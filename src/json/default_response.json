@@ -1,0 +1,7 @@
+{
+    "description": "response",
+    "type": "object",
+    "properties": {
+        "status": {"type":"string"}
+    }
+}

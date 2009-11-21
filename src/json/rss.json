@@ -1,0 +1,41 @@
+{
+    "description": "rss",
+    "type": "object",
+    "properties": {
+        "rss": {
+            "type": "object",
+            "properties": {
+                "channel": {
+                    "type": "object",
+                    "properties": {
+                        "title": {"type": "string"},
+                        "link": {"type": "string"},
+                        "description": {"type": "string"},
+                        "language": {"type": "string"},
+                        "pubDate": {"type": "string"},
+                        
+                        "item": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {"type": "string"},
+                                    "link": {"type": "string"},
+                                    "description": {"type": "string"},
+                                    "pubDate": {"type": "string"},
+                                    "guid": {"type": "string"},
+                                    "tags": {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    },
+                                    "latitude" : {"type": "number"},
+                                    "longitude" : {"type": "number"}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

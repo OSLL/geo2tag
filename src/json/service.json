@@ -1,0 +1,22 @@
+{
+    "description": "channel's list",
+    "type": "object",
+    "properties": {
+        "channels": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "description": "Channel",
+                "properties": {
+                    "text": { "type": "string" },
+                    "tags": {
+                        "type": "array",
+                        "items": { "type" : "string" }
+                    },
+                    "latitude": { "type": "number" },
+                    "longitude": { "type": "number" }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "description": "Available channels list",
+    "type": "object",
+    "properties": {
+        "channels": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "description": "Channel",
+                "properties": {
+                    "name": { "type": "string" },
+                    "tags": {
+                        "type": "array",
+                        "items": { "type" : "string" }
+                    }
+                }
+            }
+        }
+    }
+}
