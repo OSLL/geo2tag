@@ -7,8 +7,10 @@ AC_PROG_LIBTOOL
 AC_CONFIG_FILES([
  Makefile
  src/Makefile
- src/json/Makefile
- src/service/Makefile
+ src/server/Makefile
+ src/server/src/Makefile
+ src/server/src/json/Makefile
+ src/server/src/service/Makefile
 ])
 
 fastcgi_found=no
