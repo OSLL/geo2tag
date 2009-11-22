@@ -1,24 +1,23 @@
 //TODO delete
 #include <QtGui/QMessageBox>
-
 #include "mainwindowimpl.h"
 
 MainWindowImpl::MainWindowImpl() : QMainWindow(NULL)
 {
     ui.setupUi(this);
 
+    centralWidget = new QStackedWidget(this);
+
     feedView = new FeedViewImpl(this);
     mapView  = new MapViewImpl(this);
     webView  = new WebViewImpl(this);
 
-    layout= new QStackedLayout(this);
-    QWidget *cw = new QWidget(this);
-    cw->setLayout(layout);
-    layout->addWidget(feedView);
-    layout->addWidget(mapView);
-    layout->addWidget(webView);
+    centralWidget->addWidget(feedView);
+    centralWidget->addWidget(mapView);
+    centralWidget->addWidget(webView);
 
-    setCentralWidget(cw);
+
+    setCentralWidget(centralWidget);
 
     connect(ui.actionShowFeed,SIGNAL(triggered()),this,SLOT(showFeed()));
     connect(ui.actionShowWeb,SIGNAL(triggered()),this,SLOT(showWeb()));
@@ -31,16 +30,16 @@ MainWindowImpl::~MainWindowImpl()
 
 void MainWindowImpl::showFeed()
 {
-    layout->setCurrentWidget(feedView);
+    centralWidget->setCurrentWidget(feedView);
 }
 
 void MainWindowImpl::showMap()
 {
-    layout->setCurrentWidget(mapView);
+    centralWidget->setCurrentWidget(mapView);
 }
 
 void MainWindowImpl::showWeb()
 {
-    layout->setCurrentWidget(webView);
+    centralWidget->setCurrentWidget(webView);
 }
 

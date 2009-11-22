@@ -2,7 +2,7 @@
 #define MAINWINDOWIMPL_H
 
 #include <QtGui/QMainWindow>
-#include <QtGui/QStackedLayout>
+#include <QtGui/QStackedWidget>
 
 #include "ui_mainwindow.h"
 
@@ -23,7 +23,7 @@ public slots:
     void showWeb();
 private:
     Ui::MainWindow  ui;
-    QStackedLayout *layout;
+    QStackedWidget *centralWidget;
     FeedViewImpl   *feedView;
     MapViewImpl    *mapView;
     WebViewImpl    *webView;
