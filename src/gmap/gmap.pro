@@ -5,11 +5,10 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
-QT += network \ xml
+QT += network  xml
 
 # Input
 HEADERS += GetGoogleMarks.h \
-    reply.h \
     Position.h
 SOURCES += main.cpp \
     GetGoogleMarks.cpp \
