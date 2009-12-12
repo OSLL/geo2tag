@@ -1,0 +1,75 @@
+\documentclass[12pt]{article}
+
+\title{Geo 2 tag LV Demo}
+
+\begin{document}
+\maketitle          
+
+\section{Feature descriptions}
+
+This section enumerates and describes features which implemented
+for LV demo. 
+
+\paragraph{View map with marks}
+
+User can select view part of google map on his device. Map shifting and scaling
+are implemented. For each mark there is a bubble with one latin letter from 
+A to Z. There is a limit to number marks on picture at the same time.
+
+\paragraph{View marks as text feed}
+
+User has a table with next columns: date, mark letter, tag text. He could see text marks
+with nearest (we have parameter to define what does it mean) location base.
+
+\paragraph{Getting GPS/location data form device}
+
+Application uses n900 GPS location interface to determine current location and
+receive correct marks and map pieces. 
+
+\paragraph{Persist marks on remote server}
+
+Each mark are placed on remoe server in the database and has next structure:
+\begin{itemize}
+  \item timestamp
+  \item position: latitude, longitude
+  \item text message
+\end{itemize}
+
+Aditionally each mark usually belongs one or several channels.
+
+\paragraph{Select channels }
+
+User has interface for selech channels which he is interested in. It's checkboxed list
+with channel names.
+
+\paragraph{Add mark}
+
+User has dialog for adding new text message to selected channel. Time and position will
+be associated with text automaticaly.
+
+\section{Not implemented features}
+
+This section enumerates features which wonn't be implemented for LV demo.
+
+\paragraph{Add pictures and other MM content}
+
+Current client an server implementation aren't support multimedia content like picture,
+voice and video. Only text messages are supported. We have several raw parts to support 
+it in the future.
+
+\paragraph{User profiles and security}
+
+We do not support limitation for access to channels by user name. Actually we have only
+one use who could setup channels set for getting/setting marks.
+
+\paragraph{Google marks integration}
+
+We don't use (do not export/import) original google marks which can be setup in browser.
+But we can. It should be supported in next versions.
+
+\paragraph{Web interface for tag server}
+
+We have not user interface to the server. Actually we have to implement it as far as possible.
+
+\end{document}   
+
