@@ -1,0 +1,34 @@
+***************************************************************
+* This code is LGPL. You CAN make commercial solutions using  *
+* LGPL software.                                              *
+*                                                             *
+* Peter Harvey 21.FEB.99 pharvey@codebydesign.com             *
+***************************************************************
+
++-------------------------------------------------------------+
+| unixODBC                                                    |
+| ODBCINST lib (libodbcinst.so)                               |
++-------------------------------------------------------------+
+
+This share library supports ODBC Install/Setup and Config
+options. It is modelled after MS'isms and should, therefore,
+allow for an easy transition from MS'isms to other platforms
+(ie Linux).
+
+This share library, and some related share libs, also address
+the issue of GUI plugability on platforms such as Linux. GUI
+plugability being the fact that on Linux (and UNIX in general)
+the OS; may not be running a GUI or may be supporting any number
+of GUI's (X, KDE, GNOME etc).
+
+This lib also has a command line tool called odbcinst (see
+the cmd subdir).
+
+
++-------------------------------------------------------------+
+| Peter Harvey                                                |
+| pharvey@codebydesign.com                                    |
+| http://www.unixodbc.org                                     |
+| 10.APR.99                                                   |
++-------------------------------------------------------------+
+

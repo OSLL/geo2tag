@@ -1,0 +1,22 @@
+/* XPM */
+static const char * id_xpm[] = {
+"16 16 3 1",
+" 	c #FFFFFFFFFFFF",
+".	c #A699B6DACF3C",
+"X	c #000000000000",
+"                ",
+" .............. ",
+" .XXXXXXXXXXXX. ",
+" .   XX      X. ",
+" .X XXXX XXX  . ",
+" .X XXXX XXXX . ",
+" .X XXXX XXXX . ",
+" .X XXXX XXXX . ",
+" .X XXXX XXXX . ",
+" .X XXXX XXXX . ",
+" .X XXXX XXX  . ",
+" .   XX      X. ",
+" .XXXXXXXXXXXX. ",
+" .XXXXXXXXXXXX. ",
+" .............. ",
+"                "};

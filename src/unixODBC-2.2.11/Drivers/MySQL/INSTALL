@@ -1,0 +1,402 @@
+	  ***************************************
+	  *       MySQL ODBC 3.51 Driver        *
+  	  *               INSTALL               *
+          * (C) Copyright MySQL AB 1995-2002	*
+	  ***************************************
+
+=========
+CONTENTS
+=========
+1. SOFTWARE REQUIREMENTS
+2. MYODBC 3.51 CONFIGURATION OPTIONS
+3. CONFIGURATION
+4. BUILDING THE DRIVER
+5. BUILDING THE DRIVER ON WINDOWS
+6. CONFIGURING DATA SOURCE
+7. TESTING THE DRIVER
+8. TESTING WITH iodbc
+9. TESTING WITH unixODBC
+
+=========================
+1. SOFTWARE REQUIREMENTS
+=========================
+
+* MySQL client libraries and include files from 3.23.14 and above
+  This is required because MyODBC uses new calls that only exists
+  starting from the above library.
+  
+* The MySQL library must be configured with '--with-thread-safe-client'
+
+* libmysqlclient installed as a shared library.
+
+* One of unix ODBC driver managers:
+  * iODBC 3.00 or later, (http://www.iodbc.org), installed
+  * unixODBC Alpha 3 or later (http://www.unixodbc.org), installed
+  
+* If you using a character set that isn't compiled into the MySQL
+    client library (the defaults are:
+    latin1 big5 czech euc_kr gb2312 gbk sjis tis620 ujis
+     ) then you need to install the mysql character definitions from the
+     charsets directory into SHAREDIR (default 
+    /usr/local/mysql/share/mysql/charsets);  These should already be into
+    place if you have installed the MySQL server on the same machine.
+
+====================================
+2. MYODBC 3.51 CONFIGURATION OPTIONS
+====================================
+
+Usage: configure [options] [host]
+Options: [defaults in brackets after descriptions]
+
+Configuration:
+  --cache-file=FILE       cache test results in FILE
+  --help                  print this message
+  --no-create             do not create output files
+  --quiet, --silent       do not print `checking...' messages
+  --version               print the version of autoconf that created configure
+
+Directory and file names:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr/local]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [same as prefix]
+  --bindir=DIR            user executables in DIR [EPREFIX/bin]
+  --sbindir=DIR           system admin executables in DIR [EPREFIX/sbin]
+  --libexecdir=DIR        program executables in DIR [EPREFIX/libexec]
+  --datadir=DIR           read-only architecture-independent data in DIR
+                          [PREFIX/share]
+  --sysconfdir=DIR        read-only single-machine data in DIR [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data in DIR
+                          [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data in DIR [PREFIX/var]
+  --libdir=DIR            object code libraries in DIR [EPREFIX/lib]
+  --includedir=DIR        C header files in DIR [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc in DIR [/usr/include]
+  --infodir=DIR           info documentation in DIR [PREFIX/info]
+  --mandir=DIR            man documentation in DIR [PREFIX/man]
+  --srcdir=DIR            find the sources in DIR [configure dir or ..]
+  --program-prefix=PREFIX prepend PREFIX to installed program names
+  --program-suffix=SUFFIX append SUFFIX to installed program names
+  --program-transform-name=PROGRAM
+                          run sed PROGRAM on installed program names
+Host type:
+  --build=BUILD           configure for building on BUILD [BUILD=HOST]
+  --host=HOST             configure for HOST [guessed]
+  --target=TARGET         configure for TARGET [TARGET=HOST]
+
+Features and packages:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --x-includes=DIR        X include files are in DIR
+  --x-libraries=DIR       X library files are in DIR
+
+--enable and --with options recognized:
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-static[=PKGS]  build static libraries [default=no]
+  --enable-fast-install[=PKGS]  optimize for fast installation [default=yes]
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --with-mysql-libs=DIR   Look for mysql client libraries in DIR
+  --with-mysql-includes=DIR   Look for mysql include files in DIR
+  --with-unixODBC[=DIR]   Use unixODBC located in DIR
+  --with-unixODBC-includes=DIR Find unixODBC headers in DIR
+  --with-unixODBC-libs=DIR Find unixODBC libraries in DIR
+  --with-iodbc[=DIR]      Use iODBC located in DIR
+  --with-iodbc-includes=DIR Find iODBC headers in DIR
+  --with-iodbc-libs=DIR   Find iODBC libraries in DIR
+  --with-odbc-ini=PATH    Location of system odbc.ini [IODBCDIR/etc/odbc.ini]
+  --with-ldflags=option   Extra arguments for linking. Normally -lmysqlclient
+
+================
+3. CONFIGURATION
+================
+
+   The only required options are
+       --with-mysql-dirs=DIR
+       --with-mysql-includes=DIR
+   where DIR is the directory where the mysql libraries and include files are.
+ 
+   If you are using iODBC:
+
+      If your iODBC is not installed in it's default location - /usr/local,
+      you might have to use
+
+	  --with-iodbc=DIR
+
+      or if the iODBC headers aren't residing in DIR/include, you can also use
+
+          --with-iodbc-includes=INCDIR
+
+      Same goes for libraries - if they aren't in DIR/lib, use
+
+          --with-iodbc-libs=LIBDIR
+
+
+   If you are using unixODBC:
+
+      To make configure look for unixODBC instead of iODBC, use
+
+          --with-unixODBC=DIR
+
+      Where DIR is where unixODBC is installed.
+  
+      And (as usual), if the unixODBC headers and libraries aren't located
+      in DIR/include and DIR/lib, use
+ 
+          --with-unixODBC-libs=LIBDIR
+	  --with-unixODBC-includes=INCDIR
+
+
+   You might want to specify a prefix other than /usr/local for installation,
+   I for example keep my ODBC drivers in /usr/local/odbc/lib, so I add
+
+       --prefix=/usr/local/odbc
+
+   Configuration example:
+   
+   $ ./configure --prefix=/usr/local 
+                 --with-iodbc=/usr/local 
+                 --with-mysql-dirs=/usr/local/mysql/lib/mysql 
+                 --with-mysql-includes=/usr/local/mysql/include/mysql
+
+
+Note that you can normally ignore the following warning:
+----------------------------------------------------------------
+Warning: using iODBC but libiodbcinst library not found.
+Enabling workaround, which will search for mysql datasource
+configuration as follows:
+
+1. $ODBCINI, and if not found - $HOME/.odbc.ini (User data sources)
+2. /usr/local/etc/odbc.ini (System data sources)
+
+If you want to change (2), re-run configure using the
+   --with-odbc-ini=/some/other/path/odbc.ini
+option.
+
+----------------------------------------------------------------
+
+=======================
+4. BUILDING THE DRIVER
+=======================
+
+once the driver is configured, then just execute the
+following commands:
+
+   $ make
+   Shold do it.
+
+   $ make install
+   Will install libmyodbc3.so
+
+
+If you happen to only have a static version of the libmysqlclient
+library, but this is compiled with position independent code (normally -fpic)
+then you can still make a shared libmyodbc.so file by adding -lmysqlclient
+to the command that makes the shared library. For example:  Assume makes ends
+with:
+
+gcc -shared  catalog.lo connect.lo dll.lo execute.lo info.lo myodbc3.lo 
+             options.lo error.lo prepare.lo results.lo transact.lo 
+             utility.lo misc.lo  -L/usr/local/mysql/lib/mysql -lc  -Wl 
+             -soname -Wl,libmyodbc-3.51.01.so -o .libs/libmyodbc-3.51.01.so
+
+You can now get a working libmyodbc3.so file by doing:
+
+gcc -shared  catalog.lo connect.lo dll.lo execute.lo info.lo myodbc3.lo 
+             options.lo error.lo prepare.lo results.lo transact.lo 
+             utility.lo misc.lo  -L/usr/local/mysql/lib/mysql -lmysqlclient
+             -lc  -Wl -soname -Wl,libmyodbc-3.51.01.so 
+             -o .libs/libmyodbc-3.51.01.so
+
+and then continue with make install
+
+(If someone can fix configure to automaticly do the above, please mail
+myodbc@lists.mysql.com about this!)
+
+=================================
+5. BUILDING THE DRIVER ON WINDOWS
+=================================
+
+On Windows, one should be able to build the driver using the Makefiles
+distributed with the souce. WIN_Makefile is used to build the release
+version and WIN_Makefile_debug for building the Debug version of the
+driver DLLs.
+
+Download and extract the sources to a folder myodbc3, and follow the
+commands to build and install the release version
+
+ Command> cd myodbc3
+ Command> nmake -f Win_Makefile, builds the release version of the driver.
+ Command> nmake -f Win_Makefile install, installs the driver files to 
+system folders.
+
+NOTE: Make sure to specify the correct MySQL client libraries and header
+files path in the Makefiles. It assumes the default path as C:\mysql\include
+and C:\mysql\lib\opt for release DLLs and C:\mysql\lib\debug for debug
+versions.
+
+=================================
+6. CONFIGURATING DATA SOURCE NAME
+=================================
+
+Configuring one or more myodbc datasources (iodbc specific)
+
+   With ODBC, there are two kinds of datasources: 'system' and 'user'.
+   User datasources are configured in either the file $ODBCINI points to
+   or $HOME/.odbc.ini.
+   System datasources are configured in a global file, usually 
+   /usr/local/etc/odbc.ini. If you want odbc.ini file in any directory,
+   then add this complete path to ODBCINI environment variable as
+   
+   export ODBCINI=/home/mysql/myodbc3/odbc.ini
+
+   In the file you chose to use, for a mysql server on machine 
+   'www.mysql.com' listening on port 3306, add the following to set up
+   a datasource for database 'test':
+
+   [test]
+   DSN	     = test
+   # the path where you installed myodbc3.so
+   DRIVER    = /usr/local/lib/libmyodbc3.so
+   SERVER    = www.mysql.com
+   DATABASE  = test
+   USER      = root
+   PASSWORD  =
+   PORT	     = 3306
+   SOCKET    = /tmp/mysql.sock
+   OPTION    = 3
+   STMT      =
+    
+   Then, connecting using SQLConnect("test",user,password) or SQLDriverConnect
+   ("DSN=test;...") should work.
+
+   Examples of other options you can use are:
+
+   # to use a unix socket (remove the Server line)
+   Socket	 = /tmp/mysql.sock
+   
+   # provide a default user and password
+   User		 = joe
+   Password	 = secret
+
+   Enable tracing (Only if libmysqlclient is configured with --with-debug)
+
+   Trace    = On
+   TraceFile= stderr
+
+   Please note that this configuration procedure is only temporary. In the near
+   future, as iodbc evolves, hand editing of ini files will be obsolete.
+
+=====================
+7. TESTING THE DRIVER
+=====================
+
+Test the driver libraries and or DLLs, by running the basic samples
+that are distributed in the sub-directory 'samples' along with the
+driver sources.
+
+On UNIX platforms, after building the driver, go to the 'samples'
+sub-directory and start building them using 'make'
+
+  Command> make or 
+  Command> make -f Makefile
+
+On Windows, goto the samples directory and execute the following
+command to build all the samples:
+
+  Command> cd myodbc3/samples
+  Command> nmake -f Win-Makefile
+
+And start executing each samples, by specifying the DSN name as the
+command line arguments. All samples accepts the following command
+line arguments:
+
+  Command> sample_executable [DSN] [UID] [PWD]
+
+=====================
+8. TESTING WITH iodbc
+=====================
+
+Go to the samples directory for libiodbc run 'odbctest'.If you enter '?' in 
+the prompt you should see the databases you have configured in .odbc.ini.
+
+Here is a sample run that checks if your odbc setup works.
+
+(This assumes you have a DSN named 'test' in your .odbc.ini file):
+
+(/my/local/src/libiodbc-2.50.3/samples) odbctest
+OpenLink ODBC Demonstration program
+This program shows an interactive SQL processor
+
+Enter ODBC connect string (? shows list): ?
+
+DSN                            | Description
+---------------------------------------------------------------
+test                           |
+
+Enter ODBC connect string (? shows list): DSN=test
+
+SQL>select version();
+version()
+------------------
+3.23.14-alpha
+ 1 row(s) fetched.
+
+SQL>quit
+
+Have a nice day.
+
+
+If you can't get the above to work (you get the SQLSTATE=IM008 error),
+verify that your loader can find the libmysqlclient.so library:
+
+(/my/local/src/myodbc-3.51.01) ldd /usr/local/lib/libmyodbc3.so
+        libmysqlclient.so.7 => not found
+        libc.so.6 => /lib/libc.so.6 (0x40018000)
+        /lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x80000000)
+
+The above means that libmysqlclient.so can't be found.
+
+You can fix this in some of the following ways:
+
+- Add the path the the libmysqlclient library to /etc/ld.so.conf and run
+  ldconfig
+- copy or link libmysqlclient.a to some library that is searched by ldconfig
+  and run ldconfig.
+- Add the path to the LD_LIBRARY_PATH variable.
+
+In the following example, I used the last method:
+(/my/local/src/libiodbc-2.50.3/samples) export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/mysql/lib/mysql
+(/my/local/src/libiodbc-2.50.3/samples) ldd /usr/local/lib/libmyodbc3.so
+        libmysqlclient.so.7 => /usr/local/mysql/lib/mysql/libmysqlclient.so.7 (0x40014000)
+        libc.so.6 => /lib/libc.so.6 (0x4002c000)
+        libnsl.so.1 => /lib/libnsl.so.1 (0x400d3000)
+        libm.so.6 => /lib/libm.so.6 (0x400d9000)
+        libz.so.1 => /usr/lib/libz.so.1 (0x400f2000)
+        libcrypt.so.1 => /lib/libcrypt.so.1 (0x40100000)
+        /lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x80000000)
+
+========================
+9. TESTING WITH unixODBC
+========================
+
+Locate the command line utility 'isql' distributed with unixodbc
+and then try "isql -v test" where test is the DSN for MyODBC 3.51
+  
+
+For more information, read the FAQs on MyODBC from 
+http://www.mysql.com/products/myodbc/faq_toc.html
+
+
+Have fun.
+
+On behalf of the MySQL AB team:
+
+Michael Widenius.
+myodbc@lists.mysql.com
+
+
+
+

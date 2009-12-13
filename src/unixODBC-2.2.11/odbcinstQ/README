@@ -1,0 +1,69 @@
++-------------------------------------------------------------+
+| unixODBC                                                    |
+| odbcinstQ                                                   |
++-------------------------------------------------------------+
+
+README
+---------------------------------------------------------------
+
+Description:
+
+	This is the Qt plugin for odbcinst.
+	
+Problem:
+      
+        The ODBC sub-system, as specified by Microsoft, needs
+	to interact with the User on occasion. For example; to 
+	admin the data sources or drivers. Unfortunately for
+	unixODBC; it can not commit itself to a specific method
+	to interact with the User. unixODBC must account for a 
+	wide variety of methods - any of which the User may be using.
+	For example; console, native X, Qt, KDE, GTK, none, etc
+	
+Solution:
+
+        One possible solution is to conditionaly compile support
+	into the sub-system. But there are two important draw-backs
+	to this; 1) the entire system (and all Users) would only be
+	able to use one method to interact with the sub-system and 
+	2) changing the interaction method would require a recompile.
+	A better solution, and the one used here, is to use a plugin
+	system.
+	
+        This library is a plugin. The plugin 'manager' is the standard
+	odbcinst library.
+	
+Notes:
+
+        This library is ONLY used by the odbcinst library. For
+	example; the ODBCConfig tool calls SQLManageDataSources()
+	in the odbcinst library and odbcinst will pass the call to
+	a library (such as this one) to resolve the request. This
+	allows all of the User interaction bits to be a plugin and
+	transparent to the caller. Do not use this library directly.
+
+WARNING: 
+
+	If an application calls SQLManageDataSources() for Qt then
+	it must be using the same Qt library with which odbcinstQ
+	was built. Also; do not mix threaded and non-threaded versions
+	of the library. If this sounds scary then consider having
+	your application try to execute the ODBCConfig program rather
+	than call SQLManageDataSources().
+	
+License:
+
+        This code is LGPL.
+	
+Resources:
+
+        Home  - www.unixodbc.org
+        Flags - www.qnet.com/~moonbase/miniflag/
+	Icons - mostly from RH 9.0 (gnome & KDE)
+        Qt    - www.troll.no
+	
++-------------------------------------------------------------+
+| Peter Harvey <pharvey@codebydesign.com>                     |
+| 26.OCT.01                                                   |
++-------------------------------------------------------------+
+

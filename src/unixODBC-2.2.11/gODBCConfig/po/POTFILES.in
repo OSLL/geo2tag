@@ -1,0 +1,6 @@
+# List of source files containing translatable strings.
+
+src/main.c
+src/odbcconfig.c
+src/callbacks.c
+src/support.c

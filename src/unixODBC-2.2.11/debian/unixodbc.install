@@ -1,0 +1,8 @@
+usr/bin/isql			usr/bin
+usr/bin/iusql			usr/bin
+usr/lib/libgtrtst.so.*		usr/lib
+usr/lib/libodbc.so.*		usr/lib
+usr/lib/libodbccr.so.*		usr/lib
+usr/lib/libnn.so		usr/lib/odbc
+usr/lib/libodbctxt.so		usr/lib/odbc
+Drivers/MySQL/README		usr/share/doc/unixodbc/README.MySql

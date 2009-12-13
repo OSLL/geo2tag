@@ -1,0 +1,3 @@
+odbcinst1debian1: package-name-doesnt-match-sonames libodbcinst1
+odbcinst1debian1: symbols-file-contains-debian-revision on symbol ODBCINSTAddProperty@Base and 54 others
+

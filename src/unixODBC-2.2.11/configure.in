@@ -1,0 +1,566 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(DRVConfig/MiniSQL/odbcminiS.c)
+AM_INIT_AUTOMAKE(unixODBC, 2.2.11)
+
+dnl Avoid annoying Makefile rebuilds on the autobuilders.
+AM_MAINTAINER_MODE
+
+dnl Checks for programs.
+AC_PROG_AWK
+AC_PROG_YACC
+AC_PROG_CC
+AC_PROG_CPP
+AM_PROG_LEX
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+
+AC_DISABLE_STATIC
+AC_ENABLE_SHARED
+
+dnl Check if we want to build the gui bits
+
+AC_ARG_ENABLE( gui, 
+[  --enable-gui            build GUI Parts [default=yes]],
+[ case "${enableval}" in
+    yes) gui=true ;;
+    no) gui=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-gui) ;;
+    esac],[gui=true])
+
+dnl Only need c++ for the GUI bits
+
+if test "x$gui" = "xtrue"; then
+AC_PROG_CXX
+else
+dnl This gets around a autoconf problem
+if
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_CXX_dependencies_compiler_type" = gcc3; then
+  am__fastdepCXX_TRUE=
+  am__fastdepCXX_FALSE='#'
+else
+  am__fastdepCXX_TRUE='#'
+  am__fastdepCXX_FALSE=
+fi
+fi
+
+dnl Check if we want to worry about threads
+
+AC_ARG_ENABLE( threads, 
+[  --enable-threads        build with thread support [default=yes]],
+[ case "${enableval}" in
+    yes) thread=true ;;
+    no) thread=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-thread) ;;
+    esac],[thread=true])
+
+AC_ARG_ENABLE( gnuthreads, 
+[  --enable-gnuthreads     build with gnu threads support [default=no]],
+[ case "${enableval}" in
+    yes) gnuthread=true ;;
+    no) gnuthread=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-gnuthread) ;;
+    esac],[gnuthread=false])
+
+AC_ARG_ENABLE( readline, 
+[  --enable-readline       build with readline  support [default=yes]],
+[ case "${enableval}" in
+    yes) readline=true ;;
+    no) readline=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-readline) ;;
+    esac],[readline=true])
+
+dnl Check if we want to build the drivers
+
+AC_ARG_ENABLE( drivers, 
+[  --enable-drivers        build included drivers [default=yes]],
+[ case "${enableval}" in
+    yes) drivers=true ;;
+    no) drivers=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-drivers) ;;
+    esac],[drivers=true])
+
+AC_ARG_ENABLE( fdb, 
+[  --enable-fdb            build file-based data access [default=no]],
+[ case "${enableval}" in
+    yes) fdb=true ;;
+    no) fdb=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-fdb) ;;
+    esac],[fdb=false])
+
+AC_ARG_ENABLE( fastvalidate, 
+[  --enable-fastvalidate   use relaxed handle checking in the DM [default=no]],
+[ case "${enableval}" in
+    yes) fastvalidate=true ;;
+    no) fastvalidate=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-fastvalidate) ;;
+    esac],[fastvalidate=false])
+
+AC_ARG_ENABLE( iconv, 
+[  --enable-iconv          build with iconv support [default=yes]],
+[ case "${enableval}" in
+    yes) iconv=true ;;
+    no) iconv=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-iconv) ;;
+    esac],[iconv=true])
+
+
+dnl Check for sys/sem.h
+
+AC_CHECK_HEADERS(sys/sem.h, semh=true, semh=false)
+
+AC_ARG_ENABLE( stats,
+[  --enable-stats          build with statistic gathering support [default=yes]],
+[ case "${enableval}" in
+    yes) if test "x$semh" = "xfalse"; then
+           AC_MSG_ERROR(stats enabled but required header was not found)
+         fi
+        stats=true ;;
+    no) stats=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-stats) ;;
+    esac],[stats=$semh])
+
+AC_ARG_ENABLE( rtldgroup, 
+[  --enable-rtldgroup      build with RTLD_GROUP passed to dlopen (when supported)  [default=yes]],
+[ case "${enableval}" in
+    yes) rtldgroup=true ;;
+    no) rtldgroup=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-rltdgroup) ;;
+    esac],[rtldgroup=true])
+
+AC_ARG_ENABLE( ltdllib, 
+[  --enable-ltdllib        Use system libltdl.so (if found)  [default=no]],
+[ case "${enableval}" in
+    yes) ltdllib=true ;;
+    no) ltdllib=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-ltdllib) ;;
+    esac],[ltdllib=false])
+
+dnl Enable building of the convenience library
+dnl and set LIBLTDL accordingly
+
+INCLTDL=""
+LIBLTDL=""
+
+AC_MSG_CHECKING( Have we enabled using RTLD_GROUP )
+if test "x$rtldgroup" = "xtrue"; then
+AC_MSG_RESULT( yes )
+AC_LIBLTDL_CONVENIENCE
+else
+AC_MSG_RESULT( no );
+AC_LIBLTDL_CONVENIENCE_G
+fi
+
+dnl Check for dlopen support
+AC_LIBTOOL_DLOPEN
+AC_CONFIG_SUBDIRS(libltdl)
+
+dnl Configure libtool
+AM_PROG_LIBTOOL
+
+use_builtin_libtool="no"
+
+dnl override the libtool lines if we use the system libs
+if test "x$ltdllib" = "xtrue"; then
+AC_CHECK_LIB( ltdl, lt_dlopen, [ LIBLTDL="-lltdl" ], [use_builtin_libtool="yes"] )
+if test "x$use_builtin_libtool" = "xno"; then
+  AC_CHECK_HEADERS(ltdl.h, [], [use_builtin_libtool="yes"] )
+fi
+else
+use_builtin_libtool="yes"
+fi
+AC_MSG_CHECKING( if we are using the included libltdl )
+AC_MSG_RESULT( $use_builtin_libtool )
+
+dnl Substitute INCLTDL and LIBLTDL in the Makefiles
+AC_SUBST(INCLTDL)
+AC_SUBST(LIBLTDL)
+
+dnl Find shared lib extension
+AC_LTDL_SHLIBEXT
+SHLIBEXT="$libltdl_cv_shlibext"
+AC_SUBST(SHLIBEXT)
+
+if test "x$iconv" = "xtrue"; 
+then
+
+AM_ICONV
+
+iconv_char_enc="auto-search"
+AC_ARG_WITH(iconv_char_enc,
+    [  --with-iconv-char-enc=enc   Encoding to use as ASCII [default=auto-search] ],
+       iconv_char_enc="$withval"
+    )
+
+ICONV_CHAR_ENCODING="$iconv_char_enc"
+
+iconv_ucode_enc="auto-search"
+
+AC_ARG_WITH(iconv_ucode_enc,
+    [  --with-iconv-ucode-enc=enc  Encoding to use as UNICODE [default=auto-search] ],
+       iconv_ucode_enc="$withval"
+    )
+
+ICONV_CHAR_ENCODING=""
+ICONV_UNICODE_ENCODING=""
+
+if test "$am_cv_func_iconv" = yes; then
+  AC_MSG_CHECKING( for encoding to use for CHAR representations );
+  ICONV_CHAR_ENCODING="$iconv_char_enc"
+  AC_MSG_RESULT( $iconv_char_enc );
+
+  AC_MSG_CHECKING( for encoding to use for UNICODE representations );
+  ICONV_UNICODE_ENCODING="$iconv_ucode_enc"
+  AC_MSG_RESULT( $iconv_ucode_enc );
+fi
+
+AC_SUBST(ICONV_CHAR_ENCODING)
+AC_SUBST(ICONV_UNICODE_ENCODING)
+
+fi
+
+dnl Checks for libraries.
+AC_CHECK_LIB(crypt, crypt, [ LIBADD_CRYPT="-lcrypt"; AC_DEFINE(HAVE_LIBCRYPT)],)
+AC_SUBST(LIBADD_CRYPT)
+AC_CHECK_LIB(m, pow, [ LIBADD_POW="-lm" ], )
+AC_SUBST(LIBADD_POW)
+
+have_readline="no"
+
+if test "x$readline" = "xtrue"; then
+  AC_CHECK_LIB_NOC(readline, readline, 
+  [
+      READLINE=-lreadline
+      have_readline="yes"
+  ],
+  [
+      dnl try with -lcurses
+      AC_CHECK_LIB_NOC(readline, readline,
+      [
+          READLINE="-lreadline -lcurses"
+          have_readline="yes"
+      ],
+      [
+      ],
+      -lcurses )
+  ])
+
+  if test "x$have_readline" = "xyes"; then
+      AC_CHECK_HEADERS(readline/history.h, [AC_DEFINE(HAVE_READLINE, 1)])
+  fi
+fi
+
+AC_SUBST(READLINE)
+
+dnl Are we using flex
+if test "x$drivers" = "xtrue"; then
+AC_MSG_CHECKING( Are we using flex )
+if test "x$LEX" = "xflex"; then
+LFLAGS="$LFLAGS -i"
+AC_MSG_RESULT( yes );
+else
+AC_MSG_RESULT( no - text driver disabled );
+fi
+AM_CONDITIONAL(HAVE_FLEX, test "x$LEX" = "xflex" )
+AC_SUBST(LFLAGS)
+else
+AM_CONDITIONAL(HAVE_FLEX, test "xabc" = "xdef" )
+fi
+
+case $host_os in
+    *qnx* )
+    qnx="true"
+    AC_DEFINE(QNX_LIBLTDL)
+    ;;
+esac
+
+dnl check how time() can be used
+AC_HEADER_TIME
+AC_CHECK_HEADERS(sys/time.h)
+
+AC_CHECK_SIZEOF(long, 4)
+
+AC_MSG_CHECKING([if platform is 64 bit])
+if test "$ac_cv_sizeof_long" = "8"; then
+	AC_MSG_RESULT( Yes );
+    	AC_DEFINE(PLATFORM64)
+else
+	AC_MSG_RESULT( No );
+fi
+
+AC_CHECK_LONG_LONG
+
+dnl AC_CHECK_LIB(c, strcasecmp, [AC_DEFINE(HAVE_STRCASECMP, 1)])
+dnl AC_CHECK_LIB(c, strncasecmp, [AC_DEFINE(HAVE_STRNCASECMP, 1)])
+
+AC_CHECK_FUNCS( strcasecmp strncasecmp vsnprintf strtol atoll strtoll endpwent )
+
+LIBADD_DL=
+AC_SUBST(LIBADD_DL)
+
+THREADLIB=""
+if test "x$thread" = "xtrue"; then
+  if test "x$gnuthread" = "xtrue"; then
+    AC_CHECK_PTH( 1.3.0 )
+    CPPFLAGS="$CPPFLAGS $PTH_CPPFLAGS"
+    CFLAGS="$CFLAGS $PTH_CFLAGS"
+    LDFLAGS="$LDFLAGS $PTH_LDFLAGS"
+    THREADLIB="$PTH_LIBS"
+    AC_DEFINE(HAVE_LIBPTH,1)
+    AC_DEFINE(_REENTRANT)
+  else
+    gotthread="no";
+    AC_CHECK_LIB_NOC(thread, mutex_lock,
+    [
+      AC_DEFINE(HAVE_LIBTHREAD,1)
+      dnl Check if the compiler will build with -mt as a option, this is a solaris thing
+      AC_CHECK_COMP_OPT(mt)
+      AC_DEFINE(_REENTRANT)
+      gotthread="yes";
+      THREADLIB="-lthread"
+    ])
+
+    if test "x$gotthread" = "xno"; then
+      AC_CHECK_LIBPT_NOC(pthread, pthread_mutex_lock, 
+      [
+        AC_DEFINE(HAVE_LIBPTHREAD,1)
+        AC_DEFINE(_REENTRANT)
+        gotthread="yes";
+        THREADLIB="-lpthread"
+        if test "x$ac_cv_prog_gcc"="xyes"; then
+          dnl Check if the compiler will build with -pthread as a option
+          AC_CHECK_COMP_OPT(pthread)
+        else
+          dnl Check if the compiler will build with -mt as a option
+          AC_CHECK_COMP_OPT(mt)
+        fi
+      ])
+    fi
+
+    if test "x$gotthread" = "xno"; then
+      AC_CHECK_LIBPT_NOC(c, pthread_mutex_lock, 
+      [
+        AC_DEFINE(HAVE_LIBPTHREAD,1)
+        AC_DEFINE(_REENTRANT)
+        gotthread="yes";
+        THREADLIB=""
+        if test "x$ac_cv_prog_gcc"="xyes"; then
+          dnl Check if the compiler will build with -pthread as a option
+          AC_CHECK_COMP_OPT(pthread)
+        else
+          dnl Check if the compiler will build with -mt as a option
+          AC_CHECK_COMP_OPT(mt)
+        fi
+      ])
+    fi
+
+    if test "x$gotthread" = "xno"; then
+      if test "x$ac_cv_prog_gcc"="xyes"; then
+        dnl This is for freebsd that needs -lpthread before it finds the lib
+        AC_CHECK_COMP_OPT(pthread)
+        AC_CHECK_LIBPT_NOC(c, pthread_mutex_lock,
+        [
+          AC_DEFINE(HAVE_LIBPTHREAD,1)
+          AC_DEFINE(_REENTRANT)
+          THREADLIB="-pthread -lc_r"
+          gotthread="yes";
+        ])
+      fi
+    fi
+
+    dnl Check for AIX 
+    if test "x$gotthread" = "xno"; then
+      SAVECFLAGS="$CFLAGS"
+      CFLAGS="$CFLAGS -D_THREAD_SAFE -D_ALL_SOURCE -D_LONG_LONG"
+      AC_CHECK_LIBPT_NOC(pthread, pthread_mutex_lock, 
+      [
+        AC_DEFINE(HAVE_LIBPTHREAD,1)
+        gotthread="yes";
+        THREADLIB="-lpthread"
+      ])
+      CFLAGS="$SAVECFLAGS"
+      AC_DEFINE(_THREAD_SAFE)
+      AC_DEFINE(_ALL_SOURCE)
+      AC_DEFINE(_LONG_LONG)
+    fi
+
+    if test "x$gotthread" = "xyes"; then
+      dnl do not add a -lc because of this
+      save_LIBS=$LIBS
+      AC_CHECK_LIB(c, localtime_r, [AC_DEFINE(HAVE_LOCALTIME_R, 1)] )
+      LIBS=$save_LIBS
+    fi
+  fi
+fi
+
+case $host_os in
+    "darwin"*)
+        stats="false"
+        macosx="yes"
+        AC_DEFINE(OSXHEADER)
+    ;;
+
+    sysv5Open*)
+        if test "x$THREADLIB" = "x"; then
+          LIBS="$LIBS $THREADLIB"
+        else
+          LIBS="$LIBS -Kthread"
+        fi
+        ;;
+
+    *)
+        LIBS="$LIBS $THREADLIB"
+        ;;
+esac
+
+if test "x$stats" = "xtrue"; then
+  AC_CHECK_FUNCS( ftok semget shmget semop snprintf,[],[stats=false])
+fi
+
+if test "x$stats" = "xtrue"; then
+AC_CHECK_SEMUNDOO
+AC_DEFINE(COLLECT_STATS)
+fi
+
+dnl I need to check for libsocket before testing X
+AC_CHECK_LIB(socket, socket, [LIBSOCKET="-lsocket"]) dnl for Solaris
+AC_SUBST(LIBSOCKET)
+AC_CHECK_LIB(nsl, gethostbyname, [LIBNSL="-lnsl"]) dnl for Solaris
+AC_SUBST(LIBNSL)
+
+AC_QT_TEXT
+
+if test "x$macosx" = "xyes"; then
+  if test "x$gui" = "xtrue"; then
+      dnl look for the Mac version of QT (No X)
+      AC_PATH_QTOSX
+  else
+      have_qt="no";
+  fi
+else
+  if test "x$gui" = "xtrue"; then
+      dnl from the KDE folks
+      AC_PATH_QT
+    else
+      have_qt="no";
+  fi
+fi
+
+AC_ARG_WITH(msql-lib,
+    [  --with-msql-lib=DIR     where the root of MiniSQL libs are installed ],
+       msql_libraries="$withval"
+    )
+
+AC_ARG_WITH(msql-include,
+    [  --with-msql-include=DIR where the MiniSQL headers are installed ],
+       msql_headers="$withval"
+    )
+
+AC_SUBST(msql_libraries)
+AC_SUBST(msql_headers)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+
+AC_CHECK_HEADERS(malloc.h unistd.h pwd.h crypt.h limits.h synch.h strings.h string.h locale.h sys/malloc.h sys/types.h sys/sem.h)
+
+INCLUDES="$INCLUDES $USER_INCLUDES";
+
+dnl only build the mSQL code if the headers are in place
+AC_CHECK_HEADERS(msql.h,[msql=true],
+[
+   msql=false;
+   for ac_dir in $kde_extra_includes $msql_headers; 
+   do
+    AC_CHECK_HEADERS( $ac_dir/msql.h,
+    [
+        msql=true;
+        INCLUDES="$INCLUDES $USER_INCLUDES -I$ac_dir";
+    ])
+   done
+])
+
+dnl AC_SUBST(all_includes)
+dnl AC_SUBST(all_libraries)
+
+AM_CONDITIONAL(MSQL, test "x$msql" = "xtrue" )
+AM_CONDITIONAL(QT, test "x$have_qt" = "xyes" )
+AM_CONDITIONAL(DRIVERS, test "x$drivers" = "xtrue" )
+AM_CONDITIONAL(FDB, test "x$fdb" = "xtrue" )
+AM_CONDITIONAL(QNX, test "x$qnx" = "xtrue" )
+AM_CONDITIONAL(WITHLT, test "x$use_builtin_libtool" = "xyes" )
+
+dnl This blows up due to what I think is a bug in automake 1.6.3
+dnl AC_SUBST(INCLUDES)
+
+if test "x$fastvalidate" = "xtrue"; then
+AC_DEFINE(FAST_HANDLE_VALIDATE)
+fi
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
+AC_STRUCT_TM
+AC_TYPE_UID_T
+AC_HEADER_DIRENT
+
+dnl Checks for library functions.
+AC_FUNC_ALLOCA
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS( putenv socket strdup strstr setenv setlocale strchr )
+
+dnl This is the unixODBC source tree
+AC_DEFINE(UNIXODBC_SOURCE)
+
+LIB_VERSION="1:0:0"
+AC_SUBST(LIB_VERSION)
+
+AC_OUTPUT( Makefile \
+    extras/Makefile \
+    log/Makefile \
+    lst/Makefile \
+    sqp/Makefile \
+    ini/Makefile \
+    odbcinst/Makefile \
+    cur/Makefile \
+    DriverManager/Makefile \
+    odbcinstQ/Makefile \
+    exe/Makefile \
+    DRVConfig/Makefile \
+    DRVConfig/drvcfg1/Makefile \
+    DRVConfig/drvcfg2/Makefile \
+    DRVConfig/PostgreSQL/Makefile \
+    DRVConfig/MiniSQL/Makefile \
+    DRVConfig/MySQL/Makefile \
+    DRVConfig/nn/Makefile \
+    DRVConfig/esoob/Makefile \
+    DRVConfig/oplodbc/Makefile \
+    DRVConfig/template/Makefile \
+    DRVConfig/tds/Makefile \
+    DRVConfig/txt/Makefile \
+    DRVConfig/Oracle/Makefile \
+    DRVConfig/sapdb/Makefile \
+    DRVConfig/Mimer/Makefile \
+    Drivers/Makefile \
+    Drivers/PostgreSQL/Makefile \
+    Drivers/Postgre7.1/Makefile \
+    Drivers/nn/Makefile \
+    Drivers/txt/Makefile \
+    Drivers/txt/doc/Makefile \
+    Drivers/template/Makefile \
+    Drivers/MiniSQL/Makefile \
+    include/Makefile \
+    doc/Makefile \
+    doc/AdministratorManual/Makefile \
+    doc/ProgrammerManual/Makefile \
+    doc/ProgrammerManual/Tutorial/Makefile \
+    doc/UserManual/Makefile \
+    doc/lst/Makefile \
+    DataManager/Makefile \
+    DataManagerII/Makefile \
+    ODBCConfig/Makefile \
+    odbctest/Makefile \
+    autotest/Makefile \
+    )
+

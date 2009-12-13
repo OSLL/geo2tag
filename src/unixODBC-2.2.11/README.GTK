@@ -1,0 +1,5 @@
+The GTK+ version of gODBCConfig must be built and installed after the main
+unixODBC distrib has been built. 
+
+Just cd to gODBCConfig and ./configure; make; make install as you would 
+any GTK/Gnome application.

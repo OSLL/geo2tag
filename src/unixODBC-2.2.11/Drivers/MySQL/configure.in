@@ -1,0 +1,218 @@
+
+AC_INIT(myodbc3.c)
+AM_INIT_AUTOMAKE(myodbc, 3.51.02)
+
+myodbc_version=$VERSION
+
+# See the libtool docs for information on how to do shared lib versions.
+SHARED_LIB_VERSION=1:0:0
+
+AM_CONFIG_HEADER(myconf.h)
+
+AC_SUBST(myodbc_version)
+
+AC_PROG_CC
+AC_PROG_CPP
+
+AC_PROG_LN_S
+
+AM_ENABLE_SHARED
+AM_DISABLE_STATIC
+
+# define _UNIX_
+AC_DEFINE(_UNIX_)
+
+AM_PROG_LIBTOOL
+AC_CHECK_LIB(z,compress)
+
+AC_ARG_WITH(mysql-libs,
+[  --with-mysql-libs=DIR   Look for mysql client libraries in DIR],
+mysql_libs=$withval,mysql_libs="")
+
+AC_MSG_CHECKING([for the mysql client libraries])
+
+# two common alternate mysql_lib locations
+alt_lib1="/usr/local/mysql/lib/mysql"
+alt_lib2="/usr/lib/mysql"
+
+AC_MSG_RESULT([$mysql_libs])
+
+mysql_ok=no
+
+if test -n "$mysql_libs"
+then
+  LIBS="-L$mysql_libs $LIBS"
+  MYSQL_LIB_PATH="-L$mysql_libs"
+fi
+AC_SUBST(MYSQL_LIB_PATH)
+
+AC_CHECK_LIB(mysqlclient,mysql_real_query,mysql_ok=yes,mysql_ok=no)
+SAVE_LIBS=$LIBS
+
+if test "x$mysql_ok" != "xyes"
+then
+	LIBS="-L$alt_lib1 $SAVE_LIBS"
+	MYSQL_LIB_PATH="-L$alt_lib1"
+	AC_SUBST(MYSQL_LIB_PATH)
+
+	AC_CHECK_LIB(mysqlclient,mysql_real_connect,mysql_ok=yes,mysql_ok=no)
+fi
+
+
+if test "x$mysql_ok" != "xyes"
+then
+	LIBS="-L$alt_lib2 $SAVE_LIBS"
+	MYSQL_LIB_PATH="-L$alt_lib2"
+	AC_SUBST(MYSQL_LIB_PATH)
+
+	AC_CHECK_LIB(mysqlclient,mysql_change_user,mysql_ok=yes,mysql_ok=no)
+fi
+
+
+if test "x$mysql_ok" != "xyes"
+then
+	AC_MSG_ERROR([Could not find libmysqlclient in '$alt_lib1' or '$alt_lib2'. Try another location.])
+fi
+
+
+
+# Check for MySQL include files
+
+AC_ARG_WITH(mysql-includes,
+[  --with-mysql-includes=DIR   Look for mysql include files in DIR],
+mysql_includes=$withval,mysql_includes="")
+
+AC_MSG_CHECKING([for mysql include files in $mysql_includes])
+
+# two common alternate mysql_include locations
+alt_inc1="/usr/local/mysql/include/mysql"
+alt_inc2="/usr/include/mysql"
+
+if test ! -f "$mysql_includes/my_config.h"
+then
+  if test ! -f "$alt_inc1/my_config.h"
+  then
+    if test ! -f "$alt_inc2/my_config.h"
+    then
+	AC_MSG_RESULT(no)
+	AC_MSG_ERROR([Could not find the mysql include file my_config.h in '$alt_inc1' or '$alt_inc2'])
+    else
+	AC_MSG_RESULT(yes)
+	MYSQL_INCLUDES="-I$alt_inc2"
+	AC_SUBST(MYSQL_INCLUDES)
+    fi
+  else
+      AC_MSG_RESULT(yes)
+      MYSQL_INCLUDES="-I$alt_inc1"
+      AC_SUBST(MYSQL_INCLUDES)
+  fi
+else
+    AC_MSG_RESULT(yes)
+    MYSQL_INCLUDES="-I$mysql_includes"
+    AC_SUBST(MYSQL_INCLUDES)
+fi
+
+#check for unixODBC
+
+use_unixODBC=no
+AC_ARG_WITH(unixODBC,
+[  --with-unixODBC[=DIR]   Use unixODBC located in DIR],
+[use_unixODBC=yes;unixODBC="$withval"],use_unixODBC=no)
+
+if test "x$use_unixODBC" = "xyes"
+then
+
+# default to /usr if not specified
+if test "x$unixODBC" = "x"
+then
+	unixODBC="/usr";
+fi
+
+AC_ARG_WITH(unixODBC-includes,
+[  --with-unixODBC-includes=DIR Find unixODBC headers in DIR],
+unixODBC_includes="$withval",unixODBC_includes="$unixODBC/include")
+
+AC_ARG_WITH(unixODBC-libs,
+[  --with-unixODBC-libs=DIR Find unixODBC libraries in DIR],
+unixODBC_libs="$withval",unixODBC_libs="$unixODBC/lib")
+
+AC_CHECK_UNIXODBC($unixODBC_includes,$unixODBC_libs)
+
+else
+
+# check for iodbc
+
+AC_ARG_WITH(iodbc,
+[  --with-iodbc[=DIR]      Use iODBC located in DIR],
+iodbc="$withval",iodbc="/usr/local")
+
+AC_ARG_WITH(iodbc-includes,
+[  --with-iodbc-includes=DIR Find iODBC headers in DIR],
+iodbc_includes="$withval",iodbc_includes="$iodbc/include")
+
+AC_ARG_WITH(iodbc-libs,
+[  --with-iodbc-libs=DIR   Find iODBC libraries in DIR],
+iodbc_libs="$withval",iodbc_libs="$iodbc/lib")
+
+AC_CHECK_IODBC($iodbc_includes,$iodbc_libs)
+
+AC_ARG_WITH(odbc-ini,
+[  --with-odbc-ini=PATH    Location of system odbc.ini [IODBCDIR/etc/odbc.ini]],
+odbc_ini="$withval",odbc_ini="$iodbc/etc/odbc.ini")
+
+if test "x$have_iodbcinst" != "xyes"
+then
+	AC_DEFINE_UNQUOTED(SYSTEM_ODBC_INI,"$odbc_ini")
+fi
+
+fi
+
+#
+# Add some extra LDFLAGS to the linking of the shared library
+#
+
+AC_ARG_WITH(ldflags,
+    [  --with-ldflags=option   Extra arguments for linking. Normally -lmysqlclient],
+    EXTRA_LDFLAGS="$withval",EXTRA_LDFLAGS="")
+AC_SUBST(EXTRA_LDFLAGS)
+
+# if we're working in an older odbc environment,
+# we don't have the SQL* types, so we need to fall
+# back to the old versions
+
+AC_CHECK_ODBC_TYPE(SQLHENV,HENV)
+AC_CHECK_ODBC_TYPE(SQLHDBC,HDBC)
+AC_CHECK_ODBC_TYPE(SQLHSTMT,HSTMT)
+
+AC_CHECK_ODBC_TYPE(SQLINTEGER,SDWORD)
+AC_CHECK_ODBC_TYPE(SQLUINTEGER,UDWORD)
+AC_CHECK_ODBC_TYPE(SQLSMALLINT,SWORD)
+AC_CHECK_ODBC_TYPE(SQLUSMALLINT,UWORD)
+
+AC_CHECK_ODBC_TYPE(SQLPOINTER,PTR)
+AC_CHECK_ODBC_TYPE(SQLHWND,HWND)
+
+AC_CHECK_ODBC_TYPE(SQLRETURN,RETCODE)
+
+AC_CHECK_ODBC_TYPE(SQLCHAR,UCHAR)
+
+AC_OUTPUT(Makefile samples/Makefile)
+
+if test "x$iodbc_ok" = "xyes" && test "x$have_iodbcinst" != "xyes"
+then
+cat <<EOF
+----------------------------------------------------------------
+Warning: using iODBC but libiodbcinst library not found.
+Enabling workaround, which will search for mysql datasource
+configuration as follows:
+
+1. \$ODBCINI, and if not found - \$HOME/.odbc.ini (User data sources)
+2. $odbc_ini (System data sources)
+
+If you want to change (2), re-run configure using the
+   --with-odbc-ini=/some/other/path/odbc.ini
+option.
+----------------------------------------------------------------
+EOF
+fi
+

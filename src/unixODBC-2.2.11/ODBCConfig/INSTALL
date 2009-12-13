@@ -1,0 +1,34 @@
++-------------------------------------------------------------+
+| unixODBC                                                    |
+| ODBCConfig                                                  |
++-------------------------------------------------------------+
+
+INSTALL
+---------------------------------------------------------------
+
+Requirements:
+
+	Qt v3 must be installed on your system. Older versions
+	may work also.	
+
+	libodbcinstQ.so must be in the lib path.
+	
+GNU auto-tools:
+
+	The most common way to build this is to use the GNU
+	auto-tools (see the unixODBC INSTALL file).
+
+	Keep in mind that configure may not pickup existing
+	Qt installations. In such cases this program will not
+	get built. You can often correct this by telling configure
+	where the Qt stuff is (see configure --help).	
+
+qmake:
+
+	see the unixODBC README.qmake file
+	
++-------------------------------------------------------------+
+| Peter Harvey <pharvey@codebydesign.com>                     |
+| 28.OCT.01                                                   |
++-------------------------------------------------------------+
+

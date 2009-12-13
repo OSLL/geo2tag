@@ -1,0 +1,95 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.72C-CCK-MCD Caldera Systems OpenLinux [en] (X11; U; Linux 2.2.14 i686) [Netscape]">
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
+<b><font face="Arial,Helvetica">unixODBC - Text File Driver - Setup</font></b>
+<br>
+<hr WIDTH="100%">
+<p><b><font face="Arial,Helvetica">ODBCConfig</font></b><b><font face="Arial,Helvetica"></font></b>
+<p><font face="Arial,Helvetica">ODBCConfig is a great graphical utility
+program for managing ODBC. I will assume that you have this program (or
+its gtk version gODBCConfig) installed and in your path. See the main documentation
+for unixODBC for more on how to do this.</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">You can run ODBCConfig from a shell just
+like a standard UNIX command but its graphical so you must be running X
+windows.</font><b><font face="Arial,Helvetica"></font></b>
+<p><b><font face="Arial,Helvetica">Driver Setup</font></b>
+<p><font face="Arial,Helvetica">Enter a shell as a <b>root</b> user and
+run ODBCConfig. You may have to log-out of X Windows and then log-in as
+a root user first (or use xhost). Then proceed to the Drivers tab and click
+the Add button. You should see a window such as </font>figure 1<font face="Arial,Helvetica">.</font>
+<p><img SRC="DriverSetup.gif" height=280 width=433>
+<br>figure 1
+<p><font face="Arial,Helvetica">You will likely find the driver and setup
+libs in /usr/local/lib. Browse to, and select these files. Click the check-mark
+when you are done. Now this driver is availible for use by system processes
+and users.</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">There are other ways to do this. See the
+main documentation for unixODBC for more on how to do this.</font><font face="Arial,Helvetica"></font>
+<p><b><font face="Arial,Helvetica">Data Source Setup</font></b>
+<p><font face="Arial,Helvetica">ODBC drivers are almost always used via
+a Data Source Name (DSN). Use ODBCConfig to add a DSN.</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">The setup lib (odbctxtS.so) provides ODBCConfig
+with DSN&nbsp;properties which are specific to the Text File Driver (odbctxt.so).
+See </font>figure 2<font face="Arial,Helvetica">.</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;
+<p><img SRC="Setup.gif" height=265 width=345>
+<br>figure 2
+<p><font face="Arial,Helvetica">Name (mandatory)</font>
+<br><font face="Arial,Helvetica">--------</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">This should be a unique data source name.
+Try to make it; short and meaningfull - avoid unusual characters and spaces
+in the name.</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;<font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">Description (optional)</font>
+<br><font face="Arial,Helvetica">--------</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">More information about what this DSN is
+to be used for.</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;<font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">Driver (automatic)</font>
+<br><font face="Arial,Helvetica">--------</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">This is the driver you selected when selecting
+to add a DSN.</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;<font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">Trace (optional)</font>
+<br><font face="Arial,Helvetica">--------</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">Turn tracing on/off. This should always
+be turned off. Using a DSN with tracing on will result in a great deal
+of logging information being stored to TraceFile. This uses up disk space
+and slows the driver down. This is only used when debugging a problem with
+the driver.</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;<font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">TraceFile (optional)</font>
+<br><font face="Arial,Helvetica">--------</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">This is the file where Trace data is logged.</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;<font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">Directory (optional)</font>
+<br><font face="Arial,Helvetica">--------</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">The Text File Driver views a directory
+as a 'database'. This is the place where all of the table files will exist.</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">You can add a table by using the "<a href="SupportedSyntax.html">CREATE&nbsp;TABLE</a>"
+SQL&nbsp;statement or by simply copying a <a href="FileFormats.html">valid
+text file</a> into the directory.</font>
+<br><font face="Arial,Helvetica">You can remove a table by using the "<a href="SupportedSyntax.html">DROP&nbsp;TABLE</a>"
+SQL&nbsp;statement or by simply removing the file from the database directory.</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">The driver will use ~/.odbctxt if you leave
+this field blank.</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">Support for, an optional, catalog file
+may be implemented at some point in the future.</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;<font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">ColumnSeperator (optional)</font>
+<br><font face="Arial,Helvetica">--------</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">This is the character that is used to seperate
+columns in the table file. It defaults to '|'. This must be consistent
+with ALL of the table files in the database directory. See <a href="FileFormats.html">FileFormats</a>.</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;<font face="Arial,Helvetica"></font>
+<p>
+<hr WIDTH="100%">
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+</body>
+</html>

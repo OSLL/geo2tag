@@ -1,0 +1,50 @@
++-------------------------------------------------------------+
+| unixODBC                                                    |
+| odbcinstQ                                                   |
++-------------------------------------------------------------+
+
+INSTALL
+---------------------------------------------------------------
+
+Requirements:
+
+	Qt v3 must be installed on your system. Older versions
+	may work also.	
+	
+What To Do:
+
+        This will get built and installed along with the rest
+        of unixODBC. 
+
+        However; you can do this manually after core unixODBC
+        stuff is installed. Here are the steps to do it. 
+	
+	Step 1
+	
+	# qmake qmake.pro
+	
+	This uses the Qt qmake utility to build a Makefile for
+	your platform. It is easier than the GNU stuff and should
+	work for any machine with Qt on it. You may have to 
+	comment/uncomment some lines for the Mac OSX so Mac OSX
+	users should take a look in qmake.pro.
+
+	Step 2
+	
+	# make
+
+	This is the usual make step. This will generate a 
+	set of libs called libodbcinstQ.*
+	
+	Step 3
+	
+	# cp lib* /usr/local/lib
+	
+	Basically you want to put the lib somewhere. You MUST
+	put it where your libodbcinst.so is.
+
++-------------------------------------------------------------+
+| Peter Harvey <pharvey@codebydesign.com>                     |
+| 28.OCT.01                                                   |
++-------------------------------------------------------------+
+

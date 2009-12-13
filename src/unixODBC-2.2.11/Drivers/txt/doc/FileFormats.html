@@ -1,0 +1,40 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.72C-CCK-MCD Caldera Systems OpenLinux [en] (X11; U; Linux 2.2.14 i686) [Netscape]">
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
+<b><font face="Arial,Helvetica">unixODBC - Text File Driver - File Format</font></b>
+<br>
+<hr WIDTH="100%">
+<p><b><font face="Arial,Helvetica">Database</font></b>
+<p><font face="Arial,Helvetica">A database is simply a directory. This
+may be enhanced with an optional catalog file at some point in the future.</font>
+<p><b><font face="Arial,Helvetica">Table File</font></b>
+<p><font face="Arial,Helvetica">A table file consists of any number of
+data rows which are delimited by a new-line character. Also; the first
+row must contain (currently anyway) a list of column names.</font>
+<p><font face="Arial,Helvetica">Each column is delimited by a character
+specified during <a href="Setup.html">Data Source Setup</a>. The last column
+does not end with a column seperator character.</font>
+<p><font face="Arial,Helvetica">Example table file using | as a column
+seperator;</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;<font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">FirstName|LastName|PhoneNumber</font>
+<br><font face="Arial,Helvetica">Peter|Harvey|</font>
+<br><font face="Arial,Helvetica">Jane|Doe|123-4567</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;<b><font face="Arial,Helvetica"></font></b>
+<p><b><font face="Arial,Helvetica">Handling Malformed Table Files</font></b><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">The first row indicates the number of columns.
+Subsequent rows may have fewer or greater columns (but should not). The
+driver will add empty values to rows with too few columns. The driver will
+<b>truncate</b> extra values. The driver will handle these two conditions
+without warning.</font><font face="Arial,Helvetica"></font>
+<p>
+<hr WIDTH="100%">
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+</body>
+</html>

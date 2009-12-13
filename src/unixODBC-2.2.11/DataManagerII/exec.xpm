@@ -1,0 +1,36 @@
+/* XPM */
+static const char *exec[] = {
+/* width height num_colors chars_per_pixel */
+"    22    22        7            1",
+/* colors */
+". c #000000",
+"# c #ffffff",
+"a c #585858",
+"b c #400000",
+"c c #a0a0a4",
+"d c #c0c0c0",
+"e c None",
+/* pixels */
+"eeeeeeeeeeeeeeeeeeeeee",
+"eeeeeeeeeeeeeeeeeeeeee",
+"eeeeeeeeeeeeeeeeeeeeee",
+"eeeeeee...##.e..eeeeee",
+"eeeeee.##a##a.##eeeeee",
+"eeed#.#########a.##.ee",
+"ee.###.############aee",
+"ee.cad#d#########addee",
+"ee.cc#d##########dddee",
+".dddd#d##.cd.########.",
+".....dddd.cd.d###.....",
+".ccc.dddd#d##d####ddd.",
+".cc.dd.dddddd#d.#d..d.",
+".c.dd.cddddd#d#..#d#d.",
+"e.#.cc.dddddddd#dd...e",
+"e.#cc.ddd.dd..dd.dd..e",
+"e.#ccddd..dd.cddd.d..e",
+"e.#cc.b.c.dd.c.d..d..e",
+"ee..e#dcc.dd..c.c...ee",
+"eeeee#dc..dd.ec.c.eeee",
+"eeeee#d.e.dd.e..c.eeee",
+"eeeee..ee.dd.ee..eeeee"
+};

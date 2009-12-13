@@ -1,0 +1,37 @@
+***************************************************************
+* This code is LGPL. You CAN make commercial solutions using  *
+* LGPL software.                                              *
+*                                                             *
+* Peter Harvey 07.APR.99 pharvey@codebydesign.com             *
+* Peter Harvey 07.APR.01 pharvey@codebydesign.com (rewrite)   *
+***************************************************************
+
++-------------------------------------------------------------+
+| unixODBC                                                    |
+| Driver for Text files                                       |
++-------------------------------------------------------------+
+
+Description:
+
+	This driver provides an ODBC interface for accessing text files
+	where each text file is considered to be a table.
+
+Strengths/Weaknesses:
+
+	see the doc dir
+
+To Do:
+
+	- added table locking
+	- add xbase I/O
+	- add xml I/O
+	- do more to ensure sqp mem freed (i.e. failed parse)
+	- more compliance (i.e. to allow edit etc in StarOffice) 
+	- add optional support for a catalog file (describing
+	  tables in more detail)
+	
++-------------------------------------------------------------+
+| Please vist;                                                |
+| www.unixodbc.org                                            |
++-------------------------------------------------------------+
+

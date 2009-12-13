@@ -1,0 +1,221 @@
+##########################################################################
+#                                                                        #   
+#                   MAKEFILE FOR MYODBC 3.51 DRIVER                      #
+#                          WINDOWS - DEBUG                               #
+#                  (C) Copyright MySQL AB 1995-2002                      #
+#                                                                        #
+##########################################################################
+
+
+!MESSAGE *****************************************************************
+!MESSAGE *            MySQL ODBC 3.51 Driver, Debug Build                *          
+!MESSAGE *             (C) Copyright MySQL AB 1995-2002                  *
+!MESSAGE *                                                               *
+!MESSAGE *    AUTHORS: Monty (monty@mysql.com), Venu (venu@mysql.com)    *
+!MESSAGE *****************************************************************
+!MESSAGE *                                                               *
+!MESSAGE *****************************************************************
+!MESSAGE * This program is free software; you can redistribute it and/or *
+!MESSAGE * modify it under the terms of the GNU General Public License   *
+!MESSAGE * as published by the Free Software Foundation; either version  *
+!MESSAGE * 2 of the License, or (at your option) any later version.      *
+!MESSAGE *****************************************************************
+
+# -----------------------------
+# CONFIGURE DEFINATIONS
+# -----------------------------
+
+# specify MySQL include directory
+MYSQL_INCLUDE_PATH = c:\mysql\include
+
+# specify the MySQL client libraries path (Debug version)
+MYSQL_LIB_PATH     = c:\mysql\lib\debug
+
+# specify driver output file name
+MYODBC3_OUTFILE    = myodbc3
+
+# specify the output directory
+OUTDIR             = .\Debug
+
+# -----------------------------
+# COMPILER FLAGS
+# -----------------------------
+
+# compiler name
+
+CC     	           =  cl.exe
+
+# linker name
+LINK               =  link.exe
+
+# resource compiler
+RSC                =  rc.exe
+
+# specify the include path
+INCDIR             =  -I. -I$(MYSQL_INCLUDE_PATH)
+
+# optimization levels
+OPTLEVEL           =  -O2 -G6
+
+# warning level
+WARNLEVEL          =  -W3
+
+# general compiler flags
+CGENERAL           =  -nologo -DENGLISH -DMYODBC_EXPORTS -D_USERDLL -DDONT_DEFINE_VOID
+
+# multi thread related flags
+MTHREAD            =  -DMTd
+
+# output path listing
+OUTLIST            = -Fo$(OUTDIR)\ -Fd$(OUTDIR)
+
+# debug flags
+DBUGFLAGS         =  -DDBUG_ON -D_DBUG_ON -DDEBUG -D_DEBUG -Zi
+
+# all compiler flags in one place 'CFLAGS'
+CFLAGS             = $(CGENERAL) $(WARNLEVEL) $(OPTLEVEL) \
+                     $(MTHREAD) $(INCDIR) $(DBUGFLAGS) $(OUTLIST)
+
+# -----------------------------
+# DRIVER DEFINATIONS
+# -----------------------------
+
+DRIVER_DLL         = $(OUTDIR)\$(MYODBC3_OUTFILE).dll
+DRIVER_LIB         = $(OUTDIR)\$(MYODBC3_OUTFILE).lib
+MYODBC3_RES        = $(OUTDIR)\myodbc3.res
+MYODBC3_RC         = myodbc3.rc
+MYODBC3_DEF        = myodbc3.def
+
+# -----------------------------
+# DRIVER SOURCE FILES
+# -----------------------------
+
+MYODBC3_SRCS       = catalog.c \
+                     connect.c \
+                     cursor.c \
+                     dll.c \
+                     error.c \
+                     execute.c \
+                     handle.c \
+                     info.c \
+                     misc.c \
+                     myodbc3.c \
+                     options.c \
+                     prepare.c \
+                     results.c \
+                     setup.c \
+                     transact.c \
+                     utility.c 
+
+# --------------------------------------------------
+# DRIVER INTERMEDIATE FILES - FOR DEPENDENCY PURPOSE
+# --------------------------------------------------
+
+MYODBC3_OBJS       = $(OUTDIR)/catalog.obj \
+                     $(OUTDIR)/connect.obj \
+                     $(OUTDIR)/cursor.obj \
+                     $(OUTDIR)/dll.obj \
+                     $(OUTDIR)/error.obj \
+                     $(OUTDIR)/execute.obj \
+                     $(OUTDIR)/handle.obj \
+                     $(OUTDIR)/info.obj \
+                     $(OUTDIR)/misc.obj \
+                     $(OUTDIR)/myodbc3.obj \
+                     $(OUTDIR)/options.obj \
+                     $(OUTDIR)/prepare.obj \
+                     $(OUTDIR)/results.obj \
+                     $(OUTDIR)/setup.obj \
+                     $(OUTDIR)/transact.obj \
+                     $(OUTDIR)/utility.obj \
+                     $(OUTDIR)/myodbc3.res
+
+# ------------------------------------
+# BASED ON OS, SPECIFY THE TARGET PATH
+# ------------------------------------
+
+!IF "$(OS)" == "Windows_NT"
+SYSDIR             = $(WINDIR)\system32
+CFLAGS             = $(CFLAGS) -D_WIN32 -DWIN32 -D_WINDOWS -D__WIN__
+NULL               = 
+!ELSE
+
+SYSDIR             = $(WINDIR)\system
+CFLAGS             = $(CFLAGS) -D_WINDOWS -D__WIN__
+NULL               = nul
+!ENDIF
+
+
+# -----------------------------
+# LINKER FLAGS
+# -----------------------------
+
+# mysql client libraries
+MYSQL_CLIENT_LIBS  = mysqlclient.lib zlib.lib
+
+# system libraries
+SYSLIBS            = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
+                     advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib\
+                     odbc32.lib odbccp32.lib wsock32.lib ctl3d32.lib 
+                     
+# linker flags             
+LDFLAGS            = $(SYSLIBS) /NODEFAULTLIB:LIBC \
+                     /DLL /DEF:$(MYODBC3_DEF) $(MYODBC3_OBJS) \
+                     $(MYSQL_CLIENT_LIBS) /implib:$(DRIVER_LIB) \
+                     /libpath:$(MYSQL_LIB_PATH) /out:$(DRIVER_DLL)
+        
+# ---------------------------------------------------
+# RESOURCE COMPILATION
+#
+# ONE MUST SUPPLY THE RESOURCE FILE LANGUAGE USING /l 
+# IN HEX FORMAXT, 0x409 for english
+# ---------------------------------------------------
+
+RES_LANGUAGE       = 0x409
+MYODBC3_RES_PROJ   = /l $(RES_LANGUAGE) /fo $(MYODBC3_RES) $(INCDIR) $(MYODBC3_RC)
+
+# -----------------------------
+# BUILD SPECIFICATION
+# -----------------------------
+
+all     : build
+build   : $(OUTDIR) $(DRIVER_DLL)
+default : build
+buildall: build copy
+install : buildall
+
+$(DRIVER_DLL): $(MYODBC3_OBJS) $(RES) $(MYODBC3_RES) $(MYODBC3_SRCS)
+      $(LINK) /DEBUG $(LDFLAGS)
+   
+.c{$(OUTDIR)}.obj:
+        $(CC) -c $(CFLAGS) $< -o $*.obj
+
+.rc{$(OUTDIR)}.res: 
+	$(RSC) $(MYODBC3_RES_PROJ)
+	
+$(OUTDIR):
+	if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"  
+         
+# -----------------------------	
+# INSTALL SPECIFICATION
+# -----------------------------            
+
+copy: 
+     copy $(DRIVER_DLL) $(SYSDIR)\myodbc3.dll
+     copy $(DRIVER_LIB) $(SYSDIR)\myodbc3.lib
+
+# -----------------------------	
+# CLEAN SPECIFICATION
+# -----------------------------            
+
+clean:
+     -@erase  $(DRIVER_DLL)
+     -@erase  $(DRIVER_LIB)
+     -@erase  $(OUTDIR)\*.exp
+     -@erase  $(MYODBC3_RES)
+     -@erase  $(OUTDIR)\*.pdb
+     -@erase  $(OUTDIR)\*.ilk
+     -@erase  $(OUTDIR)\*.obj
+     -@erase  $(OUTDIR)\*.sbr
+     -@erase  $(OUTDIR)\*.idb
+     -@erase  *.idb
+     -@erase  *.pdb

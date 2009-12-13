@@ -1,0 +1,102 @@
+Authors of unixODBC...
+
+Peter Harvey <pharvey@codebydesign.com>
+Nick Gorham <nick@easysoft.com>
+
+The PostgreSQL Driver was modified from the standard PostgreSQL 
+ODBC driver (http://www.postgresql.org)
+
+The NNTP Driver as written by Ke Jin
+
+The MySQL driver is a mirror from the MySQL folks.
+
+Other contributors include (in no particular order)
+
+Jon Pounder
+Martin Evans
+Lars Doelle
+Manush Dodunekov
+Scott Courtney
+Greg Bentz
+Shandy J. Brown
+Mark Hessling
+Charles Morrison
+Holger Bischoff
+Charles Overbeck
+Murray Todd Williams
+Jim Ziegler
+Thomas Langen
+Nikolai Afanasiev 
+Ralf Fassel
+Tim Roepken
+Zoltan Boszormenyi
+Murad Nayal
+Michael Koch
+Dmitriy Yusupov
+Alex Hornby
+Steve Gilbert
+Max Khon
+Jay Q. Cai
+Bill Bouma
+Steffen Dettmer
+Jens Schlegel
+Venu Anuganti
+Tomas Zellerin
+James Dugal
+Simon Pepping
+Bard Hustveit
+Ola Sundell 
+Christian Werner
+Martin Edlman
+Dave Berry
+Holger Schurig
+Martin Ediman
+Jon Kåre Hellan
+Trond Eivind Glomsrød
+Jürgen Pfeifer
+Jason Crummack
+Bojnourdi Kaikavous
+Martin Hobbs
+Gary Bunting
+Patrice Favre
+John C. Rood
+Martin Lacko
+Mikko Vierula
+Paul Richardson
+Samuel Cote
+Christian Jullien
+Mark Vanderwiel
+Jeff Garzik
+Keith Woodard 
+Steven M. Schultz
+Joel W. Reed
+Jay Van Vark
+Rick Flower
+Artiom Morozov
+Bill Medland
+Per I. Mathisen
+Emile Heitor
+John L Miller
+Brian Harris
+Craig A Berry
+Stefan Radman
+Jay Cai
+Steve Langasek
+Stuart Coupe
+David Brown
+Rafi Einstein
+Ocke Janssen
+Steven Reynolds
+Jon Willeke
+Per Bengtsson
+Erik Lundqvist
+Frediano Ziglio
+Scot Loach
+Mike Schultz
+
+If I have omitted anyone from this let me know and I will amend it ASAP.
+
+I have removed the email address of the people on this list. If someone
+wants to get in touch, mail me and I will pass it on.
+
+Nick Gorham

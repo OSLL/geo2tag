@@ -1,0 +1,85 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.72C-CCK-MCD Caldera Systems OpenLinux [en] (X11; U; Linux 2.2.14 i686) [Netscape]">
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
+<b><font face="Arial,Helvetica">unixODBC - Text File Driver - Supported
+Syntax</font></b>
+<br>
+<hr WIDTH="100%">
+<p><b><font face="Arial,Helvetica">Supported SQL Syntax</font></b>
+<p><font face="Arial,Helvetica">This ODBC driver is limited in its support
+of SQL by the sqp library. But, in fact, this driver may be limited even
+more. So your best indication of supported SQL is to simply try the SQL
+(i.e. in isql) before commiting yourself to it. The idea is that any supported
+SQL in this driver will be availible in other drivers/data sources. So
+this driver may be considered the "lowest common denominator".</font>
+<p><b><font face="Arial,Helvetica">Case Sensitivity</font></b>
+<p><font face="Arial,Helvetica">sqp is case insensitive. This is inherited
+by this driver. However; this driver is often case sensitive when working
+with table names because they may map directly to file names.</font>
+<p><b><font face="Arial,Helvetica">Supported Syntax</font></b>
+<p><font face="Arial,Helvetica">Here are some SQL syntax examples which
+are known to work;</font>
+<p><i><font face="Arial,Helvetica">- CREATE TABLE -</font></i>
+<p><font face="Arial,Helvetica">CREATE TABLE TableName ( Col1 VARCHAR(100),
+Col2 VARCHAR(100) )</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;
+<blockquote><font face="Arial,Helvetica">Note:</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">The only column data type supported is
+VARCHAR and the length is always the default length compiled into the driver
+(i.e. 4096). So the length specified is ignored. The reason for this is
+simple; the <a href="FileFormats.html">table file format </a>only contains
+column names and data. This may be resolved with a catalog file in the
+future.</font></blockquote>
+<font face="Arial,Helvetica"></font><font face="Arial,Helvetica"></font>
+<p><i><font face="Arial,Helvetica">- DROP TABLE -</font></i>
+<p><font face="Arial,Helvetica">DROP TABLE TableName</font>
+<br><font face="Arial,Helvetica"></font>&nbsp;
+<blockquote><font face="Arial,Helvetica">Note:</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">This does an rm on the table file. This
+means that it will be gone forever.</font></blockquote>
+<font face="Arial,Helvetica"></font>
+<p><i><font face="Arial,Helvetica">- SELECT -</font></i>
+<p><font face="Arial,Helvetica">SELECT * FROM TableName</font>
+<br><font face="Arial,Helvetica">SELECT Col1, Col2, Col3 FROM TableName</font>
+<br><font face="Arial,Helvetica">SELECT * FROM TableName WHERE Col1 = 'value'
+AND Col2 >= 'value'</font>
+<br><font face="Arial,Helvetica">SELECT * FROM TableName ORDER BY Col1,
+Col2</font>
+<blockquote><font face="Arial,Helvetica">Note:</font>
+<p><font face="Arial,Helvetica">1. You can only AND two expressions (no
+OR).</font>
+<br><font face="Arial,Helvetica">2. A column name must be on the left and
+a string must be on the right of each expression.</font>
+<br><font face="Arial,Helvetica">3. You can not do table joins.</font>
+<br><font face="Arial,Helvetica">4. Aggregating is not supported.</font>
+<br><font face="Arial,Helvetica">5. DISTINCT is not supported.</font></blockquote>
+
+<p><br><i><font face="Arial,Helvetica">- INSERT -</font></i>
+<p><font face="Arial,Helvetica">INSERT INTO TableName VALUES ( 'value1',
+'value2' )</font>
+<br>&nbsp;
+<blockquote><font face="Arial,Helvetica">Note:</font><font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">Specifying specific columns such as (col1,co2)
+VALUES&nbsp;('val1','val2') is not supported.</font></blockquote>
+<font face="Arial,Helvetica"></font><font face="Arial,Helvetica"></font>
+<p><i><font face="Arial,Helvetica">- DELETE -</font></i>
+<p><font face="Arial,Helvetica">DELETE TableName</font>
+<br><font face="Arial,Helvetica">DELETE TableName WHERE Col1 &lt;= 'value1'
+AND Col2 > 'value2'</font>
+<br>&nbsp;
+<br><font face="Arial,Helvetica"></font>&nbsp;<font face="Arial,Helvetica"></font>
+<p><i><font face="Arial,Helvetica">- UPDATE -</font></i>
+<p><font face="Arial,Helvetica">UPDATE TableName SET Col1 = 'value1', Col2
+= 'value2' WHERE Col1 > 'value1'</font>
+<br>&nbsp;
+<p>
+<hr WIDTH="100%">
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+</body>
+</html>

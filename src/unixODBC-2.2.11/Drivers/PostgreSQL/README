@@ -1,0 +1,28 @@
+***************************************************************
+* This code is LGPL                                           *
+***************************************************************
+
++-------------------------------------------------------------+
+| unixODBC                                                    |
+| PostgreSQL Driver                                           |
++-------------------------------------------------------------+
+
+This is the PostgreSQL ODBC Driver with changes and enhancements
+made during testing with unixODBC.
+
+The driver source originated from the Win32 zip download on 
+Byrons web site and was not derived from the source included
+in the server distribution. This was done to ensure that we
+started with the most current code.
+
+News of this source was posted to the pgsql-interfaces news 
+group and it is hoped that these enhancements have since been 
+integrated into the original source.
+
++-------------------------------------------------------------+
+| Peter Harvey pharvey@codebydesign.com                       |
+| http://www.postgresql.org                                   |
+| http://www.unixODBC.org                                     |
++-------------------------------------------------------------+
+
+

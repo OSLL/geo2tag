@@ -1,0 +1,62 @@
+/* myconf.h.in.  Generated automatically from configure.in by autoheader.  */
+
+/*************************************************************************** 
+ * ACCONFIG.H                                                              *                                             
+ *                                                                         *
+ * 
+description: Defines for UNIX                                          *
+ *                                                                         *
+ * 
+author     : MySQL AB                                                  *
+ * 
+date       : 2001-Aug-15                                               *
+ * 
+product    : myodbc3                                                   *
+ *                                                                         *
+****************************************************************************/
+#undef _UNIX_
+
+/* odbc types */
+#undef SQLHENV
+#undef SQLHDBC
+#undef SQLHSTMT
+#undef SQLINTEGER
+#undef SQLUINTEGER
+#undef SQLSMALLINT
+#undef SQLUSMALLINT
+#undef SQLPOINTER
+#undef SQLRETURN
+#undef SQLCHAR
+#undef SQLHWND
+
+#undef HAVE_SQLGETPRIVATEPROFILESTRING
+
+#undef SYSTEM_ODBC_INI
+
+/* Define if you have the <iodbcinst.h> header file.  */
+#undef HAVE_IODBCINST_H
+
+/* Define if you have the <isql.h> header file.  */
+#undef HAVE_ISQL_H
+
+/* Define if you have the <isqlext.h> header file.  */
+#undef HAVE_ISQLEXT_H
+
+/* Define if you have the <odbcinst.h> header file.  */
+#undef HAVE_ODBCINST_H
+
+/* Define if you have the <sql.h> header file.  */
+#undef HAVE_SQL_H
+
+/* Define if you have the <sqlext.h> header file.  */
+#undef HAVE_SQLEXT_H
+
+/* Define if you have the z library (-lz).  */
+#undef HAVE_LIBZ
+
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+

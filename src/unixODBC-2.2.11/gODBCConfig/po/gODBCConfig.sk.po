@@ -1,0 +1,490 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gODBCConfig\n"
+"POT-Creation-Date: 2000-04-07 11:25+0100\n"
+"PO-Revision-Date: 2001-07-08 11:41CEST\n"
+"Last-Translator: Martin Lacko <lacko@host.sk>\n"
+"Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.8\n"
+
+#: src/main.c:25
+msgid "gODBCConfig - ODBC Data Source Administrator"
+msgstr "gODBCConfig - ODBC Administrátor Zdrojov Dát"
+
+#: src/odbcconfig.c:70 src/odbcconfig.c:194 src/odbcconfig.c:339
+#: src/odbcconfig.c:2163
+msgid "Add"
+msgstr "Vlo¾i»"
+
+#: src/odbcconfig.c:80 src/odbcconfig.c:203 src/odbcconfig.c:348
+msgid "Remove"
+msgstr "Odstráni»"
+
+#: src/odbcconfig.c:90 src/odbcconfig.c:212 src/odbcconfig.c:357
+msgid "Configure..."
+msgstr "Nastavi»..."
+
+#: src/odbcconfig.c:117
+msgid ""
+"User data source configuration is stored in your home directory. This allows "
+"you configure data access without having to be system administrator"
+msgstr ""
+"Zdroj u¾ívateµskej konfigurácie je umiestnený vo va¹om domovskom adresári. To vám dovoµuje "
+"nastavi» prístup k dátam bez toho, aby ste boli systémovým administrátorom."
+
+#: src/odbcconfig.c:159 src/odbcconfig.c:277 src/odbcconfig.c:423
+#: src/odbcconfig.c:1823 src/odbcconfig.c:2041 src/odbcconfig.c:2256
+msgid "Name"
+msgstr "Meno"
+
+#: src/odbcconfig.c:166 src/odbcconfig.c:284 src/odbcconfig.c:430
+#: src/odbcconfig.c:1852 src/odbcconfig.c:2070 src/odbcconfig.c:2263
+msgid "Description"
+msgstr "Popis"
+
+#: src/odbcconfig.c:173 src/odbcconfig.c:291 src/odbcconfig.c:640
+#: src/odbcconfig.c:1833 src/odbcconfig.c:2051
+msgid "Driver"
+msgstr "Ovládaè"
+
+#: src/odbcconfig.c:180
+msgid "User DSN"
+msgstr "U¾ívateµský DSN"
+
+#: src/odbcconfig.c:237
+msgid ""
+"System data sources are shared among all users of this machine.These data "
+"sources may also be used by system services. Only the administrator can "
+"configure system data sources."
+msgstr ""
+"Systémové zdroje dát sú zdieµané medzi v¹etkými u¾ívateeµmi tohoto PC. Tieto zdroje "
+"dát mô¾u by» tie¾ pou¾ité systémovými servismi. Iba administrátor mô¾e nastavi» systémové"
+"zdroje dát."
+
+#: src/odbcconfig.c:298
+msgid "System DSN"
+msgstr "Systémový DSN"
+
+#: src/odbcconfig.c:382 src/odbcconfig.c:2215
+msgid ""
+"These drivers facilitate communication between the Driver Manager and the "
+"data server. Many ODBC drivers  for Linux can be downloaded from the "
+"Internet while others are obtained from your database vendor."
+msgstr ""
+"Tieto ovládaèe umo¾òujú komunikáciu medzi Mana¾érom Ovládaèov a dátovým servrom. "
+"Veµa ODBC ovládaèov pre Linux mô¾e by» stiahnutých z Internetu pokým iné sú dodávané"
+"va¹ím dodávateµom databáz."
+
+#: src/odbcconfig.c:437 src/odbcconfig.c:2270
+msgid "Driver Lib"
+msgstr "Kni¾nica Ovládaèa"
+
+#: src/odbcconfig.c:444 src/odbcconfig.c:2277
+msgid "Setup Lib"
+msgstr "Kni¾nica Nastavenia"
+
+#: src/odbcconfig.c:451
+msgid "Drivers"
+msgstr "Ovládaèe"
+
+#: src/odbcconfig.c:490
+msgid ""
+"Tracing allows you to create logs of the calls to ODBC drivers. Great for "
+"support people, or to aid you in debugging applications.\n"
+"You must be 'root' to set"
+msgstr ""
+"Trasovanie vám dovoµuje vytvori» logovacie súbory volaní ODBC ovládaèov. Dobré hlavne "
+"pre podpour; alebo ako pomôcka pri ladení programov.\n"
+"Musíte by» 'root'."
+
+#: src/callbacks.c:1071 src/callbacks.c:1461 src/odbcconfig.c:518
+#: src/odbcconfig.c:1795 src/odbcconfig.c:1804 src/odbcconfig.c:2013
+#: src/odbcconfig.c:2022
+msgid "Browse"
+msgstr "Prechádza»..."
+
+#: src/odbcconfig.c:527
+msgid "Trace File"
+msgstr "Trasovací Súbor"
+
+#: src/odbcconfig.c:536
+msgid "Tracing On"
+msgstr "Trasovanie Zapnuté"
+
+#: src/odbcconfig.c:545
+msgid "Tracing"
+msgstr "Trasovanie"
+
+#: src/odbcconfig.c:575
+msgid ""
+"Open DataBase Connectivity (ODBC) was developed to be an Open and portable "
+"standard for accessing data. unixODBC implements this standard for "
+"Linux/UNIX."
+msgstr ""
+"Open DataBase Connectivity (ODBC) bol vytvorený ako Otvorený a prenositeµný "
+"¹tandard pre prístup k dátam. unixODBC zavádza tento ¹tandard pre Linux/UNIX."
+
+#: src/odbcconfig.c:585
+msgid "http://www.unixodbc.org"
+msgstr "http://www.unixodbc.org"
+
+#: src/odbcconfig.c:595 src/odbcconfig.c:649
+msgid "Database System"
+msgstr "Databázový Systém"
+
+#: src/odbcconfig.c:604
+msgid "Credits"
+msgstr "Poskytuje"
+
+#: src/odbcconfig.c:622
+msgid "Application"
+msgstr "Program"
+
+#: src/odbcconfig.c:631
+msgid "Driver Manager"
+msgstr "Mana¾ér Ovládaèov"
+
+#: src/odbcconfig.c:658
+msgid "odbcinst.ini"
+msgstr "odbcinst.ini"
+
+#: src/odbcconfig.c:667
+msgid "odbc.ini"
+msgstr "odbc.ini"
+
+#: src/odbcconfig.c:676
+msgid "Config"
+msgstr "Konfigurátor"
+
+#: src/odbcconfig.c:739
+msgid "About"
+msgstr "O programe"
+
+#: src/odbcconfig.c:847
+msgid "gODBCConfig - Appication"
+msgstr "gODBCConfig - Program"
+
+#: src/odbcconfig.c:892
+msgid ""
+"The Application communicates with the Driver Manager using the standard ODBC "
+"calls.\n"
+"\n"
+"The application does not care; where the data is stored, how it is stored, "
+"or even how the system is configured to access the data.\n"
+"\n"
+"The Application only needs to know the data source name (DSN)\n"
+"\n"
+"The Application is not hard wired to a particular database system. This "
+"allows the user to select a different database system using the ODBCConfig "
+"Tool."
+msgstr ""
+"Program komunikuje s Mana¾érom Dát pou¾ívajúcim ¹tand ODBC "
+"volaní.\n"
+"\n"
+"Program sa nestará; kde sú dáta ulo¾ené, ako sú ulo¾ené, "
+"alebo ako je nastavený systém k prístupu k dátam.\n"
+"\n"
+"Program potrebuje vedie» iba meno zdroja dát (DSN)\n"
+"\n"
+"Program nie je závislý na príslu¹nom databázovom systéme. To "
+"dovoµuje u¾ívateµovi vybra» si ODBCConfig ako nástroj pre rôzne databázové systémy."
+
+#: src/odbcconfig.c:951
+msgid "gODBCConfig - Driver Manager"
+msgstr "gODBCConfig - Mana¾ér Ovládaèov"
+
+#: src/odbcconfig.c:967
+msgid ""
+"The Driver Manager carries out a number of functions, such as:\n"
+"1. Resolve data source names via odbcinst lib)\n"
+"2. Loads any required drivers\n"
+"3. Calls the drivers exposed functions to communicate with the database. "
+"Some functionality, such as listing all Data Source, is only present in the "
+"Driver Manager or via odbcinst lib)."
+msgstr ""
+"Mana¾ér Ovládaèov uskutoèòuje rôzne funkcie, ako:\n"
+"1. Rozlo¾i» názvy zdrojov dát prostredníctvom odbcinst lib)\n"
+"2. Nahráva» potrebné ovládaèe\n"
+"3. Vola» funkcie ovládaèov pre komunikáciu s databázou."
+"Niektoré funkcie ako listova» v¹etky Zdroje Dát, sú poskytované"
+"iba Mana¾érom Ovládaèov alebo prostredníctvom odbcinst lib)."
+
+#: src/odbcconfig.c:977
+msgid " "
+msgstr " "
+
+#: src/odbcconfig.c:1058
+msgid "ODBCConfig - Drivers"
+msgstr "ODBCConfig - Ovládaèe"
+
+#: src/odbcconfig.c:1093
+msgid ""
+"The ODBC Drivers contain code specific to a Database System and provides a "
+"set of callable functions to the Driver Manager.\n"
+"Drivers may implement some database functionality when it is required by "
+"ODBC and is not present in the Database System.\n"
+"Drivers may also translate data types.\n"
+"\n"
+"ODBC Drivers can be obtained from the Internet or directly from the Database "
+"vendor.\n"
+"\n"
+"Check http://www.unixodbc.org for drivers"
+msgstr ""
+"ODBC Ovládaèe poskytujú kód ¹pecifický Databázovému Systému a poskytujú "
+"sadu kompatibilných funkcií Mana¾éru Ovládaèov.\n"
+"Ovládaèe mô¾u obsahova» niektoré databázové funkcie, ktoré sú potrebné"
+"pre ODBC a nie sú prítomné v Databázovom Systéme.\n"
+"Ovládaèe mô¾u tie¾ preklada» dátové typy.\n"
+"\n"
+"ODBC Ovládaèe mô¾u by» stiahnuté z Internetu alebo ich mô¾ete obdr¾a»"
+"od dodávateµa va¹ej databáze.\n"
+"\n"
+"Prezrite si http://www.unixodbc.org ak chcete získa» nové ovládaèe."
+
+#: src/odbcconfig.c:1165
+msgid "ODBCConfig - Database Systems"
+msgstr "ODBCConfig - Databázové Systémy"
+
+#: src/odbcconfig.c:1181
+msgid ""
+"Perhaps the most common type of Database System today is an SQL Server\n"
+"\n"
+"SQL Servers with Heavy Functionality\n"
+"  ADABAS-D\n"
+"  Empress\n"
+"  Sybase - www.sybase.com\n"
+"  Oracle - www.oracle.com\n"
+"\n"
+"SQL Servers with Lite Functionality\n"
+"  MiniSQL\n"
+"  MySQL\n"
+"  Solid\n"
+"\n"
+"The Database System may be running on the local machine or on a remote "
+"machine. It may also store its information in a variety of ways. This does "
+"not matter to an ODBC application because the Driver Manager and the Driver "
+"provides a consistent interface to the Database System."
+msgstr ""
+"Pravdepodobne najpou¾ívanej¹í typ Databázového Systému je v súèasnosti SQL Server\n"
+"\n"
+"SQL Server s Výbornou Funkènos»ou\n"
+"  ADABAS-D\n"
+"  Empress\n"
+"  Sybase - www.sybase.com\n"
+"  Oracle - www.oracle.com\n"
+"\n"
+"SQL Server s Dostatoènou Funkènos»ou\n"
+"  MiniSQL\n"
+"  MySQL\n"
+"  Solid\n"
+"\n"
+"Databázový Systém mô¾e ís» na lokálnom alebo na vzdialenom stroji. "
+"Takisto mô¾e zoskupova» vlastné informácie rôznymi spôsobmi. To v¹ak "
+"nezaujíma ODBC porgramy, nakoµko Mana¾ér Ovládaèov a Ovládaè "
+"poskytujú konzistentné rozhranie pre Databázový Systém."
+
+#: src/odbcconfig.c:1272
+msgid "ODBCConfig - odbc.ini"
+msgstr "ODBCConfig - odbc.ini"
+
+#: src/odbcconfig.c:1288
+msgid ""
+"This is the main configuration file for ODBC.\n"
+"It contains Data Source configuration.\n"
+"\n"
+"It is used by the Driver Manager to determine, from a given Data Source "
+"Name, such things as the name of the Driver.\n"
+"\n"
+"It is a simple text file but is configured using the ODBCConfig tool.\n"
+"The User data sources are typically stored in ~/.odbc.ini while the System "
+"data sources are stored in /etc/odbc.ini\n"
+msgstr ""
+"Toto je hlavný konfiguraèný súbor pre ODBC.\n"
+"Poskytuje nastavenie Zdrojov Dát.\n"
+"\n"
+"Je pou¾ívaný Mana¾érom Ovládaèov na rozpoznanie Mena Zdroja Dát "
+"(myslí sa meno Ovládaèa).\n"
+"\n"
+"Je to jednoduchý textový súbor, ale je pou¾ívaný na nastavenie ODBCConfig nástroja.\n"
+"U¾ívateµské dátové zdroje sú typicky umiestnené v ~/.odbc.ini, pokým Systémové"
+"dátové zdroje sú umiestnenécal/etc/odbc.ini\n"
+
+#: src/odbcconfig.c:1379
+msgid "ODBCConfig"
+msgstr "ODBCConfig"
+
+#: src/odbcconfig.c:1395
+msgid ""
+"This is the program you are using now. This program allows the user to "
+"easily configure ODBC."
+msgstr ""
+"Je to program, ktorý práve pou¾ívate. Tento program povoµuje u¾ívateµovi"
+"jednoduché nastavovanie ODBC."
+
+#: src/odbcconfig.c:1486
+msgid "ODBCConfig - odbcinst.ini"
+msgstr "ODBCConfig - odbcinst.ini"
+
+#: src/odbcconfig.c:1502
+msgid ""
+"odbcinst.ini contains a list of all installed ODBC Drivers. Each entry also "
+"contains some information about the driver such as the file name(s) of the "
+"driver.\n"
+"\n"
+"An entry should be made when an ODBC driver is installed and removed when "
+"the driver is uninstalled. This can be done using ODBCConfig or the odbcinst "
+"command tool."
+msgstr ""
+"odbcinst.ini poskytuje zoznam v¹etkých nain¹talovaných ODBC Ovládaèov. Ka¾dá polo¾ka "
+"tie¾ poskytuje niekoµko informácií o ovládaèi, ako je napr. meno súboru(ov) "
+"ovládaèa.\n"
+"\n"
+"Polo¾ka mô¾e by» vytvorená pri in¹talácii ODBC Ovládaèa a vymazaná pri jeho odobratí."
+"Toto mô¾e by» nastavené pou¾ívaním ODBCConfig alebo odbcinst príkazovým nástrojom."
+
+#: src/odbcconfig.c:1594
+msgid "ODBCConfig - Credits"
+msgstr "ODBCConfig - Poskytuje"
+
+#: src/odbcconfig.c:1638
+msgid ""
+"unixODBC consists of the following components\n"
+"\n"
+"- Driver Manager\n"
+"- GUI Data Manager\n"
+"- GUI Config\n"
+"- Several Drivers and Driver Config libs\n"
+"- Driver Code Template\n"
+"- Driver Config Code Template\n"
+"- ODBCINST lib\n"
+"- odbcinst (command line tool for install scripts)\n"
+"- INI lib\n"
+"- LOG lib\n"
+"- LST lib\n"
+"- TRE lib\n"
+"- SQI lib\n"
+"- isql (command line tool for SQL)\n"
+"\n"
+"All code is released under GPL and the LGPL license.\n"
+msgstr ""
+"unixODBC sa skladá z nasledujúcich èastí\n"
+"\n"
+"- Mana¾ér Ovládaèov\n"
+"- GUI Mana¾ér Dát\n"
+"- GUI Konfigurátor\n"
+"- Niekoµko Ovládaèov a Konfiguraèné kni¾nice\n"
+"- ©ablónu Kódu Ovládaèa\n"
+"- ©ablónu Kódu Konfigurátora\n"
+"- ODBCINST lib\n"
+"- odbcinst (nástroj príkazového riadku na in¹taláciu skriptov)\n"
+"- INI lib\n"
+"- LOG lib\n"
+"- LST lib\n"
+"- TRE lib\n"
+"- SQI lib\n"
+"- isql (nástroj príkazového riadku pre SQL)\n"
+"\n"
+"V¹etok kód je vydávaný pod GPL a LGPL licenciami.\n"
+
+#: src/odbcconfig.c:1708
+msgid "gODBCConfig - New Driver"
+msgstr "gODBCConfig - Nový Ovládaè"
+
+#: src/odbcconfig.c:1813 src/odbcconfig.c:2031
+msgid "FileUsage"
+msgstr "Pou¾itieSúboru"
+
+#: src/odbcconfig.c:1843 src/odbcconfig.c:2061
+msgid "Setup"
+msgstr "Nastavenie"
+
+#: src/odbcconfig.c:1926
+msgid "gODBCConfig - Configure Driver"
+msgstr "gODBCConfig - Nastai» Ovládaè"
+
+#: src/odbcconfig.c:2143
+msgid "gODBCConfig - Add DSN"
+msgstr "gODBCConfig - Prida» DSN"
+
+#: src/odbcconfig.c:2153
+msgid "Select the DRIVER to use or Add a new one"
+msgstr "Vyberte OVLÁDAÈ, ktorý chcete pou¾i» alebo Pridajte nov"
+
+#: src/callbacks.c:118 src/callbacks.c:369
+#, c-format
+msgid "Could not load %s"
+msgstr "Nemô¾em naèíta» %s"
+
+#: src/callbacks.c:405 src/callbacks.c:730
+#, c-format
+msgid "Could not write to (%s)"
+msgstr "Nemô¾em zapisova» do (%s)"
+
+#: src/callbacks.c:524
+msgid "Select a driver to remove"
+msgstr "Vyberte ovládaè, ktorý chcete odstráni»"
+
+#: src/callbacks.c:565
+msgid "Select a driver to configure"
+msgstr "Vyberte ovládaè, ktorý chcete nastavi»"
+
+#: src/callbacks.c:704
+msgid "Enter a DSN name"
+msgstr "Vlo¾te DSN meno"
+
+#: src/callbacks.c:718 src/callbacks.c:847 src/callbacks.c:1218
+#, c-format
+msgid "Could not construct a property list for (%s)"
+msgstr "Nemô¾em vytvori» zoznam vlastností pre (%s)"
+
+#: src/callbacks.c:816
+msgid "Select a driver to Use"
+msgstr "Vyberte ovládaè, ktorý chcete pou¾í»"
+
+#: src/callbacks.c:886 src/callbacks.c:1257
+msgid "DSN"
+msgstr "DSN"
+
+#: src/callbacks.c:1173
+msgid "Select a DSN to configure"
+msgstr "Vyberte DSN, ktorý chcete nastavi»"
+
+#: src/callbacks.c:1194
+msgid "Unable to find a Driver line for this entry"
+msgstr "Nemô¾em nájs» riadok Ovládaèa pre túto polo¾ku"
+
+#: src/callbacks.c:1598
+msgid "Select File"
+msgstr "Vyberte Súbor"
+
+#: src/callbacks.c:1671 src/callbacks.c:1707
+msgid "Select a DSN to Remove"
+msgstr "Vyberte DSN, ktorý chcete Vymaza»"
+
+#: src/callbacks.c:1724
+#, c-format
+msgid "Could not write property list for (%s)"
+msgstr "Nemô¾em zapísa» zoznam nastavení pre (%s)"
+
+#: src/callbacks.c:1821
+#, c-format
+msgid "Could not write to %s"
+msgstr "Nemô¾em zapisova» do %s"
+
+#: src/support.c:97 src/support.c:135
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr "Nemô¾em nájs» pixmap súbor: %s"
+
+#: src/support.c:113
+#, c-format
+msgid "Couldn't create pixmap from file: %s"
+msgstr "Nemô¾em vytvori» pixmap pre: %s"
+

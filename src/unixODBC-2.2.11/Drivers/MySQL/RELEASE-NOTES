@@ -1,0 +1,152 @@
+*********************************************************
+*            MyODBC 3.51 Release Notes	      	        *
+*                Version 03.51.02                       *
+*              Updated : 05 Mar 2002   	                *
+*	 (C) Copyright MySQL AB 1995-2002               *
+*********************************************************
+        
+================================================
+CONTENTS
+================================================
+1. NEW FEATURES IN THIS RELEASE
+2. BUG FIXES IN THIS RELEASE
+3. OPEN ISSUES
+4. TODO LIST
+5. NOTES
+
+================================================
+1. NEW FEATURES IN THIS RELEASE
+================================================
+
+The MyODBC 3.51.02 is mainly a bug fix release for 
+MyODBC 3.51.01 
+
+-- Added the support of SQLTablePrivileges and 
+   SQLColumnPrivileges.   
+   
+-- Added default values for the new DSN creation.
+
+================================================
+2. BUG FIXES IN THIS RELEASE
+================================================
+
+-- Fix to SQLDriverConnect to return correct output
+   string. This is the main fix for 'Reserved Error 
+   (-7778)' from all Windows ODBC applications.
+   
+-- Fix to hang from unixODBC when there is a exception. 
+   Modified SQLError to clear the error buffers on the 
+   first call when the ODBC version is SQL_OV_ODBC3, so 
+   that the subsequent calls will return SQL_NO_DATA.
+   
+-- Fix to SQL_UPDATE and SQL_ADD from SQLSetPos. Also 
+   changed to have different way of using the NULL 
+   values from WHERE clause.
+   
+-- Fix to SQLSetPos and SQLBulkOperations, when the 
+   application passes SQL_NTS as pcbValue.
+   
+-- Fix to SQLColumns to return the correct Nullability.
+   
+-- Added the support of SQLTablePrivileges and 
+   SQLColumnPrivileges.   
+   
+-- Fix to SQL_ATTR_CONNECTION_DEAD. This should fix the 
+   issues from SQLExpress for XBase++ and .NET connection 
+   closed issues.
+   
+-- Fix to SQLGetTypeInfo to return correct values for 
+   SQL_DATE/SQL_TYPE_DATE, SQL_TIME/SQL_TYPE_TIME and 
+   SQL_TIMESTAMP/SQL_TYPE_TIMESTAMP.
+   
+-- Fix to tab ordering ordering from DSN configuration 
+   dialog.
+
+-- Fix to export of tables from ACCESS 97 or MS DTS(
+   Data Transformation Services) when one of the field 
+   types are TEXT or VARCHAR.   
+  
+===============================================
+3. OPEN ISSUES
+===============================================
+    
+Some common problems:
+--------------------
+-- While performing Positioned updates or deletes or using 
+   SQLSetPos with SQL_UPDATE or SQL_DELETE, and if there is 
+   no Primary Key or UNIQUE NOT NULL column(s) exists in the 
+   table, and if there is any duplicate rows without any 
+   distinct field data, then there is no guarantee that the 
+   driver will perform the requested operation on the correct 
+   positioned row, instead it will operate on first duplicate
+   row. 
+
+-- Wrong connection port:  The port should be 3333 for MySQL 
+   3.20 and 3306 (default) for MySQL 3.21 or newer.
+   
+-- If you are connecting to a server with a character set 
+   that isn't compiled into the MySQL client library (the
+   defaults are:
+   latin1 big5 czech euc_kr gb2312 gbk sjis tis620 ujis) then 
+   you need to install the mysql character definitions from 
+   the charsets directory into the c:\mysql\share\charsets.
+  
+Known bugs:
+----------
+-- Access can't use float fields in a table without a timestamp 
+   if you are going to update it. Double on the other hand should 
+   work.
+   
+-- TIMESTAMP to TIME conversions doesn't work, when you are 
+   converting from SQL_C_CHAR to SQL_TIME.
+   
+-- Binary fields are returned as strings, not as hex strings.
+
+-- Some conversion are not according to the ODBC standard, but 
+   this shouldn't affect standard applications.
+   
+-- ODBC can't support zero dates "0000-00-00". MyODBC automatically 
+   converts 0000-00-00 dates to NULL.  Date columns that you want
+   to update and that can be 0000-00-00 should not be declared as
+   'NOT NULL'. 
+
+================================================
+4. TODO LIST
+================================================
+
+-- Support of Descriptors
+
+-- Allowing the search pattern in the catalog APIs
+
+-- Multi diagnostic status records. Currently driver
+   supports single record i.e. application can only
+   get the latest error or diagnostic information.
+   
+-- Support of keyset-driven cursor type.
+
+-- Support of batch input parameter processing
+
+================================================
+5. NOTES
+================================================
+
+1. ODBC.NET users must upgrade to this version, who are 
+   facing exception like 'Connection not open'.
+   
+2. All users who are facing problems with ACCESS 97 or 
+   MS DTS while exporting the tables, must upgrade to this 
+   version.
+
+3. Recommended everyone to upgrade to this version on 
+   all platforms who are using MyODBC 3.51. 
+   
+================================================
+
+For more information about the installation, setup, 
+work-arounds, FAQ's, programming considerations, reporting 
+bugs, and for more, please check:
+
+http://www.mysql.com/products/myodbc/index.html
+
+
+

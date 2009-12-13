@@ -1,0 +1,26 @@
+/* XPM */
+static const char *new_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16        3            1",
+/* colors */
+". c #000000",
+"# c None",
+"a c #ffffff",
+/* pixels */
+"################",
+"##........######",
+"##.aaaaaa..#####",
+"##.aaaaaa.a.####",
+"##.aaaaaa....###",
+"##.aaaaaaaaa.###",
+"##.aaaaaaaaa.###",
+"##.aaaaaaaaa.###",
+"##.aaaaaaaaa.###",
+"##.aaaaaaaaa.###",
+"##.aaaaaaaaa.###",
+"##.aaaaaaaaa.###",
+"##.aaaaaaaaa.###",
+"##...........###",
+"################",
+"################"
+};

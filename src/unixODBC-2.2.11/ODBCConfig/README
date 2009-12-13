@@ -1,0 +1,45 @@
+***************************************************************
+* This code is GPL.                                           *
+*                                                             *
+* Peter Harvey 21.FEB.99 pharvey@codebydesign.com             *
+***************************************************************
+
++-------------------------------------------------------------+
+| unixODBC                                                    |
+| ODBCConfig                                                  |
++-------------------------------------------------------------+
+
+README
+
+Description:
+
+        The ODBC Config program is a graphical program
+	used to make configuration of ODBC Data Sources
+	extremely easy. It has been designed to be User
+        compatible with the Microsoft ODBC Administrator.
+
+	ODBCConfig works best when Drivers are installed
+	with Driver Config functionality
+	( see DRVConfig/.. ).
+
+	The driver config comes in the form of a shared lib
+	which ODBC Config will dynamically load as required.
+        The naming convention for this lib *S.so.
+
+	ODBC Config will call a drivers config lib if it
+	exists.
+
+	ODBC Config determines the name of the driver setup
+	from the odbcinst lib which, in turn, gets it from a Setup
+	entry in /etc/odbcinst.ini.
+
+Flags:
+        http://www.qnet.com/~moonbase/miniflag/
+
++-------------------------------------------------------------+
+| Peter Harvey                                                |
+| www.unixODBC.org                                            |
+| www.troll.no                                                |
+| 25.APR.99                                                   |
++-------------------------------------------------------------+
+

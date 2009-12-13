@@ -1,0 +1,41 @@
+***************************************************************
+* This code is GPL.                                           *
+*                                                             *
+* Peter Harvey 21.FEB.99 pharvey@codebydesign.com             *
+***************************************************************
+
++-------------------------------------------------------------+
+| unixODBC                                                    |
+| DataManager                                                 |
++-------------------------------------------------------------+
+
+README
+
+
+Description:
+
+	This program can be used to browse/explore ODBC
+	Data Sources. It is based upon the Qt ( www.troll.no )
+	class library. You MUST have the Qt developement libs
+	installed ( please visit www.troll.no ).
+
+	One can;
+
+	- drill down a data source
+	- edit and submit SQL (when an active Data Source is selected)
+
+	One will be able to;
+
+	- configure ODBC in the tree view
+	- add and remove drivers
+	- use unixODBC ODBC extensions to work at the server level
+	- use unixODBC ODBC extensions to easily start/stop servers, create/backup/drop databases etc
+
+Enjoy!
++-------------------------------------------------------------+
+| Peter Harvey                                                |
+| http://www.unixODBC.org                                     |
+| pharvey@codebydesign.com                                    |
+| 30.MAR.99                                                   |
++-------------------------------------------------------------+
+

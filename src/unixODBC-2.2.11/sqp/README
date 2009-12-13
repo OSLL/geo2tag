@@ -1,0 +1,28 @@
+sqp
+---
+
+PURPOSE:
+
+sqp is an SQL parser. It was created to provide SQL parsing to ODBC
+drivers. For example; the ODBC Text File driver (odbctxt).
+
+LANGUAGE SUPPORT:
+
+sqp supports the most common syntax. Check yac.y for details.
+
+TRAPS:
+
+1. Does not really support embedded quotes (see lex.l).
+
+2. Do not let the last character of your SQL statement be a 
+quote. odbctxt gets around this by appending a space to the end
+of every statement.
+
+LICENSING:
+
+LGPL (of course).
+
+--------
+Author: Peter Harvey <pharvey@codebydesign.com>
+Home  : www.unixodbc.org
+

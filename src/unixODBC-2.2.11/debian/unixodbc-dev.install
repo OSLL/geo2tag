@@ -1,0 +1,16 @@
+usr/lib/libgtrtst.so	usr/lib
+usr/lib/libodbc.so	usr/lib
+usr/lib/libodbccr.so	usr/lib
+usr/lib/libodbcinst.so	usr/lib
+usr/lib/libodbcinstQ.so	usr/lib
+usr/lib/libgtrtst.a	usr/lib
+usr/lib/libodbc.a	usr/lib
+usr/lib/libodbccr.a	usr/lib
+usr/lib/libodbcinst.a	usr/lib
+usr/lib/libodbcinstQ.a	usr/lib
+usr/lib/libgtrtst.la	usr/lib
+usr/lib/libodbc.la	usr/lib
+usr/lib/libodbccr.la	usr/lib
+usr/lib/libodbcinst.la	usr/lib
+usr/lib/libodbcinstQ.la	usr/lib
+usr/include/*		usr/include

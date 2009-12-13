@@ -1,0 +1,3 @@
+This dir contains a enhanced version of the DataManager code started by Peter
+and added to by Mark Vanderwiel, but because its very different, we 
+have made a new branch of the code to avoid breaking existing builds

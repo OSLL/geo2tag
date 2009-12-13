@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = configure ] && dpkg --compare-versions "$2" lt 2.2.11-19 \
+   && [ ! -e /etc/odbcinst.ini ]
+then
+	touch /etc/odbcinst.ini
+fi
+
+#DEBHELPER#
