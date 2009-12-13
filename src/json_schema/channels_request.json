@@ -1,9 +1,0 @@
-{
-      "description": "Avavilable channels",
-      "type": "object",
-      "properties": {
-          "latitude": {"type":"number"},
-          "longitude": {"type":"number"},
-          "radius": {"type":"number"}
-      }
-}

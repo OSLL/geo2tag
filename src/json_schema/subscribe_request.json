@@ -1,8 +1,0 @@
-{
-    "description": "subscribe to channel",
-    "type": "object",
-    "properties": {
-        "user": {"type":"string"},
-        "channel":{"type":"string"}
-    }
-}
