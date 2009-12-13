@@ -10,7 +10,10 @@ HEADERS += defs.h MapForm.h MapWidget.h MarkTableDelegat.h TabWidget.h
 SOURCES += main.cpp MapForm.cpp MapWidget.cpp MarkTableDelegat.cpp TabWidget.cpp
 
 
-LIBS    += -L../internal/lib -lodbc -lcommon -lmaps -lcurl -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 -lpthread -lgobject-2.0 -lglib-2.0
+LIBS    += -L../internal/lib -lodbc -lcommon -lmaps -lcurl
 
 DESTDIR = ../../
 
+OBJECTS_DIR = .obj
+
+MOC_DIR = .moc

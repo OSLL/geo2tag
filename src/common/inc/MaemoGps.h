@@ -18,6 +18,7 @@ extern "C"
   #include <glib.h>
 }
 #include "GpsInfo.h"
+#include "Thread.h"
 
 namespace common
 {
@@ -25,9 +26,8 @@ namespace common
    * Class description. May use HTML formatting
    *
    */
-  class MaemoGps: public Gps
-  {
-    
+  class MaemoGps: public Gps, private Thread::CThread
+  { 
     LocationGPSDControl *control;
     LocationGPSDevice *device;
     
@@ -40,8 +40,9 @@ namespace common
 
     static void on_stop(LocationGPSDControl *control, gpointer data);
 
-    static bool start_location(gpointer data);
-
+    static gboolean start_location(gpointer data);
+	
+    void thread();
   public:
     MaemoGps();
     

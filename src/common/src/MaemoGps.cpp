@@ -10,6 +10,7 @@
  * ---------------------------------------------------------------- */
 #include <stdio.h>
 #include "MaemoGps.h"
+#include "Sleep.h"
 
 namespace common
 {
@@ -20,21 +21,28 @@ namespace common
   {
     control = location_gpsd_control_get_default();
     device = (LocationGPSDevice*)g_object_new(LOCATION_TYPE_GPS_DEVICE, NULL);
-    
-    g_type_init();
-  
     g_object_set(G_OBJECT(control),
       "preferred-method", LOCATION_METHOD_USER_SELECTED,
       "preferred-interval", LOCATION_INTERVAL_DEFAULT,
       NULL);
 
-    g_signal_connect(control, "error-verbose", G_CALLBACK(on_error), this);
-    g_signal_connect(device, "changed", G_CALLBACK(on_changed), control);
-    g_signal_connect(control, "gpsd-stopped", G_CALLBACK(on_stop), this);
-
-    start_location(this);
+    start(); 
   }
-  
+ 	
+  void MaemoGps::thread()
+  {
+    printf("starting thread...\n");
+    GMainLoop *loop = g_main_loop_new(NULL, FALSE);
+    
+    g_signal_connect(control, "error-verbose", G_CALLBACK(MaemoGps::on_error), loop);
+    g_signal_connect(device, "changed", G_CALLBACK(MaemoGps::on_changed), control);
+    g_signal_connect(control, "gpsd-stopped", G_CALLBACK(MaemoGps::on_stop), loop);
+    
+    g_idle_add(MaemoGps::start_location, control);
+
+    g_main_loop_run(loop);
+  }
+
   double MaemoGps::getLongitude() const
   {
     return m_longitude;
@@ -48,6 +56,7 @@ namespace common
   MaemoGps::~MaemoGps()
   {
     location_gpsd_control_stop(control);
+    join();
     g_object_unref(device);
     g_object_unref(control);
   }
@@ -59,6 +68,7 @@ namespace common
 
   void MaemoGps::on_changed(LocationGPSDevice *device, gpointer data)
   {
+    printf("changing postition\n");
     if (!device)
       return;
 
@@ -74,13 +84,14 @@ namespace common
   void MaemoGps::on_stop(LocationGPSDControl *control, gpointer data)
   {
     printf("shutting down location service\n");
+    g_main_loop_quit((GMainLoop *) data);
   }
 
-  bool MaemoGps::start_location(gpointer data)
+  gboolean MaemoGps::start_location(gpointer data)
   {
     printf("starting location service\n");
     location_gpsd_control_start((LocationGPSDControl *) data);
-    return true;
+    return FALSE;
   }
 
 } // namespace common

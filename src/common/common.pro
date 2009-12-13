@@ -90,3 +90,8 @@ LIBS    += -L../internal/lib -lodbc -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 
 QMAKE_CXXFLAGS += -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/gconf/2 -I/usr/include/dbus-1.0 -I/usr/lib/dbus-1.0/include
 
 DESTDIR = ../internal/lib
+
+OBJECTS_DIR = .obj
+
+MOC_DIR = .moc
+

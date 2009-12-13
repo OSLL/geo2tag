@@ -1,8 +1,4 @@
-
 TEMPLATE = subdirs
 
-SUBDIRS = src
+SUBDIRS = src test
 
-OBJECTS_DIR = .obj
-
-MOC_DIR = .moc

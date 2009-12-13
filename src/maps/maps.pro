@@ -28,3 +28,6 @@ SOURCES += src/CurlInitException.cpp \
 
 DESTDIR = ../internal/lib
 
+OBJECTS_DIR = .obj
+
+MOC_DIR = .moc
