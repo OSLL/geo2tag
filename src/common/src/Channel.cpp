@@ -13,7 +13,7 @@
 
 namespace common
 {
-  Channel::Channel(const std::string &description, const CHandlePtr<DataMarks> &mark):m_description(description), m_marks(marks)
+  Channel::Channel(const std::string &description, const CHandlePtr<DataMarks> &mark):m_description(description), m_marks(mark)
   {
   }
 
@@ -27,9 +27,9 @@ namespace common
     return m_marks;
   }
 
-  void Channel::addData(CHandlePtr<DataMark> mark)
+  void Channel::addData(CHandlePtr<common::DataMark> mark)
   {
-    m_marks.push_back(mark);
+    m_marks->push_back(mark);
   }
 
   Channel::~Channel()

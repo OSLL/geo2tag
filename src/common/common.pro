@@ -88,7 +88,8 @@ SOURCES += src/DataMarks.cpp \
            thread/src/SwMr.cpp \
            thread/src/Thread.cpp \
            src/DataMarkInternal.cpp \
-           src/ChannelInternal.cpp
+           src/ChannelInternal.cpp \
+           src/Channel.cpp
 
 LIBS    += -L../internal/lib -lodbc -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 -lpthread -lgobject-2.0 -lglib-2.0
 

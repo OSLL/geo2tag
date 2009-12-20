@@ -46,6 +46,10 @@ namespace loader
     common::Channel::addData(mark);
 
   }
+
+  Channel::~Channel()
+  {
+  }
 } // namespace loader
 
 /* ===[ End of file ]=== */
