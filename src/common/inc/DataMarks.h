@@ -29,11 +29,12 @@ namespace common
     std::string m_description;
 
     CTime m_time;
-    
-  public:
-    
+
+  protected:
     DataMark(double latitude=0., double longitude=0., const std::string& label="Default label", 
              const std::string& description="No descrption", const CTime &time=CTime::now());
+
+  public:
 
     void setDescription(const std::string&);
     const std::string& getDescription() const;
@@ -49,7 +50,9 @@ namespace common
 
     const CTime& getTime() const;
     void setTime(const CTime& time=CTime::now());
-
+    
+    static CHandlePtr<DataMark> createMark(double latitude=0., double longitude=0., const std::string& label="Default label", 
+             const std::string& description="No descrption", const CTime &time=CTime::now());
     virtual ~DataMark();
   };
 
@@ -61,10 +64,6 @@ namespace common
   {
   public:
     DataMarks();
-
-    virtual void load();
-
-    virtual void save();
 
     virtual ~DataMarks();
 

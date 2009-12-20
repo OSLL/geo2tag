@@ -14,6 +14,7 @@
 
 #include "Db.h"
 #include "DataMarks.h"
+#include "Channel.h"
 
 namespace common
 {
@@ -22,14 +23,37 @@ namespace common
    */
   class DbSession: protected ODBC::CDbEnv, public ODBC::CDbConn
   {
-  public:
+    CHandlePtr<DataMarks> m_marks;
+    CHandlePtr<Channels> m_channels;
+
+    void loadMarks();
+
+    void saveMarks();
+
+    void loadChannels();
+
+    void saveChannels();
+    
+    void loadRelations();
+
+    void saveRelations();
+
     DbSession();
+
+
+  public:
 
     ~DbSession();
     
-    void loadMarks(DataMarks& marks);
+    CHandlePtr<DataMarks> getMarks() const;
 
-    void storeMarks(DataMarks& marks);
+    CHandlePtr<Channels> getChannels() const;
+
+    void loadData();
+
+    void saveData();
+    
+    DbSession& getInstance();
 
   private:    
     DbSession(const DbSession& obj);

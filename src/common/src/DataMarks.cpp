@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <cstring>
 #include "DataMarks.h"
-#include "DbSession.h"
+#include "DataMarkInternal.h"
 
 namespace common
 {
@@ -80,25 +80,20 @@ namespace common
   {
     m_time = time;
   }
+  
 
   DataMarks::DataMarks()
   {
   }
 
-  void DataMarks::load()
-  {
-    DbSession session;
-    session.loadMarks(*this);
-  }
-
-  void DataMarks::save()
-  {
-    DbSession session;
-    session.storeMarks(*this);
-  }
-  
   DataMarks::~DataMarks()
   {
+  }
+  
+  CHandlePtr<DataMark> DataMark::createMark(double latitude, double longitude, const std::string& label, 
+             const std::string& description, const CTime &time)
+  {
+    return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, time));
   }
 } // namespace common
 
