@@ -157,6 +157,7 @@ namespace GUI
 	if(k->key()==Qt::Key_Equal)
         { 
            qDebug()<< "PLUS";
+#if 0
            common::DataMark m;
            std::ostringstream s; 
            s << "Label " << 'A'+(char)(getMarks().size());
@@ -166,7 +167,7 @@ namespace GUI
            m.setLatitude(common::GpsInfo::getInstance().getLatitude());
            getMarks().push_back(makeHandle(new common::DataMark(m)));
            getMarks().save();
-           
+#endif           
            dynamic_cast<ListModel*>(m_model)->layoutUpdate();
         }
 	else 

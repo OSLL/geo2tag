@@ -38,13 +38,10 @@ namespace loader
       // epic fail
       return;
     }
-    // store(update) data to DB
-    common::DbSession::getInstance().storeMark(mark);
     // update relation betwean mark and channel
     common::DbSession::getInstance().updateChannel(m_id, mark);
     // add mark to Channel object
     common::Channel::addData(mark);
-
   }
 
   Channel::~Channel()

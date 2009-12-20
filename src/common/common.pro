@@ -27,7 +27,7 @@ HEADERS += inc/DataMarks.h \
            inc/GpsInfo.h \
            inc/GpsModeller.h \
            inc/Handle.h \
-           inc/MaemoGps.h \
+#           inc/MaemoGps.h \
            inc/Picture.h \
            inc/PngPicture.h \
            inc/pointer.h \
@@ -71,7 +71,7 @@ SOURCES += src/DataMarks.cpp \
            src/DefaultException.cpp \
            src/GpsInfo.cpp \
            src/GpsModeller.cpp \
-           src/MaemoGps.cpp \
+#           src/MaemoGps.cpp \
            src/Picture.cpp \
            src/PngPicture.cpp \
            common/src/BitTools.cpp \
@@ -91,7 +91,8 @@ SOURCES += src/DataMarks.cpp \
            src/ChannelInternal.cpp \
            src/Channel.cpp
 
-LIBS    += -L../internal/lib -lodbc -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 -lpthread -lgobject-2.0 -lglib-2.0
+LIBS    += -L../internal/lib -lodbc 
+# -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 -lpthread -lgobject-2.0 -lglib-2.0
 
 QMAKE_CXXFLAGS += -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/gconf/2 -I/usr/include/dbus-1.0 -I/usr/lib/dbus-1.0/include
 

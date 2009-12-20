@@ -12,7 +12,7 @@ int main(int c, char **v)
 {
 	QApplication 	app(c,v);
 
-  getMarks().load();
+//  getMarks().load();
 
 	curl_global_init(CURL_GLOBAL_ALL);
 	
@@ -24,7 +24,7 @@ int main(int c, char **v)
 	app.exec();
 	curl_global_cleanup();
 
-  getMarks().save();
+//  getMarks().save();
 
 	return 0;
 

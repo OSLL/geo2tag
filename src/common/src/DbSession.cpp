@@ -9,6 +9,7 @@
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
+#include <iostream>
 #include <vector>
 #include <map>
 #include <string.h>
@@ -285,9 +286,10 @@ namespace db
 
 namespace common
 {
-  DbSession::DbSession(): ODBC::CDbConn(*(ODBC::CDbEnv*)this)
+  DbSession::DbSession(): ODBC::CDbConn(*(ODBC::CDbEnv*)this), m_marks(makeHandle(new DataMarks)), m_channels(makeHandle(new Channels))
   {
     connect("geo2tag");
+    std::cerr << "connected to database" << std::endl;
   }
   
   void DbSession::loadMarks()
@@ -331,6 +333,7 @@ namespace common
       
       mark->setId(query.m_seq);
       s_marks[mark->getId()] = mark;
+      m_marks->push_back(mark); // update global marks list
       db::StoreMarkQuery storeQuery(*this);
       storeQuery.id = mark->getId();
       storeQuery.latitude = mark->getLatitude();
@@ -372,7 +375,14 @@ namespace common
  
   void DbSession::updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m) //! this routine will be in private area
   {
+
     CHandlePtr<loader::DataMark> mark = m.dynamicCast<loader::DataMark>();
+    if(mark->getId()!=0)
+      return;
+    
+    // store(update) mark to DB
+    common::DbSession::getInstance().storeMark(mark);
+
     db::StoreMarkRelationQuery query(*this);
     query.mark = mark->getId();
     query.channel = channel_id;
@@ -479,9 +489,9 @@ namespace common
 
   void DbSession::loadData()
   {
-    loadMarks();
-    loadChannels();
-    loadRelations();
+    loadMarks(); std::cerr << "Marks loaded" << std::endl;
+    loadChannels();std::cerr << "Channels loaded" << std::endl;
+    loadRelations();std::cerr << "Relations loaded" << std::endl;
   }
 
   void DbSession::saveData()

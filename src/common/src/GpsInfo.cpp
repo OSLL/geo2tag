@@ -11,7 +11,7 @@
 
 #include "GpsInfo.h"
 #include "GpsModeller.h"
-#include "MaemoGps.h"
+//#include "MaemoGps.h"
 
 namespace common
 {
@@ -22,8 +22,8 @@ namespace common
 
   Gps& GpsInfo::getInstance()
   {
-//    static GpsModeller gps;
-    static MaemoGps gps;
+    static GpsModeller gps;
+//    static MaemoGps gps;
     return gps;
   }
 } // namespace common
