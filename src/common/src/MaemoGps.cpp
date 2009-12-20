@@ -12,6 +12,8 @@
 #include "MaemoGps.h"
 #include "Sleep.h"
 
+#ifndef NO_MAEMO_GPS
+
 namespace common
 {
   double MaemoGps::m_longitude = 0;
@@ -95,5 +97,8 @@ namespace common
   }
 
 } // namespace common
+
+#endif // NO_MAEMO_GPS
+
 
 /* ===[ End of file ]=== */

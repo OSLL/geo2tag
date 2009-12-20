@@ -15,22 +15,12 @@
 #include <QTimer>
 #include "MapLoaderFactory.h"
 #include "Picture.h"
-#include "TabWidget.h"
+//#include "TabWidget.h"
 #include "GpsInfo.h"
-#include "defs.h"
-
-common::DataMarks& getMarks()
-{
-  using namespace common;
-  static DataMarks data;
-  return data;
-}
+#include "DbSession.h"
 
 namespace GUI
 {
-
-
-
 	MapWidget::MapWidget(QWidget *parent, double b, double l, double scale) : QWidget(parent)
 	{
 		m_B = b;
@@ -53,7 +43,7 @@ namespace GUI
 
 		//TODO, kkv constants for scale and size
 		Picture picture = MapLoaderFactory::getInstance(MapLoader::GOOGLE)->getMapWithMarks(
-			m_B,m_L,m_scale,rect().width(),rect().height(),getMarks());
+			m_B,m_L,m_scale,rect().width(),rect().height(),*(common::DbSession::getInstance().getMarks()));
 
 
 		QByteArray array(&(picture.getData()[0]), picture.getData().size());

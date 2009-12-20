@@ -87,7 +87,7 @@ namespace common
   }
 
   DataMarks::~DataMarks()
-  {
+  { 
   }
   
   CHandlePtr<DataMark> DataMark::createMark(double latitude, double longitude, const std::string& label, 

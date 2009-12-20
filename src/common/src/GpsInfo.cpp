@@ -11,7 +11,10 @@
 
 #include "GpsInfo.h"
 #include "GpsModeller.h"
-//#include "MaemoGps.h"
+
+#ifndef NO_MAEMO_GPS
+  #include "MaemoGps.h"
+#endif
 
 namespace common
 {
@@ -22,8 +25,11 @@ namespace common
 
   Gps& GpsInfo::getInstance()
   {
+#ifdef NO_MAEMO_GPS  
     static GpsModeller gps;
-//    static MaemoGps gps;
+#else
+    static MaemoGps gps;
+#endif    
     return gps;
   }
 } // namespace common

@@ -26,8 +26,8 @@
 #include <QTableWidget>
 #include <QLineEdit>
 #include <QKeyEvent>
-#include "defs.h"
 #include "GpsInfo.h"
+#include "DbSession.h"
 
 namespace GUI
 {
@@ -38,10 +38,10 @@ namespace GUI
   {
       Q_OBJECT;
 
-      common::DataMarks& m_data;
+      CHandlePtr<common::DataMarks> m_data;
   
   public:
-      ListModel(QObject* parent) : QStandardItemModel(getMarks().size(),2,parent), m_data(getMarks())
+      ListModel(QObject* parent) : QStandardItemModel(common::DbSession::getInstance().getMarks()->size(),2,parent), m_data(common::DbSession::getInstance().getMarks())
       {
       }
 
@@ -49,7 +49,7 @@ namespace GUI
   
       int rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
       {
-        return m_data.size();
+        return m_data->size();
       }
       
       int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const
@@ -59,7 +59,7 @@ namespace GUI
 
       void setDescription(int row, const std::string& data)
       {
-        m_data[row]->setDescription(data);
+        (*m_data)[row]->setDescription(data);
       }
 
       QVariant data(const QModelIndex &index, int role) const
@@ -69,10 +69,10 @@ namespace GUI
           QString value="?";
           if(index.column() == 0 )
           {
-      		 value = m_data[index.row()]->getLabel().c_str();
+      		 value = (*m_data)[index.row()]->getLabel().c_str();
           } else
           {
-            value = m_data[index.row()]->getDescription().c_str();
+            value = (*m_data)[index.row()]->getDescription().c_str();
           }
       		return value;
       	}
@@ -80,7 +80,7 @@ namespace GUI
       }
 
 	void layoutUpdate(){
-		setRowCount(m_data.size());
+		setRowCount(m_data->size());
 		emit layoutChanged();
 	} 
   };
@@ -155,19 +155,17 @@ namespace GUI
       QKeyEvent* k=dynamic_cast<QKeyEvent*>(e);
       if (k && k->type()==6 ){
 	if(k->key()==Qt::Key_Equal)
-        { 
+        {
+	   CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().getMarks();
            qDebug()<< "PLUS";
-#if 0
-           common::DataMark m;
            std::ostringstream s; 
-           s << "Label " << 'A'+(char)(getMarks().size());
-           m.setLabel(s.str());
-           m.setDescription("");
-           m.setLongitude(common::GpsInfo::getInstance().getLongitude());
-           m.setLatitude(common::GpsInfo::getInstance().getLatitude());
-           getMarks().push_back(makeHandle(new common::DataMark(m)));
-           getMarks().save();
-#endif           
+           s << "Label " << 'A'+(char)(marks->size());
+           CHandlePtr<common::DataMark> m = common::DataMark::createMark(
+			  common::GpsInfo::getInstance().getLatitude(),
+			  common::GpsInfo::getInstance().getLongitude(), 
+			  s.str(),
+			  ""  );
+	   common::DbSession::getInstance().storeMark(m);
            dynamic_cast<ListModel*>(m_model)->layoutUpdate();
         }
 	else 
@@ -185,26 +183,7 @@ namespace GUI
   }; // class ListView
   
 
-  class MarkPane : public QWidget
-  {
-    ListView *m_list;
-    Q_OBJECT;
 
-  public:
-    MarkPane(QWidget * parent) : QWidget(parent)
-    {
-  	  QHBoxLayout *vbl = new QHBoxLayout(this);
-
-      m_list = new ListView(this);
-  		vbl->addWidget(m_list);
-      setLayout(vbl);
-    }
-
-
-    virtual ~MarkPane()
-    {
-    }
-  };
 
   
 } // namespace GUI

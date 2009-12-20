@@ -11,12 +11,15 @@
 #ifndef _MaemoGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
 #define _MaemoGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
 
+#ifndef NO_MAEMO_GPS
 extern "C"
 {
   #include <location/location-gps-device.h>
   #include <location/location-gpsd-control.h>
   #include <glib.h>
 }
+
+
 #include "GpsInfo.h"
 #include "Thread.h"
 
@@ -59,6 +62,10 @@ namespace common
   }; // class MaemoGps
   
 } // namespace common
+
+#else // NO_MAEMO_GPS
+#warning "Building without gps"
+#endif
 
 #endif //_MaemoGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
 
