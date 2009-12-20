@@ -31,6 +31,9 @@ HEADERS += inc/DataMarks.h \
            inc/Picture.h \
            inc/PngPicture.h \
            inc/pointer.h \
+           inc/Channel.h \
+           src/ChannelInternal.h \
+           src/DataMarkInternal.h \
            common/inc/BitTools.h \
            common/inc/ConstMap.h \
            common/inc/Crc.h \
@@ -84,6 +87,8 @@ SOURCES += src/DataMarks.cpp \
            thread/src/Mutex.cpp \
            thread/src/SwMr.cpp \
            thread/src/Thread.cpp \
+           src/DataMarkInternal.cpp \
+           src/ChannelInternal.cpp
 
 LIBS    += -L../internal/lib -lodbc -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 -lpthread -lgobject-2.0 -lglib-2.0
 

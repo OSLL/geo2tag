@@ -10,10 +10,12 @@
  * ---------------------------------------------------------------- */
 
 #include "ChannelInternal.h"
+#include "DataMarkInternal.h"
+#include "DbSession.h"
 
 namespace loader
 {
-  Channel::Channel(unsigned long long id, std::string description, const CHandlePtr<DataMarks> &marks): 
+  Channel::Channel(unsigned long long id, std::string description, const CHandlePtr<common::DataMarks> &marks): 
                   common::Channel(description, marks), m_id(id)
   {
   }
@@ -26,6 +28,23 @@ namespace loader
   void Channel::setId(unsigned long long id)
   {
     m_id=id;
+  }
+
+  void Channel::addData(CHandlePtr<common::DataMark> mark)
+  {
+    CHandlePtr<loader::DataMark> m = mark.dynamicCast<loader::DataMark>();
+    if(!m)
+    {
+      // epic fail
+      return;
+    }
+    // store(update) data to DB
+    common::DbSession::getInstance().storeMark(mark);
+    // update relation betwean mark and channel
+    common::DbSession::getInstance().updateChannel(m_id, mark);
+    // add mark to Channel object
+    common::Channel::addData(mark);
+
   }
 } // namespace loader
 

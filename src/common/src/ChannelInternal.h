@@ -21,13 +21,15 @@ namespace loader
     unsigned long long m_id;
 
   public:
-    Channel(unsigned long long id, std::string description, const CHandlePtr<DataMarks> &marks);
+    Channel(unsigned long long id, std::string description, const CHandlePtr<common::DataMarks> &marks=makeHandle(new common::DataMarks()));
     
     unsigned long long getId() const;
     
     void setId(unsigned long long id);
 
-    virtual ~DataMark();
+    virtual void addData(CHandlePtr<common::DataMark> mark);
+
+    virtual ~Channel();
   };
 } // namespace loader
 

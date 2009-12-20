@@ -24,7 +24,7 @@ namespace common
   {
     double m_latitude;
     double m_longitude;
-      
+
     std::string m_label;
     std::string m_description;
 
@@ -38,7 +38,7 @@ namespace common
 
     void setDescription(const std::string&);
     const std::string& getDescription() const;
-    
+
     double getLatitude() const;
     void setLatitude(const double&);
 
@@ -50,9 +50,10 @@ namespace common
 
     const CTime& getTime() const;
     void setTime(const CTime& time=CTime::now());
-    
+
     static CHandlePtr<DataMark> createMark(double latitude=0., double longitude=0., const std::string& label="Default label", 
              const std::string& description="No descrption", const CTime &time=CTime::now());
+
     virtual ~DataMark();
   };
 

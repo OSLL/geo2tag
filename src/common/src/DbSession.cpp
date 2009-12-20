@@ -9,12 +9,18 @@
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
+#include <vector>
+#include <map>
 #include <string.h>
 #include "Handle.h"
 #include "DbSession.h"
 #include "DbQuery.h"
 #include "Db.h"
 #include "DataMarkInternal.h"
+#include "ChannelInternal.h"
+
+static std::map<long, CHandlePtr<loader::DataMark> > s_marks = std::map<long, CHandlePtr<loader::DataMark> >();
+static std::map<long, CHandlePtr<loader::Channel> > s_channels = std::map<long, CHandlePtr<loader::Channel> >();
 
 namespace db
 {
@@ -34,13 +40,13 @@ namespace db
   {
     unsigned long long id;
     char description[2048];
-  }
+  };
 
-  struct Marks
+  struct MarkRelation
   {
     unsigned long long mark;
     unsigned long long channel;
-  }
+  };
 
   using namespace ODBC;
 
@@ -172,7 +178,7 @@ namespace db
     }
   };
 
-  class StoreChannelQuery: public Mark, public CDbQueryX
+  class StoreChannelQuery: public Channel, public CDbQueryX
   {
   public:
     StoreChannelQuery(const CDbConn& conn): CDbQueryX(conn)
@@ -193,7 +199,7 @@ namespace db
     }
   };
   
-  class UpdateChannelQuery: public Mark, public CDbQueryX
+  class UpdateChannelQuery: public Channel, public CDbQueryX
   {
   public:
     UpdateChannelQuery(const CDbConn& conn): CDbQueryX(conn)
@@ -204,8 +210,8 @@ namespace db
     END_COLMAP()
     
     BEGIN_PARMAP()
-      PAR(4, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(5, SQL_C_LONG, SQL_INTEGER, id)
+      PAR(1, SQL_C_CHAR, SQL_CHAR, description)
+      PAR(2, SQL_C_LONG, SQL_INTEGER, id)
     END_PARMAP()
 
     const char* sql() const
@@ -214,6 +220,67 @@ namespace db
     }
   };
   
+  /////// Marks: Mark <---> Channel
+  
+  class LoadMarkRelationsQuery: public MarkRelation, public CDbQueryX
+  {
+  public:
+    LoadMarkRelationsQuery(const CDbConn& conn): CDbQueryX(conn)
+    {
+    }
+
+    BEGIN_COLMAP()
+      COL_NAME(1, "mark_id", SQL_C_LONG, mark)
+      COL_NAME(2, "channel_id", SQL_C_LONG, channel)
+    END_COLMAP()
+
+    const char* sql() const
+    {
+      return "select mark_id, channel_id from marks order by channel_id;";
+    }
+  };
+
+  class StoreMarkRelationQuery: public MarkRelation, public CDbQueryX
+  {
+  public:
+    StoreMarkRelationQuery(const CDbConn& conn): CDbQueryX(conn)
+    {
+    }
+
+    BEGIN_COLMAP()
+    END_COLMAP()
+    
+    BEGIN_PARMAP()
+      PAR(1, SQL_C_LONG, SQL_INTEGER, mark)
+      PAR(2, SQL_C_LONG, SQL_INTEGER, channel)
+    END_PARMAP()
+
+    const char* sql() const
+    {
+      return "insert into marks (mark_id,channel_id) values(?,?);";
+    }
+  };
+  
+  class UpdateMarkRelationQuery: public MarkRelation, public CDbQueryX
+  {
+  public:
+    UpdateMarkRelationQuery(const CDbConn& conn): CDbQueryX(conn)
+    {
+    }
+
+    BEGIN_COLMAP()
+    END_COLMAP()
+    
+    BEGIN_PARMAP()
+      PAR(1, SQL_C_LONG, SQL_INTEGER, channel)
+      PAR(2, SQL_C_LONG, SQL_INTEGER, mark)
+    END_PARMAP()
+
+    const char* sql() const
+    {
+      return "update marks set channel_id=? where mark_id=?;";
+    }
+  };
 }
 
 namespace common
@@ -230,7 +297,7 @@ namespace common
     ODBC::CExecuteClose x(query);
     while(query.fetch())
     {
-      CHandlePtr<common::DataMark> mark= makeHandle(new loader::DataMark(query.id,
+      CHandlePtr<loader::DataMark> mark= makeHandle(new loader::DataMark(query.id,
                             query.latitude,
                             query.longitude,
                             query.label,
@@ -238,6 +305,60 @@ namespace common
                             ODBC::convertTime(query.time,CTime::UTC)
                             ));
       m_marks->push_back(mark);
+      s_marks[query.id] = mark;
+    }
+  }
+  
+  void DbSession::storeMark(CHandlePtr<common::DataMark> m)
+  {
+    CHandlePtr<loader::DataMark> mark = m.dynamicCast<loader::DataMark>();
+    if(!mark)
+    {
+      // epic fail!!!
+      return;
+    }
+    
+    if(mark->getId()==0)
+    {
+      ODBC::CTransaction tr(*this);
+      // Here is new object, has been created by user
+      db::NewMarkKeyQuery query(*this);
+      query.prepare();
+      {
+        ODBC::CExecuteClose keyExec(query);
+        query.fetchNoEmpty();
+      }
+      
+      mark->setId(query.m_seq);
+      s_marks[mark->getId()] = mark;
+      db::StoreMarkQuery storeQuery(*this);
+      storeQuery.id = mark->getId();
+      storeQuery.latitude = mark->getLatitude();
+      storeQuery.longitude = mark->getLongitude();
+      strncpy(storeQuery.label,mark->getLabel().c_str(),1023);
+      storeQuery.label[1023]='\0';
+      strncpy(storeQuery.description,mark->getDescription().c_str(),2047);
+      storeQuery.label[2047]='\0';
+      
+      storeQuery.prepare();
+      storeQuery.execute();
+    }
+    else
+    {
+      ODBC::CTransaction tr(*this);
+      // this object need to be updated in data base
+      
+      db::UpdateMarkQuery updateQuery(*this);
+      updateQuery.id = mark->getId();
+      updateQuery.latitude = mark->getLatitude();
+      updateQuery.longitude = mark->getLongitude();
+      strncpy(updateQuery.label,mark->getLabel().c_str(),1023);
+      updateQuery.label[1023]='\0';
+      strncpy(updateQuery.description,mark->getDescription().c_str(),2047);
+      updateQuery.description[2047]='\0';
+      
+      updateQuery.prepare();
+      updateQuery.execute();
     }
   }
 
@@ -245,68 +366,39 @@ namespace common
   { 
     for(int i=0; i<m_marks->size(); i++)
     {
-      CHandlePtr<loader::DataMark> mark = (*m_marks)[i].dynamicCast<loader::DataMark>();
-      if(!mark)
-      {
-        // big error!!!
-        continue;
-      }
-      
-      if(mark->getId()==0)
-      {
-        ODBC::CTransaction tr(*this);
-        // Here is new object, has been created by user
-        db::NewMarkKeyQuery query(*this);
-        query.prepare();
-        {
-          ODBC::CExecuteClose keyExec(query);
-          query.fetchNoEmpty();
-        }
-        
-        mark->setId(query.m_seq);
-        db::StoreMarkQuery storeQuery(*this);
-        storeQuery.id = mark->getId();
-        storeQuery.latitude = mark->getLatitude();
-        storeQuery.longitude = mark->getLongitude();
-        strncpy(storeQuery.label,mark->getLabel().c_str(),1023);
-        storeQuery.label[1023]='\0';
-        strncpy(storeQuery.description,mark->getDescription().c_str(),2047);
-        storeQuery.label[2047]='\0';
-        
-        storeQuery.prepare();
-        storeQuery.execute();
-      }
-      else
-      {
-        ODBC::CTransaction tr(*this);
-        // this object need to be updated in data base
-        
-        db::UpdateMarkQuery updateQuery(*this);
-        updateQuery.id = mark->getId();
-        updateQuery.latitude = mark->getLatitude();
-        updateQuery.longitude = mark->getLongitude();
-        strncpy(updateQuery.label,mark->getLabel().c_str(),1023);
-        updateQuery.label[1023]='\0';
-        strncpy(updateQuery.description,mark->getDescription().c_str(),2047);
-        updateQuery.description[2047]='\0';
-        
-        updateQuery.prepare();
-        updateQuery.execute();
-      }
+      storeMark((*m_marks)[i]);
     }
   }
  
+  void DbSession::updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m) //! this routine will be in private area
+  {
+    CHandlePtr<loader::DataMark> mark = m.dynamicCast<loader::DataMark>();
+    db::StoreMarkRelationQuery query(*this);
+    query.mark = mark->getId();
+    query.channel = channel_id;
+    try
+    {
+      ODBC::CTransaction tr(*this);
+      query.prepare();
+      query.execute();
+    }
+    catch (...)
+    {
+      // it is hack, but we need it
+    }
+  }
+  
   void DbSession::loadChannels()
   {
-    db::LoadChannelsQuery query(*this);
+    db::LoadChannelQuery query(*this);
     query.prepare();
     ODBC::CExecuteClose x(query);
     while(query.fetch())
     {
-      CHandlePtr<common::Channel> ch= makeHandle(new loader::channel(query.id,
-                            query.description,
-                            ));
+      CHandlePtr<loader::Channel> ch= makeHandle(new loader::Channel(query.id,
+                            std::string(&(query.description[0])) ));
       m_channels->push_back(ch);
+      s_channels[query.id] = ch;
     }
 
   }
@@ -334,6 +426,7 @@ namespace common
         }
         
         ch->setId(query.m_key);
+        s_channels[ch->getId()]=ch;
         db::StoreChannelQuery storeQuery(*this);
         storeQuery.id = ch->getId();
         strncpy(storeQuery.description,ch->getDescription().c_str(),2047);
@@ -360,13 +453,21 @@ namespace common
   
   void DbSession::loadRelations()
   {
+    db::LoadMarkRelationsQuery query(*this);
+    query.prepare();
+    ODBC::CExecuteClose x(query);
+    while(query.fetch())
+    {
+      s_channels.find(query.channel)->second->addData(s_marks.find(query.mark)->second);
+    }
   }
 
   void DbSession::saveRelations()
   {
+    // nothing
   }
 
-CHandlePtr<DataMarks> DbSession::getMarks() const
+  CHandlePtr<DataMarks> DbSession::getMarks() const
   {
     return m_marks;
   }
@@ -390,7 +491,7 @@ CHandlePtr<DataMarks> DbSession::getMarks() const
     saveRelations();
   }
 
-  static DbSession& DbSession::getInstance()
+  DbSession& DbSession::getInstance()
   {
     static DbSession s;
     return s;

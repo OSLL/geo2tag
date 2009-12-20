@@ -18,7 +18,7 @@
 
 namespace common
 {
- /*!
+  /*!
    * 
    */
   class Channel
@@ -37,8 +37,6 @@ namespace common
     const CHandlePtr<DataMarks> getMarks() const;
 
     virtual void addData(CHandlePtr<DataMark> mark);
-    
-    static CHandlePtr<Channel> createChannel(const std::string &description="", const CHandlePtr<DataMarks> &marks=CHandlePtr<DataMarks>());
 
     virtual ~Channel();
   }; // class Channel

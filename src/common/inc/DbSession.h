@@ -52,8 +52,11 @@ namespace common
     void loadData();
 
     void saveData();
-    
-    DbSession& getInstance();
+
+    void storeMark(CHandlePtr<common::DataMark> m); //! this routine will be in private area
+    void updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m); //! this routine will be in private area
+
+    static DbSession& getInstance();
 
   private:    
     DbSession(const DbSession& obj);
