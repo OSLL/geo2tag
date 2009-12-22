@@ -26,6 +26,8 @@ namespace common
   
     std::string m_description; //!< Description for channel
     CHandlePtr<DataMarks> m_marks; //!< Marks for this channel
+    
+    bool m_isDisplayed; //!< Displayed on the UI
 
   protected:
     Channel(const std::string &description="", const CHandlePtr<DataMarks> &marks=CHandlePtr<DataMarks>());
@@ -37,6 +39,10 @@ namespace common
     const CHandlePtr<DataMarks> getMarks() const;
 
     virtual void addData(CHandlePtr<DataMark> mark);
+
+    bool isDisplayed() const;
+
+    void setDisplayed(bool);
 
     virtual ~Channel();
   }; // class Channel

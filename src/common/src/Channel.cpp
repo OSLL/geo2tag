@@ -13,7 +13,7 @@
 
 namespace common
 {
-  Channel::Channel(const std::string &description, const CHandlePtr<DataMarks> &mark):m_description(description), m_marks(mark)
+  Channel::Channel(const std::string &description, const CHandlePtr<DataMarks> &mark):m_description(description), m_marks(mark), m_isDisplayed(true)
   {
   }
 
@@ -32,6 +32,15 @@ namespace common
     m_marks->push_back(mark);
   }
 
+  bool Channel::isDisplayed() const
+  {
+    return m_isDisplayed;
+  }
+
+  void Channel::setDisplayed(bool fl)
+  {
+    m_isDisplayed = fl;
+  }
   Channel::~Channel()
   {
   }
