@@ -15,16 +15,21 @@ namespace GUI
 {
     CentralWidget::CentralWidget(QWidget *parent) : QWidget(parent)
     {
+      m_palette = new QPalette(Qt::black);
+      setPalette(*m_palette);
       m_layout = new QStackedLayout(this);
 
       m_mapView  = new MapPane(this);
       m_feedView = new MarkPane(this);
+      m_editor = new MarkEditor(this);
       
       m_layout->addWidget(m_mapView);
       m_layout->addWidget(m_feedView);
+      m_layout->addWidget(m_editor);
       
       setLayout(m_layout);
 
+      switchEditor();
     }
 
     void CentralWidget::switchMap()
@@ -35,6 +40,11 @@ namespace GUI
     void CentralWidget::switchFeed()
     {
       m_layout->setCurrentWidget(m_feedView); 
+    }
+
+    void CentralWidget::switchEditor()
+    {
+      m_layout->setCurrentWidget(m_editor); 
     }
 
 } // namespace GUI

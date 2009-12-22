@@ -74,6 +74,7 @@ SOURCES += src/DataMarks.cpp \
 #           src/MaemoGps.cpp \
            src/Picture.cpp \
            src/PngPicture.cpp \
+           src/Channel.cpp\
            common/src/BitTools.cpp \
            common/src/Escape.cpp \
            common/src/MemDump.cpp \

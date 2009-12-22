@@ -37,7 +37,7 @@ namespace GUI
     connect(m_actionViewMap, SIGNAL(triggered()), centralWidget(), SLOT(switchMap()));
     connect(m_actionViewFeed, SIGNAL(triggered()), centralWidget(), SLOT(switchFeed()));
     connect(m_actionSelectChannels, SIGNAL(triggered()), this, SLOT(selectChannels()));
-    connect(m_actionAddContent, SIGNAL(triggered()), this, SLOT(addContent()));
+    connect(m_actionAddContent, SIGNAL(triggered()), centralWidget(), SLOT(switchEditor()));
     connect(m_actionQuit, SIGNAL(triggered()), this, SLOT(close()));
   }
 

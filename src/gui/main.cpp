@@ -1,5 +1,6 @@
 
 #include <QApplication>
+#include "MainWindow.h" 
 #include <curl/curl.h>
 #include "MainWindow.h" 
 #include "DbSession.h"
@@ -24,6 +25,5 @@ int main(int c, char **v)
   common::DbSession::getInstance().saveData();
 
 	return 0;
-
 }
 

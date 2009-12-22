@@ -17,6 +17,7 @@
 #include <QDebug>
 #include "MarkPane.h"
 #include "MapPane.h"
+#include "MarkEditor.h"
 
 namespace GUI
 {
@@ -31,6 +32,8 @@ namespace GUI
     QStackedLayout *m_layout;
     MapPane        *m_mapView;
     MarkPane       *m_feedView;
+    MarkEditor     *m_editor;
+    QPalette       *m_palette;
 
   public:
     CentralWidget(QWidget *parent);
@@ -42,6 +45,7 @@ namespace GUI
   public slots:
     void switchMap();
     void switchFeed();
+    void switchEditor();
     
   private:    
     CentralWidget(const CentralWidget& obj);
