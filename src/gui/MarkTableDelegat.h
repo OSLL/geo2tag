@@ -27,6 +27,7 @@
 #include <QLineEdit>
 #include <QKeyEvent>
 #include "GpsInfo.h"
+#include "Handle.h"
 #include "DbSession.h"
 
 namespace GUI
@@ -155,18 +156,22 @@ namespace GUI
       QKeyEvent* k=dynamic_cast<QKeyEvent*>(e);
       if (k && k->type()==6 ){
 	if(k->key()==Qt::Key_Equal)
-        {
-	   CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().getMarks();
-           qDebug()<< "PLUS";
-           std::ostringstream s; 
-           s << "Label " << 'A'+(char)(marks->size());
-           CHandlePtr<common::DataMark> m = common::DataMark::createMark(
-			  common::GpsInfo::getInstance().getLatitude(),
-			  common::GpsInfo::getInstance().getLongitude(), 
-			  s.str(),
-			  ""  );
-	   common::DbSession::getInstance().storeMark(m);
+        { 
+           
+          CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().common::DbSession::getInstance().getMarks();
+          std::ostringstream s; 
+          s << "Label " << 'A'+(char)(marks->size());
+          CHandlePtr<common::DataMark> m = common::DataMark::createMark(
+                        common::GpsInfo::getInstance().getLatitude(),
+                        common::GpsInfo::getInstance().getLongitude(), 
+                        s.str(),
+                        ""  );
+
+
+
+           common::DbSession::getInstance().storeMark(m);
            dynamic_cast<ListModel*>(m_model)->layoutUpdate();
+          
         }
 	else 
           if (k->key()==Qt::Key_Minus) {

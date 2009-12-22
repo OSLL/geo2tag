@@ -17,6 +17,7 @@
 #include <QDebug>
 #include "MarkPane.h"
 #include "MapPane.h"
+#include "ChannelPane.h"
 #include "MarkEditor.h"
 
 namespace GUI
@@ -32,6 +33,7 @@ namespace GUI
     QStackedLayout *m_layout;
     MapPane        *m_mapView;
     MarkPane       *m_feedView;
+    ChannelPane    *m_channelView;
     MarkEditor     *m_editor;
     QPalette       *m_palette;
 
@@ -45,6 +47,7 @@ namespace GUI
   public slots:
     void switchMap();
     void switchFeed();
+    void switchChannel();
     void switchEditor();
     
   private:    

@@ -36,7 +36,7 @@ namespace GUI
 
     connect(m_actionViewMap, SIGNAL(triggered()), centralWidget(), SLOT(switchMap()));
     connect(m_actionViewFeed, SIGNAL(triggered()), centralWidget(), SLOT(switchFeed()));
-    connect(m_actionSelectChannels, SIGNAL(triggered()), this, SLOT(selectChannels()));
+    connect(m_actionSelectChannels, SIGNAL(triggered()), centralWidget(), SLOT(switchChannel()));
     connect(m_actionAddContent, SIGNAL(triggered()), centralWidget(), SLOT(switchEditor()));
     connect(m_actionQuit, SIGNAL(triggered()), this, SLOT(close()));
   }
@@ -51,11 +51,6 @@ namespace GUI
     m_actionAddContent = new QAction("Add",this);
   }
 
-
-  void MainWindow::selectChannels()
-  {
-    qDebug() << "select";
-  }
 
 
   void MainWindow::addContent()

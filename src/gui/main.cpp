@@ -1,16 +1,19 @@
+/*  */
+/*  */
+
+
 
 #include <QApplication>
 #include "MainWindow.h" 
 #include <curl/curl.h>
-#include "MainWindow.h" 
 #include "DbSession.h"
 
 int main(int c, char **v)
 {
   common::DbSession::getInstance().loadData();
-  QApplication 	app(c,v);
+	QApplication 	app(c,v);
 
-  curl_global_init(CURL_GLOBAL_ALL);
+	curl_global_init(CURL_GLOBAL_ALL);
 	
   GUI::MainWindow window;
 
@@ -25,5 +28,6 @@ int main(int c, char **v)
   common::DbSession::getInstance().saveData();
 
 	return 0;
+
 }
 

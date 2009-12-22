@@ -46,7 +46,6 @@ namespace GUI
 
   public slots:
 
-    void selectChannels();
     void addContent();
 
   private:    

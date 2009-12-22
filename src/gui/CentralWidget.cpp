@@ -21,10 +21,12 @@ namespace GUI
 
       m_mapView  = new MapPane(this);
       m_feedView = new MarkPane(this);
+      m_channelView = new ChannelPane(this);
       m_editor = new MarkEditor(this);
       
       m_layout->addWidget(m_mapView);
       m_layout->addWidget(m_feedView);
+      m_layout->addWidget(m_channelView);
       m_layout->addWidget(m_editor);
       
       setLayout(m_layout);
@@ -40,6 +42,11 @@ namespace GUI
     void CentralWidget::switchFeed()
     {
       m_layout->setCurrentWidget(m_feedView); 
+    }
+
+    void CentralWidget::switchChannel()
+    {
+      m_layout->setCurrentWidget(m_channelView); 
     }
 
     void CentralWidget::switchEditor()
