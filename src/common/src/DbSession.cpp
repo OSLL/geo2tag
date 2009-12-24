@@ -33,6 +33,7 @@ namespace db
     double longitude;
     char label[1024];
     char description[2048];
+    char url[2048];
     SQL_TIMESTAMP_STRUCT time;
     SQLLEN timeLen;
   };
@@ -65,11 +66,12 @@ namespace db
       COL_NAME(4, "longitude", SQL_C_DOUBLE, longitude)
       COL_NAME(5, "label", SQL_C_CHAR, label)
       COL_NAME(6, "description", SQL_C_CHAR, description)
+      COL_NAME(7, "url", SQL_C_CHAR, url)
     END_COLMAP()
 
     const char* sql() const
     {
-      return "select id, time, latitude, longitude, label, description from mark order by time;";
+      return "select id, time, latitude, longitude, label, description, url from tag order by time;";
     }
   };
 
@@ -88,7 +90,7 @@ namespace db
     
     const char *sql() const
     {
-      return "select nextval('marks_seq') as seq;";
+      return "select nextval('tags_seq') as seq;";
     }
   };
 
@@ -107,12 +109,13 @@ namespace db
       PAR(2, SQL_C_DOUBLE, SQL_DOUBLE, longitude)
       PAR(3, SQL_C_CHAR, SQL_CHAR, label)
       PAR(4, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(5, SQL_C_LONG, SQL_INTEGER, id)
+      PAR(5, SQL_C_CHAR, SQL_CHAR, url)
+      PAR(6, SQL_C_LONG, SQL_INTEGER, id)
     END_PARMAP()
 
     const char* sql() const
     {
-      return "insert into mark (latitude, longitude, label, description,id) values(?,?,?,?,?);";
+      return "insert into tag (latitude, longitude, label, description, url, id) values(?,?,?,?,?);";
     }
   };
   
@@ -131,12 +134,13 @@ namespace db
       PAR(2, SQL_C_DOUBLE, SQL_DOUBLE, longitude)
       PAR(3, SQL_C_CHAR, SQL_CHAR, label)
       PAR(4, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(5, SQL_C_LONG, SQL_INTEGER, id)
+      PAR(5, SQL_C_CHAR, SQL_CHAR, url)
+      PAR(6, SQL_C_LONG, SQL_INTEGER, id)
     END_PARMAP()
 
     const char* sql() const
     {
-      return "update mark set latitude=?, longitude=?, label=?, description=? where id=?;";
+      return "update tag set latitude=?, longitude=?, label=?, description=?, url=? where id=?;";
     }
   };
 
@@ -231,13 +235,13 @@ namespace db
     }
 
     BEGIN_COLMAP()
-      COL_NAME(1, "mark_id", SQL_C_LONG, mark)
+      COL_NAME(1, "tag_id", SQL_C_LONG, mark)
       COL_NAME(2, "channel_id", SQL_C_LONG, channel)
     END_COLMAP()
 
     const char* sql() const
     {
-      return "select mark_id, channel_id from marks order by channel_id;";
+      return "select tag_id, channel_id from tags order by channel_id;";
     }
   };
 
@@ -258,7 +262,7 @@ namespace db
 
     const char* sql() const
     {
-      return "insert into marks (mark_id,channel_id) values(?,?);";
+      return "insert into tags (tag_id,channel_id) values(?,?);";
     }
   };
   
@@ -279,7 +283,7 @@ namespace db
 
     const char* sql() const
     {
-      return "update marks set channel_id=? where mark_id=?;";
+      return "update tags set channel_id=? where tag_id=?;";
     }
   };
 }
