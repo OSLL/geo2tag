@@ -29,9 +29,10 @@ namespace GUI
       m_layout->addWidget(m_channelView);
       m_layout->addWidget(m_editor);
       
+      switchMap();
       setLayout(m_layout);
 
-      switchEditor();
+      
     }
 
     void CentralWidget::switchMap()
@@ -41,6 +42,7 @@ namespace GUI
 
     void CentralWidget::switchFeed()
     {
+      m_feedView->refresh();      
       m_layout->setCurrentWidget(m_feedView); 
     }
 

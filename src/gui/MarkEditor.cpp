@@ -49,14 +49,17 @@ namespace GUI
 
   void MarkEditor::applyMark()
   {
-  //TODO, kkv add call underlying components
-    qDebug() << "sending new mark";
+    QString text = m_text->toPlainText(); 
+    qDebug() << "sending new mark " << text;
+    
     CHandlePtr<common::DataMark> mark = common::DataMark::createMark(common::GpsInfo::getInstance().getLatitude(),
                                                      common::GpsInfo::getInstance().getLongitude(), 
-                                                     "test label", 
-                                                     m_text->toHtml().toStdString());
+                                                     "P", 
+                                                     text.toStdString());
     (*common::DbSession::getInstance().getChannels())[m_combo->currentIndex()]->addData(mark);
 
+  //  common::DbSession::getInstance().saveData();
+  //  common::DbSession::getInstance().loadData();
   }
 
 } // namespace GUI

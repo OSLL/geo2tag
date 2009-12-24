@@ -33,8 +33,6 @@
 namespace GUI
 {
 
- const char MARK_NAMES[]={"ABCDEFGHIKLMNOPRSTUVWXYZ"};
-
   class ListModel : public QStandardItemModel
   {
       Q_OBJECT;
@@ -80,10 +78,11 @@ namespace GUI
       	return QVariant();
       }
 
-	void layoutUpdate(){
-		setRowCount(m_data->size());
-		emit layoutChanged();
-	} 
+	 void layoutUpdate()
+   {
+	    setRowCount(m_data->size());
+		  emit layoutChanged();
+	 } 
   };
 
  /*!
@@ -102,30 +101,10 @@ namespace GUI
     {
     }
 
-    int rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
-    {
-        return 33;
-    }
-      
     int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const
     {
         return 2;
     }
-
-    void setModelData(QWidget *editor, QAbstractItemModel *model,  const QModelIndex &index) const
-     {
-        qDebug() << "setDATA";
-        QString value = qobject_cast<QLineEdit*>(editor)->text();
-        ListModel *mymodel = qobject_cast<ListModel*>(model);
-
-        mymodel->setDescription(index.row(),value.toStdString());
-     }
-
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */,  const QModelIndex &/*index*/) const
-    {
-       return new QLineEdit(parent);
-    }
-
   }; // class MarkTableDelegat
  
  /*!
@@ -141,8 +120,8 @@ namespace GUI
     {
       m_model = new ListModel(this);
 			setModel(m_model);
-      m_model->setHeaderData(0, Qt::Horizontal, tr("Name"));
-      m_model->setHeaderData(1, Qt::Horizontal, tr("Description")); 
+      m_model->setHeaderData(0, Qt::Horizontal, tr("Map"));
+      m_model->setHeaderData(1, Qt::Horizontal, tr("Mark message")); 
       horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
       setItemDelegate(new MarkTableDelegat(this));
     }

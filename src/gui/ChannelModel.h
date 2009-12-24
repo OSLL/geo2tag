@@ -45,6 +45,16 @@ namespace GUI
       return (*m_channels)[index]->getDescription().c_str(); 
     }
 
+    bool IsSelected(int index) const
+    {
+      return (*m_channels)[index]->isDisplayed();
+    }
+
+    void setSelection(int index, bool value)
+    {
+      (*m_channels)[index]->setDisplayed(value); 
+    }
+
     int rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
     {
         return m_channels->size();
@@ -88,11 +98,6 @@ namespace GUI
     {
     }
 
-    void setModelData(QWidget *editor, QAbstractItemModel *model,  const QModelIndex &index) const
-    {
-        qDebug() << "setDATA";
-    }
-
     int rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
     {
       qDebug() << "del";
@@ -108,6 +113,11 @@ namespace GUI
     {
       const ChannelModel *model = qobject_cast<const ChannelModel*>(index.model());
       QCheckBox cb(model->getChannelName(index.row()),NULL);
+
+      if ( model->IsSelected(index.row()))
+      {        
+        cb.setCheckState(Qt::Checked);
+      }
 
       if(option.state & QStyle::State_Selected)
       {
@@ -130,6 +140,15 @@ namespace GUI
      
      return new  QCheckBox(name,parent);
    }
+
+   void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const
+   {
+      ChannelModel *_model = qobject_cast<ChannelModel*>(model);
+      QCheckBox *cb = qobject_cast<QCheckBox*>(editor);
+
+      _model->setSelection(index.row(),  (cb->checkState() == Qt::Checked) ? true : false );
+   }
+   
   }; 
 } // namespace GUI
 

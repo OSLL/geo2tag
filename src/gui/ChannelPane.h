@@ -33,6 +33,7 @@ namespace GUI
     virtual ~ChannelPane()
     {
     }
+
     
   private:    
     ChannelPane(const ChannelPane& obj);

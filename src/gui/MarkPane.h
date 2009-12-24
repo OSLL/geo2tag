@@ -33,6 +33,15 @@ namespace GUI
     virtual ~MarkPane()
     {
     }
+  
+  public slots:
+
+    void refresh()
+    {
+      qDebug() << "refresh";       
+      qobject_cast<ListModel*>((m_list)->model())->layoutUpdate();
+    }  
+    
 
   private:  
 
