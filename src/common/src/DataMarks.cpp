@@ -27,11 +27,12 @@ namespace common
   }
 
   DataMark::DataMark(double latitude, double longitude, const std::string& label, 
-             const std::string& description, const CTime &time): 
+             const std::string& description, const std::string& url, const CTime &time): 
              m_latitude(latitude), 
              m_longitude(longitude), 
              m_label(label),
              m_description(description), 
+	     m_url(url),
              m_time(time)
   {
   }
@@ -71,6 +72,16 @@ namespace common
     m_label = label;
   }
 
+  const std::string& DataMark::getUrl() const
+  {
+    return m_url;
+  }
+
+  void DataMark::setUrl(const std::string& url)
+  {
+    m_url = url;
+  }
+
   const CTime& DataMark::getTime() const
   {
     return m_time;
@@ -91,9 +102,9 @@ namespace common
   }
   
   CHandlePtr<DataMark> DataMark::createMark(double latitude, double longitude, const std::string& label, 
-             const std::string& description, const CTime &time)
+             const std::string& description, const std::string& url, const CTime &time)
   {
-    return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, time));
+    return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, url, time));
   }
 } // namespace common
 

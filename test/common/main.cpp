@@ -17,5 +17,6 @@ int main()
   std::cerr << "Total marks = " << marks->size() << std::endl;
   std::cerr << "Total channels = " << channels->size() << std::endl;
   DbSession::getInstance().saveData();
+  std::cerr << "exiting..." << std::endl;
   return 0;
 }

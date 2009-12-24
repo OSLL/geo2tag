@@ -55,7 +55,8 @@ namespace GUI
     CHandlePtr<common::DataMark> mark = common::DataMark::createMark(common::GpsInfo::getInstance().getLatitude(),
                                                      common::GpsInfo::getInstance().getLongitude(), 
                                                      "P", 
-                                                     text.toStdString());
+                                                     text.toStdString(),
+						     "" /* unknown/undefined url*/);
     (*common::DbSession::getInstance().getChannels())[m_combo->currentIndex()]->addData(mark);
 
   //  common::DbSession::getInstance().saveData();

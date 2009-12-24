@@ -144,7 +144,7 @@ namespace GUI
                         common::GpsInfo::getInstance().getLatitude(),
                         common::GpsInfo::getInstance().getLongitude(), 
                         s.str(),
-                        ""  );
+                        "", ""/*unknown/undefined url*/  );
 
 
 

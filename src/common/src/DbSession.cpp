@@ -115,7 +115,7 @@ namespace db
 
     const char* sql() const
     {
-      return "insert into tag (latitude, longitude, label, description, url, id) values(?,?,?,?,?);";
+      return "insert into tag (latitude, longitude, label, description, url, id) values(?,?,?,?,?,?);";
     }
   };
   
@@ -308,6 +308,7 @@ namespace common
                             query.longitude,
                             query.label,
                             query.description,
+			    query.url,
                             ODBC::convertTime(query.time,CTime::UTC)
                             ));
       m_marks->push_back(mark);
@@ -317,6 +318,7 @@ namespace common
   
   void DbSession::storeMark(CHandlePtr<common::DataMark> m)
   {
+    std::cerr << "Begin storing marks" << std::endl;
     CHandlePtr<loader::DataMark> mark = m.dynamicCast<loader::DataMark>();
     if(!mark)
     {
@@ -326,6 +328,7 @@ namespace common
     
     if(mark->getId()==0)
     {
+      std::cerr << "New use mark" << std::endl;
       ODBC::CTransaction tr(*this);
       // Here is new object, has been created by user
       db::NewMarkKeyQuery query(*this);
@@ -334,6 +337,7 @@ namespace common
         ODBC::CExecuteClose keyExec(query);
         query.fetchNoEmpty();
       }
+      std::cerr << "New id for user's mark = " << query.m_seq << std::endl;
       
       mark->setId(query.m_seq);
       s_marks[mark->getId()] = mark;
@@ -345,8 +349,11 @@ namespace common
       strncpy(storeQuery.label,mark->getLabel().c_str(),1023);
       storeQuery.label[1023]='\0';
       strncpy(storeQuery.description,mark->getDescription().c_str(),2047);
-      storeQuery.label[2047]='\0';
+      storeQuery.description[2047]='\0';
+      strncpy(storeQuery.url,mark->getUrl().c_str(),2047);
+      storeQuery.url[2047]='\0';
       
+      std::cerr << "ready for save" << std::endl;
       storeQuery.prepare();
       storeQuery.execute();
     }
@@ -363,6 +370,8 @@ namespace common
       updateQuery.label[1023]='\0';
       strncpy(updateQuery.description,mark->getDescription().c_str(),2047);
       updateQuery.description[2047]='\0';
+      strncpy(updateQuery.url,mark->getUrl().c_str(),2047);
+      updateQuery.url[2047]='\0';
       
       updateQuery.prepare();
       updateQuery.execute();
@@ -454,7 +463,7 @@ namespace common
         ODBC::CTransaction tr(*this);
         // this object need to be updated in data base
         
-        db::UpdateMarkQuery updateQuery(*this);
+        db::UpdateChannelQuery updateQuery(*this);
         updateQuery.id = ch->getId();
         strncpy(updateQuery.description,ch->getDescription().c_str(),2047);
         updateQuery.description[2047]='\0';
@@ -500,8 +509,11 @@ namespace common
 
   void DbSession::saveData()
   {
+    std::cerr << "Saving channels" << std::endl;
     saveChannels();
+    std::cerr << "Saving marks" << std::endl;
     saveMarks();
+    std::cerr << "Saving relations" << std::endl;
     saveRelations();
   }
 
