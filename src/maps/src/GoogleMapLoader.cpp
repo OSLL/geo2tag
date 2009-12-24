@@ -49,11 +49,15 @@ namespace maps
     std::ostringstream s;
     s << "maps.google.com/maps/api/staticmap?center=" << latitude << ","<< longitude 
       << "&zoom=" << size << "&size=" << width << "x" << height;
+
+    std::cerr << "marks=" << marks.size() << std::endl;
+    
     for(size_t i=0; i<marks.size(); i++)
     {
+      std::cerr << marks[i]->getDescription() << std::endl; 
       if(marks[i]->getDescription()!="")
         s << "&markers=color:"<< getColor(marks[i]->getLabel()[7]) <<"|label:" << 
-             marks[i]->getLabel()[7] << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude(); 
+             /*marks[i]->getLabel()[7]*/ "A" << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude(); 
     }
     s << "&maptype=roadmap&sensor=true&key=" << GOOGLE_MAPS_API_KEY;
 
