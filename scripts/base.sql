@@ -1,3 +1,12 @@
+CREATE SEQUENCE users_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
+
+CREATE TABLE users (
+  id NUMERIC(9,0) NOT NULL DEFAULT nextval('users_seq'),
+  login VARCHAR(50) NOT NULL,
+  password VARCHAR(50) NOT NULL,
+  constraint users_pkey primary key (id)
+);
+
 CREATE SEQUENCE tags_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 
 CREATE TABLE tag (
@@ -8,7 +17,10 @@ CREATE TABLE tag (
   label VARCHAR(1024) NOT NULL,
   description VARCHAR(2048) NOT NULL, 
   url VARCHAR(2048) DEFAULT NULL, 
-  constraint tag_pkey primary key (id)
+  user_id NUMERIC(9,0) NOT NULL DEFAULT 1,
+  constraint tag_pkey primary key (id),
+  constraint fk_user foreign key (user_id) references users(id)
+                                                      on delete cascade
 );
 
 CREATE SEQUENCE channels_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
@@ -27,4 +39,18 @@ CREATE TABLE tags (
   constraint fk_channels foreign key (channel_id) references channel(id)
                                                        on delete cascade
 );
+
+
+INSERT into channel (description) values ('weather');
+INSERT into channel (description) values ('sales');
+INSERT into channel (description) values ('petroleum costs');
+INSERT into channel (description) values ('announcements');
+INSERT into channel (description) values ('personal');
+INSERT into channel (description) values ('government');
+
+INSERT into users (login, password) values ('test0', 'test');
+INSERT into users (login, password) values ('test1', 'test');
+INSERT into users (login, password) values ('test2', 'test');
+INSERT into users (login, password) values ('test3', 'test');
+
 

@@ -25,18 +25,19 @@ namespace common
   {
     CHandlePtr<DataMarks> m_marks;
     CHandlePtr<Channels> m_channels;
+    CHandlePtr<std::vector<CHandlePtr<common::User> > > m_users;
 
-    void loadMarks();
+    unsigned long m_currtentUserId;
 
-    void saveMarks();
-
+    void loadUsers(const std::string &login, const std::string &password);
     void loadChannels();
-
-    void saveChannels();
-    
+    void loadMarks();
     void loadRelations();
 
+    void saveChannels();
+    void saveMarks();
     void saveRelations();
+    
 
     DbSession();
 
@@ -49,12 +50,14 @@ namespace common
 
     CHandlePtr<Channels> getChannels() const;
 
-    void loadData();
+    void loadData(const std::string &login, const std::string &password);
 
     void saveData();
 
     void storeMark(CHandlePtr<common::DataMark> m); //! this routine will be in private area
     void updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m); //! this routine will be in private area
+
+    CHandlePtr<common::User> getCurrentUser() const;
 
     static DbSession& getInstance();
 

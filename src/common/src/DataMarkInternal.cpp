@@ -14,8 +14,9 @@
 namespace loader
 {
   DataMark::DataMark(unsigned long long id, double latitude, double longitude, 
-             std::string label, std::string description, const std::string& url, const CTime& time):
-              common::DataMark(latitude, longitude, label, description, url, time), m_id(id)
+             std::string label, std::string description, const std::string& url, const CTime& time,
+             const CHandlePtr<common::User> &user):
+              common::DataMark(latitude, longitude, label, description, url, time, user), m_id(id)
     {
     }
     

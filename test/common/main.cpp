@@ -7,7 +7,7 @@
 using namespace common;
 int main()
 {
-  DbSession::getInstance().loadData();
+  DbSession::getInstance().loadData("test0", "test");
   CHandlePtr<DataMarks> marks = DbSession::getInstance().getMarks();
   CHandlePtr<Channels> channels = DbSession::getInstance().getChannels();
   std::cerr << "Total marks = " << marks->size() << std::endl;

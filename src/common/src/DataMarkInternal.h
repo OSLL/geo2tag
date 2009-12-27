@@ -21,7 +21,8 @@ namespace loader
 
   public:
     DataMark(unsigned long long id, double latitude, double longitude, 
-             std::string label, std::string description, const std::string& url, const CTime& time);
+             std::string label, std::string description, const std::string& url, const CTime& time,
+             const CHandlePtr<common::User> &user);
     
     unsigned long long getId() const;
     

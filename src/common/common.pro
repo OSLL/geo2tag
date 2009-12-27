@@ -28,12 +28,14 @@ HEADERS += inc/DataMarks.h \
            inc/GpsModeller.h \
            inc/Handle.h \
 #           inc/MaemoGps.h \
+           inc/User.h \
            inc/Picture.h \
            inc/PngPicture.h \
            inc/pointer.h \
            inc/Channel.h \
            src/ChannelInternal.h \
            src/DataMarkInternal.h \
+	   src/UserInternal.h \
            common/inc/BitTools.h \
            common/inc/ConstMap.h \
            common/inc/Crc.h \
@@ -90,6 +92,8 @@ SOURCES += src/DataMarks.cpp \
            thread/src/Thread.cpp \
            src/DataMarkInternal.cpp \
            src/ChannelInternal.cpp \
+	   src/User.cpp \
+	   src/UserInternal.cpp
 
 LIBS    += -L../internal/lib -lodbc 
 # -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 -lpthread -lgobject-2.0 -lglib-2.0

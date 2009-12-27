@@ -19,12 +19,21 @@
 #include "Db.h"
 #include "DataMarkInternal.h"
 #include "ChannelInternal.h"
+#include "UserInternal.h"
 
 static std::map<long, CHandlePtr<loader::DataMark> > s_marks = std::map<long, CHandlePtr<loader::DataMark> >();
 static std::map<long, CHandlePtr<loader::Channel> > s_channels = std::map<long, CHandlePtr<loader::Channel> >();
+static std::map<long, CHandlePtr<loader::User> > s_users = std::map<long, CHandlePtr<loader::User> >();
 
 namespace db
 {
+
+  struct User
+  {
+    char login[50];
+    char password[50];
+    unsigned long id;
+  };
 
   struct Mark
   {
@@ -36,6 +45,7 @@ namespace db
     char url[2048];
     SQL_TIMESTAMP_STRUCT time;
     SQLLEN timeLen;
+    unsigned long user_id;
   };
 
   struct Channel
@@ -54,8 +64,9 @@ namespace db
 
   class LoadMarksQuery: public Mark, public CDbQueryX
   {
+    unsigned long m_user;
   public:
-    LoadMarksQuery(const CDbConn& conn): CDbQueryX(conn)
+    LoadMarksQuery(const CDbConn& conn, unsigned long user): CDbQueryX(conn), m_user(user)
     {
     }
 
@@ -67,11 +78,15 @@ namespace db
       COL_NAME(5, "label", SQL_C_CHAR, label)
       COL_NAME(6, "description", SQL_C_CHAR, description)
       COL_NAME(7, "url", SQL_C_CHAR, url)
+      COL_NAME(8, "user_id", SQL_C_LONG, user_id)
     END_COLMAP()
-
+    
+    BEGIN_PARMAP()
+      PAR(1, SQL_C_LONG, SQL_INTEGER, m_user)
+    END_PARMAP()
     const char* sql() const
     {
-      return "select id, time, latitude, longitude, label, description, url from tag order by time;";
+      return "select id, time, latitude, longitude, label, description, url, user_id from tag where user_id=? order by time;";
     }
   };
 
@@ -110,12 +125,13 @@ namespace db
       PAR(3, SQL_C_CHAR, SQL_CHAR, label)
       PAR(4, SQL_C_CHAR, SQL_CHAR, description)
       PAR(5, SQL_C_CHAR, SQL_CHAR, url)
-      PAR(6, SQL_C_LONG, SQL_INTEGER, id)
+      PAR(6, SQL_C_LONG, SQL_INTEGER, user_id)
+      PAR(7, SQL_C_LONG, SQL_INTEGER, id)
     END_PARMAP()
 
     const char* sql() const
     {
-      return "insert into tag (latitude, longitude, label, description, url, id) values(?,?,?,?,?,?);";
+      return "insert into tag (latitude, longitude, label, description, url, user_id, id) values(?,?,?,?,?,?,?);";
     }
   };
   
@@ -286,19 +302,57 @@ namespace db
       return "update tags set channel_id=? where tag_id=?;";
     }
   };
+
+  //////////// Users
+  
+  class LoadUsersQuery: public User, public CDbQueryX
+  {
+  public:
+    LoadUsersQuery(const CDbConn& conn): CDbQueryX(conn)
+    {
+    }
+
+    BEGIN_COLMAP()
+      COL_NAME(1, "id", SQL_C_LONG, id)
+      COL_NAME(2, "login", SQL_C_CHAR, login)
+      COL_NAME(3, "password", SQL_C_CHAR, password)
+    END_COLMAP()
+
+    const char* sql() const
+    {
+      return "select id, login, password from users order by id;";
+    }
+  };
+  
 }
 
 namespace common
 {
   DbSession::DbSession(): ODBC::CDbConn(*(ODBC::CDbEnv*)this), m_marks(makeHandle(new DataMarks)), m_channels(makeHandle(new Channels))
   {
+    m_users = makeHandle(new std::vector<CHandlePtr<common::User> >());
     connect("geo2tag");
     std::cerr << "connected to database" << std::endl;
+  }
+
+  void DbSession::loadUsers(const std::string &login, const std::string &password)
+  {
+    db::LoadUsersQuery query(*this);
+    query.prepare();
+    ODBC::CExecuteClose x(query);
+    while(query.fetch())
+    {
+      CHandlePtr<loader::User> u = makeHandle(new loader::User(query.login, query.password, query.id));
+      m_users->push_back(u);
+      s_users[query.id] = u;
+      if(u->getLogin() == login)
+        m_currtentUserId = query.id;
+    }
   }
   
   void DbSession::loadMarks()
   {
-    db::LoadMarksQuery query(*this);
+    db::LoadMarksQuery query(*this, m_currtentUserId);
     query.prepare();
     ODBC::CExecuteClose x(query);
     while(query.fetch())
@@ -308,8 +362,9 @@ namespace common
                             query.longitude,
                             query.label,
                             query.description,
-			    query.url,
-                            ODBC::convertTime(query.time,CTime::UTC)
+                            query.url,
+                            ODBC::convertTime(query.time,CTime::UTC),
+                            s_users.find(query.user_id)->second
                             ));
       m_marks->push_back(mark);
       s_marks[query.id] = mark;
@@ -352,6 +407,7 @@ namespace common
       storeQuery.description[2047]='\0';
       strncpy(storeQuery.url,mark->getUrl().c_str(),2047);
       storeQuery.url[2047]='\0';
+      storeQuery.user_id = m_currtentUserId;
       
       std::cerr << "ready for save" << std::endl;
       storeQuery.prepare();
@@ -500,8 +556,9 @@ namespace common
     return m_channels;
   }
 
-  void DbSession::loadData()
+  void DbSession::loadData(const std::string& login, const std::string& password)
   {
+    loadUsers(login,password);std::cerr << "Users loaded" << std::endl;
     loadMarks(); std::cerr << "Marks loaded" << std::endl;
     loadChannels();std::cerr << "Channels loaded" << std::endl;
     loadRelations();std::cerr << "Relations loaded" << std::endl;
@@ -515,6 +572,11 @@ namespace common
     saveMarks();
     std::cerr << "Saving relations" << std::endl;
     saveRelations();
+  }
+
+  CHandlePtr<common::User> DbSession::getCurrentUser() const
+  {
+    return s_users.find(m_currtentUserId)->second;
   }
 
   DbSession& DbSession::getInstance()

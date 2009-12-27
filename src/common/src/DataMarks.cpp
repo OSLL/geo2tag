@@ -13,6 +13,7 @@
 #include <cstring>
 #include "DataMarks.h"
 #include "DataMarkInternal.h"
+#include "DbSession.h"
 
 namespace common
 {
@@ -27,13 +28,15 @@ namespace common
   }
 
   DataMark::DataMark(double latitude, double longitude, const std::string& label, 
-             const std::string& description, const std::string& url, const CTime &time): 
+             const std::string& description, const std::string& url, const CTime &time,
+             const CHandlePtr<User> &user): 
              m_latitude(latitude), 
              m_longitude(longitude), 
              m_label(label),
              m_description(description), 
-	     m_url(url),
-             m_time(time)
+      	     m_url(url),
+             m_time(time),
+             m_user(user)
   {
   }
 
@@ -92,6 +95,10 @@ namespace common
     m_time = time;
   }
   
+  CHandlePtr<User> DataMark::getUser() const
+  {
+    return m_user;
+  }
 
   DataMarks::DataMarks()
   {
@@ -104,7 +111,8 @@ namespace common
   CHandlePtr<DataMark> DataMark::createMark(double latitude, double longitude, const std::string& label, 
              const std::string& description, const std::string& url, const CTime &time)
   {
-    return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, url, time));
+    return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, url, time,
+              common::DbSession::getInstance().getCurrentUser()));
   }
 } // namespace common
 
