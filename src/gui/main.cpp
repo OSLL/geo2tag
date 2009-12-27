@@ -10,7 +10,7 @@
 
 int main(int c, char **v)
 {
-  common::DbSession::getInstance().loadData();
+  common::DbSession::getInstance().loadData("test0","test");
 	QApplication 	app(c,v);
 
 	curl_global_init(CURL_GLOBAL_ALL);
