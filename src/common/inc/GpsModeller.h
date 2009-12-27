@@ -13,6 +13,8 @@
 #include <string>
 #include "GpsInfo.h"
 
+#ifdef SIMULATE_GPS 
+
 namespace common
 {
  /*!
@@ -35,6 +37,8 @@ namespace common
   }; // class GpsModeller
   
 } // namespace common
+
+#endif // SIMULATE_GPS
 
 #endif //_GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
 

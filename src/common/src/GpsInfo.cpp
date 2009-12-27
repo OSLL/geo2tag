@@ -11,10 +11,7 @@
 
 #include "GpsInfo.h"
 #include "GpsModeller.h"
-
-#ifndef NO_MAEMO_GPS
-  #include "MaemoGps.h"
-#endif
+#include "MaemoGps.h"
 
 namespace common
 {

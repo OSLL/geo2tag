@@ -331,8 +331,46 @@ namespace common
   DbSession::DbSession(): ODBC::CDbConn(*(ODBC::CDbEnv*)this), m_marks(makeHandle(new DataMarks)), m_channels(makeHandle(new Channels))
   {
     m_users = makeHandle(new std::vector<CHandlePtr<common::User> >());
+#ifndef NO_DB_CONNECTION
     connect("geo2tag");
     std::cerr << "connected to database" << std::endl;
+#else
+    CHandlePtr<loader::User> user = makeHandle(new loader::User("test0","test",0));
+    m_users->push_back(user);
+    s_users[0]=user;
+    m_currtentUserId = 0;
+    
+    {
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(1,"weather"));
+      m_channels->push_back(channel);
+      s_channels[1]=channel;
+    }
+    {
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(2,"sales"));
+      m_channels->push_back(channel);
+      s_channels[2]=channel;
+    }
+    {
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(3,"petroleum costs"));
+      m_channels->push_back(channel);
+      s_channels[3]=channel;
+    }
+    {
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(4,"announcements"));
+      m_channels->push_back(channel);
+      s_channels[4]=channel;
+    }
+    {
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(5,"personal"));
+      m_channels->push_back(channel);
+      s_channels[5]=channel;
+    }
+    {
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(6,"government"));
+      m_channels->push_back(channel);
+      s_channels[6]=channel;
+    }
+#endif
   }
 
   void DbSession::loadUsers(const std::string &login, const std::string &password)
@@ -444,14 +482,14 @@ namespace common
  
   void DbSession::updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m) //! this routine will be in private area
   {
-
     CHandlePtr<loader::DataMark> mark = m.dynamicCast<loader::DataMark>();
     if(mark->getId()!=0)
       return;
-    
-    // store(update) mark to DB
-    common::DbSession::getInstance().storeMark(mark);
 
+#ifndef NO_DB_CONNECTION
+    // store(update) mark to DB
+    storeMark(mark);
+    
     db::StoreMarkRelationQuery query(*this);
     query.mark = mark->getId();
     query.channel = channel_id;
@@ -465,6 +503,14 @@ namespace common
     {
       // it is hack, but we need it
     }
+#else
+    if(mark->getId()==0)
+    {
+      s_marks[m_marks->size()+1]=mark;
+      mark->setId(m_marks->size()+1);
+      m_marks->push_back(mark);
+    }
+#endif
   }
   
   void DbSession::loadChannels()
@@ -558,21 +604,25 @@ namespace common
 
   void DbSession::loadData(const std::string& login, const std::string& password)
   {
+#ifndef NO_DB_CONNECTION
     loadUsers(login,password);std::cerr << "Users loaded" << std::endl;
     loadMarks(); std::cerr << "Marks loaded" << std::endl;
     loadChannels();std::cerr << "Channels loaded" << std::endl;
     loadRelations();std::cerr << "Relations loaded" << std::endl;
+#endif
   }
 
   void DbSession::saveData()
   {
+#ifndef NO_DB_CONNECTION
     std::cerr << "Saving channels" << std::endl;
     saveChannels();
     std::cerr << "Saving marks" << std::endl;
     saveMarks();
     std::cerr << "Saving relations" << std::endl;
     saveRelations();
-  }
+#endif
+}
 
   CHandlePtr<common::User> DbSession::getCurrentUser() const
   {

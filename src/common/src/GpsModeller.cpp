@@ -10,8 +10,10 @@
  * ---------------------------------------------------------------- */
 
 #include <fstream>
-
 #include "GpsModeller.h"
+
+#ifdef SIMULATE_GPS 
+
 namespace common
 {
   GpsModeller::GpsModeller(std::string flong, std::string flat):m_longFile(flong), m_latFile(flat)
@@ -41,5 +43,7 @@ namespace common
   }
 
 } // namespace common
+
+#endif 
 
 /* ===[ End of file  ]=== */

@@ -27,7 +27,7 @@ HEADERS += inc/DataMarks.h \
            inc/GpsInfo.h \
            inc/GpsModeller.h \
            inc/Handle.h \
-#           inc/MaemoGps.h \
+           inc/MaemoGps.h \
            inc/User.h \
            inc/Picture.h \
            inc/PngPicture.h \
@@ -35,7 +35,7 @@ HEADERS += inc/DataMarks.h \
            inc/Channel.h \
            src/ChannelInternal.h \
            src/DataMarkInternal.h \
-	   src/UserInternal.h \
+           src/UserInternal.h \
            common/inc/BitTools.h \
            common/inc/ConstMap.h \
            common/inc/Crc.h \
@@ -73,7 +73,7 @@ SOURCES += src/DataMarks.cpp \
            src/DefaultException.cpp \
            src/GpsInfo.cpp \
            src/GpsModeller.cpp \
-#           src/MaemoGps.cpp \
+           src/MaemoGps.cpp \
            src/Picture.cpp \
            src/PngPicture.cpp \
            src/Channel.cpp\
@@ -92,8 +92,8 @@ SOURCES += src/DataMarks.cpp \
            thread/src/Thread.cpp \
            src/DataMarkInternal.cpp \
            src/ChannelInternal.cpp \
-	   src/User.cpp \
-	   src/UserInternal.cpp
+           src/User.cpp \
+           src/UserInternal.cpp
 
 LIBS    += -L../internal/lib -lodbc 
 # -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 -lpthread -lgobject-2.0 -lglib-2.0
@@ -106,4 +106,6 @@ OBJECTS_DIR = .obj
 
 MOC_DIR = .moc
 
-DEFINES += NO_MAEMO_GPS
+DEFINES += NO_MAEMO_GPS SIMULATE_GPS
+DEFINES += NO_DB_CONNECTION
+

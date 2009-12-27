@@ -64,7 +64,7 @@ namespace common
 } // namespace common
 
 #else // NO_MAEMO_GPS
-#warning "Building without gps"
+#warning "Building without Maemo gps support"
 #endif
 
 #endif //_MaemoGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
