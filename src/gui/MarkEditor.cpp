@@ -8,9 +8,10 @@
  *
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
-
+#include <sstream>
 #include "MarkEditor.h"
 #include <QDebug>
+#include <QMessageBox>
 #include <QtGui/QVBoxLayout>
 #include "DataMarks.h"
 #include "Channel.h"
@@ -57,7 +58,17 @@ namespace GUI
                                                      "P", 
                                                      text.toStdString(),
 						     "" /* unknown/undefined url*/);
-    (*common::DbSession::getInstance().getChannels())[m_combo->currentIndex()]->addData(mark);
+    try
+    {
+      (*common::DbSession::getInstance().getChannels())[m_combo->currentIndex()]->addData(mark);
+    }
+    catch(ODBC::CException &x)
+    {
+      std::ostringstream s;
+      s << x;
+      qDebug() << s.str().c_str();
+      QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Error during save your message."));
+    }
 
   //  common::DbSession::getInstance().saveData();
   //  common::DbSession::getInstance().loadData();
