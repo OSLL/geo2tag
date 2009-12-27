@@ -5,11 +5,12 @@
 #include "MainWindow.h" 
 #include <curl/curl.h>
 #include "DbSession.h"
+#include "GpsInfo.h"
 
 int main(int c, char **v)
 {
   QApplication 	app(c,v);
-
+  common::GpsInfo::getInstance(); //starting daemon and other stuff;
   try
   {
     common::DbSession::getInstance().loadData("test0","test");

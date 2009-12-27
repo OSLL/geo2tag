@@ -39,6 +39,7 @@ namespace GUI
     
     connect(&m_updateGpsDataTimer, SIGNAL(timeout()),this, SLOT(updateGpsData()));
     m_updateGpsDataTimer.setInterval(15000);
+    m_updateGpsDataTimer.start();
 	}
 
 	void MapWidget::paintEvent(QPaintEvent *pe)

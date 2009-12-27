@@ -18,7 +18,7 @@ DEPENDPATH += . \
               thread/inc \
               thread/src
 
-INCLUDEPATH += . inc common/inc exception/inc thread/inc odbc/inc ../internal/include
+INCLUDEPATH += . inc common/inc exception/inc thread/inc odbc/inc ../internal/include /usr/include/libxml2
 
 # Input
 HEADERS += inc/DataMarks.h \
@@ -95,7 +95,7 @@ SOURCES += src/DataMarks.cpp \
            src/User.cpp \
            src/UserInternal.cpp
 
-LIBS    += -L../internal/lib -lodbc 
+LIBS    += -L../internal/lib -lodbc -lxml2
 # -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 -lpthread -lgobject-2.0 -lglib-2.0
 
 QMAKE_CXXFLAGS += -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/gconf/2 -I/usr/include/dbus-1.0 -I/usr/lib/dbus-1.0/include

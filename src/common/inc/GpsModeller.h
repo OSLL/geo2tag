@@ -11,7 +11,11 @@
 #define _GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
 
 #include <string>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include "GpsInfo.h"
+#include "Thread.h"
+#include "Time.h"
 
 #ifdef SIMULATE_GPS 
 
@@ -21,13 +25,22 @@ namespace common
    * Class description. May use HTML formatting
    *
    */
-  class GpsModeller: public Gps
+  class GpsModeller: public Gps, private Thread::CThread
   {
-    std::string m_longFile;
-    std::string m_latFile;
+    double m_longitude;
+    double m_latitude;
+   
+    CTime begin;
+    CTime currentModellerTime;
+
+    xmlDoc *m_doc;
+  
+    void searchElement(xmlNode *node);
+
+    void thread(); 
 
   public:
-    GpsModeller(std::string flong="/tmp/longitude", std::string flat="/tmp/latitude");
+    GpsModeller(const std::string &gpxFile="data/vegas.gpx");
     
     virtual double getLongitude() const;
 
