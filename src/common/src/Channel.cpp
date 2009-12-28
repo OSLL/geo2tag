@@ -13,13 +13,24 @@
 
 namespace common
 {
-  Channel::Channel(const std::string &description, const CHandlePtr<DataMarks> &mark):m_description(description), m_marks(mark), m_isDisplayed(true)
+  Channel::Channel(const std::string &name, const std::string &description, const CHandlePtr<DataMarks> &mark):
+          m_name(name), m_description(description), m_marks(mark), m_isDisplayed(true)
   {
   }
 
   const std::string& Channel::getDescription() const
   {
     return m_description;
+  }
+
+  const std::string& Channel::getName() const
+  {
+    return m_name;
+  }
+
+  void Channel::setDescription(const std::string& description)
+  {
+    m_description = description;
   }
 
   const CHandlePtr<DataMarks> Channel::getMarks() const
@@ -41,10 +52,10 @@ namespace common
   {
     m_isDisplayed = fl;
   }
+
   Channel::~Channel()
   {
   }
-
 
   Channels::Channels()
   {

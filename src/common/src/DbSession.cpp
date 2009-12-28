@@ -51,6 +51,7 @@ namespace db
   struct Channel
   {
     unsigned long long id;
+    char name[300];
     char description[2048];
   };
 
@@ -172,11 +173,12 @@ namespace db
     BEGIN_COLMAP()
       COL_NAME(1, "id", SQL_C_LONG, id)
       COL_NAME(2, "description", SQL_C_CHAR, description)
+      COL_NAME(3, "name", SQL_C_CHAR, name)
     END_COLMAP()
 
     const char* sql() const
     {
-      return "select id, description from channel order by id;";
+      return "select id, description, name from channel order by id;";
     }
   };
 
@@ -210,13 +212,14 @@ namespace db
     END_COLMAP()
     
     BEGIN_PARMAP()
-      PAR(1, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(2, SQL_C_LONG, SQL_INTEGER, id)
+      PAR(1, SQL_C_CHAR, SQL_CHAR, name)
+      PAR(2, SQL_C_CHAR, SQL_CHAR, description)
+      PAR(3, SQL_C_LONG, SQL_INTEGER, id)
     END_PARMAP()
 
     const char* sql() const
     {
-      return "insert into channel (description,id) values(?,?);";
+      return "insert into channel (name, description, id) values(?,?,?);";
     }
   };
   
@@ -341,32 +344,32 @@ namespace common
     m_currtentUserId = 0;
     
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(1,"weather"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(1,"weather", "Tags with weather"));
       m_channels->push_back(channel);
       s_channels[1]=channel;
     }
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(2,"sales"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(2,"sales", "Sales"));
       m_channels->push_back(channel);
       s_channels[2]=channel;
     }
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(3,"petroleum costs"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(3,"petroleum costs", "Petroleum stations, prices"));
       m_channels->push_back(channel);
       s_channels[3]=channel;
     }
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(4,"announcements"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(4,"announcements", "Art, cinema, show announcements"));
       m_channels->push_back(channel);
       s_channels[4]=channel;
     }
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(5,"personal"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(5,"personal", "User personal tags"));
       m_channels->push_back(channel);
       s_channels[5]=channel;
     }
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(6,"government"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(6,"government","tags connected to government" ));
       m_channels->push_back(channel);
       s_channels[6]=channel;
     }
@@ -521,22 +524,20 @@ namespace common
     while(query.fetch())
     {
       CHandlePtr<loader::Channel> ch= makeHandle(new loader::Channel(query.id,
-                            std::string(&(query.description[0])) ));
+                            std::string(&(query.name[0])), std::string(&(query.description[0])) ));
       m_channels->push_back(ch);
       s_channels[query.id] = ch;
     }
 
   }
 
-  void DbSession::saveChannels()
+  void DbSession::storeChannel(CHandlePtr<common::Channel> c)
   {
-    for(int i=0; i<m_channels->size(); i++)
-    {
-      CHandlePtr<loader::Channel> ch = (*m_channels)[i].dynamicCast<loader::Channel>();
+      CHandlePtr<loader::Channel> ch = c.dynamicCast<loader::Channel>();
       if(!ch)
       {
         // big error!!!
-        continue;
+        return;
       }
       
       if(ch->getId()==0)
@@ -556,6 +557,8 @@ namespace common
         storeQuery.id = ch->getId();
         strncpy(storeQuery.description,ch->getDescription().c_str(),2047);
         storeQuery.description[2047]='\0';
+        strncpy(storeQuery.name,ch->getName().c_str(),300);
+        storeQuery.name[299]='\0';
         
         storeQuery.prepare();
         storeQuery.execute();
@@ -569,10 +572,17 @@ namespace common
         updateQuery.id = ch->getId();
         strncpy(updateQuery.description,ch->getDescription().c_str(),2047);
         updateQuery.description[2047]='\0';
-        
+        // we don't need save Channel's name because we don't update it in SQL query 
         updateQuery.prepare();
         updateQuery.execute();
       }
+  }
+
+  void DbSession::saveChannels()
+  {
+    for(int i=0; i<m_channels->size(); i++)
+    {
+      storeChannel((*m_channels)[i]);
     }
   }
   

@@ -131,10 +131,12 @@ namespace GUI
     }
 
   private:    
+#if 0
+    // zps commented this code. I think currently we don't need for it.
     bool event(QEvent* e){
       QKeyEvent* k=dynamic_cast<QKeyEvent*>(e);
       if (k && k->type()==6 ){
-	if(k->key()==Qt::Key_Equal)
+        if(k->key()==Qt::Key_Equal)
         { 
            
           CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().common::DbSession::getInstance().getMarks();
@@ -152,13 +154,15 @@ namespace GUI
            dynamic_cast<ListModel*>(m_model)->layoutUpdate();
           
         }
-	else 
+      	else 
           if (k->key()==Qt::Key_Minus) {
               qDebug()<< "MINUS";
           } 
-	}
+    	}
      return 1;
     }
+
+#endif    
     ListView(const ListView& obj);
     ListView& operator=(const ListView& obj);
 		QStandardItemModel *m_model;

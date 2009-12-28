@@ -23,18 +23,22 @@ namespace common
    */
   class Channel
   {
-  
+    std::string m_name; //!< channel name  
     std::string m_description; //!< Description for channel
     CHandlePtr<DataMarks> m_marks; //!< Marks for this channel
     
     bool m_isDisplayed; //!< Displayed on the UI
 
   protected:
-    Channel(const std::string &description="", const CHandlePtr<DataMarks> &marks=CHandlePtr<DataMarks>());
+    Channel(const std::string &name, const std::string &description, const CHandlePtr<DataMarks> &marks);
 
   public:
 
     const std::string& getDescription() const;
+
+    const std::string& getName() const;
+
+    virtual void setDescription(const std::string& description);
 
     const CHandlePtr<DataMarks> getMarks() const;
 
