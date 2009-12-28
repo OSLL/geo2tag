@@ -40,7 +40,7 @@ namespace common
     void thread(); 
 
   public:
-    GpsModeller(const std::string &gpxFile="data/vegas.gpx");
+    GpsModeller(const std::string &gpxFile="data/helsinki.gpx");
     
     virtual double getLongitude() const;
 
