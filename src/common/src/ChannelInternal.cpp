@@ -15,8 +15,8 @@
 
 namespace loader
 {
-  Channel::Channel(unsigned long long id, const std::string &name, const std::string &description, const CHandlePtr<common::DataMarks> &marks): 
-                  common::Channel(name, description, marks), m_id(id)
+  Channel::Channel(unsigned long long id, const std::string &name, const std::string &description, const std::string &url, const CHandlePtr<common::DataMarks> &marks): 
+                  common::Channel(name, description, url, marks), m_id(id)
   {
   }
   

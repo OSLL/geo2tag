@@ -25,12 +25,14 @@ namespace common
   {
     std::string m_name; //!< channel name  
     std::string m_description; //!< Description for channel
+    std::string m_url; //!< URL for mark
+
     CHandlePtr<DataMarks> m_marks; //!< Marks for this channel
     
     bool m_isDisplayed; //!< Displayed on the UI
 
   protected:
-    Channel(const std::string &name, const std::string &description, const CHandlePtr<DataMarks> &marks);
+    Channel(const std::string &name, const std::string &description, const std::string& url, const CHandlePtr<DataMarks> &marks);
 
   public:
 
@@ -38,7 +40,11 @@ namespace common
 
     const std::string& getName() const;
 
-    virtual void setDescription(const std::string& description);
+    const std::string& getUrl() const;
+
+    void setDescription(const std::string& description);
+    
+    void setUrl(const std::string& url);
 
     const CHandlePtr<DataMarks> getMarks() const;
 

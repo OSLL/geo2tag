@@ -13,8 +13,8 @@
 
 namespace common
 {
-  Channel::Channel(const std::string &name, const std::string &description, const CHandlePtr<DataMarks> &mark):
-          m_name(name), m_description(description), m_marks(mark), m_isDisplayed(true)
+  Channel::Channel(const std::string &name, const std::string &description, const std::string &url, const CHandlePtr<DataMarks> &mark):
+          m_name(name), m_description(description), m_url(url), m_marks(mark), m_isDisplayed(true)
   {
   }
 
@@ -31,6 +31,16 @@ namespace common
   void Channel::setDescription(const std::string& description)
   {
     m_description = description;
+  }
+
+  const std::string& Channel::getUrl() const
+  {
+    return m_url;
+  }
+  
+  void Channel::setUrl(const std::string& url)
+  {
+    m_url = url;
   }
 
   const CHandlePtr<DataMarks> Channel::getMarks() const

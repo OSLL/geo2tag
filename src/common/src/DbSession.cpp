@@ -53,6 +53,7 @@ namespace db
     unsigned long long id;
     char name[300];
     char description[2048];
+    char url[2048];
   };
 
   struct MarkRelation
@@ -174,11 +175,12 @@ namespace db
       COL_NAME(1, "id", SQL_C_LONG, id)
       COL_NAME(2, "description", SQL_C_CHAR, description)
       COL_NAME(3, "name", SQL_C_CHAR, name)
+      COL_NAME(4, "url", SQL_C_CHAR, name)
     END_COLMAP()
 
     const char* sql() const
     {
-      return "select id, description, name from channel order by id;";
+      return "select id, description, name, url from channel order by id;";
     }
   };
 
@@ -214,12 +216,13 @@ namespace db
     BEGIN_PARMAP()
       PAR(1, SQL_C_CHAR, SQL_CHAR, name)
       PAR(2, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(3, SQL_C_LONG, SQL_INTEGER, id)
+      PAR(3, SQL_C_CHAR, SQL_CHAR, url)
+      PAR(4, SQL_C_LONG, SQL_INTEGER, id)
     END_PARMAP()
 
     const char* sql() const
     {
-      return "insert into channel (name, description, id) values(?,?,?);";
+      return "insert into channel (name, description, url, id) values(?,?,?,?);";
     }
   };
   
@@ -235,12 +238,13 @@ namespace db
     
     BEGIN_PARMAP()
       PAR(1, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(2, SQL_C_LONG, SQL_INTEGER, id)
+      PAR(2, SQL_C_CHAR, SQL_CHAR, url)
+      PAR(3, SQL_C_LONG, SQL_INTEGER, id)
     END_PARMAP()
 
     const char* sql() const
     {
-      return "update channel set description=? where id=?;";
+      return "update channel set description=?, url=? where id=?;";
     }
   };
   
@@ -559,6 +563,8 @@ namespace common
         storeQuery.description[2047]='\0';
         strncpy(storeQuery.name,ch->getName().c_str(),300);
         storeQuery.name[299]='\0';
+        strncpy(storeQuery.url,ch->getUrl().c_str(),2047);
+        storeQuery.url[2047]='\0';
         
         storeQuery.prepare();
         storeQuery.execute();
@@ -573,6 +579,9 @@ namespace common
         strncpy(updateQuery.description,ch->getDescription().c_str(),2047);
         updateQuery.description[2047]='\0';
         // we don't need save Channel's name because we don't update it in SQL query 
+        strncpy(updateQuery.url,ch->getUrl().c_str(),2047);
+        updateQuery.url[2047]='\0';
+
         updateQuery.prepare();
         updateQuery.execute();
       }

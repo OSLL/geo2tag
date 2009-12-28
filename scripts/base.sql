@@ -29,6 +29,7 @@ CREATE TABLE channel (
   id NUMERIC(9,0) NOT NULL DEFAULT nextval('channels_seq'),
   name VARCHAR(300) NOT NULL,
   description VARCHAR(2048) NOT NULL, 
+  url VARCHAR(2048) DEFAULT NULL,
   constraint channel_pkey primary key (id)
 );
 
@@ -42,12 +43,12 @@ CREATE TABLE tags (
 );
 
 
-INSERT into channel (name, description) values ('weather', 'Tags with wether');
-INSERT into channel (name, description) values ('sales', 'Sales');
-INSERT into channel (name, description) values ('petroleum costs', 'Petroleum stations, prices');
-INSERT into channel (name, description) values ('announcements', 'Art, cinema, show announcements');
-INSERT into channel (name, description) values ('personal', 'User personal tags');
-INSERT into channel (name, description) values ('government', 'tags connected to government');
+INSERT into channel (name, description, url) values ('weather', 'Tags with wether', '');
+INSERT into channel (name, description, url) values ('sales', 'Sales', '');
+INSERT into channel (name, description, url) values ('petroleum costs', 'Petroleum stations, prices', '');
+INSERT into channel (name, description, url) values ('announcements', 'Art, cinema, show announcements', '');
+INSERT into channel (name, description, url) values ('personal', 'User personal tags', '');
+INSERT into channel (name, description, url) values ('government', 'tags connected to government', '');
 
 INSERT into users (login, password) values ('test0', 'test');
 INSERT into users (login, password) values ('test1', 'test');
