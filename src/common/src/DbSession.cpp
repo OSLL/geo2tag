@@ -20,6 +20,7 @@
 #include "DataMarkInternal.h"
 #include "ChannelInternal.h"
 #include "UserInternal.h"
+#include "GpsInfo.h"
 
 static std::map<long, CHandlePtr<loader::DataMark> > s_marks = std::map<long, CHandlePtr<loader::DataMark> >();
 static std::map<long, CHandlePtr<loader::Channel> > s_channels = std::map<long, CHandlePtr<loader::Channel> >();
@@ -402,6 +403,13 @@ namespace common
     ODBC::CExecuteClose x(query);
     while(query.fetch())
     {
+      if(common::DataMark::getDistance(common::GpsInfo::getInstance().getLatitude(),
+                                       common::GpsInfo::getInstance().getLongitude(),
+                                       query.latitude, query.longitude)>=5)
+      {
+        std::cerr << "!!!!!!!!!!!!!!!!!!!!!" << std::endl << "The furthest mark was found" << std::endl << " !!!!!!!!!!!!! " << std::endl;
+        continue;
+      }
       CHandlePtr<loader::DataMark> mark= makeHandle(new loader::DataMark(query.id,
                             query.latitude,
                             query.longitude,
