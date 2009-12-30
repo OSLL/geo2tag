@@ -15,6 +15,7 @@
 #include "Db.h"
 #include "DataMarks.h"
 #include "Channel.h"
+#include "Thread.h"
 
 namespace common
 {
@@ -26,6 +27,7 @@ namespace common
     CHandlePtr<DataMarks> m_marks;
     CHandlePtr<Channels> m_channels;
     CHandlePtr<std::vector<CHandlePtr<common::User> > > m_users;
+    CHandlePtr<Thread::CThread> m_updateThread;
 
     unsigned long m_currtentUserId;
     

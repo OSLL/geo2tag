@@ -21,6 +21,7 @@
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QDebug>
+#include <QTimer>
 #include "DataMarks.h"
 #include <QItemDelegate>
 #include <QTableWidget>
@@ -77,12 +78,14 @@ namespace GUI
       	}
       	return QVariant();
       }
+   
+   public slots:
 
-	 void layoutUpdate()
-   {
-	    setRowCount(m_data->size());
-		  emit layoutChanged();
-	 } 
+      void layoutUpdate()
+      {
+        setRowCount(m_data->size());
+        emit layoutChanged();
+      } 
   };
 
  /*!
@@ -114,7 +117,7 @@ namespace GUI
   class ListView : public QTableView
   {
 		Q_OBJECT;
-
+    QTimer *timer; // auto-updating timer
   public:
     ListView(QWidget *parent) : QTableView(parent) 
     {
@@ -124,6 +127,10 @@ namespace GUI
       m_model->setHeaderData(1, Qt::Horizontal, tr("Mark message")); 
       horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
       setItemDelegate(new MarkTableDelegat(this));
+      timer = new QTimer(this);
+      timer->setInterval(2*60*1000); // One time per 2 minutes
+      connect(timer, SIGNAL(timeout()), m_model, SLOT(layoutUpdate()));
+      timer->start();
     }
 
     virtual ~ListView() 

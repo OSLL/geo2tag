@@ -17,6 +17,7 @@
 #include "DbSession.h"
 #include "DbQuery.h"
 #include "Db.h"
+#include "Sleep.h"
 #include "DataMarkInternal.h"
 #include "ChannelInternal.h"
 #include "UserInternal.h"
@@ -336,12 +337,37 @@ namespace db
 
 namespace common
 {
+  class UpdateThread: public Thread::CThread
+  {
+    bool m_needExit;
+
+    void thread()
+    {
+      while(!m_needExit)
+      {
+        mSleep(10000);
+        CHandlePtr<loader::User> u = DbSession::getInstance().getCurrentUser().staticCast<loader::User>();
+        DbSession::getInstance().loadData(u->getLogin(), u->getPassword());
+      }
+    }
+    public:
+      UpdateThread():m_needExit(false)
+      {
+        start();
+      }
+
+      void shutdown()
+      {
+        m_needExit = true;
+      }
+  };
   DbSession::DbSession(): ODBC::CDbConn(*(ODBC::CDbEnv*)this), m_marks(makeHandle(new DataMarks)), m_channels(makeHandle(new Channels))
   {
     m_users = makeHandle(new std::vector<CHandlePtr<common::User> >());
 #ifndef NO_DB_CONNECTION
     connect("geo2tag");
     std::cerr << "connected to database" << std::endl;
+    m_updateThread = makeHandle(new UpdateThread());
 #else
     CHandlePtr<loader::User> user = makeHandle(new loader::User("test0","test",0));
     m_users->push_back(user);
@@ -388,6 +414,8 @@ namespace common
     ODBC::CExecuteClose x(query);
     while(query.fetch())
     {
+      if(s_users.count(query.id)>0)
+        continue;
       CHandlePtr<loader::User> u = makeHandle(new loader::User(query.login, query.password, query.id));
       m_users->push_back(u);
       s_users[query.id] = u;
@@ -408,6 +436,10 @@ namespace common
                                        query.latitude, query.longitude)>=5)
       {
         std::cerr << "!!!!!!!!!!!!!!!!!!!!!" << std::endl << "The furthest mark was found" << std::endl << " !!!!!!!!!!!!! " << std::endl;
+        continue;
+      }
+      if(s_marks.count(query.id)>0)
+      {
         continue;
       }
       CHandlePtr<loader::DataMark> mark= makeHandle(new loader::DataMark(query.id,
@@ -535,6 +567,9 @@ namespace common
     ODBC::CExecuteClose x(query);
     while(query.fetch())
     {
+      if(s_channels.count(query.id)>0)
+        continue;
+
       CHandlePtr<loader::Channel> ch= makeHandle(new loader::Channel(query.id,
                             std::string(&(query.name[0])), std::string(&(query.description[0])) ));
       m_channels->push_back(ch);
@@ -664,7 +699,10 @@ namespace common
   
   DbSession::~DbSession()
   {
-
+#ifndef NO_DB_CONNECTION
+    m_updateThread.staticCast<UpdateThread>()->shutdown();
+    m_updateThread->join();
+#endif
   }
 } // namespace common
 
