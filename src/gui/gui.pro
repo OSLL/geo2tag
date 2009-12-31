@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = geo2tag
+TARGET = wikigps
 
 DEPENDPATH += .
 INCLUDEPATH += . ../common/inc/ ../maps/inc ../common/common/inc \

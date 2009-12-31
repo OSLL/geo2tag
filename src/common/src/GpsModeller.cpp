@@ -69,7 +69,7 @@ namespace common
           s >> m_longitude >> m_latitude;
           std::cerr << "time=" << currentModellerTime.getTime()  << ", lat=" << m_latitude  << ", lon=" << m_longitude << std::endl;
           std::cerr << "go to sleep for " << (currentModellerTime-begin)*1000 << "msecs" << std::endl;
-          mSleep((currentModellerTime-begin)*1000);
+          mSleep((currentModellerTime-begin)*100);
           begin=currentModellerTime;
         }
        searchElement(cur_node->children);

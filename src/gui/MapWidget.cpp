@@ -38,7 +38,7 @@ namespace GUI
     m_moving = false;
     
     connect(&m_updateGpsDataTimer, SIGNAL(timeout()),this, SLOT(updateGpsData()));
-    m_updateGpsDataTimer.setInterval(15000);
+    m_updateGpsDataTimer.setInterval(1000);
     m_updateGpsDataTimer.start();
 	}
 

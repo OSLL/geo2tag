@@ -427,6 +427,7 @@ namespace common
   void DbSession::loadMarks()
   {
     db::LoadMarksQuery query(*this, m_currtentUserId);
+    std::cerr << "current user_id = " << m_currtentUserId << std::endl;
     query.prepare();
     ODBC::CExecuteClose x(query);
     while(query.fetch())
