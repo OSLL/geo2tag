@@ -50,11 +50,8 @@ namespace maps
     s << "maps.google.com/maps/api/staticmap?center=" << latitude << ","<< longitude 
       << "&zoom=" << size << "&size=" << width << "x" << height;
 
-    std::cerr << "marks=" << marks.size() << std::endl;
-    
     for(size_t i=0; i<marks.size(); i++)
     {
-      std::cerr << marks[i]->getDescription() << std::endl; 
       if(marks[i]->getDescription()!="")
         s << "&markers=color:"<< getColor(marks[i]->getLabel()[7]) <<"|label:" << 
              /*marks[i]->getLabel()[7]*/ "A" << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude(); 
@@ -62,7 +59,7 @@ namespace maps
     s << "&maptype=roadmap&sensor=true&key=" << GOOGLE_MAPS_API_KEY;
 
     curl_easy_setopt(m_curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTP);
-    curl_easy_setopt(m_curl, CURLOPT_VERBOSE, 1);
+    curl_easy_setopt(m_curl, CURLOPT_VERBOSE, 0);
     curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, write);
     /* Set a pointer to our struct to pass to the callback */ 
     curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, &m_data);

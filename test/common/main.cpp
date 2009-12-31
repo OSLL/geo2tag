@@ -1,11 +1,14 @@
-
+#include <sstream>
 #include<iostream>
 #include "DbSession.h"
 #include "DataMarks.h"
 #include "Channel.h"
+#include "DbException.h"
 
 using namespace common;
 int main()
+{
+try
 {
   DbSession::getInstance().loadData("test0", "test");
   CHandlePtr<DataMarks> marks = DbSession::getInstance().getMarks();
@@ -18,5 +21,10 @@ int main()
   std::cerr << "Total channels = " << channels->size() << std::endl;
   DbSession::getInstance().saveData();
   std::cerr << "exiting..." << std::endl;
+}
+catch(ODBC::CException &x)
+{
+	std::cerr << x.getDescription() << std::endl;
+}
   return 0;
 }

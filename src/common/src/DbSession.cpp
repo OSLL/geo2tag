@@ -9,6 +9,7 @@
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include <map>
@@ -68,29 +69,24 @@ namespace db
 
   class LoadMarksQuery: public Mark, public CDbQueryX
   {
-    unsigned long m_user;
   public:
-    LoadMarksQuery(const CDbConn& conn, unsigned long user): CDbQueryX(conn), m_user(user)
+    LoadMarksQuery(const CDbConn& conn, unsigned long user): CDbQueryX(conn)
     {
     }
 
     BEGIN_COLMAP()
-      COL_NAME(1, "id", SQL_C_LONG, id)
-      COL_NAME_LEN(2, "time", SQL_C_TIMESTAMP, time, timeLen)
-      COL_NAME(3, "latitude", SQL_C_DOUBLE, latitude)
-      COL_NAME(4, "longitude", SQL_C_DOUBLE, longitude)
-      COL_NAME(5, "label", SQL_C_CHAR, label)
-      COL_NAME(6, "description", SQL_C_CHAR, description)
-      COL_NAME(7, "url", SQL_C_CHAR, url)
-      COL_NAME(8, "user_id", SQL_C_LONG, user_id)
+      COL_NAME(    1, "id",          SQL_C_LONG, id)
+      COL_NAME_LEN(2, "time",        SQL_C_TIMESTAMP, time, timeLen)
+      COL_NAME(    3, "latitude",    SQL_C_DOUBLE, latitude)
+      COL_NAME(    4, "longitude",   SQL_C_DOUBLE, longitude)
+      COL_NAME(    5, "label",       SQL_C_CHAR, label)
+      COL_NAME(    6, "description", SQL_C_CHAR, description)
+      COL_NAME(    7, "url",         SQL_C_CHAR, url)
     END_COLMAP()
     
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_LONG, SQL_INTEGER, m_user)
-    END_PARMAP()
     const char* sql() const
     {
-      return "select id, time, latitude, longitude, label, description, url, user_id from tag where user_id=? order by time;";
+      return "select id, time, latitude, longitude, label, description, url, user_id from tag order by time;";
     }
   };
 

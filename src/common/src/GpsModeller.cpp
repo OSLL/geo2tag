@@ -22,7 +22,6 @@ namespace common
 {
   GpsModeller::GpsModeller(const std::string &gpxFile)
   {
-    std::cerr << "Creating GpsModeller..." << std::endl;
     m_doc = xmlReadFile(gpxFile.c_str(), NULL, 0);
     start();
   }
@@ -43,7 +42,6 @@ namespace common
       
      for (cur_node = node; cur_node; cur_node = cur_node->next) {
         if (cur_node->type == XML_ELEMENT_NODE && strcmp((const char*)cur_node->name,"trkpt")==0) {
-          std::cerr << "find new element" << std::endl;
           xmlNode *time = NULL;
           for(xmlNode *s = cur_node->children; s; s = s->next) {
             if(s->type == XML_ELEMENT_NODE && strcmp((const char*)s->name,"time")==0) {
@@ -65,10 +63,7 @@ namespace common
             begin=currentModellerTime;
           std::stringstream s;
           s << (const char *)lon << " " << (const char *) lat;
-          std::cerr << "point = " << s.str() << std::endl;
           s >> m_longitude >> m_latitude;
-          std::cerr << "time=" << currentModellerTime.getTime()  << ", lat=" << m_latitude  << ", lon=" << m_longitude << std::endl;
-          std::cerr << "go to sleep for " << (currentModellerTime-begin)*1000 << "msecs" << std::endl;
           mSleep((currentModellerTime-begin)*100);
           begin=currentModellerTime;
         }
