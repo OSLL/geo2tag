@@ -10,7 +10,6 @@
 int main(int c, char **v)
 {
   QApplication 	app(c,v);
-  common::GpsInfo::getInstance(); //starting daemon and other stuff;
   try
   {
     common::DbSession::getInstance().loadData("test0","test");
@@ -32,6 +31,7 @@ int main(int c, char **v)
     return 0;
   }
   
+  common::GpsInfo::getInstance(); //starting daemon and other stuff;
 
   if(curl_global_init(CURL_GLOBAL_ALL)!=0)
   {

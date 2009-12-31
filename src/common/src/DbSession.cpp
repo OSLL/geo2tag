@@ -82,6 +82,7 @@ namespace db
       COL_NAME(    5, "label",       SQL_C_CHAR, label)
       COL_NAME(    6, "description", SQL_C_CHAR, description)
       COL_NAME(    7, "url",         SQL_C_CHAR, url)
+      COL_NAME(    8, "user_id",     SQL_C_LONG, user_id)
     END_COLMAP()
     
     const char* sql() const
@@ -361,6 +362,7 @@ namespace common
   {
     m_users = makeHandle(new std::vector<CHandlePtr<common::User> >());
 #ifndef NO_DB_CONNECTION
+    std::cerr << "trying to connect to database" << std::endl;
     connect("geo2tag");
     std::cerr << "connected to database" << std::endl;
     m_updateThread = makeHandle(new UpdateThread());
@@ -422,21 +424,22 @@ namespace common
   
   void DbSession::loadMarks()
   {
+    double lat = common::GpsInfo::getInstance().getLatitude(); 
+    double lon = common::GpsInfo::getInstance().getLongitude();
     db::LoadMarksQuery query(*this, m_currtentUserId);
     std::cerr << "current user_id = " << m_currtentUserId << std::endl;
     query.prepare();
     ODBC::CExecuteClose x(query);
     while(query.fetch())
     {
-      if(common::DataMark::getDistance(common::GpsInfo::getInstance().getLatitude(),
-                                       common::GpsInfo::getInstance().getLongitude(),
-                                       query.latitude, query.longitude)>=5)
+      if(common::DataMark::getDistance(lat,lon,query.latitude, query.longitude)>=5)
       {
         std::cerr << "!!!!!!!!!!!!!!!!!!!!!" << std::endl << "The furthest mark was found" << std::endl << " !!!!!!!!!!!!! " << std::endl;
         continue;
       }
       if(s_marks.count(query.id)>0)
       {
+        std::cerr << "!!!!!!!!!!!!!!!!!!!!!" << std::endl << "Mark already exsist" << std::endl << " !!!!!!!!!!!!! " << std::endl;
         continue;
       }
       CHandlePtr<loader::DataMark> mark= makeHandle(new loader::DataMark(query.id,
