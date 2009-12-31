@@ -49,6 +49,8 @@ namespace GUI
     void switchFeed();
     void switchChannel();
     void switchEditor();
+    void setRadius();
+    void showChannelInfo();
     
   private:    
     CentralWidget(const CentralWidget& obj);

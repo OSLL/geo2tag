@@ -41,7 +41,7 @@ namespace GUI
       CHandlePtr<common::DataMarks> m_data;
   
   public:
-      ListModel(QObject* parent) : QStandardItemModel(common::DbSession::getInstance().getMarks()->size(),2,parent), m_data(common::DbSession::getInstance().getMarks())
+      ListModel(QObject* parent) : QStandardItemModel(common::DbSession::getInstance().getMarks()->size(),3,parent), m_data(common::DbSession::getInstance().getMarks())
       {
       }
 
@@ -54,7 +54,7 @@ namespace GUI
       
       int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const
       {
-        return 2;
+        return 3;
       }
 
       void setDescription(int row, const std::string& data)
@@ -67,13 +67,25 @@ namespace GUI
       	if ( Qt::DisplayRole == role )
       	{
           QString value="?";
-          if(index.column() == 0 )
+
+          switch(index.column())
           {
+          case 0:
       		 value = (*m_data)[index.row()]->getLabel().c_str();
-          } else
-          {
+           break;
+           
+          case 1:
             value = (*m_data)[index.row()]->getDescription().c_str();
-          }
+            break;
+            
+          case 2:
+            value = QString("admin");
+            break;            
+            
+          default:
+            break;        
+          }  
+          
       		return value;
       	}
       	return QVariant();
@@ -124,7 +136,8 @@ namespace GUI
       m_model = new ListModel(this);
 			setModel(m_model);
       m_model->setHeaderData(0, Qt::Horizontal, tr("Map"));
-      m_model->setHeaderData(1, Qt::Horizontal, tr("Mark message")); 
+      m_model->setHeaderData(1, Qt::Horizontal, tr("Mark text")); 
+      m_model->setHeaderData(2, Qt::Horizontal, tr("author"));
       horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
       setItemDelegate(new MarkTableDelegat(this));
       timer = new QTimer(this);
@@ -138,38 +151,9 @@ namespace GUI
     }
 
   private:    
-#if 0
-    // zps commented this code. I think currently we don't need for it.
-    bool event(QEvent* e){
-      QKeyEvent* k=dynamic_cast<QKeyEvent*>(e);
-      if (k && k->type()==6 ){
-        if(k->key()==Qt::Key_Equal)
-        { 
-           
-          CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().common::DbSession::getInstance().getMarks();
-          std::ostringstream s; 
-          s << "Label " << 'A'+(char)(marks->size());
-          CHandlePtr<common::DataMark> m = common::DataMark::createMark(
-                        common::GpsInfo::getInstance().getLatitude(),
-                        common::GpsInfo::getInstance().getLongitude(), 
-                        s.str(),
-                        "", ""/*unknown/undefined url*/  );
 
-
-
-           common::DbSession::getInstance().storeMark(m);
-           dynamic_cast<ListModel*>(m_model)->layoutUpdate();
-          
-        }
-      	else 
-          if (k->key()==Qt::Key_Minus) {
-              qDebug()<< "MINUS";
-          } 
-    	}
-     return 1;
-    }
-
-#endif    
+    
+    
     ListView(const ListView& obj);
     ListView& operator=(const ListView& obj);
 		QStandardItemModel *m_model;

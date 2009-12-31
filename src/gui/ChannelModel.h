@@ -79,6 +79,11 @@ namespace GUI
    	return QVariant();
    }
 
+    Qt::ItemFlags flags(const QModelIndex& index) const
+    {
+      return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    }
+
 
   private:    
     ChannelModel(const ChannelModel& obj);
@@ -109,46 +114,6 @@ namespace GUI
         return 1;
     }
 
-    void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-    {
-      const ChannelModel *model = qobject_cast<const ChannelModel*>(index.model());
-      QCheckBox cb(model->getChannelName(index.row()),NULL);
-
-      if ( model->IsSelected(index.row()))
-      {        
-        cb.setCheckState(Qt::Checked);
-      }
-
-      if(option.state & QStyle::State_Selected)
-      {
-      //  painter->fillRect(option.rect, option.palette.color(QPalette::Highlight));
-        cb.setBackgroundRole(QPalette::Highlight);
-        cb.setAutoFillBackground(true);
-      }
-
-      cb.resize(option.rect.size());
-
-      QPixmap pm=QPixmap::grabWidget(&cb);
-
-      painter->drawImage(option.rect, pm.toImage());
-    }
-
-   QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */,  const QModelIndex & index) const
-   {
-     const ChannelModel *model = qobject_cast<const ChannelModel*>(index.model());
-     QString name = model->getChannelName(index.row());
-     
-     return new  QCheckBox(name,parent);
-   }
-
-   void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const
-   {
-      ChannelModel *_model = qobject_cast<ChannelModel*>(model);
-      QCheckBox *cb = qobject_cast<QCheckBox*>(editor);
-
-      _model->setSelection(index.row(),  (cb->checkState() == Qt::Checked) ? true : false );
-   }
-   
   }; 
 } // namespace GUI
 

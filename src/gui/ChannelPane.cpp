@@ -14,6 +14,7 @@
 #include <QAbstractItemModel>
 #include <QCheckBox>
 #include <QStandardItemModel>
+#include <QMouseEvent>
 #include <QtGui/QListView>
 #include "DbSession.h"
 #include "ChannelPane.h"
@@ -29,6 +30,26 @@ namespace GUI
     setModel(new ChannelModel(DbSession::getInstance().getChannels(),this));
     setItemDelegate( new ChannelDelegate() );
 
+  }
+
+  bool  ChannelPane::eventFilter(QObject *o, QEvent *e)
+  {
+    qDebug() << "Filter Event ";
+    if (e->type() == QEvent::MouseButtonDblClick)
+    {
+        emit selectChannel();
+        return true;
+    }      
+    else
+    {
+        return QWidget::eventFilter(o,e);
+    }
+  }
+  
+  void ChannelPane::selectChannel()
+  {
+//TODO: debug
+      qDebug() << "channel event ";
   }
 
 } // namespace GUI

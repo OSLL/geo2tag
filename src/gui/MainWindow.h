@@ -31,6 +31,8 @@ namespace GUI
     QAction *m_actionQuit;
     QAction *m_actionSelectChannels;
     QAction *m_actionAddContent;
+    QAction *m_actionEditRadius;
+    QAction *m_actionShowDescription;
 
   public:
     MainWindow();

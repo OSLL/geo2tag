@@ -15,6 +15,7 @@
 #include <QtGui/QListView>
 #include <QAbstractItemModel>
 
+
 namespace GUI
 {
  /*!
@@ -30,10 +31,16 @@ namespace GUI
   public:
     ChannelPane(QWidget *parent);
 
+    
     virtual ~ChannelPane()
     {
     }
+  
+    bool  eventFilter(QObject *o, QEvent *e);
 
+    public slots:
+
+    void selectChannel();  
     
   private:    
     ChannelPane(const ChannelPane& obj);

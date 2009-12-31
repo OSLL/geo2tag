@@ -10,6 +10,7 @@
  * ---------------------------------------------------------------- */
 
 #include "CentralWidget.h"
+#include <QMessageBox>
 
 namespace GUI
 {
@@ -55,7 +56,19 @@ namespace GUI
     {
       m_layout->setCurrentWidget(m_editor); 
     }
+    
+    void CentralWidget::setRadius()
+    {
+//TODO: ask real raduis
+      QMessageBox::information(this,"Set channel raduis","You cannot change radius for this channel");
+    }
 
+    void CentralWidget::showChannelInfo()
+    {
+//TODO: get real channel info
+      QMessageBox::information(this,"Channel information","This is a public channel with common city information about roads, events, building reconstructions. You cannot add new information to this channel");
+    }
+    
 } // namespace GUI
 
 /* ===[ End of file ]=== */
