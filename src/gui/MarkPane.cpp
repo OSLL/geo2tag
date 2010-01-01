@@ -20,6 +20,8 @@ namespace GUI
       m_list = new ListView(this);
   		vbl->addWidget(m_list);
       setLayout(vbl);
+
+      connect(m_list,    SIGNAL(      clicked(const QModelIndex&)), this, SLOT(showUrl(const QModelIndex&)));
     }
 
 

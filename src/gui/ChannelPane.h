@@ -35,13 +35,7 @@ namespace GUI
     virtual ~ChannelPane()
     {
     }
-  
-    bool  eventFilter(QObject *o, QEvent *e);
 
-    public slots:
-
-    void selectChannel();  
-    
   private:    
     ChannelPane(const ChannelPane& obj);
     ChannelPane& operator=(const ChannelPane& obj);

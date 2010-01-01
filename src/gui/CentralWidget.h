@@ -46,11 +46,10 @@ namespace GUI
 
   public slots:
     void switchMap();
-    void switchFeed();
+    void switchFeed(const QModelIndex& index);
     void switchChannel();
     void switchEditor();
     void setRadius();
-    void showChannelInfo();
     
   private:    
     CentralWidget(const CentralWidget& obj);

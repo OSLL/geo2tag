@@ -30,18 +30,18 @@ namespace GUI
     createActions();
 
     menuBar()->addAction(m_actionViewMap);
-    menuBar()->addAction(m_actionViewFeed);
+   // menuBar()->addAction(m_actionViewFeed);
     menuBar()->addAction(m_actionSelectChannels);
     menuBar()->addAction(m_actionAddContent);
     menuBar()->addAction(m_actionEditRadius);
-    menuBar()->addAction(m_actionShowDescription);
+  //  menuBar()->addAction(m_actionShowDescription);
 
     connect(m_actionViewMap, SIGNAL(triggered()), centralWidget(), SLOT(switchMap()));
-    connect(m_actionViewFeed, SIGNAL(triggered()), centralWidget(), SLOT(switchFeed()));
+    //connect(m_actionViewFeed, SIGNAL(triggered()), centralWidget(), SLOT(switchFeed()));
     connect(m_actionSelectChannels, SIGNAL(triggered()), centralWidget(), SLOT(switchChannel()));
     connect(m_actionAddContent,     SIGNAL(triggered()), centralWidget(), SLOT(switchEditor()));
     connect(m_actionEditRadius,     SIGNAL(triggered()), centralWidget(), SLOT(setRadius()));
-    connect(m_actionShowDescription,SIGNAL(triggered()), centralWidget(), SLOT(showChannelInfo()));
+//    connect(m_actionShowDescription,SIGNAL(triggered()), centralWidget(), SLOT(showChannelInfo()));
     connect(m_actionQuit, SIGNAL(triggered()), this, SLOT(close()));
     
   }

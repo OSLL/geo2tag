@@ -31,9 +31,11 @@ namespace GUI
       m_layout->addWidget(m_editor);
       
       switchMap();
-      setLayout(m_layout);
 
-      
+      connect(m_channelView, SIGNAL(      clicked(const QModelIndex&)), this, SLOT(switchFeed(const QModelIndex&)));
+
+
+      setLayout(m_layout);
     }
 
     void CentralWidget::switchMap()
@@ -41,8 +43,13 @@ namespace GUI
       m_layout->setCurrentWidget(m_mapView); 
     }
 
-    void CentralWidget::switchFeed()
+    void CentralWidget::switchFeed(const QModelIndex& index)
     {
+//TODO: get real channel info
+// qobject_cast<model>->getChannelDescription
+
+      QMessageBox::information(this,"Channel information","This is a public channel with common city information about roads, events, building reconstructions. You cannot add new information to this channel");
+      // TODO get active channel from index, switch to m_feedView
       m_feedView->refresh();      
       m_layout->setCurrentWidget(m_feedView); 
     }
@@ -63,12 +70,8 @@ namespace GUI
       QMessageBox::information(this,"Set channel raduis","You cannot change radius for this channel");
     }
 
-    void CentralWidget::showChannelInfo()
-    {
-//TODO: get real channel info
-      QMessageBox::information(this,"Channel information","This is a public channel with common city information about roads, events, building reconstructions. You cannot add new information to this channel");
-    }
-    
+
+
 } // namespace GUI
 
 /* ===[ End of file ]=== */

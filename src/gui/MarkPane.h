@@ -14,6 +14,7 @@
 
 #include <QtGui/QWidget>
 #include "MarkTableDelegat.h"
+#include <QMessageBox>
 
 namespace GUI
 {
@@ -41,7 +42,13 @@ namespace GUI
       qDebug() << "refresh";       
       qobject_cast<ListModel*>((m_list)->model())->layoutUpdate();
     }  
-    
+
+    void showUrl(const QModelIndex&)
+    {
+      //TODO:: here's image dialog, please 
+      QMessageBox::information(this,"MarkImage","IIMAGE DBG IMAGE DBG IMAGE DBG IMAGE DBG MAGE DBG ");
+
+    }
 
   private:  
 
