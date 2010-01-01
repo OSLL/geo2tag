@@ -13,11 +13,20 @@
 #define _MarkPane_H_D511DD50_5236_4D1D_84DB_72BE3E938E3E_INCLUDED_
 
 #include <QtGui/QWidget>
+#include <QDialog>
 #include "MarkTableDelegat.h"
 #include <QMessageBox>
+#include "DbSession.h"
 
 namespace GUI
 {
+  class MarkDetailsDialog: public QDialog
+  {
+      CHandlePtr<common::DataMark> m_mark;
+     
+    public:
+      MarkDetailsDialog(QWidget *parent, CHandlePtr<common::DataMark> mark);
+  };
  /*!
    * Class description. May use HTML formatting
    *
@@ -37,18 +46,15 @@ namespace GUI
   
   public slots:
 
-    void refresh()
+    void refresh(CHandlePtr<common::Channel> channel)
     {
-      qDebug() << "refresh";       
-      qobject_cast<ListModel*>((m_list)->model())->layoutUpdate();
+      qDebug() << "refresh marks view";   
+      qobject_cast<ListModel*>((m_list)->model())->layoutUpdate(channel);
     }  
+    
+    void updateCurrentChannelRadius();
 
-    void showUrl(const QModelIndex&)
-    {
-      //TODO:: here's image dialog, please 
-      QMessageBox::information(this,"MarkImage","IIMAGE DBG IMAGE DBG IMAGE DBG IMAGE DBG MAGE DBG ");
-
-    }
+    void showUrl(const QModelIndex &index);
 
   private:  
 

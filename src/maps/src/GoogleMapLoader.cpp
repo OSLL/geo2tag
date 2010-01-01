@@ -16,6 +16,7 @@
 #include "CurlInitException.h"
 #include "PngPicture.h"
 #include "Channel.h"
+#include "GpsInfo.h"
 
 // #define GOOGLE_MAPS_API_KEY "ABQIAAAAb5usG445bmMNMJ0q1D6iXRR6XkXNzuxLA4BE9F2bnVETdMdkRhSkq5tYa7AM0EnQv0rw_8LIEDHNGA"
 #define GOOGLE_MAPS_API_KEY "ABQIAAAAb5usG445bmMNMJ0q1D6iXRTpb8ADlP0CcCA6s8Y1Bs5YwJKeqBS1g7w1vZxXV_Ac2suwr6RGznQZiQ"
@@ -37,6 +38,16 @@ namespace maps
     m['D'] = "0xDDDDFF";
     m['E'] = "0x545CED";
     m['F'] = "0x1290FF";
+    m['G'] = "0xFF90FF";
+    m['H'] = "0x12FF32";
+    m['I'] = "0xFFFFFF";
+    m['J'] = "0x87F341";
+    m['K'] = "0x239BA2";
+    m['L'] = "0x129011";
+    m['M'] = "0xBE90FF";
+    m['N'] = "0xF2932F";
+    m['O'] = "0xD290A2";
+    m['P'] = "0x672DFF";
     if(m.count(ch)>0)
       return m.find(ch)->second;
 
@@ -51,11 +62,15 @@ namespace maps
     s << "maps.google.com/maps/api/staticmap?center=" << latitude << ","<< longitude 
       << "&zoom=" << size << "&size=" << width << "x" << height;
 
+    double clongitude = common::GpsInfo::getInstance().getLongitude();
+    double clatitude = common::GpsInfo::getInstance().getLatitude();
     for(size_t i=0; i<marks.size(); i++)
     {
-      if(marks[i]->getDescription()!="" && marks[i]->getChannel()->isDisplayed())
-        s << "&markers=color:"<< getColor(marks[i]->getLabel()[7]) <<"|label:" << 
-             /*marks[i]->getLabel()[7]*/ "A" << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude(); 
+      CHandlePtr<common::DataMark> mark = marks[i];
+      if(mark->getDescription()!="" && mark->getChannel()->isDisplayed() &&
+         mark->getChannel()->getRadius() >  common::DataMark::getDistance(clatitude, clongitude,mark->getLatitude(), mark->getLongitude()))
+        s << "&markers=color:"<< getColor(marks[i]->getLabel()[0]) <<"|label:" << 
+             marks[i]->getLabel()[0] << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude(); 
     }
     s << "&maptype=roadmap&sensor=true&key=" << GOOGLE_MAPS_API_KEY;
 

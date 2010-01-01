@@ -31,6 +31,8 @@ namespace common
     
     bool m_isDisplayed; //!< Displayed on the UI
 
+    double m_activeRadius; //< Radius for visible marks
+
   protected:
     Channel(const std::string &name, const std::string &description, const std::string& url, const CHandlePtr<DataMarks> &marks);
 
@@ -49,6 +51,9 @@ namespace common
     const CHandlePtr<DataMarks> getMarks() const;
 
     virtual void addData(CHandlePtr<DataMark> mark);
+
+    void setRadius(const double &radius);
+    double getRadius() const;
 
     bool isDisplayed() const;
 

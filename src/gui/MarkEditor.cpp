@@ -48,6 +48,14 @@ namespace GUI
     connect(m_ok, SIGNAL(pressed()), this, SLOT(applyMark()));
   }
 
+  static std::string genearateNextLabel()
+  {
+    size_t size = common::DbSession::getInstance().getMarks()->size();
+    char label = (int)'A' + (size + 1) % 23;
+    std::ostringstream s;
+    s << label;
+    return s.str();
+  }
   void MarkEditor::applyMark()
   {
     QString text = m_text->toPlainText(); 
@@ -55,9 +63,11 @@ namespace GUI
     
     CHandlePtr<common::DataMark> mark = common::DataMark::createMark(common::GpsInfo::getInstance().getLatitude(),
                                                      common::GpsInfo::getInstance().getLongitude(), 
-                                                     "P", 
+                                                     genearateNextLabel(), 
                                                      text.toStdString(),
-						     "" /* unknown/undefined url*/);
+						     "http://www.unf.edu/groups/volctr/images/question-mark.jpg" /* unknown/undefined url*/,
+                 CTime::now(),
+                 (*common::DbSession::getInstance().getChannels())[m_combo->currentIndex()]);
     try
     {
       (*common::DbSession::getInstance().getChannels())[m_combo->currentIndex()]->addData(mark);
@@ -69,9 +79,7 @@ namespace GUI
       qDebug() << s.str().c_str();
       QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Error during save your message."));
     }
-
-  //  common::DbSession::getInstance().saveData();
-  //  common::DbSession::getInstance().loadData();
+    QMessageBox::information(this, QObject::tr("Information"), QObject::tr("Your message saved"));
   }
 
 } // namespace GUI

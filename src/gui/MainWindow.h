@@ -1,7 +1,6 @@
 /*!
  * \file MainWindow.h
  * \brief Header of MainWindow
- * \todo add comment here
  *
  * File description
  *

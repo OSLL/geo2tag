@@ -115,10 +115,10 @@ namespace common
   }
   
   CHandlePtr<DataMark> DataMark::createMark(double latitude, double longitude, const std::string& label, 
-             const std::string& description, const std::string& url, const CTime &time)
+             const std::string& description, const std::string& url, const CTime &time, const CHandlePtr<Channel> &channel)
   {
     return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, url, time,
-              common::DbSession::getInstance().getCurrentUser()));
+              common::DbSession::getInstance().getCurrentUser(), channel));
   }
 
 

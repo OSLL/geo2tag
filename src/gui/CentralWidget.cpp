@@ -47,10 +47,10 @@ namespace GUI
     {
 //TODO: get real channel info
 // qobject_cast<model>->getChannelDescription
-
-      QMessageBox::information(this,"Channel information","This is a public channel with common city information about roads, events, building reconstructions. You cannot add new information to this channel");
+      QMessageBox::information(this,"Channel information",(*common::DbSession::getInstance().getChannels())[index.row()]->getDescription().c_str());
       // TODO get active channel from index, switch to m_feedView
-      m_feedView->refresh();      
+      m_feedView->refresh((*common::DbSession::getInstance().getChannels())[index.row()]
+);      
       m_layout->setCurrentWidget(m_feedView); 
     }
 
@@ -66,8 +66,15 @@ namespace GUI
     
     void CentralWidget::setRadius()
     {
-//TODO: ask real raduis
-      QMessageBox::information(this,"Set channel raduis","You cannot change radius for this channel");
+      //TODO: ask real raduis
+      if(m_layout->currentWidget()!=m_feedView)
+      {
+        QMessageBox::information(this,"Set channel raduis","You cannot change radius for this channel. You should select channel before.");
+      }
+      else
+      {
+        m_feedView->updateCurrentChannelRadius();  
+      }
     }
 
 

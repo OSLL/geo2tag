@@ -9,6 +9,7 @@
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
+#include <iostream>
 #include "Channel.h"
 
 namespace common
@@ -16,6 +17,7 @@ namespace common
   Channel::Channel(const std::string &name, const std::string &description, const std::string &url, const CHandlePtr<DataMarks> &mark):
           m_name(name), m_description(description), m_url(url), m_marks(mark), m_isDisplayed(true)
   {
+    m_activeRadius = 5.0; // 5 km
   }
 
   const std::string& Channel::getDescription() const
@@ -61,6 +63,17 @@ namespace common
   void Channel::setDisplayed(bool fl)
   {
     m_isDisplayed = fl;
+  }
+
+  void Channel::setRadius(const double& radius)
+  {
+    std::cerr << "newRadius "<< radius << " stored" << std::endl;
+    m_activeRadius = radius;
+  }
+
+  double Channel::getRadius() const
+  {
+    return m_activeRadius;
   }
 
   Channel::~Channel()

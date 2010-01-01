@@ -20,8 +20,7 @@ namespace GUI
 
     QString ChannelModel::getChannelName(int index) const
     {
-
-      return QString("DBG: ChannelNAME???")+(*m_channels)[index]->getName().c_str(); 
+      return (*m_channels)[index]->getName().c_str(); 
     }
 
     QString ChannelModel::getChannelDescription(int index) const

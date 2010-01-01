@@ -16,6 +16,7 @@
 #include "DataMarks.h"
 #include "Channel.h"
 #include "Thread.h"
+#include "SwMr.h"
 
 namespace common
 {

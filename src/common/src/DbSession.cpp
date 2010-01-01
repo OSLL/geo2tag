@@ -174,7 +174,7 @@ namespace db
       COL_NAME(1, "id", SQL_C_LONG, id)
       COL_NAME(2, "description", SQL_C_CHAR, description)
       COL_NAME(3, "name", SQL_C_CHAR, name)
-      COL_NAME(4, "url", SQL_C_CHAR, name)
+      COL_NAME(4, "url", SQL_C_CHAR, url)
     END_COLMAP()
 
     const char* sql() const
@@ -424,10 +424,7 @@ namespace common
   
   void DbSession::loadMarks()
   {
-    double lat = common::GpsInfo::getInstance().getLatitude(); 
-    double lon = common::GpsInfo::getInstance().getLongitude();
     db::LoadMarksQuery query(*this, m_currtentUserId);
-    std::cerr << "current user_id = " << m_currtentUserId << std::endl;
     query.prepare();
     query.execute();
     while(query.fetch())
@@ -445,16 +442,11 @@ namespace common
                             query.description,
                             query.url,
                             ODBC::convertTime(query.time,CTime::UTC),
-                            s_users.find(query.user_id)->second
-                            ));
+                            s_users.find(query.user_id)->second,
+                            CHandlePtr<loader::Channel>()));
 
       s_marks[query.id] = mark;
       m_marks->push_back(mark);
-      
-      if(common::DataMark::getDistance(lat,lon,query.latitude, query.longitude)>=5)
-      {
-        std::cerr << "!!!!!!!!!!!!!!!!!!!!!" << std::endl << "The furthest mark was found" << std::endl << " !!!!!!!!!!!!! " << std::endl;
-      }
     }
   }
   

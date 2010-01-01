@@ -30,6 +30,8 @@
 #include "GpsInfo.h"
 #include "Handle.h"
 #include "DbSession.h"
+#include "User.h"
+#include "GpsInfo.h"
 
 namespace GUI
 {
@@ -39,17 +41,19 @@ namespace GUI
       Q_OBJECT;
 
       CHandlePtr<common::DataMarks> m_data;
-  
+      CHandlePtr<common::Channel> m_currentChannel;
+      size_t m_size; 
   public:
       ListModel(QObject* parent) : QStandardItemModel(common::DbSession::getInstance().getMarks()->size(),3,parent), m_data(common::DbSession::getInstance().getMarks())
       {
+        m_size = 0;
       }
 
   		virtual ~ListModel() {}
   
       int rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
       {
-        return m_data->size();
+        return m_size;
       }
       
       int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const
@@ -57,9 +61,23 @@ namespace GUI
         return 3;
       }
 
+      CHandlePtr<common::Channel> getCurrentChannel() const
+      {
+        return m_currentChannel;
+      }
+
       void setDescription(int row, const std::string& data)
       {
-        (*m_data)[row]->setDescription(data);
+        size_t c=0,i=0;
+        for(; i<m_data->size(); i++)
+        {
+          if((*m_data)[i]->getChannel() == m_currentChannel)
+            c++;
+          if((c-1)==row)
+            break;
+        }
+
+        (*m_data)[i]->setDescription(data);
       }
 
       QVariant data(const QModelIndex &index, int role) const
@@ -67,19 +85,27 @@ namespace GUI
       	if ( Qt::DisplayRole == role )
       	{
           QString value="?";
+          size_t c=0,i=0;
+          for(; i<m_data->size(); i++)
+          {
+            if((*m_data)[i]->getChannel() == m_currentChannel)
+              c++;
+            if((c-1)==index.row())
+              break;
+          }
 
           switch(index.column())
           {
           case 0:
-      		 value = (*m_data)[index.row()]->getLabel().c_str();
+      		 value = (*m_data)[i]->getLabel().c_str();
            break;
            
           case 1:
-            value = (*m_data)[index.row()]->getDescription().c_str();
+            value = (*m_data)[i]->getDescription().c_str();
             break;
             
           case 2:
-            value = QString("admin");
+            value = (*m_data)[i]->getUser()->getLogin().c_str();
             break;            
             
           default:
@@ -93,9 +119,23 @@ namespace GUI
    
    public slots:
 
-      void layoutUpdate()
+      void layoutUpdate(CHandlePtr<common::Channel> channel = CHandlePtr<common::Channel>())
       {
-        setRowCount(m_data->size());
+        if(channel!=0)
+          m_currentChannel=channel;
+
+        double longitude = common::GpsInfo::getInstance().getLongitude();
+        double latitude = common::GpsInfo::getInstance().getLatitude();
+        size_t size=0;
+        for(size_t i=0; i<m_data->size(); i++)
+        {
+          CHandlePtr<common::DataMark> mark = (*m_data)[i];
+          if(mark->getChannel()              == m_currentChannel && 
+             mark->getChannel()->getRadius() >  common::DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude()))
+           size++;
+        }
+        m_size = size;
+        setRowCount(size);
         emit layoutChanged();
       } 
   };
