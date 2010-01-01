@@ -35,11 +35,11 @@ namespace GUI
 		m_B = b;
 		m_L = l;
 		m_scale = scale; 
-    m_moving = false;
-    
-    connect(&m_updateGpsDataTimer, SIGNAL(timeout()),this, SLOT(updateGpsData()));
-    m_updateGpsDataTimer.setInterval(5000);
-    m_updateGpsDataTimer.start();
+	        m_moving = false;
+	    
+                connect(&m_updateGpsDataTimer, SIGNAL(timeout()),this, SLOT(updateGpsData()));
+                m_updateGpsDataTimer.setInterval(10000);
+	        m_updateGpsDataTimer.start();
 	}
 
 	void MapWidget::paintEvent(QPaintEvent *pe)

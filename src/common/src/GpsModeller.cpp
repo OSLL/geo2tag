@@ -64,7 +64,7 @@ namespace common
           std::stringstream s;
           s << (const char *)lon << " " << (const char *) lat;
           s >> m_longitude >> m_latitude;
-          mSleep((currentModellerTime-begin)*1000);
+          mSleep((currentModellerTime-begin)*100);
           begin=currentModellerTime;
         }
        searchElement(cur_node->children);

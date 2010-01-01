@@ -17,10 +17,12 @@
 #include <vector>
 #include "Time.h"
 #include "Handle.h"
-#include "User.h"
 
 namespace common
 {
+  class Channel;
+  class User;
+
   class DataMark
   {
     double m_latitude;
@@ -34,7 +36,10 @@ namespace common
     CTime m_time;
 
     CHandlePtr<User> m_user;
+    
   protected:
+    CHandlePtr<Channel> m_channel;
+
     DataMark(double latitude, double longitude, const std::string& label, 
              const std::string& description, const std::string& url, const CTime &time,
              const CHandlePtr<User> & user);
@@ -60,6 +65,8 @@ namespace common
     void setTime(const CTime& time=CTime::now());
 
     CHandlePtr<User> getUser() const;
+
+    CHandlePtr<Channel> getChannel() const;
 
     static CHandlePtr<DataMark> createMark(double latitude=0., double longitude=0., const std::string& label="Default label", 
              const std::string& description="No descrption", const std::string& url="", const CTime &time=CTime::now());

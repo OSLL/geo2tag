@@ -40,7 +40,7 @@ namespace db
 
   struct Mark
   {
-    unsigned long long id;
+    unsigned long id;
     double latitude;
     double longitude;
     char label[1024];
@@ -53,7 +53,7 @@ namespace db
 
   struct Channel
   {
-    unsigned long long id;
+    unsigned long id;
     char name[300];
     char description[2048];
     char url[2048];
@@ -61,8 +61,8 @@ namespace db
 
   struct MarkRelation
   {
-    unsigned long long mark;
-    unsigned long long channel;
+    unsigned long mark;
+    unsigned long channel;
   };
 
   using namespace ODBC;
@@ -263,7 +263,7 @@ namespace db
 
     const char* sql() const
     {
-      return "select tag_id, channel_id from tags order by channel_id;";
+      return "select tag_id, channel_id from tags;";
     }
   };
 
@@ -429,14 +429,10 @@ namespace common
     db::LoadMarksQuery query(*this, m_currtentUserId);
     std::cerr << "current user_id = " << m_currtentUserId << std::endl;
     query.prepare();
-    ODBC::CExecuteClose x(query);
+    query.execute();
     while(query.fetch())
     {
-      if(common::DataMark::getDistance(lat,lon,query.latitude, query.longitude)>=5)
-      {
-        std::cerr << "!!!!!!!!!!!!!!!!!!!!!" << std::endl << "The furthest mark was found" << std::endl << " !!!!!!!!!!!!! " << std::endl;
-        continue;
-      }
+      std::cerr << "load mark #" << query.id << std::endl;
       if(s_marks.count(query.id)>0)
       {
         std::cerr << "!!!!!!!!!!!!!!!!!!!!!" << std::endl << "Mark already exsist" << std::endl << " !!!!!!!!!!!!! " << std::endl;
@@ -451,8 +447,14 @@ namespace common
                             ODBC::convertTime(query.time,CTime::UTC),
                             s_users.find(query.user_id)->second
                             ));
-      m_marks->push_back(mark);
+
       s_marks[query.id] = mark;
+      m_marks->push_back(mark);
+      
+      if(common::DataMark::getDistance(lat,lon,query.latitude, query.longitude)>=5)
+      {
+        std::cerr << "!!!!!!!!!!!!!!!!!!!!!" << std::endl << "The furthest mark was found" << std::endl << " !!!!!!!!!!!!! " << std::endl;
+      }
     }
   }
   
@@ -642,10 +644,14 @@ namespace common
   {
     db::LoadMarkRelationsQuery query(*this);
     query.prepare();
-    ODBC::CExecuteClose x(query);
+    query.execute();
     while(query.fetch())
     {
+      std::cerr << "updating channel " << query.channel << " and " << query.mark << " mark\n";
       s_channels.find(query.channel)->second->addData(s_marks.find(query.mark)->second);
+      std::cerr << "updating channel " << query.channel << " and " << query.mark << " mark\n";
+      s_marks.find(query.mark)->second->setChannel(s_channels.find(query.channel)->second);
+      std::cerr << "OK\n";
     }
   }
 
@@ -668,8 +674,8 @@ namespace common
   {
 #ifndef NO_DB_CONNECTION
     loadUsers(login,password);std::cerr << "Users loaded" << std::endl;
-    loadMarks(); std::cerr << "Marks loaded" << std::endl;
     loadChannels();std::cerr << "Channels loaded" << std::endl;
+    loadMarks(); std::cerr << "Marks loaded" << std::endl;
     loadRelations();std::cerr << "Relations loaded" << std::endl;
 #endif
   }

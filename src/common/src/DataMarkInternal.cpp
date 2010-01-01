@@ -29,6 +29,11 @@ namespace loader
   {
     m_id=id;
   }
+
+  void DataMark::setChannel(const CHandlePtr<common::Channel> &channel)
+  {
+    m_channel = channel;
+  }
   
   DataMark::~DataMark()
   {

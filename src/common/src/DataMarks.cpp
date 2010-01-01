@@ -101,6 +101,11 @@ namespace common
     return m_user;
   }
 
+  CHandlePtr<Channel> DataMark::getChannel() const
+  {
+    return m_channel;
+  }
+
   DataMarks::DataMarks()
   {
   }

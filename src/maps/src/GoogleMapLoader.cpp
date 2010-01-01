@@ -15,9 +15,10 @@
 #include "GoogleMapLoader.h"
 #include "CurlInitException.h"
 #include "PngPicture.h"
+#include "Channel.h"
 
-#define GOOGLE_MAPS_API_KEY "ABQIAAAAb5usG445bmMNMJ0q1D6iXRR6XkXNzuxLA4BE9F2bnVETdMdkRhSkq5tYa7AM0EnQv0rw_8LIEDHNGA"
-
+// #define GOOGLE_MAPS_API_KEY "ABQIAAAAb5usG445bmMNMJ0q1D6iXRR6XkXNzuxLA4BE9F2bnVETdMdkRhSkq5tYa7AM0EnQv0rw_8LIEDHNGA"
+#define GOOGLE_MAPS_API_KEY "ABQIAAAAb5usG445bmMNMJ0q1D6iXRTpb8ADlP0CcCA6s8Y1Bs5YwJKeqBS1g7w1vZxXV_Ac2suwr6RGznQZiQ"
 namespace maps
 {
   GoogleMapLoader::GoogleMapLoader()
@@ -52,7 +53,7 @@ namespace maps
 
     for(size_t i=0; i<marks.size(); i++)
     {
-      if(marks[i]->getDescription()!="")
+      if(marks[i]->getDescription()!="" && marks[i]->getChannel()->isDisplayed())
         s << "&markers=color:"<< getColor(marks[i]->getLabel()[7]) <<"|label:" << 
              /*marks[i]->getLabel()[7]*/ "A" << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude(); 
     }

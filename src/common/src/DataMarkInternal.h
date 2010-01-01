@@ -28,6 +28,8 @@ namespace loader
     
     void setId(unsigned long long id);
 
+    void setChannel(const CHandlePtr<common::Channel> &channel);
+
     virtual ~DataMark();
   };
   
