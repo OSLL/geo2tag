@@ -43,16 +43,16 @@ CREATE TABLE tags (
 );
 
 
-INSERT into channel (name, description, url) values ('weather', 'Tags with wether', '');
+INSERT into channel (name, description, url) values ('weather', 'Tags with weather', '');
 INSERT into channel (name, description, url) values ('sales', 'Sales', '');
 INSERT into channel (name, description, url) values ('petroleum costs', 'Petroleum stations, prices', '');
 INSERT into channel (name, description, url) values ('announcements', 'Art, cinema, show announcements', '');
 INSERT into channel (name, description, url) values ('personal', 'User personal tags', '');
-INSERT into channel (name, description, url) values ('government', 'tags connected to government', '');
+INSERT into channel (name, description, url) values ('government', 'Tags connected to government', '');
 
-INSERT into users (login, password) values ('test0', 'test');
-INSERT into users (login, password) values ('test1', 'test');
-INSERT into users (login, password) values ('test2', 'test');
-INSERT into users (login, password) values ('test3', 'test');
+INSERT into users (login, password) values ('Yvgeny', 'test');
+INSERT into users (login, password) values ('Paul',   'test');
+INSERT into users (login, password) values ('Kirill', 'test');
+INSERT into users (login, password) values ('Mark',   'test');
 
 
