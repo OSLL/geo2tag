@@ -23,7 +23,7 @@ namespace GUI
 {
   MarkEditor::MarkEditor(QWidget *parent) : QWidget(parent)
   {
-    m_ok = new QPushButton("Add mark", this);
+    m_ok = new QPushButton("Add tag", this);
     m_combo = new QComboBox(this);
 
     CHandlePtr<common::Channels> channels = common::DbSession::getInstance().getChannels();
@@ -32,7 +32,7 @@ namespace GUI
     {
       m_combo->insertItem(i++,QObject::tr((*it)->getDescription().c_str()));
     }
-    m_text = new QTextEdit("Enter new mark",this);
+    m_text = new QTextEdit("Enter new tag",this);
 
     m_text->selectAll();
 
@@ -77,9 +77,10 @@ namespace GUI
       std::ostringstream s;
       s << x;
       qDebug() << s.str().c_str();
-      QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Error during save your message."));
+      QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Error during save your tag."));
+      return;
     }
-    QMessageBox::information(this, QObject::tr("Information"), QObject::tr("Your message saved"));
+    QMessageBox::information(this, QObject::tr("Information"), QObject::tr("Your tag saved"));
   }
 
 } // namespace GUI

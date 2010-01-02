@@ -12,7 +12,7 @@ int main(int c, char **v)
   QApplication 	app(c,v);
   try
   {
-    common::DbSession::getInstance().loadData("test0","test");
+    common::DbSession::getInstance().loadData("Paul","test");
   }
   catch(ODBC::CException &x)
   {

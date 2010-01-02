@@ -176,8 +176,8 @@ namespace GUI
       m_model = new ListModel(this);
 			setModel(m_model);
       m_model->setHeaderData(0, Qt::Horizontal, tr("Map"));
-      m_model->setHeaderData(1, Qt::Horizontal, tr("Mark text")); 
-      m_model->setHeaderData(2, Qt::Horizontal, tr("author"));
+      m_model->setHeaderData(1, Qt::Horizontal, tr("Tag text")); 
+      m_model->setHeaderData(2, Qt::Horizontal, tr("Author"));
       horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
       setItemDelegate(new MarkTableDelegat(this));
       timer = new QTimer(this);
