@@ -52,7 +52,7 @@ INSERT into channel (name, description, url) values ('My channel', 'This is free
 INSERT into users (login, password) values ('Paul',   'test');
 INSERT into users (login, password) values ('Kirill', 'test');
 INSERT into users (login, password) values ('Mark',   'test');
-INSERT into users (login, password) values ('Yvgeny', 'test');
+INSERT into users (login, password) values ('Yevgeni', 'test');
 
 INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.166504, 24.841204, 'A', 'Accident at road 51. Time: 15:45, January 2, 2010.', 1, 'http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif');
 INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.163216, 24.859314, 'B', 'Shell 95: 1.299 e', 2, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
