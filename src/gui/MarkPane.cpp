@@ -84,7 +84,7 @@ namespace GUI
         m_value = new QSpinBox();
         m_value->setMinimum(200);
         m_value->setMaximum(15000);
-        m_value->setValue(5000);
+        m_value->setValue(m_channel->getRadius()*1000);
         m_value->setSingleStep(200);
         QHBoxLayout *hbox = new QHBoxLayout();
         QLabel *label = new QLabel("Radius: ");

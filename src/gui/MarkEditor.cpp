@@ -30,7 +30,7 @@ namespace GUI
     int i=0;
     for(common::Channels::iterator it = channels->begin(); it != channels->end(); it++)
     {
-      m_combo->insertItem(i++,QObject::tr((*it)->getDescription().c_str()));
+      m_combo->insertItem(i++,QObject::tr((*it)->getName().c_str()));
     }
     m_text = new QTextEdit("Enter new tag",this);
 

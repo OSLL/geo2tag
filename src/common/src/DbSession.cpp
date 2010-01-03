@@ -373,34 +373,29 @@ namespace common
     m_currtentUserId = 0;
     
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(1,"weather", "Tags with weather"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(1,"Tourist information", "This is free read-only tourist information channel. You can get information about buildings, sights around your location"));
       m_channels->push_back(channel);
       s_channels[1]=channel;
     }
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(2,"sales", "Sales"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(2,"Public announcements", "This is free read-only channel with public announcements from the city of your current location"));
       m_channels->push_back(channel);
       s_channels[2]=channel;
     }
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(3,"petroleum costs", "Petroleum stations, prices"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(3,"Fuel prices", "This is free channel where you can post/read the fuel prices around your current location."));
       m_channels->push_back(channel);
       s_channels[3]=channel;
     }
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(4,"announcements", "Art, cinema, show announcements"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(4,"Sales", "This is free channel where you can post/read sales advertisements"));
       m_channels->push_back(channel);
       s_channels[4]=channel;
     }
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(5,"personal", "User personal tags"));
+      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(5,"My channel", "This is free channel where you and your friends can post/read your tags"));
       m_channels->push_back(channel);
       s_channels[5]=channel;
-    }
-    {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(6,"government","tags connected to government" ));
-      m_channels->push_back(channel);
-      s_channels[6]=channel;
     }
 #endif
   }
