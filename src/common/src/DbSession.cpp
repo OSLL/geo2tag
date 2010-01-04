@@ -367,7 +367,7 @@ namespace common
     std::cerr << "connected to database" << std::endl;
     m_updateThread = makeHandle(new UpdateThread());
 #else
-    CHandlePtr<loader::User> user = makeHandle(new loader::User("test0","test",0));
+    CHandlePtr<loader::User> user = makeHandle(new loader::User("Paul","test",0));
     m_users->push_back(user);
     s_users[0]=user;
     m_currtentUserId = 0;
@@ -396,6 +396,46 @@ namespace common
       CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(5,"My channel", "This is free channel where you and your friends can post/read your tags"));
       m_channels->push_back(channel);
       s_channels[5]=channel;
+    }
+    {
+      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(1,60.166504, 24.841204, "A", "Accident at road 51. Time: 15:45, January 2, 2010.", "http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif", CTime::now(), user, s_channels.find(2)->second));
+      m_marks->push_back(m);
+      s_marks[1]=m;
+    }
+    {
+      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(2,60.163216, 24.859314, "B", "Shell 95: 1.299 e", "http://www.unf.edu/groups/volctr/images/question-mark.jpg", CTime::now(), user, s_channels.find(3)->second));
+      m_marks->push_back(m);
+      s_marks[2]=m;
+    }
+    {
+      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(3,60.166264, 24.859915, "C", "Neste Oil diesel: .0989 e", "http://www.unf.edu/groups/volctr/images/question-mark.jpg", CTime::now(), user, s_channels.find(3)->second));
+      m_marks->push_back(m);
+      s_marks[3]=m;
+    }
+    {
+      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(4,60.163216, 24.859915, "D", "Neste 95: 1.294 e","http://www.unf.edu/groups/volctr/images/question-mark.jpg", CTime::now(), user, s_channels.find(3)->second));
+      m_marks->push_back(m);
+      s_marks[4]=m;
+    }
+    {
+      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(5,60.162159, 24.739065, "E", "CityMarket Iso Omena: Children overalls 50% off", "http://www.k-citymarket.fi/img/citymarketLogo.gif" ,CTime::now(), user, s_channels.find(4)->second));
+      m_marks->push_back(m);
+      s_marks[5]=m;
+    }
+    {
+      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(6,60.167433, 24.733486, "F", "Prisma Olari: LEGO 20% off", "http://mw2.google.com/mw-panoramio/photos/thumbnail/5131282.jpg", CTime::now(), user, s_channels.find(4)->second));
+      m_marks->push_back(m);
+      s_marks[6]=m;
+    }
+    {
+      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(7,60.173362, 24.829166, "G", "Outdoor party place on February 20, 2010", "http://www.unf.edu/groups/volctr/images/question-mark.jpg", CTime::now(), user, s_channels.find(5)->second));
+      m_marks->push_back(m);
+      s_marks[7]=m;
+    }
+    {
+      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(8,60.178308, 24.848585, "H", "Espoo. Cheap hotel.","http://mw2.google.com/mw-panoramio/photos/small/8267319.jpg", CTime::now(), user, s_channels.find(1)->second));
+      m_marks->push_back(m);
+      s_marks[8]=m;
     }
 #endif
   }
