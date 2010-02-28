@@ -1,3 +1,33 @@
+/*
+ * Copyright 2010  OSLL osll@osll.spb.ru
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * 3. The name of the author may not be used to endorse or promote
+ *    products derived from this software without specific prior written
+ *    permission.
+ *
+ * The advertising clause requiring mention in adverts must never be included.
+ */
 /*  */
 /*!
  * \file Time.cpp
@@ -19,6 +49,21 @@
   разница шкал времени UTC и МДВ
 */
 #define DIFF_UTC_MDV   ((time_t)10800)
+
+CExceptionTime::CExceptionTime(const CSource& src):
+  CExceptionSource(0,src,0)
+{
+}
+
+CExceptionTimeType::CExceptionTimeType(int type,const CSource& src):
+  CExceptionTime(src),m_type(type)
+{
+}
+
+CExceptionTimeConv::CExceptionTimeConv(const tm& time,const CSource& src):
+  CExceptionTime(src),m_time(time)
+{
+}
 
 void CTime::init(int year, int month, int day,
   int hour, int min, double sec,
@@ -77,6 +122,28 @@ void CTime::init(int year, int month, int day,
 
   setInit();
   assert(m_addt>=0 && m_addt<1);
+}
+
+CTime::CTime()
+{
+  m_time=-1;m_addt=0;
+}
+
+CTime::CTime(short year, short month, short day,
+      short hour, short min, double sec,
+      CType type, int isDst): CInit(true)
+{
+  init(year,month,day,hour,min,sec,type,isDst);
+}
+
+CTime::CTime(const tm& time, CType type): CInit(true)
+{
+  init(time.tm_year+1900, time.tm_mon+1, time.tm_mday,
+       time.tm_hour, time.tm_min, time.tm_sec, type, time.tm_isdst);
+}
+
+CTime::CTime(time_t time): CInit(true), m_time(time), m_addt()
+{
 }
 
 CTime CTime::now()
@@ -141,12 +208,58 @@ const CTime& CTime::operator+=(double sec)
   return *this;
 }
 
+const CTime& CTime::operator -=(double sec)
+{
+  return (*this)+=(-sec);
+}
+
+CTime CTime::operator+(double sec) const
+{
+  return CTime(*this)+=sec;
+}
+
+CTime CTime::operator -(double sec) const
+{
+  return CTime(*this)-=sec;
+}
+
+
 double CTime::operator-(const CTime &t) const 
 { 
   STRACE();
   assertInit();
   t.assertInit();
   return difftime(m_time,t.m_time)+m_addt-t.m_addt;
+}
+
+bool CTime::operator ==(const CTime &t) const
+{
+  return (*this-t)==0.0;
+}
+
+bool CTime::operator !=(const CTime &t) const
+{
+  return !(*this==t);
+}
+
+bool CTime::operator <(const CTime &t) const
+{
+  return (*this-t)<0.0;
+}
+
+bool CTime::operator >(const CTime &t) const
+{
+  return (*this-t)>0.0;
+}
+
+bool CTime::operator <=(const CTime &t) const
+{
+  return !(*this>t);
+}
+
+bool CTime::operator >=(const CTime &t) const
+{
+  return !(*this<t);
 }
 
 double CTime::getSec24(CType type) const
