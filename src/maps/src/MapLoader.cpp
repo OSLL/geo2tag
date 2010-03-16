@@ -43,6 +43,7 @@
 
 namespace maps
 {
+
 } // namespace maps
 
 /* ===[ End of file  ]=== */

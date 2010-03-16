@@ -33,13 +33,14 @@
 #include <QDebug>
 #include <QMessageBox>
 #include "MainWindow.h" 
-#include <curl/curl.h>
 #include "DbSession.h"
 #include "GpsInfo.h"
+#include "GoogleClientLogin.h"
 
 int main(int c, char **v)
 {
   QApplication 	app(c,v);
+
   try
   {
     common::DbSession::getInstance().loadData("Paul","test");
@@ -63,11 +64,6 @@ int main(int c, char **v)
   
   common::GpsInfo::getInstance(); //starting daemon and other stuff;
 
-  if(curl_global_init(CURL_GLOBAL_ALL)!=0)
-  {
-    QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Error during initialization! Maps will not be able to able.  Exiting..."));
-    return 0;
-  }
 
   GUI::MainWindow window;
 
@@ -78,7 +74,7 @@ int main(int c, char **v)
 #endif  
 
   app.exec();
-  curl_global_cleanup();
+
   try
   {
     common::DbSession::getInstance().saveData();

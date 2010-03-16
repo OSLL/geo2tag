@@ -5,19 +5,20 @@
 TEMPLATE = lib
 TARGET = maps
 
+QT += network
+
 DEPENDPATH += . inc src
 
 INCLUDEPATH += . inc ../common/inc ../common/common/inc ../common/thread/inc \
                ../common/exception/inc
 
 # Input
-HEADERS += inc/CurlInitException.h \
-           inc/GoogleClientLogin.h \
+HEADERS += inc/MapLoader.h \
            inc/GoogleMapLoader.h \
-           inc/MapLoader.h \
-           inc/MapLoaderFactory.h
-SOURCES += src/CurlInitException.cpp \
-           src/GoogleClientLogin.cpp \
+           inc/GoogleClientLogin.h \
+           inc/MapLoaderFactory.h \
+           inc/GoogleMapsApiKey.h
+SOURCES += src/GoogleClientLogin.cpp \
            src/GoogleMapLoader.cpp \
            src/MapLoader.cpp \
            src/MapLoaderFactory.cpp

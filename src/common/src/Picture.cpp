@@ -51,11 +51,11 @@ namespace common
   {
   }
 
-  const std::vector<char> Picture::getData() const
+  Picture::Picture(const QImage &image):QImage(image), m_data()
   {
-    return m_data;
   }
-  
+
+
   Picture::Type Picture::getType() const
   {
     return UNKNOWN;

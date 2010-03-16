@@ -41,26 +41,26 @@
 #define _Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
 
 #include <vector>
+#include <QImage>
 
 namespace common
 {
   /*!
    * common picture. binary data + some meta information
    */
-  class Picture
+    class Picture : public QImage
   {
     std::vector<char> m_data;
   public:
     
     Picture(const Picture&);
+    Picture(const QImage&);
 
     enum Type {
-      PNG,
+      PNG = 0,
       UNKNOWN
     };
     
-    virtual const std::vector<char> getData() const;
-
     virtual Type getType() const;
 
     virtual ~Picture();

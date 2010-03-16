@@ -42,21 +42,24 @@
 
 #include "Picture.h"
 #include "DataMarks.h"
+#include <QObject>
 
 namespace maps
 {
   /*!
    * MapLoader interface
    */
-  class MapLoader
+    class MapLoader : public QObject
   {
+        Q_OBJECT
+
   public:
 
     /*!
      * \brief list fot available maps sources
      */
     enum SourceType {
-      GOOGLE,
+      GOOGLE = 0,
       UNKNOWN
     };
 
@@ -71,6 +74,11 @@ namespace maps
     virtual common::Picture getMap(double latitude, double longitude, short scale, int width, int height)=0;
     
     virtual common::Picture getMapWithMarks(double latitude, double longitude, short scale, int width, int height, common::DataMarks marks)=0;
+
+    virtual QByteArray& getMapByteArray()=0;
+
+  signals:
+    void mapUpdated(QByteArray & picture);
 
   }; // class MapLoader
   

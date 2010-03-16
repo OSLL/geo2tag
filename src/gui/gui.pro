@@ -1,6 +1,7 @@
 TEMPLATE = app
 TARGET = wikigps
 
+
 DEPENDPATH += .
 INCLUDEPATH += . \
     ../common/inc/ \
@@ -45,11 +46,12 @@ SOURCES += src/RadiusEditor.cpp \
 LIBS += -L../internal/lib \
     -lodbc \
     -lcommon \
-    -lmaps \
-    -lcurl
+    -lmaps
+
 DESTDIR = ../../
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 DEFINES += DESKTOP_STYLE
 QT += webkit \
-    phonon
+    phonon \
+    network

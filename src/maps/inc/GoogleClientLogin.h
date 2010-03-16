@@ -41,36 +41,47 @@
 #define _GoogleClientLogin_H_E398ED1A_0E83_42CA_BC67_5C3668729B16_INCLUDED_
 
 #include <string>
-#include <curl/curl.h>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QObject>
 
 namespace maps
 {
-  /*!
+    /*!
    * Google client auth
    */
-  class GoogleClientLogin
-  {
-    CURL *m_curl;
-    std::string m_email;
-    std::string m_password;
+    class GoogleClientLogin : public QObject
+    {
+        Q_OBJECT
 
-    std::string m_authToken;
+        QNetworkAccessManager *manager;
+        std::string m_email;
+        std::string m_password;
+        std::string m_authToken;
 
-  public:
-    GoogleClientLogin(std::string email, std::string password);
+    public:
+        GoogleClientLogin(std::string email, std::string password);
 
-    void login();
+        void login();
 
-    std::string getAuthToken() const;
+        std::string getAuthToken() const;
 
-    ~GoogleClientLogin();
-    
-  private:    
-    GoogleClientLogin(const GoogleClientLogin& obj);
-    GoogleClientLogin& operator=(const GoogleClientLogin& obj);
+        ~GoogleClientLogin();
 
-    static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
-  }; // class GoogleClientLogin
+    public slots:
+
+        void onManagerFinished(QNetworkReply*);
+        void onManagerSslErrors(/*QNetworkReply*, QList<QSslError>*/);
+        void onReplyError(QNetworkReply::NetworkError);
+
+
+    private:
+        GoogleClientLogin(const GoogleClientLogin& obj);
+        GoogleClientLogin& operator=(const GoogleClientLogin& obj);
+
+        static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
+
+    }; // class GoogleClientLogin
   
 } // namespace maps
 

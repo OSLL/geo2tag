@@ -10,7 +10,7 @@ INCLUDEPATH += . ../../src/common/inc/ ../../src/maps/inc ../../src/common/commo
 SOURCES += main.cpp
 
 
-LIBS    += -L../../src/internal/lib -lodbc -lcommon -lmaps -lcurl
+LIBS    += -L../../src/internal/lib -lodbc -lcommon -lmaps
 
 DESTDIR = ./
 

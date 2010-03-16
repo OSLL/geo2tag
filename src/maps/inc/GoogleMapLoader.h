@@ -40,43 +40,60 @@
 #ifndef _GoogleMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
 #define _GoogleMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
 
-#include <curl/curl.h>
 #include "MapLoader.h"
 #include "DataMarks.h"
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QMutex>
+#include <QByteArray>
 
 namespace maps
 {
- /*!
+    /*!
    * 
    */
-  class GoogleMapLoader: public MapLoader
-  {
+    class GoogleMapLoader: public MapLoader
+    {
 
-    CURL * m_curl; //!< connection to the server
-    std::vector<char> m_data;
+        Q_OBJECT
 
-  public:
-    GoogleMapLoader();
+        QNetworkAccessManager *manager;
+        std::vector<char> m_data;
+        QByteArray byteArray;
+        QMutex mapMutex;
+        int state;
 
-    virtual common::Picture getMap(double latitude, double longitude, short size, int width, int height);
-    
-    virtual common::Picture getMapWithMarks(double latitude, double longitude, short size, int width, int height, common::DataMarks marks);
+    public:
+        GoogleMapLoader();
 
-    virtual ~GoogleMapLoader();
+        virtual common::Picture getMap(double latitude, double longitude, short size, int width, int height);
 
-  private: 
-   
-    std::string preprocessQuery(double latitude, double longitude, short size, int width, int height, common::DataMarks marks = common::DataMarks());
-    /*!
+        virtual common::Picture getMapWithMarks(double latitude, double longitude, short size, int width, int height, common::DataMarks marks);
+
+        QByteArray& getMapByteArray();
+
+        virtual ~GoogleMapLoader();
+
+    public slots:
+
+        void onManagerFinished(QNetworkReply*);
+        void onManagerSslErrors(/*QNetworkReply*, QList<QSslError>*/);
+        void onReplyError(QNetworkReply::NetworkError);
+
+    private:
+
+        std::string preprocessQuery(double latitude, double longitude, short size, int width, int height, common::DataMarks marks = common::DataMarks());
+        /*!
      * \brief routine for writing data from stream
      */
-    static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
+        static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
 
-    GoogleMapLoader(const GoogleMapLoader& obj);
-    GoogleMapLoader& operator=(const GoogleMapLoader& obj);
+        GoogleMapLoader(const GoogleMapLoader& obj);
+        GoogleMapLoader& operator=(const GoogleMapLoader& obj);
 
-  }; // class GoogleMapLoader
-  
+
+    }; // class GoogleMapLoader
+
 } // namespace maps
 
 #endif //_GoogleMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
