@@ -50,6 +50,8 @@
 #include <QtGui/QImage>
 #include <QtGui/QSlider>
 #include <QtCore/QTimer>
+#include "MapLoader.h"
+#include "OnLineInformation.h"
 
 namespace GUI
 {
@@ -66,14 +68,16 @@ namespace GUI
    */
     class MapWidget : public QWidget
     {
+        Q_OBJECT
+
         double m_B;
         double m_L;
         double m_scale;
         QPointF m_mousePosition;
         bool m_moving;
         QTimer m_updateGpsDataTimer;
+        maps::MapLoader::SourceType sourceType;
 
-        Q_OBJECT
 
     public:
 
@@ -89,6 +93,7 @@ namespace GUI
 
     protected:
         void paintEvent(QPaintEvent *pe);
+        void resizeEvent(QResizeEvent *re);
         void mouseMoveEvent ( QMouseEvent * event );
         void mousePressEvent( QMouseEvent * event );
         void mouseReleaseEvent(QMouseEvent * event );
@@ -97,6 +102,7 @@ namespace GUI
         void updateMap();
         void updateGpsData();
         void onMapUpdated(QByteArray & picture);
+        void setSourceType(maps::MapLoader::SourceType sourceType);
 
     private:
         MapWidget(const MapWidget& obj);

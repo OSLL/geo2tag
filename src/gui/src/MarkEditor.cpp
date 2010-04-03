@@ -45,73 +45,86 @@
 #include <QtGui/QVBoxLayout>
 #include "DataMarks.h"
 #include "Channel.h"
-#include "DbSession.h"
 #include "Handle.h"
 #include "GpsInfo.h"
+#include <QDateTime>
 
 namespace GUI
 {
-  MarkEditor::MarkEditor(QWidget *parent) : QWidget(parent)
-  {
-    m_ok = new QPushButton("Add tag", this);
-    m_combo = new QComboBox(this);
-
-    CHandlePtr<common::Channels> channels = common::DbSession::getInstance().getChannels();
-    int i=0;
-    for(common::Channels::iterator it = channels->begin(); it != channels->end(); it++)
+    MarkEditor::MarkEditor(QWidget *parent) : QWidget(parent)
     {
-      m_combo->insertItem(i++,QObject::tr((*it)->getName().c_str()));
+        m_ok = new QPushButton("Add tag", this);
+        m_combo = new QComboBox(this);
+        m_text = new QTextEdit("Enter new tag",this);
+        m_text->selectAll();
+
+        connect(m_ok, SIGNAL(pressed()), this, SLOT(applyMark()));
+        connect(&OnLineInformation::getInstance(),
+                SIGNAL(subscribedChannelsUpdated(CHandlePtr<common::Channels>)),
+                this,
+                SLOT(onSubscribedChannelsUpdated(CHandlePtr<common::Channels>)));
+        connect(&OnLineInformation::getInstance(), SIGNAL(markApplied(int)),
+                this, SLOT(onMarkApplied(int)));
+
+        QVBoxLayout *layout = new QVBoxLayout(this);
+        layout->addWidget(m_combo);
+        layout->addWidget(m_text);
+        layout->addWidget(m_ok);
+        setLayout(layout);
+
+        update();
     }
-    m_text = new QTextEdit("Enter new tag",this);
-
-    m_text->selectAll();
 
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-
-    layout->addWidget(m_combo);
-    layout->addWidget(m_text);
-    layout->addWidget(m_ok);
-
-    setLayout(layout);
-
-    connect(m_ok, SIGNAL(pressed()), this, SLOT(applyMark()));
-  }
-
-  static std::string genearateNextLabel()
-  {
-    size_t size = common::DbSession::getInstance().getMarks()->size();
-    char label = (int)'A' + (size + 1) % 23;
-    std::ostringstream s;
-    s << label;
-    return s.str();
-  }
-  void MarkEditor::applyMark()
-  {
-    QString text = m_text->toPlainText(); 
-    qDebug() << "sending new mark " << text;
-    
-    CHandlePtr<common::DataMark> mark = common::DataMark::createMark(common::GpsInfo::getInstance().getLatitude(),
-                                                     common::GpsInfo::getInstance().getLongitude(), 
-                                                     genearateNextLabel(), 
-                                                     text.toStdString(),
-						     "http://www.unf.edu/groups/volctr/images/question-mark.jpg" /* unknown/undefined url*/,
-                 CTime::now(),
-                 (*common::DbSession::getInstance().getChannels())[m_combo->currentIndex()]);
-    try
+    void MarkEditor::update()
     {
-      (*common::DbSession::getInstance().getChannels())[m_combo->currentIndex()]->addData(mark);
-    }
-    catch(ODBC::CException &x)
+        OnLineInformation::getInstance().updateSubscribedChannels();
+    }/* Request done. If response received: */
+
+    void MarkEditor::onSubscribedChannelsUpdated(CHandlePtr<common::Channels> channels)
     {
-      std::ostringstream s;
-      s << x;
-      qDebug() << s.str().c_str();
-      QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Error during save your tag."));
-      return;
+        m_combo->clear();
+        int i = 0;
+        for(common::Channels::iterator it = channels->begin(); it != channels->end(); it++)
+        {
+            m_combo->insertItem(i++,QObject::tr((*it)->getName().c_str()));
+        }
     }
-    QMessageBox::information(this, QObject::tr("Information"), QObject::tr("Your tag saved"));
-  }
+
+
+    static std::string genearateNextLabel()
+    {
+        size_t size = OnLineInformation::getInstance().getMarks()->size();
+        // \ToDo look at me
+        char label = (int)'A' + (size + 1) % 23;
+        std::ostringstream s;
+        s << label;
+        return s.str();
+    }
+
+    void MarkEditor::applyMark()
+    {
+        /* New mark sending */
+        QString text = m_text->toPlainText();
+        qDebug() << "sending new mark " << text;
+        qDebug() << "channel " << m_combo->currentText();
+        OnLineInformation::getInstance().applyMark(m_combo->currentText(),
+                                                   QString(genearateNextLabel().c_str()),
+                                                   QString("http://www.unf.edu/groups/volctr/images/question-mark.jpg") /* unknown/undefined url*/,
+                                                   text);
+    } /* Request done. If response received: */
+
+    void MarkEditor::onMarkApplied(int status)
+    {
+        if (status)
+        {
+            QMessageBox::information(this, QObject::tr("Information"), QObject::tr("Your tag saved"));
+        }
+        else
+        {
+            QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Error during save your tag."));
+        }
+    }
 
 } // namespace GUI
 

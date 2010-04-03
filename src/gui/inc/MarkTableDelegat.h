@@ -59,7 +59,6 @@
 #include <QKeyEvent>
 #include "GpsInfo.h"
 #include "Handle.h"
-#include "DbSession.h"
 #include "User.h"
 #include "GpsInfo.h"
 #include "ListModel.h"

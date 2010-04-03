@@ -43,34 +43,37 @@
 
 namespace GUI
 {
-    ChannelModel::ChannelModel(CHandlePtr<common::Channels> channels, QObject* parent) : QStandardItemModel(channels->size(),1,parent)
+    ChannelModel::ChannelModel(CHandlePtr<common::Channels> availableChannels,
+                               CHandlePtr<common::Channels> subscribedChannels,
+                               QObject* parent) : QStandardItemModel(availableChannels->size(),1,parent)
     {
-      m_channels = channels;
+      m_availableChannels = availableChannels;
+      m_subscribedChannels = subscribedChannels;
     }
 
     QString ChannelModel::getChannelName(int index) const
     {
-      return (*m_channels)[index]->getName().c_str(); 
+      return (*m_availableChannels)[index]->getName().c_str();
     }
 
     QString ChannelModel::getChannelDescription(int index) const
     {
-      return (*m_channels)[index]->getDescription().c_str(); 
+      return (*m_availableChannels)[index]->getDescription().c_str();
     }
 
     bool ChannelModel::IsSelected(int index) const
     {
-      return (*m_channels)[index]->isDisplayed();
+      return (*m_availableChannels)[index]->isDisplayed();
     }
 
     void ChannelModel::setSelection(int index, bool value)
     {
-      (*m_channels)[index]->setDisplayed(value); 
+      (*m_availableChannels)[index]->setDisplayed(value);
     }
 
     int ChannelModel::rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
     {
-        return m_channels->size();
+        return m_availableChannels->size();
     }
       
     int ChannelModel::columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const
@@ -78,21 +81,48 @@ namespace GUI
         return 1;
     }
     
-   QVariant ChannelModel::data(const QModelIndex &index, int role) const
-   {
-    QString value = "?";
-   	if ( Qt::DisplayRole == role && index.column() == 0 )
+    QVariant ChannelModel::data(const QModelIndex &index, int role) const
     {
-      value = getChannelName(index.row()); 
-   		return value;
+        QString value = "?";
+   	if ( Qt::DisplayRole == role && index.column() == 0 )
+        {
+            value = getChannelName(index.row());
+
+            /* search in subscribed */
+            int found = 0;
+            found = isSubscribed(index);
+            if (found)
+            {
+                return (value + " (subscribed)");
+            }
+            else
+            {
+                return (value + " (not subscribed)");
+            }
+
+            //return returnString.c_str();
+
+
    	}
 
    	return QVariant();
-   }
+    }
 
     Qt::ItemFlags ChannelModel::flags(const QModelIndex& index) const
     {
       return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    }
+
+    int ChannelModel::isSubscribed(const QModelIndex &index) const
+    {
+        int returnValue = 0;
+        if (m_subscribedChannels != 0)
+        {
+            for (int i = 0; i < m_subscribedChannels->size(); i++)
+                if (m_availableChannels->at(index.row())->getName() == m_subscribedChannels->at(i)->getName())
+                    returnValue = 1;
+        }
+        return returnValue;
     }
 } // namespace GUI
 

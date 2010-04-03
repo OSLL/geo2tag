@@ -46,8 +46,8 @@
 #include <QDialog>
 #include "MarkTableDelegat.h"
 #include <QMessageBox>
-#include "DbSession.h"
 //#include "MarkDetailsDialog.h"
+#include "RSSFeedQuery.h"
 
 namespace GUI
 {
@@ -57,8 +57,9 @@ namespace GUI
    */
   class MarkPane : public QWidget
   {
+    Q_OBJECT
+
     ListView *m_list;
-    Q_OBJECT;
 
   public:
 

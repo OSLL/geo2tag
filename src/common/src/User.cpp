@@ -43,8 +43,14 @@
 
 namespace common
 {
-  User::User(const std::string& name, const std::string& pass): m_login(name), m_password(pass)
+  User::User(const std::string& name, const std::string& pass): m_login(name), m_password(pass), m_channels(makeHandle(new Channels()))
   {
+  }
+  
+  void User::subscribe(const CHandlePtr<Channel>& channel)
+  {
+    //!> ToDo: check that this channel does not exist in m_channels
+    m_channels->push_back(channel);
   }
 
   const std::string& User::getLogin() const
@@ -55,6 +61,11 @@ namespace common
   const std::string& User::getPassword() const
   {
     return m_password;
+  }
+  
+  const CHandlePtr<Channels> User::getSubscribedChannels() const
+  {
+    return m_channels;
   }
 
   User::~User()

@@ -46,6 +46,15 @@
 #include "GpsModeller.h"
 #include "Time.h"
 #include "Sleep.h"
+#include <cstring>
+
+#ifndef DEFAULT_LONGITUDE
+#define DEFAULT_LONGITUDE 60
+#endif
+
+#ifndef DEFAULT_LATITUDE
+#define DEFAULT_LATITUDE 30
+#endif
 
 #ifdef SIMULATE_GPS 
 
@@ -53,6 +62,8 @@ namespace common
 {
   GpsModeller::GpsModeller(const std::string &gpxFile)
   {
+      m_longitude = DEFAULT_LONGITUDE;
+      m_latitude = DEFAULT_LATITUDE;
     m_doc = xmlReadFile(gpxFile.c_str(), NULL, 0);
     start();
   }
@@ -105,10 +116,8 @@ namespace common
   void GpsModeller::thread()
   {
     mSleep(2000);
-    std::cerr << "starting GpsModeller thread..." << std::endl;
     if (m_doc == NULL)
     {
-       std::cerr << "error: could not parse file\n";
        return;
     }
     else

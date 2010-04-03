@@ -29,20 +29,34 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 #include "ListView.h"
+#include "OnLineInformation.h"
+#include <QDebug>
+
 namespace GUI
 {
     ListView::ListView(QWidget *parent) : QTableView(parent)
     {
-      m_model = new ListModel(this);
-                        setModel(m_model);
-      m_model->setHeaderData(0, Qt::Horizontal, tr("Map"));
-      m_model->setHeaderData(1, Qt::Horizontal, tr("Tag text"));
-      m_model->setHeaderData(2, Qt::Horizontal, tr("Author"));
-      horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
-      setItemDelegate(new MarkTableDelegat(this));
-      timer = new QTimer(this);
-      timer->setInterval(2*60*1000); // One time per 2 minutes
-      connect(timer, SIGNAL(timeout()), m_model, SLOT(layoutUpdate()));
-      timer->start();
+        //timer = new QTimer(this);
+       // updateModel();
+        connect(&OnLineInformation::getInstance(), SIGNAL(marksUpdated(CHandlePtr<common::DataMarks>)),
+                this, SLOT(updateModel()));
+        setItemDelegate(new MarkTableDelegat(this));
+        horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+    }
+
+    void ListView::updateModel()
+    {
+        m_model = new ListModel(this);
+        setModel(m_model);
+        m_model->setHeaderData(0, Qt::Horizontal, tr("Map"));
+        m_model->setHeaderData(1, Qt::Horizontal, tr("Tag text"));
+        m_model->setHeaderData(2, Qt::Horizontal, tr("Author"));
+        qDebug() << "update Model";
+        //m_model->layoutUpdate();
+        qobject_cast<ListModel*>(m_model)->layoutUpdate();
+
+//        timer->setInterval(2*60*1000); // One time per 2 minutes
+//        connect(timer, SIGNAL(timeout()), m_model, SLOT(layoutUpdate()));
+//        timer->start();
     }
 }

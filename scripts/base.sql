@@ -42,6 +42,15 @@ CREATE TABLE tags (
                                                        on delete cascade
 );
 
+CREATE TABLE subscribe (
+  channel_id NUMERIC(9,0) NOT NULL,
+  user_id NUMERIC(9,0) NOT NULL,
+  constraint fk_tags  foreign key (user_id) references users(id)
+                                                       on delete cascade,
+  constraint fk_channels foreign key (channel_id) references channel(id)
+                                                       on delete cascade
+);
+
 
 INSERT into channel (name, description, url) values ('Tourist information', 'This is free read-only tourist information channel. You can get information about buildings, sights around your location', '');
 INSERT into channel (name, description, url) values ('Public announcements', 'This is free read-only channel with public announcements from the city of your current location', '');

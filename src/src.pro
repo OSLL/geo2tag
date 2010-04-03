@@ -1,4 +1,9 @@
 TEMPLATE = subdirs
 
-SUBDIRS = common maps gui
+SUBDIRS = common \
+          json \
+          fcgiio \
+          service \
+          maps \
+          gui 
 

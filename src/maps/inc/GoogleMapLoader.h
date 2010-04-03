@@ -60,8 +60,6 @@ namespace maps
         QNetworkAccessManager *manager;
         std::vector<char> m_data;
         QByteArray byteArray;
-        QMutex mapMutex;
-        int state;
 
     public:
         GoogleMapLoader();

@@ -28,43 +28,15 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-#include <sstream>
 #include <QApplication>
-#include <QDebug>
-#include <QMessageBox>
 #include "MainWindow.h" 
-#include "DbSession.h"
 #include "GpsInfo.h"
-#include "GoogleClientLogin.h"
 
 int main(int c, char **v)
 {
   QApplication 	app(c,v);
 
-  try
-  {
-    common::DbSession::getInstance().loadData("Paul","test");
-  }
-  catch(ODBC::CException &x)
-  {
-    std::ostringstream s;
-    s << x;
-    qDebug() << s.str().c_str();
-    QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("No database connection!!! Exiting..."));
-    return 0;
-  }
-  catch(CException &x)
-  {
-    std::ostringstream s;
-    s << x;
-    qDebug() << s.str().c_str();
-    QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr(x.getDescription().c_str()));
-    return 0;
-  }
-  
   common::GpsInfo::getInstance(); //starting daemon and other stuff;
-
-
   GUI::MainWindow window;
 
 #ifdef DESKTOP_STYLE
@@ -74,28 +46,6 @@ int main(int c, char **v)
 #endif  
 
   app.exec();
-
-  try
-  {
-    common::DbSession::getInstance().saveData();
-  }
-  catch(ODBC::CException &x)
-  {
-    std::ostringstream s;
-    s << x;
-    qDebug() << s.str().c_str();
-    QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Error during saving data... Some data can be lost."));
-    return 0;
-  }
-  catch(CException &x)
-  {
-    std::ostringstream s;
-    s << x;
-    qDebug() << s.str().c_str();
-    QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr(x.getDescription().c_str()));
-    return 0;
-  }
-
   return 0;
 
 }

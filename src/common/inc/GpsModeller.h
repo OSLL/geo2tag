@@ -46,6 +46,7 @@
 #include "GpsInfo.h"
 #include "Thread.h"
 #include "Time.h"
+#include "defines.h"
 
 #ifdef SIMULATE_GPS 
 
@@ -70,7 +71,7 @@ namespace common
     void thread(); 
 
   public:
-    GpsModeller(const std::string &gpxFile="data/helsinki.gpx");
+    GpsModeller(const std::string &gpxFile=GPS_MODELLER_FILE);
     
     virtual double getLongitude() const;
 

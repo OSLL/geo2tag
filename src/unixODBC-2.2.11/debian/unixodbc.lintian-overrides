@@ -1,2 +1,0 @@
-unixodbc: package-name-doesnt-match-sonames libgtrtst1 libodbc1 libodbccr1
-unixodbc: symbols-file-contains-debian-revision on symbol GetRCString@Base and 3 others

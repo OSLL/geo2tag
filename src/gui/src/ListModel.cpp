@@ -29,9 +29,15 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 #include "ListModel.h"
+#include "DataMarks.h"
+#include "OnLineInformation.h"
+#include <QDebug>
+
 namespace GUI
 {
-ListModel::ListModel(QObject* parent) : QStandardItemModel(common::DbSession::getInstance().getMarks()->size(),3,parent), m_data(common::DbSession::getInstance().getMarks())
+    ListModel::ListModel(QObject* parent) :
+            QStandardItemModel(OnLineInformation::getInstance().getMarks()->size(), 3, parent),
+            m_data(OnLineInformation::getInstance().getMarks())
 {
   m_size = 0;
 }
@@ -82,7 +88,7 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
     switch(index.column())
     {
     case 0:
-           value = (*m_data)[i]->getLabel().c_str();
+     value = (*m_data)[i]->getLabel().c_str();
      break;
 
     case 1:
@@ -104,21 +110,35 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
 
 void ListModel::layoutUpdate(CHandlePtr<common::Channel> channel)
 {
-  if(channel!=0)
-    m_currentChannel=channel;
+    qDebug() << m_currentChannelName.c_str();
+    if(channel!=0)
+    {
+        m_currentChannel=channel;
+        m_currentChannelName = channel->getName();
+        qDebug() << m_currentChannelName.c_str();
+    }
+    else if (m_currentChannelName != "")
+    {
+        CHandlePtr<common::Channel> newChannelPtr = OnLineInformation::getInstance().findChannel(m_currentChannelName);
+        if (newChannelPtr != 0)
+        {
+            m_currentChannel = newChannelPtr;
+        }
+    }
 
-  double longitude = common::GpsInfo::getInstance().getLongitude();
-  double latitude = common::GpsInfo::getInstance().getLatitude();
-  size_t size=0;
-  for(size_t i=0; i<m_data->size(); i++)
-  {
-    CHandlePtr<common::DataMark> mark = (*m_data)[i];
-    if(mark->getChannel()              == m_currentChannel &&
+    double longitude = common::GpsInfo::getInstance().getLongitude();
+    double latitude = common::GpsInfo::getInstance().getLatitude();
+    size_t size=0;
+    //m_data = OnLineInformation::getInstance().getMarks();
+    for(size_t i=0; i<m_data->size(); i++)
+    {
+        CHandlePtr<common::DataMark> mark = (*m_data)[i];
+        if(mark->getChannel()              == m_currentChannel &&
        mark->getChannel()->getRadius() >  common::DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude()))
-     size++;
-  }
-  m_size = size;
-  setRowCount(size);
-  emit layoutChanged();
+            size++;
+    }
+    m_size = size;
+    setRowCount(size);
+    emit layoutChanged();
 }
 }

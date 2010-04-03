@@ -52,6 +52,11 @@
 #include "MarkTableDelegat.h"
 #include "MarkDetailsDialog.h"
 #include "RadiusEditor.h"
+#include "OnLineInformation.h"
+
+#ifndef DEFAULT_RADIUS
+#define DEFAULT_RADIUS 30
+#endif
 
 namespace GUI
 {
@@ -59,33 +64,33 @@ namespace GUI
 
     MarkPane::MarkPane(QWidget * parent) : QWidget(parent)
     {
-  	  QHBoxLayout *vbl = new QHBoxLayout(this);
+        m_list = new ListView(this);
 
-      m_list = new ListView(this);
-  		vbl->addWidget(m_list);
-      setLayout(vbl);
+        connect(m_list, SIGNAL(clicked(const QModelIndex&)), this, SLOT(showUrl(const QModelIndex&)));
 
-      connect(m_list,    SIGNAL(      clicked(const QModelIndex&)), this, SLOT(showUrl(const QModelIndex&)));
+        QHBoxLayout *vbl = new QHBoxLayout(this);
+        vbl->addWidget(m_list);
+        setLayout(vbl);
     }
     
     void MarkPane::showUrl(const QModelIndex &index)
     {
-      //TODO:: here's image dialog, please 
-      // QMessageBox::information(this,"MarkImage","IIMAGE DBG IMAGE DBG IMAGE DBG IMAGE DBG MAGE DBG ");
-      // We are looking for real index of selected mark ( we store all marks and show only for current channel)
-      CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().getMarks();
-      size_t c=0,i=0;
-      for(; i<marks->size(); i++)
-      {
-        if((*marks)[i]->getChannel() == dynamic_cast<GUI::ListModel*>(m_list->model())->getCurrentChannel())
-          c++;
-        if((c-1)==index.row())
-          break;
-      }
-      // now "i" is a real mark index
-      // We should draw dialog with our mark.
-      MarkDetailsDialog dialog(this, (*marks)[i]);
-      dialog.exec();
+        //TODO:: here's image dialog, please
+        // QMessageBox::information(this,"MarkImage","IIMAGE DBG IMAGE DBG IMAGE DBG IMAGE DBG MAGE DBG ");
+        // We are looking for real index of selected mark ( we store all marks and show only for current channel)
+        CHandlePtr<common::DataMarks> marks = OnLineInformation::getInstance().getMarks();
+        size_t c=0,i=0;
+        for(; i<marks->size(); i++)
+        {
+            if((*marks)[i]->getChannel() == dynamic_cast<GUI::ListModel*>(m_list->model())->getCurrentChannel())
+                c++;
+            if((c-1)==index.row())
+                break;
+        }
+        // now "i" is a real mark index
+        // We should draw dialog with our mark.
+        MarkDetailsDialog dialog(this, (*marks)[i]);
+        dialog.exec();
     }
 
 

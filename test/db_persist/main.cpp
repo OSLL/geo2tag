@@ -9,6 +9,5 @@ int main(void) {
         h.load();
         h[0]->setLabel(h[0]->getLabel() + ".");
         h.save();
-        std::cerr << h.size() << std::endl;
 	return 0;
 }

@@ -99,7 +99,7 @@ namespace common
     CHandlePtr<Channel> getChannel() const;
 
     static CHandlePtr<DataMark> createMark(double latitude=0., double longitude=0., const std::string& label="Default label", 
-             const std::string& description="No descrption", const std::string& url="", const CTime &time=CTime::now(), const CHandlePtr<Channel>&channel=CHandlePtr<Channel>());
+             const std::string& description="No descrption", const std::string& url="", const CTime &time=CTime::now(), const CHandlePtr<Channel>&channel=CHandlePtr<Channel>(),const CHandlePtr<User>&user=CHandlePtr<User>());
     
     static double getDistance(double lat1, double lon1, double lat2, double lon2);
 

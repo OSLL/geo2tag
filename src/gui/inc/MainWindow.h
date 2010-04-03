@@ -62,6 +62,7 @@ namespace GUI
     QAction *m_actionAddContent;
     QAction *m_actionEditRadius;
     QAction *m_actionShowDescription;
+    QAction *m_actionViewOptions;
 
   public:
     MainWindow();

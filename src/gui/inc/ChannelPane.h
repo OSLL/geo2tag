@@ -44,7 +44,9 @@
 
 #include <QtGui/QListView>
 #include <QAbstractItemModel>
-
+#include <QWidget>
+#include <QPushButton>
+#include "Channel.h"
 
 namespace GUI
 {
@@ -52,19 +54,33 @@ namespace GUI
    * Class description. May use HTML formatting
    *
    */
-  class ChannelPane : public QListView
+  class ChannelPane : public QWidget //public QListView
   {  
     Q_OBJECT;
 
     QAbstractItemModel *m_model;
+    QListView *listView;
+    QPushButton *subscribeButton;
+    QPushButton *tagsButton;
+
 
   public:
     ChannelPane(QWidget *parent);
+    QListView* getListView();
+    QPushButton* getTagsButton();
+
+
+    void update();
 
     
     virtual ~ChannelPane()
     {
     }
+
+public slots:
+    void onChannelsUpdated();
+    void onSubscribeButtonClicked();
+
 
   private:    
     ChannelPane(const ChannelPane& obj);

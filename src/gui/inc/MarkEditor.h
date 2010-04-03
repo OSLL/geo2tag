@@ -46,41 +46,44 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QComboBox>
 #include <QtGui/QTextEdit>
-
+#include "OnLineInformation.h"
 
 namespace GUI
 {
- /*!
+    /*!
    * Class description. May use HTML formatting
    *
    */
-  class MarkEditor : public QWidget
-  {
-    Q_OBJECT;
-
-    QPushButton  *m_ok;
-    QComboBox    *m_combo;
-    QTextEdit    *m_text;
-
-  public:
-
-    MarkEditor(QWidget *parent);
-    virtual ~MarkEditor()
+    class MarkEditor : public QWidget
     {
-    }
-    
+        Q_OBJECT
 
-  public slots:
+        QPushButton  *m_ok;
+        QComboBox    *m_combo;
+        QTextEdit    *m_text;
 
-    void applyMark();
+    public:
+
+        MarkEditor(QWidget *parent);
+        virtual ~MarkEditor()
+        {
+        }
 
 
-  private:    
-    MarkEditor(const MarkEditor& obj);
-    MarkEditor& operator=(const MarkEditor& obj);
+    public slots:
+        void update();
 
-  }; // class MarkEditor
-  
+    private slots:
+        void applyMark();
+        void onSubscribedChannelsUpdated(CHandlePtr<common::Channels> channels);
+        void onMarkApplied(int status);
+
+    private:
+        MarkEditor(const MarkEditor& obj);
+        MarkEditor& operator=(const MarkEditor& obj);
+
+    }; // class MarkEditor
+
 } // namespace GUI
 
 #endif //_MarkEditor_H_8C1685C8_8471_494E_A858_6FB0BC6AD16C_INCLUDED_

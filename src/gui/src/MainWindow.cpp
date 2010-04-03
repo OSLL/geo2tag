@@ -63,8 +63,9 @@ namespace GUI
    // menuBar()->addAction(m_actionViewFeed);
     menuBar()->addAction(m_actionSelectChannels);
     menuBar()->addAction(m_actionAddContent);
-    menuBar()->addAction(m_actionEditRadius);
+   // menuBar()->addAction(m_actionEditRadius);
   //  menuBar()->addAction(m_actionShowDescription);
+    menuBar()->addAction(m_actionViewOptions);
 
     connect(m_actionViewMap, SIGNAL(triggered()), centralWidget(), SLOT(switchMap()));
     //connect(m_actionViewFeed, SIGNAL(triggered()), centralWidget(), SLOT(switchFeed()));
@@ -73,6 +74,7 @@ namespace GUI
     connect(m_actionEditRadius,     SIGNAL(triggered()), centralWidget(), SLOT(setRadius()));
 //    connect(m_actionShowDescription,SIGNAL(triggered()), centralWidget(), SLOT(showChannelInfo()));
     connect(m_actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(m_actionViewOptions, SIGNAL(triggered()), centralWidget(), SLOT(switchOptions()));
     
   }
 
@@ -86,6 +88,7 @@ namespace GUI
     m_actionEditRadius = new QAction("Set radius",this);
     m_actionShowDescription = new QAction("Channel info",this);
     m_actionAddContent = new QAction("Add",this);
+    m_actionViewOptions = new QAction("Options", this);
   }
 
   void MainWindow::addContent()

@@ -40,6 +40,8 @@
 #define _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 
 #include <string>
+#include "Handle.h"
+#include "Channel.h"
 
 namespace common
 {
@@ -50,16 +52,22 @@ namespace common
   {
     std::string m_login;
     std::string m_password;
+    CHandlePtr<Channels> m_channels; // list of subscribed channels
 
   protected:
     User(const std::string&, const std::string&);
-
+    
+    /*!
+     * \brief add new channel to list of subscribed channels
+     */
+    void subscribe(const CHandlePtr<Channel>& channel);
   public:
 
     const std::string& getLogin() const;
     const std::string& getPassword() const;
+    const CHandlePtr<Channels> getSubscribedChannels() const;
 
-    ~User();    
+    virtual ~User();    
   }; // class User
   
 } // namespace common

@@ -60,6 +60,7 @@ namespace maps
      */
     enum SourceType {
       GOOGLE = 0,
+      OPEN_STREET,
       UNKNOWN
     };
 

@@ -1,0 +1,101 @@
+#!/usr/bin/make -f
+# debian/rules for cadaver
+#
+# Written by Pavel Zubarev <zps@osll.spb.ru>.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# These are used for cross-compiling and for saving the configure script
+# from having to guess our platform (since we know it already)
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+CFLAGS = -Wall -g
+
+BUILDDIR = ./debian/build/
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O3
+endif
+
+build: build-stamp
+
+build-stamp: 
+	dh_testdir
+	dh_clean
+	cp -r ./src $(BUILDDIR)
+	cd $(BUILDDIR)
+	qmake 
+	$(MAKE)
+	cd -
+	
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	rm -rf $(BUILDDIR)
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	
+	# $(MAKE) -C $(BUILDDIR) DESTDIR=$(CURDIR)/debian/tmp install 
+	install -d $(CURDIR)/debian/tmp/usr/lib
+	install -d $(CURDIR)/debian/tmp/usr/bin
+	cp $(BUILDDIR)internal/lib/* $(CURDIR)/debian/tmp/usr/lib
+	cp $(BUILDDIR)gui/wikigps $(CURDIR)/debian/tmp/usr/bin
+
+	dh_install -s
+	
+
+# Must not depend on anything. This is to be called by
+# binary-arch/binary-indep
+# in another 'make' thread.
+binary-common:
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+#	dh_installdocs
+#	dh_installexamples
+#	dh_installmenu
+	dh_installdebconf	
+#	dh_installlogrotate	
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+#	dh_python
+#	dh_installinit
+#	dh_installcron
+#	dh_installinfo
+#	dh_installman
+	dh_link
+	dh_strip
+	dh_compress 
+	dh_fixperms
+#	dh_perl
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+# Build architecture independant packages using the common target.
+binary-indep: build install
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+# Build architecture dependant packages using the common target.
+binary-arch: build install
+	$(MAKE) -f debian/rules DH_OPTIONS=-s binary-common
+
+binary: binary-indep binary-arch
+.PHONY: build clean install binary-indep binary-arch binary
+

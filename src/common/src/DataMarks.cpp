@@ -42,9 +42,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <cstring>
-#include "DataMarkInternal.h"
-#include "DbSession.h"
-
+#include "DataMarks.h"
 namespace common
 {
   void DataMark::setDescription(const std::string& s)
@@ -144,10 +142,12 @@ namespace common
   }
   
   CHandlePtr<DataMark> DataMark::createMark(double latitude, double longitude, const std::string& label, 
-             const std::string& description, const std::string& url, const CTime &time, const CHandlePtr<Channel> &channel)
+             const std::string& description, const std::string& url, const CTime &time, const CHandlePtr<Channel> &channel,const CHandlePtr<User> &user)
   {
-    return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, url, time,
-              common::DbSession::getInstance().getCurrentUser(), channel));
+  //  assert(false); // zps: here will be code bellow, but without DbSession. I think method should have user as IN parameter
+#if 0    
+    return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, url, time,  user, channel));
+#endif    
   }
 
 

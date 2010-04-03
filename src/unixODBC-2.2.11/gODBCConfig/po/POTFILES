@@ -1,4 +1,0 @@
-     ../src/main.c \
-     ../src/odbcconfig.c \
-     ../src/callbacks.c \
-     ../src/support.c

@@ -38,7 +38,6 @@
  *
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
-
 #include <iostream>
 #include "Channel.h"
 
@@ -97,7 +96,6 @@ namespace common
 
   void Channel::setRadius(const double& radius)
   {
-    std::cerr << "newRadius "<< radius << " stored" << std::endl;
     m_activeRadius = radius;
   }
 

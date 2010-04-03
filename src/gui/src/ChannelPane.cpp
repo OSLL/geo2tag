@@ -46,18 +46,74 @@
 #include <QStandardItemModel>
 #include <QMouseEvent>
 #include <QtGui/QListView>
-#include "DbSession.h"
 #include "ChannelPane.h"
 #include "ChannelModel.h"
+#include <QLayout>
+#include <QPushButton>
 
+#include "OnLineInformation.h"
 
 namespace GUI
 {
-  ChannelPane::ChannelPane(QWidget* parent) : QListView(parent)
+  ChannelPane::ChannelPane(QWidget* parent) : QWidget(parent)
   {    
-    using namespace common;
+      listView = new QListView(this);
+      subscribeButton = new QPushButton(tr("Subscribe/unsubscribe"), this);
+      tagsButton = new QPushButton(tr("Channel's tags"), this);
 
-    setModel(new ChannelModel(DbSession::getInstance().getChannels(),this));
+      connect(&OnLineInformation::getInstance(), SIGNAL(availableChannelsUpdated(CHandlePtr<common::Channels>)),
+              this, SLOT(onChannelsUpdated()));
+      connect(&OnLineInformation::getInstance(), SIGNAL(subscribedChannelsUpdated(CHandlePtr<common::Channels>)),
+              this, SLOT(onChannelsUpdated()));
+      connect(subscribeButton, SIGNAL(clicked()), this, SLOT(onSubscribeButtonClicked()));
+
+      QVBoxLayout *layout = new QVBoxLayout(this);
+      QHBoxLayout *buttonsLayout = new QHBoxLayout();
+      buttonsLayout->addWidget(subscribeButton);
+      buttonsLayout->addWidget(tagsButton);
+      layout->addWidget(listView);
+      layout->addLayout(buttonsLayout);
+
+      update();
+  }
+
+  QListView* ChannelPane::getListView()
+  {
+      return listView;
+  }
+
+  QPushButton* ChannelPane::getTagsButton()
+  {
+      return tagsButton;
+  }
+
+  void ChannelPane::update()
+  {
+      OnLineInformation::getInstance().updateAvailableChannels();
+
+  }
+  void ChannelPane::onChannelsUpdated()
+  {
+      if (OnLineInformation::getInstance().getAvailableChannels() != 0)
+      {
+          qDebug() << "sdfsdf";
+          listView->setModel(new ChannelModel(OnLineInformation::getInstance().getAvailableChannels(),
+                                              OnLineInformation::getInstance().getSubscribedChannels(),
+                                              this));
+      }
+  }
+
+  void ChannelPane::onSubscribeButtonClicked()
+  {
+      if((listView->model() != 0) && (listView->currentIndex().isValid()))
+      {
+          if (!dynamic_cast<GUI::ChannelModel*>(listView->model())->isSubscribed(listView->currentIndex()))
+          {
+              qDebug() << "dsfsd";
+              QString channelName = dynamic_cast<GUI::ChannelModel*>(listView->model())->getChannelName(listView->currentIndex().row());
+              OnLineInformation::getInstance().subscribeChannel(channelName);
+          }
+      }
   }
 } // namespace GUI
 

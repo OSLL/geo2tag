@@ -34,12 +34,14 @@
 #include "MarkTableDelegat.h"
 namespace GUI
 {
+static std::string m_currentChannelName;
 class ListModel : public QStandardItemModel
 {
     Q_OBJECT;
 
     CHandlePtr<common::DataMarks> m_data;
     CHandlePtr<common::Channel> m_currentChannel;
+
     size_t m_size;
 public:
     ListModel(QObject* parent) ;

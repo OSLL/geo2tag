@@ -17,15 +17,18 @@ HEADERS += inc/MapLoader.h \
            inc/GoogleMapLoader.h \
            inc/GoogleClientLogin.h \
            inc/MapLoaderFactory.h \
-           inc/GoogleMapsApiKey.h
+           inc/GoogleMapsApiKey.h \
+           inc/OpenStreetMapLoader.h
 SOURCES += src/GoogleClientLogin.cpp \
            src/GoogleMapLoader.cpp \
            src/MapLoader.cpp \
-           src/MapLoaderFactory.cpp
+           src/MapLoaderFactory.cpp \
+           src/OpenStreetMapLoader.cpp
 
 # LIBS    += -L../internal/lib -lodbc -llocation -lgconf-2 -ldbus-glib-1 -ldbus-1 -lpthread -lgobject-2.0 -lglib-2.0
 
 # QMAKE_CXXFLAGS += -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/gconf/2 -I/usr/include/dbus-1.0 -I/usr/lib/dbus-1.0/include
+
 
 DESTDIR = ../internal/lib
 

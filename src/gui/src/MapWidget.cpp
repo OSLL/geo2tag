@@ -48,19 +48,15 @@
 #include "Picture.h"
 //#include "TabWidget.h"
 #include "GpsInfo.h"
-#include "DbSession.h"
 #include <QDebug>
+#include "OnLineInformation.h"
 
-common::DataMarks getMarks()
-{
-  using namespace common;
-  return *(DbSession::getInstance().getMarks());
-}
+#ifndef DEFAULT_SOURCE_TYPE
+#define DEFAULT_SOURCE_TYPE GOOGLE
+#endif
 
 namespace GUI
 {
-
-
 
     MapWidget::MapWidget(QWidget *parent, double b, double l, double scale) : QWidget(parent)
     {
@@ -68,11 +64,14 @@ namespace GUI
         m_L = l;
         m_scale = scale;
         m_moving = false;
+        sourceType = maps::MapLoader::DEFAULT_SOURCE_TYPE;
 
         connect(&m_updateGpsDataTimer, SIGNAL(timeout()),this, SLOT(updateGpsData()));
 
         using namespace maps;
-        connect(MapLoaderFactory::getInstance(MapLoader::GOOGLE), SIGNAL(mapUpdated(QByteArray &)),
+        connect(MapLoaderFactory::getInstance(maps::MapLoader::GOOGLE), SIGNAL(mapUpdated(QByteArray &)),
+                this, SLOT(onMapUpdated(QByteArray&)));
+        connect(MapLoaderFactory::getInstance(maps::MapLoader::OPEN_STREET), SIGNAL(mapUpdated(QByteArray &)),
                 this, SLOT(onMapUpdated(QByteArray&)));
 
         m_updateGpsDataTimer.setInterval(10000);
@@ -90,9 +89,14 @@ namespace GUI
 
         qDebug() << "loading map for b=" << m_L << ", " << m_B;
 
-        QByteArray picture = MapLoaderFactory::getInstance(MapLoader::GOOGLE)->getMapByteArray();
+        QByteArray picture = MapLoaderFactory::getInstance(sourceType)->getMapByteArray();
         painter.drawImage(pe->rect(),QImage::fromData(picture));
         qDebug() << "| paint event done |";
+    }
+
+    void MapWidget::resizeEvent(QResizeEvent *re)
+    {
+        updateMap();
     }
 
     void MapWidget::mousePressEvent ( QMouseEvent * event )
@@ -157,19 +161,42 @@ namespace GUI
     {
         qDebug() << "MapWidget::updateMap";
 
-        using namespace maps;
-
-        //TODO, kkv constants for scale and size
-        MapLoaderFactory::getInstance(MapLoader::GOOGLE)->getMapWithMarks(
-                m_B,m_L,m_scale,rect().width(),rect().height(),getMarks());
-
-
+        if (OnLineInformation::getInstance().getMarks() != NULL)
+        {
+            //TODO, kkv constants for scale and size
+            qDebug() <<rect().width() << " " << rect().height();
+            maps::MapLoaderFactory::getInstance(sourceType)->getMapWithMarks(
+                    m_B,m_L,m_scale,rect().width(),rect().height(),
+                    *OnLineInformation::getInstance().getMarks());
+        }
+        else
+        {
+            maps::MapLoaderFactory::getInstance(sourceType)->getMap(m_B,m_L,m_scale,
+                                                                    rect().width(),rect().height());
+        };
     }
 
     void MapWidget::onMapUpdated(QByteArray &picture)
     {       
         qDebug("onMapUpdated");
         emit repaint();
+    }
+
+    void MapWidget::setSourceType(maps::MapLoader::SourceType sourceType)
+    {
+        if (this->sourceType != sourceType)
+        {
+            this->sourceType = sourceType;
+            if (sourceType == maps::MapLoader::GOOGLE)
+            {
+                qDebug() << "Google maps source type set";
+            }
+            if (sourceType == maps::MapLoader::OPEN_STREET)
+            {
+                qDebug() << "Open Street maps source type set";
+            }
+            updateMap();
+        }
     }
 
 } // namespace GUI

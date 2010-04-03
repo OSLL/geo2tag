@@ -49,6 +49,7 @@
 #include "MapPane.h"
 #include "ChannelPane.h"
 #include "MarkEditor.h"
+#include "OptionsPane.h"
 
 namespace GUI
 {
@@ -66,6 +67,8 @@ namespace GUI
     ChannelPane    *m_channelView;
     MarkEditor     *m_editor;
     QPalette       *m_palette;
+    OptionsPane    *m_options;
+
 
   public:
     CentralWidget(QWidget *parent);
@@ -80,6 +83,8 @@ namespace GUI
     void switchChannel();
     void switchEditor();
     void setRadius();
+    void switchOptions();
+    void onViewTagsButtonClicked();
     
   private:    
     CentralWidget(const CentralWidget& obj);

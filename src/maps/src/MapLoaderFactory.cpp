@@ -39,6 +39,7 @@
 
 #include "MapLoaderFactory.h"
 #include "GoogleMapLoader.h"
+#include "OpenStreetMapLoader.h"
 
 namespace maps
 {
@@ -57,9 +58,13 @@ namespace maps
      * \TODO use std::map for instance selecting 
      */
     static GoogleMapLoader gMap;
+    static OpenStreetMapLoader openStreetMap;
 
     if(type == MapLoader::GOOGLE)
       return &gMap;
+
+    if(type == MapLoader::OPEN_STREET)
+        return &openStreetMap;
 
     return NULL;
   }

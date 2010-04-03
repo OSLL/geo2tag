@@ -65,6 +65,7 @@ namespace GUI
     }
 
     void setPosition(const QPointF& pos);
+    MapWidget* getMapWidget();
 
     public slots:
     

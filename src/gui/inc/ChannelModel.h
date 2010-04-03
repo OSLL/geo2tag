@@ -60,12 +60,15 @@ namespace GUI
 
     Q_OBJECT;
     
-    CHandlePtr<common::Channels>   m_channels;
+    CHandlePtr<common::Channels> m_availableChannels;
+    CHandlePtr<common::Channels> m_subscribedChannels;
 
   public:
 
 
-    ChannelModel(CHandlePtr<common::Channels> channels, QObject* parent);
+    ChannelModel(CHandlePtr<common::Channels> availableChannels,
+                 CHandlePtr<common::Channels> subscribedChannels,
+                 QObject* parent);
 
     QString getChannelName(int index) const;
     QString getChannelDescription(int index) const;
@@ -74,6 +77,7 @@ namespace GUI
     int rowCount(const QModelIndex &/*parent = QModelIndex()*/) const;
     int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const;
     QVariant data(const QModelIndex &index, int role) const;
+    int isSubscribed(const QModelIndex& index) const;
 
     Qt::ItemFlags flags(const QModelIndex& index) const;
 

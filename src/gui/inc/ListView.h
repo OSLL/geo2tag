@@ -49,6 +49,9 @@ namespace GUI
    {
    }
 
+public slots:
+   void updateModel();
+
  private:
    ListView(const ListView& obj);
    ListView& operator=(const ListView& obj);

@@ -120,7 +120,7 @@ namespace maps
         connect(manager, SIGNAL(finished(QNetworkReply*)),
                 this, SLOT(onManagerFinished(QNetworkReply*)));
         connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-                this, SLOT(onManagerSslErrors(QNetworkReply*,QList<QSslError>)));
+                this, SLOT(onManagerSslErrors()));
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(onReplyError(QNetworkReply::NetworkError)));
 

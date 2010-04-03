@@ -41,6 +41,7 @@
 
 #include "CentralWidget.h"
 #include <QMessageBox>
+#include "OnLineInformation.h"
 
 namespace GUI
 {
@@ -50,20 +51,24 @@ namespace GUI
       setPalette(*m_palette);
       m_layout = new QStackedLayout(this);
 
+      m_options = new OptionsPane(this);
       m_mapView  = new MapPane(this);
       m_feedView = new MarkPane(this);
       m_channelView = new ChannelPane(this);
       m_editor = new MarkEditor(this);
+
       
       m_layout->addWidget(m_mapView);
       m_layout->addWidget(m_feedView);
       m_layout->addWidget(m_channelView);
       m_layout->addWidget(m_editor);
+      m_layout->addWidget(m_options);
       
       switchMap();
 
-      connect(m_channelView, SIGNAL(      clicked(const QModelIndex&)), this, SLOT(switchFeed(const QModelIndex&)));
-
+      connect(m_channelView->getTagsButton(), SIGNAL(clicked()), this, SLOT(onViewTagsButtonClicked()));
+      connect(m_options, SIGNAL(sourceTypeUpdated(maps::MapLoader::SourceType)),
+              m_mapView->getMapWidget(), SLOT(setSourceType(maps::MapLoader::SourceType)));
 
       setLayout(m_layout);
     }
@@ -77,10 +82,9 @@ namespace GUI
     {
 //TODO: get real channel info
 // qobject_cast<model>->getChannelDescription
-      QMessageBox::information(this,"Channel information",(*common::DbSession::getInstance().getChannels())[index.row()]->getDescription().c_str());
+        QMessageBox::information(this,"Channel information",(*OnLineInformation::getInstance().getAvailableChannels())[index.row()]->getDescription().c_str());
       // TODO get active channel from index, switch to m_feedView
-      m_feedView->refresh((*common::DbSession::getInstance().getChannels())[index.row()]
-);      
+      m_feedView->refresh((*OnLineInformation::getInstance().getAvailableChannels())[index.row()]);
       m_layout->setCurrentWidget(m_feedView); 
     }
 
@@ -93,7 +97,7 @@ namespace GUI
     {
       m_layout->setCurrentWidget(m_editor); 
     }
-    
+
     void CentralWidget::setRadius()
     {
       //TODO: ask real raduis
@@ -103,8 +107,21 @@ namespace GUI
       }
       else
       {
-        m_feedView->updateCurrentChannelRadius();  
+        m_feedView->updateCurrentChannelRadius();
       }
+    }
+
+    void CentralWidget::switchOptions()
+    {
+        m_layout->setCurrentWidget(m_options);
+    }
+
+    void CentralWidget::onViewTagsButtonClicked()
+    {
+        if (m_channelView->getListView()->currentIndex().isValid())
+        {
+            switchFeed(m_channelView->getListView()->currentIndex());
+        }
     }
 
 
