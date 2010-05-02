@@ -80,11 +80,8 @@ namespace GUI
 
     void CentralWidget::switchFeed(const QModelIndex& index)
     {
-//TODO: get real channel info
-// qobject_cast<model>->getChannelDescription
-        QMessageBox::information(this,"Channel information",(*OnLineInformation::getInstance().getAvailableChannels())[index.row()]->getDescription().c_str());
-      // TODO get active channel from index, switch to m_feedView
       m_feedView->refresh((*OnLineInformation::getInstance().getAvailableChannels())[index.row()]);
+      QMessageBox::information(this,"Channel information",(*OnLineInformation::getInstance().getAvailableChannels())[index.row()]->getDescription().c_str());
       m_layout->setCurrentWidget(m_feedView); 
     }
 

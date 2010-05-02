@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.0.7
+Type=Application
+Name=wikigps
+Icon=wikigps
+Exec=wikigps
+X-Icon-path=/usr/share/icons/
+X-Window-Icon=wikigps

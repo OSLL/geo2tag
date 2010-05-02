@@ -1,5 +1,9 @@
 TEMPLATE = lib 
-TARGET = fcgiio
+
+TARGET = ../lib/fcgiio
+
+include(../../config.pri)
+linux {
 DEPENDPATH += . inc src \
               ../json ../json/inc ../json/src \
               ../common ../common/inc \
@@ -21,9 +25,7 @@ HEADERS += inc/ChannelList.h \
 SOURCES += src/ChannelList.cpp \
            src/stream.cpp 
 
-LIBS += -L../internal/lib -lfcgi -lcommon 
-
-DESTDIR = ../internal/lib
+LIBS +=  -lfcgi -lcommon 
+}
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
-CONFIG += DEBUG

@@ -50,6 +50,7 @@
 #include "GpsInfo.h"
 #include <QDebug>
 #include "OnLineInformation.h"
+#include "math.h"
 
 #ifndef DEFAULT_SOURCE_TYPE
 #define DEFAULT_SOURCE_TYPE GOOGLE
@@ -65,8 +66,11 @@ namespace GUI
         m_scale = scale;
         m_moving = false;
         sourceType = maps::MapLoader::DEFAULT_SOURCE_TYPE;
+        m_markerDx = 0;
+        m_markerDy = 0;
 
         connect(&m_updateGpsDataTimer, SIGNAL(timeout()),this, SLOT(updateGpsData()));
+        connect(&m_delay, SIGNAL(timeout()), this, SLOT(onDelayTimeout()));
 
         using namespace maps;
         connect(MapLoaderFactory::getInstance(maps::MapLoader::GOOGLE), SIGNAL(mapUpdated(QByteArray &)),
@@ -74,15 +78,17 @@ namespace GUI
         connect(MapLoaderFactory::getInstance(maps::MapLoader::OPEN_STREET), SIGNAL(mapUpdated(QByteArray &)),
                 this, SLOT(onMapUpdated(QByteArray&)));
 
-        m_updateGpsDataTimer.setInterval(10000);
+        m_updateGpsDataTimer.setInterval(8000);
         m_updateGpsDataTimer.start();
+        m_delay.setInterval(300);
+        m_delay.start();
 
-        updateMap();
+        //updateMap();
     }
 
     void MapWidget::paintEvent(QPaintEvent *pe)
     {
-  	QPainter painter( this );
+      	QPainter painter( this );
 
         using namespace common;
         using namespace maps;
@@ -91,6 +97,7 @@ namespace GUI
 
         QByteArray picture = MapLoaderFactory::getInstance(sourceType)->getMapByteArray();
         painter.drawImage(pe->rect(),QImage::fromData(picture));
+
         qDebug() << "| paint event done |";
     }
 
@@ -108,9 +115,11 @@ namespace GUI
 
     void MapWidget::updateGpsData()
     {
-        qDebug() << "timer...";
         m_B=common::GpsInfo::getInstance().getLatitude();
         m_L=common::GpsInfo::getInstance().getLongitude();
+        qDebug() << "timer..." << m_B << " " << m_L;
+        m_markerDx = 0;
+        m_markerDy = 0;
 
         updateMap();
     }
@@ -123,8 +132,6 @@ namespace GUI
         double dl = (currentPos.x() - m_mousePosition.x())/(100.0*m_scale);
         double db = (currentPos.y() - m_mousePosition.y())/(100.0*m_scale);
 
-        qDebug() << "release: db=" << db << ", dl " << dl;
-
         m_B += db;
         m_L -= dl;
 
@@ -134,8 +141,8 @@ namespace GUI
 
     void MapWidget::mouseMoveEvent    ( QMouseEvent * event )
     {
-        int db = event->x();
-        int dl = event->y();
+        int dl = event->x();
+        int db = event->y();
         qDebug() << "move db=" << db << ", dl" << dl;
     }
 
@@ -163,7 +170,6 @@ namespace GUI
 
         if (OnLineInformation::getInstance().getMarks() != NULL)
         {
-            //TODO, kkv constants for scale and size
             qDebug() <<rect().width() << " " << rect().height();
             maps::MapLoaderFactory::getInstance(sourceType)->getMapWithMarks(
                     m_B,m_L,m_scale,rect().width(),rect().height(),
@@ -171,6 +177,7 @@ namespace GUI
         }
         else
         {
+            qDebug() << "OnLineInformation::getInstance().getMarks() == NULL!!!!!!!!!!!!!!";
             maps::MapLoaderFactory::getInstance(sourceType)->getMap(m_B,m_L,m_scale,
                                                                     rect().width(),rect().height());
         };
@@ -197,6 +204,12 @@ namespace GUI
             }
             updateMap();
         }
+    }
+
+    void MapWidget::onDelayTimeout()
+    {
+        updateMap();
+        m_delay.stop();
     }
 
 } // namespace GUI

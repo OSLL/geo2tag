@@ -76,7 +76,10 @@ namespace GUI
         QPointF m_mousePosition;
         bool m_moving;
         QTimer m_updateGpsDataTimer;
+        QTimer m_delay;
         maps::MapLoader::SourceType sourceType;
+        qreal m_markerDx;
+        qreal m_markerDy;
 
 
     public:
@@ -103,6 +106,7 @@ namespace GUI
         void updateGpsData();
         void onMapUpdated(QByteArray & picture);
         void setSourceType(maps::MapLoader::SourceType sourceType);
+        void onDelayTimeout();
 
     private:
         MapWidget(const MapWidget& obj);

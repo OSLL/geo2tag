@@ -39,7 +39,7 @@
 
 namespace loader
 {
-  User::User(const std::string &login, const std::string& pass, unsigned long id):common::User(login,pass), m_id(id)
+  User::User(const std::string &login, const std::string& pass, unsigned long id, const std::string& token):common::User(login,pass), m_id(id), m_token(token)
   {
   }
   
@@ -54,10 +54,20 @@ namespace loader
 	}
     if (isntHere) common::User::subscribe(channel);
   }
+  
+  void User::unsubscribe(const CHandlePtr<loader::Channel>& channel)
+  {
+    common::User::unsubscribe(channel);
+  }
 
   unsigned long User::getId() const
   {
     return m_id;
+  }
+
+  const std::string& User::getToken() const
+  {
+    return m_token;
   }
 
   User::~User()

@@ -89,6 +89,8 @@ Query::Query(const std::string &s,Stream& stm) {
     else if (getParam("query")==std::string("subscribed")) m_type=SUBSCRIBED_LIST;
     else if (getParam("query")==std::string("applymark")) m_type=APPLYMARK;
     else if (getParam("query")==std::string("rss"))m_type=RSSFEED;
+    else if (getParam("query")==std::string("unsubscribe"))m_type=UNSUBSCRIBE;
+    else if (getParam("query")==std::string("login"))m_type=LOGIN;
     else  m_type=UNKNOWN;
 
 }

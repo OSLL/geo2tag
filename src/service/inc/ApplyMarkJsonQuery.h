@@ -55,16 +55,16 @@
 #include "cast.h"
 #include "exception.h"
 #include <sstream>
-#include "stream.h"
+#include "IJsonQuery.h"
 
 
  /*!
    * Class description. May use HTML formatting
    *
    */
-class ApplyMarkJsonQuery: public OStream
+class ApplyMarkJsonQuery: public IJsonQuery
 {
-        std::string                   m_user; //! \ToDo comment here
+        std::string                   m_token; //! \ToDo comment here
         double                        m_radius;    //! \ToDo comment here
         double                        m_latitude;  //! \ToDo comment here
         double                        m_longitude; //! \ToDo comment here
@@ -75,8 +75,9 @@ class ApplyMarkJsonQuery: public OStream
         std::string                   m_time;
 	std::string 		      m_status;
 	std::string outToString() const;
+	void init(const std::stringstream& query);
 public:
-	ApplyMarkJsonQuery(const std::stringstream& query);
+	ApplyMarkJsonQuery();
 	void process();
     
 

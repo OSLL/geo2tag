@@ -1,5 +1,8 @@
 TEMPLATE = lib
-TARGET =  json
+TARGET =  ../lib/json
+
+include(../../config.pri)
+
 DEPENDPATH += . inc src
 INCLUDEPATH += . inc
 
@@ -15,7 +18,5 @@ HEADERS += inc/cast.h \
            inc/cast.inl
 SOURCES += src/elements.cpp src/quick.cpp src/reader.cpp src/writer.cpp
 
-DESTDIR = ../internal/lib
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
-CONFIG += DEBUG

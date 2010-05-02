@@ -10,22 +10,35 @@
  * ---------------------------------------------------------------- */
 
 #include "SubscribeQuery.h"
+#include "UserInternal.h"
 #include <syslog.h>
-SubscribeQuery::SubscribeQuery(const std::stringstream& query){
+SubscribeQuery::SubscribeQuery(){
+
+}
+
+void SubscribeQuery::init(const std::stringstream& query){
+
   json::Element elemRoot;
   std::istringstream s(query.str());
   json::Reader::Read(elemRoot,s);
   json::QuickInterpreter interpreter(elemRoot);
-  const json::String& user=interpreter["user"];
-  m_user=std::string(user);
+  const json::String& token=interpreter["auth_token"];
+  m_token=std::string(token);
   const json::String& channel=interpreter["channel"];
   m_channel=std::string(channel);
 }
 
-void SubscribeQuery::subscribe(){
+void SubscribeQuery::process(){
 //  common::DbSession::getInstance().loadData();
   syslog(LOG_INFO,"Starting DbSession::subscribe method");
-  common::DbSession::getInstance().subscribe(m_user,m_channel);
+  CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
+  for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
+  {
+    if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
+    {
+      common::DbSession::getInstance().subscribe((*i)->getLogin(),m_channel);
+    }
+  }
 }
 
 std::string SubscribeQuery::outToString() const

@@ -54,6 +54,7 @@
 #include "DataMarkInternal.h"
 #include "ChannelInternal.h"
 #include "UserInternal.h"
+#include "DynamicCastFailure.h"
 
 static std::map<long, CHandlePtr<loader::DataMark> > s_marks = std::map<long, CHandlePtr<loader::DataMark> >();
 static std::map<long, CHandlePtr<loader::Channel> > s_channels = std::map<long, CHandlePtr<loader::Channel> >();
@@ -67,6 +68,7 @@ namespace db
     char login[50];
     char password[50];
     unsigned long id;
+    char token[65];
   };
 
   struct Mark
@@ -359,11 +361,12 @@ namespace db
       COL_NAME(1, "id", SQL_C_LONG, id)
       COL_NAME(2, "login", SQL_C_CHAR, login)
       COL_NAME(3, "password", SQL_C_CHAR, password)
+      COL_NAME(4, "token", SQL_C_CHAR, token)
     END_COLMAP()
 
     const char* sql() const
     {
-      return "select id, login, password from users order by id;";
+      return "select id, login, password, token from users order by id;";
     }
   };
   
@@ -408,6 +411,26 @@ namespace db
     }
   };
   
+  class RemoveSubscribedQuery: public SubscribeRelation, public CDbQueryX
+  {
+  public:
+    RemoveSubscribedQuery(const CDbConn& conn): CDbQueryX(conn)
+    {
+    }
+
+    BEGIN_COLMAP()
+    END_COLMAP()
+    
+    BEGIN_PARMAP()
+      PAR(1, SQL_C_LONG, SQL_INTEGER, user)
+      PAR(2, SQL_C_LONG, SQL_INTEGER, channel)
+    END_PARMAP()
+
+    const char* sql() const
+    {
+      return "delete from subscribe where user_id=? and channel_id=?;";
+    }
+  };
 }
 
 namespace common
@@ -501,12 +524,19 @@ namespace common
     {
       if(s_users.count(query.id)>0) // This user already exists we shoudl skip it.
         continue;
-      CHandlePtr<loader::User> u = makeHandle(new loader::User(query.login, query.password, query.id));
+      CHandlePtr<loader::User> u = makeHandle(new loader::User(query.login, query.password, query.id, query.token));
       m_users->push_back(u);
       s_users[query.id] = u;
+      m_tokensMap[query.token] = u; // store alias between hash and User. 
     }
   }
-  
+ 
+
+  const std::map<std::string,CHandlePtr<common::User> >& DbSession::getTokensMap() const
+  {
+    return m_tokensMap;
+  }
+ 
   void DbSession::loadMarks()
   {
     int i = 0;
@@ -532,6 +562,7 @@ namespace common
 
       s_marks[query.id] = mark;
       m_marks->push_back(mark);
+    syslog(LOG_INFO, "loaded new %i mark[%f,%f]", i, query.latitude, query.longitude);
     }
     syslog(LOG_INFO, "loaded new %i marks", i);
   }
@@ -543,16 +574,19 @@ namespace common
     {
       // epic fail!!!
       // std::ostringstream s("Can't cast from common::DataMark to loader::, DbSession::"); s << __func__ << __LINE__;
-      // throw CDynamicCastFailure(s.str());
+      syslog(LOG_INFO,"Failure at storeMark, dynamicCast<loader::DataMark>(), at storeMark ");
+//      throw CDynamicCastFailure(1,SRC(),1);
       return;
     }
     
     if(mark->getId()==0)
     {
       CHandlePtr<loader::User> user = mark->getUser().dynamicCast<loader::User>();
-      if(!user)
-        return; // epic fail!!!
-
+      if(!user){
+        syslog(LOG_INFO,"Failure at storeMark, dynamicCast<loader::User>(), at storeMark");
+//        throw CDynamicCastFailure(1,SRC(),1);
+       return; // epic fail!!!
+      }
       ODBC::CTransaction tr(*this);
       // Here is new object, has been created by user
       db::NewMarkKeyQuery query(*this);
@@ -607,6 +641,35 @@ namespace common
       storeMark((*m_marks)[i]);
     }
   }
+
+
+  void DbSession::unsubscribe(CHandlePtr<common::User> user, CHandlePtr<common::Channel> channel)
+  {
+    CHandlePtr<loader::User> u = user.dynamicCast<loader::User>();
+    CHandlePtr<loader::Channel> c = channel.dynamicCast<loader::Channel>();
+    if (!u || !c)
+    {
+       // we need error checking & processing here
+       return;
+    }
+    unsigned long long user_id=u->getId(), channel_id=c->getId();
+     
+    db::RemoveSubscribedQuery query(*this);
+    query.user = user_id;
+    query.channel = channel_id;
+    try
+    {
+      ODBC::CTransaction tr(*this);
+      query.prepare();
+      query.execute();
+      u->unsubscribe(c);
+    }
+    catch (...)
+    {
+      // we need error checking & processing here
+    }
+    
+  }
   
   void DbSession::subscribe(const std::string& userName, const std::string &hannelName)
   {
@@ -656,8 +719,11 @@ namespace common
   {
     CHandlePtr<loader::DataMark> mark = m.dynamicCast<loader::DataMark>();
     if(mark->getId()!=0)
-      return;
-
+    {
+        // syslog(LOG_INFO,"Failure at updateChannel, dynamicCast<loader::DataMark>(), in Dbsession::updateChannel");
+        // It's not a failure. because this mark already in channel!
+	return;
+    }
 #ifndef NO_DB_CONNECTION
     // store(update) mark to DB
     storeMark(mark);
@@ -709,7 +775,9 @@ namespace common
       if(!ch)
       {
         // big error!!!
-        return;
+        syslog(LOG_INFO,"Failure at storeChannel, dynamicCast<loader::Channel>() at storeChannel");
+//        throw CDynamicCastFailure(1,SRC(),1);
+	return; 
       }
       
       if(ch->getId()==0)
@@ -772,7 +840,12 @@ namespace common
       query.execute();
       while(query.fetch())
       {
+//       try{
         s_channels.find(query.channel)->second->addData(s_marks.find(query.mark)->second);
+/*       }
+       catch(CDynamicCastFailure& e){
+       throw;
+       }*/
         s_marks.find(query.mark)->second->setChannel(s_channels.find(query.channel)->second);
       }
     }
@@ -809,6 +882,7 @@ namespace common
 
   CHandlePtr<Channels> DbSession::getChannels() const
   {
+    syslog(LOG_INFO, "m_channels->size()=%ld", m_channels->size());
     return m_channels;
   }
   

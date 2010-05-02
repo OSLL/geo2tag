@@ -44,42 +44,39 @@
 #include "DbSession.h"
 #include <syslog.h>
 #include "cast.h"
-
-AvailableList::AvailableList(const std::stringstream& query)
+#include "UserInternal.h"
+AvailableList::AvailableList()
 {
 	m_channels=makeHandle(new common::Channels());
+}
+
+void AvailableList::init(const std::stringstream& query){
 	json::Element elemRoot;
-  std::istringstream s(query.str());
+	std::istringstream s(query.str());
 	json::Reader::Read(elemRoot,s); 
 	json::QuickInterpreter interpreter(elemRoot);
-	const json::String& user=interpreter["user"];
-  m_user=std::string(user);
+	const json::String& token=interpreter["auth_token"];
+	m_token=std::string(token);
 	const json::Number& radius=interpreter["radius"];
 	m_radius=radius;
 	const json::Number& latitude=interpreter["latitude"];
-  m_latitude=latitude;
+	m_latitude=latitude;
 	const json::Number& longitude=interpreter["longitude"];
-  m_longitude=longitude;
+	m_longitude=longitude;
 }
 
+
 void AvailableList::process(){
-  syslog(LOG_INFO, "m_user=%s m_radius=%f m_latitude=%f m_longitude=%f",m_user.c_str(),m_radius,m_latitude,m_longitude);
-  CHandlePtr<common::Channels> channels = common::DbSession::getInstance().getChannels();
-  syslog(LOG_INFO,"getChannels method completed");
-  syslog(LOG_INFO,"recieved %i channels",channels->size());
-  for (common::Channels::iterator i=channels->begin();i!=channels->end();i++) {
-	CHandlePtr<common::DataMarks> marks=(*i)->getMarks();
-	syslog(LOG_INFO,"recieved %i marks",marks->size());
-//	for (DataMarks::iterator j=marks->begin();j!=marks->end();j++){
-//		syslog(LOG_INFO,"distance from user %f",DataMark::getDistance(m_latitude,m_longitude,(*j)->getLatitude(),(*j)->getLongitude()));
-//		if (DataMark::getDistance(m_latitude,m_longitude,(*j)->getLatitude(),(*j)->getLongitude()) <= m_radius+(*i)->getRadius())
-		{
-	    		m_channels->push_back(*i);
-//			break;
-		}
-//	}
-  }	
-  syslog(LOG_INFO,"process() method completed");
+  syslog(LOG_INFO, "m_user=%s m_radius=%f m_latitude=%f m_longitude=%f",m_token.c_str(),m_radius,m_latitude,m_longitude);
+  CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
+  for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
+  {
+    if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
+    {
+       m_channels = common::DbSession::getInstance().getChannels();
+       break;
+    }
+  }
 }
 
 const CHandlePtr<common::Channels>& AvailableList::getChannels() const

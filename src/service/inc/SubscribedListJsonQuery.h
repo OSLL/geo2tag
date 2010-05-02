@@ -30,9 +30,7 @@
  */
 /*!
  * \file SubscribedList.h
- * \brief Header of SubscribedList
- * \todo add comment here
- *
+ * \brief Header of Subscribed( *
  * File description
  *
  * PROJ: OSLL/geo2tag
@@ -57,20 +55,27 @@
 #include "cast.h"
 #include "exception.h"
 #include <sstream>
-#include "stream.h"
+#include "IJsonQuery.h"
 #include "ChannelList.h"
-  class SubscribedList: public OStream
+  class SubscribedList: public IJsonQuery 
   {
-    std::string m_user;
+    std::string m_token;
 
     CHandlePtr<common::Channels> m_channels;
+
+    
+    /*
+    * convert %m_channels% into JSON and return it as a string    
+    */
+   std::string outToString() const;
+   void init(const std::stringstream& query);
   public:
 
     /*
     * constructor with %query% paramete, where %query% is a Subscribed Channels request 
     */
 
-    SubscribedList(const std::stringstream& query);
+    SubscribedList();
 
     /*
     * gets all channels that user are subscribed from DbSession and put it to %m_channels%
@@ -83,12 +88,7 @@
     */
 
     const CHandlePtr<common::Channels>& getChannels() const;
-    
-    /*
-    * convert %m_channels% into JSON and return it as a string    
-    */
 
-    std::string outToString() const;
 
   }; // class SubscribedList
   

@@ -77,11 +77,11 @@ namespace GUI
 
         AvailableChannelsListQuery(QObject *parent = 0);
 
-        AvailableChannelsListQuery(QString user, qreal latitude,
+        AvailableChannelsListQuery(QString auth_token, qreal latitude,
                                    qreal longitude, qreal radius,
                                    QObject *parent = 0);
 
-        void setQuery(QString user, qreal latitude,
+        void setQuery(QString auth_token, qreal latitude,
                       qreal longitude, qreal radius);
 
         ~AvailableChannelsListQuery();

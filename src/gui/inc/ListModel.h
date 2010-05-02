@@ -58,7 +58,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
 
  public slots:
-
+    void marksUp(CHandlePtr<common::DataMarks> m_marks=CHandlePtr<common::DataMarks>());
     void layoutUpdate(CHandlePtr<common::Channel> channel = CHandlePtr<common::Channel>());
 };
 

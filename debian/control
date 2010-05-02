@@ -2,7 +2,7 @@ Source: wikigps
 Section: web
 Priority: optional
 Maintainer: Pavel Zubarev <zps@osll.spb.ru>
-Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.5)
+Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-maemo5-dev (>=4.6), libqjson-dev (>=0.7), libqtm-dev (>=1.0)
 
 Package: wikigps
 Architecture: any

@@ -49,21 +49,21 @@
 #include "cast.h"
 #include "exception.h"
 #include <sstream>
-#include "stream.h"
+#include "IJsonQuery.h"
 #include "ChannelList.h"
 
-class AvailableList: public OStream /*can be only writed to stream*/ 
+class AvailableList: public  IJsonQuery/*can be only writed to stream*/ 
 {
-	std::string                   m_user; //! \ToDo comment here
+	std::string                   m_token; //! \ToDo comment here
 	double                        m_radius;    //! \ToDo comment here
 	double                        m_latitude;  //! \ToDo comment here
 	double                        m_longitude; //! \ToDo comment here
 	CHandlePtr<common::Channels>  m_channels;//! \ToDo comment here
   
   std::string outToString() const;
-
+  void init(const std::stringstream& query);
 public:
-	AvailableList(const std::stringstream& query);
+	AvailableList();
 	
   void process();
 	

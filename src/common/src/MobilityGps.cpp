@@ -28,75 +28,55 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file MaemoGps.h
- * \brief Header of MaemoGps
+/*! ---------------------------------------------------------------
+ *
+ *
+ * \file MobilityGps.cpp
+ * \brief MobilityGps implementation
  *
  * File description
  *
- * PROJ: OSLL/geo2tag
+ * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
-
-#ifndef _MaemoGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
-#define _MaemoGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
-
-#ifndef NO_MAEMO_GPS
-extern "C"
-{
-  #include <location/location-gps-device.h>
-  #include <location/location-gpsd-control.h>
-  #include <glib.h>
-}
-
-
-#include "GpsInfo.h"
-#include "Thread.h"
+#include "MobilityGps.h"
 
 namespace common
 {
- /*!
-   * Class description. May use HTML formatting
-   *
-   */
-  class MaemoGps: public Gps, private Thread::CThread
-  { 
-    LocationGPSDControl *control;
-    LocationGPSDevice *device;
-    
-    static double m_longitude;
-    static double m_latitude;
+  double MobilityGps::m_longitude = 0;
+  double MobilityGps::m_latitude = 0;
 
-    static void on_error(LocationGPSDControl *control, LocationGPSDControlError error, gpointer data);
-  
-    static void on_changed(LocationGPSDevice *device, gpointer data);
+  MobilityGps::MobilityGps(QObject *parent) : QObject(parent)
+  {
+      QGeoPositionInfoSource *source = QGeoPositionInfoSource::createDefaultSource(this);
+      if (source) {
+          connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)),
+                  this, SLOT(positionUpdated(QGeoPositionInfo)));
+          source->startUpdates();
+      }
+  }
 
-    static void on_stop(LocationGPSDControl *control, gpointer data);
+  void MobilityGps::positionUpdated(QGeoPositionInfo info)
+  {
+      m_longitude = info.coordinate().longitude();
+      m_latitude = info.coordinate().latitude();
+  }
 
-    static gboolean start_location(gpointer data);
-	
-    void thread();
-  public:
-    MaemoGps();
-    
-    virtual double getLongitude() const;
+  double MobilityGps::getLongitude() const
+  {
+    return m_longitude;
+  }
 
-    virtual double getLatitude() const;
+  double MobilityGps::getLatitude() const
+  {
+    return m_latitude;
+  }
 
-    virtual ~MaemoGps();
-    
-  private:    
-    MaemoGps(const MaemoGps& obj);
-    MaemoGps& operator=(const MaemoGps& obj);
+  MobilityGps::~MobilityGps()
+  {
 
-  }; // class MaemoGps
-  
+  }
+
 } // namespace common
-
-#else // NO_MAEMO_GPS
-#warning "Building without Maemo gps support"
-#endif
-
-#endif //_MaemoGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
 
 /* ===[ End of file ]=== */

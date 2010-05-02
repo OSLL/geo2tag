@@ -3,10 +3,11 @@
 
 #include <fcgiapp.h>
 #include "query.h"
-
+#include "JsonQueryFactory.h"
 class Server {
 
     FCGX_Request m_cgi;
+    JsonQueryFactory m_factory;
 
 public:
 

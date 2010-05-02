@@ -42,6 +42,7 @@
 
 #include "defines.h"
 #include "SubscribeChannelQuery.h"
+#include "SubscribeChannelJSON.h"
 #include <QDebug>
 
 namespace GUI
@@ -56,20 +57,18 @@ namespace GUI
         qDebug() << "Free SubscribeChannelQuery created";
     }
 
-    SubscribeChannelQuery::SubscribeChannelQuery(QString user, QString channel, QObject *parent)
+    SubscribeChannelQuery::SubscribeChannelQuery(QString auth_token, QString channel, QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
-        setQuery(user, channel);
+        setQuery(auth_token, channel);
         qDebug() << "SubscribeChannelQuery created:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void SubscribeChannelQuery::setQuery(QString user, QString channel)
+    void SubscribeChannelQuery::setQuery(QString auth_token, QString channel)
     {
-        jsonQuery = "{\"user\":\"" + user +
-                    "\", \"channel\":\"" + channel +
-                    "\"}";
+        jsonQuery = SubscribeChannelJSON::convertToJSON(auth_token, channel);
         httpQuery = SUBSCRIBE_HTTP_URL;
     }
 
@@ -122,17 +121,8 @@ namespace GUI
         {
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
-            // std::stringstream jsonStream(jsonResponse.toStdString());
-            /* check response and emit signal */
-            if ((jsonResponse.contains("\"status\":\"ok\"", Qt::CaseInsensitive))
-                || (jsonResponse.contains("\"status\" : \"ok\"", Qt::CaseInsensitive)))
-            {
-                emit responseReceived(1);
-            }
-            else
-            {
-                emit responseReceived(0);
-            }
+            QString status = SubscribeChannelJSON::convertToSatus(jsonResponse);
+            emit responseReceived(status);
         }
     }
 

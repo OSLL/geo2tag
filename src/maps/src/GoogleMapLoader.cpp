@@ -49,6 +49,7 @@
 #include <QVector>
 //#include <QSslError>
 #include <QDebug>
+#include "GpsInfo.h"
 
 #include "GoogleMapsApiKey.h"
 
@@ -84,7 +85,7 @@ namespace maps
         return "0x0000FF";
     }
 
-    std::string GoogleMapLoader::preprocessQuery(double latitude, double longitude, short size, int width, int height, common::DataMarks marks)
+    std::string GoogleMapLoader::preprocessQuery(double latitude, double longitude, short size, int width, int height, const common::DataMarks& marks)
     {
         m_data.clear();
 
@@ -94,14 +95,19 @@ namespace maps
 
         double clongitude = common::GpsInfo::getInstance().getLongitude();
         double clatitude = common::GpsInfo::getInstance().getLatitude();
+        qDebug() << "process map " << marks.size();
         for(size_t i=0; i<marks.size(); i++)
         {
             CHandlePtr<common::DataMark> mark = marks[i];
-            if(mark->getDescription()!="" && mark->getChannel()->isDisplayed() &&
-               mark->getChannel()->getRadius() >  common::DataMark::getDistance(clatitude, clongitude,mark->getLatitude(), mark->getLongitude()))
+            if(mark->getDescription()!="" /*&& 
+               (mark->getChannel()->getRadius()*100) >  common::DataMark::getDistance(clatitude, clongitude,mark->getLatitude(), mark->getLongitude())*/)
                 s << "&markers=color:"<< getColor(marks[i]->getLabel()[0]) <<"|label:" <<
                         marks[i]->getLabel()[0] << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude();
         }
+        s << "&markers=icon:http://pafciu17.dev.openstreetmap.org/media/pointer/sight_point.png|"
+                << common::GpsInfo::getInstance().getLatitude() << ","
+                << common::GpsInfo::getInstance().getLongitude();
+
         s << "&maptype=roadmap&sensor=true&key=" << GOOGLE_MAPS_API_KEY;
 
         return s.str();
@@ -127,7 +133,7 @@ namespace maps
         return common::Picture(QImage::fromData(byteArray));//PngPicture(m_data);
     }
 
-    common::Picture GoogleMapLoader::getMapWithMarks(double latitude, double longitude, short size, int width, int height, common::DataMarks marks)
+    common::Picture GoogleMapLoader::getMapWithMarks(double latitude, double longitude, short size, int width, int height, const common::DataMarks& marks)
     {
         std::string s = preprocessQuery(latitude, longitude, size, width, height, marks);
 

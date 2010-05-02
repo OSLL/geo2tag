@@ -50,13 +50,17 @@ namespace loader
   class User: public common::User
   {
     unsigned long m_id;
+    std::string m_token;
 
   public:
-    User(const std::string& login, const std::string& pass, unsigned long id);
+    User(const std::string& login, const std::string& pass, unsigned long id, const std::string& token);
     
     unsigned long getId() const;
+    
+    const std::string& getToken() const;
 
     void subscribe(const CHandlePtr<loader::Channel>& channel);
+    void unsubscribe(const CHandlePtr<loader::Channel>& channel);
 
     ~User();
   }; // class UserInternal

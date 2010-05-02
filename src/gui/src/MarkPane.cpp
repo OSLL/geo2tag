@@ -55,7 +55,7 @@
 #include "OnLineInformation.h"
 
 #ifndef DEFAULT_RADIUS
-#define DEFAULT_RADIUS 30
+#define DEFAULT_RADIUS 500
 #endif
 
 namespace GUI

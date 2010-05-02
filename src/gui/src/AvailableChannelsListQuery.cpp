@@ -43,7 +43,7 @@
 #include "AvailableChannelsListQuery.h"
 #include "defines.h"
 #include <QDebug>
-#include "ChannelList.h"
+#include "ChannelListJSON.h"
 
 namespace GUI
 {
@@ -58,19 +58,19 @@ namespace GUI
     }
 
     AvailableChannelsListQuery::AvailableChannelsListQuery
-            (QString user, qreal latitude, qreal longitude, qreal radius, QObject *parent)
+            (QString auth_token, qreal latitude, qreal longitude, qreal radius, QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
-        setQuery(user,latitude,longitude,radius);
+        setQuery(auth_token,latitude,longitude,radius);
         qDebug() << "AvailableChannelsListQuery created:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void AvailableChannelsListQuery::setQuery(QString user, qreal latitude,
+    void AvailableChannelsListQuery::setQuery(QString auth_token, qreal latitude,
                                               qreal longitude, qreal radius)
     {
-        jsonQuery = "{\"user\":\"" + user +
+        jsonQuery = "{\"auth_token\":\"" + auth_token +
                     "\", \"latitude\":" + QString::number(latitude) +
                     ", \"longitude\":" + QString::number(longitude) +
                     ", \"radius\":" + QString::number(radius) +
@@ -128,7 +128,7 @@ namespace GUI
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
             std::stringstream jsonStream(jsonResponse.toStdString());
-            ChannelList channelList(jsonStream);
+            ChannelListJSON channelList(jsonStream);
             CHandlePtr<common::Channels> channels = channelList.getChannels();
             emit responseReceived(channels);
         }

@@ -77,9 +77,9 @@ namespace GUI
 
       SubscribedChannelsListQuery(QObject *parent = 0);
 
-      SubscribedChannelsListQuery(QString user, QObject *parent = 0);
+      SubscribedChannelsListQuery(QString auth_token, QObject *parent = 0);
 
-      void setQuery(QString user);
+      void setQuery(QString auth_token);
 
       ~SubscribedChannelsListQuery();
 

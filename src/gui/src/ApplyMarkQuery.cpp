@@ -43,6 +43,10 @@
 #include "ApplyMarkQuery.h"
 #include "defines.h"
 #include <QDebug>
+#include "qjson/parser.h"
+#include "qjson/serializer.h"
+#include "QVariant"
+#include "QVariantMap"
 
 namespace GUI
 {
@@ -56,30 +60,33 @@ namespace GUI
         qDebug() << "Free ApplyMarkQuery created";
     }
 
-    ApplyMarkQuery::ApplyMarkQuery(QString user, QString channel, QString title,
+    ApplyMarkQuery::ApplyMarkQuery(QString auth_token, QString channel, QString title,
                                    QString link, QString description, qreal latitude,
                                    qreal longitude, QString time, QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
-        setQuery(user, channel, title, link, description, latitude, longitude, time);
+        setQuery(auth_token, channel, title, link, description, latitude, longitude, time);
         qDebug() << "ApplyMarkQuery created:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void ApplyMarkQuery::setQuery(QString user, QString channel, QString title,
+    void ApplyMarkQuery::setQuery(QString auth_token, QString channel, QString title,
                                   QString link, QString description, qreal latitude,
                                   qreal longitude, QString time)
     {
-        jsonQuery = "{\"user\":\"" + user +
-                    "\", \"channel\":\"" + channel +
-                    "\", \"title\":\"" + title +
-                    "\", \"link\":\"" + link +
-                    "\", \"description\":\"" + description +
-                    "\", \"latitude\":" + QString::number(latitude) +
-                    ", \"longitude\":" + QString::number(longitude) +
-                    ", \"time\":\"" + time +
-                    "\"}";
+        QVariantMap request;
+        request.insert("auth_token", auth_token);
+        request.insert("channel", channel);
+        request.insert("title", title);
+        request.insert("link", link);
+        request.insert("description", description);
+        request.insert("latitude", QString::number(latitude).toDouble());
+        request.insert("longitude", QString::number(longitude).toDouble());
+        request.insert("time", time);
+        QJson::Serializer serializer;
+        jsonQuery = serializer.serialize(request);
+
         httpQuery = APPLY_HTTP_URL;
     }
 
@@ -132,14 +139,20 @@ namespace GUI
         {
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
-            if (jsonResponse.contains("\"status\":\"ok\"", Qt::CaseInsensitive))
+            QJson::Parser parser;
+            bool ok;
+            QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
+            QString status("");
+            if (!ok)
             {
-                emit responseReceived(1);
+                qFatal("An error occured during parsing json with response to apply mark");
             }
             else
             {
-                emit responseReceived(0);
+                status = result["status"].toString();
             }
+
+            emit responseReceived(status);
         }
     }
 

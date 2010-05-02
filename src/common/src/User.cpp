@@ -40,7 +40,7 @@
  * ---------------------------------------------------------------- */
 
 #include "User.h"
-
+#include <algorithm>
 namespace common
 {
   User::User(const std::string& name, const std::string& pass): m_login(name), m_password(pass), m_channels(makeHandle(new Channels()))
@@ -53,6 +53,13 @@ namespace common
     m_channels->push_back(channel);
   }
 
+  void User::unsubscribe(const CHandlePtr<Channel>& channel)
+  {
+    Channels::iterator it = std::find(m_channels->begin(), m_channels->end(), channel);
+    if(it != m_channels->end())
+       m_channels->erase(it);
+  }
+  
   const std::string& User::getLogin() const
   {
     return m_login;

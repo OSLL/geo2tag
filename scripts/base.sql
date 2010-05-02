@@ -4,6 +4,7 @@ CREATE TABLE users (
   id NUMERIC(9,0) NOT NULL DEFAULT nextval('users_seq'),
   login VARCHAR(50) NOT NULL,
   password VARCHAR(50) NOT NULL,
+  token VARCHAR(65) UNIQUE NOT NULL,
   constraint users_pkey primary key (id)
 );
 
@@ -58,10 +59,10 @@ INSERT into channel (name, description, url) values ('Fuel prices', 'This is fre
 INSERT into channel (name, description, url) values ('Sales', 'This is free channel where you can post/read sales advertisements', '');
 INSERT into channel (name, description, url) values ('My channel', 'This is free channel where you and your friends can post/read your tags', '');
 
-INSERT into users (login, password) values ('Paul',   'test');
-INSERT into users (login, password) values ('Kirill', 'test');
-INSERT into users (login, password) values ('Mark',   'test');
-INSERT into users (login, password) values ('Yevgeni', 'test');
+INSERT into users (login, password, token) values ('Paul',   'test', 'PPPPPPPPPP');
+INSERT into users (login, password, token) values ('Kirill', 'test', 'KKKKKKKKKK');
+INSERT into users (login, password, token) values ('Mark',   'test', 'MMMMMMMMMM');
+INSERT into users (login, password, token) values ('Yevgeni', 'test', 'YYYYYYYYYY');
 
 INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.166504, 24.841204, 'A', 'Accident at road 51. Time: 15:45, January 2, 2010.', 1, 'http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif');
 INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.163216, 24.859314, 'B', 'Shell 95: 1.299 e', 2, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');

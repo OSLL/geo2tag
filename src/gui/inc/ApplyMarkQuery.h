@@ -71,11 +71,11 @@ namespace GUI
   public:
       ApplyMarkQuery(QObject *parent = 0);
 
-      ApplyMarkQuery(QString user, QString channel, QString title, QString link,
+      ApplyMarkQuery(QString auth_token, QString channel, QString title, QString link,
                      QString description, qreal latitude, qreal longitude,
                      QString time, QObject *parent = 0);
 
-      void setQuery(QString user, QString channel, QString title, QString link,
+      void setQuery(QString auth_token, QString channel, QString title, QString link,
                     QString description, qreal latitude, qreal longitude,
                     QString time);
 
@@ -87,8 +87,7 @@ namespace GUI
       void doRequest();
 
   signals:
-      void responseReceived(int state); /* if subscribed then state == 1
-                                           else state = 0 */
+      void responseReceived(QString status);
 
   private slots:
       void onManagerFinished(QNetworkReply *reply);

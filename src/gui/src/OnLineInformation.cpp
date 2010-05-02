@@ -46,44 +46,44 @@
 #include <QDateTime>
 #include <DataMarks.h>
 #include <QTimer>
+#include "defines.h"
 
 #include "GpsInfo.h"
-
-#ifndef DEFAULT_RADIUS
-#define DEFAULT_RADIUS 30
-#endif
-
-#ifndef DEFAULT_USER
-#define DEFAULT_USER "Paul"
-#endif
 
 namespace GUI
 {
     OnLineInformation::OnLineInformation(): m_users(makeHandle(new std::vector<CHandlePtr<common::User> >()))
     {
+        m_marks = makeHandle(new common::DataMarks());
+        m_availableChannels = makeHandle(new common::Channels());
+        m_subscribedChannels = makeHandle(new common::Channels());
+
         applyMarkQuery = new ApplyMarkQuery(this);
         availableChannelsListQuery = new AvailableChannelsListQuery(this);
         rssFeedQuery = new RSSFeedQuery(this);
         subscribeChannelQuery = new SubscribeChannelQuery(this);
+        unsubscribeChannelQuery = new UnsubscribeChannelQuery(this);
         subscribedChannelsListQuery = new SubscribedChannelsListQuery(this);
-        QTimer *timer = new QTimer(this);
-        timer->setInterval(15 * 1000); /* one time per 15 seconds */
+        loginQuery = new LoginQuery(this);
+        m_updateTimer = new QTimer(this);
+        m_updateTimer->setInterval(15 * 1000); /* one time per 15 seconds */
 
-        
-        connect(applyMarkQuery, SIGNAL(responseReceived(int)),
-                this, SLOT(onApplyMarkQueryResponseReceived(int)));
+        connect(applyMarkQuery, SIGNAL(responseReceived(QString)),
+                this, SLOT(onApplyMarkQueryResponseReceived(QString)));
         connect(availableChannelsListQuery, SIGNAL(responseReceived(CHandlePtr<common::Channels>&)),
                 this, SLOT(onAvailableChannelsListQueryResponseReceived(CHandlePtr<common::Channels>&)));
         connect(rssFeedQuery, SIGNAL(responseReceived(CHandlePtr<common::DataMarks>&)),
                 this, SLOT(onRSSFeedQueryResponseReceived(CHandlePtr<common::DataMarks>&)));
-        connect(subscribeChannelQuery, SIGNAL(responseReceived(int)),
-                this, SLOT(onSubscribeChannelQueryResponseReceived(int)));
+        connect(subscribeChannelQuery, SIGNAL(responseReceived(QString)),
+                this, SLOT(onSubscribeChannelQueryResponseReceived(QString)));
+        connect(unsubscribeChannelQuery, SIGNAL(responseReceived(QString)),
+                this, SLOT(onUnsubscribeChannelQueryResponseReceived(QString)));
         connect(subscribedChannelsListQuery, SIGNAL(responseReceived(CHandlePtr<common::Channels>&)),
                 this, SLOT(onSubscribedChannelsListQueryResponseReceived(CHandlePtr<common::Channels>&)));
-        connect(timer, SIGNAL(timeout()), this, SLOT(updateAvailableChannels()));
+        connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateAvailableChannels()));
+        connect(loginQuery, SIGNAL(responseReceived(QString,QString)),
+                this, SLOT(onLoginQueryResponseReceived(QString,QString)));
 
-        updateAvailableChannels();
-        timer->start();
     }
 
     OnLineInformation::~OnLineInformation()
@@ -135,64 +135,103 @@ namespace GUI
 
     void OnLineInformation::updateMarks()
     {
-        rssFeedQuery->setQuery(DEFAULT_USER,
-                               common::GpsInfo::getInstance().getLatitude(),
-                               common::GpsInfo::getInstance().getLongitude(),
-                               DEFAULT_RADIUS);
-        rssFeedQuery->doRequest();
+        if (m_auth_token != QString(""))
+        {
+            rssFeedQuery->setQuery(m_auth_token,
+                                   common::GpsInfo::getInstance().getLatitude(),
+                                   common::GpsInfo::getInstance().getLongitude(),
+                                   DEFAULT_RADIUS);
+            rssFeedQuery->doRequest();
+        }
     }
 
     void OnLineInformation::updateAvailableChannels()
     {
-        availableChannelsListQuery->setQuery(DEFAULT_USER,
-                                             common::GpsInfo::getInstance().getLatitude(),
-                                             common::GpsInfo::getInstance().getLongitude(),
-                                             DEFAULT_RADIUS);
-        availableChannelsListQuery->doRequest();
+        if (m_auth_token != QString(""))
+        {
+            availableChannelsListQuery->setQuery(m_auth_token,
+                                                 common::GpsInfo::getInstance().getLatitude(),
+                                                 common::GpsInfo::getInstance().getLongitude(),
+                                                 DEFAULT_RADIUS);
+            availableChannelsListQuery->doRequest();
+        }
     }
 
     void OnLineInformation::updateSubscribedChannels()
     {
-        subscribedChannelsListQuery->setQuery(DEFAULT_USER);
-        subscribedChannelsListQuery->doRequest();
+        if (m_auth_token != QString(""))
+        {
+            subscribedChannelsListQuery->setQuery(m_auth_token);
+            subscribedChannelsListQuery->doRequest();
+        }
     }
 
     void OnLineInformation::subscribeChannel(QString channel)
     {
-        subscribeChannelQuery->setQuery(DEFAULT_USER,
-                                        channel);
-        subscribeChannelQuery->doRequest();
+        if (m_auth_token != QString(""))
+        {
+            subscribeChannelQuery->setQuery(m_auth_token,
+                                            channel);
+            subscribeChannelQuery->doRequest();
+        }
+    }
+
+    void OnLineInformation::unsubscribeChannel(QString channel)
+    {
+        if (m_auth_token != QString(""))
+        {
+            unsubscribeChannelQuery->setQuery(m_auth_token,
+                                              channel);
+            unsubscribeChannelQuery->doRequest();
+        }
     }
 
     void OnLineInformation::applyMark(QString channel, QString title, QString link,
                                       QString description)
     {
-        applyMarkQuery->setQuery(DEFAULT_USER, channel, title, link, description,
-                                 common::GpsInfo::getInstance().getLatitude(),
-                                 common::GpsInfo::getInstance().getLongitude(),
-                                 QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
+        if (m_auth_token != QString(""))
+        {
+            applyMarkQuery->setQuery(m_auth_token, channel, title, link, description,
+                                     common::GpsInfo::getInstance().getLatitude(),
+                                     common::GpsInfo::getInstance().getLongitude(),
+                                     QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
 
-        //QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss"));
-        applyMarkQuery->doRequest();
+            //QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss"));
+            applyMarkQuery->doRequest();
+        }
     }
 
-    void OnLineInformation::setUser(CHandlePtr<common::User>user)
+    void OnLineInformation::setAuthToken(QString token)
     {
-        m_user = user;
+        m_auth_token = token;
+        m_updateTimer->start();
     }
 
-    void OnLineInformation::onApplyMarkQueryResponseReceived(int state)
+    void OnLineInformation::onApplyMarkQueryResponseReceived(QString status)
     {
-        updateMarks();
-        emit markApplied(state);
+        if (status == QString("ok"))
+        {
+            updateMarks();
+            emit markApplied(1);
+        }
+        else
+        {
+            emit markApplied(0);
+        }
     }
 
     void OnLineInformation::onAvailableChannelsListQueryResponseReceived
             (CHandlePtr<common::Channels> &channels)
     {
-        m_availableChannels = channels;
+        m_availableChannels->clear();
+        for (size_t i = 0; i < channels->size(); i++)
+        {
+            CHandlePtr<common::Channel> channel = (*channels)[i];
+            m_availableChannels->push_back(channel);
+            channel->setDisplayed(true);
+        }
         updateMarks();
-        if (m_subscribedChannels == 0)
+        if (m_subscribedChannels->size() == 0)
         {
             updateSubscribedChannels();
         }
@@ -202,24 +241,56 @@ namespace GUI
     void OnLineInformation::onRSSFeedQueryResponseReceived
             (CHandlePtr<common::DataMarks> &marks)
     {
-        m_marks = marks;
+        m_marks->clear();
+        for(size_t i=0; i<marks->size(); ++i)
+        {
+          CHandlePtr<common::DataMark> mark = (*marks)[i];
+          m_marks->push_back(mark);
+        }
+
         emit marksUpdated(m_marks);
     }
 
-    void OnLineInformation::onSubscribeChannelQueryResponseReceived(int state)
+    void OnLineInformation::onSubscribeChannelQueryResponseReceived(QString status)
     {
         updateSubscribedChannels();
-        //updateMarks();
-        emit subscribedOnChannel(state);
+        updateMarks();
+        if (status == QString("Ok"))
+        {
+            emit subscribedChannel();
+        }
+    }
+
+    void OnLineInformation::onUnsubscribeChannelQueryResponseReceived(QString status)
+    {
+        updateSubscribedChannels();
+        updateMarks();
+        if (status == QString("Ok"))
+        {
+            emit unsubscribedChannel();
+        }
     }
 
     void OnLineInformation::onSubscribedChannelsListQueryResponseReceived
             (CHandlePtr<common::Channels> &channels)
     {
-        m_subscribedChannels = channels;
+        m_subscribedChannels->clear();
+        for (size_t i = 0; i < channels->size(); i++)
+        {
+            CHandlePtr<common::Channel> channel = (*channels)[i];
+            m_subscribedChannels->push_back(channel);
+        }
         emit subscribedChannelsUpdated(m_subscribedChannels);
     }
 
+    void OnLineInformation::onLoginQueryResponseReceived(QString status, QString auth_token)
+    {
+        if (status == QString("Ok"))
+        {
+            m_auth_token = auth_token;
+            updateAvailableChannels();
+        }
+    }
 } // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

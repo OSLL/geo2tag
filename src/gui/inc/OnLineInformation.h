@@ -45,6 +45,7 @@
 #define _OnLineInformation_H_91CA39C8_1612_4CBC_B6C2_8ED74E337584_INCLUDED_
 
 #include <QObject>
+#include <QTimer>
 
 #include "DataMarks.h"
 #include "Channel.h"
@@ -53,7 +54,9 @@
 #include "AvailableChannelsListQuery.h"
 #include "RSSFeedQuery.h"
 #include "SubscribeChannelQuery.h"
+#include "UnsubscribeChannelQuery.h"
 #include "SubscribedChannelsListQuery.h"
+#include "LoginQuery.h"
 
 namespace GUI
 {
@@ -76,12 +79,18 @@ namespace GUI
 
         /* We need something that represents user */
         CHandlePtr<common::User> m_user;
-
-        ApplyMarkQuery              *applyMarkQuery;
-        AvailableChannelsListQuery  *availableChannelsListQuery;
-        RSSFeedQuery                *rssFeedQuery;
-        SubscribeChannelQuery       *subscribeChannelQuery;
-        SubscribedChannelsListQuery *subscribedChannelsListQuery;
+        QString m_userName;
+        QString m_userPassword;
+        QString m_auth_token;
+        
+        QTimer                      * m_updateTimer;
+        ApplyMarkQuery              * applyMarkQuery;
+        AvailableChannelsListQuery  * availableChannelsListQuery;
+        RSSFeedQuery                * rssFeedQuery;
+        SubscribeChannelQuery       * subscribeChannelQuery;
+        UnsubscribeChannelQuery     * unsubscribeChannelQuery;
+        SubscribedChannelsListQuery * subscribedChannelsListQuery;
+        LoginQuery                  * loginQuery;
 
         OnLineInformation();
     public:
@@ -101,23 +110,27 @@ namespace GUI
         void updateAvailableChannels();
         void updateSubscribedChannels();
         void subscribeChannel(QString channel);
+        void unsubscribeChannel(QString channel);
         void applyMark(QString channel, QString title, QString link,
                        QString description);
-        void setUser(CHandlePtr<common::User> user);
+        void setAuthToken(QString token);
 
     signals:
         void marksUpdated(CHandlePtr<common::DataMarks> );
         void availableChannelsUpdated(CHandlePtr<common::Channels> );
         void subscribedChannelsUpdated(CHandlePtr<common::Channels> );
-        void subscribedOnChannel(int );
-        void markApplied(int );
+        void subscribedChannel();
+        void unsubscribedChannel();
+        void markApplied(int status);
 
     private slots:
-        void onApplyMarkQueryResponseReceived(int state);
+        void onApplyMarkQueryResponseReceived(QString status);
         void onAvailableChannelsListQueryResponseReceived(CHandlePtr<common::Channels>& channels);
         void onRSSFeedQueryResponseReceived(CHandlePtr<common::DataMarks>& marks);
-        void onSubscribeChannelQueryResponseReceived(int state);
+        void onSubscribeChannelQueryResponseReceived(QString status);
+        void onUnsubscribeChannelQueryResponseReceived(QString status);
         void onSubscribedChannelsListQueryResponseReceived(CHandlePtr<common::Channels>& channels);
+        void onLoginQueryResponseReceived(QString status, QString auth_token);
 
     private:
         OnLineInformation(const OnLineInformation& obj);

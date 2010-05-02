@@ -1,8 +1,11 @@
 TEMPLATE = app
+include(../../config.pri)
+
 TARGET = wikigps
-DEPENDPATH += . inc src \
-              ../fcgiio/inc \
-              ../json/inc
+DEPENDPATH += . inc src
+
+target.path = /usr/bin
+INSTALLS += target
 
 INCLUDEPATH += . inc \
                  ../common/inc/ \
@@ -10,17 +13,18 @@ INCLUDEPATH += . inc \
                  ../common/common/inc \
                  ../common/thread/inc \
                  ../common/exception/inc \
-                 ../json/inc \
-                 ../fcgiio/inc
+                 ../internal/include
 
 # Input
 HEADERS += inc/ApplyMarkQuery.h \
            inc/AvailableChannelsListQuery.h \     
            inc/CentralWidget.h \
+           inc/ChannelListJSON.h \
            inc/ChannelModel.h \
            inc/ChannelPane.h \
            inc/ListModel.h \
            inc/ListView.h \
+           inc/LoginQuery.h \
            inc/MainWindow.h \
            inc/MapPane.h \
            inc/MapWidget.h \
@@ -31,21 +35,26 @@ HEADERS += inc/ApplyMarkQuery.h \
            inc/OnLineInformation.h \
            inc/OptionsPane.h \
            inc/RadiusEditor.h \
-           inc/RSSFeed.h \
+	         inc/LoginWindow.h \
+           inc/RSSFeedJSON.h \
            inc/RSSFeedQuery.h \
+           inc/SubscribeChannelJSON.h \
            inc/SubscribeChannelQuery.h \
            inc/SubscribedChannelsListQuery.h \
-           inc/defines.h
+           inc/UnsubscribeChannelQuery.h
 SOURCES += src/ApplyMarkQuery.cpp \
            src/AvailableChannelsListQuery.cpp \
+           src/ChannelListJSON.cpp \
            src/ChannelModel.cpp \
            src/ChannelPane.cpp \
            src/ListModel.cpp \
            src/ListView.cpp \
+           src/LoginQuery.cpp \
            src/main.cpp \
            src/MainWindow.cpp \
            src/MapPane.cpp \
            src/MapWidget.cpp \
+      	   src/LoginWindow.cpp \
            src/MarkDetailsDialog.cpp \
            src/MarkEditor.cpp \
            src/MarkPane.cpp \
@@ -53,15 +62,20 @@ SOURCES += src/ApplyMarkQuery.cpp \
            src/OnLineInformation.cpp \
            src/OptionsPane.cpp \
            src/RadiusEditor.cpp \
-           src/RSSFeed.cpp \
+           src/RSSFeedJSON.cpp \
            src/RSSFeedQuery.cpp \
+           src/UnsubscribeChannelQuery.cpp \
+           src/SubscribeChannelJSON.cpp \
            src/SubscribeChannelQuery.cpp \
            src/SubscribedChannelsListQuery.cpp \
            src/CentralWidget.cpp
 
-LIBS    += -L../internal/lib -lodbc -lcommon -lmaps -lfcgiio -ljson
+FORMS  +=  src/LoginForm.ui
+
+LIBS    +=  -lcommon  -lmaps -lqjson
+
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 DEFINES += DESKTOP_STYLE
 
-QT += webkit phonon network
+QT += core gui webkit phonon network

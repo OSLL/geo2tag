@@ -27,10 +27,10 @@ build-stamp:
 	dh_testdir
 	dh_clean
 	cp -r ./src $(BUILDDIR)
-	cd $(BUILDDIR)
-	qmake 
-	$(MAKE)
-	cd -
+	cp -r ./data $(BUILDDIR)
+	cp -r ./debian/config.pri $(BUILDDIR)
+	cd $(BUILDDIR) && qmake 
+	$(MAKE) -C $(BUILDDIR)
 	
 	touch build-stamp
 
@@ -46,12 +46,12 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	
-	# $(MAKE) -C $(BUILDDIR) DESTDIR=$(CURDIR)/debian/tmp install 
-	install -d $(CURDIR)/debian/tmp/usr/lib
-	install -d $(CURDIR)/debian/tmp/usr/bin
-	cp $(BUILDDIR)internal/lib/* $(CURDIR)/debian/tmp/usr/lib
-	cp $(BUILDDIR)gui/wikigps $(CURDIR)/debian/tmp/usr/bin
+
+	$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install
+	install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps
+	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon
+	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps 
+	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon
 
 	dh_install -s
 	

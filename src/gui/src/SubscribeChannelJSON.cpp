@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OSLL osll@osll.spb.ru
+ * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -29,29 +29,54 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/*!
- * \file defines.h
- * \brief Header with defines
+/*! ---------------------------------------------------------------
+ * $Id$ 
+ *
+ * \file SubscribeChannelJSON.cpp
+ * \brief SubscribeChannelJSON implementation
  *
  * File description
  *
- * PROJ: OSLL/wikigps
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#include "SubscribeChannelJSON.h"
+#include "qjson/parser.h"
+#include "qjson/serializer.h"
+#include "QVariant"
+#include "QVariantMap"
 
-#ifndef _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
-#define _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
+namespace GUI
+{
+    QString SubscribeChannelJSON::convertToJSON(QString auth_token, QString channel)
+    {
+        QVariantMap request;
+        request.insert("auth_token", auth_token);
+        request.insert("channel", channel);
 
-#define SERVER_HTTP_URL "http://zps.spb.su/"
+        QJson::Serializer serializer;
+        QString json(serializer.serialize(request));
 
-#define SUBSCRIBE_HTTP_URL        SERVER_HTTP_URL"example?query=subscribe"
-#define APPLY_HTTP_URL            SERVER_HTTP_URL"example?query=applymark"
-#define FEED_HTTP_URL             SERVER_HTTP_URL"example?query=rss"
-#define SUBSCRIBED_LIST_HTTP_URL  SERVER_HTTP_URL"example?query=subscribed"
-#define AVAILABLE_LIST_HTTP_URL   SERVER_HTTP_URL"example?query=channels"
+        return json;
+    }
 
-#define GPS_MODELLER_FILE         "../../data/helsinki.gpx"
+    QString SubscribeChannelJSON::convertToSatus(QString json)
+    {
+        QJson::Parser parser;
+        bool ok;
+        QVariantMap result = parser.parse(QByteArray(json.toAscii()), &ok).toMap();
+        QString status("");
+        if (!ok)
+        {
+            qFatal("An error occured during parsing json with channel list");
+        }
+        else
+        {
+            status = result["status"].toString();
+        }
+        return status;
+    }
 
-#endif //_defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
+} // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

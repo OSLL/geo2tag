@@ -5,24 +5,30 @@
 #include <sstream>
 #include "DataMarkInternal.h"
 #include <algorithm>
-bool comp(CHandlePtr<common::DataMark> x1,CHandlePtr<common::DataMark> x2){x1->getTime() < x2->getTime();}
+bool comp(CHandlePtr<common::DataMark> x1,CHandlePtr<common::DataMark> x2){return x1->getTime() < x2->getTime();}
 
-RssFeedJsonQuery::RssFeedJsonQuery(const std::stringstream& query)
+RssFeedJsonQuery::RssFeedJsonQuery()
 {
+
+	m_marks=makeHandle(new common::DataMarks());
+}
+
+
+void RssFeedJsonQuery::init(const std::stringstream& query){
         json::Element elemRoot;
 	std::istringstream s(query.str());
         json::Reader::Read(elemRoot,s);
         json::QuickInterpreter interpreter(elemRoot);
-        const json::String& user=interpreter["user"];
-	m_user=std::string(user);
+        const json::String& token=interpreter["auth_token"];
+	m_token=std::string(token);
         const json::Number& radius=interpreter["radius"];
         m_radius=radius;
         const json::Number& latitude=interpreter["latitude"];
 	m_latitude=latitude;
 	const json::Number& longitude=interpreter["longitude"];
 	m_longitude=longitude;
-	m_marks=makeHandle(new common::DataMarks());
 }
+
 
 void RssFeedJsonQuery::process()
 {
@@ -31,24 +37,24 @@ void RssFeedJsonQuery::process()
   CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
   CHandlePtr<common::Channels> channels;
   for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++){
-    if ((*i)->getLogin()==m_user){
+    if ((*i).dynamicCast<loader::User>()->getToken()==m_token){
       channels=(*i)->getSubscribedChannels();
       break;
     }
   }
-  bool inSubscribed;
-  for (common::DataMarks::iterator y=marks->begin();y!=marks->end();y++)
+  syslog(LOG_INFO, "Marks->size()=%ld,channels->size()=%ld",marks->size(), channels->size());
+  size_t i,y;
+  for (y=0; y<marks->size();y++)
   {
-    inSubscribed=0;
-    for (common::Channels::iterator i=channels->begin();i!=channels->end();i++){
-       if ((*i)->getName()==(*y)->getChannel()->getName()) {
-         inSubscribed=1;
-         break;
+    for (i=0; i<channels->size();i++){
+       if ((*marks)[y]->getChannel()==(*channels)[i]) {
+    	 syslog(LOG_INFO, "(*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude)[%f] <= m_radius[%f]",
+              (*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude), m_radius);
+	 if ((*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude) <= m_radius) 
+	 {
+	       m_marks->push_back((*marks)[y]);
+	 }
        }
-    }
-    if ((*y)->getDistance((*y)->getLatitude(),(*y)->getLongitude(),m_latitude,m_longitude) <= m_radius && inSubscribed) 
-    {
-       m_marks->push_back((*y));
     }
   }
   syslog(LOG_INFO, "RssFeedJsonQuery::process, marks.size() = %u, after filtering", m_marks->size());
@@ -67,7 +73,7 @@ void RssFeedJsonQuery::process()
   //  (*m_marks)[k]=tmp;
     std::swap((*m_marks)[i],(*m_marks)[k]);//
   }*/
-  std::sort(m_marks->begin(),m_marks->end(),comp);
+   std::sort(m_marks->begin(),m_marks->end(),comp);
 }
 
 std::string RssFeedJsonQuery::outToString() const
@@ -93,8 +99,10 @@ std::string RssFeedJsonQuery::outToString() const
 			marks[j]["title"]=json::String((*i)->getLabel());
 			marks[j]["link"]=json::String((*i)->getUrl());
 			marks[j]["description"]=json::String((*i)->getDescription());
+			syslog(LOG_INFO, "RSS reply, lat=%f, lon=%f", (*i)->getLatitude(), (*i)->getLongitude());
 			marks[j]["latitude"]=json::Number((*i)->getLatitude());
 			marks[j]["longitude"]=json::Number((*i)->getLongitude());
+			syslog(LOG_INFO, "RSS reply, lat=%f, lon=%f", (*i)->getLatitude(), (*i)->getLongitude());
 			marks[j]["tags"]=json::Null();
                         marks[j]["pubDate"]=json::String(formatTime((*i)->getTime().getTime(),"%d %b %Y %H:%M:%S"));
 			marks[j]["user"]=json::String((*i)->getUser()->getLogin());

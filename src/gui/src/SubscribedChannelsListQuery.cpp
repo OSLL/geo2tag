@@ -43,7 +43,7 @@
 #include "SubscribedChannelsListQuery.h"
 #include "defines.h"
 #include <QDebug>
-#include "ChannelList.h"
+#include "ChannelListJSON.h"
 
 namespace GUI
 {
@@ -57,18 +57,18 @@ namespace GUI
         qDebug() << "Free SubscribedChannelsListQuery created";
     }
 
-    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QString user, QObject *parent)
+    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QString auth_token, QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
-        setQuery(user);
+        setQuery(auth_token);
         qDebug() << "SubscribedChannelsListQuery created:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void SubscribedChannelsListQuery::setQuery(QString user)
+    void SubscribedChannelsListQuery::setQuery(QString auth_token)
     {
-        jsonQuery = "{\"user\":\"" + user + "\"}";
+        jsonQuery = "{\"auth_token\":\"" + auth_token + "\"}";
         httpQuery = SUBSCRIBED_LIST_HTTP_URL;
     }
 
@@ -122,7 +122,7 @@ namespace GUI
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
             std::stringstream jsonStream(jsonResponse.toStdString());
-            ChannelList channelList(jsonStream);
+            ChannelListJSON channelList(jsonStream);
             CHandlePtr<common::Channels> channels = channelList.getChannels();
             emit responseReceived(channels);
         }

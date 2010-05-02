@@ -42,7 +42,8 @@
 #include "ChannelInternal.h"
 #include "DataMarkInternal.h"
 #include "DbSession.h"
-
+#include "DynamicCastFailure.h"
+#include <syslog.h>
 namespace loader
 {
   Channel::Channel(unsigned long long id, const std::string &name, const std::string &description, const std::string &url, const CHandlePtr<common::DataMarks> &marks): 
@@ -66,10 +67,17 @@ namespace loader
     if(!m)
     {
       // epic fail
+    syslog(LOG_INFO,"Failure at loader::Channel::addData");
+//      throw CDynamicCastFailure(1,SRC(),1);
       return;
     }
     // update relation betwean mark and channel
+  //  try {
     common::DbSession::getInstance().updateChannel(getId(), mark);
+  //  }
+   // catch(CDynamicCastFailure& c){
+  //  throw;
+   //  }
     // add mark to Channel object
     common::Channel::addData(mark);
   }

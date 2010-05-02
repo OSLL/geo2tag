@@ -110,7 +110,7 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
 
 void ListModel::layoutUpdate(CHandlePtr<common::Channel> channel)
 {
-    qDebug() << m_currentChannelName.c_str();
+    qDebug() << "current channel = " << m_currentChannelName.c_str();
     if(channel!=0)
     {
         m_currentChannel=channel;
@@ -124,7 +124,7 @@ void ListModel::layoutUpdate(CHandlePtr<common::Channel> channel)
         {
             m_currentChannel = newChannelPtr;
         }
-    }
+    } 
 
     double longitude = common::GpsInfo::getInstance().getLongitude();
     double latitude = common::GpsInfo::getInstance().getLatitude();
@@ -133,12 +133,22 @@ void ListModel::layoutUpdate(CHandlePtr<common::Channel> channel)
     for(size_t i=0; i<m_data->size(); i++)
     {
         CHandlePtr<common::DataMark> mark = (*m_data)[i];
+        qDebug() << "radius = " << mark->getChannel()->getRadius() 
+                 << "disctance=" << common::DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude());
         if(mark->getChannel()              == m_currentChannel &&
-       mark->getChannel()->getRadius() >  common::DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude()))
+       mark->getChannel()->getRadius()*100 >  common::DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude()))
             size++;
     }
     m_size = size;
+    qDebug() << "m_size=" << m_size << " from " << m_data->size();
     setRowCount(size);
     emit layoutChanged();
 }
+void ListModel::marksUp(CHandlePtr<common::DataMarks> m_marks)
+{
+    qDebug() << "marksUp got new marks set";
+    m_data=m_marks;
+    layoutUpdate();
+}
+
 }

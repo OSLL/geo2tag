@@ -77,7 +77,7 @@ namespace GUI
     void createActions();
 
   public slots:
-
+    void onActivate(QString auth_token);
     void addContent();
 
   private:    

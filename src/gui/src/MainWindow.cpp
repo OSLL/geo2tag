@@ -53,6 +53,7 @@ namespace GUI
     setCentralWidget(new CentralWidget(this));
     createMenu();
     qDebug() << "centralWidget";
+    setHidden(true);
   }
 
   void MainWindow::createMenu()
@@ -97,6 +98,11 @@ namespace GUI
   }
 
 
+  void MainWindow::onActivate(QString)
+  {
+    setHidden(false); 
+  }
+  
 } // namespace GUI
 
 /* ===[ End of file ]=== */

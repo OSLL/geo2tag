@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,12 +28,9 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-
-/* $Id$ */
 /*!
- * \file RSSFeed.h
- * \brief Header of RSSFeed
- * \todo add comment here
+ * \file MobilityGps.h
+ * \brief Header of MobilityGps
  *
  * File description
  *
@@ -41,33 +38,55 @@
  * ---------------------------------------------------------------- */
 
 
-#ifndef _RSSFeed_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
-#define _RSSFeed_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+#ifndef _MobilityGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
+#define _MobilityGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
 
-#include "DataMarks.h"
-#include "Handle.h"
-#include "elements.h"
-#include "quick.h"
-#include "reader.h"
-#include "writer.h"
-#include "cast.h"
-#include "exception.h"
-#include <sstream>
 
-class RSSFeed
+
+#include "GpsInfo.h"
+#include <QObject>
+
+// QtMobility API headers
+// Location
+#include <qgeopositioninfosource.h>
+#include <qgeopositioninfo.h>
+
+// QtMobility namespace
+QTM_USE_NAMESPACE
+
+namespace common
 {
-    std::stringstream m_json;
-    CHandlePtr<common::DataMarks> m_marks;
-    void convertInMarks();
+  /*!
+   * Class description. May use HTML formatting
+   *
+   */
+    class MobilityGps: public QObject, public Gps
+    {
+        Q_OBJECT
 
-public:
-    RSSFeed(const std::stringstream& json);
-    ~RSSFeed();
+        static double m_longitude;
+        static double m_latitude;
 
-    const CHandlePtr<common::DataMarks>& getMarks() const ;
+    public:
+        MobilityGps(QObject *parent = 0);
 
-};//class RSSFeed
+        virtual double getLongitude() const;
 
-#endif //_RSSFeed_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+        virtual double getLatitude() const;
 
-/* ===[ End of file $HeadURL$ ]=== */
+        virtual ~MobilityGps();
+
+    private slots:
+        void positionUpdated(QGeoPositionInfo info);
+
+    private:
+        MobilityGps(const MobilityGps& obj);
+        MobilityGps& operator=(const MobilityGps& obj);
+
+    }; // class MobilityGps
+
+} // namespace common
+
+#endif //_MobilityGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
+
+/* ===[ End of file ]=== */

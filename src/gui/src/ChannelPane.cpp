@@ -96,7 +96,6 @@ namespace GUI
   {
       if (OnLineInformation::getInstance().getAvailableChannels() != 0)
       {
-          qDebug() << "sdfsdf";
           listView->setModel(new ChannelModel(OnLineInformation::getInstance().getAvailableChannels(),
                                               OnLineInformation::getInstance().getSubscribedChannels(),
                                               this));
@@ -107,11 +106,16 @@ namespace GUI
   {
       if((listView->model() != 0) && (listView->currentIndex().isValid()))
       {
+          QString channelName = dynamic_cast<GUI::ChannelModel*>(listView->model())->getChannelName(listView->currentIndex().row());
           if (!dynamic_cast<GUI::ChannelModel*>(listView->model())->isSubscribed(listView->currentIndex()))
-          {
-              qDebug() << "dsfsd";
-              QString channelName = dynamic_cast<GUI::ChannelModel*>(listView->model())->getChannelName(listView->currentIndex().row());
+          {      
+              qDebug() << "subscribing to channel " << channelName;
               OnLineInformation::getInstance().subscribeChannel(channelName);
+          }
+          else
+          {
+              qDebug() << "unsubscribing from channel " << channelName;
+              OnLineInformation::getInstance().unsubscribeChannel(channelName);
           }
       }
   }

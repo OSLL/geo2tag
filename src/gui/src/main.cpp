@@ -31,6 +31,8 @@
 #include <QApplication>
 #include "MainWindow.h" 
 #include "GpsInfo.h"
+#include "LoginWindow.h"
+#include "OnLineInformation.h"
 
 int main(int c, char **v)
 {
@@ -38,13 +40,17 @@ int main(int c, char **v)
 
   common::GpsInfo::getInstance(); //starting daemon and other stuff;
   GUI::MainWindow window;
+  
+  GUI::LoginWindow loginWin;
+  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)),&window,SLOT(onActivate(QString)));
+  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)), &GUI::OnLineInformation::getInstance(), SLOT(setAuthToken(QString)));
 
 #ifdef DESKTOP_STYLE
-  window.show();
+  loginWin.show();
 #else  
-  window.showMaximized();
+  loginWin.showMaximized();
 #endif  
-
+  
   app.exec();
   return 0;
 

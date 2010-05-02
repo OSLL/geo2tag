@@ -49,7 +49,8 @@
 #include "Thread.h"
 #include "SwMr.h"
 #include "Sleep.h"
-
+#include "DynamicCastFailure.h"
+#include <sstream>
 namespace common
 {
   template<typename T>
@@ -64,7 +65,16 @@ namespace common
       while(!m_needExit)
       {
         syslog(LOG_INFO, "update thread: updating data");
+       // try{
         m_instance->loadData();
+      /*  }
+        catch(CDynamicCastFailure& e){
+	  syslog(LOG_INFO,"Dynamic Cast Failure in thread. Line %i, file %s",e.getLine(),e.getSource());
+	  std::stringstream s; 
+          e.outToStream(s);
+          syslog(LOG_INFO,"%s",s.str().c_str());
+          mSleep(10000);
+        }*/
         mSleep(10000);
       }
       syslog(LOG_INFO, "update thread: exiting...");
@@ -90,6 +100,7 @@ namespace common
 
     CHandlePtr<DataMarks> m_marks;
     CHandlePtr<Channels> m_channels;
+    std::map<std::string,CHandlePtr<common::User> > m_tokensMap;
     CHandlePtr<std::vector<CHandlePtr<common::User> > > m_users;
     CHandlePtr<Thread::CThread> m_updateThread;
 
@@ -121,11 +132,16 @@ namespace common
 
     CHandlePtr<Channels> getChannels() const;
 
+    const std::map<std::string,CHandlePtr<common::User> >& getTokensMap() const;
+
     void storeMark(CHandlePtr<common::DataMark> m);
     
     CHandlePtr<std::vector<CHandlePtr<common::User> > > getUsers() const;
     
     void subscribe(const std::string& userName, const std::string &channelName);
+
+    void unsubscribe(CHandlePtr<common::User> user, CHandlePtr<common::Channel> hannel);
+
 
     void updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m); 
 

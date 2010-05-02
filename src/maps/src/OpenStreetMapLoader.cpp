@@ -49,6 +49,7 @@
 #include <QVector>
 //#include <QSslError>
 #include <QDebug>
+#include "GpsInfo.h"
 
 namespace maps
 {
@@ -82,32 +83,28 @@ namespace maps
         return "0x0000FF";
     }
 
-    std::string OpenStreetMapLoader::preprocessQuery(double latitude, double longitude, short size, int width, int height, common::DataMarks marks)
+    std::string OpenStreetMapLoader::preprocessQuery(double latitude, double longitude, short size, int width, int height, const common::DataMarks& marks)
     {
         m_data.clear();
 
         std::ostringstream s;
-        //http://dev.openstreetmap.org/~pafciu17/?module=map&center=55.027084,24.999439&zoom=10&type=mapnik&width=400&height=200&points=54.99,25.01,pointImagePattern:greenP;55.05,25.039,pointImagePattern:redI
+
         s << "http://pafciu17.dev.openstreetmap.org/?module=map&center=" << longitude << ","<< latitude
                 << "&zoom=" << size << "&type=mapnik" << "&width=" << width << "&height=" << height;
 
-        if (marks.size() > 0)
-        {
-            s << "&points=";
-        }
+            s << "&points=" << common::GpsInfo::getInstance().getLongitude() << ","
+              << common::GpsInfo::getInstance().getLatitude()
+              << ",pointImageUrl:pafciu17.dev.openstreetmap.org/media/pointer/sight_point.png;";
 
         double clongitude = common::GpsInfo::getInstance().getLongitude();
         double clatitude = common::GpsInfo::getInstance().getLatitude();
         for(size_t i=0; i<marks.size(); i++)
         {
             CHandlePtr<common::DataMark> mark = marks[i];
-            if(mark->getDescription()!="" && mark->getChannel()->isDisplayed() &&
-               mark->getChannel()->getRadius() >  common::DataMark::getDistance(clatitude, clongitude,mark->getLatitude(), mark->getLongitude()))
+            if(mark->getDescription()!="" /*&&
+               (mark->getChannel()->getRadius()*100) >  common::DataMark::getDistance(clatitude, clongitude,mark->getLatitude(), mark->getLongitude())*/)
                 s << marks[i]->getLongitude() << "," << marks[i]->getLatitude() << ",pointImagePattern:"<< getColor(marks[i]->getLabel()[0]) << marks[i]->getLabel()[0] << ";";
-               // s << "&markers=color:"<< getColor(marks[i]->getLabel()[0]) <<"|label:" <<
-               //         marks[i]->getLabel()[0] << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude();
         }
-       // s << "&maptype=roadmap&sensor=true&key=" << GOOGLE_MAPS_API_KEY;
 
         return s.str();
 
@@ -133,7 +130,7 @@ namespace maps
         return common::Picture(QImage::fromData(byteArray));//PngPicture(m_data);
     }
 
-    common::Picture OpenStreetMapLoader::getMapWithMarks(double latitude, double longitude, short size, int width, int height, common::DataMarks marks)
+    common::Picture OpenStreetMapLoader::getMapWithMarks(double latitude, double longitude, short size, int width, int height, const common::DataMarks& marks)
     {
         std::string s = preprocessQuery(latitude, longitude, size, width, height, marks);
 

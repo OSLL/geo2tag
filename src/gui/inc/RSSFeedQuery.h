@@ -76,11 +76,11 @@ namespace GUI
 
         RSSFeedQuery(QObject *parent = 0);
 
-        RSSFeedQuery(QString user, qreal latitude,
+        RSSFeedQuery(QString auth_token, qreal latitude,
                                    qreal longitude, qreal radius,
                                    QObject *parent = 0);
 
-        void setQuery(QString user, qreal latitude,
+        void setQuery(QString auth_token, qreal latitude,
                       qreal longitude, qreal radius);
 
         ~RSSFeedQuery();

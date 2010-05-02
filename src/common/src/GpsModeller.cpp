@@ -49,11 +49,11 @@
 #include <cstring>
 
 #ifndef DEFAULT_LONGITUDE
-#define DEFAULT_LONGITUDE 60
+#define DEFAULT_LONGITUDE 30
 #endif
 
 #ifndef DEFAULT_LATITUDE
-#define DEFAULT_LATITUDE 30
+#define DEFAULT_LATITUDE 60
 #endif
 
 #ifdef SIMULATE_GPS 

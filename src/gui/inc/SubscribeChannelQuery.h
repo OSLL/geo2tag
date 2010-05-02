@@ -77,9 +77,9 @@ namespace GUI
 
         SubscribeChannelQuery(QObject *parent = 0);
 
-        SubscribeChannelQuery(QString user, QString channel, QObject *parent = 0);
+        SubscribeChannelQuery(QString auth_token, QString channel, QObject *parent = 0);
 
-        void setQuery(QString user, QString channel);
+        void setQuery(QString auth_token, QString channel);
 
         ~SubscribeChannelQuery();
 
@@ -89,8 +89,7 @@ namespace GUI
         void doRequest();
 
     signals:
-        void responseReceived(int state); /* if subscribed then state == 1
-                                             else state = 0 */
+        void responseReceived(QString status);
 
     private slots:
         void onManagerFinished(QNetworkReply *reply);

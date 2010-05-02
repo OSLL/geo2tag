@@ -48,17 +48,20 @@
 #include "DbSession.h"
 #include "Time.h"
 #include <syslog.h>
-ApplyMarkJsonQuery::ApplyMarkJsonQuery(const std::stringstream& query){
+ApplyMarkJsonQuery::ApplyMarkJsonQuery(){
+
+}
+
+void ApplyMarkJsonQuery::init(const std::stringstream& query){
+
 	json::Element elemRoot;
 	std::istringstream s(query.str());
 	json::Reader::Read(elemRoot,s);
 	json::QuickInterpreter interpreter(elemRoot);
-	const json::String& user=interpreter["user"];
-	m_user=std::string(user);
+	const json::String& token=interpreter["auth_token"];
+	m_token=std::string(token);
 	const json::String& channel=interpreter["channel"];
 	m_channel=std::string(channel);
-   //     const json::Number& radius=interpreter["radius"];
-///        m_radius=radius;
         const json::Number& latitude=interpreter["latitude"];
 	m_latitude=latitude;
         const json::Number& longitude=interpreter["longitude"];
@@ -71,7 +74,6 @@ ApplyMarkJsonQuery::ApplyMarkJsonQuery(const std::stringstream& query){
         m_time=std::string(time);
         const json::String& link=interpreter["link"];
         m_link=std::string(link);
-
 }
 
 void ApplyMarkJsonQuery::process(){
@@ -79,7 +81,7 @@ void ApplyMarkJsonQuery::process(){
   m_status="error";
   for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
   {
-    if ((*i)->getLogin()==m_user)
+    if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
     {
     	struct tm tim;	
     	syslog(LOG_INFO,"Find user from request");

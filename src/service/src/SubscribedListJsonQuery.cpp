@@ -38,18 +38,22 @@
  *
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
-#include "User.h"
+#include "UserInternal.h"
 #include "SubscribedListJsonQuery.h"
 #include <syslog.h>
-SubscribedList::SubscribedList(const std::stringstream& query)
+SubscribedList::SubscribedList()
 {
+
+  m_channels=makeHandle(new common::Channels);
+}
+
+void SubscribedList::init(const std::stringstream& query){
   json::Element elemRoot;
   std::istringstream s(query.str());
   json::Reader::Read(elemRoot,s);
   json::QuickInterpreter interpreter(elemRoot);
-  const json::String& user=interpreter["user"];
-  m_user=std::string(user);
-  m_channels=makeHandle(new common::Channels);
+  const json::String& token=interpreter["auth_token"];
+  m_token=std::string(token);
 }
 
 void SubscribedList::process()
@@ -57,7 +61,7 @@ void SubscribedList::process()
   CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
   for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++){
     syslog(LOG_INFO,"got %s user from DbSession",(*i)->getLogin().c_str());
-    if ((*i)->getLogin()==m_user){
+    if ((*i).dynamicCast<loader::User>()->getToken()==m_token){
       syslog(LOG_INFO,"it is user from query");
       m_channels=(*i)->getSubscribedChannels();
       syslog(LOG_INFO,"got %i channels for %s ",m_channels->size(),(*i)->getLogin().c_str());

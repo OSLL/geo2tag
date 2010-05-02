@@ -11,23 +11,22 @@
 #include "cast.h"
 #include "exception.h"
 #include <sstream>
-#include "stream.h"
+#include "IJsonQuery.h"
 
 
-class RssFeedJsonQuery:public OStream
+class RssFeedJsonQuery:public IJsonQuery
 {
-	std::string m_user;
+	std::string m_token;
 	double m_latitude;
 	double m_longitude;
 	double m_radius;
 	std::string outToString() const;
 	CHandlePtr<common::DataMarks> m_marks;
-
+	void init(const std::stringstream& query);
 public:
 	
-	RssFeedJsonQuery(const std::stringstream& query);
-
-void process();
+	RssFeedJsonQuery();
+	void process();
 };
 
 #endif

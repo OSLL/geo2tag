@@ -61,6 +61,7 @@ namespace common
      * \brief add new channel to list of subscribed channels
      */
     void subscribe(const CHandlePtr<Channel>& channel);
+    void unsubscribe(const CHandlePtr<Channel>& channel);
   public:
 
     const std::string& getLogin() const;

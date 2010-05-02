@@ -41,7 +41,7 @@
  * ---------------------------------------------------------------- */
 
 #include "RSSFeedQuery.h"
-#include "RSSFeed.h"
+#include "RSSFeedJSON.h"
 #include "defines.h"
 #include <QDebug>
 
@@ -68,10 +68,10 @@ namespace GUI
                  << httpQuery << jsonQuery;
     }
 
-    void RSSFeedQuery::setQuery(QString user, qreal latitude,
+    void RSSFeedQuery::setQuery(QString auth_token, qreal latitude,
                                               qreal longitude, qreal radius)
     {
-        jsonQuery = "{\"user\":\"" + user +
+        jsonQuery = "{\"auth_token\":\"" + auth_token +
                     "\", \"latitude\":" + QString::number(latitude) +
                     ", \"longitude\":" + QString::number(longitude) +
                     ", \"radius\":" + QString::number(radius) +
@@ -129,7 +129,7 @@ namespace GUI
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
             std::stringstream jsonStream(jsonResponse.toStdString());
-            RSSFeed rssFeed(jsonStream);
+            RSSFeedJSON rssFeed(jsonStream);
             CHandlePtr<common::DataMarks> marks = rssFeed.getMarks();
             emit responseReceived(marks);
             /* check response and emit signal */

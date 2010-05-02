@@ -112,7 +112,8 @@ namespace GUI
         proxyLayout->addWidget(m_portProxyEdit);
         proxyLayout->addStretch();
         mainLayout->addWidget(m_proxyBox);
-
+        
+        setLayout(mainLayout);
 
     }
 

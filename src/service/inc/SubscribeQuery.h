@@ -23,27 +23,29 @@
 #include "cast.h"
 #include "exception.h"
 #include <sstream>
-#include "stream.h"
+#include "IJsonQuery.h"
 #include "ChannelList.h"
 
  /*!
    * Class description. May use HTML formatting
    *
    */
-class SubscribeQuery:public OStream
+class SubscribeQuery:public IJsonQuery
   {
 
-  std::string m_user;
+  std::string m_token;
 
   std::string m_channel;
-
-public:
-
-  SubscribeQuery(const std::stringstream& query);
-
-  void subscribe();
+  void init(const std::stringstream& query);
 
   std::string outToString() const;
+public:
+
+  SubscribeQuery();
+
+  void process();
+
+
 
   }; // class SubscribeQuery
   
