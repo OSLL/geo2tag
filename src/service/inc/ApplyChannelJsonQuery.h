@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright <year>  <name of author> <e-mail>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,60 +28,59 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+
+/* $Id$ */
 /*!
- * \file query.h
- * \brief Header of query
+ * \file ApplyChannelJsonQuery.h
+ * \brief Header of ApplyChannelJsonQuery
  * \todo add comment here
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
+
  * ---------------------------------------------------------------- */
-#ifndef _QUERY_H_
-#define _QUERY_H_
 
-#include <map>
-#include <string>
+
+#ifndef _ApplyChannelJsonQuery_H_63C8A8C3_6AB3_4BE4_BC90_6F9057182695_INCLUDED_
+#define _ApplyChannelJsonQuery_H_63C8A8C3_6AB3_4BE4_BC90_6F9057182695_INCLUDED_
+
 #include <sstream>
-#include "stream.h"
+#include "Channel.h"
+#include "Handle.h"
+#include "elements.h"
+#include "quick.h"
+#include "reader.h"
+#include "writer.h"
+#include "cast.h"
+#include "exception.h"
+#include "IJsonQuery.h"
 
-enum QueryType {
-    SUBSCRIBE,        //! Query subscribe to the channel
-    AVAILABLE_LIST,   //! The list with available channels
-    SUBSCRIBED_LIST,  //! The list with subscribed by user channels
-    APPLYMARK,
-    APPLYCHANNEL,
-    RSSFEED,
-    UNSUBSCRIBE,
-    LOGIN,
-    UNKNOWN
-    };
+/*!
+ * Class description. May use HTML formatting
+ *
+ */
+class ApplyChannelJsonQuery: public IJsonQuery
+{
+  std::string                   m_token;
 
-
-class Query {
-    std::map<std::string, std::string> m_params;
-    
-    std::stringstream m_query; //! query's data
-
-    QueryType m_type;
+  std::string		                m_name;
+  std::string                   m_description;
+  std::string                   m_url;
+  std::string         		      m_status;
+  double                        m_activeRadius;
+  
+  std::string outToString() const;
+  
+  void init(const std::stringstream& query);
 
 public:
 
-    Query(const std::string &s, Stream& stm);
+  ApplyChannelJsonQuery();
+	void process();
+}; // class ApplyChannelJsonQuery
+  
 
-    const std::string& getParam(const std::string& param) const;
-    
-    /*!
-     * \brief Routine return type of query
-     */
-    QueryType getType() const;
-    
-    /*!
-     * \brief Routine return content of request
-     */
-    const std::stringstream& getStream() const;
-};//class Query
+#endif //_ApplyChannelJsonQuery_H_63C8A8C3_6AB3_4BE4_BC90_6F9057182695_INCLUDED_
 
-#endif//_QUERY_H_
-
-/* ===[ End of file ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

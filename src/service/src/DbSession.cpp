@@ -69,6 +69,13 @@ namespace db
     char password[50];
     unsigned long id;
     char token[65];
+
+    User():id(0)
+    {
+      memset(login, 0, 50);
+      memset(password, 0, 50);
+      memset(token, 0, 50);
+    }
   };
 
   struct Mark
@@ -82,6 +89,15 @@ namespace db
     SQL_TIMESTAMP_STRUCT time;
     SQLLEN timeLen;
     unsigned long user_id;
+
+    Mark():id(0), latitude(0.), longitude(0.), user_id(0)
+    {
+      memset(label, 0, 1024);
+      memset(description, 0, 2048);
+      memset(url, 0, 2048);
+      memset(&time, 0, sizeof(time));
+      memset(&timeLen, 0, sizeof(timeLen));
+    }
   };
 
   struct Channel
@@ -90,18 +106,33 @@ namespace db
     char name[300];
     char description[2048];
     char url[2048];
+
+    Channel():id(0)
+    {
+      memset(name, 0, 1024);
+      memset(description, 0, 2048);
+      memset(url, 0, 2048);
+    }
   };
 
   struct MarkRelation
   {
     unsigned long mark;
     unsigned long channel;
+
+    MarkRelation():mark(0), channel(0)
+    {
+    }
   };
   
   struct SubscribeRelation
   {
     unsigned long user;
     unsigned long channel;
+
+    SubscribeRelation():user(0), channel(0)
+    {
+    }
   };
 
   using namespace ODBC;
@@ -286,6 +317,25 @@ namespace db
     }
   };
   
+  class RemoveChannelQuery: public Channel, public CDbQueryX
+  {
+  public:
+    RemoveChannelQuery(const CDbConn& conn): CDbQueryX(conn)
+    {
+    }
+
+    BEGIN_COLMAP()
+    END_COLMAP()
+    
+    BEGIN_PARMAP()
+      PAR(1, SQL_C_LONG, SQL_INTEGER, id)
+    END_PARMAP()
+
+    const char* sql() const
+    {
+      return "delete from channel where id=?;";
+    }
+  };
   /////// Marks: Mark <---> Channel
   
   class LoadMarkRelationsQuery: public MarkRelation, public CDbQueryX
@@ -438,81 +488,17 @@ namespace common
   DbSession::DbSession(): ODBC::CDbConn(*(ODBC::CDbEnv*)this), m_marks(makeHandle(new DataMarks)), m_channels(makeHandle(new Channels))
   {
     m_users = makeHandle(new std::vector<CHandlePtr<common::User> >());
-#ifndef NO_DB_CONNECTION
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %ld", __FILE__, __LINE__);
-    connect("geo2tag");
-    syslog(LOG_INFO, "connected to database");
-    m_updateThread = makeHandle(new UpdateThread<DbSession>(this));
-#else
-    CHandlePtr<loader::User> user = makeHandle(new loader::User("Paul","test",0));
-    m_users->push_back(user);
-    s_users[0]=user;
+    try
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(1,"Tourist information", "This is free read-only tourist information channel. You can get information about buildings, sights around your location"));
-      m_channels->push_back(channel);
-      s_channels[1]=channel;
+      connect("geo2tag");
+      syslog(LOG_INFO, "connected to database");
+      m_updateThread = makeHandle(new UpdateThread<DbSession>(this));
     }
+    catch(...)
     {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(2,"Public announcements", "This is free read-only channel with public announcements from the city of your current location"));
-      m_channels->push_back(channel);
-      s_channels[2]=channel;
+      syslog(LOG_INFO, "UUuuups...");
     }
-    {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(3,"Fuel prices", "This is free channel where you can post/read the fuel prices around your current location."));
-      m_channels->push_back(channel);
-      s_channels[3]=channel;
-    }
-    {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(4,"Sales", "This is free channel where you can post/read sales advertisements"));
-      m_channels->push_back(channel);
-      s_channels[4]=channel;
-    }
-    {
-      CHandlePtr<loader::Channel> channel = makeHandle(new loader::Channel(5,"My channel", "This is free channel where you and your friends can post/read your tags"));
-      m_channels->push_back(channel);
-      s_channels[5]=channel;
-    }
-    {
-      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(1,60.166504, 24.841204, "A", "Accident at road 51. Time: 15:45, January 2, 2010.", "http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif", CTime::now(), user, s_channels.find(2)->second));
-      m_marks->push_back(m);
-      s_marks[1]=m;
-    }
-    {
-      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(2,60.163216, 24.859314, "B", "Shell 95: 1.299 e", "http://www.unf.edu/groups/volctr/images/question-mark.jpg", CTime::now(), user, s_channels.find(3)->second));
-      m_marks->push_back(m);
-      s_marks[2]=m;
-    }
-    {
-      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(3,60.166264, 24.859915, "C", "Neste Oil diesel: .0989 e", "http://www.unf.edu/groups/volctr/images/question-mark.jpg", CTime::now(), user, s_channels.find(3)->second));
-      m_marks->push_back(m);
-      s_marks[3]=m;
-    }
-    {
-      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(4,60.163216, 24.859915, "D", "Neste 95: 1.294 e","http://www.unf.edu/groups/volctr/images/question-mark.jpg", CTime::now(), user, s_channels.find(3)->second));
-      m_marks->push_back(m);
-      s_marks[4]=m;
-    }
-    {
-      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(5,60.162159, 24.739065, "E", "CityMarket Iso Omena: Children overalls 50% off", "http://www.k-citymarket.fi/img/citymarketLogo.gif" ,CTime::now(), user, s_channels.find(4)->second));
-      m_marks->push_back(m);
-      s_marks[5]=m;
-    }
-    {
-      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(6,60.167433, 24.733486, "F", "Prisma Olari: LEGO 20% off", "http://mw2.google.com/mw-panoramio/photos/thumbnail/5131282.jpg", CTime::now(), user, s_channels.find(4)->second));
-      m_marks->push_back(m);
-      s_marks[6]=m;
-    }
-    {
-      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(7,60.173362, 24.829166, "G", "Outdoor party place on February 20, 2010", "http://www.unf.edu/groups/volctr/images/question-mark.jpg", CTime::now(), user, s_channels.find(5)->second));
-      m_marks->push_back(m);
-      s_marks[7]=m;
-    }
-    {
-      CHandlePtr<loader::DataMark> m = makeHandle(new loader::DataMark(8,60.178308, 24.848585, "H", "Espoo. Cheap hotel.","http://mw2.google.com/mw-panoramio/photos/small/8267319.jpg", CTime::now(), user, s_channels.find(1)->second));
-      m_marks->push_back(m);
-      s_marks[8]=m;
-    }
-#endif
   }
 
   void DbSession::loadUsers()
@@ -548,6 +534,10 @@ namespace common
       if(s_marks.count(query.id)>0)
       {
         continue;
+      }
+      else
+      {
+        syslog(LOG_INFO, "loading mark with id=[%lu]", query.id);
       }
       i++;
       CHandlePtr<loader::DataMark> mark= makeHandle(new loader::DataMark(query.id,
@@ -680,9 +670,8 @@ namespace common
     syslog(LOG_INFO, "subscribe: users->size=%ld", m_users->size());
     for(size_t i=0; i<m_users->size(); ++i)
     {
-	syslog(LOG_INFO, "subscribe: i=%ld", i);
+	      syslog(LOG_INFO, "subscribe: i=%ld", i);
         du = ((*m_users)[i]).dynamicCast<loader::User>();
-//	syslog(LOG_INFO, "subscribe: du= %ld", du);
         if(du && du->getLogin() == userName)
         {
              user_id = du->getId();
@@ -699,7 +688,6 @@ namespace common
         }
     }
     du->subscribe(u);
-#ifndef NO_DB_CONNECTION
     db::StoreSubscribedQuery query(*this);
     query.user = user_id;
     query.channel = channel_id;
@@ -713,7 +701,6 @@ namespace common
     {
       // it is hack, but we need it
     }
-#endif
   }
   void DbSession::updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m) //! this routine will be in private area
   {
@@ -724,7 +711,6 @@ namespace common
         // It's not a failure. because this mark already in channel!
 	return;
     }
-#ifndef NO_DB_CONNECTION
     // store(update) mark to DB
     storeMark(mark);
     
@@ -741,14 +727,6 @@ namespace common
     {
       // it is hack, but we need it
     }
-#else
-    if(mark->getId()==0)
-    {
-      s_marks[m_marks->size()+1]=mark;
-      mark->setId(m_marks->size()+1);
-      m_marks->push_back(mark);
-    }
-#endif
   }
   
   void DbSession::loadChannels()
@@ -769,15 +747,35 @@ namespace common
 
   }
 
+  void DbSession::removeChannel(CHandlePtr<common::Channel> c)
+  {
+      CHandlePtr<loader::Channel> ch = c.dynamicCast<loader::Channel>();
+      if(!ch)
+      {
+        syslog(LOG_INFO,"Failure at removeChannel, dynamicCast<loader::Channel>() at removeChannel");
+	      return; 
+      }
+      
+      if(ch->getId()==0)
+      {
+        return;
+      }
+      else
+      {
+        ODBC::CTransaction tr(*this);
+        db::RemoveChannelQuery removeQuery(*this);
+        removeQuery.id = ch->getId();
+        removeQuery.prepare();
+        removeQuery.execute();
+      }
+  }
   void DbSession::storeChannel(CHandlePtr<common::Channel> c)
   {
       CHandlePtr<loader::Channel> ch = c.dynamicCast<loader::Channel>();
       if(!ch)
       {
-        // big error!!!
         syslog(LOG_INFO,"Failure at storeChannel, dynamicCast<loader::Channel>() at storeChannel");
-//        throw CDynamicCastFailure(1,SRC(),1);
-	return; 
+	      return; 
       }
       
       if(ch->getId()==0)
@@ -840,13 +838,29 @@ namespace common
       query.execute();
       while(query.fetch())
       {
-//       try{
-        s_channels.find(query.channel)->second->addData(s_marks.find(query.mark)->second);
-/*       }
-       catch(CDynamicCastFailure& e){
-       throw;
-       }*/
-        s_marks.find(query.mark)->second->setChannel(s_channels.find(query.channel)->second);
+        syslog(LOG_INFO, "loadRelations, fetch");
+        CHandlePtr<loader::Channel> channel;
+        CHandlePtr<loader::DataMark> mark;
+        if(s_channels.count(query.channel))
+        {
+          channel = s_channels.find(query.channel)->second;
+        }
+        else
+        {
+          syslog(LOG_INFO, "channel id=[%lu] is missing", query.channel);
+          continue;
+        }
+        if(s_marks.count(query.mark))
+        {
+          mark = s_marks.find(query.mark)->second;
+        }
+        else
+        {
+          syslog(LOG_INFO, "mark id=[%lu] is missing", query.mark);
+          continue;
+        }
+        mark->setChannel(channel);
+        channel->addData(mark);
       }
     }
     { // LoadSubscribedQuery block
@@ -893,22 +907,18 @@ namespace common
 
   void DbSession::loadData()
   {
-#ifndef NO_DB_CONNECTION
     loadUsers();
     loadChannels();
     loadMarks(); 
     loadRelations();
     syslog(LOG_INFO,"Objects has been updated");
-#endif
   }
 
   void DbSession::saveData()
   {
-#ifndef NO_DB_CONNECTION
     saveChannels();
     saveMarks();
     saveRelations();
-#endif
 }
 
   DbSession& DbSession::getInstance()
@@ -919,10 +929,8 @@ namespace common
   
   DbSession::~DbSession()
   {
-#ifndef NO_DB_CONNECTION
     m_updateThread.staticCast<UpdateThread<DbSession> >()->shutdown();
     m_updateThread->join();
-#endif
   }
 } // namespace common
 

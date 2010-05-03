@@ -32,10 +32,11 @@ HEADERS += inc/AvailableListJsonQuery.h \
            inc/SubscribedListJsonQuery.h \
            inc/LoginJsonQuery.h \
            inc/SubscribeQuery.h \
-	   inc/ApplyMarkJsonQuery.h \
-	   inc/RssFeedJsonQuery.h \
-	   inc/IJsonQuery.h \
-	   inc/JsonQueryFactory.h \
+           inc/ApplyMarkJsonQuery.h \
+           inc/ApplyChannelJsonQuery.h \
+           inc/RssFeedJsonQuery.h \
+           inc/IJsonQuery.h \
+           inc/JsonQueryFactory.h \
            inc/UnsubscribeJsonQuery.h \
            inc/DynamicCastFailure.h \
            inc/engine.h \
@@ -48,11 +49,12 @@ HEADERS += inc/AvailableListJsonQuery.h \
 
 SOURCES += src/main.cpp \
            src/SubscribedListJsonQuery.cpp \
-	   src/RssFeedJsonQuery.cpp \
+           src/RssFeedJsonQuery.cpp \
            src/AvailableListJsonQuery.cpp \
            src/ApplyMarkJsonQuery.cpp \
+           src/ApplyChannelJsonQuery.cpp \
            src/LoginJsonQuery.cpp \
-	   src/UnknownJsonQuery.cpp \
+           src/UnknownJsonQuery.cpp \
            src/SubscribeQuery.cpp \
            src/UnsubscribeJsonQuery.cpp \
            src/query.cpp \

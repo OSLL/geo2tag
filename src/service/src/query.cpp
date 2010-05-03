@@ -84,6 +84,7 @@ Query::Query(const std::string &s,Stream& stm) {
     for(std::map<std::string, std::string>::const_iterator it=m_params.begin();it!=m_params.end(); ++it)
       ss << it->first << "=" << it->second << " &&& ";
     syslog(LOG_INFO, ss.str().c_str());
+
     if (getParam("query")==std::string("subscribe")) m_type=SUBSCRIBE;
     else if (getParam("query")==std::string("channels")) m_type=AVAILABLE_LIST;
     else if (getParam("query")==std::string("subscribed")) m_type=SUBSCRIBED_LIST;
@@ -91,8 +92,8 @@ Query::Query(const std::string &s,Stream& stm) {
     else if (getParam("query")==std::string("rss"))m_type=RSSFEED;
     else if (getParam("query")==std::string("unsubscribe"))m_type=UNSUBSCRIBE;
     else if (getParam("query")==std::string("login"))m_type=LOGIN;
+    else if (getParam("query")==std::string("addChannel"))m_type=APPLYCHANNEL;
     else  m_type=UNKNOWN;
-
 }
 
 const std::string& Query::getParam(const std::string& param) const

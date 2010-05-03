@@ -65,16 +65,16 @@ namespace common
       while(!m_needExit)
       {
         syslog(LOG_INFO, "update thread: updating data");
-       // try{
-        m_instance->loadData();
-      /*  }
-        catch(CDynamicCastFailure& e){
-	  syslog(LOG_INFO,"Dynamic Cast Failure in thread. Line %i, file %s",e.getLine(),e.getSource());
-	  std::stringstream s; 
+        try
+        {
+          m_instance->loadData();
+        }
+        catch(CExceptionSource & e)
+        {
+      	  std::stringstream s; 
           e.outToStream(s);
           syslog(LOG_INFO,"%s",s.str().c_str());
-          mSleep(10000);
-        }*/
+        }
         mSleep(10000);
       }
       syslog(LOG_INFO, "update thread: exiting...");
@@ -104,8 +104,6 @@ namespace common
     CHandlePtr<std::vector<CHandlePtr<common::User> > > m_users;
     CHandlePtr<Thread::CThread> m_updateThread;
 
-    void storeChannel(CHandlePtr<common::Channel> c); //! this routine will be in private area
-
     void loadUsers();
     void loadChannels();
     void loadMarks();
@@ -132,17 +130,23 @@ namespace common
 
     CHandlePtr<Channels> getChannels() const;
 
+    CHandlePtr<std::vector<CHandlePtr<common::User> > > getUsers() const;
+
     const std::map<std::string,CHandlePtr<common::User> >& getTokensMap() const;
 
     void storeMark(CHandlePtr<common::DataMark> m);
-    
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > getUsers() const;
-    
+  
     void subscribe(const std::string& userName, const std::string &channelName);
 
     void unsubscribe(CHandlePtr<common::User> user, CHandlePtr<common::Channel> hannel);
 
+    void storeChannel(CHandlePtr<common::Channel> channel);
 
+    void removeChannel(CHandlePtr<common::Channel> channel);
+
+    /*
+     * \brief add to channel new mark
+     */
     void updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m); 
 
     static DbSession& getInstance();

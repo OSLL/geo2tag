@@ -66,19 +66,10 @@ namespace loader
     CHandlePtr<loader::DataMark> m = mark.dynamicCast<loader::DataMark>();
     if(!m)
     {
-      // epic fail
-    syslog(LOG_INFO,"Failure at loader::Channel::addData");
-//      throw CDynamicCastFailure(1,SRC(),1);
+      syslog(LOG_INFO,"Failure at loader::Channel::addData");
       return;
     }
     // update relation betwean mark and channel
-  //  try {
-    common::DbSession::getInstance().updateChannel(getId(), mark);
-  //  }
-   // catch(CDynamicCastFailure& c){
-  //  throw;
-   //  }
-    // add mark to Channel object
     common::Channel::addData(mark);
   }
 
