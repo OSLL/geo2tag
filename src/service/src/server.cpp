@@ -15,6 +15,7 @@
 #include "UnsubscribeJsonQuery.h"
 #include "LoginJsonQuery.h"
 #include "DynamicCastFailure.h"
+#include "SubscribedUsersJsonQuery.h"
 
 #define LISTENSOCK_FILENO 0
 #define LISTENSOCK_FLAGS 0
@@ -31,6 +32,7 @@ Server::Server()
     m_factory.reg<RssFeedJsonQuery>(RSSFEED);
     m_factory.reg<UnsubscribeJsonQuery>(UNSUBSCRIBE);
     m_factory.reg<LoginJsonQuery>(LOGIN);
+    m_factory.reg<SubscribedUsersJsonQuery>(SUBSCRIBED_USERS);
     m_factory.reg<UnknownJsonQuery>(UNKNOWN);
     
     if (err) 

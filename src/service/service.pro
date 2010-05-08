@@ -30,6 +30,7 @@ INCLUDEPATH += \
 HEADERS += inc/AvailableListJsonQuery.h \
            inc/UnknownJsonQuery.h \
            inc/SubscribedListJsonQuery.h \
+	   inc/SubscribedUsersJsonQuery.h \
            inc/LoginJsonQuery.h \
            inc/SubscribeQuery.h \
            inc/ApplyMarkJsonQuery.h \
@@ -50,6 +51,7 @@ HEADERS += inc/AvailableListJsonQuery.h \
 SOURCES += src/main.cpp \
            src/SubscribedListJsonQuery.cpp \
            src/RssFeedJsonQuery.cpp \
+           src/SubscribedUsersJsonQuery.cpp \
            src/AvailableListJsonQuery.cpp \
            src/ApplyMarkJsonQuery.cpp \
            src/ApplyChannelJsonQuery.cpp \

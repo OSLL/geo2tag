@@ -93,6 +93,7 @@ Query::Query(const std::string &s,Stream& stm) {
     else if (getParam("query")==std::string("unsubscribe"))m_type=UNSUBSCRIBE;
     else if (getParam("query")==std::string("login"))m_type=LOGIN;
     else if (getParam("query")==std::string("addChannel"))m_type=APPLYCHANNEL;
+    else if (getParam("query")==std::string("subscribedUsers")) m_type=SUBSCRIBED_USERS;
     else  m_type=UNKNOWN;
 }
 

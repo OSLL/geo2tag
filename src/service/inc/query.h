@@ -51,6 +51,7 @@ enum QueryType {
     SUBSCRIBED_LIST,  //! The list with subscribed by user channels
     APPLYMARK,
     APPLYCHANNEL,
+    SUBSCRIBED_USERS,
     RSSFEED,
     UNSUBSCRIBE,
     LOGIN,
