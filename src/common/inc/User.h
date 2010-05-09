@@ -52,6 +52,9 @@ namespace common
   {
     std::string m_login;
     std::string m_password;
+
+    std::string m_result;
+    std::string m_token;
     CHandlePtr<Channels> m_channels; // list of subscribed channels
 
   protected:
@@ -66,6 +69,7 @@ namespace common
 
     const std::string& getLogin() const;
     const std::string& getPassword() const;
+    const std::string& getToken() const;
     const CHandlePtr<Channels> getSubscribedChannels() const;
 
     virtual ~User();    

@@ -64,6 +64,11 @@ namespace loader
   {
     return m_id;
   }
+  
+  void User::setId(unsigned long id)
+  {
+    m_id = id;
+  }
 
   const std::string& User::getToken() const
   {

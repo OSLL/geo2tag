@@ -400,6 +400,25 @@ namespace db
 
   //////////// Users
   
+  class NewUserKeyQuery: public CDbQueryX
+  {
+  public:
+    long m_key;
+    
+    NewUserKeyQuery(const CDbConn &dbConn) : CDbQueryX(dbConn)
+    {
+    }
+
+    BEGIN_COLMAP()
+      COL_NAME(1,"key",SQL_C_LONG,m_key)
+    END_COLMAP()
+    
+    const char *sql() const
+    {
+      return "select nextval('users_seq') as key;";
+    }
+  };
+
   class LoadUsersQuery: public User, public CDbQueryX
   {
   public:
@@ -417,6 +436,52 @@ namespace db
     const char* sql() const
     {
       return "select id, login, password, token from users order by id;";
+    }
+  };
+  
+  class StoreUserQuery: public User, public CDbQueryX
+  {
+  public:
+    StoreUserQuery(const CDbConn& conn): CDbQueryX(conn)
+    {
+    }
+
+    BEGIN_COLMAP()
+    END_COLMAP()
+
+    BEGIN_PARMAP()
+      PAR(1, SQL_C_LONG, SQL_INTEGER, id)
+      PAR(2, SQL_C_CHAR, SQL_CHAR, token)
+      PAR(3, SQL_C_CHAR, SQL_CHAR, login)
+      PAR(4, SQL_C_CHAR, SQL_CHAR, password)
+    END_PARMAP()
+
+    const char* sql() const
+    {
+      return "insert into users (id, token, login, password) values(?,?,?,?);";
+    }
+  };
+  
+  class UpdateUserQuery: public User, public CDbQueryX
+  {
+  public:
+    UpdateUserQuery(const CDbConn& conn): CDbQueryX(conn)
+    {
+    }
+
+    BEGIN_COLMAP()
+    END_COLMAP()
+
+    BEGIN_PARMAP()
+      PAR(1, SQL_C_CHAR, SQL_CHAR, token)
+      PAR(2, SQL_C_CHAR, SQL_CHAR, login)
+      PAR(3, SQL_C_CHAR, SQL_CHAR, password)
+      PAR(4, SQL_C_LONG, SQL_INTEGER, id)
+    END_PARMAP()
+
+    const char* sql() const
+    {
+      return "update users set token=?, login=?, password=? where id=?;";
     }
   };
   
@@ -517,6 +582,60 @@ namespace common
     }
   }
  
+  void DbSession::storeUser(CHandlePtr<common::User> user)
+  {
+      CHandlePtr<loader::User> us = user.dynamicCast<loader::User>();
+      if(!us)
+      {
+        syslog(LOG_INFO,"Failure at storeChannel, dynamicCast<loader::Channel>() at storeChannel");
+	      return; 
+      }
+      
+      if(us->getId()==0)
+      {
+        ODBC::CTransaction tr(*this);
+        // Here is new object, has been created by user
+        db::NewUserKeyQuery query(*this);
+        query.prepare();
+        {
+          ODBC::CExecuteClose keyExec(query);
+          query.fetchNoEmpty();
+        }
+        
+        us->setId(query.m_key);
+        db::StoreUserQuery storeQuery(*this);
+        storeQuery.id = us->getId();
+        strncpy(storeQuery.login,us->getLogin().c_str(),49);
+        storeQuery.login[49]='\0';
+        strncpy(storeQuery.password,us->getPassword().c_str(),49);
+        storeQuery.password[49]='\0';
+        strncpy(storeQuery.token,us->getToken().c_str(),60);
+        storeQuery.token[59]='\0';
+        
+        storeQuery.prepare();
+        storeQuery.execute();
+        
+        s_users[us->getId()]=us;
+        m_users->push_back(us);
+      }
+      else
+      {
+        ODBC::CTransaction tr(*this);
+        // this object need to be updated in data base
+        
+        db::UpdateUserQuery updateQuery(*this);
+        updateQuery.id = us->getId();
+        strncpy(updateQuery.login,us->getLogin().c_str(),49);
+        updateQuery.login[49]='\0';
+        strncpy(updateQuery.password,us->getPassword().c_str(),49);
+        updateQuery.password[49]='\0';
+        strncpy(updateQuery.token,us->getToken().c_str(),59);
+        updateQuery.token[59]='\0';
+
+        updateQuery.prepare();
+        updateQuery.execute();
+      }
+  }
 
   const std::map<std::string,CHandlePtr<common::User> >& DbSession::getTokensMap() const
   {

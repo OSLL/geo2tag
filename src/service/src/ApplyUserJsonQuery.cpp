@@ -32,8 +32,8 @@
 /*! ---------------------------------------------------------------
  * $Id$ 
  *
- * \file ApplyChannelJsonQuery.cpp
- * \brief ApplyChannelJsonQuery implementation
+ * \file ApplyUserJsonQuery.cpp
+ * \brief ApplyUserJsonQuery implementation
  *
  * File description
  *
@@ -42,74 +42,83 @@
 
 #include <syslog.h>
 #include <time.h>
-#include "ApplyChannelJsonQuery.h"
+#include "ApplyUserJsonQuery.h"
 #include "ChannelInternal.h"
 #include "UserInternal.h"
 #include "DbSession.h"
 #include "Time.h"
+#include "Handle.h"
+#include "Crc.h"
+#include "BitTools.h"
 
-ApplyChannelJsonQuery::ApplyChannelJsonQuery()
+ApplyUserJsonQuery::ApplyUserJsonQuery()
 {
 }
 
-void ApplyChannelJsonQuery::init(const std::stringstream& query)
+void ApplyUserJsonQuery::init(const std::stringstream& query)
 {
 	json::Element elemRoot;
 	std::istringstream s(query.str());
 	json::Reader::Read(elemRoot,s);
 	json::QuickInterpreter interpreter(elemRoot);
 
-  const json::String& token=interpreter["auth_token"];
-	m_token=std::string(token);
-	
-  const json::String& name=interpreter["name"];
-	m_name=std::string(name);
+  const json::String& login=interpreter["login"];
+	m_login=std::string(login);
 
-  const json::String& description=interpreter["description"];
-  m_description=std::string(description);
-  
-  const json::String& url=interpreter["url"];
-  m_url=std::string(url);
-  
-  const json::Number& activeRadius=interpreter["activeRadius"];
-	m_activeRadius=activeRadius;
+  const json::String& password=interpreter["password"];
+  m_password=std::string(password);
 }
 
-void ApplyChannelJsonQuery::process()
+void ApplyUserJsonQuery::process()
 {
   CHandlePtr<std::vector<CHandlePtr<common::User> > > users=
       common::DbSession::getInstance().getUsers();
-  CHandlePtr<common::Channels> channels = common::DbSession::getInstance().getChannels();
-  
-  for(size_t i=0; i<channels->size(); i++)
-  {
-    if((*channels)[i]->getName() == m_name)
-    {
-      m_status="Error";
-      return;
-    }
-  }
 
   for(std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
   {
-    if((*i).dynamicCast<loader::User>()->getToken()==m_token)
+    if((*i).dynamicCast<loader::User>()->getLogin()==m_login)
     {
-    	syslog(LOG_INFO,"Find user from request");
-      CHandlePtr<loader::Channel> channel=
-            makeHandle(new loader::Channel(0,m_name, m_description, m_url));
-			common::DbSession::getInstance().storeChannel(channel); 
- 			syslog(LOG_INFO,"updateChannel finished sucsesfull");
- 			m_status="Ok";
+ 			m_result="Error";
       return;
     }
   }
   
-  m_status="Error";
+  std::ostringstream s(""), token("");
+  s << "token" << CTime::now() 
+               << m_login 
+               << m_password 
+               << CTime::now();
+  CCrc32 crc;
+  unsigned long crc32 = crc.add(s.str().c_str(), s.str().size());
+  token << crc32 << m_login;
+  crc32 = crc.add(token.str().c_str(), token.str().size());
+  BitTools::reverse(&crc32, sizeof(crc32));
+  token << crc32;
+  m_token = token.str();
+  CHandlePtr<loader::User> user =
+      makeHandle(new loader::User(m_login, m_password, 0, m_token));
+
+  try
+  {
+    common::DbSession::getInstance().storeUser(user);
+    m_result = "Ok";
+  }
+  catch(const CExceptionSource& e)
+  {
+    m_result="Error";
+  }
 }
 
-std::string ApplyChannelJsonQuery::outToString() const
+std::string ApplyUserJsonQuery::outToString() const
 {
-	return "{\"status\":\""+m_status+"\"}";
+	if(m_result=="Error")
+  {
+    return "{\"status\":\""+m_result+"\"}";
+  }
+  else
+  {
+    return "{\"status\":\""+m_result+"\", \"auth_token\"=\""+m_token+"\"}";
+  }
 }
 
 /* ===[ End of file $HeadURL$ ]=== */

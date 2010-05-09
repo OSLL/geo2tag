@@ -56,6 +56,7 @@ namespace loader
     User(const std::string& login, const std::string& pass, unsigned long id, const std::string& token);
     
     unsigned long getId() const;
+    void setId(unsigned long);
     
     const std::string& getToken() const;
 

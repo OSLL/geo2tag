@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright <year>  <name of author> <e-mail>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,61 +28,57 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
- *  
- *
- * \file User.cpp
- * \brief User implementation
+
+/* $Id$ */
+/*!
+ * \file ApplyUserJsonQuery.h
+ * \brief Header of ApplyUserJsonQuery
+ * \todo add comment here
  *
  * File description
  *
- * PROJ: OSLL/geoblog
+ * PROJ: OSLL/geo2tag
+
  * ---------------------------------------------------------------- */
 
-#include "User.h"
-#include <algorithm>
-namespace common
+
+#ifndef _ApplyUserJsonQuery_H_63C8A8C3_6AB3_4BE4_BC90_6F9057182695_INCLUDED_
+#define _ApplyUserJsonQuery_H_63C8A8C3_6AB3_4BE4_BC90_6F9057182695_INCLUDED_
+
+#include <sstream>
+#include "Channel.h"
+#include "Handle.h"
+#include "elements.h"
+#include "quick.h"
+#include "reader.h"
+#include "writer.h"
+#include "cast.h"
+#include "exception.h"
+#include "IJsonQuery.h"
+
+/*!
+ * Class description. May use HTML formatting
+ *
+ */
+class ApplyUserJsonQuery: public IJsonQuery
 {
-  User::User(const std::string& name, const std::string& pass): m_login(name), m_password(pass), m_channels(makeHandle(new Channels()))
-  {
-  }
+  std::string         		      m_login;
+  std::string                   m_password;
   
-  void User::subscribe(const CHandlePtr<Channel>& channel)
-  {
-    //!> ToDo: check that this channel does not exist in m_channels
-    m_channels->push_back(channel);
-  }
-
-  void User::unsubscribe(const CHandlePtr<Channel>& channel)
-  {
-    Channels::iterator it = std::find(m_channels->begin(), m_channels->end(), channel);
-    if(it != m_channels->end())
-       m_channels->erase(it);
-  }
+  std::string                   m_result;
+  std::string                   m_token;
   
-  const std::string& User::getLogin() const
-  {
-    return m_login;
-  }
-
-  const std::string& User::getToken() const
-  {
-    return m_token;
-  }
-
-  const std::string& User::getPassword() const
-  {
-    return m_password;
-  }
+  std::string outToString() const;
   
-  const CHandlePtr<Channels> User::getSubscribedChannels() const
-  {
-    return m_channels;
-  }
+  void init(const std::stringstream& query);
 
-  User::~User()
-  {
-  }
-} // namespace common
+public:
 
-/* ===[ End of file ]=== */
+  ApplyUserJsonQuery();
+	void process();
+}; // class ApplyUserJsonQuery
+  
+
+#endif //_ApplyUserJsonQuery_H_63C8A8C3_6AB3_4BE4_BC90_6F9057182695_INCLUDED_
+
+/* ===[ End of file $HeadURL$ ]=== */

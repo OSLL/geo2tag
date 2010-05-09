@@ -136,6 +136,8 @@ namespace common
     const std::map<std::string,CHandlePtr<common::User> >& getTokensMap() const;
 
     void storeMark(CHandlePtr<common::DataMark> m);
+
+    void storeUser(CHandlePtr<common::User> user);
   
     void subscribe(const CHandlePtr<common::User>& user, const CHandlePtr<common::Channel>& channel);
 
