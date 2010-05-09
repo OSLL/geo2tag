@@ -98,10 +98,11 @@ namespace common
   {
     friend class UpdateThread<DbSession>;
 
-    CHandlePtr<DataMarks> m_marks;
-    CHandlePtr<Channels> m_channels;
+    CHandlePtr<DataMarks> m_marks; // Marks list
+    CHandlePtr<Channels> m_channels; // Channels list
+    CHandlePtr<std::vector<CHandlePtr<common::User> > > m_users; // Users list
+
     std::map<std::string,CHandlePtr<common::User> > m_tokensMap;
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > m_users;
     CHandlePtr<Thread::CThread> m_updateThread;
 
     void loadUsers();
@@ -136,7 +137,7 @@ namespace common
 
     void storeMark(CHandlePtr<common::DataMark> m);
   
-    void subscribe(const std::string& userName, const std::string &channelName);
+    void subscribe(const CHandlePtr<common::User>& user, const CHandlePtr<common::Channel>& channel);
 
     void unsubscribe(CHandlePtr<common::User> user, CHandlePtr<common::Channel> hannel);
 

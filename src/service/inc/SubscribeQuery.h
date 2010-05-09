@@ -34,8 +34,9 @@ class SubscribeQuery:public IJsonQuery
   {
 
   std::string m_token;
-
   std::string m_channel;
+  std::string m_result;
+
   void init(const std::stringstream& query);
 
   std::string outToString() const;

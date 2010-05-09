@@ -70,7 +70,7 @@ void Server::process(const Query &q)
 		s << "Status: 200 OK\r\nContent-Type: text/html\r\n\r\n";
 		s << (*query);
 	}
-	catch (CDynamicCastFailure& e)
+	catch (const CExceptionSource& e)
 	{
 		syslog(LOG_INFO,"Dynamic Cast Failure. Line %i, file %s",e.getLine(),e.getSource());
 		s << "Status: 500 Internal Server Error\r\nContent-Type: text/html\r\n\r\n Error applying mark.";

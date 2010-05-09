@@ -12,11 +12,13 @@
 #include "SubscribeQuery.h"
 #include "UserInternal.h"
 #include <syslog.h>
-SubscribeQuery::SubscribeQuery(){
+SubscribeQuery::SubscribeQuery()
+{
 
 }
 
-void SubscribeQuery::init(const std::stringstream& query){
+void SubscribeQuery::init(const std::stringstream& query)
+{
 
   json::Element elemRoot;
   std::istringstream s(query.str());
@@ -28,23 +30,55 @@ void SubscribeQuery::init(const std::stringstream& query){
   m_channel=std::string(channel);
 }
 
-void SubscribeQuery::process(){
+void SubscribeQuery::process()
+{
 //  common::DbSession::getInstance().loadData();
   syslog(LOG_INFO,"Starting DbSession::subscribe method");
-  CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
-  for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
+  CHandlePtr<common::Channels > channels=common::DbSession::getInstance().getChannels();
+  CHandlePtr<common::User> du;
+  CHandlePtr<common::Channel> ch;
+
+  if(common::DbSession::getInstance().getTokensMap().count(m_token) == 0)
   {
-    if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
-    {
-      common::DbSession::getInstance().subscribe((*i)->getLogin(),m_channel);
-    }
+    m_result="Error";
+    return;
+  } 
+  else
+  {
+    du = common::DbSession::getInstance().getTokensMap().find(m_token)->second;  
   }
+
+  for(size_t i=0; i< channels->size(); ++i)
+  {
+      if((*channels)[i]->getName() == m_channel)
+      {
+          ch = (*channels)[i];
+          break;
+      }
+  }
+  
+  if(ch == NULL) // Channel was not found
+  {
+    m_result = "Error";
+    return;
+  }
+
+  try 
+  { 
+    common::DbSession::getInstance().subscribe(du,ch);
+    m_result = "Ok";
+  }
+  catch(const CExceptionSource& x)
+  {
+    m_result = "Error";
+  }
+
 }
 
 std::string SubscribeQuery::outToString() const
 {
         syslog(LOG_INFO,"Starting SubscribedQuery::outToString() method");
-        return "{\"status\":\"ok\"}";
+        return "{\"status\":\""+m_result+"\"}";
 }
 
 

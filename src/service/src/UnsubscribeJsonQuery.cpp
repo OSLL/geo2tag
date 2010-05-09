@@ -48,11 +48,14 @@
 #include "DbSession.h"
 #include "Time.h"
 #include <syslog.h>
-UnsubscribeJsonQuery::UnsubscribeJsonQuery(){
+
+UnsubscribeJsonQuery::UnsubscribeJsonQuery()
+{
 	m_status="Error";
 }
 
-void UnsubscribeJsonQuery::init(const std::stringstream& query){
+void UnsubscribeJsonQuery::init(const std::stringstream& query)
+{
 	json::Element elemRoot;
 	std::istringstream s(query.str());
 	json::Reader::Read(elemRoot,s);
@@ -63,25 +66,32 @@ void UnsubscribeJsonQuery::init(const std::stringstream& query){
 	m_channel=std::string(channel);
 }
 
-void UnsubscribeJsonQuery::process(){
+void UnsubscribeJsonQuery::process()
+{
 	CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
 	for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
 	{
-	    if ((*i).dynamicCast<loader::User>()->getToken()==m_token){
-			CHandlePtr<common::Channels> channels=(*i)->getSubscribedChannels();
-			if (!channels) break;
-			for (common::Channels::iterator j=channels->begin();j!=channels->end();j++)
-			{
-				if ((*j)->getName()==m_channel){
-					common::DbSession::getInstance().unsubscribe((*i),(*j));
-					syslog(LOG_INFO,"DbSession::Unsubscribe finished");
-					m_status="ok";
-					break;
-				}
+	    if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
+      {
+			  CHandlePtr<common::Channels> channels=(*i)->getSubscribedChannels();
+  			if(channels == NULL) 
+        {
+          break;
+        }
+  			for (common::Channels::iterator j=channels->begin();j!=channels->end();j++)
+  			{
+	  			if ((*j)->getName()==m_channel)
+          {
+		  			common::DbSession::getInstance().unsubscribe((*i),(*j));
+			  		syslog(LOG_INFO,"DbSession::Unsubscribe finished");
+				  	m_status="Ok";
+					  return;
+				  }
 			}
-		break;
+		  break;
 		}
 	}
+  m_status="Error";
 }
 
 std::string UnsubscribeJsonQuery::outToString() const
