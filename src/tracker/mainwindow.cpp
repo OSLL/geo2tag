@@ -101,15 +101,12 @@ void MainWindow::createSettings()
 void MainWindow::timerEvent(QTimerEvent *te)
 {
   killTimer(te->timerId());
-  QDateTime now = QDateTime::currentDateTime();
 
-  qDebug() << "mark timer " << now;
 
   if( m_settings.initialized )
   {
     qDebug() << "   ... dropping mark" << QDateTime().currentDateTime();
     bool result = setMark();
-    m_status->setText(QString("Last attempt %1, was %2").arg(now.toString()).arg( ((result) ? "success" : "failed")));
   }
 
   startTimer(UPDATE_INTERVAL);
@@ -133,5 +130,16 @@ bool MainWindow::setMark()
 
 void MainWindow::onApplyMarkResponse(QString status)
 {
+    QDateTime now = QDateTime::currentDateTime();
+    qDebug() << "mark timer " << now;
+
+    if (status == QString("Ok"))
+    {
+        m_status->setText(QString("Last attempt %1, was %2").arg(now.toString()).arg(" success"));
+    }
+    else
+    {
+        m_status->setText(QString("Last attempt %1, was %2").arg(now.toString()).arg(" failed"));
+    }
 
 }
