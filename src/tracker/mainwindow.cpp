@@ -117,12 +117,21 @@ void MainWindow::timerEvent(QTimerEvent *te)
 
 bool MainWindow::setMark()
 {
- //   ApplyMarkQuery *applyMarkQuery = new ApplyMarkQ
+    GUI::ApplyMarkQuery *applyMarkQuery = new GUI::ApplyMarkQuery
+                                          (m_settings.auth_token,
+                                           m_settings.channel,
+                                           QString("title"),
+                                           QString("url"),
+                                           QString("description"),
+                                           0, 0,
+                                           QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
+    connect(applyMarkQuery, SIGNAL(responseReceived(QString)), this, SLOT(onApplyMarkResponse(QString)));
+    applyMarkQuery->doRequest();
 
-  // remove this
-  static bool succ = false;
-  succ = !succ;
-  return succ;
+    return true;
+}
 
-  //TODO: implement setting mark
+void MainWindow::onApplyMarkResponse(QString status)
+{
+
 }

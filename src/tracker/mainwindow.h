@@ -31,7 +31,7 @@ public slots:
   void readSettings();
   void createSettings();
 
-  //void onApplyMarkResponse(QString);
+  void onApplyMarkResponse(QString);
 
 };
 
