@@ -75,6 +75,13 @@
     </layout>
    </item>
    <item>
+    <widget class="QCheckBox" name="newUser">
+     <property name="text">
+      <string>Register new user</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <widget class="QPushButton" name="okButton">

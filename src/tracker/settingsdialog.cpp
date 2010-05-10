@@ -47,7 +47,8 @@ void SettingsDialog::accept()
 {
   reflectSettings();
 
-  createUser();
+  if( m_ui.newUser->isChecked())
+    createUser();
 }
 
 
