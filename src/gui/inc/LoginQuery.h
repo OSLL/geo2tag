@@ -49,8 +49,6 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-#include "Channel.h"
-
 namespace GUI
 {
     /*!

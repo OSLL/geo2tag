@@ -6,6 +6,7 @@
 #include "AddUserQuery.h"
 #include "ApplyChannelQuery.h"
 #include "SubscribeChannelQuery.h"
+#include "LoginQuery.h"
 
 SettingsDialog::SettingsDialog(int type, QWidget *parent) : QDialog(parent), m_isCreateNewChannel(type == 0)
 {
@@ -48,7 +49,9 @@ void SettingsDialog::accept()
   reflectSettings();
 
   if( m_ui.newUser->isChecked())
-    createUser();
+      createUser();
+  else
+      loginUser();
 }
 
 
@@ -78,6 +81,39 @@ void SettingsDialog::onAddUserResponse(QString status, QString auth_token)
     else
     {
         QMessageBox::critical(this,"Error", QString("Cannot create user '%1', passwd '%2'")
+                              .arg(m_settings.user)
+                              .arg(m_settings.passw));
+    }
+}
+
+bool SettingsDialog::loginUser()
+{
+    GUI::LoginQuery *loginQuery = new GUI::LoginQuery(m_settings.user,
+                                                      m_settings.passw,
+                                                      this);
+    connect(loginQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onLoginResponse(QString,QString)));
+    loginQuery->doRequest();
+
+    return true;
+}
+
+void SettingsDialog::onLoginResponse(QString status, QString auth_token)
+{
+    if (status == QString("Ok"))
+    {
+        m_settings.auth_token = auth_token;
+        if(m_isCreateNewChannel)
+        {
+            createChannel();
+        }
+        else
+        {
+            subscribeChannel();
+        }
+    }
+    else
+    {
+        QMessageBox::critical(this,"Error", QString("Cannot login user '%1', passwd '%2'")
                               .arg(m_settings.user)
                               .arg(m_settings.passw));
     }

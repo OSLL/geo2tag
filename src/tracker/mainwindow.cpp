@@ -120,7 +120,7 @@ bool MainWindow::setMark()
                                            QString("title"),
                                            QString("url"),
                                            QString("description"),
-                                           0, 0,
+                                           60.17, 24.95,
                                            QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
     connect(applyMarkQuery, SIGNAL(responseReceived(QString)), this, SLOT(onApplyMarkResponse(QString)));
     applyMarkQuery->doRequest();
@@ -133,7 +133,7 @@ void MainWindow::onApplyMarkResponse(QString status)
     QDateTime now = QDateTime::currentDateTime();
     qDebug() << "mark timer " << now;
 
-    if (status == QString("Ok"))
+    if (status == QString("ok"))
     {
         m_status->setText(QString("Last attempt %1, was %2").arg(now.toString()).arg(" success"));
     }

@@ -136,11 +136,11 @@ void AddUserQuery::onManagerFinished(QNetworkReply *reply)
         QJson::Parser parser;
         bool ok;
         QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
-        QString status("");
+        QString status("Error");
         QString auth_token("");
         if (!ok)
         {
-            qFatal("An error occured during parsing json with channel list");
+            qFatal("An error occured during parsing json with user name and password");
         }
         else
         {

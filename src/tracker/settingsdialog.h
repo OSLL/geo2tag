@@ -21,6 +21,7 @@ public:
 
 protected:
     bool createUser();
+    bool loginUser();
     bool createChannel();
     bool subscribeChannel();
     void reflectSettings();
@@ -30,6 +31,7 @@ public slots:
     void reject();
 
     void onAddUserResponse(QString status, QString auth_token);
+    void onLoginResponse(QString status, QString auth_token);
     void onApplyChannelResponse(QString status);
     void onSubscribeChannelResponse(QString status);
 };

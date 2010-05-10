@@ -20,15 +20,18 @@ SOURCES += main.cpp \
            AddUserQuery.cpp \
            ../gui/src/SubscribeChannelQuery.cpp \
            ../gui/src/SubscribeChannelJSON.cpp \
-           ../gui/src/ApplyMarkQuery.cpp
+           ../gui/src/ApplyMarkQuery.cpp \
+           ../gui/src/LoginQuery.cpp
 
 HEADERS += mainwindow.h \
            settingsdialog.h \
            tracker.h \
            ApplyChannelQuery.h \
            AddUserQuery.h \
+           ../common/inc/defines.h \
            ../gui/inc/SubscribeChannelQuery.h \
-           ../gui/inc/ApplyMarkQuery.h
+           ../gui/inc/ApplyMarkQuery.h \
+           ../gui/inc/LoginQuery.h
 
 FORMS += formCreateChannel.ui
 
