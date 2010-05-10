@@ -10,7 +10,10 @@ DEPENDPATH += . \
 INCLUDEPATH += . \
                ./requests \
                ../gui/inc \
-               ../common/inc
+               ../common/inc \
+               ../common/common/inc \
+               ../common/exception/inc \
+               ../common/thread/inc 
 
 # Input
 SOURCES += main.cpp \
