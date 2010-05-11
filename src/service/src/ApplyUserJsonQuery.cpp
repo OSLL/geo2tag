@@ -117,7 +117,7 @@ std::string ApplyUserJsonQuery::outToString() const
   }
   else
   {
-    return "{\"status\":\""+m_result+"\", \"auth_token\"=\""+m_token+"\"}";
+    return "{\"status\":\""+m_result+"\", \"auth_token\":\""+m_token+"\"}";
   }
 }
 

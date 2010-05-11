@@ -16,15 +16,25 @@
 
 class RssFeedJsonQuery:public IJsonQuery
 {
+public:
+  enum Type
+  {
+    ALL_MARKS,
+    THE_LATEST_FROM_EACH_MEMBER
+  };
+private:
+
 	std::string m_token;
 	double m_latitude;
 	double m_longitude;
 	double m_radius;
+  Type   m_type;
+
 	std::string outToString() const;
 	CHandlePtr<common::DataMarks> m_marks;
 	void init(const std::stringstream& query);
 public:
-	
+  
 	RssFeedJsonQuery();
 	void process();
 };

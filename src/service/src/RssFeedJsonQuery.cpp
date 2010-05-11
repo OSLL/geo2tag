@@ -9,24 +9,41 @@ bool comp(CHandlePtr<common::DataMark> x1,CHandlePtr<common::DataMark> x2){retur
 
 RssFeedJsonQuery::RssFeedJsonQuery()
 {
-
 	m_marks=makeHandle(new common::DataMarks());
 }
 
 
-void RssFeedJsonQuery::init(const std::stringstream& query){
-        json::Element elemRoot;
+void RssFeedJsonQuery::init(const std::stringstream& query)
+{
+  json::Element elemRoot;
 	std::istringstream s(query.str());
-        json::Reader::Read(elemRoot,s);
-        json::QuickInterpreter interpreter(elemRoot);
-        const json::String& token=interpreter["auth_token"];
+  json::Reader::Read(elemRoot,s);
+  json::QuickInterpreter interpreter(elemRoot);
+  const json::String& token=interpreter["auth_token"];
 	m_token=std::string(token);
-        const json::Number& radius=interpreter["radius"];
-        m_radius=radius;
-        const json::Number& latitude=interpreter["latitude"];
+  const json::Number& radius=interpreter["radius"];
+  m_radius=radius;
+  const json::Number& latitude=interpreter["latitude"];
 	m_latitude=latitude;
 	const json::Number& longitude=interpreter["longitude"];
 	m_longitude=longitude;
+  try
+  {
+    const json::String& type=interpreter["type"];
+    if(std::string(type)=="last_one")
+    {
+      m_type = THE_LATEST_FROM_EACH_MEMBER;
+    }
+    else
+    {
+      m_type = ALL_MARKS;
+    }
+  }
+  catch(...)
+  {
+    m_type = ALL_MARKS;
+  }
+
 }
 
 
@@ -36,44 +53,66 @@ void RssFeedJsonQuery::process()
   m_marks->clear();
   CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
   CHandlePtr<common::Channels> channels;
-  for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++){
-    if ((*i).dynamicCast<loader::User>()->getToken()==m_token){
+  std::map<CHandlePtr<common::User>, CHandlePtr<common::DataMark> > m_outputList; // used for THE_LATEST_FROM_EACH_MEMBER request
+
+
+  for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
+  {
+    if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
+    {
       channels=(*i)->getSubscribedChannels();
       break;
     }
   }
+
   syslog(LOG_INFO, "Marks->size()=%ld,channels->size()=%ld",marks->size(), channels->size());
   size_t i,y;
+  
   for (y=0; y<marks->size();y++)
   {
-    for (i=0; i<channels->size();i++){
-       if ((*marks)[y]->getChannel()==(*channels)[i]) {
-    	 syslog(LOG_INFO, "(*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude)[%f] <= m_radius[%f]",
+    for (i=0; i<channels->size();i++)
+    {
+       if ((*marks)[y]->getChannel()==(*channels)[i]) 
+       {
+           syslog(LOG_INFO, "(*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude)[%f] <= m_radius[%f]",
               (*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude), m_radius);
-	 if ((*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude) <= m_radius) 
-	 {
-	       m_marks->push_back((*marks)[y]);
-	 }
+           if ((*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude) <= m_radius) 
+           {
+              if(m_type == ALL_MARKS)
+              {
+                m_marks->push_back((*marks)[y]);
+              }
+              else
+              {
+                CHandlePtr<common::DataMark> m = (*marks)[y];
+                if(m_outputList.count(m->getUser())>0 )
+                {
+                  if(m_outputList.find(m->getUser())->second->getTime() < m->getTime())
+                  {
+                    m_outputList[m->getUser()] = m;
+                  }
+                }
+                else
+                {
+                  m_outputList[m->getUser()] = m;
+                }
+              }
+           }
        }
     }
   }
-  syslog(LOG_INFO, "RssFeedJsonQuery::process, marks.size() = %u, after filtering", m_marks->size());
-//  CHandlePtr<common::DataMark> max=makeHandle(new loader::DataMark());
-//  CHandlePtr<common::DataMark> tmp=makeHandle(new loader::DataMark());
-//This things should be in common::DataMarks class
- /*nt k;
-  for (int i=0;i!=20;i++){
-//    max=(*m_marks)[i];
-    k=i;
-    for (int j=i;j!=m_marks->size();j++){
-      if ((*m_marks)[k]->getTime()>(*marks)[j]->getTime()) k=j; 
+  
+  if(m_type == THE_LATEST_FROM_EACH_MEMBER)
+  {
+    for(std::map<CHandlePtr<common::User>, CHandlePtr<common::DataMark> >::iterator it=m_outputList.begin();
+          it!=m_outputList.end(); it++)
+    {
+      m_marks->push_back(it->second);
     }
-   // tmp=(*m_marks)[i];
-//    (*m_marks)[i]=(*m_marks)[k];
-  //  (*m_marks)[k]=tmp;
-    std::swap((*m_marks)[i],(*m_marks)[k]);//
-  }*/
-   std::sort(m_marks->begin(),m_marks->end(),comp);
+  }
+
+  syslog(LOG_INFO, "RssFeedJsonQuery::process, marks.size() = %u, after filtering", m_marks->size());
+  std::sort(m_marks->begin(),m_marks->end(),comp);
 }
 
 std::string RssFeedJsonQuery::outToString() const
@@ -110,7 +149,10 @@ std::string RssFeedJsonQuery::outToString() const
 			marks[j]["channel"]=json::String(channel->getName());			
 		}	
 	}
-	else marks = json::Null();
+	else  // m_marks->size() == 0
+  {
+    marks = json::Null();
+  }
 
 	json::Writer::Write(newRoot,s);
 	syslog(LOG_INFO,"json formed");
