@@ -7,7 +7,8 @@ TARGET =
 QT += network
 
 CONFIG += mobility
-MOBILITY = location
+MOBILITY = location \
+           bearer
 
 DEPENDPATH += . \
               ./requests \

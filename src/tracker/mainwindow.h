@@ -11,6 +11,9 @@
 // Location
 #include <qgeopositioninfosource.h>
 #include <qgeopositioninfo.h>
+// Bearer
+#include <qnetworkconfigmanager.h>
+#include <qnetworksession.h>
 
 // QtMobility namespace
 QTM_USE_NAMESPACE
@@ -27,6 +30,9 @@ class MainWindow : public QMainWindow
   // Location data
   QPointer<QGeoPositionInfoSource> m_positionSource;
   QGeoPositionInfo m_positionInfo;
+
+  // for bearer management
+  QNetworkSession* m_session;
 
 
 public:
@@ -47,6 +53,7 @@ public slots:
   void readSettings();
   void createSettings();
 
+  void setupBearer();
   void onApplyMarkResponse(QString);
   void positionUpdated(QGeoPositionInfo gpsPos);
 

@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QVBoxLayout>
+#include <QTimer>
 
 #include "settingsdialog.h"
 
@@ -40,6 +41,9 @@ MainWindow::MainWindow() : QMainWindow(NULL)
   initSettings();
 
   startTimer(100); // first update should be fast
+
+  startGps();
+  QTimer::singleShot(0, this, SLOT(setupBearer()));
 }
 
 void MainWindow::cleanLocalSettigns()
@@ -114,6 +118,23 @@ void MainWindow::startGps()
 void MainWindow::positionUpdated(QGeoPositionInfo gpsPos)
 {
     m_positionInfo = gpsPos;
+}
+
+void MainWindow::setupBearer()
+{
+    // Set Internet Access Point
+    QNetworkConfigurationManager manager;
+    const bool canStartIAP = (manager.capabilities()
+        & QNetworkConfigurationManager::CanStartAndStopInterfaces);
+    // Is there default access point, use it
+    QNetworkConfiguration cfg = manager.defaultConfiguration();
+    if (!cfg.isValid() || !canStartIAP) {
+        QMessageBox::information(this, "QWhoWhere", "Available Access Points not found");
+        return;
+    }
+    m_session = new QNetworkSession(cfg);
+    m_session->open();
+    m_session->waitForOpened();
 }
 
 void MainWindow::timerEvent(QTimerEvent *te)
