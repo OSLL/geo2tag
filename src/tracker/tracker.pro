@@ -3,6 +3,12 @@
 # #####################################################################
 TEMPLATE = app
 TARGET = 
+
+QT += network
+
+CONFIG += mobility
+MOBILITY = location
+
 DEPENDPATH += . \
               ./requests \
               ../gui/inc \
@@ -37,4 +43,4 @@ FORMS += formCreateChannel.ui
 
 LIBS += -lqjson
 
-QT += network
+

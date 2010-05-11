@@ -4,7 +4,16 @@
 #include <QMainWindow>
 #include <QDateTime>
 #include <QLabel>
+#include <QPointer>
 #include "tracker.h"
+
+// QtMobility API headers
+// Location
+#include <qgeopositioninfosource.h>
+#include <qgeopositioninfo.h>
+
+// QtMobility namespace
+QTM_USE_NAMESPACE
 
 
 class MainWindow : public QMainWindow
@@ -14,6 +23,10 @@ class MainWindow : public QMainWindow
   Settings   m_settings;
   QLabel    *m_status;
   QDateTime  m_lastUpdate;
+
+  // Location data
+  QPointer<QGeoPositionInfoSource> m_positionSource;
+  QGeoPositionInfo m_positionInfo;
 
 
 public:
@@ -25,6 +38,9 @@ protected:
   void initSettings();
   bool setMark();
 
+private:
+    void startGps();
+
 public slots:
 
   void cleanLocalSettigns();
@@ -32,6 +48,7 @@ public slots:
   void createSettings();
 
   void onApplyMarkResponse(QString);
+  void positionUpdated(QGeoPositionInfo gpsPos);
 
 };
 

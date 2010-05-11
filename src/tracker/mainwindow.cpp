@@ -13,6 +13,9 @@
 
 #include "ApplyMarkQuery.h"
 
+#define DEFAULT_LATITUDE 60.17
+#define DEFAULT_LONGITUDE 24.95
+
 MainWindow::MainWindow() : QMainWindow(NULL)
 {
   QAction *clean = new QAction("&Clean", this);
@@ -98,6 +101,21 @@ void MainWindow::createSettings()
   }
 }
 
+void MainWindow::startGps()
+{
+    if (!m_positionSource) {
+        m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
+        QObject::connect(m_positionSource, SIGNAL(positionUpdated(QGeoPositionInfo)),
+        this, SLOT(positionUpdated(QGeoPositionInfo)));
+    }
+    m_positionSource->startUpdates();
+}
+
+void MainWindow::positionUpdated(QGeoPositionInfo gpsPos)
+{
+    m_positionInfo = gpsPos;
+}
+
 void MainWindow::timerEvent(QTimerEvent *te)
 {
   killTimer(te->timerId());
@@ -114,13 +132,25 @@ void MainWindow::timerEvent(QTimerEvent *te)
 
 bool MainWindow::setMark()
 {
+    qreal latitude = DEFAULT_LATITUDE;
+    qreal longitude = DEFAULT_LONGITUDE;
+
+    if (m_positionInfo.isValid()) {
+        latitude = m_positionInfo.coordinate().latitude();
+        longitude = m_positionInfo.coordinate().longitude();
+    }
+    else {
+        qDebug() << "Using wrong coordinates.";
+    }
+
     GUI::ApplyMarkQuery *applyMarkQuery = new GUI::ApplyMarkQuery
                                           (m_settings.auth_token,
                                            m_settings.channel,
                                            QString("title"),
                                            QString("url"),
                                            QString("description"),
-                                           60.17, 24.95,
+                                           latitude,
+                                           longitude,
                                            QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
     connect(applyMarkQuery, SIGNAL(responseReceived(QString)), this, SLOT(onApplyMarkResponse(QString)));
     applyMarkQuery->doRequest();
