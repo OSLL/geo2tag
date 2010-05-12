@@ -6,7 +6,7 @@ int main(int c, char **v)
   QApplication app(c,v);
 
   MainWindow mw;
-  mw.show();
+  mw.showMaximized();
 
   return app.exec();
 }

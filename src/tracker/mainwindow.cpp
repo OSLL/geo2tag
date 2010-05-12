@@ -83,8 +83,8 @@ void MainWindow::readSettings()
 void MainWindow::createSettings()
 {
   int p = QMessageBox::question(this,
-                                "Question","Create new channel or attach existing?",
-                                "Create new", "Attach existing");
+                                "Question","Attach existing channel? (otherwise new one will be created)",//"Create new channel or attach existing?",
+                                "No", "Yes"); //"Create new", "Attach existing");
 
   SettingsDialog sd(p,this);
 
