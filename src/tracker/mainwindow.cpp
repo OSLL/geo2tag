@@ -129,7 +129,6 @@ void MainWindow::setupBearer()
     // Is there default access point, use it
     QNetworkConfiguration cfg = manager.defaultConfiguration();
     if (!cfg.isValid() || !canStartIAP) {
-        QMessageBox::information(this, "QWhoWhere", "Available Access Points not found");
         return;
     }
     m_session = new QNetworkSession(cfg);

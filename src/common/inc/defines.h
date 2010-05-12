@@ -42,7 +42,7 @@
 #ifndef _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #define _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 
-#define SERVER_HTTP_URL "http://osll.spb.ru:8080/"
+#define SERVER_HTTP_URL "http://zps.spb.su/"
 
 #define SUBSCRIBE_HTTP_URL        SERVER_HTTP_URL"example?query=subscribe"
 #define UNSUBSCRIBE_HTTP_URL      SERVER_HTTP_URL"example?query=unsubscribe"

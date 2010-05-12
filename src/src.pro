@@ -6,7 +6,8 @@ SUBDIRS = common
 
 maemo5 {
   SUBDIRS += maps \
-             gui
+             gui \
+	     tracker
 }
 
 linux {
