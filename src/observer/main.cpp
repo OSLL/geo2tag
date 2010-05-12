@@ -1,7 +1,7 @@
 #include <QApplication>
 #include "observer.h"
 #include <curl/curl.h>
-
+#include "MapWidget.h"
 
 int main(int c, char **v)
 {

@@ -92,7 +92,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
-      <widget class="QWidget" name="m_mapArea" native="true"/>
+      <widget class="MapWidget" name="m_mapArea" native="true"/>
      </item>
      <item>
       <widget class="QSlider" name="m_scale">
@@ -114,6 +114,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MapWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">MapWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
