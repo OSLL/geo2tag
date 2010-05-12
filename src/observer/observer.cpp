@@ -6,6 +6,7 @@
 #include "User.h"
 #include "MapLoaderFactory.h"
 #include "MapLoader.h"
+#include <QDebug>
 Observer::Observer() : QDialog(NULL)
 {
     m_ui.setupUi(this);
@@ -14,6 +15,7 @@ Observer::Observer() : QDialog(NULL)
     connect(m_ui.m_updateButton, SIGNAL(clicked()), this, SLOT(buttonPushed()));
     connect(this, SIGNAL(dataUpdated()), this, SLOT(updateView()));
     connect(this, SIGNAL(dataUpdated()), this, SLOT(updateList()));
+    qDebug() << "Starting";
 }
 
 
@@ -37,6 +39,7 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
 // Get dataMark 
 // push it into m_data
     if (rssFeedQuery){
+    qDebug() << "updateData(CHandlePtr<common::DataMarks>& marks) called";
     m_data.clear();
     MarkInfo tmp;
     for (common::DataMarks::iterator i=marks->begin();i!=marks->end();i++)
@@ -53,16 +56,19 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
     painter.drawImage(m_ui.m_mapArea->rect(),QImage::fromData(array));
 }
     emit dataUpdated();
+    qDebug() << "updateData(CHandlePtr<common::DataMarks>& marks) finishes";
 }
 
 void Observer::tokenRecieved(QString status,QString auth_token)
 {
 //When auth is success make Observer visible and create RSSFeedQuery
+    qDebug() << "tokenRecieved called"; 
     rssFeedQuery=new GUI::RSSFeedQuery(auth_token,30.0,30.0,30.0,true);
     connect(rssFeedQuery,SIGNAL(responseReceived(CHandlePtr<common::DataMarks>& )),
        this,SLOT(updateData(CHandlePtr<common::DataMarks>&))); 
     connect(m_ui.m_updateButton, SIGNAL(clicked()), this, SLOT(doRequest()));
     rssFeedQuery->doRequest();
+    qDebug() << "tokenRecieved finished";
 }
 
 void Observer::doRequest()
@@ -73,6 +79,7 @@ void Observer::doRequest()
 void Observer::buttonPushed()
 {
 if (!rssFeedQuery){
+        qDebug() << "buttonPushed finishes";
 	loginQuery->setQuery(m_ui.m_user->text(),m_ui.m_password->text());
 	connect(loginQuery,SIGNAL(responseReceived(QString, QString)), this,SLOT(tokenRecieved(QString,QString)));
 	loginQuery->doRequest();

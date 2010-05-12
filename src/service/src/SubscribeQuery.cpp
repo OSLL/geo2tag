@@ -40,6 +40,7 @@ void SubscribeQuery::process()
 
   if(common::DbSession::getInstance().getTokensMap().count(m_token) == 0)
   {
+    syslog(LOG_INFO,"common::DbSession::getInstance().getTokensMap().count(m_token) == 0");
     m_result="Error";
     return;
   } 
@@ -58,7 +59,8 @@ void SubscribeQuery::process()
   }
   
   if(ch == NULL) // Channel was not found
-  {
+  { 
+    syslog(LOG_INFO, "ch == NULL");
     m_result = "Error";
     return;
   }
@@ -70,6 +72,7 @@ void SubscribeQuery::process()
   }
   catch(const CExceptionSource& x)
   {
+    syslog(LOG_INFO,"exception while common::DbSession::getInstance().subscribe(du,ch)");
     m_result = "Error";
   }
 

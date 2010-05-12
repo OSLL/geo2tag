@@ -65,7 +65,7 @@ void RssFeedJsonQuery::process()
     }
   }
 
-  syslog(LOG_INFO, "Marks->size()=%ld,channels->size()=%ld",marks->size(), channels->size());
+//  syslog(LOG_INFO, "Marks->size()=%ld,channels->size()=%ld",marks->size(), channels->size());
   size_t i,y;
   
   for (y=0; y<marks->size();y++)

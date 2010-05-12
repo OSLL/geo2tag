@@ -58,24 +58,25 @@ namespace GUI
     }
 
     RSSFeedQuery::RSSFeedQuery
-            (QString user, qreal latitude, qreal longitude, qreal radius, QObject *parent)
+            (QString user, qreal latitude, qreal longitude, qreal radius, bool isLastOne,QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
-        setQuery(user,latitude,longitude,radius);
+        setQuery(user,latitude,longitude,radius,isLastOne);
 
         qDebug() << "RSSFeedQuery created:\n"
                  << httpQuery << jsonQuery;
     }
 
     void RSSFeedQuery::setQuery(QString auth_token, qreal latitude,
-                                              qreal longitude, qreal radius)
+                                              qreal longitude, qreal radius,bool isLastOne)
     {
         jsonQuery = "{\"auth_token\":\"" + auth_token +
                     "\", \"latitude\":" + QString::number(latitude) +
                     ", \"longitude\":" + QString::number(longitude) +
-                    ", \"radius\":" + QString::number(radius) +
-                    "}";
+                    ", \"radius\":" + QString::number(radius) ;
+	if (isLastOne) jsonQuery+=",\"type\":\"last_one\"";
+                   jsonQuery+= "}";
         httpQuery = FEED_HTTP_URL;
     }
 

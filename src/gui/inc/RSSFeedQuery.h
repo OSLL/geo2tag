@@ -78,10 +78,11 @@ namespace GUI
 
         RSSFeedQuery(QString auth_token, qreal latitude,
                                    qreal longitude, qreal radius,
+				   bool isLastOne=0,
                                    QObject *parent = 0);
 
         void setQuery(QString auth_token, qreal latitude,
-                      qreal longitude, qreal radius);
+                      qreal longitude, qreal radius,bool isLastOne=0);
 
         ~RSSFeedQuery();
 

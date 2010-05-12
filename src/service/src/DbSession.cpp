@@ -617,6 +617,7 @@ namespace common
         
         s_users[us->getId()]=us;
         m_users->push_back(us);
+        m_tokensMap[us->getToken()]=us;
       }
       else
       {
