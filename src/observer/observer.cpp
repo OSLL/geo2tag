@@ -2,20 +2,18 @@
 #include <QMessageBox>
 #include <QPainter>
 #include "Picture.h"
-//#include "GoogleMapLoader.h"
 #include "User.h"
-//#include "MapLoaderFactory.h"
-//#include "MapLoader.h"
 #include <QDebug>
 #include "MapWidget.h"
-
+#include <QStringList>
+#include <QComboBox>
 
 Observer::Observer() : QDialog(NULL)
 {
     m_ui.setupUi(this);
+    m_marks=makeHandle(new common::DataMarks);
     loginQuery=new GUI::LoginQuery;
     qDebug() << "starting" ;
-//    connect(m_ui.m_updateButton, SIGNAL(clicked()), this, SLOT(updateData()));
     connect(m_ui.m_updateButton, SIGNAL(pressed()), this, SLOT(buttonPushed()));
     connect(this, SIGNAL(dataUpdated()), this, SLOT(updateView()));
     connect(this, SIGNAL(dataUpdated()), this, SLOT(updateList()));
@@ -45,15 +43,20 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
     qDebug() << "updateData slot";
     m_data.clear();
     MarkInfo tmp;
+    m_marks=marks;
+    QStringList list;
     for (common::DataMarks::iterator i=marks->begin();i!=marks->end();i++)
     {
-        tmp.user=QString((*i)->getUser()->getLogin().c_str());
-        tmp.position=QPointF((*i)->getLatitude(),(*i)->getLongitude());
-	qDebug() << "before time making";
+//        tmp.user=QString((*i)->getUser()->getLogin().c_str());
+//        tmp.position=QPointF((*i)->getLatitude(),(*i)->getLongitude());
+//	qDebug() << "before time making";
 //	tmp.date=QDateTime::fromString(formatTime((*i)->getTime().getTime(),"%d %b %Y %H:%M:%S").c_str());
-	qDebug() << "after time making";
-        m_data.push_back(tmp);
+//	qDebug() << "after time making";
+//        m_data.push_back(tmp);
+        list << QString((*i)->getUser()->getLogin().c_str());
     }
+    m_ui.m_users->clear();
+    m_ui.m_users->addItems(list);
 }
     emit dataUpdated();
 }
@@ -66,10 +69,11 @@ void Observer::tokenRecieved(QString status,QString auth_token)
     rssFeedQuery=new GUI::RSSFeedQuery(auth_token,30.0,30.0,30000000.0,true);
     connect(rssFeedQuery,SIGNAL(responseReceived(CHandlePtr<common::DataMarks>& )),
        this,SLOT(updateData(CHandlePtr<common::DataMarks>&))); 
-    connect(rssFeedQuery,SIGNAL(responseReceived(CHandlePtr<common::DataMarks>& )),
+    connect(this,SIGNAL(dataMarksGotten(CHandlePtr<common::DataMarks>& )),
        m_ui.m_mapArea,SLOT(updated(CHandlePtr<common::DataMarks>&)));
     connect(m_ui.m_updateButton, SIGNAL(clicked()), this, SLOT(doRequest()));
     connect(m_ui.m_scale,SIGNAL(sliderMoved(int)),m_ui.m_mapArea,SLOT(scaleChanged(int)));
+    connect(m_ui.m_users,SIGNAL(currentIndexChanged ( const QString&) ),this,SLOT(usersSelected(const QString&)));
     rssFeedQuery->doRequest();
     
 }
@@ -91,3 +95,18 @@ void Observer::buttonPushed()
 //}
 }
 
+//New slot were we create DataMarks from one DataMark that corresponds for text user name
+
+void Observer::usersSelected(const QString & text)
+{
+CHandlePtr<common::DataMarks> mrs=makeHandle(new common::DataMarks);
+//Code below
+for (common::DataMarks::iterator i=m_marks->begin();i!=m_marks->end();i++)
+{
+	if ((*i)->getUser()->getLogin()==text.toStdString()){
+		mrs->push_back((*i));
+		emit dataMarksGotten(mrs);
+		break;
+	}
+}
+}

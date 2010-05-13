@@ -81,18 +81,27 @@
       </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="m_updateButton">
-       <property name="text">
-        <string>Update</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QPushButton" name="m_updateButton">
+         <property name="text">
+          <string>Update</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="m_users"/>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
-      <widget class="MapWidget" name="m_mapArea" native="true"/>
+      <widget class="MapWidget" name="m_mapArea" native="true">
+       <zorder></zorder>
+      </widget>
      </item>
      <item>
       <widget class="QSlider" name="m_scale">

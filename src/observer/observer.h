@@ -11,6 +11,7 @@ class Observer : public QDialog
     Q_OBJECT;
     Ui::Form           m_ui;
     QVector<MarkInfo>  m_data;
+    CHandlePtr<common::DataMarks> m_marks;
     GUI::RSSFeedQuery  *rssFeedQuery;
     GUI::LoginQuery *loginQuery;
 public:
@@ -19,7 +20,7 @@ public:
 
 signals:
     void dataUpdated();
-
+    void dataMarksGotten(CHandlePtr<common::DataMarks>& marks);
 public slots:
     void tokenRecieved(QString status,QString auth_token);
     void updateData(CHandlePtr<common::DataMarks>& marks);
@@ -27,6 +28,7 @@ public slots:
     void updateView();
     void updateList();
     void doRequest();
+    void usersSelected(const QString & text);
 };
 
 #endif // OBSERVER_H
