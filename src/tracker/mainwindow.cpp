@@ -121,6 +121,7 @@ void MainWindow::startGps()
 {
     if (!m_positionSource) {
         m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
+	m_positionSource -> setPreferredPositioningMethods(QGeoPositionInfoSource::AllPositioningMethods);
         QObject::connect(m_positionSource, SIGNAL(positionUpdated(QGeoPositionInfo)),
         this, SLOT(positionUpdated(QGeoPositionInfo)));
     }
@@ -167,7 +168,7 @@ bool MainWindow::setMark()
     qreal latitude = DEFAULT_LATITUDE;
     qreal longitude = DEFAULT_LONGITUDE;
 
-    if (m_positionInfo.isValid()) {
+    if (m_positionInfo.coordinate().isValid()) {
         latitude = m_positionInfo.coordinate().latitude();
         longitude = m_positionInfo.coordinate().longitude();
         

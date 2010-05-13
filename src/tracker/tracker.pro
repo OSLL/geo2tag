@@ -3,8 +3,8 @@ TARGET = tracker
 
 include(../../config.pri)
 
-#target.path = /usr/bin
-#INSTALLS += target
+target.path = /usr/bin
+INSTALLS += target
 
 QT += network
 
