@@ -1,3 +1,5 @@
+include(../../config.pri)
+
 INCLUDEPATH += . inc \
 	     ../common/inc \
              ../common/common/inc \
@@ -49,7 +51,5 @@ HEADERS += observer.h \
     ../gui/inc/SubscribeChannelJSON.h \
     defs.h
 
-LIBS+= -L/home/vood/geo2tag/trunk/src/lib/ -lcommon -lqjson -lcurl -lfcgiio -ljson
-OBJECTS_DIR = .obj
-MOC_DIR = .moc
+LIBS+= -lcommon -lqjson -lcurl -lfcgiio -ljson
 QT += core gui network
