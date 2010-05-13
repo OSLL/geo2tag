@@ -54,11 +54,6 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
 	qDebug() << "after time making";
         m_data.push_back(tmp);
     }
-//    QPainter painter(m_ui.m_mapArea);
-    //common::Picture picture = maps::MapLoaderFactory::getInstance(maps::MapLoader::GOOGLE)->getMapWithMarks(
-//			0.0,0.0,12,m_ui.m_mapArea->rect().width(),m_ui.m_mapArea->rect().height(),*marks);
-  //  QByteArray array(&(picture.getData()[0]), picture.getData().size());
-//    painter.drawImage(m_ui.m_mapArea->rect(),QImage::fromData(array));
 }
     emit dataUpdated();
 }
@@ -74,7 +69,9 @@ void Observer::tokenRecieved(QString status,QString auth_token)
     connect(rssFeedQuery,SIGNAL(responseReceived(CHandlePtr<common::DataMarks>& )),
        m_ui.m_mapArea,SLOT(updated(CHandlePtr<common::DataMarks>&)));
     connect(m_ui.m_updateButton, SIGNAL(clicked()), this, SLOT(doRequest()));
+    connect(m_ui.m_scale,SIGNAL(sliderMoved(int)),m_ui.m_mapArea,SLOT(scaleChanged(int)));
     rssFeedQuery->doRequest();
+    
 }
 
 void Observer::doRequest()

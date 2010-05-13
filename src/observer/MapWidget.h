@@ -16,7 +16,7 @@ class MapWidget : public QWidget
 {
 
     Q_OBJECT
-
+    int m_scale;
     CHandlePtr<common::DataMarks> m_marks;
 
 public:
@@ -32,7 +32,7 @@ protected:
         void paintEvent(QPaintEvent *pe);
 
 public slots:
-
+	void scaleChanged(int newScale);
 	void updated(CHandlePtr<common::DataMarks>& marks);
 	
 };

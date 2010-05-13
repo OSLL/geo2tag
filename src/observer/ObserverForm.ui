@@ -97,13 +97,13 @@
      <item>
       <widget class="QSlider" name="m_scale">
        <property name="minimum">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>10</number>
+        <number>19</number>
        </property>
        <property name="value">
-        <number>5</number>
+        <number>1</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>

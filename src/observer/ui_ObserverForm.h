@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'ObserverForm.ui'
 **
-** Created: Wed May 12 03:11:07 2010
+** Created: Thu May 13 23:11:38 2010
 **      by: Qt User Interface Compiler version 4.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -10,6 +10,7 @@
 #ifndef UI_OBSERVERFORM_H
 #define UI_OBSERVERFORM_H
 
+#include <MapWidget.h>
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
@@ -46,7 +47,7 @@ public:
     QLineEdit *m_channelKey;
     QPushButton *m_updateButton;
     QHBoxLayout *horizontalLayout_6;
-    QWidget *m_mapArea;
+    MapWidget *m_mapArea;
     QSlider *m_scale;
 
     void setupUi(QWidget *Form)
@@ -138,16 +139,16 @@ public:
 
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
-        m_mapArea = new QWidget(Form);
+        m_mapArea = new MapWidget(Form);
         m_mapArea->setObjectName(QString::fromUtf8("m_mapArea"));
 
         horizontalLayout_6->addWidget(m_mapArea);
 
         m_scale = new QSlider(Form);
         m_scale->setObjectName(QString::fromUtf8("m_scale"));
-        m_scale->setMinimum(1);
-        m_scale->setMaximum(10);
-        m_scale->setValue(5);
+        m_scale->setMinimum(0);
+        m_scale->setMaximum(19);
+        m_scale->setValue(1);
         m_scale->setOrientation(Qt::Vertical);
 
         horizontalLayout_6->addWidget(m_scale);
