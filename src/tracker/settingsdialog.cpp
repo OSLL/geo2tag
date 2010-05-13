@@ -11,9 +11,12 @@
 SettingsDialog::SettingsDialog(int type, QWidget *parent) : QDialog(parent), m_isCreateNewChannel(type == 0)
 {
   m_ui.setupUi(this);
+  
 
   setWindowTitle("Setup configuration");
-
+  //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+  this->showMaximized();
+  
   if( m_isCreateNewChannel) // create new channel
   {
     m_ui.channelKey->setEnabled(false);

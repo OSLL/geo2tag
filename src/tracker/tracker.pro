@@ -3,8 +3,8 @@ TARGET = tracker
 
 include(../../config.pri)
 
-target.path = /usr/bin
-INSTALLS += target
+#target.path = /usr/bin
+#INSTALLS += target
 
 QT += network
 
@@ -27,6 +27,7 @@ INCLUDEPATH += . \
 SOURCES += main.cpp \
            mainwindow.cpp \
            settingsdialog.cpp \
+           LoginDialog.cpp \
            ApplyChannelQuery.cpp \
            AddUserQuery.cpp \
            ../gui/src/SubscribeChannelQuery.cpp \
@@ -36,6 +37,7 @@ SOURCES += main.cpp \
 
 HEADERS += mainwindow.h \
            settingsdialog.h \
+           LoginDialog.h \
            tracker.h \
            ApplyChannelQuery.h \
            AddUserQuery.h \
@@ -47,5 +49,18 @@ HEADERS += mainwindow.h \
 FORMS += formCreateChannel.ui
 
 LIBS += -lqjson
+
+symbian: {
+ #   TARGET.UID3 = 0xEEF9CA31
+    
+    TARGET.CAPABILITY = NetworkServices \
+    Location \
+    ReadUserData \
+    WriteUserData \
+    LocalServices \
+    UserEnvironment \
+    ReadDeviceData \
+    WriteDeviceData
+}
 
 

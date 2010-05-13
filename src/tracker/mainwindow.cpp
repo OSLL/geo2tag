@@ -11,6 +11,7 @@
 #include <QTimer>
 
 #include "settingsdialog.h"
+#include "LoginDialog.h"
 
 #include "ApplyMarkQuery.h"
 
@@ -25,6 +26,8 @@ MainWindow::MainWindow() : QMainWindow(NULL)
   QMenu *menu = new QMenu("&Settings",this);
   menu->addAction(clean);
   menu->addAction(quit);
+  
+  //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
   menuBar()->addMenu(menu);
   m_status = new QLabel("Unknown", this);
@@ -37,13 +40,12 @@ MainWindow::MainWindow() : QMainWindow(NULL)
   connect(clean, SIGNAL(triggered()), this, SLOT(cleanLocalSettigns()));
   connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-
+  startGps();
+  QTimer::singleShot(0, this, SLOT(setupBearer()));
+    
   initSettings();
 
   startTimer(100); // first update should be fast
-
-  startGps();
-  QTimer::singleShot(0, this, SLOT(setupBearer()));
 }
 
 void MainWindow::cleanLocalSettigns()
@@ -82,11 +84,21 @@ void MainWindow::readSettings()
 
 void MainWindow::createSettings()
 {
-  int p = QMessageBox::question(this,
-                                "Question","Attach existing channel? (otherwise new one will be created)",//"Create new channel or attach existing?",
-                                "No", "Yes"); //"Create new", "Attach existing");
-
-  SettingsDialog sd(p,this);
+	int p;
+	LoginDialog ld(this);
+	if (QDialog::Accepted == ld.exec())
+	{
+        //p = QMessageBox::question(this,
+        //                        "Question","Attach existing channel? (otherwise new one will be created)",//"Create new channel or attach existing?",
+        //                        "No", "Yes"); //"Create new", "Attach existing");
+        p = 0;
+	}
+	else
+	{
+	    p = 1;
+	}
+	
+  SettingsDialog sd(p, this);
 
   if (QDialog::Accepted == sd.exec())
   {
@@ -158,22 +170,24 @@ bool MainWindow::setMark()
     if (m_positionInfo.isValid()) {
         latitude = m_positionInfo.coordinate().latitude();
         longitude = m_positionInfo.coordinate().longitude();
+        
+        GUI::ApplyMarkQuery *applyMarkQuery = new GUI::ApplyMarkQuery
+                                                  (m_settings.auth_token,
+                                                   m_settings.channel,
+                                                   QString("title"),
+                                                   QString("url"),
+                                                   QString("description"),
+                                                   latitude,
+                                                   longitude,
+                                                   QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
+            connect(applyMarkQuery, SIGNAL(responseReceived(QString)), this, SLOT(onApplyMarkResponse(QString)));
+            applyMarkQuery->doRequest();
     }
     else {
         qDebug() << "Using wrong coordinates.";
     }
 
-    GUI::ApplyMarkQuery *applyMarkQuery = new GUI::ApplyMarkQuery
-                                          (m_settings.auth_token,
-                                           m_settings.channel,
-                                           QString("title"),
-                                           QString("url"),
-                                           QString("description"),
-                                           latitude,
-                                           longitude,
-                                           QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
-    connect(applyMarkQuery, SIGNAL(responseReceived(QString)), this, SLOT(onApplyMarkResponse(QString)));
-    applyMarkQuery->doRequest();
+    
 
     return true;
 }
