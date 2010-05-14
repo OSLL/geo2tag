@@ -32,12 +32,14 @@ MainWindow::MainWindow() : QMainWindow(NULL)
   menuBar()->addMenu(menu);
   m_status = new QLabel("finding geo location", this);
   m_status2 = new QLabel("", this);
+  m_status3 = new QLabel("", this);
 
   QWidget *widget = new QWidget(this);
   QVBoxLayout *vLayout = new QVBoxLayout();
   vLayout->addStretch();
   vLayout->addWidget(m_status);
   vLayout->addWidget(m_status2);
+  vLayout->addWidget(m_status3);
   vLayout->addStretch();
   widget->setLayout(vLayout);
   setCentralWidget(widget);
@@ -172,7 +174,7 @@ bool MainWindow::setMark()
 {
     qreal latitude = DEFAULT_LATITUDE;
     qreal longitude = DEFAULT_LONGITUDE;
-
+    
     if (m_positionInfo.coordinate().isValid()) {
         latitude = m_positionInfo.coordinate().latitude();
         longitude = m_positionInfo.coordinate().longitude();
@@ -205,13 +207,15 @@ void MainWindow::onApplyMarkResponse(QString status)
 
     if (status == QString("ok"))
     {
-        m_status->setText(QString("Last attempt %1,").arg(now.toString()));
-        m_status2->setText(QString("was %2").arg(" success"));
+        m_status->setText(QString("Last attempt:"));
+        m_status2->setText(QString("%1").arg(now.toString()));
+        m_status3->setText(QString("was %2").arg(" successfull"));
     }
     else
     {
-        m_status->setText(QString("Last attempt %1,").arg(now.toString()));
-        m_status2->setText(QString("was %2").arg(" failed"));
+        m_status->setText(QString("Last attempt:"));
+        m_status2->setText(QString("%1").arg(now.toString()));
+        m_status3->setText(QString("was %2").arg(" failed"));
     }
 
 }
