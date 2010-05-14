@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow
 
   Settings   m_settings;
   QLabel    *m_status;
+  QLabel    *m_status2;
   QDateTime  m_lastUpdate;
 
   // Location data
