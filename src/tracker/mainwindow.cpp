@@ -30,7 +30,7 @@ MainWindow::MainWindow() : QMainWindow(NULL)
   //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
   menuBar()->addMenu(menu);
-  m_status = new QLabel("Unknown", this);
+  m_status = new QLabel("finding geo location", this);
 
   QWidget *widget = new QWidget(this);
   widget->setLayout(new QVBoxLayout());
