@@ -8,11 +8,15 @@
 #include "RSSFeedQuery.h"
 #include "LoginQuery.h"
 #include <QStatusBar>
+#include <QStringList>
+
+
 class Observer : public QDialog
 {
     Q_OBJECT;
     Ui::Form           m_ui;
     QVector<MarkInfo>  m_data;
+    QStringList m_list;
     CHandlePtr<common::DataMarks> m_marks;
     GUI::RSSFeedQuery  *rssFeedQuery;
     GUI::LoginQuery *loginQuery;

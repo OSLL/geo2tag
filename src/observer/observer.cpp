@@ -5,7 +5,6 @@
 #include "User.h"
 #include <QDebug>
 #include "MapWidget.h"
-#include <QStringList>
 #include <QComboBox>
 #include <sstream>
 #include <QObject>
@@ -58,8 +57,11 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
 //        m_data.push_back(tmp);
         list << QString((*i)->getUser()->getLogin().c_str());
     }
-    m_ui.m_users->clear();
-    m_ui.m_users->addItems(list);
+    if (m_list != list) {
+	    m_ui.m_users->clear();
+	    m_ui.m_users->addItems(list);
+	    m_list=list;
+    }
 }
     emit dataUpdated();
 }
