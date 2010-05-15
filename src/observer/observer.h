@@ -2,10 +2,12 @@
 #define OBSERVER_H
 
 #include <QDialog>
+//#include <QMainWindow>
 #include "ui_ObserverForm.h"
 #include "defs.h"
 #include "RSSFeedQuery.h"
 #include "LoginQuery.h"
+#include <QStatusBar>
 class Observer : public QDialog
 {
     Q_OBJECT;

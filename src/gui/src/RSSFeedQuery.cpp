@@ -58,7 +58,7 @@ namespace GUI
     }
 
     RSSFeedQuery::RSSFeedQuery
-            (QString user, qreal latitude, qreal longitude, qreal radius, bool isLastOne,QObject *parent)
+            (QString user, qreal latitude, qreal longitude, qreal radius, bool isLastOne, QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
@@ -74,9 +74,13 @@ namespace GUI
         jsonQuery = "{\"auth_token\":\"" + auth_token +
                     "\", \"latitude\":" + QString::number(latitude) +
                     ", \"longitude\":" + QString::number(longitude) +
-                    ", \"radius\":" + QString::number(radius) ;
-	if (isLastOne) jsonQuery+=",\"type\":\"last_one\"";
-                   jsonQuery+= "}";
+                    ", \"radius\":" + QString::number(radius);
+	if (isLastOne){ 
+		 jsonQuery+=", \"type\":\"last_one\"";
+		 qDebug() << "isLastOne=1";
+	}
+	jsonQuery += "}";
+        qDebug() << "++++Builded request ++ "<< jsonQuery;
         httpQuery = FEED_HTTP_URL;
     }
 

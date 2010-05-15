@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="statusTip">
+   <string>слон</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -100,7 +103,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
       <widget class="MapWidget" name="m_mapArea" native="true">
-       <zorder></zorder>
+       <property name="statusTip">
+        <string>слон</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -120,6 +125,9 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QStatusBar" name="m_statusBar" native="true"/>
    </item>
   </layout>
  </widget>

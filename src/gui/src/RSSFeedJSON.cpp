@@ -46,7 +46,8 @@
 #include "qjson/parser.h"
 #include <QVariant>
 #include <QDebug>
-
+#include "Time.h"
+#include <time.h>
 static std::map<std::string, CHandlePtr<common::User> > s_users;
 
 namespace stub
@@ -80,8 +81,8 @@ namespace stub
     public:
         DataMark (double latitude, double longitude, const std::string &label,
                   const std::string &description, const std::string &link,
-                  const std::string &channel, const CHandlePtr<common::User>& user)
-                      : common::DataMark(latitude, longitude, label, description, link, CTime(), user )
+                  const std::string &channel, const CHandlePtr<common::User>& user, const CTime Time)
+                      : common::DataMark(latitude, longitude, label, description, link, Time, user )
         {
             CHandlePtr<common::Channel> foundChannel = GUI::OnLineInformation::getInstance().findChannel(channel);
             if (foundChannel == 0)
@@ -141,6 +142,10 @@ void RSSFeedJSON::convertInMarks()
             //const json::Array& tags = interpreter["rss"]["channel"]["item"][i]["tags"];
             std::string guid = markMap["user"].toString().toStdString();
             std::string login = markMap["user"].toString().toStdString();
+	    std::string timeStr =  markMap["pubDate"].toString().toStdString();
+            struct tm timeTm;
+            strptime(timeStr.c_str(),"%d %b %Y %H:%M:%S",&timeTm);
+	    CTime Time(timeTm);    
             CHandlePtr<common::User> user;
             if(s_users.count(guid) == 0)
             {
@@ -157,7 +162,7 @@ void RSSFeedJSON::convertInMarks()
             std::string channel = markMap["channel"].toString().toStdString();
 
             CHandlePtr<common::DataMark> mark =
-                    makeHandle(new stub::DataMark(latitude, longitude, title, description, link, channel, user));
+                    makeHandle(new stub::DataMark(latitude, longitude, title, description, link, channel, user,Time));
             m_marks->push_back(mark);
             qDebug() << "converted using QJson";
         }
