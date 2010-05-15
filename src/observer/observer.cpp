@@ -17,6 +17,7 @@ Observer::Observer() : QDialog(NULL)
     connect(m_ui.m_updateButton, SIGNAL(pressed()), this, SLOT(buttonPushed()));
     connect(this, SIGNAL(dataUpdated()), this, SLOT(updateView()));
     connect(this, SIGNAL(dataUpdated()), this, SLOT(updateList()));
+    connect(loginQuery,SIGNAL(responseReceived(QString, QString)), this,SLOT(tokenRecieved(QString,QString)));
 }
 
 
@@ -64,7 +65,7 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
 void Observer::tokenRecieved(QString status,QString auth_token)
 {
 //When auth is success make Observer visible and create RSSFeedQuery
-    disconnect(loginQuery);
+    disconnect(loginQuery, 0, 0, 0);
     qDebug() << "auth_token recieved " << auth_token;
     rssFeedQuery=new GUI::RSSFeedQuery(auth_token,30.0,30.0,30000000.0,true);
     connect(rssFeedQuery,SIGNAL(responseReceived(CHandlePtr<common::DataMarks>& )),
@@ -74,7 +75,7 @@ void Observer::tokenRecieved(QString status,QString auth_token)
     connect(m_ui.m_updateButton, SIGNAL(clicked()), this, SLOT(doRequest()));
     connect(m_ui.m_scale,SIGNAL(sliderMoved(int)),m_ui.m_mapArea,SLOT(scaleChanged(int)));
     connect(m_ui.m_users,SIGNAL(currentIndexChanged ( const QString&) ),this,SLOT(usersSelected(const QString&)));
-    rssFeedQuery->doRequest();
+    //rssFeedQuery->doRequest();
     
 }
 
@@ -90,7 +91,7 @@ void Observer::buttonPushed()
 	qDebug() << "UpdateButton pushed " << m_ui.m_user->text() << " passw "<< m_ui.m_password->text() ;
 	loginQuery->setQuery(m_ui.m_user->text(),m_ui.m_password->text());
         loginQuery->doRequest();
-	connect(loginQuery,SIGNAL(responseReceived(QString, QString)), this,SLOT(tokenRecieved(QString,QString)));
+
 //	loginQuery->doRequest();
 //}
 }

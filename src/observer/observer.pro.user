@@ -26,7 +26,9 @@
  </data>
  <data>
   <variable>RunConfiguration0-UserEnvironmentChanges</variable>
-  <valuelist type="QVariantList"/>
+  <valuelist type="QVariantList">
+   <value type="QString">LD_LIBRARY_PATH=/home/ivan/qtsdk-2010.01/lib/qtcreator:/home/ivan/osll/geo2tag/trunk/src/lib</value>
+  </valuelist>
  </data>
  <data>
   <variable>RunConfiguration0-UserSetName</variable>
@@ -56,7 +58,7 @@
   <variable>buildConfiguration-Release</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-   <value key="QtVersionId" type="int">3</value>
+   <value key="QtVersionId" type="int">0</value>
    <value key="ToolChain" type="int">0</value>
    <value key="addQDumper" type=""></value>
    <value key="buildConfiguration" type="int">0</value>
@@ -67,46 +69,45 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-OTIgBULdwh,guid=9455b9f715d3f63c3b5f56f04bea4afd</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-tcp9HOkzQl,guid=a6cb9ff651e68b60d255f7d14bedafee</value>
     <value type="QString">DESKTOP_SESSION=gnome</value>
     <value type="QString">DISPLAY=:0.0</value>
     <value type="QString">GDMSESSION=gnome</value>
-    <value type="QString">GDM_LANG=ru_RU.UTF-8</value>
-    <value type="QString">GDM_XSERVER_LOCATION=local</value>
+    <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
+    <value type="QString">GDM_LANG=en_GB.UTF-8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_PID=10055</value>
-    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-xn76Io/socket</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/seahorse-yAgiTN/S.gpg-agent:10146:1</value>
+    <value type="QString">GNOME_KEYRING_PID=2095</value>
+    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-mcGFF6/socket</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
-    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/vood/.gtkrc-1.2-gnome2</value>
-    <value type="QString">HOME=/home/vood</value>
-    <value type="QString">LANG=ru_RU.UTF-8</value>
-    <value type="QString">LD_LIBRARY_PATH=/opt/qtsdk-2010.01/lib/qtcreator:</value>
-    <value type="QString">LOGNAME=vood</value>
-    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-vood</value>
-    <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/opt/real/RealPlayer</value>
-    <value type="QString">PWD=/home/vood</value>
-    <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/Vood:/tmp/.ICE-unix/10066</value>
+    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/ivan/.gtkrc-1.2-gnome2</value>
+    <value type="QString">HOME=/home/ivan</value>
+    <value type="QString">LANG=en_GB.UTF-8</value>
+    <value type="QString">LD_LIBRARY_PATH=/home/ivan/qtsdk-2010.01/lib/qtcreator:</value>
+    <value type="QString">LOGNAME=ivan</value>
+    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-ivan</value>
+    <value type="QString">PATH=/home/ivan/qtsdk-2010.01/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString">PWD=/home/ivan</value>
+    <value type="QString">QTDIR=/home/ivan/qtsdk-2010.01/qt</value>
+    <value type="QString">SESSION_MANAGER=local/ivan-laptop:@/tmp/.ICE-unix/2110,unix/ivan-laptop:/tmp/.ICE-unix/2110</value>
     <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SSH_AGENT_PID=10123</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-xn76Io/socket.ssh</value>
-    <value type="QString">USER=vood</value>
-    <value type="QString">USERNAME=vood</value>
-    <value type="QString">WINDOWPATH=7</value>
-    <value type="QString">XAUTHORITY=/home/vood/.Xauthority</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
-    <value type="QString">XDG_SESSION_COOKIE=7389042d559ece05d0cf06a54a92deb9-1273645820.321126-2045644685</value>
+    <value type="QString">SPEECHD_PORT=7560</value>
+    <value type="QString">SSH_AGENT_PID=2152</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-mcGFF6/socket.ssh</value>
+    <value type="QString">USER=ivan</value>
+    <value type="QString">USERNAME=ivan</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-ivan-k8Ne6V/database</value>
+    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
+    <value type="QString">XDG_SESSION_COOKIE=9c89bc7cabbfb98621cdd0814aedede6-1273868269.803960-1077567375</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">/home/vood/geo2tag/trunk/src/observer/observer.pro</value>
+    <value type="QString">/home/ivan/osll/geo2tag/trunk/src/observer/observer.pro</value>
     <value type="QString">-spec</value>
     <value type="QString">linux-g++</value>
     <value type="QString">-r</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString">/usr/bin/qmake-qt4</value>
-   <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/vood/geo2tag/trunk/src/observer</value>
+   <value key="abstractProcess.command" type="QString">/home/ivan/qtsdk-2010.01/qt/bin/qmake</value>
+   <value key="abstractProcess.enabled" type="bool">false</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/ivan/osll/geo2tag/trunk/src/observer</value>
   </valuemap>
  </data>
  <data>
@@ -114,36 +115,35 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-OTIgBULdwh,guid=9455b9f715d3f63c3b5f56f04bea4afd</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-tcp9HOkzQl,guid=a6cb9ff651e68b60d255f7d14bedafee</value>
     <value type="QString">DESKTOP_SESSION=gnome</value>
     <value type="QString">DISPLAY=:0.0</value>
     <value type="QString">GDMSESSION=gnome</value>
-    <value type="QString">GDM_LANG=ru_RU.UTF-8</value>
-    <value type="QString">GDM_XSERVER_LOCATION=local</value>
+    <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
+    <value type="QString">GDM_LANG=en_GB.UTF-8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_PID=10055</value>
-    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-xn76Io/socket</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/seahorse-yAgiTN/S.gpg-agent:10146:1</value>
+    <value type="QString">GNOME_KEYRING_PID=2095</value>
+    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-mcGFF6/socket</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
-    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/vood/.gtkrc-1.2-gnome2</value>
-    <value type="QString">HOME=/home/vood</value>
-    <value type="QString">LANG=ru_RU.UTF-8</value>
-    <value type="QString">LD_LIBRARY_PATH=/opt/qtsdk-2010.01/lib/qtcreator:</value>
-    <value type="QString">LOGNAME=vood</value>
-    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-vood</value>
-    <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/opt/real/RealPlayer</value>
-    <value type="QString">PWD=/home/vood</value>
-    <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/Vood:/tmp/.ICE-unix/10066</value>
+    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/ivan/.gtkrc-1.2-gnome2</value>
+    <value type="QString">HOME=/home/ivan</value>
+    <value type="QString">LANG=en_GB.UTF-8</value>
+    <value type="QString">LD_LIBRARY_PATH=/home/ivan/qtsdk-2010.01/lib/qtcreator:</value>
+    <value type="QString">LOGNAME=ivan</value>
+    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-ivan</value>
+    <value type="QString">PATH=/home/ivan/qtsdk-2010.01/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString">PWD=/home/ivan</value>
+    <value type="QString">QTDIR=/home/ivan/qtsdk-2010.01/qt</value>
+    <value type="QString">SESSION_MANAGER=local/ivan-laptop:@/tmp/.ICE-unix/2110,unix/ivan-laptop:/tmp/.ICE-unix/2110</value>
     <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SSH_AGENT_PID=10123</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-xn76Io/socket.ssh</value>
-    <value type="QString">USER=vood</value>
-    <value type="QString">USERNAME=vood</value>
-    <value type="QString">WINDOWPATH=7</value>
-    <value type="QString">XAUTHORITY=/home/vood/.Xauthority</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
-    <value type="QString">XDG_SESSION_COOKIE=7389042d559ece05d0cf06a54a92deb9-1273645820.321126-2045644685</value>
+    <value type="QString">SPEECHD_PORT=7560</value>
+    <value type="QString">SSH_AGENT_PID=2152</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-mcGFF6/socket.ssh</value>
+    <value type="QString">USER=ivan</value>
+    <value type="QString">USERNAME=ivan</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-ivan-k8Ne6V/database</value>
+    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
+    <value type="QString">XDG_SESSION_COOKIE=9c89bc7cabbfb98621cdd0814aedede6-1273868269.803960-1077567375</value>
    </valuelist>
    <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
    <valuelist key="abstractProcess.arguments" type="QVariantList">
@@ -151,7 +151,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/vood/geo2tag/trunk/src/observer</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/ivan/osll/geo2tag/trunk/src/observer</value>
   </valuemap>
  </data>
  <data>
