@@ -588,7 +588,8 @@ namespace common
       if(!us)
       {
         syslog(LOG_INFO,"Failure at storeChannel, dynamicCast<loader::Channel>() at storeChannel");
-	      return; 
+	throw CDynamicCastFailure(1,SRC(),1);
+	      //return; 
       }
       
       if(us->getId()==0)
@@ -679,7 +680,9 @@ namespace common
     if(!mark)
     {
       syslog(LOG_INFO,"Failure at storeMark, dynamicCast<loader::DataMark>() is NULL... Mark wasn't stored ");
-      return;
+      throw CDynamicCastFailure(1,SRC(),1);
+
+      //return;
     }
     
     if(mark->getId()==0) // It means that it's new mark and we should call insert into Database
@@ -688,7 +691,9 @@ namespace common
       if(!user)
       {
         syslog(LOG_INFO,"Failure at storeMark, dynamicCast<loader::User>(), is NULL... Mark wasn't added");
-        return; 
+        throw CDynamicCastFailure(1,SRC(),1);
+
+        //return; 
       }
 
       ODBC::CTransaction tr(*this);
@@ -753,7 +758,9 @@ namespace common
     if (!u || !c)
     {
        // we need error checking & processing here
-       return;
+        throw CDynamicCastFailure(1,SRC(),1);
+
+//       return;
     }
     unsigned long long user_id=u->getId(), channel_id=c->getId();
     
@@ -781,7 +788,8 @@ namespace common
     CHandlePtr<loader::User> us = user.dynamicCast<loader::User>(); 
     if(!ch && !us)
     {
-      return;
+      throw CDynamicCastFailure(1,SRC(),1);
+//    return;
     }
 
     CHandlePtr<common::Channels> subscribedChannels = us->getSubscribedChannels();
@@ -789,7 +797,8 @@ namespace common
     {
       if((*subscribedChannels)[i] == ch)
       {
-        return;
+        throw CDynamicCastFailure(1,SRC(),1);
+ //       return;
       }
     }
 
@@ -858,12 +867,15 @@ namespace common
       if(!ch)
       {
         syslog(LOG_INFO,"Failure at removeChannel, dynamicCast<loader::Channel>() at removeChannel");
-	      return; 
+        throw CDynamicCastFailure(1,SRC(),1);
+//      return; 
       }
       
       if(ch->getId()==0)
       {
-        return;
+	syslog(LOG_INFO,"Failure at ch->getId(), dynamicCast<loader::Channel>() at removeChannel");
+        throw CDynamicCastFailure(1,SRC(),1);
+//        return;
       }
       else
       {
@@ -881,7 +893,8 @@ namespace common
       if(!ch)
       {
         syslog(LOG_INFO,"Failure at storeChannel, dynamicCast<loader::Channel>() at storeChannel");
-	      return; 
+        throw CDynamicCastFailure(1,SRC(),1);
+//      return; 
       }
       
       if(ch->getId()==0)

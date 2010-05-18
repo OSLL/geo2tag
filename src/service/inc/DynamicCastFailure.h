@@ -1,5 +1,5 @@
-#ifndef _CDynamicCastFailure_h_included_
-#define _CDynamicCastFailure_h_included_
+#ifndef _DynamicCastFailure_h_included_
+#define _DynamicCastFailure_h_included_
 
 #include "ExceptionSource.h"
 	  
