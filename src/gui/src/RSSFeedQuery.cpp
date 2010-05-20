@@ -79,8 +79,9 @@ namespace GUI
 		 jsonQuery+=", \"type\":\"last_one\"";
 		 qDebug() << "isLastOne=1";
 	}
+	qDebug() << auth_token;
 	jsonQuery += "}";
-        qDebug() << "++++Builded request ++ "<< jsonQuery;
+//        qDebug() << "++++Builded request ++ "<< jsonQuery;
         httpQuery = FEED_HTTP_URL;
     }
 
