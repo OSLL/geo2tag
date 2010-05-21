@@ -556,7 +556,7 @@ namespace common
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %ld", __FILE__, __LINE__);
     try
     {
-      connect("geo2tag");
+      connect("demo");
       syslog(LOG_INFO, "connected to database");
       m_updateThread = makeHandle(new UpdateThread<DbSession>(this));
     }
