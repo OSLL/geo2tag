@@ -49,7 +49,7 @@
 #include "QVariantMap"
 
 #ifndef APPLY_CHANNEL_HTTP_URL
-#define APPLY_CHANNEL_HTTP_URL "http://zps.spb.su/example?query=addChannel"
+#define APPLY_CHANNEL_HTTP_URL "http://zps.spb.su/service?query=addChannel"
 #endif
 
 ApplyChannelQuery::ApplyChannelQuery(QObject *parent)

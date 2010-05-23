@@ -10,7 +10,7 @@ Depends: ${shlibs:Depends}
 Description: WikiGPS service client
  Very long description will be here
 
-Package: tracker
+Package: wikigps-tracker
 Architecture: any
 Depends: ${shlibs:Depends}
 Description: WikiGPS tracker

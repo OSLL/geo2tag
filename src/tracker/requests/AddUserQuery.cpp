@@ -49,7 +49,7 @@
 #include "QVariantMap"
 
 #ifndef ADD_USER_HTTP_URL
-#define ADD_USER_HTTP_URL "http://zps.spb.su/example?query=addUser"
+#define ADD_USER_HTTP_URL "http://zps.spb.su/service?query=addUser"
 #endif
 
 AddUserQuery::AddUserQuery(QObject *parent)
