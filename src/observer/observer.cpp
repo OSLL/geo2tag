@@ -8,6 +8,12 @@
 #include <QComboBox>
 #include <sstream>
 #include <QObject>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+
+
+static double s_scales[]={83333.33,41666.67,21052.63,10526.32 ,5263.16,2500.00,1250.00,625.0,307.69,160.00,80.00,40.00,20.00,10.00,5.00,2.50,1.25,0.63,0.31,0.16};
+
 
 Observer::Observer() : QDialog(NULL)
 {
@@ -23,54 +29,56 @@ Observer::Observer() : QDialog(NULL)
            m_ui.m_mapArea,SLOT(updated(CHandlePtr<common::DataMarks>&)));
     connect(m_ui.m_updateButton, SIGNAL(clicked()), this, SLOT(doRequest()));
     connect(m_ui.m_scale,SIGNAL(sliderMoved(int)),m_ui.m_mapArea,SLOT(scaleChanged(int)));
-    connect(m_ui.m_users,SIGNAL(currentIndexChanged ( const QString&) ),this,SLOT(usersSelected(const QString&)));
     connect(m_ui.m_updateButton, SIGNAL(pressed()), this, SLOT(buttonPushed()));
-    connect(this, SIGNAL(dataUpdated()), this, SLOT(updateView()));
-    connect(this, SIGNAL(dataUpdated()), this, SLOT(updateList()));
+    connect(m_ui.m_showAll, SIGNAL(pressed()), this, SLOT(restoreGoodScale()));
 }
 
 
-void Observer::updateView()
-{
-    //QMessageBox::information(this,"Error", "Update view: not implemented");
-}
-
-void Observer::updateList()
-{
-  //  QMessageBox::information(this,"Error", "Update list: not implemented");
-}
 
 void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
 {
     int lastIndex=-1;
     if (rssFeedQuery){
     qDebug() << "updateData slot";
-    m_data.clear();
-    MarkInfo tmp;
-    m_marks=marks;
-    QStringList list;
-    for (common::DataMarks::iterator i=marks->begin();i!=marks->end();i++)
-    {
-//        tmp.user=QString((*i)->getUser()->getLogin().c_str());
-//        tmp.position=QPointF((*i)->getLatitude(),(*i)->getLongitude());
-//	qDebug() << "before time making";
-//	tmp.date=QDateTime::fromString(formatTime((*i)->getTime().getTime(),"%d %b %Y %H:%M:%S").c_str());
-//	qDebug() << "after time making";
-//        m_data.push_back(tmp);
-        list << QString((*i)->getUser()->getLogin().c_str());
-	if (m_ui.m_user->text()==(*i)->getUser()->getLogin().c_str()) lastIndex=list.length()-1;
+      m_data.clear();
+      MarkInfo tmp;
+      m_marks=marks;
+      QStringList list;
+    //Addding elements into m_users
+      int j=0;
+      m_ui.m_tableWidget->clearContents();
+      m_ui.m_tableWidget->setRowCount(marks->size());
+      double maxLat=(*marks)[0]->getLatitude(),minLat=(*marks)[0]->getLatitude(),maxLon=(*marks)[0]->getLongitude(),minLon=(*marks)[0]->getLongitude();
+      for (common::DataMarks::iterator i=marks->begin();i!=marks->end();i++,j++)
+      {
+        //Add items into m_tableWidget
+        if ((*i)->getLatitude()<minLat) minLat=(*i)->getLatitude();
+        if ((*i)->getLongitude()<minLon) minLon=(*i)->getLongitude();
+        if ((*i)->getLatitude()>maxLat) maxLat=(*i)->getLatitude();
+        if ((*i)->getLongitude()>maxLon) maxLon=(*i)->getLongitude();
+        QTableWidgetItem* name=new QTableWidgetItem(QString((*i)->getUser()->getLogin().c_str()));
+        QTableWidgetItem* mark=new QTableWidgetItem(QString((*i)->getLabel().c_str()));
+        m_ui.m_tableWidget->setItem(j,0,name);
+        m_ui.m_tableWidget->setItem(j,1,mark);
+      }
+      qDebug() << "Lat " << maxLat-minLat << " Lon "<<maxLon-minLon;
+      double height_= common::DataMark::getDistance(maxLat,maxLon,maxLat,minLon)*1000.;
+      double width_ = common::DataMark::getDistance(maxLat,maxLon,minLat,maxLon)*1000.;
+      qDebug() << "height " << height_ << " width "<< width_;
+      qDebug() << "height " << height() << " width "<< width();
+      for (int i=19;i>=0;i--) 
+        {
+          qDebug() << "height " << (height_)/s_scales[i] << " width "<< (width_)/s_scales[i];
+          if (height()>(height_)/s_scales[i] && width()>(width_)/s_scales[i]) {
+            qDebug() << "Selected scale " <<  s_scales[i] ;
+            m_goodScale=i;
+            m_ui.m_scale->setValue(i);
+            m_ui.m_mapArea->scaleChanged(i);
+            break;
+          }
+        }
     }
-    if (m_list != list) {
-	    m_ui.m_users->clear();
-	    m_ui.m_users->addItems(list);
-	    m_list=list;
-    }
-}
-    emit dataUpdated();
-    if (m_ui.m_user->text()!=m_lastLogin && lastIndex!=-1) {
-        m_lastLogin=m_ui.m_user->text();		
-	m_ui.m_users->setCurrentIndex(lastIndex);
-    }
+    emit dataMarksGotten(marks);
 }
 
 void Observer::tokenRecieved(QString status,QString auth_token)
@@ -92,7 +100,6 @@ void Observer::buttonPushed()
 {
 	qDebug() << "UpdateButton pushed " << m_ui.m_user->text() << " passw "<< m_ui.m_password->text() ;
 	if (m_lastLogin != m_ui.m_user->text()){
-//	m_lastLogin = m_ui.m_user->text();
 	loginQuery->setQuery(m_ui.m_user->text(),m_ui.m_password->text());
 	connect(loginQuery,SIGNAL(responseReceived(QString, QString)), this,SLOT(tokenRecieved(QString,QString)));
         loginQuery->doRequest();
@@ -100,24 +107,7 @@ void Observer::buttonPushed()
 
 }
 
-//New slot were we create DataMarks from one DataMark that corresponds for text user name
-
-void Observer::usersSelected(const QString & text)
-{
-CHandlePtr<common::DataMarks> mrs=makeHandle(new common::DataMarks);
-//Code below
-for (common::DataMarks::iterator i=m_marks->begin();i!=m_marks->end();i++)
-{
-	if ((*i)->getUser()->getLogin()==text.toStdString()){
-		mrs->push_back((*i));
-//		std::stringstream st;
-//		st << (*i)->getTime();
-		QString timeQ;
-	 	qDebug() << "getTime";
-		timeQ=formatTime((*i)->getTime().getTime(),"%d %B %Y %H:%M:%S").c_str();
-                m_ui.m_statusBar->showMessage(QObject::tr(timeQ.toStdString().c_str()));
-		emit dataMarksGotten(mrs);
-		break;
-	}
-}
-}
+void Observer::restoreGoodScale(){
+  m_ui.m_scale->setValue(m_goodScale);
+  m_ui.m_mapArea->scaleChanged(m_goodScale);
+  }

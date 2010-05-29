@@ -19,6 +19,7 @@ class Observer : public QDialog
     QString m_lastLogin;
     QStringList m_list;
     CHandlePtr<common::DataMarks> m_marks;
+    int m_goodScale;
     GUI::RSSFeedQuery  *rssFeedQuery;
     GUI::LoginQuery *loginQuery;
 public:
@@ -31,11 +32,9 @@ signals:
 public slots:
     void tokenRecieved(QString status,QString auth_token);
     void updateData(CHandlePtr<common::DataMarks>& marks);
+    void restoreGoodScale();
     void buttonPushed();
-    void updateView();
-    void updateList();
     void doRequest();
-    void usersSelected(const QString & text);
 };
 
 #endif // OBSERVER_H
