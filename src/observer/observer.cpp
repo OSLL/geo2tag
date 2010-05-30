@@ -11,7 +11,7 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 
-
+//I didn't find where it is and make my own GoogleScaleList
 static double s_scales[]={83333.33,41666.67,21052.63,10526.32 ,5263.16,2500.00,1250.00,625.0,307.69,160.00,80.00,40.00,20.00,10.00,5.00,2.50,1.25,0.63,0.31,0.16};
 
 
@@ -30,48 +30,51 @@ Observer::Observer() : QDialog(NULL)
     connect(m_ui.m_updateButton, SIGNAL(clicked()), this, SLOT(doRequest()));
     connect(m_ui.m_scale,SIGNAL(sliderMoved(int)),m_ui.m_mapArea,SLOT(scaleChanged(int)));
     connect(m_ui.m_updateButton, SIGNAL(pressed()), this, SLOT(buttonPushed()));
-    connect(m_ui.m_showAll, SIGNAL(pressed()), this, SLOT(restoreGoodScale()));
+    connect(m_ui.m_showAll, SIGNAL(pressed()), this, SLOT(showAllMarks()));
 }
 
 
 
 void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
 {
-    int lastIndex=-1;
     if (rssFeedQuery){
     qDebug() << "updateData slot";
-      m_data.clear();
-      MarkInfo tmp;
       m_marks=marks;
-      QStringList list;
-    //Addding elements into m_users
       int j=0;
       m_ui.m_tableWidget->clearContents();
       m_ui.m_tableWidget->setRowCount(marks->size());
+      //Optimal scale finding:
+      //    Find min and max Latitude and Longitude from marks. 
+      //    Count width and height of rect that marks are take place
+      //    Find optimal scale in wich all marks shown on a screen
       double maxLat=(*marks)[0]->getLatitude(),minLat=(*marks)[0]->getLatitude(),maxLon=(*marks)[0]->getLongitude(),minLon=(*marks)[0]->getLongitude();
       for (common::DataMarks::iterator i=marks->begin();i!=marks->end();i++,j++)
       {
-        //Add items into m_tableWidget
+        //Finding min and max Latitude and Longitude
         if ((*i)->getLatitude()<minLat) minLat=(*i)->getLatitude();
         if ((*i)->getLongitude()<minLon) minLon=(*i)->getLongitude();
         if ((*i)->getLatitude()>maxLat) maxLat=(*i)->getLatitude();
         if ((*i)->getLongitude()>maxLon) maxLon=(*i)->getLongitude();
+        //Add items into m_tableWidget
         QTableWidgetItem* name=new QTableWidgetItem(QString((*i)->getUser()->getLogin().c_str()));
         QTableWidgetItem* mark=new QTableWidgetItem(QString((*i)->getLabel().c_str()));
         m_ui.m_tableWidget->setItem(j,0,name);
         m_ui.m_tableWidget->setItem(j,1,mark);
       }
       qDebug() << "Lat " << maxLat-minLat << " Lon "<<maxLon-minLon;
+      //Count size of rect where all marks can be placed
       double height_= common::DataMark::getDistance(maxLat,maxLon,maxLat,minLon)*1000.;
       double width_ = common::DataMark::getDistance(maxLat,maxLon,minLat,maxLon)*1000.;
       qDebug() << "height " << height_ << " width "<< width_;
       qDebug() << "height " << height() << " width "<< width();
+      //Choose optimal scale
       for (int i=19;i>=0;i--) 
         {
           qDebug() << "height " << (height_)/s_scales[i] << " width "<< (width_)/s_scales[i];
           if (height()>(height_)/s_scales[i] && width()>(width_)/s_scales[i]) {
             qDebug() << "Selected scale " <<  s_scales[i] ;
-            m_goodScale=i;
+            //m_optScale will contain optimal scale value
+            m_optScale=i;
             m_ui.m_scale->setValue(i);
             m_ui.m_mapArea->scaleChanged(i);
             break;
@@ -106,8 +109,9 @@ void Observer::buttonPushed()
 	}
 
 }
+//Restore scale to optimal - set scale as optScale
+void Observer::showAllMarks(){
 
-void Observer::restoreGoodScale(){
-  m_ui.m_scale->setValue(m_goodScale);
-  m_ui.m_mapArea->scaleChanged(m_goodScale);
+  m_ui.m_scale->setValue(m_optScale);
+  m_ui.m_mapArea->scaleChanged(m_optScale);
   }

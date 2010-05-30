@@ -2,7 +2,6 @@
 #define OBSERVER_H
 
 #include <QDialog>
-//#include <QMainWindow>
 #include "ui_ObserverForm.h"
 #include "defs.h"
 #include "RSSFeedQuery.h"
@@ -15,11 +14,12 @@ class Observer : public QDialog
 {
     Q_OBJECT;
     Ui::Form           m_ui;
-    QVector<MarkInfo>  m_data;
+    // last user login
     QString m_lastLogin;
-    QStringList m_list;
+    // dataMarks
     CHandlePtr<common::DataMarks> m_marks;
-    int m_goodScale;
+    //optimal scale
+    int m_optScale;
     GUI::RSSFeedQuery  *rssFeedQuery;
     GUI::LoginQuery *loginQuery;
 public:
@@ -27,12 +27,11 @@ public:
     Observer();
 
 signals:
-    void dataUpdated();
     void dataMarksGotten(CHandlePtr<common::DataMarks>& marks);
 public slots:
     void tokenRecieved(QString status,QString auth_token);
     void updateData(CHandlePtr<common::DataMarks>& marks);
-    void restoreGoodScale();
+    void showAllMarks();
     void buttonPushed();
     void doRequest();
 };
