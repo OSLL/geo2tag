@@ -74,7 +74,7 @@ namespace GUI
     QString getChannelDescription(int index) const;
     bool IsSelected(int index) const;
     void setSelection(int index, bool value);
-    int rowCount(const QModelIndex &/*parent = QModelIndex()*/) const;
+    int rowCount(const QModelIndex & = QModelIndex()) const;
     int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const;
     QVariant data(const QModelIndex &index, int role) const;
     int isSubscribed(const QModelIndex& index) const;

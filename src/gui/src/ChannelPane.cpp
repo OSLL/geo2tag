@@ -96,9 +96,41 @@ namespace GUI
   {
       if (OnLineInformation::getInstance().getAvailableChannels() != 0)
       {
-          listView->setModel(new ChannelModel(OnLineInformation::getInstance().getAvailableChannels(),
-                                              OnLineInformation::getInstance().getSubscribedChannels(),
-                                              this));
+
+          if((listView->model() != 0) && (listView->currentIndex().isValid()))
+          {
+              selectedChannel = dynamic_cast<GUI::ChannelModel*>(listView->model())->getChannelName(listView->currentIndex().row());
+              qDebug() << " ------> selected " << selectedChannel;
+          }
+          else
+          {
+              selectedChannel = QString("");
+              qDebug() << " ------> selected " << selectedChannel;
+          }
+
+          ChannelModel *model = new ChannelModel(OnLineInformation::getInstance().getAvailableChannels(),
+                                                 OnLineInformation::getInstance().getSubscribedChannels(),
+                                                 this);
+
+          int selected = -1;
+          for (int i = 0; i < model->rowCount(); i++)
+          {
+              qDebug() << " ------> " << i << " "
+                       << dynamic_cast<GUI::ChannelModel*>(model)->getChannelName(i);
+              if (dynamic_cast<GUI::ChannelModel*>(model)->getChannelName(i) == selectedChannel)
+              {
+                  selected = i;
+                  break;
+              }
+          }
+
+          listView->setModel(model);
+          listView->setCurrentIndex(model->index(selected, 0, QModelIndex()));
+
+          if((listView->model() != 0) && (listView->currentIndex().isValid()))
+          {
+              qDebug() << " ------> valid " << selectedChannel;
+          }
       }
   }
 

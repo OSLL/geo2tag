@@ -59,6 +59,7 @@ namespace GUI
     Q_OBJECT;
 
     QAbstractItemModel *m_model;
+    QString selectedChannel;
     QListView *listView;
     QPushButton *subscribeButton;
     QPushButton *tagsButton;
