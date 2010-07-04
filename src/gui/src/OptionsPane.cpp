@@ -55,15 +55,16 @@
 
 namespace GUI
 {
-    OptionsPane::OptionsPane(QWidget *parent) : QWidget(parent)
+    OptionsPane::OptionsPane(QWidget *parent) : QScrollArea(parent)
     {
-        QPalette *m_palette = new QPalette(Qt::white);
-        setPalette(*m_palette);
+        QWidget *mainWidget = new QWidget(this);
+        QPalette *m_palette = new QPalette(Qt::black);
+        //setPalette(*m_palette);
         //this->setForegroundRole(QPalette::WindowText);
 
         /* Add maps source type options */
 
-        m_sourceTypeBox = new QGroupBox(tr("Source of maps:"), this);
+        m_sourceTypeBox = new QGroupBox(tr("Source of maps:"), mainWidget);
         m_googleButton = new QRadioButton(tr("Google maps"), m_sourceTypeBox);
         m_openStreetButton = new QRadioButton(tr("Open street map"), m_sourceTypeBox);
 
@@ -80,18 +81,29 @@ namespace GUI
 //                                                         3128));
 
         QVBoxLayout *sourceTypeBoxLayout = new QVBoxLayout(m_sourceTypeBox);
+        sourceTypeBoxLayout->addWidget(new QLabel(QString(" "), m_sourceTypeBox));
         sourceTypeBoxLayout->addWidget(m_googleButton);
         sourceTypeBoxLayout->addWidget(m_openStreetButton);
         sourceTypeBoxLayout->addStretch();
+        m_sourceTypeBox->setLayout(sourceTypeBoxLayout);
 
-        QVBoxLayout *mainLayout = new QVBoxLayout(this);
+        QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+        mainWidget->setLayout(mainLayout);
         mainLayout->addWidget(m_sourceTypeBox);
 
 
         /* Add proxy options */
-        m_proxyBox = new QGroupBox(tr("Use proxy server"), this);
-        m_hostProxyEdit = new QLineEdit(this);
-        m_portProxyEdit = new QLineEdit(this);
+        m_proxyBox = new QGroupBox(tr("Use proxy server"), mainWidget);
+        m_hostProxyEdit = new QLineEdit(mainWidget);
+        m_portProxyEdit = new QLineEdit(mainWidget);
+                QPalette pal = m_hostProxyEdit->palette();
+                pal.setColor(m_hostProxyEdit->backgroundRole(), Qt::transparent);
+                m_hostProxyEdit->setPalette(pal);
+                pal.setColor(m_hostProxyEdit->backgroundRole(), Qt::black);
+                m_portProxyEdit->setPalette(pal);
+
+//        m_hostProxyEdit->setBackgroundRole(QPalette::Dark);
+//        m_portProxyEdit->setForegroundRole(m_palette->Background);
         QRegExpValidator* ValIPAddr;
         // match the Bytes can be from 0-199 or 200-249 or 250-255 but not a number with one 0 at the beginning like 001 or 020
         QString Byte = "(?!0[0-9])(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])";
@@ -108,12 +120,15 @@ namespace GUI
         connect(m_portProxyEdit, SIGNAL(editingFinished()), this, SLOT(onProxyBoxClicked()));
 
         QVBoxLayout *proxyLayout = new QVBoxLayout(m_proxyBox);
+        proxyLayout->addWidget(new QLabel(QString(" "), mainWidget));
         proxyLayout->addWidget(m_hostProxyEdit);
         proxyLayout->addWidget(m_portProxyEdit);
         proxyLayout->addStretch();
+        m_proxyBox->setLayout(proxyLayout);
+
         mainLayout->addWidget(m_proxyBox);
-        
-        setLayout(mainLayout);
+        //mainWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+        this->setWidget(mainWidget);
 
     }
 

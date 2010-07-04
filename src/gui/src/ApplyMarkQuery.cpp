@@ -114,7 +114,9 @@ namespace GUI
         }
 
         QNetworkRequest request;
-        request.setUrl(QUrl(httpQuery));
+	QUrl url(httpQuery);
+	url.setPort(DEFAULT_PORT);
+        request.setUrl(url);
 
         QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
 

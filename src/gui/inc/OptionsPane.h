@@ -49,6 +49,7 @@
 #include <QRadioButton>
 #include <QLabel>
 #include <QLineEdit>
+#include <QScrollArea>
 
 
 #include "MapLoader.h"
@@ -59,7 +60,7 @@ namespace GUI
      * Class description. May use HTML formatting
      *
      */
-    class OptionsPane : public QWidget
+    class OptionsPane : public QScrollArea
     {
         Q_OBJECT
 
