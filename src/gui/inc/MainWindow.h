@@ -45,6 +45,8 @@
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
 
+#include <LoginWindow.h>
+
 namespace GUI
 {
  /*!
@@ -55,6 +57,8 @@ namespace GUI
   {
     Q_OBJECT;
 
+    LoginWindow *loginWindow;
+
     QAction *m_actionViewMap;
     QAction *m_actionViewFeed;
     QAction *m_actionQuit;
@@ -63,6 +67,7 @@ namespace GUI
     QAction *m_actionEditRadius;
     QAction *m_actionShowDescription;
     QAction *m_actionViewOptions;
+    QAction *m_logout;
 
   public:
     MainWindow();
@@ -78,6 +83,7 @@ namespace GUI
 
   public slots:
     void onActivate(QString auth_token);
+    void onDeactivate();
     void addContent();
 
   private:    

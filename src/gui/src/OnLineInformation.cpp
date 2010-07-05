@@ -204,7 +204,14 @@ namespace GUI
     void OnLineInformation::setAuthToken(QString token)
     {
         m_auth_token = token;
-        m_updateTimer->start();
+        if (token != QString(""))
+        {
+            m_updateTimer->start();
+        }
+        else
+        {
+            m_updateTimer->stop();
+        }
     }
 
     void OnLineInformation::onApplyMarkQueryResponseReceived(QString status)

@@ -46,15 +46,24 @@
 namespace GUI
 {
 
-//TODO, kkv play with flags to get better appearence
-  MainWindow::MainWindow() : QMainWindow(NULL /*, Qt::Desktop*/)
-  {
-    setWindowTitle("wikigps");
-    setCentralWidget(new CentralWidget(this));
-    createMenu();
-    qDebug() << "centralWidget";
-    setHidden(true);
-  }
+    //TODO, kkv play with flags to get better appearence
+    MainWindow::MainWindow() : QMainWindow(NULL /*, Qt::Desktop*/)
+    {
+        loginWindow = new LoginWindow(this);
+        QObject::connect(loginWindow,SIGNAL(onSucsess(QString)),this,SLOT(onActivate(QString)));
+        QObject::connect(loginWindow,SIGNAL(onSucsess(QString)), &GUI::OnLineInformation::getInstance(), SLOT(setAuthToken(QString)));
+#ifdef DESKTOP_STYLE
+        loginWindow->show();
+#else
+        loginWindow->showMaximized();
+#endif
+
+        setWindowTitle("wikigps");
+        setCentralWidget(new CentralWidget(this));
+        createMenu();
+        qDebug() << "centralWidget";
+        setHidden(true);
+    }
 
   void MainWindow::createMenu()
   {
@@ -67,6 +76,7 @@ namespace GUI
    // menuBar()->addAction(m_actionEditRadius);
   //  menuBar()->addAction(m_actionShowDescription);
     menuBar()->addAction(m_actionViewOptions);
+    menuBar()->addAction(m_logout);
 
     connect(m_actionViewMap, SIGNAL(triggered()), centralWidget(), SLOT(switchMap()));
     //connect(m_actionViewFeed, SIGNAL(triggered()), centralWidget(), SLOT(switchFeed()));
@@ -76,6 +86,7 @@ namespace GUI
 //    connect(m_actionShowDescription,SIGNAL(triggered()), centralWidget(), SLOT(showChannelInfo()));
     connect(m_actionQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(m_actionViewOptions, SIGNAL(triggered()), centralWidget(), SLOT(switchOptions()));
+    connect(m_logout, SIGNAL(triggered()), this, SLOT(onDeactivate()));
     
   }
 
@@ -90,6 +101,7 @@ namespace GUI
     m_actionShowDescription = new QAction("Channel info",this);
     m_actionAddContent = new QAction("Add",this);
     m_actionViewOptions = new QAction("Options", this);
+    m_logout = new QAction("Logout", this);
   }
 
   void MainWindow::addContent()
@@ -100,7 +112,15 @@ namespace GUI
 
   void MainWindow::onActivate(QString)
   {
-    setHidden(false); 
+      loginWindow->setHidden(true);
+      setHidden(false);
+  }
+
+  void MainWindow::onDeactivate()
+  {
+      loginWindow->setHidden(false);
+      setHidden(true);
+      OnLineInformation::getInstance().setAuthToken(QString(""));
   }
   
 } // namespace GUI

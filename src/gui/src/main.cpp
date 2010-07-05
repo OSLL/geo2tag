@@ -41,15 +41,15 @@ int main(int c, char **v)
   common::GpsInfo::getInstance(); //starting daemon and other stuff;
   GUI::MainWindow window;
   
-  GUI::LoginWindow loginWin;
-  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)),&window,SLOT(onActivate(QString)));
-  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)), &GUI::OnLineInformation::getInstance(), SLOT(setAuthToken(QString)));
+//  GUI::LoginWindow loginWin;
+//  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)),&window,SLOT(onActivate(QString)));
+//  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)), &GUI::OnLineInformation::getInstance(), SLOT(setAuthToken(QString)));
 
-#ifdef DESKTOP_STYLE
-  loginWin.show();
-#else  
-  loginWin.showMaximized();
-#endif  
+//#ifdef DESKTOP_STYLE
+//  loginWin.show();
+//#else
+//  loginWin.showMaximized();
+//#endif
   
   app.exec();
   return 0;
