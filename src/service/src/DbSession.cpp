@@ -669,9 +669,9 @@ namespace common
 
       s_marks[query.id] = mark;
       m_marks->push_back(mark);
-      syslog(LOG_INFO, "loaded new %i mark at [%f,%f]", query.id, query.latitude, query.longitude);
+      // syslog(LOG_INFO, "loaded new %i mark at [%f,%f]", query.id, query.latitude, query.longitude);
     }
-    syslog(LOG_INFO, "loaded new %i marks", i);
+    // syslog(LOG_INFO, "loaded new %i marks", i);
   }
   
   void DbSession::storeMark(CHandlePtr<common::DataMark> m)
@@ -953,13 +953,13 @@ namespace common
   void DbSession::loadRelations()
   {
     { // LoadMarkRelationsQuery block
-      syslog(LOG_INFO, "loading MarkRelations: mark <=> tag");
+      // syslog(LOG_INFO, "loading MarkRelations: mark <=> tag");
       db::LoadMarkRelationsQuery query(*this);
       query.prepare();
       query.execute();
       while(query.fetch())
       {
-        syslog(LOG_INFO, "loadRelations, fetch");
+        // syslog(LOG_INFO, "loadRelations, fetch");
         CHandlePtr<loader::Channel> channel;
         CHandlePtr<loader::DataMark> mark;
         if(s_channels.count(query.channel))
@@ -968,7 +968,7 @@ namespace common
         }
         else
         {
-          syslog(LOG_INFO, "channel id=[%lu] is missing", query.channel);
+          // syslog(LOG_INFO, "channel id=[%lu] is missing", query.channel);
           continue;
         }
         if(s_marks.count(query.mark))
@@ -977,7 +977,7 @@ namespace common
         }
         else
         {
-          syslog(LOG_INFO, "mark id=[%lu] is missing", query.mark);
+          // syslog(LOG_INFO, "mark id=[%lu] is missing", query.mark);
           continue;
         }
         mark->setChannel(channel);
@@ -986,7 +986,7 @@ namespace common
     }
     { 
       // LoadSubscribedQuery block
-      syslog(LOG_INFO, "loading MarkRelations: user <=> channel");
+      // syslog(LOG_INFO, "loading MarkRelations: user <=> channel");
       db::LoadSubscribedQuery query(*this);
       query.prepare();
       query.execute();

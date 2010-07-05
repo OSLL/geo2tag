@@ -67,7 +67,7 @@ void AvailableList::init(const std::stringstream& query){
 
 
 void AvailableList::process(){
-  syslog(LOG_INFO, "m_user=%s m_radius=%f m_latitude=%f m_longitude=%f",m_token.c_str(),m_radius,m_latitude,m_longitude);
+  // syslog(LOG_INFO, "m_user=%s m_radius=%f m_latitude=%f m_longitude=%f",m_token.c_str(),m_radius,m_latitude,m_longitude);
   CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
   for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
   {
@@ -86,9 +86,9 @@ const CHandlePtr<common::Channels>& AvailableList::getChannels() const
 
 std::string AvailableList::outToString() const
 {
-	syslog(LOG_INFO,"Starting AvailableList::outToString() method");
+        // syslog(LOG_INFO,"Starting AvailableList::outToString() method");
 	ChannelList  list(m_channels);
-	syslog(LOG_INFO,"ChannelList::convertInJSON() method completed");
+        // syslog(LOG_INFO,"ChannelList::convertInJSON() method completed");
 	return list.getJSON().str();
 }
 

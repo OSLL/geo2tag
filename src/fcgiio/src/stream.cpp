@@ -8,7 +8,7 @@ Stream::Stream(FCGX_Stream *stream):m_stream(stream)
 Stream& Stream::operator <<(const OStream& obj)
 {
   const std::string &s = obj.outToString();
-  syslog(LOG_INFO,"writing to Stream string %s",s.c_str());
+  // syslog(LOG_INFO,"writing to Stream string %s",s.c_str());
   FCGX_PutStr(s.c_str(), s.size(), m_stream);
   return *this;
 }
@@ -23,7 +23,7 @@ Stream& Stream::operator >>(std::string& s) {
     else
        break;
   } 
-  syslog(LOG_INFO, "end stream, read: [%s], last symbol = [%ld]", s.c_str(), s[s.size()-1]);
+  // syslog(LOG_INFO, "end stream, read: [%s], last symbol = [%ld]", s.c_str(), s[s.size()-1]);
   return *this;
 }
 

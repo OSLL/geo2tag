@@ -94,11 +94,11 @@ void ApplyChannelJsonQuery::process()
   {
     if((*i).dynamicCast<loader::User>()->getToken()==m_token)
     {
-    	syslog(LOG_INFO,"Find user from request");
+        // syslog(LOG_INFO,"Find user from request");
       CHandlePtr<loader::Channel> channel=
             makeHandle(new loader::Channel(0,m_name, m_description, m_url));
 			common::DbSession::getInstance().storeChannel(channel); 
- 			syslog(LOG_INFO,"updateChannel finished sucsesfull");
+                        // syslog(LOG_INFO,"updateChannel finished sucsesfull");
  			m_status="Ok";
       return;
     }

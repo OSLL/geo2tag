@@ -83,7 +83,7 @@ void UnsubscribeJsonQuery::process()
 	  			if ((*j)->getName()==m_channel)
           {
 		  			common::DbSession::getInstance().unsubscribe((*i),(*j));
-			  		syslog(LOG_INFO,"DbSession::Unsubscribe finished");
+                                        // syslog(LOG_INFO,"DbSession::Unsubscribe finished");
 				  	m_status="Ok";
 					  return;
 				  }

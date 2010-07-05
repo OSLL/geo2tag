@@ -83,7 +83,7 @@ Query::Query(const std::string &s,Stream& stm) {
     std::ostringstream ss;
     for(std::map<std::string, std::string>::const_iterator it=m_params.begin();it!=m_params.end(); ++it)
       ss << it->first << "=" << it->second << " &&& ";
-    syslog(LOG_INFO, ss.str().c_str());
+    // syslog(LOG_INFO, ss.str().c_str());
 
     if (getParam("query")==std::string("subscribe")) m_type=SUBSCRIBE;
     else if (getParam("query")==std::string("channels")) m_type=AVAILABLE_LIST;

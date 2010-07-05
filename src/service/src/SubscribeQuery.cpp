@@ -33,7 +33,7 @@ void SubscribeQuery::init(const std::stringstream& query)
 void SubscribeQuery::process()
 {
 //  common::DbSession::getInstance().loadData();
-  syslog(LOG_INFO,"Starting DbSession::subscribe method");
+  // syslog(LOG_INFO,"Starting DbSession::subscribe method");
   CHandlePtr<common::Channels > channels=common::DbSession::getInstance().getChannels();
   CHandlePtr<common::User> du;
   CHandlePtr<common::Channel> ch;
@@ -60,7 +60,7 @@ void SubscribeQuery::process()
   
   if(ch == NULL) // Channel was not found
   { 
-    syslog(LOG_INFO, "ch == NULL");
+    // syslog(LOG_INFO, "ch == NULL");
     m_result = "Error";
     return;
   }
@@ -80,7 +80,7 @@ void SubscribeQuery::process()
 
 std::string SubscribeQuery::outToString() const
 {
-        syslog(LOG_INFO,"Starting SubscribedQuery::outToString() method");
+        // syslog(LOG_INFO,"Starting SubscribedQuery::outToString() method");
         return "{\"status\":\""+m_result+"\"}";
 }
 

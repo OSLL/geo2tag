@@ -61,7 +61,7 @@ void Server::process(const Query &q)
 
 	std::string str=q.getStream().str();
   std::stringstream ss(str);
-	syslog(LOG_INFO,ss.str().c_str());
+        // syslog(LOG_INFO,ss.str().c_str());
 
 	CHandlePtr<IJsonQuery> query=m_factory.getJsonQuery(q,ss);
 	try
@@ -89,12 +89,12 @@ void Server::serve()
       break;
     }
     const std::string s=std::string(FCGX_GetParam("QUERY_STRING", m_cgi.envp));
-    syslog(LOG_INFO,"Recieved new query. Content below");
+    // syslog(LOG_INFO,"Recieved new query. Content below");
     Stream stream=Stream(m_cgi.in);
     Query q(s, stream);
-    syslog(LOG_INFO, q.getStream().str().c_str());
+    // syslog(LOG_INFO, q.getStream().str().c_str());
     process(q);
-    syslog(LOG_INFO,"processing is finished");
+    // syslog(LOG_INFO,"processing is finished");
     FCGX_Finish_r(&m_cgi);
   }
 }

@@ -80,6 +80,7 @@ namespace maps
 
   signals:
     void mapUpdated(QByteArray & picture);
+    void error(QString error);
 
   }; // class MapLoader
   

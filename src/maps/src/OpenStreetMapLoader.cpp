@@ -132,6 +132,11 @@ namespace maps
 
     common::Picture OpenStreetMapLoader::getMapWithMarks(double latitude, double longitude, short size, int width, int height, const common::DataMarks& marks)
     {
+        if (size > 18)
+        {
+            emit error(QString("error size"));
+            return common::Picture(QImage());
+        }
         std::string s = preprocessQuery(latitude, longitude, size, width, height, marks);
 
         QNetworkRequest request;

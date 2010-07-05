@@ -74,8 +74,9 @@ void RssFeedJsonQuery::process()
     {
        if ((*marks)[y]->getChannel()==(*channels)[i]) 
        {
-           syslog(LOG_INFO, "(*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude)[%f] <= m_radius[%f]",
+           /* syslog(LOG_INFO, "(*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude)[%f] <= m_radius[%f]",
               (*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude), m_radius);
+            */
            if ((*marks)[y]->getDistance((*marks)[y]->getLatitude(),(*marks)[y]->getLongitude(),m_latitude,m_longitude) <= m_radius) 
            {
               if(m_type == ALL_MARKS)
@@ -111,7 +112,7 @@ void RssFeedJsonQuery::process()
     }
   }
 
-  syslog(LOG_INFO, "RssFeedJsonQuery::process, marks.size() = %u, after filtering", m_marks->size());
+  // syslog(LOG_INFO, "RssFeedJsonQuery::process, marks.size() = %u, after filtering", m_marks->size());
   std::sort(m_marks->begin(),m_marks->end(),comp);
 }
 
@@ -125,7 +126,7 @@ std::string RssFeedJsonQuery::outToString() const
 	builder["rss"]["channel"]["description"]=json::String(" ");
 	builder["rss"]["channel"]["language"]=json::String("English");
 	builder["rss"]["channel"]["pubDate"]=json::String(formatTime(CTime::now().getTime(),"%d %b %Y %H:%M:%S"));
-	syslog(LOG_INFO,"time generated");
+        // syslog(LOG_INFO,"time generated");
 	json::QuickBuilder marks=builder["rss"]["channel"]["item"];
 	if (m_marks->size()>0)
 	{
@@ -134,14 +135,14 @@ std::string RssFeedJsonQuery::outToString() const
 		if (m_marks->size()>20) finish=m_marks->begin()+20;
 		for (common::DataMarks::iterator i=m_marks->begin();i!=finish;i++,j++)
 		{
-			syslog(LOG_INFO,"another itaration");
+                        // syslog(LOG_INFO,"another itaration");
 			marks[j]["title"]=json::String((*i)->getLabel());
 			marks[j]["link"]=json::String((*i)->getUrl());
 			marks[j]["description"]=json::String((*i)->getDescription());
-			syslog(LOG_INFO, "RSS reply, lat=%f, lon=%f", (*i)->getLatitude(), (*i)->getLongitude());
+                        // syslog(LOG_INFO, "RSS reply, lat=%f, lon=%f", (*i)->getLatitude(), (*i)->getLongitude());
 			marks[j]["latitude"]=json::Number((*i)->getLatitude());
 			marks[j]["longitude"]=json::Number((*i)->getLongitude());
-			syslog(LOG_INFO, "RSS reply, lat=%f, lon=%f", (*i)->getLatitude(), (*i)->getLongitude());
+                        // syslog(LOG_INFO, "RSS reply, lat=%f, lon=%f", (*i)->getLatitude(), (*i)->getLongitude());
 			marks[j]["tags"]=json::Null();
                         marks[j]["pubDate"]=json::String(formatTime((*i)->getTime().getTime(),"%d %b %Y %H:%M:%S"));
 			marks[j]["user"]=json::String((*i)->getUser()->getLogin());
@@ -155,7 +156,7 @@ std::string RssFeedJsonQuery::outToString() const
   }
 
 	json::Writer::Write(newRoot,s);
-	syslog(LOG_INFO,"json formed");
+        // syslog(LOG_INFO,"json formed");
 	return s.str();
 
 }

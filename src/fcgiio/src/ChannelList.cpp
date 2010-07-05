@@ -71,7 +71,7 @@ ChannelList::ChannelList(const std::stringstream& json){
 }
 
 void ChannelList::convertInJSON(){
-	syslog(LOG_INFO,"Starting ChannelList::convertInJson() method");
+        // syslog(LOG_INFO,"Starting ChannelList::convertInJson() method");
 	assert(m_channels);
   json::Element newRoot;
   json::QuickBuilder builder(newRoot);

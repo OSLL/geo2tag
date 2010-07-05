@@ -84,18 +84,18 @@ void ApplyMarkJsonQuery::process(){
     if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
     {
     	struct tm tim;	
-    	syslog(LOG_INFO,"Find user from request");
-    	syslog(LOG_INFO,"strptime result %i",strptime(m_time.c_str(),"%d %b %Y %H:%M:%S",&tim)==NULL);
-    	syslog(LOG_INFO,"Finishing strptime");
+        // syslog(LOG_INFO,"Find user from request");
+        // syslog(LOG_INFO,"strptime result %i",strptime(m_time.c_str(),"%d %b %Y %H:%M:%S",&tim)==NULL);
+        // syslog(LOG_INFO,"Finishing strptime");
     	CHandlePtr<common::Channels> channels = common::DbSession::getInstance().getChannels();
-    	syslog(LOG_INFO,"getChannels sucsesfull");
+        // syslog(LOG_INFO,"getChannels sucsesfull");
     	for (common::Channels::iterator j=channels->begin();j!=channels->end();j++)
       {
     		if ((*j)->getName()==m_channel)
         {
-    			syslog(LOG_INFO,"Find channel from request");
+                        // syslog(LOG_INFO,"Find channel from request");
 			CHandlePtr<loader::DataMark> mark=makeHandle(new loader::DataMark(0,m_latitude,m_longitude,m_title,m_description,m_link,CTime(tim) ,*i,*j));
-    			syslog(LOG_INFO,"Datamark created sucsefully. Id of user %i, Id of channel %i, mark %i",(*i).dynamicCast<loader::User>()->getId(),(*j).dynamicCast<loader::Channel>()->getId(),mark==0);
+                        // syslog(LOG_INFO,"Datamark created sucsefully. Id of user %i, Id of channel %i, mark %i",(*i).dynamicCast<loader::User>()->getId(),(*j).dynamicCast<loader::Channel>()->getId(),mark==0);
           	//	try
 		//	{
 				common::DbSession::getInstance().updateChannel((*j).dynamicCast<loader::Channel>()->getId(),mark); // \ToDo replace channel_id to Objejct
@@ -105,7 +105,7 @@ void ApplyMarkJsonQuery::process(){
 		//		break;
 		//	}
           		(*j)->addData(mark);
-    			syslog(LOG_INFO,"updateChannel finished sucsesfull");
+                        // syslog(LOG_INFO,"updateChannel finished sucsesfull");
     			m_status="ok";
     			break;
     		}

@@ -64,7 +64,7 @@ namespace common
     {
       while(!m_needExit)
       {
-        syslog(LOG_INFO, "update thread: updating data");
+        // syslog(LOG_INFO, "update thread: updating data");
         try
         {
           m_instance->loadData();
@@ -77,7 +77,7 @@ namespace common
         }
         mSleep(10000);
       }
-      syslog(LOG_INFO, "update thread: exiting...");
+      // syslog(LOG_INFO, "update thread: exiting...");
     }
     public:
       UpdateThread(T* instance):m_needExit(false), m_instance(instance)
