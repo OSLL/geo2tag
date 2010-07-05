@@ -154,11 +154,13 @@ namespace GUI
     void LoginQuery::onReplyError(QNetworkReply::NetworkError error)
     {
         qDebug("Network error: %d \n", error);
+        emit errorReceived();
     }
 
     void LoginQuery::onManagerSslErrors()
     {
         qDebug("ssl error \n");
+        emit errorReceived();
     }
 } // namespace GUI
 

@@ -13,6 +13,7 @@ LoginWindow::LoginWindow(QWidget * parent, Qt::WindowFlags f):QMainWindow(parent
     connect(&m_query,SIGNAL(responseReceived(QString, QString)),this,SLOT(responseReceived(QString,QString)));
     connect(&m_query,SLOT(onManagerSslErrors()),&m_query,SIGNAL(errorReceived()));
     connect(&m_query,SLOT(onReplyError(QNetworkReply::NetworkError)),&m_query,SIGNAL(errorReceived()));
+    connect(&m_query,SIGNAL(errorReceived()),this,SLOT(errorReceived()));
 }
 
 void LoginWindow::okPressed()
@@ -35,6 +36,11 @@ void LoginWindow::responseReceived(QString status, QString auth_token)
         QMessageBox::information( this, "wikigps","Wrong user name or password.");
         //error
     }
+}
+
+void LoginWindow::errorReceived()
+{
+    QMessageBox::information(this, "wikigps", "Network error");
 }
 
 }

@@ -21,6 +21,7 @@ namespace  GUI
   private slots:
     void okPressed();
     void responseReceived(QString status, QString auth_token);
+    void errorReceived();
 
   signals:
     void onSucsess(QString authToken);
