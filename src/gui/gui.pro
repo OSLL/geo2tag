@@ -76,6 +76,9 @@ LIBS    +=  -lcommon  -lmaps -lqjson
 
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
-DEFINES += DESKTOP_STYLE
+
+linux: {
+    DEFINES += DESKTOP_STYLE
+}
 
 QT += core gui webkit phonon network

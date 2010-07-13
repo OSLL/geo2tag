@@ -141,7 +141,7 @@ void MainWindow::positionUpdated(QGeoPositionInfo gpsPos)
 }
 
 void MainWindow::setupBearer()
-{
+{  /*
     // Set Internet Access Point
     QNetworkConfigurationManager manager;
     const bool canStartIAP = (manager.capabilities()
@@ -154,6 +154,7 @@ void MainWindow::setupBearer()
     m_session = new QNetworkSession(cfg);
     m_session->open();
     m_session->waitForOpened();
+    */
 }
 
 void MainWindow::timerEvent(QTimerEvent *te)

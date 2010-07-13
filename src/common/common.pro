@@ -18,7 +18,8 @@ INCLUDEPATH += . \
     inc \
     common/inc \
     exception/inc \
-    /usr/include/libxml2
+    /usr/include/libxml2 \
+    thread/inc
 
 # Input
 HEADERS += inc/DataMarks.h \
@@ -125,6 +126,9 @@ linux: {
 }
 
 maemo5: {
+    CONFIG += mobility
+    MOBILITY = location
+
     DEPENDPATH += \
                   thread/inc \
                   thread/src
@@ -151,6 +155,59 @@ maemo5: {
 }
 
 symbian: {
+}
+
+webside: {
+    DEPENDPATH += odbc/inc \
+                  odbc/src \
+                  thread/inc \
+                  thread/src
+
+    INCLUDEPATH +=  thread/inc \
+                    odbc/inc
+
+    HEADERS += odbc/inc/Cache.h \
+               odbc/inc/Db.h \
+               odbc/inc/DbException.h \
+               odbc/inc/DbLock.h \
+               odbc/inc/DbQuery.h \
+               thread/inc/AtomicCount.h \
+               thread/inc/DummySync.h \
+               thread/inc/Event.h \
+               thread/inc/Lock.h \
+               thread/inc/Mutex.h \
+               thread/inc/SpinLock.h \
+               thread/inc/SwMr.h \
+               thread/inc/Thread.h \
+               thread/inc/Threading.h \
+               thread/inc/WorkerThread.h \
+               common/inc/CrcTable.h \
+               common/inc/ElectSeq.h \
+               inc/GpsModeller.h \
+               odbc/inc/DbConn.h \
+               odbc/inc/Transaction.h \
+               odbc/inc/DbStmt.h \
+               odbc/inc/ExecuteClose.h \
+               odbc/inc/DbQueryX.h
+
+    SOURCES += src/GpsModeller.cpp \
+               odbc/src/Db.cpp \
+               odbc/src/DbLock.cpp \
+               odbc/src/DbQuery.cpp \
+               thread/src/Event.cpp \
+               thread/src/Mutex.cpp \
+               thread/src/SwMr.cpp \
+               thread/src/Thread.cpp \
+               odbc/src/DbException.cpp \
+               odbc/src/DbConn.cpp \
+               odbc/src/Transaction.cpp \
+               odbc/src/DbStmt.cpp \
+               odbc/src/ExecuteClose.cpp \
+               odbc/src/DbQueryX.cpp
+
+    LIBS += -lxml2 -lodbc
+
+    DEFINES += NO_GPS SIMULATE_GPS
 }
 
 OBJECTS_DIR = .obj

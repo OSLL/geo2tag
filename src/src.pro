@@ -15,9 +15,13 @@ linux {
              fcgiio \
              service \
              maps \
-             gui 
+             gui
 }
 
 symbian {
+}
+
+webside {
+  SUBDIRS += webside
 }
 

@@ -1,8 +1,9 @@
 CONFIG += debug
 
 #CONFIG += linux
-CONFIG += maemo5
+#CONFIG += maemo5
 #CONFIG += symbian
+CONFIG += webside
 
 SOURCE_DIR = $$PWD
 
@@ -28,6 +29,11 @@ symbian: {
 }
 
 linux: {
+    OBJECTS_DIR = .obj
+    MOC_DIR = .moc
+}
+
+webside: {
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }
