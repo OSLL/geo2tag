@@ -61,7 +61,7 @@
 #define DEFAULT_RADIUS            30
 #define DEFAULT_USER_NAME         "Paul"
 #define DEFAULT_USER_PASSWORD     "test"
-#define DEFAULT_TOKEN             "test"
+#define DEFAULT_TOKEN             "2154086390Ivan1128557755"
 
 #endif //_defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 

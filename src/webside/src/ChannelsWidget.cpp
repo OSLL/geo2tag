@@ -36,16 +36,25 @@ void ChannelsWidget::updateChannelsBox()
 {
     m_availableChannels = common::DbSession::getInstance().getChannels();
 
+    if (m_availableChannels->size() > 0)
+        channelsBox->addItem(WString("availables"));
+
     /* Looking for subscribed channels */
     CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
     for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
     {
-        if ((*i).dynamicCast<common::User>()->getToken() == DEFAULT_TOKEN) /* TODO!!! auth-n!!! */
+        if ((*i).dynamicCast<loader::User>()->getToken() == DEFAULT_TOKEN) /* TODO!!! auth-n!!! */
         {
             m_subscribedChannels=(*i)->getSubscribedChannels();
             break;
         }
     }
+
+    if (m_availableChannels->size() > 0)
+        channelsBox->addItem(WString("availables2"));
+
+    if (m_subscribedChannels->size() > 0)
+        channelsBox->addItem(WString("subscribed"));
 
     /* Adding channels to Box */
     for (int i = 0; i < m_availableChannels->size(); i++)
