@@ -1,5 +1,6 @@
 
 #include "sketch.h"
+#include "DbSession.h"
 
 #include <Wt/WVBoxLayout>
 #include <Wt/WHBoxLayout>
@@ -13,7 +14,8 @@
 Scetch::Scetch(const WEnvironment& env)
   : WApplication(env)
 {
-  setTitle("Geo2tag");                               // application title
+  setTitle("Geo2tag"); // application title
+  common::DbSession::getInstance();
   
   privateButton = new WPushButton("Private", root());
   channelsButton = new WPushButton("Channels", root());

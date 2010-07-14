@@ -3,6 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
+include(../../config.pri)
 TARGET = sketch.wt
 DEPENDPATH += . inc src
 INCLUDEPATH += . inc
@@ -10,6 +11,29 @@ INCLUDEPATH += . inc
 # Wt
 INCLUDEPATH += /usr/local/include/Wt
 LIBS += -lwtfcgi
+
+# Common library
+INCLUDEPATH += ../common/inc \
+               ../common/common/inc \
+               ../common/thread/inc \
+               ../common/exception/inc \
+               ../common/odbc/inc
+LIBS += -lcommon
+
+# DbSession (from service)
+INCLUDEPATH += ../service/inc
+DEPENDPATH += ../service/inc \
+              ../service/src
+HEADERS += DbSession.h \
+           ChannelInternal.h \
+           DataMarkInternal.h \
+           UserInternal.h \
+           DynamicCastFailure.h
+SOURCES += DbSession.cpp \
+           ChannelInternal.cpp \
+           DataMarkInternal.cpp \
+           UserInternal.cpp \
+           DynamicCastFailure.cpp
 
 # Input
 HEADERS += inc/ChannelsWidget.h \

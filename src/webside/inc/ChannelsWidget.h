@@ -6,6 +6,8 @@
 #include <Wt/WSelectionBox>
 #include <Wt/WPushButton>
 
+#include "Channel.h"
+
 using namespace Wt;
 
 class ChannelsWidget : public WContainerWidget
@@ -15,8 +17,12 @@ class ChannelsWidget : public WContainerWidget
     WPushButton *subscribeButton;
     WPushButton *unsubscribeButton;
 
+    CHandlePtr<common::Channels> m_subscribedChannels;
+    CHandlePtr<common::Channels> m_availableChannels;
+
 public:
     ChannelsWidget(WContainerWidget *parent = 0);
+    void updateChannelsBox();
 
 };
 
