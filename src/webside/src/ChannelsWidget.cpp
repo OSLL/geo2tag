@@ -41,12 +41,23 @@ void ChannelsWidget::updateChannelsBox()
 
     /* Looking for subscribed channels */
     CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
+
+    /*
     for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
     {
-        if ((*i).dynamicCast<loader::User>()->getToken() == DEFAULT_TOKEN) /* TODO!!! auth-n!!! */
+        if ((*i).dynamicCast<loader::User>()->getToken() == DEFAULT_TOKEN) // TODO!!! auth-n!!!
         {
             m_subscribedChannels=(*i)->getSubscribedChannels();
             break;
+        }
+    }
+    */
+
+    for (int i = 0; i < users->size(); i++)
+    {
+        if (users->at(i)->getToken() == DEFAULT_TOKEN)
+        {
+            m_subscribedChannels = users->at(i)->getSubscribedChannels();
         }
     }
 

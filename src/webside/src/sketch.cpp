@@ -15,7 +15,7 @@ Scetch::Scetch(const WEnvironment& env)
   : WApplication(env)
 {
   setTitle("Geo2tag"); // application title
-  common::DbSession::getInstance();
+  // common::DbSession::getInstance();
   
   privateButton = new WPushButton("Private", root());
   channelsButton = new WPushButton("Channels", root());
