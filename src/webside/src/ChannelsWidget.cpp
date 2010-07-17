@@ -13,6 +13,7 @@ ChannelsWidget::ChannelsWidget(WContainerWidget *parent)
 {
     channelsText = new WText("Available channels:", parent);
     channelsBox = new WSelectionBox(parent);
+    channelsBox->setMinimumSize(WLength(300), WLength(400));
     subscribeButton = new WPushButton("Subscribe", parent);
     unsubscribeButton = new WPushButton("Unsubscribe", parent);
     m_availableChannels = makeHandle(new common::Channels);
@@ -86,6 +87,9 @@ void ChannelsWidget::updateChannelsBox()
 void ChannelsWidget::onSubscribeClicked()
 {
     WString m_channel = channelsBox->currentText();
+#ifdef WT_THREADED
+    WMessageBox::show("Geo2tag", "hello", Ok);
+#endif
     if (m_channel != WString(""))
     {
         /* subscribe to channel */
@@ -95,7 +99,11 @@ void ChannelsWidget::onSubscribeClicked()
 
         if(common::DbSession::getInstance().getTokensMap().count(std::string(DEFAULT_TOKEN)) == 0)
         {
+#ifdef WT_THREADED
             WMessageBox::show("Geo2tag", "Can't find user. Ask admin.", Ok);
+#else
+    channelsBox->addItem(WString("Can't find user"));
+#endif
             return;
         }
         else
@@ -103,18 +111,28 @@ void ChannelsWidget::onSubscribeClicked()
             du = common::DbSession::getInstance().getTokensMap().find(std::string(DEFAULT_TOKEN))->second;
         }
 
-        for(size_t i=0; i< channels->size(); ++i)
+        for(int i = 0; i < channels->size(); i++)
         {
-            if(WString((*channels)[i]->getName()) == m_channel)
+            channelsBox->addItem(WString(channels->at(i)->getName()));
+            if (((WString(channels->at(i)->getName()) + 
+                 WString(" (subscribed)"))
+                    == m_channel) 
+             || ((WString(channels->at(i)->getName()) +
+                 WString(" (not subscribed)"))
+                    == m_channel) )
             {
-                ch = (*channels)[i];
+                ch = channels->at(i);
                 break;
             }
         }
 
         if(ch == NULL) // Channel was not found
         {
+#ifdef WT_THREADED
             WMessageBox::show("Geo2tag", "Can't find channel. Ask admin.", Ok);
+#else
+    channelsBox->addItem(WString("Can't find channel"));
+#endif
             return;
         }
 
@@ -124,23 +142,99 @@ void ChannelsWidget::onSubscribeClicked()
         }
         catch(const CExceptionSource& x)
         {
+#ifdef WT_THREADED
             WMessageBox::show("Geo2tag", "Exception while common::DbSession::getInstance().subscribe(du,ch). Ask admin", Ok);
+#else
+    channelsBox->addItem(WString("Can't subscribe"));
+#endif
         }
 
         updateChannelsBox();
     }
     else
     {
+#ifdef WT_THREADED
         WMessageBox::show("Geo2tag", "Nothing is selected", Ok);
+#else
+    channelsBox->addItem(WString("Nothing is selected"));
+#endif
     }
 
 }
 
 void ChannelsWidget::onUnsubscribeClicked()
 {
-    if (channelsBox->currentText() != WString(""))
+WString m_channel = channelsBox->currentText();
+#ifdef WT_THREADED
+    WMessageBox::show("Geo2tag", "hello", Ok);
+#endif
+    if (m_channel != WString(""))
     {
         /* unsubscribe from channel */
+        CHandlePtr<common::Channels > channels=common::DbSession::getInstance().getChannels();
+        CHandlePtr<common::User> du;
+        CHandlePtr<common::Channel> ch;
 
+        if(common::DbSession::getInstance().getTokensMap().count(std::string(DEFAULT_TOKEN)) == 0)
+        {
+#ifdef WT_THREADED
+            WMessageBox::show("Geo2tag", "Can't find user. Ask admin.", Ok);
+#else
+    channelsBox->addItem(WString("Can't find user"));
+#endif
+            return;
+        }
+        else
+        {
+            du = common::DbSession::getInstance().getTokensMap().find(std::string(DEFAULT_TOKEN))->second;
+        }
+
+        for(int i = 0; i < channels->size(); i++)
+        {
+            channelsBox->addItem(WString(channels->at(i)->getName()));
+            if (((WString(channels->at(i)->getName()) + 
+                 WString(" (subscribed)"))
+                    == m_channel) 
+             || ((WString(channels->at(i)->getName()) +
+                 WString(" (not subscribed)"))
+                    == m_channel) )
+            {
+                ch = channels->at(i);
+                break;
+            }
+        }
+
+        if(ch == NULL) // Channel was not found
+        {
+#ifdef WT_THREADED
+            WMessageBox::show("Geo2tag", "Can't find channel. Ask admin.", Ok);
+#else
+    channelsBox->addItem(WString("Can't find channel"));
+#endif
+            return;
+        }
+
+        try
+        {
+            common::DbSession::getInstance().unsubscribe(du,ch);
+        }
+        catch(const CExceptionSource& x)
+        {
+#ifdef WT_THREADED
+            WMessageBox::show("Geo2tag", "Exception while common::DbSession::getInstance().subscribe(du,ch). Ask admin", Ok);
+#else
+    channelsBox->addItem(WString("Can't unsubscribe"));
+#endif
+        }
+
+        updateChannelsBox();
+    }
+    else
+    {
+#ifdef WT_THREADED
+        WMessageBox::show("Geo2tag", "Nothing is selected", Ok);
+#else
+    channelsBox->addItem(WString("Nothing is selected"));
+#endif
     }
 }
