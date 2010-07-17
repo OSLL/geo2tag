@@ -6,6 +6,7 @@
 #include <WHBoxLayout>
 #include <WVBoxLayout>
 #include <WContainerWidget>
+#include <WMessageBox>
 
 ChannelsWidget::ChannelsWidget(WContainerWidget *parent)
     : WContainerWidget(parent)
@@ -28,6 +29,10 @@ ChannelsWidget::ChannelsWidget(WContainerWidget *parent)
     mainLayout->addWidget(channelsBox);
     mainLayout->addItem(buttonsLayout);
     this->setLayout(mainLayout);
+
+    /* signals and slots */
+    subscribeButton->clicked().connect(this, &ChannelsWidget::onSubscribeClicked);
+    unsubscribeButton->clicked().connect(this, &ChannelsWidget::onUnsubscribeClicked);
 
     updateChannelsBox();
 }
@@ -75,5 +80,67 @@ void ChannelsWidget::updateChannelsBox()
             /* add as not subscribed channel */
             channelsBox->addItem(WString(m_availableChannels->at(i)->getName()) + WString(" (not subscribed)"));
         }
+    }
+}
+
+void ChannelsWidget::onSubscribeClicked()
+{
+    WString m_channel = channelsBox->currentText();
+    if (m_channel != WString(""))
+    {
+        /* subscribe to channel */
+        CHandlePtr<common::Channels > channels=common::DbSession::getInstance().getChannels();
+        CHandlePtr<common::User> du;
+        CHandlePtr<common::Channel> ch;
+
+        if(common::DbSession::getInstance().getTokensMap().count(std::string(DEFAULT_TOKEN)) == 0)
+        {
+            WMessageBox::show("Geo2tag", "Can't find user. Ask admin.", Ok);
+            return;
+        }
+        else
+        {
+            du = common::DbSession::getInstance().getTokensMap().find(std::string(DEFAULT_TOKEN))->second;
+        }
+
+        for(size_t i=0; i< channels->size(); ++i)
+        {
+            if(WString((*channels)[i]->getName()) == m_channel)
+            {
+                ch = (*channels)[i];
+                break;
+            }
+        }
+
+        if(ch == NULL) // Channel was not found
+        {
+            WMessageBox::show("Geo2tag", "Can't find channel. Ask admin.", Ok);
+            return;
+        }
+
+        try
+        {
+            common::DbSession::getInstance().subscribe(du,ch);
+        }
+        catch(const CExceptionSource& x)
+        {
+            WMessageBox::show("Geo2tag", "Exception while common::DbSession::getInstance().subscribe(du,ch). Ask admin", Ok);
+        }
+
+        updateChannelsBox();
+    }
+    else
+    {
+        WMessageBox::show("Geo2tag", "Nothing is selected", Ok);
+    }
+
+}
+
+void ChannelsWidget::onUnsubscribeClicked()
+{
+    if (channelsBox->currentText() != WString(""))
+    {
+        /* unsubscribe from channel */
+
     }
 }

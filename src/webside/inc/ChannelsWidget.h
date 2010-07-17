@@ -24,6 +24,10 @@ public:
     ChannelsWidget(WContainerWidget *parent = 0);
     void updateChannelsBox();
 
+    /* slots */
+    void onSubscribeClicked();
+    void onUnsubscribeClicked();
+
 };
 
 
