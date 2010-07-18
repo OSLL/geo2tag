@@ -34,6 +34,7 @@ linux: {
 }
 
 webside: {
+    QMAKE_CXXFLAGS += -g3
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }

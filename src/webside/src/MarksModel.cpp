@@ -57,7 +57,8 @@ boost::any MarksModel::data(const WModelIndex & index,
     switch (index.column())
     {
     case 0:
-        return m_marks->at(index.row())->getTime();
+        return formatTime(m_marks->at(index.row())->getTime().getTime(),"%d %b %Y %H:%M:%S");
+        // return m_marks->at(index.row())->getTime();
     case 1:
         return m_marks->at(index.row())->getDescription();
     case 2:
@@ -70,8 +71,8 @@ boost::any MarksModel::data(const WModelIndex & index,
         return m_marks->at(index.row())->getUrl();
     default:
         return "undefined";
-
     }
+return "indefined";
 }
 
 boost::any MarksModel::headerData(int section,
