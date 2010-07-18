@@ -29,6 +29,7 @@ void MarksWidget::updateModel()
     {
         marksMapWidget->addMarker(WGoogleMap::Coordinate(marks->at(i)->getLatitude(),
                                                          marks->at(i)->getLongitude()),
-                                  WString("title of this marker..."));
+                                  marks->at(i)->getDescription());
+                                  //WString("dfdf dsfsd ."));
     }
 }

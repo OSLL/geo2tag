@@ -196,12 +196,14 @@ void WGoogleMap::doGmJavaScript(const std::string& jscode, bool sepScope)
     additions_.push_back(js);
 }
 
-void WGoogleMap::addMarker(const Coordinate& pos, const WString& title)
+void WGoogleMap::addMarker(const Coordinate& pos, const std::string& title)
 {
   std::stringstream strm;
   strm << "var marker = new google.maps.Marker(new google.maps.LatLng("
-       << pos.latitude() << ", " << pos.longitude() << ")); marker.title= \""
-       << title << "\";"
+       //<< pos.latitude() << ", " << pos.longitude() << ")); marker.title= \""
+       //<< title << "\";"
+       << pos.latitude() << ", " << pos.longitude() << "), {title: \""
+       << title << "\"});"
        << jsRef() << ".map.addOverlay(marker);";
 
   doGmJavaScript(strm.str(), false);
