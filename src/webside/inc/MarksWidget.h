@@ -4,16 +4,21 @@
 #include <Wt/WTabWidget>
 #include <Wt/WText>
 #include <Wt/WGoogleMap>
+#include <WTableView>
+
+#include "MarksModel.h"
 
 using namespace Wt;
 
 class MarksWidget : public WTabWidget
 {
-    WText *marksTableWidget;
     WGoogleMap *marksMapWidget;
+    WTableView *marksTable;
+    MarksModel *marksModel;
 
 public:
     MarksWidget(WContainerWidget *parent = 0);
+    void updateModel();
 
 };
 

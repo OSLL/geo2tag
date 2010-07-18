@@ -56,6 +56,7 @@ void ChannelsWidget::updateChannelsBox()
         {
             //channelsBox->addItem(WString("found"));
             m_subscribedChannels = user->getSubscribedChannels();
+            break;
         }
     }
 

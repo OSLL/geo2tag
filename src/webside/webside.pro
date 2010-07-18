@@ -38,12 +38,13 @@ SOURCES += DbSession.cpp \
 # Input
 HEADERS += inc/ChannelsWidget.h \
            inc/MarksWidget.h \
+           inc/MarksModel.h \
            inc/OptionsModel.h \
            inc/OptionsWidget.h \
            inc/sketch.h
 SOURCES += src/ChannelsWidget.cpp \
            src/main.cpp \
-           #src/MarksModel.cpp \
+           src/MarksModel.cpp \
            src/MarksWidget.cpp \
            src/OptionsModel.cpp \
            src/OptionsWidget.cpp \
