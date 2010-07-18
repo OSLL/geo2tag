@@ -41,11 +41,13 @@ HEADERS += inc/ChannelsWidget.h \
            inc/MarksModel.h \
            inc/OptionsModel.h \
            inc/OptionsWidget.h \
-           inc/sketch.h
+           inc/sketch.h \
+           inc/GoogleMap.h
 SOURCES += src/ChannelsWidget.cpp \
            src/main.cpp \
            src/MarksModel.cpp \
            src/MarksWidget.cpp \
            src/OptionsModel.cpp \
            src/OptionsWidget.cpp \
-           src/sketch.cpp
+           src/sketch.cpp \
+           src/GoogleMap.cpp

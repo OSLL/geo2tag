@@ -28,6 +28,7 @@ void MarksWidget::updateModel()
     for (int i = 0; i < marks->size(); i++)
     {
         marksMapWidget->addMarker(WGoogleMap::Coordinate(marks->at(i)->getLatitude(),
-                                                         marks->at(i)->getLongitude()));
+                                                         marks->at(i)->getLongitude()),
+                                  WString("title of this marker..."));
     }
 }

@@ -3,7 +3,7 @@
 
 #include <Wt/WTabWidget>
 #include <Wt/WText>
-#include <Wt/WGoogleMap>
+#include "GoogleMap.h"
 #include <WTableView>
 
 #include "MarksModel.h"
