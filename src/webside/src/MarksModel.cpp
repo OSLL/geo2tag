@@ -92,3 +92,8 @@ boost::any MarksModel::headerData(int section,
     else if (section == 5)
         return "url";
 }
+
+CHandlePtr<common::DataMarks> MarksModel::getMarks() const
+{
+    return m_marks;
+}

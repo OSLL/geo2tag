@@ -4,7 +4,7 @@ MarksWidget::MarksWidget(WContainerWidget *parent)
     : WTabWidget(parent)
 {
     marksTable = new WTableView();
-    marksTable->setMinimumSize(WLength(100), WLength(100));
+    marksTable->setMinimumSize(WLength(100), WLength(400));
     marksMapWidget = new WGoogleMap();
     marksMapWidget->setMinimumSize(WLength(300), WLength(400));
     marksMapWidget->setMaximumSize(WLength(500), WLength(400));
@@ -22,4 +22,12 @@ void MarksWidget::updateModel()
 {
     marksModel = new MarksModel(WString(""), marksTable->parent());
     marksTable->setModel(marksModel);
+
+    CHandlePtr<common::DataMarks> marks = marksModel->getMarks();
+    marksMapWidget->clearOverlays();
+    for (int i = 0; i < marks->size(); i++)
+    {
+        marksMapWidget->addMarker(WGoogleMap::Coordinate(marks->at(i)->getLatitude(),
+                                                         marks->at(i)->getLongitude()));
+    }
 }

@@ -37,6 +37,8 @@ public:
     virtual boost::any headerData(int section,
                                   Orientation orientation = Horizontal,
                                   int role = DisplayRole) const;
+
+    CHandlePtr<common::DataMarks> getMarks() const;
 };
 
 
