@@ -50,7 +50,8 @@ HEADERS += inc/DataMarks.h \
     common/inc/TypeInfo.h \
     exception/inc/Exception.h \
     exception/inc/ExceptionSource.h \
-    exception/inc/Trace.h 
+    exception/inc/Trace.h \ 
+    inc/Parameters.h
 
 SOURCES += src/DataMarks.cpp \
     src/DefaultException.cpp \
@@ -68,7 +69,8 @@ SOURCES += src/DataMarks.cpp \
     exception/src/ExceptionSource.cpp \
     exception/src/Trace.cpp \
     common/src/Init.cpp \
-    common/src/TypeInfo.cpp 
+    common/src/TypeInfo.cpp \ 
+    src/Parameters.cpp
 
 
 
