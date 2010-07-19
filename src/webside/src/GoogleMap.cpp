@@ -196,9 +196,15 @@ void WGoogleMap::doGmJavaScript(const std::string& jscode, bool sepScope)
     additions_.push_back(js);
 }
 
-void WGoogleMap::addMarker(const Coordinate& pos, const std::string& title)
+void WGoogleMap::addMarker(const Coordinate& pos, std::string title)
 {
   std::stringstream strm;
+  int found = title.find(std::string("\n"));
+  while (found != std::string::npos)
+  {
+    title.erase(found, 2);
+    found = title.find(std::string("\n"));
+  }
   strm << "var marker = new google.maps.Marker(new google.maps.LatLng("
        //<< pos.latitude() << ", " << pos.longitude() << ")); marker.title= \""
        //<< title << "\";"

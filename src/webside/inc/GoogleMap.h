@@ -110,7 +110,7 @@ public:
 
   /*! \brief Adds a marker overlay to the map.
    */
-  void addMarker(const Coordinate &pos, const std::string &title);
+  void addMarker(const Coordinate &pos, std::string title);
 
   /*! \brief Adds a polyline overlay to the map.
    *
