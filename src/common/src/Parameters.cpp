@@ -81,6 +81,21 @@ int Parameters::getDefaultRadius()
 void Parameters::setDefaultRadius(int newRadius)
 {
     m_defaultRadius = newRadius;
+    updateFile();
+}
+
+void Parameters::updateFile()
+{
+    FILE *configFile;
+    if ((configFile = fopen("geo2tag.conf", "w")) == NULL)
+    {
+        qDebug() << "can't open config file";
+        return;
+    }
+
+    fprintf(configFile, "default_radius = %d\n", m_defaultRadius);
+
+    fclose(configFile);
 }
 
 

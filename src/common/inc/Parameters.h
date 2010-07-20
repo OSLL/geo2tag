@@ -15,6 +15,7 @@ public:
 
     int getDefaultRadius();
     void setDefaultRadius(int newRadius);
+    void updateFile();
 
 };
 

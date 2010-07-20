@@ -97,3 +97,10 @@ CHandlePtr<common::DataMarks> MarksModel::getMarks() const
 {
     return m_marks;
 }
+
+#include <WFlags>
+
+WFlags<ItemFlag> MarksModel::flags(const WModelIndex &index) const
+{
+    return WFlags();
+}
