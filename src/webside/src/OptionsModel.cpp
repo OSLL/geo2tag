@@ -24,10 +24,10 @@ WFlags<ItemFlag> OptionsModel::flags(const WModelIndex &index) const
 {
     if (index.column() == 1)
     {
-        return (Wt::ItemIsSelectable | Wt::ItemIsEditable);
+        return (/*Wt::ItemIsSelectable |*/ Wt::ItemIsEditable);
     }
 
-    return Wt::ItemIsSelectable;
+    return 0 /*Wt::ItemIsSelectable*/;
 }
 
 boost::any OptionsModel::headerData(int section,
