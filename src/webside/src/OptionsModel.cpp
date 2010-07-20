@@ -2,10 +2,12 @@
 
 #include "Parameters.h"
 
+#include "WFlags"
+
 OptionsModel::OptionsModel(const WString &configPath, WObject *parent)
     : WAbstractTableModel(parent)
 {
-    
+
 }
 
 int OptionsModel::columnCount(const WModelIndex & parent) const
@@ -16,6 +18,16 @@ int OptionsModel::columnCount(const WModelIndex & parent) const
 int OptionsModel::rowCount(const WModelIndex & parent) const
 {
     return 1;
+}
+
+WFlags<ItemFlag> OptionsModel::flags(const WModelIndex &index) const
+{
+    if (index.column() == 1)
+    {
+        return (Wt::ItemIsSelectable | Wt::ItemIsEditable);
+    }
+
+    return Wt::ItemIsSelectable;
 }
 
 boost::any OptionsModel::headerData(int section,

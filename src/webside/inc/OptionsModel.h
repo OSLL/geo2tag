@@ -20,6 +20,7 @@ public:
                                   Orientation orientation = Horizontal,
                                   int role = DisplayRole) const;
     virtual bool setData(const WModelIndex &index, const boost::any &value, int role = EditRole);
+    WFlags<ItemFlag> flags(const WModelIndex &index) const;
 
 };
 
