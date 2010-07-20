@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <QDebug>
 
+namespace common
+{
+
 void removeAllWhite (std::string &str)
 {
     std::string temp;
@@ -79,3 +82,6 @@ void Parameters::setDefaultRadius(int newRadius)
 {
     m_defaultRadius = newRadius;
 }
+
+
+} //namespace common

@@ -19,6 +19,8 @@ public:
     virtual boost::any headerData(int section,
                                   Orientation orientation = Horizontal,
                                   int role = DisplayRole) const;
+    virtual bool setData(const WModelIndex &index, const boost::any &value, int role = EditRole);
+
 };
 
 

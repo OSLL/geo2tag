@@ -1,6 +1,9 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
+namespace common
+{
+
 class Parameters
 {
     int m_defaultRadius;
@@ -14,5 +17,7 @@ public:
     void setDefaultRadius(int newRadius);
 
 };
+
+} // namespace common
 
 #endif // PARAMETERS_H
