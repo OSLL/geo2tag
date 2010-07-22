@@ -102,5 +102,5 @@ CHandlePtr<common::DataMarks> MarksModel::getMarks() const
 
 WFlags<ItemFlag> MarksModel::flags(const WModelIndex &index) const
 {
-    return WFlags();
+    return WFlags<ItemFlag>();
 }
