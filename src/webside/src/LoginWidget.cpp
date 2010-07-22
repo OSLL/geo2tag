@@ -31,6 +31,8 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
     map->setCenter(Wt::WGoogleMap::Coordinate(60, 30));
     map->enableScrollWheelZoom();
 
+    loginButton->clicked().connect(this, &LoginWidget::loginClicked);
+
     fillMap();
 }
 
