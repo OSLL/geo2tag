@@ -1,10 +1,11 @@
-#ifndef SCRETCH_H
-#define SCRETCH_H
+#ifndef SKETCH_H
+#define SKETCH_H
 
 #include <Wt/WApplication>
 #include <Wt/WContainerWidget>
 #include <Wt/WPushButton>
 #include <Wt/WStackedWidget>
+#include <Wt/WContainerWidget>
 
 #include "ChannelsWidget.h"
 #include "MarksWidget.h"
@@ -13,12 +14,12 @@
 using namespace Wt;
 
 /*
- * A scketch for futher webside application.
+ * A sketch for futher webside application.
  */
-class Scetch : public WApplication
+class Sketch : public WContainerWidget
 {
 public:
-  Scetch(const WEnvironment& env);
+  Sketch(WContainerWidget *parent = 0);
 
 private:
   WPushButton *privateButton;
@@ -44,4 +45,4 @@ private:
 
 };
 
-#endif /* SCRETCH_H */
+#endif /* SKETCH_H */

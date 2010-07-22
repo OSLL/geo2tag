@@ -7,29 +7,32 @@
 #include <WVBoxLayout>
 #include <WContainerWidget>
 #include <WMessageBox>
+#include <WBreak>
 
 ChannelsWidget::ChannelsWidget(WContainerWidget *parent)
     : WContainerWidget(parent)
 {
-    channelsText = new WText("Available channels:", parent);
-    channelsBox = new WSelectionBox(parent);
+    channelsText = new WText("Available channels:", this);
+    WBreak *break1 = new WBreak(this);
+    channelsBox = new WSelectionBox(this);
     channelsBox->setMinimumSize(WLength(300), WLength(400));
-    subscribeButton = new WPushButton("Subscribe", parent);
-    unsubscribeButton = new WPushButton("Unsubscribe", parent);
+    WBreak *break2 = new WBreak(this);
+    subscribeButton = new WPushButton("Subscribe", this);
+    unsubscribeButton = new WPushButton("Unsubscribe", this);
     m_availableChannels = makeHandle(new common::Channels);
     m_subscribedChannels = makeHandle(new common::Channels);
 
-    /* Setting up buttons layout */
-    WHBoxLayout *buttonsLayout = new WHBoxLayout();
-    buttonsLayout->addWidget(subscribeButton);
-    buttonsLayout->addWidget(unsubscribeButton);
+//    /* Setting up buttons layout */
+//    WHBoxLayout *buttonsLayout = new WHBoxLayout();
+//    buttonsLayout->addWidget(subscribeButton);
+//    buttonsLayout->addWidget(unsubscribeButton);
     
-    /* Setting up channels widget main container */
-    WVBoxLayout *mainLayout = new WVBoxLayout();
-    mainLayout->addWidget(channelsText);
-    mainLayout->addWidget(channelsBox);
-    mainLayout->addItem(buttonsLayout);
-    this->setLayout(mainLayout);
+//    /* Setting up channels widget main container */
+//    WVBoxLayout *mainLayout = new WVBoxLayout();
+//    mainLayout->addWidget(channelsText);
+//    mainLayout->addWidget(channelsBox);
+//    mainLayout->addItem(buttonsLayout);
+//    this->setLayout(mainLayout);
 
     /* signals and slots */
     subscribeButton->clicked().connect(this, &ChannelsWidget::onSubscribeClicked);
