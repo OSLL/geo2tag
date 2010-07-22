@@ -7,9 +7,10 @@
 #include "defines.h"
 bool comp(CHandlePtr<common::DataMark> x1,CHandlePtr<common::DataMark> x2){return x1->getTime() < x2->getTime();}
 
-MarksModel::MarksModel(const WString &channel, WObject *parent)
+MarksModel::MarksModel(const std::string &token, const WString &channel, WObject *parent)
     : WAbstractTableModel(parent)
 {
+    m_token = token;
     CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().getMarks();
     m_marks=makeHandle(new common::DataMarks());
     m_marks->clear();
@@ -20,7 +21,7 @@ MarksModel::MarksModel(const WString &channel, WObject *parent)
     {
         CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
         WString token = WString(user->getToken());
-        if (token == WString(DEFAULT_TOKEN))
+        if (token == WString(m_token))
         {
             channels = user->getSubscribedChannels();
             break;

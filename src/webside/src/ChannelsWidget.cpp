@@ -9,9 +9,10 @@
 #include <WMessageBox>
 #include <WBreak>
 
-ChannelsWidget::ChannelsWidget(WContainerWidget *parent)
+ChannelsWidget::ChannelsWidget(const std::string &token, WContainerWidget *parent)
     : WContainerWidget(parent)
 {
+    m_token = token;
     channelsText = new WText("Available channels:", this);
     WBreak *break1 = new WBreak(this);
     channelsBox = new WSelectionBox(this);
@@ -21,18 +22,6 @@ ChannelsWidget::ChannelsWidget(WContainerWidget *parent)
     unsubscribeButton = new WPushButton("Unsubscribe", this);
     m_availableChannels = makeHandle(new common::Channels);
     m_subscribedChannels = makeHandle(new common::Channels);
-
-//    /* Setting up buttons layout */
-//    WHBoxLayout *buttonsLayout = new WHBoxLayout();
-//    buttonsLayout->addWidget(subscribeButton);
-//    buttonsLayout->addWidget(unsubscribeButton);
-    
-//    /* Setting up channels widget main container */
-//    WVBoxLayout *mainLayout = new WVBoxLayout();
-//    mainLayout->addWidget(channelsText);
-//    mainLayout->addWidget(channelsBox);
-//    mainLayout->addItem(buttonsLayout);
-//    this->setLayout(mainLayout);
 
     /* signals and slots */
     subscribeButton->clicked().connect(this, &ChannelsWidget::onSubscribeClicked);
@@ -54,10 +43,8 @@ void ChannelsWidget::updateChannelsBox()
     {
         CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
         WString token = WString(user->getToken());
-        //channelsBox->addItem(token);
-        if (token == WString(DEFAULT_TOKEN))
+        if (token == WString(m_token))
         {
-            //channelsBox->addItem(WString("found"));
             m_subscribedChannels = user->getSubscribedChannels();
             break;
         }
@@ -101,7 +88,7 @@ void ChannelsWidget::onSubscribeClicked()
         CHandlePtr<common::User> du;
         CHandlePtr<common::Channel> ch;
 
-        if(common::DbSession::getInstance().getTokensMap().count(std::string(DEFAULT_TOKEN)) == 0)
+        if(common::DbSession::getInstance().getTokensMap().count(std::string(m_token)) == 0)
         {
 #ifdef WT_THREADED
             WMessageBox::show("Geo2tag", "Can't find user. Ask admin.", Ok);
@@ -112,7 +99,7 @@ void ChannelsWidget::onSubscribeClicked()
         }
         else
         {
-            du = common::DbSession::getInstance().getTokensMap().find(std::string(DEFAULT_TOKEN))->second;
+            du = common::DbSession::getInstance().getTokensMap().find(std::string(m_token))->second;
         }
 
         for(int i = 0; i < channels->size(); i++)
@@ -179,7 +166,7 @@ WString m_channel = channelsBox->currentText();
         CHandlePtr<common::User> du;
         CHandlePtr<common::Channel> ch;
 
-        if(common::DbSession::getInstance().getTokensMap().count(std::string(DEFAULT_TOKEN)) == 0)
+        if(common::DbSession::getInstance().getTokensMap().count(std::string(m_token)) == 0)
         {
 #ifdef WT_THREADED
             WMessageBox::show("Geo2tag", "Can't find user. Ask admin.", Ok);
@@ -190,7 +177,7 @@ WString m_channel = channelsBox->currentText();
         }
         else
         {
-            du = common::DbSession::getInstance().getTokensMap().find(std::string(DEFAULT_TOKEN))->second;
+            du = common::DbSession::getInstance().getTokensMap().find(std::string(m_token))->second;
         }
 
         for(int i = 0; i < channels->size(); i++)

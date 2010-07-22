@@ -21,6 +21,7 @@ public:
       THE_LATEST_FROM_EACH_MEMBER
     };
 
+    std::string m_token;
     double m_latitude;
     double m_longitude;
     double m_radius;
@@ -28,7 +29,7 @@ public:
 
     CHandlePtr<common::DataMarks> m_marks;
 
-    MarksModel(const WString &channel, WObject *parent = 0);
+    MarksModel(const std::string &token, const WString &channel, WObject *parent = 0);
     
     virtual int columnCount(const WModelIndex & parent = WModelIndex()) const;
     virtual int rowCount(const WModelIndex & parent = WModelIndex()) const;

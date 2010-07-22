@@ -12,6 +12,7 @@ using namespace Wt;
 
 class ChannelsWidget : public WContainerWidget
 {
+    std::string m_token;
     WText *channelsText;
     WSelectionBox *channelsBox;
     WPushButton *subscribeButton;
@@ -21,7 +22,7 @@ class ChannelsWidget : public WContainerWidget
     CHandlePtr<common::Channels> m_availableChannels;
 
 public:
-    ChannelsWidget(WContainerWidget *parent = 0);
+    ChannelsWidget(const std::string &token, WContainerWidget *parent = 0);
     void updateChannelsBox();
 
     /* slots */

@@ -11,76 +11,77 @@
  * constructor so it is typically also an argument for your custom
  * application constructor.
 */
-Sketch::Sketch(WContainerWidget *parent)
-  : WContainerWidget(parent)
+Sketch::Sketch(const std::string &token, WContainerWidget *parent)
+    : WContainerWidget(parent)
 {
-  //setTitle("Geo2tag"); // application title
-  // common::DbSession::getInstance();
-  
-  menuContainer = new WContainerWidget(this);
-  stackedWidget = new WStackedWidget(this);
-  privateButton = new WPushButton("Private", menuContainer);
-  channelsButton = new WPushButton("Channels", menuContainer);
-  marksButton = new WPushButton("Marks", menuContainer);
-  optionsButton = new WPushButton("Options", menuContainer);
-  adminButton = new WPushButton("Administration", menuContainer);
-  channelsWidget = new ChannelsWidget(stackedWidget);
-  marksWidget = new MarksWidget(stackedWidget);
-  optionsWidget = new OptionsWidget(stackedWidget);
-  //WSelectionBox *box = new WSelectionBox(root());
+    //setTitle("Geo2tag"); // application title
+    // common::DbSession::getInstance();
 
-  stackedWidget->setCurrentWidget(channelsWidget);
+    m_token = token;
+    menuContainer = new WContainerWidget(this);
+    stackedWidget = new WStackedWidget(this);
+    privateButton = new WPushButton("Private", menuContainer);
+    channelsButton = new WPushButton("Channels", menuContainer);
+    marksButton = new WPushButton("Marks", menuContainer);
+    optionsButton = new WPushButton("Options", menuContainer);
+    adminButton = new WPushButton("Administration", menuContainer);
+    channelsWidget = new ChannelsWidget(m_token, stackedWidget);
+    marksWidget = new MarksWidget(m_token, stackedWidget);
+    optionsWidget = new OptionsWidget(stackedWidget);
+    //WSelectionBox *box = new WSelectionBox(root());
 
-//  /* Setting up menu container */
-//  WHBoxLayout *menuLayout = new WHBoxLayout();
-//  menuLayout->addWidget(privateButton);
-//  menuLayout->addWidget(channelsButton);
-//  menuLayout->addWidget(marksButton);
-//  menuLayout->addWidget(optionsButton);
-//  menuLayout->addWidget(adminButton);
-//  menuContainer->setLayout(menuLayout);
+    stackedWidget->setCurrentWidget(channelsWidget);
 
-//  /* Setting up main container */
-//  WVBoxLayout *mainLayout = new WVBoxLayout();
-//  mainLayout->addWidget(menuContainer);
-//  mainLayout->addWidget(stackedWidget);
-//  mainContainer->setLayout(mainLayout, AlignJustify | AlignTop);
-//  //mainContainer->resize(600, 600);
+    //  /* Setting up menu container */
+    //  WHBoxLayout *menuLayout = new WHBoxLayout();
+    //  menuLayout->addWidget(privateButton);
+    //  menuLayout->addWidget(channelsButton);
+    //  menuLayout->addWidget(marksButton);
+    //  menuLayout->addWidget(optionsButton);
+    //  menuLayout->addWidget(adminButton);
+    //  menuContainer->setLayout(menuLayout);
 
-//  /* Setting up main container as a root */
-//  root()->addWidget(mainContainer);
+    //  /* Setting up main container */
+    //  WVBoxLayout *mainLayout = new WVBoxLayout();
+    //  mainLayout->addWidget(menuContainer);
+    //  mainLayout->addWidget(stackedWidget);
+    //  mainContainer->setLayout(mainLayout, AlignJustify | AlignTop);
+    //  //mainContainer->resize(600, 600);
 
-  /* signals and slots */
-  privateButton->clicked().connect(this, &Sketch::onPrivateClicked);
-  channelsButton->clicked().connect(this, &Sketch::onChannelsClicked);
-  marksButton->clicked().connect(this, &Sketch::onMarksClicked);
-  optionsButton->clicked().connect(this, &Sketch::onOptionsClicked);
-  adminButton->clicked().connect(this, &Sketch::onAdminClicked);
+    //  /* Setting up main container as a root */
+    //  root()->addWidget(mainContainer);
+
+    /* signals and slots */
+    privateButton->clicked().connect(this, &Sketch::onPrivateClicked);
+    channelsButton->clicked().connect(this, &Sketch::onChannelsClicked);
+    marksButton->clicked().connect(this, &Sketch::onMarksClicked);
+    optionsButton->clicked().connect(this, &Sketch::onOptionsClicked);
+    adminButton->clicked().connect(this, &Sketch::onAdminClicked);
 
 }
 
 void Sketch::onPrivateClicked()
 {
-  //stackedWidget->setCurrentWidget(privateWidget);
+    //stackedWidget->setCurrentWidget(privateWidget);
 }
 
 void Sketch::onChannelsClicked()
 {
-  stackedWidget->setCurrentWidget(channelsWidget);
+    stackedWidget->setCurrentWidget(channelsWidget);
 }
 
 void Sketch::onMarksClicked()
 {
-  stackedWidget->setCurrentWidget(marksWidget);
+    stackedWidget->setCurrentWidget(marksWidget);
 }
 
 void Sketch::onOptionsClicked()
 {
-  stackedWidget->setCurrentWidget(optionsWidget);
+    stackedWidget->setCurrentWidget(optionsWidget);
 }
 
 void Sketch::onAdminClicked()
 {
-  //stackedWidget->setCurrentWidget(adminWidget);
+    //stackedWidget->setCurrentWidget(adminWidget);
 }
 

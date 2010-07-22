@@ -1,8 +1,9 @@
 #include "MarksWidget.h"
 
-MarksWidget::MarksWidget(WContainerWidget *parent)
+MarksWidget::MarksWidget(const std::string &token, WContainerWidget *parent)
     : WTabWidget(parent)
 {
+    m_token = token;
     marksTable = new WTableView();
     marksTable->setMinimumSize(WLength(100), WLength(400));
     marksMapWidget = new WGoogleMap();
@@ -11,7 +12,7 @@ MarksWidget::MarksWidget(WContainerWidget *parent)
     marksMapWidget->setCenter(Wt::WGoogleMap::Coordinate(60, 30));
     marksMapWidget->enableScrollWheelZoom();
     
-//    /* Setting up tab widget */
+    /* Setting up tab widget */
     this->addTab(marksTable, "Table");
     this->addTab(marksMapWidget, "Map");
 
@@ -20,7 +21,7 @@ MarksWidget::MarksWidget(WContainerWidget *parent)
 
 void MarksWidget::updateModel()
 {
-    marksModel = new MarksModel(WString(""), marksTable->parent());
+    marksModel = new MarksModel(m_token, WString(""), marksTable->parent());
     marksTable->setModel(marksModel);
 
     CHandlePtr<common::DataMarks> marks = marksModel->getMarks();
@@ -30,6 +31,5 @@ void MarksWidget::updateModel()
         marksMapWidget->addMarker(WGoogleMap::Coordinate(marks->at(i)->getLatitude(),
                                                          marks->at(i)->getLongitude()),
                                   marks->at(i)->getDescription());
-                                  //std::string("dfdf $1 dsfsd ."));
     }
 }

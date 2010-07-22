@@ -19,29 +19,31 @@ using namespace Wt;
 class Sketch : public WContainerWidget
 {
 public:
-  Sketch(WContainerWidget *parent = 0);
+    Sketch(const std::string &token, WContainerWidget *parent = 0);
 
 private:
-  WPushButton *privateButton;
-  WPushButton *channelsButton;
-  WPushButton *marksButton;
-  WPushButton *optionsButton;
-  WPushButton *adminButton;
+    std::string m_token;
 
-  WContainerWidget *mainContainer;
-  WContainerWidget *menuContainer;
-  WStackedWidget *stackedWidget;
+    WPushButton *privateButton;
+    WPushButton *channelsButton;
+    WPushButton *marksButton;
+    WPushButton *optionsButton;
+    WPushButton *adminButton;
 
-  ChannelsWidget *channelsWidget;
-  MarksWidget *marksWidget;
-  OptionsWidget *optionsWidget;
+    WContainerWidget *mainContainer;
+    WContainerWidget *menuContainer;
+    WStackedWidget *stackedWidget;
 
-  /* slots */
-  void onPrivateClicked();
-  void onChannelsClicked();
-  void onMarksClicked();
-  void onOptionsClicked();
-  void onAdminClicked();
+    ChannelsWidget *channelsWidget;
+    MarksWidget *marksWidget;
+    OptionsWidget *optionsWidget;
+
+    /* slots */
+    void onPrivateClicked();
+    void onChannelsClicked();
+    void onMarksClicked();
+    void onOptionsClicked();
+    void onAdminClicked();
 
 };
 

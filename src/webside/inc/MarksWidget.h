@@ -12,12 +12,13 @@ using namespace Wt;
 
 class MarksWidget : public WTabWidget
 {
+    std::string m_token;
     WGoogleMap *marksMapWidget;
     WTableView *marksTable;
     MarksModel *marksModel;
 
 public:
-    MarksWidget(WContainerWidget *parent = 0);
+    MarksWidget(const std::string &token, WContainerWidget *parent = 0);
     void updateModel();
 
 };

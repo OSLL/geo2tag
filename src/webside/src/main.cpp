@@ -1,5 +1,5 @@
 #include <Wt/WApplication>
-#include "sketch.h"
+#include "Webside.h"
 
 WApplication *createApplication(const WEnvironment& env)
 {
@@ -9,7 +9,7 @@ WApplication *createApplication(const WEnvironment& env)
    */
     WApplication *app = new WApplication(env);
     app->setTitle("Geo2tag");
-    new Sketch(app->root());
+    Webside *webside = new Webside(app->root());
 
     return app;
 }
@@ -27,5 +27,5 @@ int main(int argc, char **argv)
    * support. The function should return a newly instantiated application
    * object.
    */
-  return WRun(argc, argv, &createApplication);
+    return WRun(argc, argv, &createApplication);
 }
