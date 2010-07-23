@@ -11,19 +11,25 @@ MarksWidget::MarksWidget(const std::string &token, WContainerWidget *parent)
     marksMapWidget->setMaximumSize(WLength(500), WLength(400));
     marksMapWidget->setCenter(Wt::WGoogleMap::Coordinate(60, 30));
     marksMapWidget->enableScrollWheelZoom();
+    marksModel = new MarksModel(m_token, WString(""), marksTable->parent());
+    marksTable->setModel(marksModel);
     
     /* Setting up tab widget */
     this->addTab(marksTable, "Table");
     this->addTab(marksMapWidget, "Map");
 
-    updateModel();
+    updateMap();
 }
 
 void MarksWidget::updateModel()
-{
-    marksModel = new MarksModel(m_token, WString(""), marksTable->parent());
-    marksTable->setModel(marksModel);
+{ 
+    marksModel->update();
+    updateMap();
 
+}
+
+void MarksWidget::updateMap()
+{
     CHandlePtr<common::DataMarks> marks = marksModel->getMarks();
     marksMapWidget->clearOverlays();
     for (int i = 0; i < marks->size(); i++)

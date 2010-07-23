@@ -1,3 +1,5 @@
+#define AMOUNT_OF_COLUMNS 6
+
 #include "MarksModel.h"
 
 #include <algorithm>
@@ -44,7 +46,7 @@ MarksModel::MarksModel(const std::string &token, const WString &channel, WObject
 
 int MarksModel::columnCount(const WModelIndex & parent) const
 {
-    return 6;
+    return AMOUNT_OF_COLUMNS;
 }
 
 int MarksModel::rowCount(const WModelIndex & parent) const
@@ -104,4 +106,53 @@ CHandlePtr<common::DataMarks> MarksModel::getMarks() const
 WFlags<ItemFlag> MarksModel::flags(const WModelIndex &index) const
 {
     return WFlags<ItemFlag>();
+}
+
+void MarksModel::update()
+{
+    int curSize = m_marks->size();
+
+    CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().getMarks();
+    m_marks->clear();
+    CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
+    CHandlePtr<common::Channels> channels;
+
+    for (int i = 0; i < users->size(); i++)
+    {
+        CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+        WString token = WString(user->getToken());
+        if (token == WString(m_token))
+        {
+            channels = user->getSubscribedChannels();
+            break;
+        }
+    }
+
+    for (size_t y = 0; y < marks->size(); y++)
+    {
+        for (size_t i = 0; i < channels->size(); i++)
+        {
+            if (marks->at(y)->getChannel() == channels->at(i)) // ((*marks)[y]->getChannel() == (*channels)[i])
+            {
+                m_marks->push_back(marks->at(y)); // ((*marks)[y]);
+            }
+        }
+    }
+
+    std::sort(m_marks->begin(), m_marks->end(), comp);
+int *a = NULL;
+    if (m_marks->size() > curSize)
+    {
+        dataChanged().emit(createIndex(0, 0, a),
+                           createIndex(m_marks->size() - 1,
+                                       AMOUNT_OF_COLUMNS - 1,
+                                       a));
+    }
+    else
+    {
+        dataChanged().emit(createIndex(0, 0, a),
+                           createIndex(curSize - 1,
+                                       AMOUNT_OF_COLUMNS - 1,
+                                       a));
+    }
 }

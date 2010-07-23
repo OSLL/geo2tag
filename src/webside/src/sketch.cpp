@@ -57,7 +57,7 @@ Sketch::Sketch(const std::string &token, WContainerWidget *parent)
     marksButton->clicked().connect(this, &Sketch::onMarksClicked);
     optionsButton->clicked().connect(this, &Sketch::onOptionsClicked);
     adminButton->clicked().connect(this, &Sketch::onAdminClicked);
-
+    channelsWidget->channelsUpdated.connect(marksWidget, &MarksWidget::updateModel);
 }
 
 void Sketch::onPrivateClicked()

@@ -25,6 +25,9 @@ public:
     ChannelsWidget(const std::string &token, WContainerWidget *parent = 0);
     void updateChannelsBox();
 
+    /* signals */
+     Wt::Signal<> channelsUpdated;
+
     /* slots */
     void onSubscribeClicked();
     void onUnsubscribeClicked();

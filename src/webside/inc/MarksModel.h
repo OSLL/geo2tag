@@ -41,6 +41,8 @@ public:
     WFlags<ItemFlag> flags(const WModelIndex &index) const;
 
     CHandlePtr<common::DataMarks> getMarks() const;
+
+    void update();
 };
 
 

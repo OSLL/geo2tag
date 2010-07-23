@@ -141,6 +141,7 @@ void ChannelsWidget::onSubscribeClicked()
         }
 
         updateChannelsBox();
+        channelsUpdated.emit();
     }
     else
     {
@@ -219,6 +220,7 @@ WString m_channel = channelsBox->currentText();
         }
 
         updateChannelsBox();
+        channelsUpdated.emit();
     }
     else
     {

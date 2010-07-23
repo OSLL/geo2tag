@@ -20,6 +20,7 @@ class MarksWidget : public WTabWidget
 public:
     MarksWidget(const std::string &token, WContainerWidget *parent = 0);
     void updateModel();
+    void updateMap();
 
 };
 
