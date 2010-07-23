@@ -23,7 +23,12 @@ MarksWidget::MarksWidget(const std::string &token, WContainerWidget *parent)
 
 void MarksWidget::updateModel()
 { 
-    marksModel->update();
+    // marksModel->update();
+    MarksModel *oldModel = marksModel;
+    marksModel = new MarksModel(m_token, WString(""), marksTable->parent());
+    marksTable->setModel(marksModel);
+    if (oldModel != 0)
+        delete oldModel;
     updateMap();
 
 }
