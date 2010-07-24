@@ -4,6 +4,7 @@
 #include "UserInternal.h"
 #include "DataMarks.h"
 #include "Channel.h"
+#include "defines.h"
 
 #include <WLabel>
 #include <WText>
@@ -65,5 +66,9 @@ void LoginWidget::loginClicked()
             loginSuccessful.emit(m_token);
             break;
         }
+    }
+    if (users->size() == 0)
+    {
+        loginSuccessful.emit(std::string(DEFAULT_TOKEN));
     }
 }

@@ -24,32 +24,14 @@ Sketch::Sketch(const std::string &token, WContainerWidget *parent)
     channelsButton = new WPushButton("Channels", menuContainer);
     marksButton = new WPushButton("Marks", menuContainer);
     optionsButton = new WPushButton("Options", menuContainer);
-    adminButton = new WPushButton("Administration", menuContainer);
+    adminButton = new WPushButton("Users management", menuContainer);
     channelsWidget = new ChannelsWidget(m_token, stackedWidget);
     marksWidget = new MarksWidget(m_token, stackedWidget);
     optionsWidget = new OptionsWidget(stackedWidget);
+    usersWidget = new UsersWidget(stackedWidget);
     //WSelectionBox *box = new WSelectionBox(root());
 
     stackedWidget->setCurrentWidget(channelsWidget);
-
-    //  /* Setting up menu container */
-    //  WHBoxLayout *menuLayout = new WHBoxLayout();
-    //  menuLayout->addWidget(privateButton);
-    //  menuLayout->addWidget(channelsButton);
-    //  menuLayout->addWidget(marksButton);
-    //  menuLayout->addWidget(optionsButton);
-    //  menuLayout->addWidget(adminButton);
-    //  menuContainer->setLayout(menuLayout);
-
-    //  /* Setting up main container */
-    //  WVBoxLayout *mainLayout = new WVBoxLayout();
-    //  mainLayout->addWidget(menuContainer);
-    //  mainLayout->addWidget(stackedWidget);
-    //  mainContainer->setLayout(mainLayout, AlignJustify | AlignTop);
-    //  //mainContainer->resize(600, 600);
-
-    //  /* Setting up main container as a root */
-    //  root()->addWidget(mainContainer);
 
     /* signals and slots */
     privateButton->clicked().connect(this, &Sketch::onPrivateClicked);
@@ -82,6 +64,6 @@ void Sketch::onOptionsClicked()
 
 void Sketch::onAdminClicked()
 {
-    //stackedWidget->setCurrentWidget(adminWidget);
+    stackedWidget->setCurrentWidget(usersWidget);
 }
 

@@ -30,14 +30,16 @@ HEADERS += DbSession.h \
            UserInternal.h \
            DynamicCastFailure.h \
     inc/LoginWidget.h \
-    inc/Webside.h
+    inc/Webside.h \
+    inc/UsersWidget.h
 SOURCES += DbSession.cpp \
            ChannelInternal.cpp \
            DataMarkInternal.cpp \
            UserInternal.cpp \
            DynamicCastFailure.cpp \
     src/LoginWidget.cpp \
-    src/Webside.cpp
+    src/Webside.cpp \
+    src/UsersWidget.cpp
 
 # Input
 HEADERS += inc/ChannelsWidget.h \

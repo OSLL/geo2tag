@@ -10,6 +10,7 @@
 #include "ChannelsWidget.h"
 #include "MarksWidget.h"
 #include "OptionsWidget.h"
+#include "UsersWidget.h"
 
 using namespace Wt;
 
@@ -37,6 +38,7 @@ private:
     ChannelsWidget *channelsWidget;
     MarksWidget *marksWidget;
     OptionsWidget *optionsWidget;
+    UsersWidget *usersWidget;
 
     /* slots */
     void onPrivateClicked();
