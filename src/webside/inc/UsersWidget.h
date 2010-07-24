@@ -27,6 +27,7 @@ class UsersWidget : public WContainerWidget
     WLineEdit *password2;
     WPushButton *addUserButton;
     WPushButton *cancelUserButton;
+    WText *message;
 
 
 public:

@@ -4,6 +4,13 @@
 #include <WBreak>
 #include <WLabel>
 
+#include "DbSession.h"
+#include "UserInternal.h"
+#include "Time.h"
+#include "Handle.h"
+#include "Crc.h"
+#include "BitTools.h"
+
 UsersWidget::UsersWidget(WContainerWidget *parent)
     : WContainerWidget(parent)
 {
@@ -37,6 +44,9 @@ UsersWidget::UsersWidget(WContainerWidget *parent)
     cancelUserButton = new WPushButton("Cancel",
                                        addUserWidget->elementAt(3, 1));
 
+    WBreak *break4 = new WBreak(this);
+    message = new WText("", this);
+
     addButton->clicked().connect(this, &UsersWidget::addClicked);
     removeButton->clicked().connect(this, &UsersWidget::removeClicked);
     addUserButton->clicked().connect(this, &UsersWidget::addUserClicked);
@@ -48,7 +58,15 @@ UsersWidget::UsersWidget(WContainerWidget *parent)
 
 void UsersWidget::updateUsersBox()
 {
-
+    usersBox->clear();
+    CHandlePtr<std::vector<CHandlePtr<common::User> > > users =
+            common::DbSession::getInstance().getUsers();
+    for (int i = 0; i < users->size(); i++)
+    {
+        CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+        WString login = WString(user->getLogin());
+        usersBox->addItem(login);
+    }
 }
 
 void UsersWidget::addClicked()
@@ -64,7 +82,54 @@ void UsersWidget::removeClicked()
 
 void UsersWidget::addUserClicked()
 {
+    CHandlePtr<std::vector<CHandlePtr<common::User> > > users=
+            common::DbSession::getInstance().getUsers();
 
+    if (password->text() != password2->text())
+    {
+        message->setText("Passwords are different");
+        return;
+    }
+
+    std::string m_login = login->text().toUTF8();
+    std::string m_password = password->text().toUTF8();
+    std::string m_token;
+
+    for(std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
+    {
+        if((*i).dynamicCast<loader::User>()->getLogin()==m_login)
+        {
+            message->setText("User alredy exist");
+            return;
+        }
+    }
+
+    std::ostringstream s(""), token("");
+    s << "token" << CTime::now()
+            << m_login
+            << m_password
+            << CTime::now();
+    CCrc32 crc;
+    unsigned long crc32 = crc.add(s.str().c_str(), s.str().size());
+    token << crc32 << m_login;
+    crc32 = crc.add(token.str().c_str(), token.str().size());
+    BitTools::reverse(&crc32, sizeof(crc32));
+    token << crc32;
+    m_token = token.str();
+    CHandlePtr<loader::User> user =
+            makeHandle(new loader::User(m_login, m_password, 0, m_token));
+
+    try
+    {
+        common::DbSession::getInstance().storeUser(user);
+        updateUsersBox();
+        message->setText("");
+        addUserWidget->setHidden(true);
+    }
+    catch(const CExceptionSource& e)
+    {
+        message->setText("Can't add user");
+    }
 }
 
 void UsersWidget::cancelUserClicked()
