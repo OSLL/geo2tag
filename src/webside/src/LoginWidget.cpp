@@ -67,8 +67,10 @@ void LoginWidget::loginClicked()
             break;
         }
     }
-    if (users->size() == 0)
-    {
-        loginSuccessful.emit(std::string(DEFAULT_TOKEN));
-    }
+
+    /* For testing without db */
+    //if (users->size() == 0)
+    //{
+    //    loginSuccessful.emit(std::string(DEFAULT_TOKEN));
+    //}
 }

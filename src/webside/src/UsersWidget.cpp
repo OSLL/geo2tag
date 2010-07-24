@@ -33,6 +33,7 @@ UsersWidget::UsersWidget(WContainerWidget *parent)
     WLabel *passwordLabel = new WLabel("Password:",
                                        addUserWidget->elementAt(1, 0));
     password = new WLineEdit(addUserWidget->elementAt(1, 1));
+    password->setEchoMode(WLineEdit::Password);
     passwordLabel->setBuddy(password);
     WLabel *password2Label = new WLabel("Confirm password:",
                                         addUserWidget->elementAt(2, 0));
@@ -135,4 +136,5 @@ void UsersWidget::addUserClicked()
 void UsersWidget::cancelUserClicked()
 {
     actionWidget->setHidden(true);
+    message->setText("");
 }
