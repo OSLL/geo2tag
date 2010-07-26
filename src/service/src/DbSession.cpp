@@ -682,8 +682,20 @@ namespace common
           ODBC::CTransaction tr(*this);
           db::RemoveUserQuery removeQuery(*this);
           removeQuery.id = us->getId();
+/* delete user from stack */
           removeQuery.prepare();
           removeQuery.execute();
+          for (int i = 0; i < m_users->size(); i++)
+          {
+              if (m_users->at(i).dynamicCast<loader::User>()->getId()
+                  == us->getId())
+              {
+                  m_users->erase(m_users->begin() + i);
+                  break;
+              }
+          }
+          s_users.erase(us->getId());
+          m_tokensMap.erase(us->getToken());
       }
   }
 
