@@ -78,7 +78,32 @@ void UsersWidget::addClicked()
 
 void UsersWidget::removeClicked()
 {
+    CHandlePtr<std::vector<CHandlePtr<common::User> > > users =
+            common::DbSession::getInstance().getUsers();
 
+    std::string userToDelete("");
+
+    if (usersBox->currentText() == WString(""))
+    {
+        message->setText("User isn't selected");
+    }
+    else
+    {
+        userToDelete = usersBox->currentText().toUTF8();
+    }
+
+    for (int i = 0; i < users->size(); i++)
+    {
+        CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+        std::string login = user->getLogin();
+        if (userToDelete == login)
+        {
+            common::DbSession::getInstance().removeUser(user);
+            message->setText("");
+            updateUsersBox();
+            break;
+        }
+    }
 }
 
 void UsersWidget::addUserClicked()

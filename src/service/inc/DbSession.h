@@ -138,6 +138,8 @@ namespace common
     void storeMark(CHandlePtr<common::DataMark> m);
 
     void storeUser(CHandlePtr<common::User> user);
+
+    void removeUser(CHandlePtr<common::User> user);
   
     void subscribe(const CHandlePtr<common::User>& user, const CHandlePtr<common::Channel>& channel);
 

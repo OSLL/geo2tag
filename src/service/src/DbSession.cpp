@@ -461,6 +461,26 @@ namespace db
       return "insert into users (id, token, login, password) values(?,?,?,?);";
     }
   };
+
+  class RemoveUserQuery: public User, public CDbQueryX
+  {
+  public:
+    RemoveUserQuery(const CDbConn& conn): CDbQueryX(conn)
+    {
+    }
+
+    BEGIN_COLMAP()
+    END_COLMAP()
+
+    BEGIN_PARMAP()
+      PAR(1, SQL_C_LONG, SQL_INTEGER, id)
+    END_PARMAP()
+
+    const char* sql() const
+    {
+      return "delete from users where id=?;";
+    }
+  };
   
   class UpdateUserQuery: public User, public CDbQueryX
   {
@@ -636,6 +656,34 @@ namespace common
 
         updateQuery.prepare();
         updateQuery.execute();
+      }
+  }
+
+  void DbSession::removeUser(CHandlePtr<common::User> user)
+  {
+      CHandlePtr<loader::User> us = user.dynamicCast<loader::User>();
+      if (!us)
+      {
+          syslog(LOG_INFO, "Failure at removeUser, dynamicCast<loader::User>()"
+                           " at removeUser");
+          throw CDynamicCastFailure(1,SRC(),1);
+          //return;
+      }
+
+      if (us->getId() == 0)
+      {
+          syslog(LOG_INFO, "Failure at us->getId(), "
+                           "dynamicCast<loader::User>() at removeUser");
+          throw CDynamicCastFailure(1,SRC(),1);
+          //        return;
+      }
+      else
+      {
+          ODBC::CTransaction tr(*this);
+          db::RemoveUserQuery removeQuery(*this);
+          removeQuery.id = us->getId();
+          removeQuery.prepare();
+          removeQuery.execute();
       }
   }
 
