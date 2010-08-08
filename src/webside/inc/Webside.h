@@ -9,8 +9,9 @@
 
 using namespace Wt;
 
-class Webside : public WStackedWidget
+class Webside : public WContainerWidget
 {
+    WStackedWidget *stackedWidget;
     LoginWidget *loginWidget;
     Sketch *mainWidget;
 

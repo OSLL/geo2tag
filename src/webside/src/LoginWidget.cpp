@@ -13,9 +13,12 @@
 LoginWidget::LoginWidget(WContainerWidget *parent)
     : WContainerWidget(parent)
 {
-    WText *intro = new WText("Hello! Please, login into geo2tag "
+    this->setId("login_widget");
+    this->setStyleClass("login_widget_style");
+    WText *intro = new WText("Hello! Please, login into Geo2tag "
                              "or view marks from public channels",
                              this);
+    intro->setId("intro");
     WBreak *break1 = new WBreak(this);
     WLabel *usernameLabel = new WLabel("Username:", this);
     usernameEdit = new WLineEdit(this);
@@ -35,6 +38,8 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
     loginButton->clicked().connect(this, &LoginWidget::loginClicked);
 
     fillMap();
+
+    //this->setStyleClass("login_wigdet");
 }
 
 void LoginWidget::fillMap()
@@ -69,8 +74,8 @@ void LoginWidget::loginClicked()
     }
 
     /* For testing without db */
-    //if (users->size() == 0)
-    //{
-    //    loginSuccessful.emit(std::string(DEFAULT_TOKEN));
-    //}
+    if (users->size() == 0)
+    {
+        loginSuccessful.emit(std::string(DEFAULT_TOKEN));
+    }
 }

@@ -8,6 +8,13 @@ WApplication *createApplication(const WEnvironment& env)
    * the user has permission to start a new application
    */
     WApplication *app = new WApplication(env);
+    std::string cssPath("css/wt");
+    //app->useStyleSheet(cssPath + "/wt.css");
+    //app->useStyleSheet(cssPath + "/wt_ie.css", "lt IE 7");
+    ///app->useStyleSheet("css/home.css");
+    //app->useStyleSheet("css/sourceview.css");
+    app->useStyleSheet("wt/wt.css");
+    app->useStyleSheet("style.css");
     app->setTitle("Geo2tag");
     Webside *webside = new Webside(app->root());
 
