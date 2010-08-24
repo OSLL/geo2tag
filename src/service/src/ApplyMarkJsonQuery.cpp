@@ -74,6 +74,22 @@ void ApplyMarkJsonQuery::init(const std::stringstream& query){
         m_time=std::string(time);
         const json::String& link=interpreter["link"];
         m_link=std::string(link);
+	try
+	{
+		const json::String& type=interpreter["user_time"];
+		if(std::string(type)=="true")
+		{
+			m_type = USER_TIME;
+		}
+		else
+		{
+			m_type = SERVER_TIME;
+		}
+	}
+	catch(...)
+	{
+		m_type = SERVER_TIME;
+	}
 }
 
 void ApplyMarkJsonQuery::process(){
@@ -84,21 +100,28 @@ void ApplyMarkJsonQuery::process(){
     if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
     {
     	struct tm tim;	
+	strptime(m_time.c_str(),"%d %b %Y %H:%M:%S",&tim);
         // syslog(LOG_INFO,"Find user from request");
-        // syslog(LOG_INFO,"strptime result %i",strptime(m_time.c_str(),"%d %b %Y %H:%M:%S",&tim)==NULL);
+        // syslog(LOG_INFO,"strptime result %i,strptime(m_time.c_str(),"%d %b %Y %H:%M:%S",&tim)==NULL);
         // syslog(LOG_INFO,"Finishing strptime");
     	CHandlePtr<common::Channels> channels = common::DbSession::getInstance().getChannels();
         // syslog(LOG_INFO,"getChannels sucsesfull");
     	for (common::Channels::iterator j=channels->begin();j!=channels->end();j++)
-      {
-    		if ((*j)->getName()==m_channel)
         {
+    		if ((*j)->getName()==m_channel)
+        	{
                         // syslog(LOG_INFO,"Find channel from request");
-			CHandlePtr<loader::DataMark> mark=makeHandle(new loader::DataMark(0,m_latitude,m_longitude,m_title,m_description,m_link,CTime(tim) ,*i,*j));
+			CTime tmp_time=CTime::now();
+			if (m_type==USER_TIME)
+			{
+				tmp_time=CTime(tim);
+				syslog(LOG_INFO,"Adding mark with user time");
+			}
+			CHandlePtr<loader::DataMark> mark=makeHandle(new loader::DataMark(0,m_latitude,m_longitude,m_title,m_description,m_link,tmp_time,*i,*j));
                         // syslog(LOG_INFO,"Datamark created sucsefully. Id of user %i, Id of channel %i, mark %i",(*i).dynamicCast<loader::User>()->getId(),(*j).dynamicCast<loader::Channel>()->getId(),mark==0);
           	//	try
 		//	{
-				common::DbSession::getInstance().updateChannel((*j).dynamicCast<loader::Channel>()->getId(),mark); // \ToDo replace channel_id to Objejct
+			common::DbSession::getInstance().updateChannel((*j).dynamicCast<loader::Channel>()->getId(),mark); // \ToDo replace channel_id to Objejct
 		//	} catch (//const CDynamicCastFailure &x)
 		///	{
 				// type your code here

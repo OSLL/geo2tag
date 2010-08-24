@@ -65,7 +65,7 @@ void Server::process(const Query &q)
 
 	CHandlePtr<IJsonQuery> query=m_factory.getJsonQuery(q,ss);
 	try
-  {
+	{
 		query->process();
 		s << "Status: 200 OK\r\nContent-Type: text/html\r\n\r\n";
 		s << (*query);

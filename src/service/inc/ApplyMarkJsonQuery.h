@@ -64,6 +64,13 @@
    */
 class ApplyMarkJsonQuery: public IJsonQuery
 {
+public:
+  enum timeType
+  {
+    USER_TIME ,
+    SERVER_TIME
+  };
+private:
         std::string                   m_token; //! \ToDo comment here
         double                        m_radius;    //! \ToDo comment here
         double                        m_latitude;  //! \ToDo comment here
@@ -74,6 +81,7 @@ class ApplyMarkJsonQuery: public IJsonQuery
         std::string                   m_link;
         std::string                   m_time;
 	std::string 		      m_status;
+	timeType		      m_type;
 	std::string outToString() const;
 	void init(const std::stringstream& query);
 public:
