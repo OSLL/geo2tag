@@ -47,8 +47,8 @@ namespace maps
 	  m_data.clear();
 
     std::ostringstream s;
-    s << "maps.google.com/maps/api/staticmap?" 
-      << "zoom=" << size << "&size=" << width << "x" << height;
+    s << "maps.google.com/maps/api/staticmap?center=" << latitude << ","<< longitude 
+      << "&zoom=" << size << "&size=" << width << "x" << height;
     for(size_t i=0; i<marks.size(); i++)
     {
       if(marks[i]->getDescription().length()!=0)

@@ -20,6 +20,8 @@ class Observer : public QDialog
     CHandlePtr<common::DataMarks> m_marks;
     //optimal scale
     int m_optScale;
+    double m_optB;
+    double m_optL;
     GUI::RSSFeedQuery  *rssFeedQuery;
     GUI::LoginQuery *loginQuery;
 public:

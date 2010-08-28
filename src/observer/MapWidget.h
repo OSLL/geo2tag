@@ -15,23 +15,32 @@
 class MapWidget : public QWidget 
 {
 
-    Q_OBJECT
-    int m_scale;
-    CHandlePtr<common::DataMarks> m_marks;
+  Q_OBJECT
+  double m_scale;
+  //
+  bool m_moving;
+  double m_B;
+  double m_L;
+  QPointF m_mousePosition;
+  ///
+  CHandlePtr<common::DataMarks> m_marks;
 
 public:
 
 	MapWidget(QWidget *parent);
-
-        virtual ~MapWidget()
-        {
-        }
+  virtual ~MapWidget(){}
+  void setB(double b);
+  void setL(double l);
 
 protected:
 
-        void paintEvent(QPaintEvent *pe);
+  void paintEvent(QPaintEvent *pe);
+//  void mouseMoveEvent ( QMouseEvent * event );
+  void mousePressEvent( QMouseEvent * event );
+  void mouseReleaseEvent(QMouseEvent * event );
 
 public slots:
+
 	void scaleChanged(int newScale);
 	void updated(CHandlePtr<common::DataMarks>& marks);
 	

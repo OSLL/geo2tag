@@ -67,6 +67,10 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
       double width_ = common::DataMark::getDistance(maxLat,maxLon,minLat,maxLon)*1000.;
       qDebug() << "height " << height_ << " width "<< width_;
       qDebug() << "height " << height() << " width "<< width();
+      m_optB=(maxLat+minLat)/2.;
+      m_optL=(maxLon+minLon)/2.;
+      qDebug() << "optimal latitude " << m_optB;
+      qDebug() << "optimal longitude " << m_optL;
       //Choose optimal scale
       for (int i=19;i>=0;i--) 
         {
@@ -111,7 +115,9 @@ void Observer::buttonPushed()
 }
 //Restore scale to optimal - set scale as optScale
 void Observer::showAllMarks(){
-
+  
   m_ui.m_scale->setValue(m_optScale);
   m_ui.m_mapArea->scaleChanged(m_optScale);
+  m_ui.m_mapArea->setB(m_optB);
+  m_ui.m_mapArea->setL(m_optL);
   }
