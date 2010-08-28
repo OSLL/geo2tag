@@ -43,6 +43,7 @@ SOURCES += DbSession.cpp \
 
 # Input
 HEADERS += inc/ChannelsWidget.h \
+	   inc/ChannelsModel.h \
            inc/MarksWidget.h \
            inc/MarksModel.h \
            inc/OptionsModel.h \
@@ -50,6 +51,7 @@ HEADERS += inc/ChannelsWidget.h \
            inc/sketch.h \
            inc/GoogleMap.h
 SOURCES += src/ChannelsWidget.cpp \
+	   src/ChannelsModel.cpp \
            src/main.cpp \
            src/MarksModel.cpp \
            src/MarksWidget.cpp \

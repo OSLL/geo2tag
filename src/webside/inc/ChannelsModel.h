@@ -1,5 +1,5 @@
-#ifndef MARKSMODEL_H
-#define MARKSMODEL_H
+#ifndef CHANNELSMODEL_H
+#define CHANNELSMODEL_H
 
 #include <Wt/WAbstractTableModel>
 
@@ -10,28 +10,14 @@
 
 using namespace Wt;
 
-class MarksModel : public WAbstractTableModel
+class ChannelsModel : public WAbstractTableModel
 {
 
-
     std::string m_token;
-    double m_latitude;
-    double m_longitude;
-    double m_radius;
-
-    CHandlePtr<common::DataMarks> m_marks;
-
+    CHandlePtr<common::Channels> m_subscribedChannels;
+    CHandlePtr<common::Channels> m_availableChannels;
 public:
-
-    enum Type
-    {
-      ALL_MARKS,
-      THE_LATEST_FROM_EACH_MEMBER
-    };
-
-    Type   m_type;
-    MarksModel(const std::string &token, const WString &channel, WObject *parent = 0);
-    
+    ChannelsModel(const std::string &token, WObject *parent);
     virtual int columnCount(const WModelIndex & parent = WModelIndex()) const;
     virtual int rowCount(const WModelIndex & parent = WModelIndex()) const;
     virtual boost::any data(const WModelIndex & index,
@@ -41,10 +27,9 @@ public:
                                   int role = DisplayRole) const;
     WFlags<ItemFlag> flags(const WModelIndex &index) const;
 
-    CHandlePtr<common::DataMarks> getMarks() const;
-
+    CHandlePtr<common::Channels> getAvailableChannels() const;
+    virtual bool setData(const WModelIndex &index, const boost::any &value, int role = EditRole);
+//    CHandlePtr<common::Channels> getSubscribedChannels() const;
     void update();
 };
-
-
-#endif /* OPTIONSMODEL_H */
+#endif

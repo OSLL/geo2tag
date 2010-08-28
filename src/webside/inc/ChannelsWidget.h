@@ -5,28 +5,29 @@
 #include <Wt/WText>
 #include <Wt/WSelectionBox>
 #include <Wt/WPushButton>
-
+#include <WTableView>
 #include "Channel.h"
-
+#include "ChannelsModel.h"
 using namespace Wt;
 
 class ChannelsWidget : public WContainerWidget
 {
     std::string m_token;
     WText *channelsText;
-    WSelectionBox *channelsBox;
+    WTableView *channelsTable;
+    ChannelsModel *channelsModel;
     WPushButton *subscribeButton;
     WPushButton *unsubscribeButton;
 
-    CHandlePtr<common::Channels> m_subscribedChannels;
-    CHandlePtr<common::Channels> m_availableChannels;
+//    CHandlePtr<common::Channels> m_subscribedChannels;
+//    CHandlePtr<common::Channels> m_availableChannels;
 
 public:
     ChannelsWidget(const std::string &token, WContainerWidget *parent = 0);
-    void updateChannelsBox();
+    void updateChannelsModel();
 
     /* signals */
-     Wt::Signal<> channelsUpdated;
+    Wt::Signal<> channelsUpdated;
 
     /* slots */
     void onSubscribeClicked();
