@@ -62,10 +62,10 @@ private:
     QNetworkAccessManager *manager;
 
     /* Url of th request */
-    QString httpQuery;
+    QString m_httpQuery;
 
     /* Body of the request */
-    QString jsonQuery;
+    QString m_jsonQuery;
 
 public:
     ApplyChannelQuery(QObject *parent = 0);

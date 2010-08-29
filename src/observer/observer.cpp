@@ -12,17 +12,20 @@
 #include <QTableWidgetItem>
 
 //I didn't find where it is and make my own GoogleScaleList
+// Each element means kilometers per pixel, for example when we use scale 1 we got 83333.33 kilometers per pixel
 static double s_scales[]={83333.33,41666.67,21052.63,10526.32 ,5263.16,2500.00,1250.00,625.0,307.69,160.00,80.00,40.00,20.00,10.00,5.00,2.50,1.25,0.63,0.31,0.16};
 
+#define scales_number 20
+#define Kilometers2Meters 1000.
 
 Observer::Observer() : QDialog(NULL)
 {
     m_ui.setupUi(this);
     m_lastLogin= "";
     m_marks=makeHandle(new common::DataMarks);
-    loginQuery=new GUI::LoginQuery;
+    loginQuery=new GUI::LoginQuery(this);
     qDebug() << "starting" ;
-    rssFeedQuery=new GUI::RSSFeedQuery;
+    rssFeedQuery=new GUI::RSSFeedQuery(this);
     connect(rssFeedQuery,SIGNAL(responseReceived(CHandlePtr<common::DataMarks>& )),
            this,SLOT(updateData(CHandlePtr<common::DataMarks>&)));
     connect(this,SIGNAL(dataMarksGotten(CHandlePtr<common::DataMarks>& )),
@@ -63,19 +66,22 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
       }
       qDebug() << "Lat " << maxLat-minLat << " Lon "<<maxLon-minLon;
       //Count size of rect where all marks can be placed
-      double height_= common::DataMark::getDistance(maxLat,maxLon,maxLat,minLon)*1000.;
-      double width_ = common::DataMark::getDistance(maxLat,maxLon,minLat,maxLon)*1000.;
-      qDebug() << "height " << height_ << " width "<< width_;
+      // Because common::DataMark::getDistance return result in meters we need to transform 
+      double height_optimal= common::DataMark::getDistance(maxLat,maxLon,maxLat,minLon)*Kilometers2Meters;
+      double width_optimal = common::DataMark::getDistance(maxLat,maxLon,minLat,maxLon)*Kilometers2Meters;
+      qDebug() << "height " << height_optimal << " width "<< width_optimal;
       qDebug() << "height " << height() << " width "<< width();
       m_optB=(maxLat+minLat)/2.;
       m_optL=(maxLon+minLon)/2.;
       qDebug() << "optimal latitude " << m_optB;
       qDebug() << "optimal longitude " << m_optL;
       //Choose optimal scale
-      for (int i=19;i>=0;i--) 
+      qDebug() << "size ----------------------->" << sizeof(s_scales)/sizeof(double);
+
+      for (int i=scales_number-1;i>=0;i--) 
         {
-          qDebug() << "height " << (height_)/s_scales[i] << " width "<< (width_)/s_scales[i];
-          if (height()>(height_)/s_scales[i] && width()>(width_)/s_scales[i]) {
+          qDebug() << "height " << (height_optimal)/s_scales[i] << " width "<< (width_optimal)/s_scales[i];
+          if (height()>(height_optimal)/s_scales[i] && width()>(width_optimal)/s_scales[i]) {
             qDebug() << "Selected scale " <<  s_scales[i] ;
             //m_optScale will contain optimal scale value
             m_optScale=i;

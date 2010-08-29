@@ -1,13 +1,13 @@
 include(../../config.pri)
 
 INCLUDEPATH += . inc \
-	     ../common/inc \
-             ../common/common/inc \
-	     ../common/thread/inc \
-             ../common/exception/inc \
-             ../gui/inc \
-	     ../fcgiio/inc \
-	     ../json/inc
+    ../common/inc \
+    ../common/common/inc \
+    ../common/thread/inc \
+    ../common/exception/inc \
+    ../gui/inc \
+    ../fcgiio/inc \
+    ../json/inc
 
 #SUBDIRS= ../common
 
@@ -15,7 +15,6 @@ SOURCES += main.cpp \
     observer.cpp \
     CurlInitException.cpp \
     GoogleMapLoader.cpp \
-    MapLoader.cpp \
     MapWidget.cpp \
     MapLoaderFactory.cpp \
     ../gui/src/RSSFeedQuery.cpp \
@@ -49,7 +48,6 @@ HEADERS += observer.h \
     ../gui/inc/SubscribedChannelsListQuery.h \
     ../gui/inc/ChannelListJSON.h \
     ../gui/inc/SubscribeChannelJSON.h \
-    defs.h
 
 LIBS+= -lcommon -lqjson -lcurl -lfcgiio -ljson
 QT += core gui network

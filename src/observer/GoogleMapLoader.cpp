@@ -10,19 +10,28 @@
  * ---------------------------------------------------------------- */
 
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <sstream>
 #include <map>
 #include "GoogleMapLoader.h"
 #include "CurlInitException.h"
 #include "PngPicture.h"
-
-#define GOOGLE_MAPS_API_KEY "ABQIAAAAb5usG445bmMNMJ0q1D6iXRR6XkXNzuxLA4BE9F2bnVETdMdkRhSkq5tYa7AM0EnQv0rw_8LIEDHNGA"
+#include <QDebug>
+#define KEY_FILE "api_key"
 
 namespace maps
 {
+  void GoogleMapLoader::readApiKey(){
+    std::ifstream in(KEY_FILE);
+    in >> m_apiKey;
+    qDebug() << "read " << m_apiKey.c_str() << " from " << KEY_FILE;
+  }
+
   GoogleMapLoader::GoogleMapLoader()
   {
     m_curl = curl_easy_init();
+    readApiKey();
     if(!m_curl)
       throw exception::CurlInitException();
   }
@@ -30,6 +39,7 @@ namespace maps
   static std::string getColor(char ch)
   {
     std::map<char, std::string> m;
+    ///Replace this map for color generation algorithm, bug #1112
     m['A'] = "0x0000FF";
     m['B'] = "0xFF00FF";
     m['C'] = "0x00FFFF";
@@ -47,6 +57,15 @@ namespace maps
 	  m_data.clear();
 
     std::ostringstream s;
+    //Check parameters
+    if (size<0) size=0;
+    if (size>19) size=19;
+    if (latitude < -90.) latitude=-90.;
+    if (latitude > 90.) latitude=90.;
+    if (longitude < -180.) longitude=-180.;
+    if (longitude > 180.) longitude=180.;
+    if (width > 512) width=512;
+    if (height > 512) height=512;
     s << "maps.google.com/maps/api/staticmap?center=" << latitude << ","<< longitude 
       << "&zoom=" << size << "&size=" << width << "x" << height;
     for(size_t i=0; i<marks.size(); i++)
@@ -54,7 +73,7 @@ namespace maps
       if(marks[i]->getDescription().length()!=0)
         s << "&markers=color:"<< getColor(marks[i]->getLabel()[0]) <<"|label:" << marks[i]->getLabel() << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude(); 
     }
-    s << "&maptype=roadmap&sensor=true&key=" << GOOGLE_MAPS_API_KEY;
+    s << "&maptype=roadmap&sensor=true&key=" << m_apiKey.c_str();
 
     curl_easy_setopt(m_curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTP);
     curl_easy_setopt(m_curl, CURLOPT_VERBOSE, 1);

@@ -1,7 +1,15 @@
 #include "MapWidget.h"
 #include "DataMarks.h"
-#include <math.h>
-static double s_scales[]={83333.33,41666.67,21052.63,10526.32 ,5263.16,2500.00,1250.00,625.0,307.69,160.00,80.00,40.00,20.00,10.00,5.00,2.50,1.25,0.63,0.31,0.16};
+#include <QDebug>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+#include <QPainter>
+#include "Picture.h"
+#include "GoogleMapLoader.h"
+#include "MapLoaderFactory.h"
+#include "MapLoader.h" 
+
+//static double s_scales[]={83333.33,41666.67,21052.63,10526.32 ,5263.16,2500.00,1250.00,625.0,307.69,160.00,80.00,40.00,20.00,10.00,5.00,2.50,1.25,0.63,0.31,0.16};
 
 MapWidget::MapWidget(QWidget *parent)
 {

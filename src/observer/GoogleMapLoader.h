@@ -13,7 +13,7 @@
 #include <curl/curl.h>
 #include "MapLoader.h"
 #include "DataMarks.h"
-
+#include <iostream>
 namespace maps
 {
  /*!
@@ -24,7 +24,8 @@ namespace maps
 
     CURL * m_curl; //!< connection to the server
     std::vector<char> m_data;
-
+    std::string m_apiKey;
+    void readApiKey();
   public:
     GoogleMapLoader();
 

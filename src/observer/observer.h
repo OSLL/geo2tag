@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include "ui_ObserverForm.h"
-#include "defs.h"
 #include "RSSFeedQuery.h"
 #include "LoginQuery.h"
 #include <QStatusBar>

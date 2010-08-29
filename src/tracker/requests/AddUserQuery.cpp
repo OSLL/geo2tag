@@ -48,6 +48,8 @@
 #include "QVariant"
 #include "QVariantMap"
 
+
+//Task #1113
 #ifndef ADD_USER_HTTP_URL
 #define ADD_USER_HTTP_URL "http://zps.spb.su/service?query=addUser"
 #endif

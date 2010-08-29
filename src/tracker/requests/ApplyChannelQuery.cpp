@@ -48,6 +48,8 @@
 #include "QVariant"
 #include "QVariantMap"
 
+
+///Task #1113
 #ifndef APPLY_CHANNEL_HTTP_URL
 #define APPLY_CHANNEL_HTTP_URL "http://zps.spb.su/service?query=addChannel"
 #endif
