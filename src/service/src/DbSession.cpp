@@ -55,6 +55,7 @@
 #include "ChannelInternal.h"
 #include "UserInternal.h"
 #include "DynamicCastFailure.h"
+#include "defines.h"
 
 static std::map<long, CHandlePtr<loader::DataMark> > s_marks = std::map<long, CHandlePtr<loader::DataMark> >();
 static std::map<long, CHandlePtr<loader::Channel> > s_channels = std::map<long, CHandlePtr<loader::Channel> >();
@@ -576,8 +577,8 @@ namespace common
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %ld", __FILE__, __LINE__);
     try
     {
-      connect("demo");
-      syslog(LOG_INFO, "connected to database");
+      connect(DATABASE_NAME);
+      syslog(LOG_INFO, "connected to database " DATABASE_NAME);
       m_updateThread = makeHandle(new UpdateThread<DbSession>(this));
     }
     catch(...)

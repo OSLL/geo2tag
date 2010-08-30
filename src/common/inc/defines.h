@@ -45,6 +45,8 @@
 #define SERVER_HTTP_URL "http://zps.spb.su/"
 #define DEFAULT_PORT 80
 
+#define DATABASE_NAME "demo" // "geo2tag"
+
 #define SUBSCRIBE_HTTP_URL        SERVER_HTTP_URL"service?query=subscribe"
 #define UNSUBSCRIBE_HTTP_URL      SERVER_HTTP_URL"service?query=unsubscribe"
 #define APPLY_HTTP_URL            SERVER_HTTP_URL"service?query=applymark"
