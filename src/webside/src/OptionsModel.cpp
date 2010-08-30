@@ -43,24 +43,31 @@ boost::any OptionsModel::headerData(int section,
 boost::any OptionsModel::data(const WModelIndex & index,
                               int role) const
 {
-    switch (index.row())
+    if (role == Wt::DisplayRole || role == Wt::EditRole)
     {
-    case 0: /* default_radius */
-        switch (index.column())
+        switch (index.row())
         {
-        case 0:
-            return "default_radius";
-        case 1:
-            return common::Parameters::getInstance().getDefaultRadius();
-        default:
+        case 0: /* default_radius */
+            switch (index.column())
+            {
+            case 0:
+                return "default_radius";
+            case 1:
+                return common::Parameters::getInstance().getDefaultRadius();
+            default:
+                return "no data";
+            }
+            break;
+    default:
             return "no data";
         }
-        break;
-    default:
+
         return "no data";
     }
-
-    return "no data";
+    else
+    {
+        return boost::any();
+    }
 }
 
 bool OptionsModel::setData(const WModelIndex &index, const boost::any &value, int role)

@@ -5,6 +5,7 @@
 #include "DataMarks.h"
 #include "Channel.h"
 #include "defines.h"
+#include "OpenStreetMap.h"
 
 #include <WLabel>
 #include <WText>
@@ -34,6 +35,11 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
     map->setMaximumSize(WLength(500), WLength(400));
     map->setCenter(Wt::WGoogleMap::Coordinate(60, 30));
     map->enableScrollWheelZoom();
+
+    WBreak *break3 = new WBreak(this);
+    WOpenStreetMap *map2 = new WOpenStreetMap(this);
+    map2->setMinimumSize(WLength(300), WLength(400));
+    //map2->setMaximumSize(WLength(500), WLength(400));
 
     loginButton->clicked().connect(this, &LoginWidget::loginClicked);
 

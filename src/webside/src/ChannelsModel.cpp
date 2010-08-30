@@ -39,36 +39,43 @@ int ChannelsModel::rowCount(const WModelIndex & parent) const
 }
 
 boost::any ChannelsModel::data(const WModelIndex & index,
-                              int role) const
+                               int role) const
 {
-    switch (index.column())
+    if (role == Wt::DisplayRole || role == Wt::EditRole)
     {
-    case 0:
-        return m_availableChannels->at(index.row())->getName();
-    case 1:
-        return m_availableChannels->at(index.row())->getDescription();
-    case 2:
-        return m_availableChannels->at(index.row())->getRadius();
-    case 3:{
+        switch (index.column())
+        {
+        case 0:
+            return m_availableChannels->at(index.row())->getName();
+        case 1:
+            return m_availableChannels->at(index.row())->getDescription();
+        case 2:
+            return m_availableChannels->at(index.row())->getRadius();
+        case 3:{
 
-//	  WCheckBox *Check;
-//  	  Check = new WCheckBox(/*dynamic_cast<WContainerWidget*>(WObject::parent())*/);
-	  for (int i=0;i<m_subscribedChannels->size();i++){
-		if (m_subscribedChannels->at(i)==m_availableChannels->at(index.row())){
-//			Check->setChecked(true);
-		//	return boost::any(Check);
+                //	  WCheckBox *Check;
+                //  	  Check = new WCheckBox(/*dynamic_cast<WContainerWidget*>(WObject::parent())*/);
+                for (int i=0;i<m_subscribedChannels->size();i++){
+                    if (m_subscribedChannels->at(i)==m_availableChannels->at(index.row())){
+                        //			Check->setChecked(true);
+                        //	return boost::any(Check);
 			if (role == Wt::CheckStateRole) return true;
 			return "";
-		}
-	  }
-//	  return *Check;
-	  if (role == Wt::CheckStateRole) return false;
-	  return "";
-	}
-    default:
-        return "undefined";
+                    }
+                }
+                //	  return *Check;
+                if (role == Wt::CheckStateRole) return false;
+                return "";
+            }
+        default:
+            return "undefined";
+        }
+        return "indefined";
     }
-return "indefined";
+    else
+    {
+        return boost::any();
+    }
 }
 
 boost::any ChannelsModel::headerData(int section,

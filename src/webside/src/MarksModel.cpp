@@ -57,25 +57,41 @@ int MarksModel::rowCount(const WModelIndex & parent) const
 boost::any MarksModel::data(const WModelIndex & index,
                               int role) const
 {
-    switch (index.column())
+    if (role == Wt::DisplayRole || role == Wt::EditRole)
     {
-    case 0:
-        return formatTime(m_marks->at(index.row())->getTime().getTime(),"%d %b %Y %H:%M:%S");
-        // return m_marks->at(index.row())->getTime();
-    case 1:
-        return m_marks->at(index.row())->getDescription();
-    case 2:
-        return m_marks->at(index.row())->getChannel()->getName();
-    case 3:
-        return m_marks->at(index.row())->getLatitude();
-    case 4:
-        return m_marks->at(index.row())->getLongitude();
-    case 5:
-        return m_marks->at(index.row())->getUrl();
-    default:
+        switch (index.column())
+        {
+        case 0:
+            return formatTime(m_marks->at(index.row())->getTime().getTime(),"%d %b %Y %H:%M:%S");
+            // return m_marks->at(index.row())->getTime();
+        case 1:
+            return m_marks->at(index.row())->getDescription();
+        case 2:
+            return m_marks->at(index.row())->getChannel()->getName();
+        case 3:
+            return m_marks->at(index.row())->getLatitude();
+        case 4:
+            return m_marks->at(index.row())->getLongitude();
+        case 5:
+            return m_marks->at(index.row())->getUrl();
+        default:
+            return "undefined";
+        }
         return "undefined";
+
     }
-return "indefined";
+    else if (role == Wt::UrlRole)
+    {
+        if (index.column() == 5)
+        {
+            return m_marks->at(index.row())->getUrl();
+        }
+        return boost::any();
+    }
+    else
+    {
+        return boost::any();
+    }
 }
 
 boost::any MarksModel::headerData(int section,

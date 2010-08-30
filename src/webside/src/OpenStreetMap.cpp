@@ -125,54 +125,32 @@ WOpenStreetMap::~WOpenStreetMap()
 
 void WOpenStreetMap::render(WFlags<RenderFlag> flags)
 {
+
+
   if (flags & RenderFull) {
     // initialize the map
     std::stringstream strm;
     strm <<
-      "{ "         // function init() {"
+      "{ function init() { "   // private scope
       """var self = " << jsRef() << ";"
-      """var map = new OpenLayers.Map(\"" << id() << "\");"
-      """var mapnik = new OpenLayers.Layer.OSM();"
-      """map.addLayer(mapnik);"
-      """map.setCenter(new OpenLayers.LonLat(13.41, 52.52)"
-      ""  ".transform("
-      ""    "new OpenLayers.Projection(\"EPSG:4326\"),"
-      ""    "new OpenLayers.Projection(\"EPSG:900913\")"
-      ""  "), 15"
-      """);"
+//      """map = new OpenLayers.Map(\"" << id() << "\");"
+//      """var mapnik = new OpenLayers.Layer.OSM();"
+//      """map.addLayer(mapnik);"
+//      """map.setCenter(new OpenLayers.LonLat(13.41, 52.52)"
+//      ""  ".transform("
+//      ""    "new OpenLayers.Projection(\"EPSG:4326\"),"
+//      ""    "new OpenLayers.Projection(\"EPSG:900913\")"
+//      ""  "), 15"
+//      """);"
 //
-      """self.map = map;";
-////
-////      // eventhandling
-////      """google.maps.Event.addListener(map, \"click\", "
-////      ""                              "function(overlay, latlng) {"
-////      ""  "if (latlng) {"
-////      ""  << clicked_.createCall("latlng.lat() +' '+ latlng.lng()") << ";"
-////      ""  "}"
-////      """});"
-////
-////      """google.maps.Event.addListener(map, \"dblclick\", "
-////      ""                              "function(overlay, latlng) {"
-////      ""  "if (latlng) {"
-////      ""  << doubleClicked_.createCall("latlng.lat() +' '+ latlng.lng()") << ";"
-////      ""  "}"
-////      """});"
-////
-////      """google.maps.Event.addListener(map, \"mousemove\", "
-////      ""                              "function(latlng) {"
-////      ""  "if (latlng) {"
-////      ""  << mouseMoved_.createCall("latlng.lat() +' '+ latlng.lng()") << ";"
-////      ""  "}"
-////      """});";
+//      """self.map = map;"
 //
 //    // additional things
 //    for (unsigned int i = 0; i < additions_.size(); i++)
 //      strm << additions_[i];
 //
-    strm <<
-      //"}" // function initialize()
-////      "google.load(\"maps\", \"2\", "
-////      ""          "{other_params:\"sensor=false\", callback: initialize});"
+      "" "} " // function init
+      "" "init();"
       " }"; // private scope
 //
 //    additions_.clear();
@@ -180,7 +158,8 @@ void WOpenStreetMap::render(WFlags<RenderFlag> flags)
     WApplication::instance()->doJavaScript(strm.str());
   }
 
-  WCompositeWidget::render(flags);
+WCompositeWidget::render(flags);
+
 }
 
 void WOpenStreetMap::clearOverlays()
