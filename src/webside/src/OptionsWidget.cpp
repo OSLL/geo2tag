@@ -14,6 +14,7 @@ OptionsWidget::OptionsWidget(WContainerWidget *parent)
     optionsModel = new OptionsModel("/opt/geo2tag/geo2tag.conf", this);
     optionsTable->setModel(optionsModel);
     optionsTable->setMinimumSize(WLength(100), WLength(100));
+    optionsTable->setSelectable(true);
 
 //    /* Setting up channels widget main container */
 //    WVBoxLayout *mainLayout = new WVBoxLayout();

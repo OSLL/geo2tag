@@ -16,6 +16,7 @@ class ChannelsModel : public WAbstractTableModel
     std::string m_token;
     CHandlePtr<common::Channels> m_subscribedChannels;
     CHandlePtr<common::Channels> m_availableChannels;
+
 public:
     ChannelsModel(const std::string &token, WObject *parent);
     virtual int columnCount(const WModelIndex & parent = WModelIndex()) const;
@@ -29,7 +30,7 @@ public:
 
     CHandlePtr<common::Channels> getAvailableChannels() const;
     virtual bool setData(const WModelIndex &index, const boost::any &value, int role = EditRole);
-//    CHandlePtr<common::Channels> getSubscribedChannels() const;
+//    CHandlePtr<common::Channels> getSubscribedChannels() const;          
     void update();
 };
 #endif

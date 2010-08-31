@@ -27,6 +27,9 @@ ChannelsWidget::ChannelsWidget(const std::string &token, WContainerWidget *paren
     channelsModel = new ChannelsModel(m_token, channelsTable->parent());
     channelsTable->setModel(channelsModel);
     channelsTable->setSelectionMode(ExtendedSelection);
+    channelsTable->setColumnAlignment(2, Wt::AlignCenter);
+    channelsTable->setColumnAlignment(3, Wt::AlignCenter);
+    channelsTable->setSelectable(true);
 //    channelsTable->setSelectionBehavior(SelectItems);
 //    updateChannelsModel();
 }

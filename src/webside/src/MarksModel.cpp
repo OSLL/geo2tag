@@ -7,6 +7,27 @@
 #include "UserInternal.h"
 #include "DbSession.h"
 #include "defines.h"
+
+std::string formatCoord(double coord)
+{
+    std::stringstream strm;
+    int degree = coord;
+    int minutes = (coord - degree) * 60;
+    double seconds = (((coord - degree) * 60) - minutes) * 60;
+    strm << degree;
+    if (degree < 10)
+        strm << "ᵒ  ";
+    else
+        strm << "ᵒ ";
+    strm << minutes;
+    if (degree < 10)
+        strm << "'  ";
+    else
+        strm << "' ";
+    strm << seconds << "\"";
+    return strm.str();
+}
+
 bool comp(CHandlePtr<common::DataMark> x1,CHandlePtr<common::DataMark> x2){return x1->getTime() < x2->getTime();}
 
 MarksModel::MarksModel(const std::string &token, const WString &channel, WObject *parent)
@@ -57,7 +78,7 @@ int MarksModel::rowCount(const WModelIndex & parent) const
 boost::any MarksModel::data(const WModelIndex & index,
                               int role) const
 {
-    if (role == Wt::DisplayRole || role == Wt::EditRole)
+    if (role == Wt::DisplayRole || role == Wt::EditRole || role == ToolTipRole)
     {
         switch (index.column())
         {
@@ -65,13 +86,13 @@ boost::any MarksModel::data(const WModelIndex & index,
             return formatTime(m_marks->at(index.row())->getTime().getTime(),"%d %b %Y %H:%M:%S");
             // return m_marks->at(index.row())->getTime();
         case 1:
-            return m_marks->at(index.row())->getDescription();
-        case 2:
             return m_marks->at(index.row())->getChannel()->getName();
+        case 2:
+            return m_marks->at(index.row())->getDescription();
         case 3:
-            return m_marks->at(index.row())->getLatitude();
+            return formatCoord(m_marks->at(index.row())->getLatitude());
         case 4:
-            return m_marks->at(index.row())->getLongitude();
+            return formatCoord(m_marks->at(index.row())->getLongitude());
         case 5:
             return m_marks->at(index.row())->getUrl();
         default:
@@ -101,9 +122,9 @@ boost::any MarksModel::headerData(int section,
     if (section == 0)
         return "time";
     else if (section == 1)
-        return "description";
-    else if (section == 2)
         return "channel";
+    else if (section == 2)
+        return "description";
     else if (section == 3)
         return "latitude";
     else if (section == 4)

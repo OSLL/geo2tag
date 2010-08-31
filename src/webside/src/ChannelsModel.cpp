@@ -41,7 +41,7 @@ int ChannelsModel::rowCount(const WModelIndex & parent) const
 boost::any ChannelsModel::data(const WModelIndex & index,
                                int role) const
 {
-    if (role == Wt::DisplayRole || role == Wt::EditRole)
+    if (role == Wt::DisplayRole || role == Wt::EditRole || role == ToolTipRole)
     {
         switch (index.column())
         {

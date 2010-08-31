@@ -13,6 +13,7 @@ MarksWidget::MarksWidget(const std::string &token, WContainerWidget *parent)
     marksMapWidget->enableScrollWheelZoom();
     marksModel = new MarksModel(m_token, WString(""), marksTable->parent());
     marksTable->setModel(marksModel);
+    marksTable->setSelectable(true);
     
     /* Setting up tab widget */
     this->addTab(marksTable, "Table");
