@@ -20,7 +20,7 @@ Sketch::Sketch(const std::string &token, WContainerWidget *parent)
     m_token = token;
     menuContainer = new WContainerWidget(this);
     stackedWidget = new WStackedWidget(this);
-    privateButton = new WPushButton("Private", menuContainer);
+    prefButton = new WPushButton("Preferences", menuContainer);
     channelsButton = new WPushButton("Channels", menuContainer);
     marksButton = new WPushButton("Marks", menuContainer);
     optionsButton = new WPushButton("Options", menuContainer);
@@ -29,12 +29,13 @@ Sketch::Sketch(const std::string &token, WContainerWidget *parent)
     marksWidget = new MarksWidget(m_token, stackedWidget);
     optionsWidget = new OptionsWidget(stackedWidget);
     usersWidget = new UsersWidget(stackedWidget);
+    prefWidget = new PrefWidget(token, stackedWidget);
     //WSelectionBox *box = new WSelectionBox(root());
 
     stackedWidget->setCurrentWidget(channelsWidget);
 
     /* signals and slots */
-    privateButton->clicked().connect(this, &Sketch::onPrivateClicked);
+    prefButton->clicked().connect(this, &Sketch::onPrefClicked);
     channelsButton->clicked().connect(this, &Sketch::onChannelsClicked);
     marksButton->clicked().connect(this, &Sketch::onMarksClicked);
     optionsButton->clicked().connect(this, &Sketch::onOptionsClicked);
@@ -42,9 +43,9 @@ Sketch::Sketch(const std::string &token, WContainerWidget *parent)
     channelsWidget->channelsUpdated.connect(marksWidget, &MarksWidget::updateModel);
 }
 
-void Sketch::onPrivateClicked()
+void Sketch::onPrefClicked()
 {
-    //stackedWidget->setCurrentWidget(privateWidget);
+    stackedWidget->setCurrentWidget(prefWidget);
 }
 
 void Sketch::onChannelsClicked()

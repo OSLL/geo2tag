@@ -72,6 +72,8 @@ namespace common
     const std::string& getToken() const;
     const CHandlePtr<Channels> getSubscribedChannels() const;
 
+    void setPassword(const std::string password);
+
     virtual ~User();    
   }; // class User
   

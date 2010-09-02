@@ -7,6 +7,7 @@
 #include <Wt/WStackedWidget>
 #include <Wt/WContainerWidget>
 
+#include "PrefWidget.h"
 #include "ChannelsWidget.h"
 #include "MarksWidget.h"
 #include "OptionsWidget.h"
@@ -25,7 +26,7 @@ public:
 private:
     std::string m_token;
 
-    WPushButton *privateButton;
+    WPushButton *prefButton;
     WPushButton *channelsButton;
     WPushButton *marksButton;
     WPushButton *optionsButton;
@@ -35,13 +36,14 @@ private:
     WContainerWidget *menuContainer;
     WStackedWidget *stackedWidget;
 
+    PrefWidget *prefWidget;
     ChannelsWidget *channelsWidget;
     MarksWidget *marksWidget;
     OptionsWidget *optionsWidget;
     UsersWidget *usersWidget;
 
     /* slots */
-    void onPrivateClicked();
+    void onPrefClicked();
     void onChannelsClicked();
     void onMarksClicked();
     void onOptionsClicked();

@@ -42,10 +42,10 @@
 #ifndef _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #define _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 
-#define SERVER_HTTP_URL "http://zps.spb.su/"
+#define SERVER_HTTP_URL "http://localhost/"
 #define DEFAULT_PORT 80
 
-#define DATABASE_NAME "demo" // "geo2tag"
+#define DATABASE_NAME "geo2tag" // "demo"
 
 #define SUBSCRIBE_HTTP_URL        SERVER_HTTP_URL"service?query=subscribe"
 #define UNSUBSCRIBE_HTTP_URL      SERVER_HTTP_URL"service?query=unsubscribe"

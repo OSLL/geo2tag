@@ -48,9 +48,11 @@ HEADERS += inc/ChannelsWidget.h \
            inc/MarksModel.h \
            inc/OptionsModel.h \
            inc/OptionsWidget.h \
+           inc/PrefWidget.h \
            inc/sketch.h \
            inc/GoogleMap.h \
-           inc/OpenStreetMap.h
+           inc/OpenStreetMap.h \
+           inc/YandexMap.h
 SOURCES += src/ChannelsWidget.cpp \
 	   src/ChannelsModel.cpp \
            src/main.cpp \
@@ -58,6 +60,8 @@ SOURCES += src/ChannelsWidget.cpp \
            src/MarksWidget.cpp \
            src/OptionsModel.cpp \
            src/OptionsWidget.cpp \
+           src/PrefWidget.cpp \
            src/sketch.cpp \
            src/GoogleMap.cpp \
-           src/OpenStreetMap.cpp
+           src/OpenStreetMap.cpp \
+           src/YandexMap.cpp

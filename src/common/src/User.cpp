@@ -80,6 +80,11 @@ namespace common
     return m_channels;
   }
 
+  void User::setPassword(std::string password)
+  {
+      m_password = password;
+  }
+
   User::~User()
   {
   }
