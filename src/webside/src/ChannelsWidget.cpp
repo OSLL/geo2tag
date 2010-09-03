@@ -25,6 +25,7 @@ ChannelsWidget::ChannelsWidget(const std::string &token, WContainerWidget *paren
     unsubscribeButton->clicked().connect(this, &ChannelsWidget::onUnsubscribeClicked);
     /* create a table model*/
     channelsModel = new ChannelsModel(m_token, channelsTable->parent());
+    channelsModel->channelsUpdated.connect(this, &ChannelsWidget::onModelUpdated);
     channelsTable->setModel(channelsModel);
     channelsTable->setSelectionMode(ExtendedSelection);
     channelsTable->setColumnAlignment(2, Wt::AlignCenter);
@@ -38,10 +39,16 @@ void ChannelsWidget::updateChannelsModel()
 {
     ChannelsModel *oldModel = channelsModel;
     channelsModel = new ChannelsModel(m_token, channelsTable->parent());
+    channelsModel->channelsUpdated.connect(this, &ChannelsWidget::onModelUpdated);
     channelsTable->setModel(channelsModel);
     if (oldModel != 0)
         delete oldModel;
 
+}
+
+void ChannelsWidget::onModelUpdated()
+{
+    this->channelsUpdated.emit();
 }
 
 void ChannelsWidget::onSubscribeClicked()

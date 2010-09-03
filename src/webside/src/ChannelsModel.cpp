@@ -41,7 +41,8 @@ int ChannelsModel::rowCount(const WModelIndex & parent) const
 boost::any ChannelsModel::data(const WModelIndex & index,
                                int role) const
 {
-    if (role == Wt::DisplayRole || role == Wt::EditRole || role == ToolTipRole)
+    if (role == Wt::DisplayRole || role == Wt::EditRole
+        || role == ToolTipRole || CheckStateRole)
     {
         switch (index.column())
         {
@@ -156,6 +157,7 @@ bool ChannelsModel::setData(const WModelIndex &index, const boost::any &value, i
 		}
 //		index.data(Wt::CheckStateRole)=;
 		dataChanged().emit(index, index);
+                this->channelsUpdated.emit();
 		return true;
 	}
 	return false;

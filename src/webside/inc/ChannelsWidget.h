@@ -32,6 +32,7 @@ public:
     /* slots */
     void onSubscribeClicked();
     void onUnsubscribeClicked();
+    void onModelUpdated();
 
 };
 

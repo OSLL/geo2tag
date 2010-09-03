@@ -32,5 +32,8 @@ public:
     virtual bool setData(const WModelIndex &index, const boost::any &value, int role = EditRole);
 //    CHandlePtr<common::Channels> getSubscribedChannels() const;          
     void update();
+
+    /* signals */
+    Wt::Signal<> channelsUpdated;
 };
 #endif
