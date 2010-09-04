@@ -29,7 +29,7 @@ build-stamp:
 	cp -r ./src $(BUILDDIR)
 	cp -r ./data $(BUILDDIR)
 	cp -r ./debian/config.pri $(BUILDDIR)
-	cd $(BUILDDIR) && qmake 
+	cd $(BUILDDIR) && qmake
 	$(MAKE) -C $(BUILDDIR)
 	
 	touch build-stamp

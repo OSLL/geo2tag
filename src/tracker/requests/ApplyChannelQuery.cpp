@@ -57,8 +57,8 @@
 ApplyChannelQuery::ApplyChannelQuery(QObject *parent)
     : QObject(parent)
 {
-    jsonQuery = "";
-    httpQuery = "";
+    m_jsonQuery = "";
+    m_httpQuery = "";
     manager = new QNetworkAccessManager(this);
 
     qDebug() << "Free ApplyChannelQuery created";
@@ -71,7 +71,7 @@ ApplyChannelQuery::ApplyChannelQuery(QString auth_token, QString name, QString d
     manager = new QNetworkAccessManager(this);
     setQuery(auth_token, name, description, url, activeRadius);
     qDebug() << "ApplyChannelQuery created:\n"
-             << httpQuery << jsonQuery;
+             << m_httpQuery << m_jsonQuery;
 }
 
 void ApplyChannelQuery::setQuery(QString auth_token, QString name, QString description,
@@ -84,9 +84,9 @@ void ApplyChannelQuery::setQuery(QString auth_token, QString name, QString descr
     request.insert("url", url);
     request.insert("activeRadius", activeRadius);
     QJson::Serializer serializer;
-    jsonQuery = serializer.serialize(request);
+    m_jsonQuery = serializer.serialize(request);
 
-    httpQuery = APPLY_CHANNEL_HTTP_URL;
+    m_httpQuery = APPLY_CHANNEL_HTTP_URL;
 }
 
 ApplyChannelQuery::~ApplyChannelQuery()
@@ -96,26 +96,26 @@ ApplyChannelQuery::~ApplyChannelQuery()
 
 const QString& ApplyChannelQuery::getHttpQuery()
 {
-    return httpQuery;
+    return m_httpQuery;
 }
 
 const QString& ApplyChannelQuery::getJsonQuery()
 {
-    return jsonQuery;
+    return m_jsonQuery;
 }
 
 void ApplyChannelQuery::doRequest()
 {
-    if (httpQuery == "" || jsonQuery == "")
+    if (m_httpQuery == "" || m_jsonQuery == "")
     {
         qDebug() << "ApplyChannelQuery: can't do request because query isn't set";
         return;
     }
 
     QNetworkRequest request;
-    request.setUrl(QUrl(httpQuery));
+    request.setUrl(QUrl(m_httpQuery));
 
-    QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
+    QByteArray data(m_jsonQuery.toAscii(), m_jsonQuery.size());
 
     QNetworkReply *reply = manager->post(request, data);
 
@@ -127,7 +127,7 @@ void ApplyChannelQuery::doRequest()
             this, SLOT(onReplyError(QNetworkReply::NetworkError)));
 
     qDebug() << "ApplyChannelQuery did request:\n"
-             << httpQuery << jsonQuery;
+             << m_httpQuery << m_jsonQuery;
 }
 
 void ApplyChannelQuery::onManagerFinished(QNetworkReply *reply)
@@ -167,4 +167,4 @@ void ApplyChannelQuery::onManagerSslErrors()
 
 
 
-/* ===[ End of file $HeadURL$ ]=== */
+//* ===[ End of file $HeadURL$ ]=== */
