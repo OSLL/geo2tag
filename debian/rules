@@ -15,6 +15,7 @@ CFLAGS = -Wall -g
 
 BUILDDIR = ./debian/build/
 
+
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
 else
@@ -23,12 +24,17 @@ endif
 
 build: build-stamp
 
-build-stamp: 
+build-stamp:
 	dh_testdir
 	dh_clean
 	cp -r ./src $(BUILDDIR)
 	cp -r ./data $(BUILDDIR)
 	cp -r ./debian/config.pri $(BUILDDIR)
+#Check what architecture we are use. If it is i386, we need to build all for i386, else build all armel code
+	if [ "$(DEB_BUILD_ARCH)" = "i386" ] ; then \
+	echo "i386 architecture selection"; \
+	sed -i 's/CONFIG += maemo5/CONFIG += linux/g' debian/config.pri; \
+	fi;
 	cd $(BUILDDIR) && qmake
 	$(MAKE) -C $(BUILDDIR)
 	
@@ -46,15 +52,17 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-
-	$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install
-	install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps
-	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon
-	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps 
-	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon
-	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png
-	cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop
-
+	# if we are no on armel arch we needn`t install wikigps and tracker files
+	if [ "$(DEB_BUILD_ARCH)" = "armel" ] ; then \
+	echo "armel arch instalation"; \
+	$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
+	install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
+	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
+	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
+	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
+	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; \
+	cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop; \
+	fi;
 	dh_install -s
 	
 

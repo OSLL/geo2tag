@@ -1,3 +1,9 @@
+wikigps (0.1.0) unstable; urgency=low
+
+  * the_platform iteration release
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Sat, 04 Sep 2010 16:26:46 +0400
+
 wikigps (0.0.9) unstable; urgency=low
 
   * Tampere's release
