@@ -1,4 +1,5 @@
 Source: wikigps
+Architecture: armel
 Section: web
 Priority: optional
 Maintainer: Pavel Zubarev <zps@osll.spb.ru>
@@ -16,3 +17,9 @@ Depends: ${shlibs:Depends}
 Description: WikiGPS tracker
  has very tiny interface. alfa version.
 
+Package: libwt3.1.5
+Architecture: i386 
+Depends: ${shlibs:Depends}, libboost1.40-dev, gcc, zlib1g-dev, zlib1g, libgd2-xpm, libgd2-xpm-dev, cmake
+Description: Wt (pronounced 'witty') 
+ is a C++ library and application server for developing and deploying web applications.
+ The API is widget-centric and offers complete abstraction of any web-specific application details.

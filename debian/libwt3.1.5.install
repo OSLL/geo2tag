@@ -1,0 +1,17 @@
+debian/tmp/usr/local/share/Wt/resources/*
+debian/tmp/usr/local/share/Wt/resources/themes/*
+debian/tmp/usr/local/share/Wt/resources/themes/default/*
+debian/tmp/usr/local/share/Wt/resources/themes/default/no-stripes/*
+debian/tmp/usr/local/share/Wt/resources/themes/default/stripes/*
+debian/tmp/usr/local/share/Wt/resources/themes/polished/*
+debian/tmp/usr/local/share/Wt/resources/themes/polished/no-stripes/*
+debian/tmp/usr/local/share/Wt/resources/themes/polished/stripes/*
+debian/tmp/usr/local/share/cmake-2.4/Modules/*
+debian/tmp/usr/local/include/Wt/*
+debian/tmp/usr/local/include/Wt/Test/*
+debian/tmp/usr/local/include/Wt/Ext/*
+debian/tmp/usr/local/include/Wt/Chart/*
+debian/tmp/usr/local/include/Wt/Dbo/*
+debian/tmp/usr/local/include/Wt/Dbo/backend/*
+debian/tmp/usr/local/include/Wt/Http/*
+debian/tmp/usr/local/lib/*

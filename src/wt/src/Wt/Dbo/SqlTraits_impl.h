@@ -1,0 +1,84 @@
+// This may look like C code, but it's really -*- C++ -*-
+/*
+ * Copyright (C) 2009 Emweb bvba, Kessel-Lo, Belgium.
+ *
+ * See the LICENSE file for terms of use.
+ */
+#ifndef WT_DBO_SQL_TRAITS_IMPL_H_
+#define WT_DBO_SQL_TRAITS_IMPL_H_
+
+#include <Wt/Dbo/SqlStatement>
+
+namespace Wt {
+  namespace Dbo {
+
+template <typename V, class Enable>
+void sql_value_traits<V, Enable>::bind(const char *v, SqlStatement *statement,
+				       int column, int size)
+{
+  statement->bind(column, v);
+}
+
+template <typename Result>
+void query_result_traits<Result>::getFields(Session& session,
+					  std::vector<std::string> *aliases,
+					  std::vector<FieldInfo>& result)
+{
+  /* Adds an immutable single value field */
+
+  if (!aliases || aliases->empty())
+    throw std::logic_error("Session::query(): not enough aliases for results");
+  std::string name = aliases->front();
+  aliases->erase(aliases->begin());
+
+  std::string sqlType = "??"; // FIXME, get from session ?
+
+  result.push_back(FieldInfo(name, &typeid(Result), sqlType, 0));
+}
+
+template <typename Result>
+Result query_result_traits<Result>::load(Session& session,
+				       SqlStatement& statement,
+				       int& column)
+{
+  Result result;
+  sql_value_traits<Result>::read(result, &statement, column++, -1);
+  return result;
+}
+
+template <typename Result>
+void query_result_traits<Result>::getValues(const Result& result,
+					    std::vector<boost::any>& values)
+{
+  values.push_back(result);
+}
+
+template <typename Result>
+void query_result_traits<Result>::setValue(Result& result,
+					   int& index, const boost::any& value)
+{
+  if (index == 0)
+    result = boost::any_cast<Result>(value);
+  --index;
+}
+
+template <typename Result>
+Result query_result_traits<Result>::create()
+{
+  return Result();
+}
+
+template <typename Result>
+void query_result_traits<Result>::add(Session& session, Result& result)
+{
+}
+
+template <typename Result>
+void query_result_traits<Result>::remove(Result& result)
+{
+}
+
+  }
+}
+
+#endif // WT_DBO_SQL_TRAITS_IMPL_H_

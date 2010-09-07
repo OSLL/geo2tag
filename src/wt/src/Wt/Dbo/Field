@@ -1,0 +1,214 @@
+// This may look like C code, but it's really -*- C++ -*-
+/*
+ * Copyright (C) 2009 Emweb bvba, Kessel-Lo, Belgium.
+ *
+ * See the LICENSE file for terms of use.
+ */
+#ifndef WT_DBO_FIELD_H_
+#define WT_DBO_FIELD_H_
+
+#include <string>
+
+#include <Wt/Dbo/ptr>
+#include <Wt/Dbo/collection>
+
+namespace Wt {
+  namespace Dbo {
+
+class Session;
+class SqlStatement;
+
+template <typename V>
+class FieldRef
+{
+public:
+  FieldRef(V& value, const std::string& name, int size);
+
+  const std::string& name() const;
+  int size() const;
+
+  std::string sqlType(Session& session) const;
+  const std::type_info *type() const;
+  const V& value() const { return value_; }
+  void setValue(const V& value) const { value_ = value; }
+
+  void bindValue(SqlStatement *statement, int column) const;
+  void setValue(Session& session, SqlStatement *statement, int column) const;
+
+private:
+  V& value_;
+  std::string name_;
+  int size_;
+};
+
+/*! \brief Type of an SQL relation.
+ *
+ * \ingroup dbo
+ */
+enum RelationType {
+  ManyToOne,  //!< Many-to-One relationship
+  ManyToMany  //!< Many-to-Many relationship
+};
+
+template <class C>
+class CollectionRef
+{
+public:
+  CollectionRef(collection< ptr<C> >& value, RelationType type,
+		const std::string& joinName, const std::string& joinId);
+
+  collection< ptr<C> >& value() const { return value_; }
+  const std::string& joinName() const { return joinName_; }
+  const std::string& joinId() const { return joinId_; }
+  RelationType type() const { return type_; }
+
+private:
+  collection< ptr<C> >& value_;
+  std::string joinName_, joinId_;
+  RelationType type_;
+};
+
+template <class C>
+class PtrRef
+{
+public:
+  PtrRef(ptr<C>& value, const std::string& name, int size);
+
+  const std::string& name() const { return name_; }
+  const ptr<C>& value() const { return value_; }
+  typename dbo_traits<C>::IdType id() const { return value_.id(); }
+
+  const std::type_info *type() const;
+
+  /*
+   * If session = 0, the visited foreign key fields will not be named
+   * correctly (ok when e.g. reading/writing data)
+   */
+  template <typename A> void visit(A& action, Session *session) const;
+
+private:
+  ptr<C>& value_;
+  std::string name_;
+  int size_;
+};
+
+/*! \brief Maps a natural primary key (id) field.
+ *
+ * A natural primary key field is optional. If you define one and its
+ * type is not <tt>long long</tt>, you must specialize
+ * Wt::Dbo::dbo_traits to match the type \p V as the IdType for this
+ * class. When not specified for a class, an auto-generated surrogate
+ * key field is used with the name specified by
+ * Wt::Dbo::dbo_traits::surrogateIdField(), which defaults to "id".
+ *
+ * Unlike the default surrogate key, a natural id is not
+ * auto-generated and thus you need to give each object a unique value
+ * when creating a new object.
+ *
+ * The id may be a composite type. In that case, you need to
+ * specialize Wt::Dbo::field().
+ *
+ * \ingroup dbo
+ */
+template <class Action, typename V>
+void id(Action& action, V& value, const std::string& name = "id",
+	int size = -1);
+
+/*! \brief Maps a database object field.
+ *
+ * This function binds the field \p value to the database field \p name.
+ *
+ * The optional \p size may be used as a hint for the needed
+ * storage. It is only useful for <i>std::string</i> or
+ * <i>Wt::WString</i> fields, and causes the schema to use a
+ * <tt>varchar(</tt><i><tt>size</tt></i><tt>)</tt> for storing the
+ * field instead of an unlimited length string type.
+ *
+ * You may want to specialize this method for a particular composite
+ * type which should be persisted in multiple database fields but not as
+ * a separate table (e.g. for natural composite primary keys, see id()).
+ *
+ * For example:
+ * \code
+ * struct Coordinate {
+ *   int x, y;
+ * };
+ *
+ * namespace Wt {
+ *   namespace Dbo {
+ *
+ *     template <class Action>
+ *     void field(Action& action, Coordinate& coordinate, const std::string& name, int size = -1)
+ *     {
+ *       field(action, coordinate.x, name + "_x");
+ *       field(action, coordinate.y, name + "_y");
+ *     }
+ *
+ *   } // namespace Dbo
+ * } // namespace Wt
+ * \endcode
+ *
+ * To support a custom type that needs to be persisted as a single
+ * field, you should specialize sql_value_traits instead.
+ *
+ * \ingroup dbo
+ */
+template <class Action, typename V>
+void field(Action& action, V& value, const std::string& name, int size = -1);
+
+template <class Action, class C>
+void field(Action& action, ptr<C>& value, const std::string& name,
+	   int size = -1);
+
+/*! \brief Maps the "One"-side of a ManyToOne relation.
+ *
+ * This function binds the pointer field \p value to the database
+ * field \p name <tt>+ "_id"</tt>.
+ *
+ * A belongsTo() will usually have a counter-part hasMany() declaration
+ * in the referenced class \p C.
+ *
+ * \sa hasMany()
+ *
+ * \ingroup dbo
+ */
+template <class Action, class C>
+void belongsTo(Action& action, ptr<C>& value, const std::string& name,
+	       int size = -1);
+
+/*! \brief Maps the "Many"-side of a ManyToOne or ManyToMany relation.
+ *
+ * This function binds the collection field \p value to contain objects
+ * (of type \p C).
+ *
+ * For a \link Wt::Dbo::ManyToOne ManyToOne\endlink relation, the
+ * query is defined by the database field \p joinName <tt>+ "_id"</tt>
+ * in the table that matches \p C. This should be the same name as
+ * passed to the matching belongsTo() method for the other side of the
+ * relation.
+ *
+ * For a \link Wt::Dbo::ManyToMany ManyToMany\endlink relation, the \p
+ * joinName is the name of a linker table (this linker table may be
+ * schema qualified, e.g. <tt>"myschema.posts_tags"</tt>. Thus, also
+ * for a ManyToMany relation, both sides of the relationship will have
+ * the same joinName passed to them. You may optionally specify the \p
+ * joinId which is used to reference this side of the relationship in
+ * the join table. If \p joinId is left blank, the value will be
+ * table name of the current class + "_id".
+ *
+ * A hasMany() must have a counter-part belongsTo() or hasMany()
+ * declaration in the referenced class \p C.
+ *
+ * \sa belongsTo()
+ *
+ * \ingroup dbo
+ */
+template <class Action, class C>
+void hasMany(Action& action, collection< ptr<C> >& value,
+	     RelationType type, const std::string& joinName,
+	     const std::string& joinId = "");
+
+  }
+}
+
+#endif // WT_DBO_FIELD

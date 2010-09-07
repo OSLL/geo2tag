@@ -1,0 +1,589 @@
+// This may look like C code, but it's really -*- C++ -*-
+/*
+ * Copyright (C) 2008 Emweb bvba, Kessel-Lo, Belgium.
+ *
+ * See the LICENSE file for terms of use.
+ */
+#ifndef WMENU_H_
+#define WMENU_H_
+
+#include <vector>
+
+#include <Wt/WCompositeWidget>
+#include <Wt/WMenuItem>
+
+namespace Wt {
+
+class WStackedWidget;
+class WTable;
+
+/*! \class WMenu Wt/WMenu Wt/WMenu
+ *  \brief A widget that shows a menu of options.
+ *
+ * The %WMenu widget offers menu navigation.
+ *
+ * Typically, a menu is used in conjunction with a WStackedWidget (but
+ * can be used without too), where different 'contents' are stacked
+ * upon each other. Each choice in the menu (which is implemented as a
+ * WMenuItem) corresponds to a tab in the contents stack. The contents
+ * stack may contain other items, and could be shared with other WMenu
+ * instances.
+ *
+ * When used without a contents stack, you can react to menu item
+ * selection using the itemSelected() signal, to implement some custom
+ * handling of item selection.
+ *
+ * Usage example:
+ * \if cpp
+ * \code
+ * // create the stack where the contents will be located
+ * Wt::WStackedWidget *contents = new Wt::WStackedWidget(contentsParent);
+ *
+ * // create a menu
+ * Wt::WMenu *menu = new Wt::WMenu(contents, Wt::Vertical, menuParent);
+ * menu->setRenderAsList(true);
+ *
+ * // add four items using the default lazy loading policy.
+ * menu->addItem("Introduction", new Wt::WText("intro"));
+ * menu->addItem("Download", new Wt::WText("Not yet available"));
+ * menu->addItem("Demo", new DemoWidget());
+ * menu->addItem(new Wt::WMenuItem("Demo2", new DemoWidget()));
+ * \endcode
+ * \elseif java
+ * \code
+ * // create the stack where the contents will be located
+ * WStackedWidget contents = new WStackedWidget(contentsParent);
+ *		 
+ * // create a menu
+ * WMenu menu = new WMenu(contents, Orientation.Vertical, menuParent);
+ * menu.setRenderAsList(true);
+ *		 
+ * // add four items using the default lazy loading policy.
+ * menu.addItem("Introduction", new WText("intro"));
+ * menu.addItem("Download", new WText("Not yet available"));
+ * menu.addItem("Demo", new DemoWidget());
+ * menu.addItem(new WMenuItem("Demo2", new DemoWidget()));
+ * \endcode
+ * \endif
+ *
+ * Historically, a menu was implemented as a table, but \link
+ * setRenderAsList() rendering as a list\endlink (<tt>&lt;ul&gt;</tt>)
+ * is preferred, as it is the norm form implementations.
+ *
+ * After contruction, the first entry will be selected. At any time,
+ * it is possible to select a particular item using select().
+ *
+ * Each item of %WMenu may be closeable (see WMenuItem::setCloseable(bool).
+ * Like selection, at any time, it is possible to close a particular item
+ * using close(). You can react to close of item by using the itemClosed()
+ * signal.
+ *
+ * The %WMenu implementation offers fine-grained control on how
+ * contents should be preloaded. By default, all contents is
+ * lazy-loaded, only when needed. To improve response time, an item
+ * may also be preloaded (using addItem()). In that case, the item
+ * will be loaded in the background, before its first use. In any
+ * case, once the contents corresponding to a menu item is loaded,
+ * subsequent navigation to it is handled entirely client-side.
+ *
+ * The %WMenu may participate in the application's internal path,
+ * which lets menu items correspond to internal URLs, see
+ * setInternalPathEnabled().
+ *
+ * The layout of the menu may be Horizontal or Vertical. The look of
+ * the items may be defined through style sheets. The default
+ * WMenuItem implementation uses four style classes to distinguish
+ * between inactivated, activated, closeable inactivated and closeable
+ * activated menu items: <tt>"item"</tt>, <tt>"itemselected"</tt>,
+ * <tt>"citem"</tt>, <tt>"citemselected"</tt>. By using CSS nested selectors,
+ * a different style may be defined for items in a different menu.
+ *
+ * You may customize the rendering and behaviour of menu entries by
+ * specializing WMenuItem.
+ *
+ * <h3>CSS</h3>
+ *
+ * Styling a menu will be different depending of the rendering mode
+ * (table, list). Conventionally, menus like this are styled as a list
+ * (setRenderAsList()).
+ *
+ * You will want to differentiate between unselected and selected items
+ * based on the <tt>"item"</tt> and <tt>"itemselected"</tt> style classes
+ * as well as between unselected and selected closeable items based on the
+ * <tt>"citem"</tt> and <tt>"citemselected"</tt> style classes.
+ *
+ * For menus without closeable items a styling is pretty simple. For
+ * example, assuming you set a <tt>"menu"</tt> style class for your
+ * menu, you can style the items using:
+ *
+ * \code
+.menu * .item {
+  cursor: pointer; cursor: hand;
+  color: blue;
+  text-decoration: underline;
+}
+
+.menu * .itemselected {
+  color: blue;
+  text-decoration: underline;
+  font-weight: bold;  
+}
+ * \endcode
+ *
+ * For menus which supports closing and/or enabling disabling of
+ * items, the styling is more complex. The close icon is styled by the
+ * current CSS theme and can be overriden by using
+ * <tt>"Wt-closeicon"</tt> CSS class. The look of the menu, assuming
+ * the default implementation for WMenuItem, can be customized by
+ * using the following selectors (again assuming a menu with as
+ * styleclass <tt>"menu"</tt>):
+ *
+ * \verbatim
+.Wt-closeicon                     : a close icon
+
+.menu                             : the list (you custom menu class)
+.menu li                          : a list item
+.menu span                        : spans of a list item
+
+# not closable items:
+.menu a.item span                 : the inner span of the label of an enabled item
+.menu span.item                   : the label of a disabled item
+.menu a.itemselected span         : the inner span the label of an enabled selected item
+.menu span.itemselected           : the label of a disabled selected item
+
+# closable items:
+.menu .citem a.label span         : the inner span of the label of an enabled item
+.menu .citem span.label           : the label of a disabled item
+.menu .citemselected a.label span : the inner span the label of an enabled selected item
+.menu .citemselected span.label   : the label of a disabled selected item
+\endverbatim
+ *
+ * Example of styling a menu with closeable items:
+ * 
+ * \code
+.menu {
+  overflow: auto;
+}
+
+.menu li {
+  display: inline;
+}
+
+.menu span {
+  display: block; float: left;
+}
+
+.menu a.item span {
+  cursor: pointer; cursor: hand;
+  color: blue;
+  margin-right: 5px;
+}
+
+.menu span.item {
+  color: gray;
+  margin-right: 5px;
+}
+
+.menu a.itemselected span {
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.menu span.itemselected {
+  color: gray;
+  font-weight: bold;
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.menu .citem a.label span {
+  cursor: pointer; cursor: hand;
+  color: blue;
+}
+
+.menu .citem span.label {
+  color: gray;
+}
+
+.menu .citemselected a.label span {
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.menu .citemselected span.label {
+  color: gray;
+  font-weight: bold;
+  text-decoration: none;
+}
+ * \endcode
+ * 
+ * \sa WMenuItem
+ */
+class WT_API WMenu : public WCompositeWidget
+{
+public:
+  /*! \brief Creates a new menu.
+   *
+   * Construct a menu with given \p orientation. The menu is not
+   * associated with a contents stack, and thus you will want to react
+   * to the itemSelected() signal to react to menu changes.
+   */
+  WMenu(Orientation orientation, WContainerWidget *parent = 0);
+
+  /*! \brief Creates a new menu.
+   *
+   * Construct a menu to manage the widgets in \p contentsStack,
+   * and sets the menu \p orientation.
+   *
+   * Each menu item will manage a single widget in the
+   * \p contentsStack, making it the current widget when the menu
+   * item is activated.
+   */
+  WMenu(WStackedWidget *contentsStack, Orientation orientation,
+	WContainerWidget *parent = 0);
+
+  /*! \brief Destructor.
+   */
+  ~WMenu();
+
+  /*! \brief Adds an item.
+   *
+   * Adds a menu item with given \p contents, which is added to the
+   * menu's associated contents stack.
+   *
+   * \p contents may be \c 0 for two reasons:
+   * - if the menu is not associated with a contents stack, then you cannot
+   *   associate a menu item with a contents widget
+   * - or, you may have one or more items which which are not associated with
+   *   a contents widget in the contents stack.
+   *
+   * Returns the corresponding WMenuItem.
+   *
+   * \sa addItem(WMenuItem *)
+   */
+  WMenuItem *addItem(const WString& name, WWidget *contents,
+		     WMenuItem::LoadPolicy policy = WMenuItem::LazyLoading);
+
+  /*! \brief Adds an item.
+   *
+   * Adds a menu item. Use this form to add specialized WMenuItem
+   * implementations.
+   *
+   * \sa addItem(const WString&, WWidget *, WMenuItem::LoadPolicy)
+   */
+  WMenuItem *addItem(WMenuItem *item);
+
+  /*! \brief Removes an item.
+   *
+   * Removes the given item. The item and its contents is not deleted.
+   *
+   * \sa addItem()
+   */
+  void removeItem(WMenuItem *item);
+
+  /*! \brief Selects an item.
+   *
+   * Select the menu item \p item.
+   *
+   * \sa select(int), currentItem(), WMenuItem::select()
+   */
+  void select(WMenuItem *item);
+
+  /*! \brief Selects an item.
+   *
+   * Menu items in a menu with \p N items are numbered from 0 to
+   * \p N - 1.
+   *
+   * \sa select(WMenuItem *), currentIndex()
+   */
+  void select(int index);
+
+  /*! \brief %Signal which indicates that a new item was selected.
+   *
+   * This signal is emitted when an item was selected. It is emitted
+   * both when the user activated an item, or when select() was
+   * invoked.
+   *
+   * \sa itemSelectRendered()
+   */
+  Signal<WMenuItem *>& itemSelected() { return itemSelected_; }
+
+  /*! \brief %Signal which indicates that a new selected item is rendered.
+   *
+   * This signal is similar to \link WMenu::itemSelected
+   * itemSelected\endlink, but is emitted from within a stateless
+   * slot. Therefore, any slot connected to this signal will be
+   * optimized to client-side JavaScript, and must support the
+   * contract of a stateless slot (i.e., be idempotent).
+   *
+   * If you are unsure what is the difference with the \link
+   * WMenu::itemSelected itemSelected\endlink signal, you'll probably
+   * need the latter instead.
+   *
+   * \sa itemSelected()
+   */
+  Signal<WMenuItem *>& itemSelectRendered() { return itemSelectRendered_; }
+
+  /*! \brief Closes an item.
+   *
+   * Close the menu item \p item. Only \link WMenuItem::setCloseable(bool)
+   * closeable\endlink items can be closed.
+   *
+   * \sa close(int), WMenuItem::close()
+   */
+  void close(WMenuItem *item);
+
+  /*! \brief Closes an item.
+   *
+   * Menu items in a menu with \p N items are numbered from 0 to
+   * \p N - 1.
+   *
+   * \sa close(WMenuItem *)
+   */
+  void close(int index);
+
+  /*! \brief Returns the items.
+   *
+   * Returns the list of menu items in this menu.
+   */
+  const std::vector<WMenuItem *>& items() const { return items_; }
+
+  /*! \brief %Signal which indicates that an item was closed.
+   *
+   * This signal is emitted when an item was closed. It is emitted
+   * both when the user closes an item, or when close() was
+   * invoked.
+   */
+  Signal<WMenuItem *>& itemClosed() { return itemClosed_; }
+
+  /*! \brief Hides an item.
+   *
+   * Hides the menu item \p item. By default, all menu items are
+   * visible.
+   *
+   * If the item was currently selected, then the next item to be selected
+   * is determined by nextAfterHide().
+   *
+   * \sa setItemHidden(int, bool), WMenuItem::hide()
+   */
+  void setItemHidden(WMenuItem *item, bool hidden);
+
+  /*! \brief Hides an item.
+   *
+   * Menu items in a menu with \p N items are numbered from 0 to \p N - 1.
+   *
+   * \sa setItemHidden(WMenuItem *, bool)
+   */
+  void setItemHidden(int index, bool hidden);
+
+  /*! \brief Returns whether the item widget of the given item is hidden.
+   *
+   * \sa setItemHidden()
+   */
+  bool isItemHidden(WMenuItem *item) const;
+
+  /*! \brief Returns whether the item widget of the given index is hidden.
+   *
+   * Menu items in a menu with \p N items are numbered from 0 to \p N - 1.
+   *
+   * \sa setItemHidden()
+   */
+  bool isItemHidden(int index) const;
+
+  /*! \brief Disables an item.
+   *
+   * Disables the menu item \p item. Only an item that is enabled can
+   * be selected. By default, all menu items are enabled.
+   *
+   * \sa setItemDisabled(int, bool), WMenuItem::setDisabled()
+   */
+  void setItemDisabled(WMenuItem *item, bool disabled);
+
+  /*! \brief Disables an item.
+   *
+   * Menu items in a menu with \p N items are numbered from 0 to
+   * \p N - 1.
+   *
+   * \sa setItemDisabled(WMenuItem *, bool)
+   */
+  void setItemDisabled(int index, bool disabled);
+
+  /*! \brief Returns whether the item widget of the given item is disabled.
+   *
+   * \sa setItemDisabled()
+   */
+  bool isItemDisabled(WMenuItem *item) const;
+
+  /*! \brief Returns whether the item widget of the given index is disabled.
+   *
+   * Menu items in a menu with \p N items are numbered from 0 to
+   * \p N - 1.
+   *
+   * \sa setItemDisabled()
+   */
+  bool isItemDisabled(int index) const;
+
+  /*! \brief Returns the currently selected item.
+   *
+   * \sa currentIndex(), select(WMenuItem *)
+   */
+  WMenuItem *currentItem() const;
+
+  /*! \brief Returns the index of the currently selected item.
+   *
+   * \sa currentItem(), select(int)
+   */
+  int currentIndex() const { return current_; }
+
+  /*! \brief Returns the orientation.
+   *
+   * The orientation is set at time of construction.
+   */
+  Orientation orientation() const { return orientation_; }
+
+  /*! \brief Renders using an HTML list.
+   *
+   * By default, the the menu is rendered using an HTML
+   * <tt>&lt;table&gt;</tt> element for layout. Setting this option
+   * enables rendering using <tt>&lt;ul&gt;</tt> and
+   * <tt>&lt;il&gt;</tt> elements, as is commonly done for CSS-based
+   * designs.
+   *
+   * \note You cannot use this method after items have been added to
+   * the menu.
+   */
+  void setRenderAsList(bool enable);
+
+  /*! \brief Returns whether the menu is rendered as an HTML list.
+   *
+   * \sa setRenderAsList(bool)
+   */
+  bool renderAsList() const { return renderAsList_; }
+
+  /*! \brief Enables internal paths for items.
+   *
+   * The menu participates in the internal path by changing the
+   * internal path when an item has been selected, and listening for
+   * path changes to react to path selections. As a consequence this
+   * allows the user to bookmark the current menu selection and
+   * revisit it later, use back/forward buttons to navigate through
+   * history of visited menu items, and allows indexing of pages.
+   *
+   * For each menu item, WMenuItem::pathComponent() is appended to the
+   * internal base path (internalBasePath()), which defaults to the
+   * internal path (WApplication::internalPath()) but may be changed
+   * using setInternalBasePath(), with a '/' appended to turn it into
+   * a folder, if needed.
+   *
+   * By default, menu interaction does not change the application
+   * internal path.
+   *
+   * \sa WMenuItem::setPathComponent().
+   */
+  void setInternalPathEnabled(const std::string& basePath = "");
+
+  /*! \brief Returns whether the menu generates internal paths entries.
+   *
+   * \sa setInternalPathEnabled()
+   */
+  bool internalPathEnabled() const { return internalPathEnabled_; }
+
+  /*! \brief Sets the internal base path.
+   *
+   * A '/' is appended to turn it into a folder, if needed.
+   *
+   * \sa setInternalPathEnabled(), internalBasePath()
+   */
+  void setInternalBasePath(const std::string& basePath);
+
+  /*! \brief Returns the internal base path.
+   *
+   * The default value is the application's internalPath
+   * (WApplication::internalPath()) that was recorded when
+   * setInternalPathEnabled() was called, and together with each
+   * WMenuItem::pathComponent() determines the paths for each item.
+   *
+   * For example, if internalBasePath() is <tt>"/examples/"</tt> and
+   * pathComponent() for a particular item is <tt>"charts/"</tt>, then
+   * the internal path for that item will be
+   * <tt>"/examples/charts/"</tt>.
+   *
+   * \sa setInternalPathEnabled()
+   */
+  const std::string& internalBasePath() const { return basePath_; }
+
+  /*! \brief Returns the contents stack associated with the menu.
+   */
+  WStackedWidget *contentsStack() const { return contentsStack_; }
+
+protected:
+  virtual void enableAjax();
+
+  /*! \brief Handling of internal path changes.
+   *
+   * This methods makes the menu react to internal path changes (and also
+   * the initial internal path).
+   *
+   * You may want to reimplement this if you want to customize the internal
+   * path handling.
+   */
+  virtual void internalPathChanged(const std::string& path);
+
+  /*! \brief Returns the index of the item to be selected after hides.
+   *
+   * Returns the index of the item to be selected after the item with given
+   * index will be hidden.
+   *
+   * By default, if the given index is an index of currently selected item,
+   * returns an index of the first visible item to the right of it. If it is not
+   * found, returns the index of the first visible item to the left of it. If
+   * there are no visible items around the currently selected item, returns the
+   * index of currently selected item.
+   *
+   * You may want to reimplement this if you want to customize the algorithm
+   * of determining the index of the item to be selected after hiding the item
+   * with given index.
+   */
+  virtual int nextAfterHide(int index);
+
+private:
+  WWidget          *impl_;
+  WStackedWidget   *contentsStack_;
+  Orientation       orientation_;
+  bool              renderAsList_;
+  bool              internalPathEnabled_;
+  bool              emitPathChange_;
+  std::string       basePath_, previousInternalPath_;
+
+  Signal<WMenuItem *> itemSelected_, itemSelectRendered_;
+  Signal<WMenuItem *> itemClosed_;
+
+  std::vector<WMenuItem *> items_;
+
+  void select(int index, bool changePath);
+
+  int current_;
+  int previousCurrent_;
+  int previousStackIndex_;
+
+  int indexOf(WMenuItem *item) const;
+
+  void selectVisual(WMenuItem *item);
+  void selectVisual(int item, bool changePath);
+  void undoSelectVisual();
+  friend class WMenuItem;
+  friend class WSubMenuItem;
+
+  void recreateItem(int index);
+  void recreateItem(WMenuItem *item);
+  void doSetHiddenItem(int index, bool hidden);
+  void doSetHiddenItem(WMenuItem *item, bool hidden);
+  void updateItems();
+};
+
+}
+
+#endif // WMENU_H_

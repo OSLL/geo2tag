@@ -30,14 +30,17 @@ build-stamp:
 	cp -r ./src $(BUILDDIR)
 	cp -r ./data $(BUILDDIR)
 	cp -r ./debian/config.pri $(BUILDDIR)
+	mkdir $(BUILDDIR)wt/build ; \
 #Check what architecture we are use. If it is i386, we need to build all for i386, else build all armel code
 	if [ "$(DEB_BUILD_ARCH)" = "i386" ] ; then \
-	echo "i386 architecture selection"; \
-	sed -i 's/CONFIG += maemo5/CONFIG += linux/g' debian/config.pri; \
+		echo "i386 architecture selection"; \
+		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../; \
+		$(MAKE) ; \
+		cd ../../../../; \
+	else \
+	cd $(BUILDDIR) && qmake; \
+	$(MAKE) -C $(BUILDDIR); \
 	fi;
-	cd $(BUILDDIR) && qmake
-	$(MAKE) -C $(BUILDDIR)
-	
 	touch build-stamp
 
 clean:
@@ -52,16 +55,18 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	# if we are no on armel arch we needn`t install wikigps and tracker files
+#installing tracker and observer
 	if [ "$(DEB_BUILD_ARCH)" = "armel" ] ; then \
-	echo "armel arch instalation"; \
-	$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
-	install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
-	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
-	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
-	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
-	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; \
-	cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop; \
+		echo "armel arch instalation"; \
+		$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
+		install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
+		install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
+		cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
+		cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
+		cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; \
+		cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop; \
+	else \
+		$(MAKE) -C $(BUILDDIR)wt/build install; \
 	fi;
 	dh_install -s
 	

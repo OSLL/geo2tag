@@ -1,0 +1,380 @@
+// This may look like C code, but it's really -*- C++ -*-
+/*
+ * Copyright (C) 2008 Emweb bvba, Kessel-Lo, Belgium.
+ *
+ * See the LICENSE file for terms of use.
+ */
+#ifndef WMENU_ITEM_H_
+#define WMENU_ITEM_H_
+
+#include <Wt/WObject>
+#include <Wt/WString>
+
+namespace Wt {
+
+class SignalBase;
+class WContainerWidget;
+class WMenu;
+class WWidget;
+
+/*! \brief A single item in a menu.
+ *
+ * The item determines the look and behaviour of a single item in a
+ * WMenu.
+ *
+ * By default, for enabled menu items a WMenuItem uses a WAnchor widget. For
+ * disabled menu items it uses a WText widget. If item is closeable, WMenuItem
+ * puts these widgets and extra WText widget (for a close icon) in
+ * a WContainerWidget.
+ * When the menu participates in application internal paths
+ * (see WMenu::setInternalPathEnabled()), the anchor references the
+ * bookmark URL corresponding to the pathComponent() for the item (see
+ * WApplication::bookmarkUrl()).
+ *
+ * To provide another look for the menu items (such as perhaps adding
+ * an icon), you can specialize this class, and reimplement the
+ * virtual methods:
+ *
+ * - createItemWidget(): to provide another widget to represent the
+ *   item.
+ * - updateItemWidget(): to update the widget to reflect item changes,
+ *   triggered by for example setText() and setPathComponent().
+ * - optionally, activateSignal(): to bind the event for activating
+ *   the item to something else than the clicked event.
+ * - optionally, closeSignal(): to bind the event for closing
+ *   the item to something else than the clicked event.
+ * - optionally, renderSelected(bool): if you need to do additional
+ *   styling to reflect a selection, other than changing style classes.
+ * - optionally, renderHidden(bool): if you need to do additionanl
+ *   styling to reflect a hide, other than hiding (see
+ *   WWebWidget::setHidden(bool)).
+ *
+ * To provide another look for the close icon you can override
+ * <tt>Wt-closeicon</tt> CSS class (see WMenu for more details).
+ * 
+ * \sa WMenu
+ * \sa WMenu::addItem(WMenuItem *)
+ */
+class WT_API WMenuItem : public WObject
+{
+public:
+  /*! \brief Enumeration that determines when contents should be loaded.
+   */
+  enum LoadPolicy {
+    LazyLoading, //!< Lazy loading: on first use
+    PreLoading   //!< Pre-loading: before first use
+  };
+
+  /*! \brief Creates a new item.
+   *
+   * The text specifies the item text. The contents is the widget that must
+   * be shown in the WMenu contents stack when the item is selected.
+   *
+   * The load policy specifies whether the contents widgets is transmitted
+   * only when it the item is activated for the first time (LazyLoading)
+   * or transmitted prior to first rendering.
+   *
+   * The pathComponent() is derived from \p text, and can be
+   * customized using setPathComponent().
+   *
+   * \p contents may be 0, in which case no contents is associated with
+   * the item in the contents stack.
+   */
+  WMenuItem(const WString& text, WWidget *contents,
+	    LoadPolicy policy = LazyLoading);
+
+  /* !\brief Destructor.
+   *
+   * Removes the item from the menu (if it was added previously to one), and
+   * also deletes the contents that was associated with the item.
+   *
+   * \sa WMenu::removeItem()
+   */
+  ~WMenuItem();
+
+  /*! \brief Sets the text for this item.
+   *
+   * Unless a custom path component was defined, the pathComponent()
+   * is also updated based on the new text.
+   *
+   * The item widget is updated using updateItemWidget().
+   *
+   * \sa setPathComponent();
+   */
+  void setText(const WString& text);
+
+  /*! \brief Returns the text for this item.
+   *
+   * \sa setText();
+   */
+  const WString& text() const { return text_; }
+
+  /*! \brief Sets the path component for this item.
+   *
+   * The path component is used by the menu item in the application
+   * internal path (see WApplication::setInternalPath()), when
+   * internal paths are enabled (see WMenu::setInternalPathEnabled())
+   * for the menu.
+   *
+   * You may specify an empty \p path to let a menu item be the
+   * "default" menu option.
+   *
+   * For example, if WMenu::internalBasePath() is
+   * <tt>"/examples/"</tt> and pathComponent() for is
+   * <tt>"charts/"</tt>, then the internal path for the item will be
+   * <tt>"/examples/charts/"</tt>.
+   *
+   * By default, the path is automatically derived from text(). If a
+   * \link WString::literal() literal text\endlink is used, the path
+   * is based on the text itself, otherwise on the \link
+   * WString::key() key\endlink. It is converted to lower case, and
+   * replacing white space and special characters with '_'.
+   *
+   * \sa setText(), WMenu::setInternalPathEnabled()
+   */
+  void setPathComponent(const std::string& path);
+
+  /*! \brief Returns the path component for this item.
+   *
+   * You may want to reimplement this to customize the path component
+   * set by the item in the application internal path.
+   *
+   * \sa setPathComponent()
+   */
+  virtual std::string pathComponent() const;
+
+  /*! \brief Make it possible to close this item interactively or by close().
+   *
+   * \sa close(), isCloseable()
+   */
+  void setCloseable(bool closeable);
+
+  /*! \brief Returns whether the item is closeable.
+   *
+   * \sa setCloseable()
+   */
+  bool isCloseable() const { return closeable_; }
+
+  /*! \brief Closes this item.
+   *
+   * Hides the item widget and emits WMenu::itemClosed() signal. Only closeable
+   * items can be closed.
+   *
+   * \sa setCloseable(), hide()
+   */
+  void close();
+
+  /*! \brief Sets whether the item widget is hidden.
+   *
+   * Hides or show the item widget.
+   * 
+   * \sa hide(), show(), isHidden()
+   */
+  void setHidden(bool hidden);
+
+  /*! \brief Returns whether the item widget is hidden.
+   *
+   * \sa setHidden()
+   */
+  bool isHidden() const { return hidden_; }
+
+  /*! \brief Hides the item widget.
+   *
+   * This calls \link setHidden() setHidden(true)\endlink.
+   *
+   * \sa show()
+   */
+  void hide();
+
+  /*! \brief Shows the item widget.
+   *
+   * If the item was previously closed it will be shown.
+   * 
+   * This calls \link setHidden() setHidden(false)\endlink.
+   *
+   * \sa hide(), select()
+   */
+  void show();
+
+  /*! \brief Enables or disables an item.
+   *
+   * A disabled item cannot be activated.
+   *
+   * \sa enable(), disable(), isEnabled()
+   */
+  void setDisabled(bool disabled);
+
+  /*! \brief Returns whether an item is enabled.
+   *
+   * \sa setDisabled()
+   */
+  bool isDisabled() const { return disabled_ ; }
+
+  /*! \brief Enables the item.
+   *
+   * This calls \link setDisabled() setDisabled(false)\endlink.
+   *
+   * \sa disable()
+   */
+  void enable();
+
+  /*! \brief Disables the item.
+   *
+   * This calls \link setDisabled() setDisabled(true)\endlink.
+   *
+   * \sa enable()
+   */
+  void disable();
+
+  /*! \brief Sets a tooltip.
+   *
+   * The tooltip is displayed when the cursor hovers over the label of the item,
+   * i.e. WAnchor or WText, depending on whether the item is enabled or not
+   * (see createItemWidget()).
+   *
+   * \sa toolTip()
+   */
+  void setToolTip(const WString& tip);
+
+  /*! \brief Returns the tooltip.
+   */
+  const WString& toolTip() const { return tip_; }
+
+  /*! \brief Returns the menu.
+   */
+  WMenu *menu() const { return menu_; }
+
+  /*! \brief Returns the contents widget for this item.
+   *
+   * The contents widget is the widget in the WStackedWidget associated with
+   * this item.
+   */
+  WWidget *contents() const;
+  WWidget *takeContents();
+
+  /*! \brief Returns the widget that represents the item.
+   *
+   * This returns the item widget, creating it using
+   * createItemWidget() if necessary.
+   */
+  WWidget *itemWidget();
+
+  /*! \brief Selects this item.
+   *
+   * If the item was previously closed it will be shown.
+   *
+   * \sa close()
+   */
+  void select();
+
+protected:
+  /*! \brief Creates the widget that represents the item.
+   *
+   * The default implementation will return:
+   * - a WAnchor if item is not closeable and enabled;
+   * - a WText if item is not closeable and disabled;
+   * - a WContainerWidget with WAnchor or WText (the label of enabled
+   * or disabled item accordingly) and WText (the close icon) inside if
+   * item is closeable.
+   * 
+   * A call to createItemWidget() is immediately followed by
+   * updateItemWidget().
+   *
+   * If you reimplement this method, you should probably also
+   * reimplement updateItemWidget().
+   */
+  virtual WWidget *createItemWidget();
+
+  /*! \brief Updates the widget that represents the item.
+   *
+   * The default implementation will cast the \p itemWidget to a
+   * WAnchor, and set the anchor's text and destination according to
+   * text() and pathComponent().
+   *
+   * \sa createItemWidget()
+   */
+  virtual void updateItemWidget(WWidget *itemWidget);
+
+  /*! \brief Renders the item as selected or unselected.
+   *
+   * The default implementation sets the styleclass for itemWidget()
+   * to 'item' for an unselected not closeable, 'itemselected' for
+   * selected not closeable, 'citem' for an unselected closeable and
+   * 'citemselected' for selected closeable item.
+   *
+   * Note that this method is called from within a stateless slot
+   * implementation, and thus should be stateless as well.
+   */
+  virtual void renderSelected(bool selected);
+
+  /*! \brief Renders the item as hidden or closed.
+   *
+   * The default implementation hides the item widget (including all its
+   * descendant widgets).
+   */
+  virtual void renderHidden(bool hidden);
+
+  /*! \brief Returns the signal used to activate the item.
+   *
+   * The default implementation will tries to cast the itemWidget() or
+   * its first child if item is \link WMenuItem::setCloseable closeable\endlink
+   * to a WInteractWidget and returns the \link WInteractWidget::clicked
+   * clicked signal\endlink.
+   */
+  virtual SignalBase& activateSignal();
+
+  /*! \brief Returns the signal used to close the item.
+   *
+   * The default implementation will tries to cast the itemWidget() (or
+   * its second child if item is \link WMenuItem::setCloseable closeable\endlink)
+   * to a WInteractWidget and returns the \link WInteractWidget::clicked
+   * clicked signal\endlink.
+   */
+  virtual SignalBase& closeSignal();
+
+  virtual void setFromInternalPath(const std::string& path);
+
+  /*! \brief Progresses to an Ajax-enabled widget.
+   *
+   * This method is called when the progressive bootstrap method is
+   * used, and support for AJAX has been detected. The default
+   * behavior will upgrade the menu and the contents event handling to use AJAX
+   * instead of full page reloads.
+   *
+   * You may want to reimplement this method if you want to make
+   * changes to widget when AJAX is enabled.
+   *
+   * \sa WMenu::enableAjax()
+   */
+  virtual void enableAjax();
+
+private:
+  WWidget          *itemWidget_;
+  WContainerWidget *contentsContainer_;
+  WWidget          *contents_;
+  WMenu            *menu_;
+  WString           text_;
+  WString           tip_;
+  std::string       pathComponent_;
+  bool              customPathComponent_;
+  bool              closeable_;
+  bool              disabled_;
+  bool              hidden_;
+
+  bool contentsLoaded() const;
+  void loadContents();
+  void setMenu(WMenu *menu);
+  void selectNotLoaded();
+  void selectVisual();
+  void undoSelectVisual();
+  void connectActivate();
+  void connectClose();
+  void connectSignals();
+  WWidget *recreateItemWidget();
+
+  friend class WMenu;
+};
+
+}
+
+#endif // WMENU_ITEM_H_
