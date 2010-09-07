@@ -37,9 +37,8 @@ build-stamp:
 		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../; \
 		$(MAKE) ; \
 		cd ../../../../; \
-		# webside building
 		cd $(BUILDDIR) && qmake "CONFIG += webside"; \
-		&(MAKE) -C $(BUILDDIR); \
+		$(MAKE) -C $(BUILDDIR); \
 	else \
 	cd $(BUILDDIR) && qmake "CONFIG += maemo"; \
 	$(MAKE) -C $(BUILDDIR); \
