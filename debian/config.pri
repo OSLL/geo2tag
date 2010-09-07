@@ -1,6 +1,6 @@
 CONFIG += release
 
-CONFIG += maemo5
+#CONFIG += maemo5
 
 SOURCE_DIR = $$PWD
 

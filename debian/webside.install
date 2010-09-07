@@ -1,0 +1,3 @@
+debian/tmp/usr/geo2tag/*
+debian/tmp/etc/lighttpd/conf-enabled/*
+debian/tmp/var/www/*

@@ -23,3 +23,8 @@ Depends: ${shlibs:Depends}, libboost1.40-dev, gcc, zlib1g-dev, zlib1g, libgd2-xp
 Description: Wt (pronounced 'witty') 
  is a C++ library and application server for developing and deploying web applications.
  The API is widget-centric and offers complete abstraction of any web-specific application details.
+
+Package: webside
+Architecture: i386
+Depends: ${shlibs:Depends}, debhelper (>= 5), libqt4-dev (>=4)
+Description: Geo2tag website

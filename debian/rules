@@ -37,8 +37,11 @@ build-stamp:
 		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../; \
 		$(MAKE) ; \
 		cd ../../../../; \
+		# webside building
+		cd $(BUILDDIR) && qmake "CONFIG += webside"; \
+		&(MAKE) -C $(BUILDDIR); \
 	else \
-	cd $(BUILDDIR) && qmake; \
+	cd $(BUILDDIR) && qmake "CONFIG += maemo"; \
 	$(MAKE) -C $(BUILDDIR); \
 	fi;
 	touch build-stamp
@@ -67,6 +70,16 @@ install: build
 		cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop; \
 	else \
 		$(MAKE) -C $(BUILDDIR)wt/build install; \
+		\
+		$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
+		install -d $(CURDIR)/debian/tmp/opt/geo2tag; \
+		install -d $(CURDIR)/debian/tmp/var/www; \
+		install -d $(CURDUR)/debian/tmp/etc/lighttpd/conf-enabled; \
+		cp -r $(BUILDDOR)src/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
+		cp $(BUILDDOR)src/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp -l $(BUILDDOR)src/lib/libcommon* $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp  $(BUILDDOR)src/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp $(BUILDDOR)src/webside/webside.cong $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 	fi;
 	dh_install -s
 	
