@@ -1,3 +1,4 @@
-debian/tmp/usr/geo2tag/*
-debian/tmp/etc/lighttpd/conf-enabled/*
+debian/tmp/opt/geo2tag/sketch.wt
+debian/tmp/opt/geo2tag/libcommon*
+debian/tmp/etc/lighttpd/conf-enabled/webside.conf
 debian/tmp/var/www/*
