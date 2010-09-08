@@ -36,9 +36,10 @@ build-stamp:
 		echo "i386 architecture selection"; \
 		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../; \
 		$(MAKE) ; \
-		cd ../../../../; \
+		cd ../../; \
 		cd $(BUILDDIR) && qmake "CONFIG += webside"; \
 		$(MAKE) -C $(BUILDDIR); \
+		cd ../../; \
 	else \
 	cd $(BUILDDIR) && qmake "CONFIG += maemo"; \
 	$(MAKE) -C $(BUILDDIR); \
@@ -73,12 +74,12 @@ install: build
 		$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
 		install -d $(CURDIR)/debian/tmp/opt/geo2tag; \
 		install -d $(CURDIR)/debian/tmp/var/www; \
-		install -d $(CURDUR)/debian/tmp/etc/lighttpd/conf-enabled; \
+		install -d $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp -r $(BUILDDOR)src/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
 		cp $(BUILDDOR)src/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp -l $(BUILDDOR)src/lib/libcommon* $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp  $(BUILDDOR)src/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp $(BUILDDOR)src/webside/webside.cong $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+		cp $(BUILDDOR)src/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 	fi;
 	dh_install -s
 	
