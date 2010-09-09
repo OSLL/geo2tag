@@ -1,11 +1,11 @@
-Source: wikigps
+Source: wikigps-client
 Architecture: armel
 Section: web
 Priority: optional
 Maintainer: Pavel Zubarev <zps@osll.spb.ru>
 Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6), libqjson-dev (>=0.7), libqtm-dev (>=1.0)
 
-Package: wikigps
+Package: wikigps-client
 Architecture: armel
 Depends: ${shlibs:Depends}
 Description: WikiGPS service client
@@ -24,7 +24,12 @@ Description: Wt (pronounced 'witty')
  is a C++ library and application server for developing and deploying web applications.
  The API is widget-centric and offers complete abstraction of any web-specific application details.
 
-Package: webside
+Package: wikigps-webside
 Architecture: i386
 Depends: ${shlibs:Depends}, debhelper (>= 5), libqt4-dev (>=4)
 Description: Geo2tag website
+
+Package: wikigps-service
+Architecture: i386
+Depends: ${shlibs:Depends}, lighttpd, postgresql, libqt4-dev (>=4), libodbc
+Description: Geo2tag webservice

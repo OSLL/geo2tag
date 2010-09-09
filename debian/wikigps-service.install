@@ -1,0 +1,4 @@
+debian/tmp/opt/geo2tag/libcommon*
+debian/tmp/opt/geo2tag/libfcgiio*
+debian/tmp/opt/geo2tag/libjson*
+debian/tmp/opt/geo2tag/fcgi_server

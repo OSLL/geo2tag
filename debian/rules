@@ -30,18 +30,17 @@ build-stamp:
 	cp -r ./src $(BUILDDIR)
 	cp -r ./data $(BUILDDIR)
 	cp -r ./debian/config.pri $(BUILDDIR)
-	mkdir $(BUILDDIR)wt/build ; \
+	mkdir $(BUILDDIR)wt/build ; 
 #Check what architecture we are use. If it is i386, we need to build all for i386, else build all armel code
 	if [ "$(DEB_BUILD_ARCH)" = "i386" ] ; then \
 		echo "i386 architecture selection"; \
-		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../; \
-		$(MAKE) ; \
+		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../ && $(MAKE); \
 		cd ../../; \
-		cd $(BUILDDIR) && qmake "CONFIG += webside"; \
+		cd $(BUILDDIR) && qmake "CONFIG += webside linux" -after geo2tag.pro; \
 		$(MAKE) -C $(BUILDDIR); \
 		cd ../../; \
 	else \
-	cd $(BUILDDIR) && qmake "CONFIG += maemo"; \
+	cd $(BUILDDIR) && qmake "CONFIG += maemo" -after geo2tag.pro; \
 	$(MAKE) -C $(BUILDDIR); \
 	fi;
 	touch build-stamp
@@ -80,6 +79,9 @@ install: build
 		cp -l $(BUILDDOR)src/lib/libcommon* $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp  $(BUILDDOR)src/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp $(BUILDDOR)src/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+		cp -l $(BUILDDOR)src/lib/libfcgiio* $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp -l $(BUILDDOR)src/lib/libjson* $(CURDIR)/debian/tmp/opt/geo2tag; \
+                cp  $(BUILDDOR)src/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
 	fi;
 	dh_install -s
 	
