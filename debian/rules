@@ -42,8 +42,8 @@ build-stamp:
 		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../ && $(MAKE); \
 		cd ../../; \
 	else \
-	cd $(BUILDDIR) && qmake "CONFIG += maemo" -after geo2tag.pro; \
-	$(MAKE) -C $(BUILDDIR); \
+	cd $(BUILDDIR) && qmake "CONFIG += maemo" -after *.pro; \
+	$(MAKE) ; \
 	fi;
 	touch build-stamp
 
@@ -85,7 +85,7 @@ install: build
 		cp -l $(BUILDDOR)src/lib/libjson* $(CURDIR)/debian/tmp/usr/lib; \
                 cp $(BUILDDOR)src/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
 	fi;
-	cp -l $(BUILDDOR)src/lib/libmaps* $(CURDIR)/debian/tmp/usr/lib;
+#	cp -l $(BUILDDOR)src/lib/libmaps* $(CURDIR)/debian/tmp/usr/lib;
 	dh_install -s
 	
 
