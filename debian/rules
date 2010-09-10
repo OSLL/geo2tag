@@ -39,7 +39,7 @@ build-stamp:
 		qmake "CONFIG +=webside" -after *.pro && $(MAKE); \
 		cd ../../; \
 		echo "i386 architecture selection"; \
-		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../ && $(MAKE); \
+		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../ -DCONNECTOR_FCGI=ON && $(MAKE); \
 		cd ../../; \
 	else \
 	cd $(BUILDDIR) && qmake "CONFIG += maemo" -after *.pro; \
@@ -84,6 +84,9 @@ install: build
 		cp -l $(BUILDDOR)src/lib/libfcgiio* $(CURDIR)/debian/tmp/usr/lib; \
 		cp -l $(BUILDDOR)src/lib/libjson* $(CURDIR)/debian/tmp/usr/lib; \
                 cp $(BUILDDOR)src/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
+                cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
+                cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
+                cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
 	fi;
 #	cp -l $(BUILDDOR)src/lib/libmaps* $(CURDIR)/debian/tmp/usr/lib;
 	dh_install -s
