@@ -23,7 +23,7 @@ Description: WikiGPS tracker
 
 Package: libwt3.1.5
 Architecture: i386 
-Depends: ${shlibs:Depends}, libboost1.40-dev, gcc, zlib1g-dev, zlib1g, libgd2-xpm, libgd2-xpm-dev, cmake
+Depends: ${shlibs:Depends}, libboost1.40-dev, libboost-date-time-dev, libboost-date-time1.40.0, libboost-program-options-dev, libboost-program-options1.40.0, libboost-regex-dev, libboost-regex1.40.0, libboost-signals-dev, libboost-signals1.40.0, libboost-thread-dev, libboost-thread1.40.0, libboost-filesystem-dev, libboost-filesystem1.40.0, libboost-test-dev, libboost-test1.40.0, gcc, g++, zlib1g-dev, zlib1g, libgd2-xpm, libgd2-xpm-dev, cmake, libssl-dev
 Description: Wt (pronounced 'witty') 
  is a C++ library and application server for developing and deploying web applications.
  The API is widget-centric and offers complete abstraction of any web-specific application details.
@@ -35,5 +35,5 @@ Description: Geo2tag website
 
 Package: wikigps-service
 Architecture: i386
-Depends: ${shlibs:Depends}, lighttpd, postgresql, libqt4-dev (>=4), wikigps-libs
+Depends: ${shlibs:Depends}, lighttpd, postgresql, unixodbc, unixodbc-dev, odbc-postgresql, libqt4-dev (>=4), wikigps-libs
 Description: Geo2tag webservice
