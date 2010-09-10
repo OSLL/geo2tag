@@ -1,5 +1,4 @@
 debian/tmp/usr/bin/wikigps
-debian/tmp/usr/lib/lib*.so.*
 debian/tmp/usr/share/applications/hildon/wikigps.desktop
 debian/tmp/usr/share/icons/hicolor/48x48/apps/wikigps.png
 

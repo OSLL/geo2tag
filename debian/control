@@ -1,13 +1,17 @@
-Source: wikigps-client
-Architecture: armel
+Source: wikigps
 Section: web
 Priority: optional
 Maintainer: Pavel Zubarev <zps@osll.spb.ru>
-Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6), libqjson-dev (>=0.7), libqtm-dev (>=1.0)
+Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6)
+
+Package: wikigps-libs
+Architecture: any
+Depends: ${shlibs:Depends}, libqt4-dev (>=4), libodbc, libxml
+Description: Geo2tag libs
 
 Package: wikigps-client
 Architecture: armel
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, wikigps-libs, libqjson-dev (>=0.7), libqtm-dev (>=1.0)
 Description: WikiGPS service client
  Very long description will be here
 
@@ -26,10 +30,10 @@ Description: Wt (pronounced 'witty')
 
 Package: wikigps-webside
 Architecture: i386
-Depends: ${shlibs:Depends}, debhelper (>= 5), libqt4-dev (>=4)
+Depends: ${shlibs:Depends}, wikigps-service, libqt4-dev (>=4)
 Description: Geo2tag website
 
 Package: wikigps-service
 Architecture: i386
-Depends: ${shlibs:Depends}, lighttpd, postgresql, libqt4-dev (>=4), libodbc
+Depends: ${shlibs:Depends}, lighttpd, postgresql, libqt4-dev (>=4), wikigps-libs
 Description: Geo2tag webservice
