@@ -76,14 +76,14 @@ install: build
 		install -d $(CURDIR)/debian/tmp/opt/geo2tag; \
 		install -d $(CURDIR)/debian/tmp/var/www; \
 		install -d $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
-		cp -r $(BUILDDOR)src/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
-		cp $(BUILDDOR)src/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp $(BUILDDOR)src/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp $(BUILDDOR)src/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
-		cp $(BUILDDOR)src/service/wikigps-service.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
-		cp -l $(BUILDDOR)src/lib/libfcgiio* $(CURDIR)/debian/tmp/usr/lib; \
-		cp -l $(BUILDDOR)src/lib/libjson* $(CURDIR)/debian/tmp/usr/lib; \
-                cp $(BUILDDOR)src/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp -r $(BUILDDIR)/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
+		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp $(BUILDDIR)/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+		cp $(BUILDDIR)/service/wikigps-service.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+		cp -l $(BUILDDIR)/lib/libfcgiio* $(CURDIR)/debian/tmp/usr/lib; \
+		cp -l $(BUILDDIR)/lib/libjson* $(CURDIR)/debian/tmp/usr/lib; \
+                cp $(BUILDDIR)/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
