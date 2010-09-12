@@ -81,6 +81,7 @@ install: build
 		cp $(BUILDDIR)/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp $(BUILDDIR)/service/wikigps-service.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+		cp $(BUILDDIR)/service/pg_hba.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp -l $(BUILDDIR)/lib/libfcgiio* $(CURDIR)/debian/tmp/usr/lib; \
 		cp -l $(BUILDDIR)/lib/libjson* $(CURDIR)/debian/tmp/usr/lib; \
                 cp $(BUILDDIR)/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \

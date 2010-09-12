@@ -4,6 +4,7 @@
 sudo -u postgres createuser geo2tag
 sudo -u postgres createdb -O geo2tag geo2tag
 sudo -u postgres psql --command="GRANT ALL privileges on database geo2tag to geo2tag;"
+sudo cp /opt/geo2tag/pg_hba.conf `find /etc/postgresql -name pg_hba.conf`
 psql geo2tag -U geo2tag < /opt/geo2tag/base.sql
 cat /opt/geo2tag/odbc.ini >> /etc/odbc.ini
 cat /opt/geo2tag/odbcinst.ini >> /etc/odbcinst.ini
