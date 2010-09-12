@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6)
 
 Package: wikigps-libs
 Architecture: any
-Depends: ${shlibs:Depends}, libqt4-dev (>=4), libodbc, libxml
+Depends: ${shlibs:Depends}, libqt4-dev (>=4), unixodbc, unixodbc-dev, libxml2, libxml2-dev
 Description: Geo2tag libs
 
 Package: wikigps-client
@@ -23,7 +23,7 @@ Description: WikiGPS tracker
 
 Package: libwt3.1.5
 Architecture: i386 
-Depends: ${shlibs:Depends}, libboost1.40-dev, libboost-date-time-dev, libboost-date-time1.40.0, libboost-program-options-dev, libboost-program-options1.40.0, libboost-regex-dev, libboost-regex1.40.0, libboost-signals-dev, libboost-signals1.40.0, libboost-thread-dev, libboost-thread1.40.0, libboost-filesystem-dev, libboost-filesystem1.40.0, libboost-test-dev, libboost-test1.40.0, gcc, g++, zlib1g-dev, zlib1g, libgd2-xpm, libgd2-xpm-dev, cmake, libssl-dev
+Depends: ${shlibs:Depends}, libboost1.40-dev, libboost-date-time1.40.0, libboost-program-options1.40.0, libboost-regex1.40.0, libboost-signals1.40.0, libboost-thread1.40.0, libboost-filesystem1.40.0, libboost-test1.40.0, gcc, g++, zlib1g-dev, zlib1g, libgd2-xpm, libgd2-xpm-dev, cmake, libssl-dev
 Description: Wt (pronounced 'witty') 
  is a C++ library and application server for developing and deploying web applications.
  The API is widget-centric and offers complete abstraction of any web-specific application details.
