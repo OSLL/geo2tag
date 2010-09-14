@@ -139,7 +139,7 @@ void WOpenStreetMap::render(WFlags<RenderFlag> flags)
 //      """map.setCenter(new OpenLayers.LonLat(13.41, 52.52)"
 //      ""  ".transform("
 //      ""    "new OpenLayers.Projection(\"EPSG:4326\"),"
-//      ""    "new OpenLayers.Projection(\"EPSG:900913\")"
+//     ""    "new OpenLayers.Projection(\"EPSG:900913\")"
 //      ""  "), 15"
 //      """);"
 //
