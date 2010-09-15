@@ -9,3 +9,4 @@ sudo `find /etc/init.d/ -name "postgres*"` restart
 psql geo2tag -U geo2tag < /opt/geo2tag/base.sql
 cat /opt/geo2tag/odbc.ini >> /etc/odbc.ini
 cat /opt/geo2tag/odbcinst.ini >> /etc/odbcinst.ini
+lighty-enable-mod fastcgi
