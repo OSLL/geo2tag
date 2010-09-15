@@ -16,8 +16,6 @@ class ChannelsWidget : public WContainerWidget
     WText *channelsText;
     WTableView *channelsTable;
     ChannelsModel *channelsModel;
-    WPushButton *subscribeButton;
-    WPushButton *unsubscribeButton;
 
 //    CHandlePtr<common::Channels> m_subscribedChannels;
 //    CHandlePtr<common::Channels> m_availableChannels;
@@ -30,8 +28,6 @@ public:
     Wt::Signal<> channelsUpdated;
 
     /* slots */
-    void onSubscribeClicked();
-    void onUnsubscribeClicked();
     void onModelUpdated();
 
 };
