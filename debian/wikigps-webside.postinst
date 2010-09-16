@@ -1,0 +1,3 @@
+sudo mkdir -v -p /usr/wt/run
+sudo chown -R www-data:www-data /usr/wt
+sudo /etc/lighttpd/lighttpd restart
