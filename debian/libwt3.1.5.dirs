@@ -19,3 +19,5 @@
 /usr/local/include/Wt/Dbo/backend
 /usr/local/include/Wt/Http
 /usr/local/lib
+/etc
+/etc/wt

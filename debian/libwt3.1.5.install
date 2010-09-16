@@ -15,3 +15,5 @@ debian/tmp/usr/local/include/Wt/Dbo/*
 debian/tmp/usr/local/include/Wt/Dbo/backend/*
 debian/tmp/usr/local/include/Wt/Http/*
 debian/tmp/usr/local/lib/*
+debian/tmp/etc/*
+debian/tmp/etc/wt/*
