@@ -1,4 +1,4 @@
 #!/bin/bash
-sudo mkdir -v -p /usr/wt/run
-sudo chown -R www-data:www-data /usr/wt
+sudo mkdir -v -p /var/run/wt
+sudo chown -R www-data:www-data /var/run/wt
 sudo /etc/init.d/lighttpd restart
