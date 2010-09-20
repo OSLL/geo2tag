@@ -1,2 +1,4 @@
 #!/bin/sh
+mkdir /var/run/wt
+chown www-data:www-data /var/run/wt
 sudo ldconfig
