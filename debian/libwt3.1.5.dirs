@@ -1,3 +1,4 @@
+/usr/local/
 /usr/local/share
 /usr/local/share/Wt
 /usr/local/share/Wt/resources
@@ -8,8 +9,8 @@
 /usr/local/share/Wt/resources/themes/polished
 /usr/local/share/Wt/resources/themes/polished/no-stripes
 /usr/local/share/Wt/resources/themes/polished/stripes
-/usr/local/share/cmake-24
-/usr/local/share/cmake-24/Modules
+/usr/local/share/cmake-2.4
+/usr/local/share/cmake-2.4/Modules
 /usr/local/include
 /usr/local/include/Wt
 /usr/local/include/Wt/Test

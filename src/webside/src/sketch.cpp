@@ -28,7 +28,7 @@ Sketch::Sketch(const std::string &token, WContainerWidget *parent)
     channelsWidget = new ChannelsWidget(m_token, stackedWidget);
     marksWidget = new MarksWidget(m_token, stackedWidget);
     optionsWidget = new OptionsWidget(stackedWidget);
-    usersWidget = new UsersWidget(stackedWidget);
+    usersWidget = new UsersWidget(m_token,stackedWidget);
     prefWidget = new PrefWidget(token, stackedWidget);
     //WSelectionBox *box = new WSelectionBox(root());
 

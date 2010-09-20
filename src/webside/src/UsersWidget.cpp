@@ -11,9 +11,10 @@
 #include "Crc.h"
 #include "BitTools.h"
 
-UsersWidget::UsersWidget(WContainerWidget *parent)
+UsersWidget::UsersWidget(const std::string &token,WContainerWidget *parent)
     : WContainerWidget(parent)
 {
+	m_token=token;
     WText *usersText = new WText("Users:", this);
     WBreak *break1 = new WBreak(this);
     usersBox = new WSelectionBox(this);
@@ -95,9 +96,13 @@ void UsersWidget::removeClicked()
     for (int i = 0; i < users->size(); i++)
     {
         CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+
         std::string login = user->getLogin();
         if (userToDelete == login)
         {
+	    if (user->getToken() == m_token){
+		break;
+	    }
             common::DbSession::getInstance().removeUser(user);
             message->setText("");
             updateUsersBox();

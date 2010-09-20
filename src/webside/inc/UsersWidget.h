@@ -29,9 +29,9 @@ class UsersWidget : public WContainerWidget
     WPushButton *cancelUserButton;
     WText *message;
 
-
+    std::string m_token;
 public:
-    UsersWidget(WContainerWidget *parent = 0);
+    UsersWidget(const std::string &token,WContainerWidget *parent = 0);
 
     void updateUsersBox();
 

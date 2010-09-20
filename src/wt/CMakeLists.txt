@@ -95,8 +95,7 @@ IF(WIN32)
 ELSE(WIN32)
 
   SET(RUNDIR "/var/run/wt" CACHE PATH
-    "Default path for wt session management "
-    "(only used by FCGI connector; not relative to CMAKE_INSTALL_PREFIX)")
+    "Default path for wt session management (only used by FCGI connector; not relative to CMAKE_INSTALL_PREFIX)")
 
   IF( NOT DEFINED CONFIGDIR )
     SET(CONFIGDIR "/etc/wt" CACHE STRING "Path for the configuration files")

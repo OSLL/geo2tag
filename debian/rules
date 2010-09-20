@@ -39,7 +39,7 @@ build-stamp:
 		qmake "CONFIG +=webside" -after *.pro && $(MAKE); \
 		cd ../../; \
 		echo "i386 architecture selection"; \
-		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../ -DCONNECTOR_FCGI=ON && $(MAKE); \
+		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../ -DCONNECTOR_FCGI=ON -DCONFIGDIR=$(CURDIR)/debian/tmp/etc/wt && $(MAKE); \
 		cd ../../; \
 	else \
 	cd $(BUILDDIR) && qmake "CONFIG += maemo" -after *.pro; \
