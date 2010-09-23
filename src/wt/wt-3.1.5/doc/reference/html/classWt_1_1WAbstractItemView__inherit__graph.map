@@ -1,0 +1,5 @@
+<area shape="rect" href="$classWt_1_1WTableView.html" title="An MVC View widget for tabular data." alt="" coords="5,315,120,344">
+<area shape="rect" href="$classWt_1_1WTreeView.html" title="A view class that displays a model as a tree or tree table." alt="" coords="144,315,253,344">
+<area shape="rect" href="$classWt_1_1WCompositeWidget.html" title="A widget that hides the implementation of composite widgets." alt="" coords="52,160,209,189">
+<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="83,83,179,112">
+<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="84,5,177,35">

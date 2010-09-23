@@ -1,0 +1,4 @@
+<area shape="rect" href="$classWt_1_1WMessageBox.html" title="A standard dialog for confirmation or to get simple user input." alt="" coords="19,304,152,331">
+<area shape="rect" href="$classWt_1_1WCompositeWidget.html" title="A widget that hides the implementation of composite widgets." alt="" coords="5,155,165,181">
+<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="37,80,133,107">
+<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="37,5,133,32">

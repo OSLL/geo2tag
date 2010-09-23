@@ -1,0 +1,51 @@
+IF(COMMAND cmake_policy)
+  CMAKE_POLICY(SET CMP0003 NEW)
+ENDIF(COMMAND cmake_policy)
+
+SET(BUILD_WTWITHQT true)
+IF (NOT MULTI_THREADED_BUILD)
+  SET(BUILD_WTWITHQT false)
+ENDIF (NOT MULTI_THREADED_BUILD)
+IF (NOT QT_FOUND)
+  SET(BUILD_WTWITHQT false)
+ENDIF (NOT QT_FOUND)
+
+IF (NOT BUILD_WTWITHQT)
+
+  MESSAGE(STATUS "** Not building wtwithqt example.")
+  MESSAGE(STATUS "   wtwithqt example requires a Qt4 installation.")
+
+ELSE (NOT BUILD_WTWITHQT)
+
+  SUBDIRS(lib)
+
+  ADD_DEFINITIONS(-DWT_NO_SLOT_MACROS)
+
+  QT4_GENERATE_MOC(${CMAKE_CURRENT_SOURCE_DIR}/QtObject.h
+                   ${CMAKE_CURRENT_BINARY_DIR}/moccedQtObject.C)
+
+  WT_ADD_EXAMPLE(helloqt.wt
+    hello.C
+    QtObject.C
+    ${CMAKE_CURRENT_BINARY_DIR}/moccedQtObject.C
+  )
+
+  TARGET_LINK_LIBRARIES(helloqt.wt
+    wtwithqt
+    ${QT_LIBRARIES}
+  )
+
+  #
+  # If you have Wt installed somehwere, you should use the
+  # installed Wt header files for your own Wt projects.
+  # e.g. INCLUDE_DIRECTORIES(/usr/local/wt/include)
+  # instead of the following:
+  #
+  INCLUDE_DIRECTORIES(
+    ${WT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
+    ${QT_QTCORE_INCLUDE_DIR} ${QT_INCLUDE_DIR}
+  )
+
+ENDIF (NOT BUILD_WTWITHQT)
+

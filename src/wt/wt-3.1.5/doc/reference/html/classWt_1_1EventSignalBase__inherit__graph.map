@@ -1,0 +1,17 @@
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; &#160;\&gt;" alt="" coords="657,25,764,55">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; bool \&gt;" alt="" coords="643,79,779,108">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; int \&gt;" alt="" coords="648,132,773,161">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; int, int \&gt;" alt="" coords="637,185,784,215">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; int, int, int, int \&gt;" alt="" coords="615,239,807,268">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; int, int, std::string, std::string, Wt::WMouseEvent \&gt;" alt="" coords="513,292,908,321">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string \&gt;" alt="" coords="625,345,796,375">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, int \&gt;" alt="" coords="615,399,807,428">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, int, std::string \&gt;" alt="" coords="581,452,840,481">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, int, std::string, std::string, std::string, Wt::WMouseEvent \&gt;" alt="" coords="457,505,964,535">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, std::string \&gt;" alt="" coords="593,559,828,588">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, std::string, Wt::WMouseEvent, struct Wt::NoClass, struct Wt::NoClass, struct Wt::NoClass \&gt;" alt="" coords="357,612,1064,641">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; void \&gt;" alt="" coords="643,665,779,695">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; Wt::WGoogleMap::Coordinate \&gt;" alt="" coords="569,719,852,748">
+<area shape="rect" href="$classWt_1_1EventSignal.html" title="A signal that conveys user&#45;interface events." alt="" coords="637,772,784,801">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="A signal to relay JavaScript to C++ calls." alt="" coords="587,825,835,855">
+<area shape="rect" href="$classWt_1_1SignalBase.html" title="Abstract base class of a signal." alt="" coords="5,425,117,455">

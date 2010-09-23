@@ -1,0 +1,4 @@
+<area shape="rect" href="$classWt_1_1WHTML5Media.html" title="Abstract baseclass for HTML5 media elements." alt="" coords="5,237,139,267">
+<area shape="rect" href="$classWt_1_1WWebWidget.html" title="A base class for widgets with an HTML counterpart." alt="" coords="11,160,133,189">
+<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="24,83,120,112">
+<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="25,5,119,35">

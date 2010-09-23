@@ -1,0 +1,48 @@
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; &#160;\&gt;" alt="" coords="411,20,512,49">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; bool \&gt;" alt="" coords="397,73,525,103">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; int \&gt;" alt="" coords="401,127,521,156">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; int, int \&gt;" alt="" coords="391,180,532,209">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; int, int, int, int \&gt;" alt="" coords="369,233,553,263">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; int, Wt::NoClass \&gt;" alt="" coords="361,287,561,316">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; int, Wt::WFormWidget * \&gt;" alt="" coords="340,340,583,369">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; int, Wt::WLength \&gt;" alt="" coords="360,393,563,423">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; int64_t, int64_t \&gt;" alt="" coords="365,447,557,476">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; std::string \&gt;" alt="" coords="380,500,543,529">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; T, A1 \&gt;" alt="" coords="393,553,529,583">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; void \&gt;" alt="" coords="397,607,525,636">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::Ext::Dialog::DialogCode \&gt;" alt="" coords="328,660,595,689">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::Orientation, int, int \&gt;" alt="" coords="344,713,579,743">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::StandardButton \&gt;" alt="" coords="352,767,571,796">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::StandardButton, Wt::NoClass \&gt;" alt="" coords="312,820,611,849">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WCalendar::Coordinate, Wt::NoClass \&gt;" alt="" coords="291,873,632,903">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WDate \&gt;" alt="" coords="377,927,545,956">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WDialog::DialogCode \&gt;" alt="" coords="336,980,587,1009">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WMenuItem * \&gt;" alt="" coords="357,1033,565,1063">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WModelIndex \&gt;" alt="" coords="357,1087,565,1116">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WModelIndex, int, int \&gt;" alt="" coords="336,1140,587,1169">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WModelIndex, Wt::WModelIndex \&gt;" alt="" coords="301,1193,621,1223">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WModelIndex, Wt::WMouseEvent \&gt;" alt="" coords="300,1247,623,1276">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WObject *, Wt::NoClass, Wt::NoClass, Wt::NoClass, Wt::NoClass, Wt::NoClass \&gt;" alt="" coords="165,1300,757,1329">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WRadioButton * \&gt;" alt="" coords="351,1353,572,1383">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WStandardItem * \&gt;" alt="" coords="348,1407,575,1436">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WString \&gt;" alt="" coords="375,1460,548,1489">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WWidget * \&gt;" alt="" coords="367,1513,556,1543">
+<area shape="rect" href="$classWt_1_1Signal.html" title="Wt::Signal\&lt; Wt::WWidget *, bool \&gt;" alt="" coords="351,1567,572,1596">
+<area shape="rect" href="$classWt_1_1EventSignalBase.html" title="Abstract base class of an event signal." alt="" coords="389,1620,533,1649">
+<area shape="rect" href="$classWt_1_1Signal.html" title="A signal that propagates events to listeners." alt="" coords="341,1673,581,1703">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; &#160;\&gt;" alt="" coords="1105,1220,1212,1249">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; bool \&gt;" alt="" coords="1091,1273,1227,1303">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; int \&gt;" alt="" coords="1096,1327,1221,1356">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; int, int \&gt;" alt="" coords="1085,1380,1232,1409">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; int, int, int, int \&gt;" alt="" coords="1063,1433,1255,1463">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; int, int, std::string, std::string, Wt::WMouseEvent \&gt;" alt="" coords="961,1487,1356,1516">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string \&gt;" alt="" coords="1073,1540,1244,1569">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, int \&gt;" alt="" coords="1063,1593,1255,1623">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, int, std::string \&gt;" alt="" coords="1029,1647,1288,1676">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, int, std::string, std::string, std::string, Wt::WMouseEvent \&gt;" alt="" coords="905,1700,1412,1729">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, std::string \&gt;" alt="" coords="1041,1753,1276,1783">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; std::string, std::string, Wt::WMouseEvent, struct Wt::NoClass, struct Wt::NoClass, struct Wt::NoClass \&gt;" alt="" coords="805,1807,1512,1836">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; void \&gt;" alt="" coords="1091,1860,1227,1889">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="Wt::JSignal\&lt; Wt::WGoogleMap::Coordinate \&gt;" alt="" coords="1017,1913,1300,1943">
+<area shape="rect" href="$classWt_1_1EventSignal.html" title="A signal that conveys user&#45;interface events." alt="" coords="1085,1967,1232,1996">
+<area shape="rect" href="$classWt_1_1JSignal.html" title="A signal to relay JavaScript to C++ calls." alt="" coords="1035,2020,1283,2049">

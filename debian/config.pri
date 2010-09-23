@@ -1,4 +1,4 @@
-CONFIG += release
+CONFIG += debug
 
 #CONFIG += maemo5
 
