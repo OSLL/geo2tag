@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6)
 
 Package: wikigps-libs
 Architecture: any
-Depends: ${shlibs:Depends}, libqt4 (>=4), unixodbc [i386], unixodbc-dev [i386], libxml2 (>=2.6)
+Depends: ${shlibs:Depends}, libqt4-core (>=4), libqt4-gui (>=4), libqt4-webkit (>=4), libqt4-phonon (>=4), libqt4-network (>=4), unixodbc [i386], unixodbc-dev [i386], libxml2 (>=2.6)
 Description: Geo2tag libs
 
 Package: wikigps-client
