@@ -11,7 +11,7 @@ Description: Geo2tag libs
 
 Package: wikigps-client
 Architecture: armel
-Depends: wikigps-libs, libqjson (>=0.7), libqtm (>=1.0)
+Depends: wikigps-libs, libqjson (>=0.7), libqtm-location (>=1.0),libqtm-bearer (>=1.0)
 Description: WikiGPS service client
  Very long description will be here
 
