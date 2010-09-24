@@ -1,3 +1,9 @@
+wikigps (0.1.1) unstable; urgency=low
+
+  * small bugs are fixed
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Fri, 24 Sep 2010 10:55:45 +0400 
+
 wikigps (0.1.0) unstable; urgency=low
 
   * the_platform iteration release
