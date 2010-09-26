@@ -1,7 +1,7 @@
 #!/bin/bash
 /etc/init.d/lighttpd restart;
 # down will be DB initialization
-sudo -u postgres createuser geo2tag
+sudo -u postgres createuser -s geo2tag
 sudo -u postgres createdb -O geo2tag geo2tag
 sudo -u postgres psql --command="GRANT ALL privileges on database geo2tag to geo2tag;"
 sudo cp /opt/geo2tag/pg_hba.conf `find /etc/postgresql -name pg_hba.conf`
