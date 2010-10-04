@@ -1,0 +1,21 @@
+* To build the examples, call CMake this way:
+
+  cmake -DWT_SOURCE_DIR=/usr/share/doc/witty-doc/ -DEXAMPLES_CONNECTOR="wt;wthttp" /usr/share/doc/witty-doc/examples
+
+* Then go to /usr/share/doc/witty-doc/examples and enter the directory of the 
+  example you want to run. When running the example, set the docroot to "." 
+  For instance, if you compiled the examples in /home/user/dev/wtexamples, you would do:
+
+  $ mkdir /home/user/dev/wtexamples
+  $ cd /home/user/dev/wtexamples
+  $ cmake -DWT_SOURCE_DIR=/usr/share/doc/witty-doc/ -DEXAMPLES_CONNECTOR="wt;wthttp" /usr/share/doc/witty-doc/examples
+  $ make
+  $ cd /usr/share/doc/witty-doc/examples/charts
+  $ /home/user/dev/wtexamples/charts/charts.wt --http-port 10000 --http-addr 0.0.0.0 --docroot .
+
+* Important
+
+  Please note the wt-homepage example will not run properly unless you download
+  ExtJS (http://extjs.com) and extract it the proper place.
+
+  Please note the wtwithqt example needs Qt 4.x to run

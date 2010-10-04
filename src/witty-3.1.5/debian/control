@@ -1,0 +1,55 @@
+Source: witty
+Priority: extra
+Maintainer: Pau Garcia i Quiles <pgquiles@elpauer.org>
+Build-Depends: debhelper (>= 6.0.7), dpatch, libgd2-xpm-dev, libfcgi-dev, libmysql++-dev, cmake, libboost1.40-dev (>= 1.40.0), libboost-date-time1.40-dev (>= 1.40.0), libboost-filesystem1.40-dev (>= 1.40.0), libboost-program-options1.40-dev (>= 1.40.0), libboost-regex1.40-dev (>= 1.40.0), libboost-signals1.40-dev (>= 1.40.0), libboost-thread1.40-dev (>= 1.40.0), libssl-dev, doxygen, graphviz
+Standards-Version: 3.8.1
+Section: web
+Homepage: http://www.webtoolkit.eu/
+
+Package: witty
+Architecture: any
+Depends: ${shlibs:Depends}, ${cli:Depends}, ${misc:Depends}
+Recommends: tinymce ( >= 3.0.7 )
+Description: C++ library and application server for web applications [runtime]
+ Wt (pronounced 'witty') is a C++ library and application server for
+ developing and deploying web applications. The API is widget-centric
+ and offers complete abstraction of any web-specific application details.
+ .
+ This package contains the Witty core library, the embedded HTTP server
+ library, the FastCGI library and the ExtJS adapter library.
+
+Package: witty-dbg
+Architecture: any
+Section: debug
+Depends: witty (= ${binary:Version}) 
+Description: C++ library and application server for web applications [debug]
+ Wt (pronounced 'witty') is a C++ library and application server for
+ developing and deploying web applications. The API is widget-centric
+ and offers complete abstraction of any web-specific application details.
+ .
+ This package contains debugging files used to investigate problems with
+ binaries included in the Wt packages.
+
+Package: witty-dev
+Section: devel
+Architecture: any
+Depends: ${shlibs:Depends}, ${cli:Depends}, ${misc:Depends}, witty (= ${binary:Version})
+Suggests: libqt4-dev
+Description: C++ library and application server for web applications [devel]
+ Wt (pronounced 'witty') is a C++ library and application server for
+ developing and deploying web applications. The API is widget-centric
+ and offers complete abstraction of any web-specific application details.
+ .
+ This package contains development files for building software that uses the
+ Wt libraries.
+
+Package: witty-doc
+Section: doc
+Architecture: all
+Suggests: witty-dev
+Description: C++ library and application server for web applications [doc]
+ Wt (pronounced 'witty') is a C++ library and application server for
+ developing and deploying web applications. The API is widget-centric
+ and offers complete abstraction of any web-specific application details.
+ .
+ This package contains the documentation and examples.

@@ -1,0 +1,26 @@
+This package uses dpatch(1) to manage all modifications to the upstream source.
+Changes are stored in the source package as dpatch format diffs, and applied 
+from debian/patches at build-time.
+
+To get the fully patched source after unpacking the source package, cd to the 
+root level of the source package and run:
+
+	dpatch apply-all
+
+To add new patches, first apply all existing patches, and then run:
+
+	dpatch-edit-patch <patchname>
+
+Dpatch opens a new shell in a copy of the source tree. Edit the files 
+appropriately and then exit the shell, and dpatch will generate a file called 
+debian/patches/<patchname>. To have new patches applied automatically during 
+build and with dpatch apply-all, add <patchname> to debian/patches/00list.
+
+To reverse all patching, run:
+
+	dpatch deapply-all
+
+  -- Pau Garcia i Quiles <pgquiles@elpauer.org>, Tue, 09 December 2008
+
+(this text is original by Jonathan Wiltshire <debian@jwiltshire.org.uk>, 
+ Wed, 26 November 2008, for the webcpp package)
