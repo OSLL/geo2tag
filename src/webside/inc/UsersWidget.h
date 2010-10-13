@@ -2,11 +2,11 @@
 #define USERSWIDGET_H
 
 #include <Wt/WContainerWidget>
-#include <WSelectionBox>
-#include <WPushButton>
-#include <WLineEdit>
-#include <WStackedWidget>
-#include <WTable>
+#include <Wt/WSelectionBox>
+#include <Wt/WPushButton>
+#include <Wt/WLineEdit>
+#include <Wt/WStackedWidget>
+#include <Wt/WTable>
 
 using namespace Wt;
 

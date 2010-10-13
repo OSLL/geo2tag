@@ -1,7 +1,7 @@
 #include "inc/PrefWidget.h"
 
-#include <WText>
-#include <WBreak>
+#include <Wt/WText>
+#include <Wt/WBreak>
 #include <string.h>
 #include "DbSession.h"
 #include "Handle.h"

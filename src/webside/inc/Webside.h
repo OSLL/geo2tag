@@ -2,7 +2,7 @@
 #define WEBSIDE_H
 
 #include <Wt/WStackedWidget>
-#include <WContainerWidget>
+#include <Wt/WContainerWidget>
 
 #include "LoginWidget.h"
 #include "sketch.h"

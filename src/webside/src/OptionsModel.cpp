@@ -2,7 +2,7 @@
 
 #include "Parameters.h"
 
-#include "WFlags"
+#include <Wt/WFlags>
 
 OptionsModel::OptionsModel(const WString &configPath, WObject *parent)
     : WAbstractTableModel(parent)

@@ -4,7 +4,7 @@
 #include <Wt/WTabWidget>
 #include <Wt/WText>
 #include "GoogleMap.h"
-#include <WTableView>
+#include <Wt/WTableView>
 
 #include "MarksModel.h"
 

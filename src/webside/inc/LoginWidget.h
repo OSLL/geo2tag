@@ -2,8 +2,8 @@
 #define LOGINWIDGET_H
 
 #include <Wt/WContainerWidget>
-#include <WLineEdit>
-#include <WPushButton>
+#include <Wt/WLineEdit>
+#include <Wt/WPushButton>
 
 #include "GoogleMap.h"
 

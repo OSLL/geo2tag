@@ -8,9 +8,9 @@
 #include "OpenStreetMap.h"
 #include "YandexMap.h"
 
-#include <WLabel>
-#include <WText>
-#include <WBreak>
+#include <Wt/WLabel>
+#include <Wt/WText>
+#include <Wt/WBreak>
 
 LoginWidget::LoginWidget(WContainerWidget *parent)
     : WContainerWidget(parent)

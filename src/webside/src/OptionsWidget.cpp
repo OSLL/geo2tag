@@ -1,9 +1,9 @@
 #include "OptionsWidget.h"
 
-#include <WHBoxLayout>
-#include <WVBoxLayout>
-#include <WContainerWidget>
-#include <WBreak>
+#include <Wt/WHBoxLayout>
+#include <Wt/WVBoxLayout>
+#include <Wt/WContainerWidget>
+#include <Wt/WBreak>
 
 OptionsWidget::OptionsWidget(WContainerWidget *parent)
     : WContainerWidget(parent)

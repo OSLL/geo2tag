@@ -1,8 +1,8 @@
 #include "inc/UsersWidget.h"
 
-#include <WText>
-#include <WBreak>
-#include <WLabel>
+#include <Wt/WText>
+#include <Wt/WBreak>
+#include <Wt/WLabel>
 
 #include "DbSession.h"
 #include "UserInternal.h"

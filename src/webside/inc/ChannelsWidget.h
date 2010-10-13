@@ -5,7 +5,7 @@
 #include <Wt/WText>
 #include <Wt/WSelectionBox>
 #include <Wt/WPushButton>
-#include <WTableView>
+#include <Wt/WTableView>
 #include "Channel.h"
 #include "ChannelsModel.h"
 using namespace Wt;

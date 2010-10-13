@@ -1,5 +1,5 @@
 #define AMOUNT_OF_COLUMNS 4
-#include <WContainerWidget>
+#include <Wt/WContainerWidget>
 #include "ChannelsModel.h"
 #include "UserInternal.h"
 #include "DbSession.h"
@@ -98,7 +98,7 @@ CHandlePtr<common::Channels> ChannelsModel::getAvailableChannels() const
     return m_availableChannels;
 }
 
-#include <WFlags>
+#include <Wt/WFlags>
 
 WFlags<ItemFlag> ChannelsModel::flags(const WModelIndex &index) const
 {

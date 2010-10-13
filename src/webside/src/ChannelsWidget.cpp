@@ -3,11 +3,11 @@
 #include "defines.h"
 #include "UserInternal.h"
 
-#include <WHBoxLayout>
-#include <WVBoxLayout>
-#include <WContainerWidget>
-#include <WMessageBox>
-#include <WBreak>
+#include <Wt/WHBoxLayout>
+#include <Wt/WVBoxLayout>
+#include <Wt/WContainerWidget>
+#include <Wt/WMessageBox>
+#include <Wt/WBreak>
 
 ChannelsWidget::ChannelsWidget(const std::string &token, WContainerWidget *parent)
     : WContainerWidget(parent)
