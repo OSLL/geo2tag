@@ -32,14 +32,10 @@ build-stamp:
 	cp -r ./debian/config.pri $(BUILDDIR)
 	echo "Current diRRR"
 	echo $(CURDIR)
-	mkdir $(BUILDDIR)wt/build ; 
 #Check what architecture we are use. If it is i386, we need to build all for i386, else build all armel code
 	if [ "$(DEB_BUILD_ARCH)" = "i386" ] ; then \
 		echo $$PWD ; \
 		echo "i386 architecture selection"; \
-		cd $(BUILDDIR)wt/build && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/debian/tmp/usr/local ../ -DCONNECTOR_FCGI=ON -DCONFIGDIR=$(CURDIR)/debian/tmp/etc/wt && $(MAKE); \
-		cd ../../; \
-		export LD_LIBRARY_PATH="./wt/build/src:$$LD_LIBRARY_PATH"; \
 		cd $(BUILDDIR) && qmake "CONFIG +=linux" -after *.pro && $(MAKE); \
 		qmake "CONFIG +=webside" -after *.pro && $(MAKE); \
 		cd ../../; \
@@ -72,8 +68,6 @@ install: build
 		cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; \
 		cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop; \
 	else \
-		$(MAKE) -C $(BUILDDIR)wt/build install; \
-		\
 		$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
 		install -d $(CURDIR)/debian/tmp/opt/geo2tag; \
 		install -d $(CURDIR)/debian/tmp/var/www; \
