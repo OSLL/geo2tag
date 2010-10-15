@@ -67,6 +67,7 @@ class UnsubscribeJsonQuery: public IJsonQuery
 	std::string m_token;
 	std::string m_channel;
 	std::string m_status;
+        std::string m_status_description;
 	std::string outToString() const;
 	void init(const std::stringstream& query);
 public:

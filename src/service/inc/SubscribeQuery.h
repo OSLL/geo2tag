@@ -36,6 +36,7 @@ class SubscribeQuery:public IJsonQuery
   std::string m_token;
   std::string m_channel;
   std::string m_result;
+  std::string m_status_description;
 
   void init(const std::stringstream& query);
 

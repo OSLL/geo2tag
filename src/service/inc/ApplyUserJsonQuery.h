@@ -66,6 +66,7 @@ class ApplyUserJsonQuery: public IJsonQuery
   std::string                   m_password;
   
   std::string                   m_result;
+  std::string m_status_description;
   std::string                   m_token;
   
   std::string outToString() const;

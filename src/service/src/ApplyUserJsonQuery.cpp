@@ -53,6 +53,7 @@
 
 ApplyUserJsonQuery::ApplyUserJsonQuery()
 {
+    m_status_description = "nothing";
 }
 
 void ApplyUserJsonQuery::init(const std::stringstream& query)
@@ -79,6 +80,7 @@ void ApplyUserJsonQuery::process()
     if((*i).dynamicCast<loader::User>()->getLogin()==m_login)
     {
  			m_result="Error";
+                        m_status_description = "Login already exists";
       return;
     }
   }
@@ -102,10 +104,12 @@ void ApplyUserJsonQuery::process()
   {
     common::DbSession::getInstance().storeUser(user);
     m_result = "Ok";
+    m_status_description = "nothing";
   }
   catch(const CExceptionSource& e)
   {
     m_result="Error";
+    m_status_description = "Db internal error";
   }
 }
 
@@ -113,11 +117,14 @@ std::string ApplyUserJsonQuery::outToString() const
 {
 	if(m_result=="Error")
   {
-    return "{\"status\":\""+m_result+"\"}";
+            return "{\"status\":\"" + m_result +
+                    "\", \"status_description\":\"" + m_status_description+"\"}";
   }
   else
   {
-    return "{\"status\":\""+m_result+"\", \"auth_token\":\""+m_token+"\"}";
+      return "{\"status\":\"" + m_result +
+              "\", \"status_description\":\"" + m_status_description +
+              "\", \"auth_token\":\"" + m_token + "\"}";
   }
 }
 

@@ -81,6 +81,7 @@ private:
         std::string                   m_link;
         std::string                   m_time;
 	std::string 		      m_status;
+        std::string                   m_status_description;
 	timeType		      m_type;
 	std::string outToString() const;
 	void init(const std::stringstream& query);

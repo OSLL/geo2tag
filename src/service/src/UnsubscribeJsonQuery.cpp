@@ -52,6 +52,7 @@
 UnsubscribeJsonQuery::UnsubscribeJsonQuery()
 {
 	m_status="Error";
+        m_status_description = "nothing";
 }
 
 void UnsubscribeJsonQuery::init(const std::stringstream& query)
@@ -68,35 +69,39 @@ void UnsubscribeJsonQuery::init(const std::stringstream& query)
 
 void UnsubscribeJsonQuery::process()
 {
-	CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
-	for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
-	{
-	    if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
-      {
-			  CHandlePtr<common::Channels> channels=(*i)->getSubscribedChannels();
-  			if(channels == NULL) 
+    CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
+    m_status_description = "User isn't authenticated";
+    for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
+    {
+        if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
         {
-          break;
+            m_status_description = "Channel wasn't found";
+            CHandlePtr<common::Channels> channels=(*i)->getSubscribedChannels();
+            if(channels == NULL)
+            {
+                break;
+            }
+            for (common::Channels::iterator j=channels->begin();j!=channels->end();j++)
+            {
+                if ((*j)->getName()==m_channel)
+                {
+                    common::DbSession::getInstance().unsubscribe((*i),(*j));
+                    // syslog(LOG_INFO,"DbSession::Unsubscribe finished");
+                    m_status="Ok";
+                    m_status_description = "nothing";
+                    return;
+                }
+            }
+            break;
         }
-  			for (common::Channels::iterator j=channels->begin();j!=channels->end();j++)
-  			{
-	  			if ((*j)->getName()==m_channel)
-          {
-		  			common::DbSession::getInstance().unsubscribe((*i),(*j));
-                                        // syslog(LOG_INFO,"DbSession::Unsubscribe finished");
-				  	m_status="Ok";
-					  return;
-				  }
-			}
-		  break;
-		}
-	}
-  m_status="Error";
+    }
+    m_status="Error";
 }
 
 std::string UnsubscribeJsonQuery::outToString() const
 {
-	return "{\"status\":\""+m_status+"\"}";
+    return "{\"status\":\"" + m_result +
+            "\", \"status_description\":\"" + m_status_description+"\"}";
 }
 
 /* ===[ End of file $HeadURL$ ]=== */

@@ -49,6 +49,7 @@
 #include "Time.h"
 #include <syslog.h>
 ApplyMarkJsonQuery::ApplyMarkJsonQuery(){
+    m_status_description = "nothing";
 
 }
 
@@ -95,6 +96,7 @@ void ApplyMarkJsonQuery::init(const std::stringstream& query){
 void ApplyMarkJsonQuery::process(){
   CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
   m_status="error";
+  m_status_description = "User isn't authenticated";
   for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
   {
     if ((*i).dynamicCast<loader::User>()->getToken()==m_token)
@@ -106,6 +108,7 @@ void ApplyMarkJsonQuery::process(){
         // syslog(LOG_INFO,"Finishing strptime");
     	CHandlePtr<common::Channels> channels = common::DbSession::getInstance().getChannels();
         // syslog(LOG_INFO,"getChannels sucsesfull");
+        m_status_description = "Channel wasn't found";
     	for (common::Channels::iterator j=channels->begin();j!=channels->end();j++)
         {
     		if ((*j)->getName()==m_channel)
@@ -129,18 +132,24 @@ void ApplyMarkJsonQuery::process(){
 		//	}
           		(*j)->addData(mark);
                         // syslog(LOG_INFO,"updateChannel finished sucsesfull");
+                        m_status_description = "nothing";
     			m_status="ok";
     			break;
     		}
 	    }
 	    break;
     }
+    else
+    {
+
+    }
   }
 }
 
 std::string ApplyMarkJsonQuery::outToString() const
 {
-	return "{\"status\":\""+m_status+"\"}";
+    return "{\"status\":\"" + m_result +
+            "\", \"status_description\":\"" + m_status_description+"\"}";
 }
 
 /* ===[ End of file $HeadURL$ ]=== */

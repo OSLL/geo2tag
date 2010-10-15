@@ -67,7 +67,8 @@ class ApplyChannelJsonQuery: public IJsonQuery
   std::string		                m_name;
   std::string                   m_description;
   std::string                   m_url;
-  std::string         		      m_status;
+  std::string         		m_status;
+  std::string                   m_status_description;
   double                        m_activeRadius;
   
   std::string outToString() const;

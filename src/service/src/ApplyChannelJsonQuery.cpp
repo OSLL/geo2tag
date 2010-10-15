@@ -50,6 +50,7 @@
 
 ApplyChannelJsonQuery::ApplyChannelJsonQuery()
 {
+    m_status_description = "nothing";
 }
 
 void ApplyChannelJsonQuery::init(const std::stringstream& query)
@@ -86,6 +87,7 @@ void ApplyChannelJsonQuery::process()
     if((*channels)[i]->getName() == m_name)
     {
       m_status="Error";
+      m_status_description = "Channel wasn't found";
       return;
     }
   }
@@ -100,16 +102,20 @@ void ApplyChannelJsonQuery::process()
 			common::DbSession::getInstance().storeChannel(channel); 
                         // syslog(LOG_INFO,"updateChannel finished sucsesfull");
  			m_status="Ok";
+                        m_status_description = "nothing";
+
       return;
     }
   }
   
   m_status="Error";
+  m_status_description = "User isn't authenticated";
 }
 
 std::string ApplyChannelJsonQuery::outToString() const
 {
-	return "{\"status\":\""+m_status+"\"}";
+    return "{\"status\":\"" + m_status +
+            "\", \"status_description\":\"" + m_status_description+"\"}";
 }
 
 /* ===[ End of file $HeadURL$ ]=== */

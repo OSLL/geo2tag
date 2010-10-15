@@ -14,7 +14,7 @@
 #include <syslog.h>
 SubscribeQuery::SubscribeQuery()
 {
-
+    m_status_description = "nothing";
 }
 
 void SubscribeQuery::init(const std::stringstream& query)
@@ -42,6 +42,7 @@ void SubscribeQuery::process()
   {
     syslog(LOG_INFO,"common::DbSession::getInstance().getTokensMap().count(m_token) == 0");
     m_result="Error";
+    m_status_description = "User isn't authenticated";
     return;
   } 
   else
@@ -62,6 +63,7 @@ void SubscribeQuery::process()
   { 
     // syslog(LOG_INFO, "ch == NULL");
     m_result = "Error";
+    m_status_description = "Channel wasn't found";
     return;
   }
 
@@ -74,6 +76,7 @@ void SubscribeQuery::process()
   {
     syslog(LOG_INFO,"exception while common::DbSession::getInstance().subscribe(du,ch)");
     m_result = "Error";
+    m_status_description = "Db internal error";
   }
 
 }
@@ -81,7 +84,8 @@ void SubscribeQuery::process()
 std::string SubscribeQuery::outToString() const
 {
         // syslog(LOG_INFO,"Starting SubscribedQuery::outToString() method");
-        return "{\"status\":\""+m_result+"\"}";
+        return "{\"status\":\"" + m_result +
+                "\", \"status_description\":\"" + m_status_description+"\"}";
 }
 
 

@@ -2,6 +2,7 @@
 #include "UserInternal.h"
 #include "DbSession.h"
 LoginJsonQuery::LoginJsonQuery(){
+    m_status_description = "nothing";
 }
 
 void LoginJsonQuery::init(const std::stringstream& query){
@@ -20,9 +21,11 @@ void LoginJsonQuery::init(const std::stringstream& query){
 void LoginJsonQuery::process(){
 	CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
 	for (std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++){
+            m_status_description = "User isn't authenticated";
 		if ((*i)->getLogin()==m_user && (*i)->getPassword()==m_password){
 			m_token=(*i).dynamicCast<loader::User>()->getToken();
 			m_status="Ok";
+                        m_status_description = "nothing";
 			break;
 		}
 	}
@@ -35,6 +38,7 @@ std::string LoginJsonQuery::outToString() const{
 	json::Element newRoot;
 	json::QuickBuilder builder(newRoot);
 	builder["status"]=json::String(m_status);
+        builder["status_description"]=json::String(m_status_description);
 	builder["auth_token"]=json::String(m_token);
 	json::Writer::Write(newRoot,s);
 	return s.str();
