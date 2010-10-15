@@ -148,7 +148,7 @@ void ApplyMarkJsonQuery::process(){
 
 std::string ApplyMarkJsonQuery::outToString() const
 {
-    return "{\"status\":\"" + m_result +
+    return "{\"status\":\"" + m_status +
             "\", \"status_description\":\"" + m_status_description+"\"}";
 }
 
