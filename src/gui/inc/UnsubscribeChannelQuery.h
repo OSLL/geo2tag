@@ -89,7 +89,7 @@ namespace GUI
         void doRequest();
 
     signals:
-        void responseReceived(QString status);
+        void responseReceived(QString status,QString status_description);
 
     private slots:
         void onManagerFinished(QNetworkReply *reply);

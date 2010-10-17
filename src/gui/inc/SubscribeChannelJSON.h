@@ -57,7 +57,7 @@ namespace GUI
 
     static QString convertToJSON(QString auth_token, QString channel);
     static QString convertToSatus(QString json);
-
+    static QString convertToSatusDescription(QString json)
 
   }; // class SubscribeChannelJSON
   

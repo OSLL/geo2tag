@@ -87,7 +87,7 @@ namespace GUI
         void doRequest();
 
     signals:
-        void responseReceived(QString status, QString auth_token);
+        void responseReceived(QString status, QString auth_token,QString status_description);
         void errorReceived();
 
     private slots:

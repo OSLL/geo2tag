@@ -122,7 +122,8 @@ namespace GUI
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
             QString status = SubscribeChannelJSON::convertToSatus(jsonResponse);
-            emit responseReceived(status);
+            QString status_description = SubscribeChannelJSON::convertToSatusDescription(jsonResponse); 
+            emit responseReceived(status,status_description);
         }
     }
 

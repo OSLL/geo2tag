@@ -77,6 +77,22 @@ namespace GUI
         return status;
     }
 
+    QString SubscribeChannelJSON::convertToSatusDescription(QString json)
+    {
+        QJson::Parser parser;
+        bool ok;
+        QVariantMap result = parser.parse(QByteArray(json.toAscii()), &ok).toMap();
+        QString status_description("");
+        if (!ok)
+        {
+            qFatal("An error occured during parsing json with channel list");
+        }
+        else
+        {
+            status_description = result["status_description"].toString();
+        }
+        return status;
+    }
 } // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

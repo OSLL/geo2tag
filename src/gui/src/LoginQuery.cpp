@@ -144,10 +144,11 @@ namespace GUI
             else
             {
                 status = result["status"].toString();
+                status_description = result["status_description"].toString();
                 auth_token = result["auth_token"].toString();
             }
 
-            emit responseReceived(status, auth_token);
+            emit responseReceived(status, auth_token,status_description);
         }
     }
 
