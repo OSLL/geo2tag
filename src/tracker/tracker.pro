@@ -33,7 +33,10 @@ SOURCES += main.cpp \
            ../gui/src/SubscribeChannelQuery.cpp \
            ../gui/src/SubscribeChannelJSON.cpp \
            ../gui/src/ApplyMarkQuery.cpp \
-           ../gui/src/LoginQuery.cpp
+           ../gui/src/LoginQuery.cpp \
+    TrackerRequests/BaseRequest.cpp \
+    TrackerRequests/GetStatus.cpp \
+    TrackerRequests/Login.cpp
 
 HEADERS += mainwindow.h \
            settingsdialog.h \
@@ -44,7 +47,10 @@ HEADERS += mainwindow.h \
            ../common/inc/defines.h \
            ../gui/inc/SubscribeChannelQuery.h \
            ../gui/inc/ApplyMarkQuery.h \
-           ../gui/inc/LoginQuery.h
+           ../gui/inc/LoginQuery.h \
+    TrackerRequests/BaseRequest.h \
+    TrackerRequests/GetStatus.h \
+    TrackerRequests/Login.h
 
 FORMS += formCreateChannel.ui
 
@@ -62,5 +68,3 @@ symbian: {
     ReadDeviceData \
     WriteDeviceData
 }
-
-
