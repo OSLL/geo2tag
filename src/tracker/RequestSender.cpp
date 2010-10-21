@@ -1,6 +1,9 @@
 #include "RequestSender.h"
 
-RequestSender::RequestSender(QTcpSocket *socket, QObject *parent = 0) :
+#include <QDataStream>
+#include "defines.h"
+
+RequestSender::RequestSender(QTcpSocket *socket, QObject *parent) :
         QObject(parent),
         m_socket(socket)
 {
@@ -18,32 +21,77 @@ void RequestSender::setSocket(QTcpSocket *socket)
 
 bool RequestSender::login(QString name, QString password)
 {
-    // TODO
+    if (m_socket->open(QIODevice::ReadWrite))
+    {
+        QDataStream out(m_socket);
+        out << QString("login");
+        out << name;
+        out << password;
+    }
+    m_socket->close();
 }
 
 bool RequestSender::setChannel(QString name, QString key)
 {
-    // TODO
+    if (m_socket->open(QIODevice::ReadWrite))
+    {
+        QDataStream out(m_socket);
+        out << QString("set channel");
+        out << name;
+        out << key;
+    }
+    m_socket->close();
 }
 
 bool RequestSender::addChannel(QString name, QString key)
 {
-    // TODO
+    if (m_socket->open(QIODevice::ReadWrite))
+    {
+        QDataStream out(m_socket);
+        out << QString("add channel");
+        out << name;
+        out << key;
+    }
+    m_socket->close();
 }
 
 bool RequestSender::start()
 {
-    // TODO
+    if (m_socket->open(QIODevice::ReadWrite))
+    {
+        QDataStream out(m_socket);
+        out << QString("start");
+    }
+    m_socket->close();
 }
 
 bool RequestSender::stop()
 {
-
+    if (m_socket->open(QIODevice::ReadWrite))
+    {
+        QDataStream out(m_socket);
+        out << QString("stop");
+    }
+    m_socket->close();
 }
 
 QString RequestSender::status()
 {
-    // TODO
+    if (m_socket->open(QIODevice::ReadWrite))
+    {
+        QDataStream out(m_socket);
+        out << QString("status");
+    }
+    m_socket->close();
+
+    QString status("");
+    QDataStream in(m_socket);
+    m_socket->waitForReadyRead(TRACKER_MSECS_TIMEOUT);
+    if (m_socket->open(QIODevice::ReadWrite))
+    {
+        in >> status;
+    }
+    m_socket->close();
 }
 
 

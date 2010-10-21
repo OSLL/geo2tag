@@ -1,6 +1,8 @@
 #include "RequestReceiver.h"
 
-RequestReceiver::RequestReceiver(QTcpSocket *socket, QObject *parent = 0) :
+#include <QDataStream>
+
+RequestReceiver::RequestReceiver(QTcpSocket *socket, QObject *parent) :
         QObject(parent),
         m_socket(socket)
 {
@@ -14,15 +16,63 @@ QTcpSocket* RequestReceiver::getSocket()
 
 void RequestReceiver::setSocket(QTcpSocket *socket)
 {
-    m_soket = socket;
+    m_socket = socket;
 }
 
 void RequestReceiver::sendStatus(QString status)
 {
-    // TODO
+    if (m_socket->open(QIODevice::ReadWrite))
+    {
+        QDataStream out(m_socket);
+        out << status;
+    }
+
+    m_socket->close();
 }
 
 void RequestReceiver::onSocketReadyRead()
 {
-    // TODO
+    if (!m_socket->open(QIODevice::ReadWrite))
+    {
+        return;
+    }
+
+    QDataStream in(m_socket);
+    QString request;
+    in >> request;
+    if (request == "login")
+    {
+        QString name;
+        QString password;
+        in >> name >> password;
+        emit login(name, password);
+    }
+    else if (request == "set_channel")
+    {
+        QString name;
+        QString key;
+        in >> name >> key;
+        emit setChannel(name, key);
+    }
+    else if (request == "add channel")
+    {
+        QString name;
+        QString key;
+        in >> name >> key;
+        emit addChannel(name, key);
+    }
+    else if (request == "start")
+    {
+        emit start();
+    }
+    else if (request == "stop")
+    {
+        emit stop();
+    }
+    else if (request == "status")
+    {
+        emit status();
+    }
+
+    m_socket->close();
 }

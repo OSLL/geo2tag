@@ -136,6 +136,7 @@ namespace GUI
             bool ok;
             QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
             QString status("");
+            QString status_description;
             QString auth_token("");
             if (!ok)
             {

@@ -91,7 +91,7 @@ namespace GUI
         {
             status_description = result["status_description"].toString();
         }
-        return status;
+        return status_description;
     }
 } // namespace GUI
 
