@@ -54,6 +54,9 @@
 #define APPLY_CHANNEL_HTTP_URL "http://zps.spb.su/service?query=addChannel"
 #endif
 
+
+namespace GUI{
+
 ApplyChannelQuery::ApplyChannelQuery(QObject *parent)
     : QObject(parent)
 {
@@ -165,6 +168,6 @@ void ApplyChannelQuery::onManagerSslErrors()
     qDebug("ssl error \n");
 }
 
-
+}
 
 //* ===[ End of file $HeadURL$ ]=== */

@@ -54,6 +54,7 @@
    * Class description. May use HTML formatting
    *
    */
+namespace GUI{
 class ApplyChannelQuery : public QObject
 {
     Q_OBJECT
@@ -97,6 +98,7 @@ private:
     ApplyChannelQuery& operator=(const ApplyChannelQuery& obj);
 
 }; // class ApplyMarkQuery
+}
 
 #endif //_ApplyChannelQuery_H_A2EBB6AB_07D4_4326_AB6A_39441A3DD564_INCLUDED_
 

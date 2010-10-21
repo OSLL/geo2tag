@@ -25,32 +25,32 @@ INCLUDEPATH += . \
 
 # Input
 SOURCES += main.cpp \
-           mainwindow.cpp \
-           settingsdialog.cpp \
-           LoginDialog.cpp \
+         #  mainwindow.cpp \
+          # settingsdialog.cpp \
+         #  LoginDialog.cpp \
+            trackerdaemon.cpp \
            ApplyChannelQuery.cpp \
-           AddUserQuery.cpp \
            RequestReceiver.cpp \
+           AddUserQuery.cpp \
            ../gui/src/SubscribeChannelQuery.cpp \
            ../gui/src/SubscribeChannelJSON.cpp \
            ../gui/src/ApplyMarkQuery.cpp \
-           ../gui/src/LoginQuery.cpp \
-           RequestSender.cpp
+           ../gui/src/LoginQuery.cpp
 
 HEADERS += mainwindow.h \
-           settingsdialog.h \
-           LoginDialog.h \
+            trackerdaemon.h \
+          # settingsdialog.h \
+        #   LoginDialog.h \
            tracker.h \
            ApplyChannelQuery.h \
-           AddUserQuery.h \
            RequestReceiver.h \
+           AddUserQuery.h \
            ../common/inc/defines.h \
            ../gui/inc/SubscribeChannelQuery.h \
            ../gui/inc/ApplyMarkQuery.h \
-           ../gui/inc/LoginQuery.h \
-           RequestSender.h
+           ../gui/inc/LoginQuery.h
 
-FORMS += formCreateChannel.ui
+#FORMS += formCreateChannel.ui
 
 LIBS += -lqjson
 
