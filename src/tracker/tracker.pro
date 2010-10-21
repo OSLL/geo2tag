@@ -30,13 +30,16 @@ SOURCES += main.cpp \
            LoginDialog.cpp \
            ApplyChannelQuery.cpp \
            AddUserQuery.cpp \
+           RequestReceiver.cpp \
            ../gui/src/SubscribeChannelQuery.cpp \
            ../gui/src/SubscribeChannelJSON.cpp \
            ../gui/src/ApplyMarkQuery.cpp \
            ../gui/src/LoginQuery.cpp \
     TrackerRequests/BaseRequest.cpp \
     TrackerRequests/GetStatus.cpp \
-    TrackerRequests/Login.cpp
+    TrackerRequests/Login.cpp \
+    TrackerRequests/Receiver.cpp \
+    RequestSender.cpp
 
 HEADERS += mainwindow.h \
            settingsdialog.h \
@@ -44,13 +47,16 @@ HEADERS += mainwindow.h \
            tracker.h \
            ApplyChannelQuery.h \
            AddUserQuery.h \
+           RequestReceiver.h \
            ../common/inc/defines.h \
            ../gui/inc/SubscribeChannelQuery.h \
            ../gui/inc/ApplyMarkQuery.h \
            ../gui/inc/LoginQuery.h \
     TrackerRequests/BaseRequest.h \
     TrackerRequests/GetStatus.h \
-    TrackerRequests/Login.h
+    TrackerRequests/Login.h \
+    TrackerRequests/Receiver.h \
+    RequestSender.h
 
 FORMS += formCreateChannel.ui
 
