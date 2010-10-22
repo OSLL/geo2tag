@@ -25,9 +25,6 @@ INCLUDEPATH += . \
 
 # Input
 SOURCES += main.cpp \
-         #  mainwindow.cpp \
-          # settingsdialog.cpp \
-         #  LoginDialog.cpp \
             trackerdaemon.cpp \
            ApplyChannelQuery.cpp \
            RequestReceiver.cpp \
@@ -37,10 +34,7 @@ SOURCES += main.cpp \
            ../gui/src/ApplyMarkQuery.cpp \
            ../gui/src/LoginQuery.cpp
 
-HEADERS += mainwindow.h \
-            trackerdaemon.h \
-          # settingsdialog.h \
-        #   LoginDialog.h \
+HEADERS += trackerdaemon.h \
            tracker.h \
            ApplyChannelQuery.h \
            RequestReceiver.h \

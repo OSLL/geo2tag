@@ -34,6 +34,10 @@ trackerDaemon::trackerDaemon() : QObject(NULL)
 
 }
 
+void trackerDaemon::onApplyChannelResponse(QString status,QString status_description){
+	setStatus(status,status_description);
+}
+
 void trackerDaemon::cleanLocalSettigns()
 {
   QSettings settings("osll","tracker");
