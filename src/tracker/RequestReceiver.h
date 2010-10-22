@@ -2,6 +2,7 @@
 #define REQUESTRECEIVER_H
 
 #include <QTcpSocket>
+#include "Status.h"
 
 class RequestReceiver : public QObject
 {
@@ -15,7 +16,7 @@ public:
     void setSocket(QTcpSocket *socket);
     QTcpSocket* getSocket();
 
-    void sendStatus(QString status);
+    void sendStatus(struct Status status);
 
 private slots:
     /* Reads data from socket and emits signals */

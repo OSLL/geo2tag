@@ -19,12 +19,14 @@ void RequestReceiver::setSocket(QTcpSocket *socket)
     m_socket = socket;
 }
 
-void RequestReceiver::sendStatus(QString status)
+void RequestReceiver::sendStatus(struct Status status)
 {
     if (m_socket->open(QIODevice::ReadWrite))
     {
         QDataStream out(m_socket);
-        out << status;
+        out << status.datetime;
+        out << status.status;
+        out << status.description;
     }
 
     m_socket->close();

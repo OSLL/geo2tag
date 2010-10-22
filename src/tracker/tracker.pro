@@ -48,6 +48,9 @@ HEADERS += mainwindow.h \
            ../common/inc/defines.h \
            ../gui/inc/SubscribeChannelQuery.h \
            ../gui/inc/ApplyMarkQuery.h \
+           ../gui/inc/LoginQuery.h \
+           RequestSender.h \
+           Status.h \
            ../gui/inc/LoginQuery.h
 
 #FORMS += formCreateChannel.ui

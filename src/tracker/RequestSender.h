@@ -2,6 +2,7 @@
 #define REQUESTSENDER_H
 
 #include <QTcpSocket>
+#include "Status.h"
 
 class RequestSender : public QObject
 {
@@ -21,7 +22,7 @@ public:
     bool addChannel(QString name, QString key);
     bool start();
     bool stop();
-    QString status();
+    struct Status status();
 
 };
 
