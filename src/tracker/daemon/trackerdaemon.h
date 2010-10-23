@@ -9,10 +9,11 @@
 #include "tracker.h"
 #include <QTcpServer>
 #include <QTcpSocket>
-// QtMobility API headers
+/* QtMobility API headers
 // Location
 #include <qgeopositioninfosource.h>
-#include <qgeopositioninfo.h>
+#include <qgeopositioninfo.h>*/
+#include "GpsInfo.h"
 
 #include "ApplyMarkQuery.h"
 #include "SubscribeChannelQuery.h"
@@ -26,7 +27,7 @@
 // #include <qnetworksession.h>
 
 // QtMobility namespace
-QTM_USE_NAMESPACE
+//QTM_USE_NAMESPACE
 
 
 class trackerDaemon : public QObject{
@@ -42,9 +43,9 @@ class trackerDaemon : public QObject{
   QString m_status;
   QString m_statusDescription;
   int m_timerID;
-  // Location data
+  /* Location data
   QPointer<QGeoPositionInfoSource> m_positionSource;
-  QGeoPositionInfo m_positionInfo;
+  QGeoPositionInfo m_positionInfo;*/
 
   GUI::ApplyMarkQuery m_applyMarkQuery;
   GUI::SubscribeChannelQuery m_subscribeQuery;
@@ -62,8 +63,8 @@ protected:
   void initSettings();
   bool setMark();
 
-private:
-  void startGps();
+//private:
+//  void startGps();
 
 public slots:
 
@@ -89,7 +90,7 @@ public slots:
   void onApplyMarkResponse(QString,QString);
   void onApplyChannelResponse(QString,QString);
 
-  void positionUpdated(QGeoPositionInfo gpsPos);
+  //void positionUpdated(QGeoPositionInfo gpsPos);
 
 };
 

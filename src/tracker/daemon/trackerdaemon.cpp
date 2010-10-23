@@ -23,7 +23,7 @@ trackerDaemon::trackerDaemon() : QObject(NULL)
 //     r("Critical error - can not start server!!!!!");
   }
   connect(m_server, SIGNAL(newConnection()), this, SLOT(uiConnected()));
-  startGps(); // TODO investigate, how we can to stopGPS in stop()
+ // startGps(); // TODO investigate, how we can to stopGPS in stop()
   QTimer::singleShot(0, this, SLOT(setupBearer()));
   connect(&m_applyMarkQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyMarkResponse(QString,QString)));
   connect(&m_loginQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onLoginResponse(QString,QString,QString)));
@@ -86,7 +86,7 @@ void trackerDaemon::createSettings()
     m_settings.initialized = true;
 }
 
-void trackerDaemon::startGps()
+/*void trackerDaemon::startGps()
 {
     if (!m_positionSource) {
         m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
@@ -100,7 +100,7 @@ void trackerDaemon::startGps()
 void trackerDaemon::positionUpdated(QGeoPositionInfo gpsPos)
 {
     m_positionInfo = gpsPos;
-}
+}*/
 
 //TODO learn what it is
 void trackerDaemon::setupBearer()
@@ -139,9 +139,9 @@ bool trackerDaemon::setMark()
     qreal latitude = DEFAULT_LATITUDE;
     qreal longitude = DEFAULT_LONGITUDE;
     
-    if (m_positionInfo.coordinate().isValid()) {
-        latitude = m_positionInfo.coordinate().latitude();
-        longitude = m_positionInfo.coordinate().longitude();
+//    if (m_positionInfo.coordinate().isValid()) {
+        latitude = common::GpsInfo::getInstance().getLatitude();
+        longitude = common::GpsInfo::getInstance().getLongitude();
         
         m_applyMarkQuery.setQuery(m_settings.auth_token,
                                                    m_settings.channel,
@@ -151,12 +151,11 @@ bool trackerDaemon::setMark()
                                                    latitude,
                                                    longitude,
                                                    QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
-  //TODO place it into start()          //connect(m_applyMarkQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyMarkResponse(QString,QString)));
        m_applyMarkQuery.doRequest();
-    }
-    else {
-        setStatus(QString("Error"),QString("GPS error"));
-    }
+    //}
+   // else {
+     //   setStatus(QString("Error"),QString("GPS error"));
+//    }
 
     
 
