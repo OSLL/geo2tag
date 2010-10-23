@@ -7,7 +7,7 @@ SUBDIRS = common
 maemo5 {
   SUBDIRS += maps \
              gui \
-	     tracker
+    	     tracker
 }
 
 linux {
@@ -15,7 +15,8 @@ linux {
              fcgiio \
              service \
              maps \
-             gui
+             gui \
+             tracker
 }
 
 symbian {

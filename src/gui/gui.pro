@@ -8,6 +8,7 @@ target.path = /usr/bin
 INSTALLS += target
 
 INCLUDEPATH += . inc \
+                 /usr/include/jqson/ \
                  ../common/inc/ \
                  ../maps/inc \
                  ../common/common/inc \

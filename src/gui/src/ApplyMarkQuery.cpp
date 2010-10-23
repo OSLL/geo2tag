@@ -43,8 +43,8 @@
 #include "ApplyMarkQuery.h"
 #include "defines.h"
 #include <QDebug>
-#include "qjson/parser.h"
-#include "qjson/serializer.h"
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 #include "QVariant"
 #include "QVariantMap"
 
