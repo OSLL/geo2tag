@@ -32,7 +32,12 @@ SOURCES += main.cpp \
            ../gui/src/SubscribeChannelQuery.cpp \
            ../gui/src/SubscribeChannelJSON.cpp \
            ../gui/src/ApplyMarkQuery.cpp \
-           ../gui/src/LoginQuery.cpp
+           ../gui/src/LoginQuery.cpp \
+RequestSender.cpp \
+    TrackerGUI.cpp \
+    TitleWidget.cpp \
+    OptionsWidget.cpp \
+    LogWidget.cpp
 
 HEADERS += trackerdaemon.h \
            tracker.h \
@@ -45,7 +50,11 @@ HEADERS += trackerdaemon.h \
            ../gui/inc/LoginQuery.h \
            RequestSender.h \
            Status.h \
-           ../gui/inc/LoginQuery.h
+           ../gui/inc/LoginQuery.h \
+    TrackerGUI.h \
+    TitleWidget.h \
+    OptionsWidget.h \
+    LogWidget.h
 
 #FORMS += formCreateChannel.ui
 
