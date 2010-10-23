@@ -21,23 +21,23 @@ void RequestReceiver::setSocket(QTcpSocket *socket)
 
 void RequestReceiver::sendStatus(struct Status status)
 {
-    if (m_socket->open(QIODevice::ReadWrite))
-    {
+//    if (m_socket->open(QIODevice::ReadWrite))
+//    {
         QDataStream out(m_socket);
         out << status.datetime;
         out << status.status;
         out << status.description;
-    }
+//    }
 
-    m_socket->close();
+//    m_socket->close();
 }
 
 void RequestReceiver::onSocketReadyRead()
 {
-    if (!m_socket->open(QIODevice::ReadWrite))
+  /*  if (!m_socket->open(QIODevice::ReadWrite))
     {
         return;
-    }
+    }*/
 
     QDataStream in(m_socket);
     QString request;
@@ -76,5 +76,5 @@ void RequestReceiver::onSocketReadyRead()
         emit status();
     }
 
-    m_socket->close();
+//    m_socket->close();
 }

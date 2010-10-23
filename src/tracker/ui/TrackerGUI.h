@@ -37,7 +37,7 @@ public slots:
     void switchLog();
     void onOptionsWidgetDone();
     void onLogWidgetDone();
-
+    void connected();
     void updateStatus();
 
 };

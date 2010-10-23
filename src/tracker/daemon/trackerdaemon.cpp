@@ -20,6 +20,7 @@ trackerDaemon::trackerDaemon() : QObject(NULL)
 //
   m_server = new QTcpServer(this);
   if (!m_server->listen(QHostAddress::LocalHost,DAEMON_PORT)){
+      qDebug() << "Critical error - can not start server!!!!!" ;
 //     r("Critical error - can not start server!!!!!");
   }
   connect(m_server, SIGNAL(newConnection()), this, SLOT(uiConnected()));
@@ -165,6 +166,7 @@ bool trackerDaemon::setMark()
 void trackerDaemon::onApplyMarkResponse(QString status,QString status_description)
 {
     setStatus(status,status_description);
+    qDebug() << "added mark, status " << status << " " << status_description;
 }
 
 void trackerDaemon::onLoginResponse(QString status,QString auth_token,QString status_description){
@@ -181,6 +183,7 @@ void trackerDaemon::onSubscribeChannelResponse(QString status,QString status_des
 
 
 void trackerDaemon::start(){// start adding marks by timer
+    qDebug() << "start() ";
     if (m_settings.auth_token!=QString("")){
 
         m_timerID=startTimer(100); // first update should be fast*/
@@ -191,6 +194,7 @@ void trackerDaemon::start(){// start adding marks by timer
 }
 
 void trackerDaemon::stop(){// stop adding marks by timer;
+    qDebug() << "stop()";
     if (m_timerID){
         killTimer(m_timerID);
         m_timerID=0;
@@ -199,6 +203,7 @@ void trackerDaemon::stop(){// stop adding marks by timer;
 
 
 void trackerDaemon::login(QString login,QString password){
+    qDebug() << "login " << login << " " << password;
     m_settings.user=login;
     m_settings.passw=password;
     m_loginQuery.setQuery(login,password);
@@ -208,7 +213,10 @@ void trackerDaemon::login(QString login,QString password){
 
 
 void trackerDaemon::uiConnected(){
+  qDebug() << "uiConnected()";
   if (!m_uiSocket){
+      qDebug() << "uiConnected()";
+      m_uiSocket=m_server->nextPendingConnection();
       m_receiver=new RequestReceiver(m_uiSocket,this);
 
       connect(m_receiver,SIGNAL(start()),this,SLOT(start()));
@@ -220,10 +228,10 @@ void trackerDaemon::uiConnected(){
 
 
 
-     // m_uiSocket=->nextPendingConnection();
     //  connect(m_uiSocket, SIGNAL(readyRead()), this, SLOT(processSocketData()));
   }
 }
+
 
 void trackerDaemon::setStatus(QString status,QString status_description){
     m_status=status;

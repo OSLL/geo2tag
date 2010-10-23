@@ -7,7 +7,7 @@
 class RequestSender : public QObject
 {
     Q_OBJECT
-
+    Status m_status;
     QTcpSocket *m_socket;
 
 public:
@@ -23,6 +23,8 @@ public:
     bool start();
     bool stop();
     struct Status status();
+public slots:
+    void readyRead();
 
 };
 

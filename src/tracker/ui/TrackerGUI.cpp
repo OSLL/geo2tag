@@ -15,8 +15,10 @@ TrackerGUI::TrackerGUI(QWidget *parent) :
      * Create RequestSender to interact with daemon
      */
     QTcpSocket *socket = new QTcpSocket(this);
+    connect(socket,SIGNAL(connected()),this,SLOT(connected()));
     socket->connectToHost(QHostAddress::LocalHost, DAEMON_PORT);
-    socket->close();
+
+//    socket->close();
     m_requestSender = new RequestSender(socket, this);
 
     /*
@@ -128,3 +130,6 @@ void TrackerGUI::updateStatus()
     m_logWidget->setLog(newStatus + m_logWidget->getLog());
 }
 
+void TrackerGUI::connected(){
+    qDebug() << "Connected to daemon!";
+}
