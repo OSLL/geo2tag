@@ -21,10 +21,8 @@ trackerDaemon::trackerDaemon() : QObject(NULL)
   m_server = new QTcpServer(this);
   if (!m_server->listen(QHostAddress::LocalHost,DAEMON_PORT)){
       qDebug() << "Critical error - can not start server!!!!!" ;
-//     r("Critical error - can not start server!!!!!");
   }
   connect(m_server, SIGNAL(newConnection()), this, SLOT(uiConnected()));
- // startGps(); // TODO investigate, how we can to stopGPS in stop()
   QTimer::singleShot(0, this, SLOT(setupBearer()));
   connect(&m_applyMarkQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyMarkResponse(QString,QString)));
   connect(&m_loginQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onLoginResponse(QString,QString,QString)));
@@ -48,6 +46,7 @@ void trackerDaemon::cleanLocalSettigns()
 
 void trackerDaemon::initSettings()
 {
+    qDebug() << m_server->errorString();
   QSettings settings("osll","tracker");
 
   if( settings.value("magic").toString() == APP_MAGIC )
@@ -225,7 +224,8 @@ void trackerDaemon::uiConnected(){
       connect(m_receiver,SIGNAL(setChannel(QString,QString)),this,SLOT(setChannel(QString,QString)));
       connect(m_receiver,SIGNAL(addChannel(QString,QString)),this,SLOT(addChannel(QString,QString)));
       connect(m_receiver,SIGNAL(status()),this,SLOT(status()));
-
+     connect(m_uiSocket, SIGNAL(disconnected()),
+                  m_uiSocket, SLOT(deleteLater()));
 
 
     //  connect(m_uiSocket, SIGNAL(readyRead()), this, SLOT(processSocketData()));
@@ -246,6 +246,7 @@ void trackerDaemon::status(){
     if (m_status!="Ok"){
         out << m_statusDescription; 
     }
+    m_uiSocket->disconnectFromHost();
 }
 
 void trackerDaemon::setChannel(QString channel,QString channelKey){
@@ -259,46 +260,3 @@ void trackerDaemon::addChannel(QString channel,QString channelKey){
     m_applyChannelQuery.setQuery(m_settings.auth_token,channel,QString(""),QString(""),1000);
 }
 
-/*void trackerDaemon::processSocketData(){
-    QDataStream in(m_uiSocket);
-    QString command("");
-    in >> command;
-    switch(command){
-        case "start": {
-            start();
-            break;
-        }
-        case "stop":{
-            stop();
-            break;
-        }
-        case "login":{
-            QString name(""),password("");
-            in >> name;
-            in >> password;
-            if(name==QString("") || password==QString("")) return;
-            login(name,password);
-            break;
-        }
-        case "set channel":{
-            QString channel(""),key("");
-            in >> channel;
-            in >> key;
-            if (channel==QString("") || key==QString("")) return;
-            setChannel(channel,key);
-            break;
-        }
-        case "add channel":{
-            QString channel(""),key("");
-            in >> channel;
-            in >> key;
-            if (channel==QString("") || key==QString("")) return;
-            addChannel(channel,key);
-            break;
-        }
-        case "status":{
-            status();
-            break;
-        }
-    }
-}*/

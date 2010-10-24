@@ -6,7 +6,7 @@
 #include <QHostAddress>
 #include "Status.h"
 
-#define DAEMON_PORT 2001//34243
+#define DAEMON_PORT 34243
 
 TrackerGUI::TrackerGUI(QWidget *parent) :
         QMainWindow(parent)
@@ -15,8 +15,9 @@ TrackerGUI::TrackerGUI(QWidget *parent) :
      * Create RequestSender to interact with daemon
      */
     QTcpSocket *socket = new QTcpSocket(this);
+    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
     connect(socket,SIGNAL(connected()),this,SLOT(connected()));
-    socket->connectToHost(QHostAddress::LocalHost, DAEMON_PORT);
+    socket->connectToHost(QHostAddress::Any/*QHostAddress::LocalHost*/, DAEMON_PORT);
 
 //    socket->close();
     m_requestSender = new RequestSender(socket, this);
@@ -74,6 +75,7 @@ TrackerGUI::TrackerGUI(QWidget *parent) :
 
 void TrackerGUI::onStartTriggered()
 {
+    qDebug() << "start";
     m_requestSender->start();
     switchTitle();
     updateStatus();
@@ -81,6 +83,7 @@ void TrackerGUI::onStartTriggered()
 
 void TrackerGUI::onStopTriggered()
 {
+    qDebug() << "stop";
     m_requestSender->stop();
     switchTitle();
     updateStatus();
@@ -132,4 +135,22 @@ void TrackerGUI::updateStatus()
 
 void TrackerGUI::connected(){
     qDebug() << "Connected to daemon!";
+}
+
+void  TrackerGUI::displayError(QAbstractSocket::SocketError socketError){
+    switch (socketError) {
+         case QAbstractSocket::RemoteHostClosedError:{
+            qDebug() << "RemoteHostClosedError";
+            break;
+         }
+         case QAbstractSocket::HostNotFoundError: {
+             qDebug() << "HostNotFoundError";
+             break;
+         }
+         case QAbstractSocket::ConnectionRefusedError:{
+             qDebug() << "ConnectionRefusedError";
+             break;
+         }
+    }
+
 }

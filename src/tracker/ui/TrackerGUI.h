@@ -39,7 +39,8 @@ public slots:
     void onLogWidgetDone();
     void connected();
     void updateStatus();
-
+private slots:
+    void displayError(QAbstractSocket::SocketError socketError);
 };
 
 #endif // TRACKERGUI_H
