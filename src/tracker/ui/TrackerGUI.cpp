@@ -6,7 +6,7 @@
 #include <QHostAddress>
 #include "Status.h"
 
-#define DAEMON_PORT 34243
+#define DAEMON_PORT 2001//34243
 
 TrackerGUI::TrackerGUI(QWidget *parent) :
         QMainWindow(parent)
