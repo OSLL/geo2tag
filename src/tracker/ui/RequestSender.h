@@ -17,13 +17,26 @@ public:
     QTcpSocket* getSocket();
     void setSocket(QTcpSocket *socket);
 
+    /* if daemon is not loged in then gui have to
+       call this method with name/password */
     bool login(QString name, QString password);
+
+    /* send channel to send marks with position in */
     bool setChannel(QString name, QString key);
+
+    /* add channel if it is requred */
     bool addChannel(QString name, QString key);
+
+    /* start sending of marks with position */
     bool start();
+
+    /* stop sending if marks */
     bool stop();
+
+    /* get status of the daemon */
     struct Status status();
-public slots:
+
+private slots:
     void readyRead();
 
 };

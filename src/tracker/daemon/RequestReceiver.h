@@ -16,6 +16,8 @@ public:
     void setSocket(QTcpSocket *socket);
     QTcpSocket* getSocket();
 
+    /* daemon can sent its status to gui through socket
+       if it was requested */
     void sendStatus(struct Status status);
 
 private slots:
@@ -23,11 +25,24 @@ private slots:
     void onSocketReadyRead();
 
 signals:
+    /* is emittend whent gui have sent a login request */
     void login(QString name, QString password);
+
+    /* is emittend whent gui have sent a request to set a channel */
     void setChannel(QString name, QString key);
+
+    /* is emittend whent gui have sent a request to add a channel */
     void addChannel(QString name, QString key);
+
+     /* is emittend whent gui have sent a request to start sending
+        of marks with position */
     void start();
+
+    /* is emittend whent gui have sent a request to stop sending
+       of marks with position */
     void stop();
+
+    /* is emitted when gui have requested a status */
     void status();
 };
 

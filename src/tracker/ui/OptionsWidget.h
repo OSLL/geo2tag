@@ -25,6 +25,7 @@ public slots:
     void onDoneClicked();
 
 signals:
+    /* is emitted when "ok" button is pressed */
     void done();
 
 };

@@ -14,6 +14,10 @@ public:
     TitleWidget(QWidget *parent = 0);
 
 public slots:
+    /* this widget should eliminate current status,
+       it can be text or picture.
+       In any case there should be methods to set
+       this information */
     void setEnabled(bool enabled);
     void setStatus(QString status);
 };
