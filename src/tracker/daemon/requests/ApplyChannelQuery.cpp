@@ -145,6 +145,7 @@ void ApplyChannelQuery::onManagerFinished(QNetworkReply *reply)
         bool ok;
         QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
         QString status("");
+        QString status_description("");
         if (!ok)
         {
             qFatal("An error occured during parsing json with response to apply mark");
@@ -152,9 +153,10 @@ void ApplyChannelQuery::onManagerFinished(QNetworkReply *reply)
         else
         {
             status = result["status"].toString();
+            status_description = result["status_description"].toString(); 
         }
 
-        emit responseReceived(status);
+        emit responseReceived(status,status_description);
     }
 }
 

@@ -1,6 +1,6 @@
 #include <QDebug>
 #include <QCoreApplication>
-#include "trackerdaemon.h"
+#include "TrackerDaemon.h"
 
 
 int main(int c, char **v)

@@ -1,4 +1,4 @@
-#include "trackerdaemon.h"
+#include "TrackerDaemon.h"
 #include <QSettings>
 #include <QDebug>
 #include <QDateTime>
@@ -30,8 +30,8 @@ TrackerDaemon::TrackerDaemon():
     connect(m_server, SIGNAL(newConnection()), this, SLOT(uiConnected()));
     QTimer::singleShot(0, this, SLOT(setupBearer()));
     connect(&m_applyMarkQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyMarkResponse(QString,QString)));
-    connect(&m_loginQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onLoginResponse(QString,QString,QString)));
-    connect(&m_subscribeQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onSubscribeResponse(QString,QString)));
+    connect(&m_loginQuery, SIGNAL(responseReceived(QString,QString,QString)), this, SLOT(onLoginResponse(QString,QString,QString)));
+    connect(&m_subscribeQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onSubscribeChannelResponse(QString,QString)));
     connect(&m_applyChannelQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyChannelResponse(QString,QString)));
     initSettings();
 }
@@ -89,22 +89,6 @@ void TrackerDaemon::createSettings()
     settings.setValue("magic",APP_MAGIC);
     m_settings.initialized = true;
 }
-
-/*void trackerDaemon::startGps()
-{
-    if (!m_positionSource) {
-        m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
-        m_positionSource -> setPreferredPositioningMethods(QGeoPositionInfoSource::AllPositioningMethods);
-        QObject::connect(m_positionSource, SIGNAL(positionUpdated(QGeoPositionInfo)),
-        this, SLOT(positionUpdated(QGeoPositionInfo)));
-    }
-    m_positionSource->startUpdates();
-}
-
-void trackerDaemon::positionUpdated(QGeoPositionInfo gpsPos)
-{
-    m_positionInfo = gpsPos;
-}*/
 
 //TODO learn what it is
 void TrackerDaemon::setupBearer()
@@ -187,7 +171,7 @@ void TrackerDaemon::onSubscribeChannelResponse(QString status,QString status_des
 
 void TrackerDaemon::start()
 {// start adding marks by timer
-    qDebug() << "start() ";
+    qDebug() << "start() slot executed";
     if(m_settings.auth_token!=QString(""))
     {
 
@@ -201,7 +185,7 @@ void TrackerDaemon::start()
 }
 
 void TrackerDaemon::stop(){// stop adding marks by timer;
-    qDebug() << "stop()";
+    qDebug() << "stop() slot executed";
     if (m_timerID){
         killTimer(m_timerID);
         m_timerID=0;
@@ -222,25 +206,19 @@ void TrackerDaemon::login(QString login,QString password)
 
 void TrackerDaemon::uiConnected()
 {
-    qDebug() << "uiConnected()";
-    if (!m_uiSocket)
-    {
-        qDebug() << "uiConnected()";
-        m_uiSocket=m_server->nextPendingConnection();
-        m_receiver=new RequestReceiver(m_uiSocket,this);
 
-        connect(m_receiver,SIGNAL(start()),this,SLOT(start()));
-        connect(m_receiver,SIGNAL(stop()),this,SLOT(stop()));
-        connect(m_receiver,SIGNAL(login(QString,QString)),this,SLOT(login(QString,QString)));
-        connect(m_receiver,SIGNAL(setChannel(QString,QString)),this,SLOT(setChannel(QString,QString)));
-        connect(m_receiver,SIGNAL(addChannel(QString,QString)),this,SLOT(addChannel(QString,QString)));
-        connect(m_receiver,SIGNAL(status()),this,SLOT(status()));
-        connect(m_uiSocket, SIGNAL(disconnected()),
+   m_uiSocket=m_server->nextPendingConnection();
+   qDebug() << "uiConnected, socket " << m_uiSocket;
+   m_receiver=new RequestReceiver(m_uiSocket,this);
+   connect(m_receiver,SIGNAL(start()),this,SLOT(start()));
+   connect(m_receiver,SIGNAL(stop()),this,SLOT(stop()));
+   connect(m_receiver,SIGNAL(login(QString,QString)),this,SLOT(login(QString,QString)));
+   connect(m_receiver,SIGNAL(setChannel(QString,QString)),this,SLOT(setChannel(QString,QString)));
+   connect(m_receiver,SIGNAL(addChannel(QString,QString)),this,SLOT(addChannel(QString,QString)));
+   connect(m_receiver,SIGNAL(status()),this,SLOT(status()));
+   connect(m_uiSocket, SIGNAL(disconnected()),
                 m_uiSocket, SLOT(deleteLater()));
 
-
-        //  connect(m_uiSocket, SIGNAL(readyRead()), this, SLOT(processSocketData()));
-    }
 }
 
 

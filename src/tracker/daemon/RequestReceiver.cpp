@@ -42,6 +42,7 @@ void RequestReceiver::onSocketReadyRead()
     QDataStream in(m_socket);
     QString request;
     in >> request;
+    qDebug() << "server recievs message " << request;
     if (request == "login")
     {
         QString name;

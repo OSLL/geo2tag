@@ -17,7 +17,7 @@ TrackerGUI::TrackerGUI(QWidget *parent) :
     QTcpSocket *socket = new QTcpSocket(this);
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
     connect(socket,SIGNAL(connected()),this,SLOT(connected()));
-    socket->connectToHost(QHostAddress::Any/*QHostAddress::LocalHost*/, DAEMON_PORT);
+    socket->connectToHost(QHostAddress::LocalHost, DAEMON_PORT);
 
 //    socket->close();
     m_requestSender = new RequestSender(socket, this);
