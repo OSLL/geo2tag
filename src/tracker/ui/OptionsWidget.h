@@ -10,9 +10,14 @@ class OptionsWidget : public QWidget
 {
     Q_OBJECT
 
-    QLineEdit *m_name;
-    QLineEdit *m_password;
-    QLineEdit *m_channel;
+    QLineEdit *m_nameEdit;
+    QLineEdit *m_passwordEdit;
+    QLineEdit *m_channelEdit;
+
+    QString m_name;
+    QString m_password;
+    QString m_channel;
+
     QPushButton *m_doneButton;
 
 public:
