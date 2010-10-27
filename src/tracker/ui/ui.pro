@@ -6,7 +6,7 @@ include(../../../config.pri)
 target.path = /usr/bin
 INSTALLS += target
 
-QT += network
+QT += network xml
 
 
 DEPENDPATH += . \

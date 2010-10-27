@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QtXml/QDomElement>
 
 class OptionsWidget : public QWidget
 {
