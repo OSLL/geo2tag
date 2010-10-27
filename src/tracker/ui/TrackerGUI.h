@@ -17,7 +17,12 @@ class TrackerGUI : public QMainWindow
     RequestSender *m_requestSender;
 
     QStackedWidget *m_stackedWidget;
-    TitleWidget *m_titleWidget;
+    QWidget *m_titleWidget;
+    QLabel *m_status;
+    QPushButton *m_startButton;
+    QPushButton *m_stopButton;
+    QPushButton *m_optionsButton;
+    QPushButton *m_logButton;
     OptionsWidget *m_optionsWidget;
     LogWidget *m_logWidget;
 

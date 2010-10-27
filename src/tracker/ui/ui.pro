@@ -34,3 +34,5 @@ HEADERS += tracker.h \
            OptionsWidget.h \
            LogWidget.h
 
+RESOURCES += \
+    images.qrc

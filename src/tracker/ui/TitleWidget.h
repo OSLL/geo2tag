@@ -3,12 +3,15 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QPushButton>
 
 class TitleWidget : public QWidget
 {
     Q_OBJECT
 
     QLabel *m_status;
+    QPushButton *m_startButton;
+    QPushButton *m_stopButton;
 
 public:
     TitleWidget(QWidget *parent = 0);

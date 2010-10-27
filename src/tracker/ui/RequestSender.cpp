@@ -9,7 +9,7 @@ RequestSender::RequestSender(QTcpSocket *socket, QObject *parent) :
 {
     qDebug() << "got " << socket << " socket";
     m_status.valid=true;
-    m_status.status="Daemon not connected";
+    m_status.status="Daemon is not connected";
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
@@ -88,10 +88,10 @@ bool RequestSender::stop()
 
 struct Status RequestSender::status()
 {
-/*    struct Status status;
+    struct Status status;
     status.valid = false;
 
-    if (m_socket->open(QIODevice::ReadWrite))
+/*    if (m_socket->open(QIODevice::ReadWrite))
     {
         QDataStream out(m_socket);
         out << QString("status");
