@@ -1,3 +1,5 @@
 debian/tmp/usr/bin/tracker
+debian/tmp/usr/bin/tracker-ui
+debian/tmp/etc/init.d/tracker
 debian/tmp/usr/share/applications/hildon/tracker.desktop
 debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png

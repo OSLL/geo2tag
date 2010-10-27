@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /etc/init.d;
+update-rc.d defaults 99;

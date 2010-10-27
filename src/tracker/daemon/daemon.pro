@@ -6,7 +6,7 @@ include(../../../config.pri)
 target.path = /usr/bin
 INSTALLS += target
 
-QT += network
+QT += network core
 
 
 DEPENDPATH += . \
@@ -28,24 +28,13 @@ INCLUDEPATH += . \
 # Input
 SOURCES += main.cpp \
            TrackerDaemon.cpp \
-           ApplyChannelQuery.cpp \
-           RequestReceiver.cpp \
-           AddUserQuery.cpp \
-           ../../gui/src/SubscribeChannelQuery.cpp \
-           ../../gui/src/SubscribeChannelJSON.cpp \
            ../../gui/src/ApplyMarkQuery.cpp \
            ../../gui/src/LoginQuery.cpp \
 
 HEADERS += TrackerDaemon.h \
            tracker.h \
-           ApplyChannelQuery.h \
-           RequestReceiver.h \
-           AddUserQuery.h \
            ../../common/inc/defines.h \
-           ../../gui/inc/SubscribeChannelQuery.h \
            ../../gui/inc/ApplyMarkQuery.h \
-           ../../gui/inc/LoginQuery.h \
-           Status.h \
            ../../gui/inc/LoginQuery.h \
 
 

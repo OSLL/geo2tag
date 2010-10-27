@@ -3,54 +3,32 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QTimer>
-
-#include "ApplyMarkQuery.h"
-#include "SubscribeChannelQuery.h"
+#include <QFile>
+//#include "ApplyMarkQuery.h"
+//#include "SubscribeChannelQuery.h"
 #include "LoginQuery.h"
 
 
 #define DEFAULT_LATITUDE 60.17
 #define DEFAULT_LONGITUDE 24.95
 #define DAEMON_PORT 34243
-#define ERRORLOG_LENGTH 30
+#define LOG QString("/var/wikigps-tracker")
 
-TrackerDaemon::TrackerDaemon():
-        m_server(new QTcpServer(this))
+TrackerDaemon::TrackerDaemon()
 {
-    qDebug() << "in constructor";
-    if(m_server->listen(QHostAddress::LocalHost, DAEMON_PORT))
-    {
-        qDebug() << "Server is started";
-    }
-    else
-    {
-        qDebug() << "Critical error - can not start server!!!!!" ;
-    }
-
-    connect(m_server, SIGNAL(newConnection()), this, SLOT(uiConnected()));
+    qDebug() << "Starting server";
+    // Create log file and textStream for it
+    m_log = new QFile(LOG,this);
+    m_log->open(QIODevice::WriteOnly | QIODevice::Text);
+    m_logOut = new QTextStream(m_log);
     QTimer::singleShot(0, this, SLOT(setupBearer()));
     connect(&m_applyMarkQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyMarkResponse(QString,QString)));
     connect(&m_loginQuery, SIGNAL(responseReceived(QString,QString,QString)), this, SLOT(onLoginResponse(QString,QString,QString)));
-    connect(&m_subscribeQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onSubscribeChannelResponse(QString,QString)));
-    connect(&m_applyChannelQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyChannelResponse(QString,QString)));
     initSettings();
+    login(m_settings.user,m_settings.passw);
 }
-
-void TrackerDaemon::onApplyChannelResponse(QString status,QString status_description)
-{
-    setStatus(status,status_description);
-}
-
-void TrackerDaemon::cleanLocalSettigns()
-{
-    QSettings settings("osll","tracker");
-    settings.clear();
-
-}
-
 void TrackerDaemon::initSettings()
 {
-    qDebug() << m_server->errorString();
     QSettings settings("osll","tracker");
 
     if( settings.value("magic").toString() == APP_MAGIC )
@@ -60,7 +38,7 @@ void TrackerDaemon::initSettings()
     }
     else
     {
-        emit createSettings();
+        setStatus(QString("Error"),QString("No settings!"));
     }
 }
 
@@ -71,24 +49,10 @@ void TrackerDaemon::readSettings()
     m_settings.key = settings.value("key").toString();
     m_settings.user = settings.value("user").toString();
     m_settings.passw = settings.value("passwd").toString();
-    m_settings.auth_token = settings.value("auth_token").toString();
+//    m_settings.auth_token = settings.value("auth_token").toString();
     m_settings.initialized = true;
 }
 
-void TrackerDaemon::createSettings()
-{
-
-    //TODO Add settings initialization
-
-    QSettings settings("osll","tracker");
-    settings.setValue("channel",m_settings.channel);
-    settings.setValue("key",m_settings.key);
-    settings.setValue("user",m_settings.user);
-    settings.setValue("passwd",m_settings.passw);
-    settings.setValue("auth_token",m_settings.auth_token);
-    settings.setValue("magic",APP_MAGIC);
-    m_settings.initialized = true;
-}
 
 //TODO learn what it is
 void TrackerDaemon::setupBearer()
@@ -127,7 +91,6 @@ bool TrackerDaemon::setMark()
     qreal latitude = DEFAULT_LATITUDE;
     qreal longitude = DEFAULT_LONGITUDE;
 
-    //    if (m_positionInfo.coordinate().isValid()) {
     latitude = common::GpsInfo::getInstance().getLatitude();
     longitude = common::GpsInfo::getInstance().getLongitude();
 
@@ -140,13 +103,6 @@ bool TrackerDaemon::setMark()
                               longitude,
                               QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
     m_applyMarkQuery.doRequest();
-    //}
-    // else {
-    //   setStatus(QString("Error"),QString("GPS error"));
-    //    }
-
-
-
     return true;
 }
 
@@ -161,11 +117,8 @@ void TrackerDaemon::onLoginResponse(QString status,QString auth_token,QString st
     if (status == QString("Ok"))
     {
         m_settings.auth_token=auth_token;
+        start();
     }
-}
-
-void TrackerDaemon::onSubscribeChannelResponse(QString status,QString status_description){
-    setStatus(status,status_description);
 }
 
 
@@ -190,6 +143,7 @@ void TrackerDaemon::stop(){// stop adding marks by timer;
         killTimer(m_timerID);
         m_timerID=0;
     }
+    m_log->close();
 }
 
 
@@ -204,22 +158,6 @@ void TrackerDaemon::login(QString login,QString password)
 
 
 
-void TrackerDaemon::uiConnected()
-{
-
-   m_uiSocket=m_server->nextPendingConnection();
-   qDebug() << "uiConnected, socket " << m_uiSocket;
-   m_receiver=new RequestReceiver(m_uiSocket,this);
-   connect(m_receiver,SIGNAL(start()),this,SLOT(start()));
-   connect(m_receiver,SIGNAL(stop()),this,SLOT(stop()));
-   connect(m_receiver,SIGNAL(login(QString,QString)),this,SLOT(login(QString,QString)));
-   connect(m_receiver,SIGNAL(setChannel(QString,QString)),this,SLOT(setChannel(QString,QString)));
-   connect(m_receiver,SIGNAL(addChannel(QString,QString)),this,SLOT(addChannel(QString,QString)));
-   connect(m_receiver,SIGNAL(status()),this,SLOT(status()));
-   connect(m_uiSocket, SIGNAL(disconnected()),
-                m_uiSocket, SLOT(deleteLater()));
-
-}
 
 
 void TrackerDaemon::setStatus(QString status,QString status_description)
@@ -227,30 +165,9 @@ void TrackerDaemon::setStatus(QString status,QString status_description)
     m_status=status;
     m_statusDescription=status_description;
     m_lastAttempt=QDateTime::currentDateTime();
-}
+    (*m_logOut) << m_lastAttempt.toString() << " " << m_status << " " 
+        << m_statusDescription;
 
-void TrackerDaemon::status()
-{
-    QDataStream out(m_uiSocket);
-    out << m_lastAttempt;
-    out << m_status;
-    if (m_status!="Ok")
-    {
-        out << m_statusDescription;
-    }
-    m_uiSocket->disconnectFromHost();
-}
 
-void TrackerDaemon::setChannel(QString channel,QString channelKey)
-{
-    m_settings.channel=channel;
-    m_settings.key=channelKey;
-    m_subscribeQuery.setQuery(m_settings.auth_token,m_settings.channel);
-    m_subscribeQuery.doRequest();
-}
-
-void TrackerDaemon::addChannel(QString channel,QString channelKey)
-{
-    m_applyChannelQuery.setQuery(m_settings.auth_token,channel,QString(""),QString(""),1000);
 }
 
