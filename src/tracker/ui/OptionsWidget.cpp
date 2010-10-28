@@ -6,6 +6,9 @@
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 #include <QDebug>
+#include <QSettings>
+#include <QMessageBox>
+#include <DaemonManager.h>
 
 OptionsWidget::OptionsWidget(QWidget *parent) :
         QWidget(parent)
@@ -23,136 +26,124 @@ OptionsWidget::OptionsWidget(QWidget *parent) :
 
     connect(m_doneButton, SIGNAL(clicked()), this, SLOT(onDoneClicked()));
 
-    /*
-     * Read settings for /var/tracker/tracker.conf
-     */
-    QDomDocument docSettings("Settings");
-    QFile settingsFile("/var/tracker/tracker.conf");
-    if (settingsFile.open(QIODevice::ReadOnly))
-    {
-        if (docSettings.setContent(&settingsFile))
-        {
-            QDomElement docElem = docSettings.documentElement();
-
-            QDomNode n = docElem.firstChild();
-            while(!n.isNull()) {
-                QDomElement e = n.toElement(); // try to convert the node to an element.
-                if(!e.isNull()) {
-                    if (e.tagName() == "login")
-                    {
-                        m_nameEdit->setText(e.text());
-                        m_name = e.text();
-                        qDebug() << "read login: " << e.text();
-                    }
-                    else if (e.tagName() == "password")
-                    {
-                        m_passwordEdit->setText(e.text());
-                        m_password = e.text();
-                        qDebug() << "read password: " << e.text();
-                    }
-                    else if (e.tagName() == "channel")
-                    {
-                        m_channelEdit->setText(e.text());
-                        m_channel = e.text();
-                    }
-                }
-                n = n.nextSibling();
-            }
-        }
-        else
-        {
-            qDebug() << "can't find xml document in config file";
-        }
-    }
-    else
-    {
-        qDebug() << "can't open settings file /var/tracker/tracker.conf";
-        settingsFile.close();
-    }
-
-    settingsFile.close();
+    initSettings();
 
 }
 
 QString OptionsWidget::name()
 {
-    return m_name;
+    return m_settings.user;
 }
 
 QString OptionsWidget::password()
 {
-    return m_password;
+    return m_settings.passw;
 }
 
 QString OptionsWidget::channel()
 {
-    return m_channel;
+    return m_settings.channel;
 }
 
 void OptionsWidget::onDoneClicked()
 {
-    QDomDocument docSettings("Settings");
-    QFile settingsFile("/var/tracker/tracker.conf");
-    if (settingsFile.open(QIODevice::ReadWrite))
-    {
-        if (docSettings.setContent(&settingsFile))
-        {
-            QDomElement docElem = docSettings.documentElement();
+    int changed = 0;
 
-            QDomNode n = docElem.firstChild();
-            while(!n.isNull()) {
-                QDomElement e = n.toElement(); // try to convert the node to an element.
-                if(!e.isNull()) {
-                    if (e.tagName() == "login")
-                    {
-                        if (m_nameEdit->text() != m_name)
-                        {
-                            e.setNodeValue(m_nameEdit->text());
-                            docSettings.documentElement().childNodes().at(1).toElement().setNodeValue(m_nameEdit->text());
-                            m_name = m_nameEdit->text();
-                            qDebug() << "write login: " << m_name;
-                        }
-                    }
-                    else if (e.tagName() == "password")
-                    {
-                        if (m_passwordEdit->text() != m_password)
-                        {
-                            e.setNodeValue(m_passwordEdit->text());
-                            docSettings.documentElement().childNodes().at(2).setNodeValue(m_passwordEdit->text());
-                            m_password = m_passwordEdit->text();
-                            qDebug() << "write password: " << m_password;// << m_passwordEdit->text();
-                        }
-                    }
-                    else if (e.tagName() == "channel")
-                    {
-                        if (m_channelEdit->text() != m_channel)
-                        {
-                            e.setNodeValue(m_channelEdit->text());
-                            m_channel = m_channelEdit->text();
-                            qDebug() << "write channel: " << m_channel;
-                        }
-                    }
-                }
-                n = n.nextSibling();
-            }
-        }
-        else
-        {
-            qDebug() << "can't find xml document in config file";
-        }
+    if (m_nameEdit->text() == "")
+    {
+        QMessageBox::information(this, "Tracker", "User's name can be empy");
+        return;
+    }
+    else if (m_passwordEdit->text() == "")
+    {
+        QMessageBox::information(this, "Tracker", "User's password can be empy");
+        return;
+    }
+    else if (m_settings.channel == "")
+    {
+        QMessageBox::information(this, "Tracker", "Channel's name can be empy");
+        return;
+    }
+
+    if (m_settings.user != m_nameEdit->text())
+    {
+        changed = 1;
+        m_settings.user = m_nameEdit->text();
+        qDebug() << "new name: " << m_settings.user;
+    }
+    if (m_settings.passw != m_passwordEdit->text())
+    {
+        changed = 1;
+        m_settings.passw = m_passwordEdit->text();
+        qDebug() << "new password: " << m_settings.passw;
+    }
+    if (m_settings.channel != m_channelEdit->text())
+    {
+        changed = 1;
+        m_settings.channel = m_channelEdit->text();
+        qDebug() << "new channel: " << m_settings.channel;
+    }
+
+    if (changed)
+    {
+
+        // 1. stop daemon
+        DaemonManager::getInstance().start();
+
+        // 2. update qsettings
+        createSettings();
+
+        // 3. start daemon
+        DaemonManager::getInstance().stop();
+
+        // 4. check status
+    }
+
+    emit this->done();
+}
+
+void OptionsWidget::initSettings()
+{
+    QSettings settings("osll","tracker");
+
+    if( settings.value("magic").toString() == APP_MAGIC )
+    {
+        qDebug() << "magic = " << settings.value("magic").toString();
+        emit readSettings();
     }
     else
     {
-        qDebug() << "can't open settings file /var/tracker/tracker.conf";
-        settingsFile.close();
+        emit createSettings();
     }
+}
 
-    settingsFile.close();
+void OptionsWidget::readSettings()
+{
+    QSettings settings("osll","tracker");
+    m_settings.channel = settings.value("channel").toString();
+    m_settings.key = settings.value("key").toString();
+    m_settings.user = settings.value("user").toString();
+    m_settings.passw = settings.value("passwd").toString();
+    m_settings.auth_token = settings.value("auth_token").toString();
+    m_settings.initialized = true;
 
-    QString savedXML = docSettings.toString();
-    qDebug() << savedXML;
-    //QTextStream tempTS(&savedXML);
-    //do
+    m_nameEdit->setText(m_settings.user);
+    m_passwordEdit->setText(m_settings.passw);
+    m_channelEdit->setText(m_settings.channel);
 
-    emit this->done();
+    m_backupSettings = m_settings;
+}
+
+void OptionsWidget::createSettings()
+{
+    QSettings settings("osll","tracker");
+    settings.setValue("channel",m_settings.channel);
+    settings.setValue("key",m_settings.key);
+    settings.setValue("user",m_settings.user);
+    settings.setValue("passwd",m_settings.passw);
+    settings.setValue("auth_token",m_settings.auth_token);
+    settings.setValue("magic",APP_MAGIC);
+    m_settings.initialized = true;
+
+    m_backupSettings = m_settings;
 }

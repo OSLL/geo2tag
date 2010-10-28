@@ -5,10 +5,14 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QtXml/QDomElement>
+#include "tracker.h"
 
 class OptionsWidget : public QWidget
 {
     Q_OBJECT
+
+    Settings m_settings;
+    Settings m_backupSettings;
 
     QLineEdit *m_nameEdit;
     QLineEdit *m_passwordEdit;
@@ -26,6 +30,11 @@ public:
     QString name();
     QString password();
     QString channel();
+
+    void initSettings();
+    void readSettings();
+    void createSettings();
+    void updateWidgets();
 
 public slots:
     void onDoneClicked();

@@ -23,7 +23,8 @@ SOURCES += main.cpp \
            TrackerGUI.cpp \
            TitleWidget.cpp \
            OptionsWidget.cpp \
-           LogWidget.cpp
+           LogWidget.cpp \
+    DaemonManager.cpp
 
 HEADERS += tracker.h \
            ../../common/inc/defines.h \
@@ -32,7 +33,8 @@ HEADERS += tracker.h \
            TrackerGUI.h \
            TitleWidget.h \
            OptionsWidget.h \
-           LogWidget.h
+           LogWidget.h \
+    DaemonManager.h
 
 RESOURCES += \
     images.qrc
