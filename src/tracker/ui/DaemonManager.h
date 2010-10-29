@@ -2,9 +2,12 @@
 #define DAEMONMANAGER_H
 
 #include <QString>
+#include <QObject>
 
 class DaemonManager
 {
+    QObject object;
+
 public:
     DaemonManager();
 

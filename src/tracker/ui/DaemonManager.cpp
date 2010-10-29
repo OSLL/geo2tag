@@ -1,5 +1,6 @@
 #include "DaemonManager.h"
 
+#include <QProcess>
 #include <QString>
 
 DaemonManager::DaemonManager()
@@ -14,12 +15,22 @@ DaemonManager& DaemonManager::getInstance()
 
 void DaemonManager::start()
 {
-    // TODO
+    QString program = "/etc/init.d/tracker";
+    QStringList arguments;
+    arguments << "start";
+
+    QProcess *myProcess = new QProcess(&object);
+    myProcess->start(program, arguments);
 }
 
 void DaemonManager::stop()
 {
-    // TODO
+    QString program = "/etc/init.d/tracker";
+    QStringList arguments;
+    arguments << "stop";
+
+    QProcess *myProcess = new QProcess(&object);
+    myProcess->start(program, arguments);
 }
 
 QString DaemonManager::getStatus()
