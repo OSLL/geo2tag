@@ -19,8 +19,10 @@ TrackerDaemon::TrackerDaemon()
     qDebug() << "Starting server";
     // Create log file and textStream for it
     m_log = new QFile(LOG,this);
-    m_log->open(QIODevice::WriteOnly | QIODevice::Text);
-    m_logOut = new QTextStream(m_log);
+    if (!m_log->open(QIODevice::WriteOnly | QIODevice::Text)){
+        qDebug() << "cant open file!!!!";
+    }
+//    m_logOut = new QTextStream(m_log);
     QTimer::singleShot(0, this, SLOT(setupBearer()));
     connect(&m_applyMarkQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyMarkResponse(QString,QString)));
     connect(&m_loginQuery, SIGNAL(responseReceived(QString,QString,QString)), this, SLOT(onLoginResponse(QString,QString,QString)));
@@ -165,8 +167,9 @@ void TrackerDaemon::setStatus(QString status,QString status_description)
     m_status=status;
     m_statusDescription=status_description;
     m_lastAttempt=QDateTime::currentDateTime();
-    (*m_logOut) << m_lastAttempt.toString() << " " << m_status << " " 
-        << m_statusDescription;
+    QTextStream out(m_log);
+    out << m_lastAttempt.toString(QString("hh:mm:ss dd.MM.yyyy")) << " " << m_status << " " 
+        << m_statusDescription << "\n";
 
 
 }
