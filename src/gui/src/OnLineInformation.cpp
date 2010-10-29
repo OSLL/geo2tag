@@ -81,8 +81,8 @@ namespace GUI
         connect(subscribedChannelsListQuery, SIGNAL(responseReceived(CHandlePtr<common::Channels>&)),
                 this, SLOT(onSubscribedChannelsListQueryResponseReceived(CHandlePtr<common::Channels>&)));
         connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateAvailableChannels()));
-        connect(loginQuery, SIGNAL(responseReceived(QString,QString)),
-                this, SLOT(onLoginQueryResponseReceived(QString,QString)));
+        connect(loginQuery, SIGNAL(responseReceived(QString,QString,QString)),
+                this, SLOT(onLoginQueryResponseReceived(QString,QString,QString)));
 
     }
 
