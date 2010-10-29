@@ -4,9 +4,10 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include <QWidget>
+#include <QLabel>
+#include <QPixmap>
 
 #include "RequestSender.h"
-#include "TitleWidget.h"
 #include "OptionsWidget.h"
 #include "LogWidget.h"
 
@@ -18,7 +19,7 @@ class TrackerGUI : public QMainWindow
 
     QStackedWidget *m_stackedWidget;
     QWidget *m_titleWidget;
-    QLabel *m_status;
+    QPushButton *m_status;
     QPushButton *m_startButton;
     QPushButton *m_stopButton;
     QPushButton *m_optionsButton;

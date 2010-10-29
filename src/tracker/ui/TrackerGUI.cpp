@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include "Status.h"
+#include "DaemonManager.h"
 
 #define DAEMON_PORT 34243
 
@@ -79,7 +80,11 @@ TrackerGUI::TrackerGUI(QWidget *parent) :
     buttonsLayout->addWidget(m_optionsButton);
     buttonsLayout->addWidget(m_logButton);
     buttonsLayout->addStretch();
-    m_status = new QLabel("Undefined");
+    m_status = new QPushButton();
+    m_status->setIcon(QIcon(":/images/stop"));
+    m_status->setFlat(true);
+    m_status->setIconSize(QSize(100, 100));
+    m_status->setDisabled(true);
     QHBoxLayout *titleLayout = new QHBoxLayout();
     titleLayout->addLayout(buttonsLayout);
     titleLayout->addWidget(m_status);
@@ -115,12 +120,14 @@ void TrackerGUI::onStartTriggered()
 {
     qDebug() << "start";
     // TODO : send "start" to daemon
+    DaemonManager::getInstance().start();
     updateStatus();
 }
 
 void TrackerGUI::onStopTriggered()
 {
     qDebug() << "stop";
+    DaemonManager::getInstance().stop();
     // TODO : send "stop" to daemon
     updateStatus();
 }

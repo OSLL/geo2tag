@@ -21,7 +21,6 @@ INCLUDEPATH += . \
 SOURCES += main.cpp \
            RequestSender.cpp \
            TrackerGUI.cpp \
-           TitleWidget.cpp \
            OptionsWidget.cpp \
            LogWidget.cpp \
     DaemonManager.cpp
@@ -31,7 +30,6 @@ HEADERS += tracker.h \
            RequestSender.h \
            Status.h \
            TrackerGUI.h \
-           TitleWidget.h \
            OptionsWidget.h \
            LogWidget.h \
     DaemonManager.h
