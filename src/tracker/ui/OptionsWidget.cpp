@@ -59,7 +59,7 @@ void OptionsWidget::onDoneClicked()
         QMessageBox::information(this, "Tracker", "User's password can be empy");
         return;
     }
-    else if (m_settings.channel == "")
+    else if (m_channelEdit->text() == "")
     {
         QMessageBox::information(this, "Tracker", "Channel's name can be empy");
         return;
