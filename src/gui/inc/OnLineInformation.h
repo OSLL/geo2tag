@@ -130,7 +130,7 @@ namespace GUI
         void onSubscribeChannelQueryResponseReceived(QString status);
         void onUnsubscribeChannelQueryResponseReceived(QString status);
         void onSubscribedChannelsListQueryResponseReceived(CHandlePtr<common::Channels>& channels);
-        void onLoginQueryResponseReceived(QString status, QString auth_token,QString status description);
+        void onLoginQueryResponseReceived(QString status, QString auth_token);
 
     private:
         OnLineInformation(const OnLineInformation& obj);
