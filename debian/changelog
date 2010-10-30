@@ -1,3 +1,9 @@
+wikigps (0.1.2) unstable; urgency=low
+
+  * tracker splited for two parts
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Sat, 30 Oct 2010 18:39:11 +0400
+
 wikigps (0.1.1) unstable; urgency=low
 
   * small bugs are fixed
