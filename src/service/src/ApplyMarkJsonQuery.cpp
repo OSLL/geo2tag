@@ -133,7 +133,7 @@ void ApplyMarkJsonQuery::process(){
           		(*j)->addData(mark);
                         // syslog(LOG_INFO,"updateChannel finished sucsesfull");
                         m_status_description = "nothing";
-    			m_status="ok";
+    			m_status="Ok";
     			break;
     		}
 	    }
