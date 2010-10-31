@@ -109,6 +109,7 @@ void ApplyMarkJsonQuery::process(){
     	CHandlePtr<common::Channels> channels = common::DbSession::getInstance().getChannels();
         // syslog(LOG_INFO,"getChannels sucsesfull");
         m_status_description = "Channel wasn't found";
+
     	for (common::Channels::iterator j=channels->begin();j!=channels->end();j++)
         {
     		if ((*j)->getName()==m_channel)
@@ -121,15 +122,7 @@ void ApplyMarkJsonQuery::process(){
 				syslog(LOG_INFO,"Adding mark with user time");
 			}
 			CHandlePtr<loader::DataMark> mark=makeHandle(new loader::DataMark(0,m_latitude,m_longitude,m_title,m_description,m_link,tmp_time,*i,*j));
-                        // syslog(LOG_INFO,"Datamark created sucsefully. Id of user %i, Id of channel %i, mark %i",(*i).dynamicCast<loader::User>()->getId(),(*j).dynamicCast<loader::Channel>()->getId(),mark==0);
-          	//	try
-		//	{
 			common::DbSession::getInstance().updateChannel((*j).dynamicCast<loader::Channel>()->getId(),mark); // \ToDo replace channel_id to Objejct
-		//	} catch (//const CDynamicCastFailure &x)
-		///	{
-				// type your code here
-		//		break;
-		//	}
           		(*j)->addData(mark);
                         // syslog(LOG_INFO,"updateChannel finished sucsesfull");
                         m_status_description = "nothing";
