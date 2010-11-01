@@ -20,7 +20,7 @@ namespace  GUI
 
   private slots:
     void okPressed();
-    void responseReceived(QString status, QString auth_token);
+    void responseReceived(QString status, QString auth_token,QString status_description);
     void errorReceived();
 
   signals:
