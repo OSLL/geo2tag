@@ -106,9 +106,9 @@ void ApplyMarkJsonQuery::process(){
         // syslog(LOG_INFO,"Find user from request");
         // syslog(LOG_INFO,"strptime result %i,strptime(m_time.c_str(),"%d %b %Y %H:%M:%S",&tim)==NULL);
         // syslog(LOG_INFO,"Finishing strptime");
-    	CHandlePtr<common::Channels> channels = common::DbSession::getInstance().getChannels();
+    	CHandlePtr<common::Channels> channels = (*i).dynamicCast<loader::User>()->getSubscribedChannels();//common::DbSession::getInstance().getChannels();
         // syslog(LOG_INFO,"getChannels sucsesfull");
-        m_status_description = "Channel wasn't found";
+        m_status_description = "Channel wasn't found or not subscribed";
 
     	for (common::Channels::iterator j=channels->begin();j!=channels->end();j++)
         {
