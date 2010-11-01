@@ -14,50 +14,6 @@
 TrackerGUI::TrackerGUI(QWidget *parent) :
         QMainWindow(parent)
 {
-//    /*
-//     * Create RequestSender to interact with daemon
-//     */
-//    QTcpSocket *socket = new QTcpSocket(this);
-//    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
-//    connect(socket,SIGNAL(connected()),this,SLOT(connected()));
-//    socket->connectToHost(QHostAddress::LocalHost, DAEMON_PORT);
-
-//////    socket->close();
-//    m_requestSender = new RequestSender(socket, this);
-
-//    /*
-//     * Create menu
-//     * There are two type of menu:
-//     * 1. MenuBar with Actions
-//     * 2. MenuBar contains Menu and Menu contains Actions
-//     * One of them is uncommented.
-//     */
-//    m_startAction = new QAction("Start", this);
-//    m_stopAction = new QAction("Stop", this);
-//    m_optionsAction = new QAction("Options", this);
-//    m_logAction = new QAction("Log", this);
-//    /*
-//    QMenu *fileMenu = this->menuBar()->addMenu("File");
-//    fileMenu->addAction(m_startAction);
-//    fileMenu->addAction(m_stopAction);
-//    fileMenu->addAction(m_optionsAction);
-//    fileMenu->addAction(m_logAction);
-//    */
-//    ///*
-//    this->menuBar()->addAction(m_startAction);
-//    this->menuBar()->addAction(m_stopAction);
-//    this->menuBar()->addAction(m_optionsAction);
-//    this->menuBar()->addAction(m_logAction);
-//    //*/
-//    connect(m_startAction, SIGNAL(triggered()),
-//            this, SLOT(onStartTriggered()));
-//    connect(m_stopAction, SIGNAL(triggered()),
-//            this, SLOT(onStopTriggered()));
-//    connect(m_optionsAction, SIGNAL(triggered()),
-//            this, SLOT(switchOptions()));
-//    connect(m_logAction, SIGNAL(triggered()),
-//            this, SLOT(switchLog()));
-
     /*
      * Create title widget
      */
@@ -112,14 +68,16 @@ TrackerGUI::TrackerGUI(QWidget *parent) :
     connect(m_optionsButton, SIGNAL(clicked()), this, SLOT(switchOptions()));
     connect(m_logButton, SIGNAL(clicked()), this, SLOT(switchLog()));
 
-    updateStatus();
+    m_statusTimer = new QTimer(this);
+    m_statusTimer->setInterval(60 * 1000);
+    connect(m_statusTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
 
+    updateStatus();
 }
 
 void TrackerGUI::onStartTriggered()
 {
     qDebug() << "start";
-    // TODO : send "start" to daemon
     DaemonManager::getInstance().start();
     updateStatus();
 }
@@ -128,7 +86,6 @@ void TrackerGUI::onStopTriggered()
 {
     qDebug() << "stop";
     DaemonManager::getInstance().stop();
-    // TODO : send "stop" to daemon
     updateStatus();
 }
 
@@ -160,21 +117,41 @@ void TrackerGUI::onLogWidgetDone()
 
 void TrackerGUI::updateStatus()
 {
-    // TODO : check status file
-//    struct Status status = m_requestSender->status();
-//    QString newStatus;
-//    if (status.valid)
-//    {
-//        newStatus = status.datetime.toString("dd.MM.yyyy hh:mm:ss") + " " +
-//                    status.status + "<br>: " +
-//                    status.description;
-//    }
-//    else
-//    {
-//        newStatus = "Can't connect to daemon";
-//    }
-//    m_status->setText(newStatus);
-//    m_logWidget->setLog(newStatus + m_logWidget->getLog());
+    QDateTime now = QDateTime::currentDateTime();
+
+    if (DaemonManager::getInstance().lastStatusModification().secsTo(now) < 60)
+    {
+        struct Status status = DaemonManager::getInstance().getStatus();
+        if (status.status == "Ok")
+        {
+            QString message = status.datetime.toString("hh:mm:ss dd.MM.yyyy")
+                              + ": " + status.status + ". " +
+                              status.description;
+            qDebug() << message;
+            m_logWidget->addToLog(message);
+            m_status->setIcon(QIcon(":/images/start"));
+        }
+        else
+        {
+            QString message = status.datetime.toString("hh:mm:ss dd.MM.yyyy")
+                              + ": " + status.status + ". " +
+                              status.description;
+            qDebug() << message;
+            m_logWidget->addToLog(message);
+            m_status->setIcon(QIcon(":/images/error"));
+        }
+    }
+    else
+    {
+        QString message = QDateTime::currentDateTime().toString("hh:mm:ss dd.MM.yyyy")
+                          + " Status hasn't been updated within "
+                            "last 60 secs -> daemon isn't working";
+        qDebug() << message;
+        m_logWidget->addToLog(message);
+        m_status->setIcon(QIcon(":/images/stop"));
+    }
+
+    m_statusTimer->start();
 }
 
 void TrackerGUI::connected(){

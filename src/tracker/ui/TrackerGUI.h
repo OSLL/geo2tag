@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPixmap>
+#include <QTimer>
 
 #include "RequestSender.h"
 #include "OptionsWidget.h"
@@ -31,6 +32,8 @@ class TrackerGUI : public QMainWindow
     QAction *m_stopAction;
     QAction *m_optionsAction;
     QAction *m_logAction;
+
+    QTimer *m_statusTimer;
 
 public:
     TrackerGUI(QWidget *parent = 0);

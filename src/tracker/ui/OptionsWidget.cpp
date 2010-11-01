@@ -21,10 +21,14 @@ OptionsWidget::OptionsWidget(QWidget *parent) :
     layout->addWidget(new QLabel("Channel name:"));
     layout->addWidget(m_channelEdit = new QLineEdit());
     layout->addStretch();
-    layout->addWidget(m_doneButton = new QPushButton("Done"));
+    QHBoxLayout *buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(m_doneButton = new QPushButton("Done"));
+    buttonLayout->addWidget(m_cancelButton = new QPushButton("Cancel"));
+    layout->addLayout(buttonLayout);
     this->setLayout(layout);
 
     connect(m_doneButton, SIGNAL(clicked()), this, SLOT(onDoneClicked()));
+    connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
 
     initSettings();
 
@@ -86,18 +90,43 @@ void OptionsWidget::onDoneClicked()
 
     if (changed)
     {
+        QDateTime prevModified = DaemonManager::getInstance().lastStatusModification();
 
         // 1. stop daemon
-        DaemonManager::getInstance().start();
+        DaemonManager::getInstance().stop();
 
         // 2. update qsettings
         createSettings();
 
         // 3. start daemon
-        DaemonManager::getInstance().stop();
+        DaemonManager::getInstance().start();
 
         // 4. check status
+        for (int i = 0; i < 100000; i++)
+            if (prevModified != DaemonManager::getInstance().lastStatusModification())
+                break;
+
+        if (prevModified != DaemonManager::getInstance().lastStatusModification())
+        {
+            struct Status status = DaemonManager::getInstance().getStatus();
+            if (status.status == "Error")
+            {
+                QMessageBox::information(this, "Tracker", "Error: " + status.description);
+                return;
+            }
+        }
     }
+
+    m_backupSettings = m_settings;
+    emit this->done();
+}
+
+void OptionsWidget::onCancelClicked()
+{
+    m_settings = m_backupSettings;
+    m_nameEdit->setText(m_settings.user);
+    m_passwordEdit->setText(m_settings.passw);
+    m_channelEdit->setText(m_settings.channel);
 
     emit this->done();
 }

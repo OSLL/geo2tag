@@ -4,5 +4,6 @@
         <file>images/stop.png</file>
         <file>images/log.png</file>
         <file>images/options.png</file>
+        <file>images/error.png</file>
     </qresource>
 </RCC>

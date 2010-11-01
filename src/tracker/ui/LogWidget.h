@@ -16,6 +16,7 @@ public:
     LogWidget(QWidget *parent = 0);
     QString getLog();
     void setLog(QString log);
+    void addToLog(QString string);
 
 public slots:
     void onOkClicked();

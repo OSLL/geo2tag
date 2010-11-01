@@ -23,6 +23,7 @@ class OptionsWidget : public QWidget
     QString m_channel;
 
     QPushButton *m_doneButton;
+    QPushButton *m_cancelButton;
 
 public:
     OptionsWidget(QWidget *parent = 0);
@@ -38,10 +39,12 @@ public:
 
 public slots:
     void onDoneClicked();
+    void onCancelClicked();
 
 signals:
     /* is emitted when "ok" button is pressed */
     void done();
+    void cancel();
 
 };
 

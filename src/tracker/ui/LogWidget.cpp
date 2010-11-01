@@ -23,6 +23,11 @@ void LogWidget::setLog(QString log)
     m_log->setText(log);
 }
 
+void LogWidget::addToLog(QString string)
+{
+    m_log->setText(string + "\n \n" + m_log->toPlainText());
+}
+
 void LogWidget::onOkClicked()
 {
     emit done();
