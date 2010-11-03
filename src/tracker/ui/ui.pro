@@ -1,10 +1,12 @@
 TEMPLATE = app
-TARGET = tracker-ui
 
-include(../../../config.pri)
+TARGET = tracker-ui
 
 target.path = /usr/bin
 INSTALLS += target
+
+include(../../../config.pri)
+
 
 QT += network xml
 

@@ -1,10 +1,12 @@
 TEMPLATE = app
-TARGET = tracker
 
-include(../../../config.pri)
+TARGET = tracker
 
 target.path = /usr/bin
 INSTALLS += target
+
+include(../../../config.pri)
+
 
 QT += network core
 

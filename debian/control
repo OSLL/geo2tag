@@ -16,17 +16,17 @@ Description: WikiGPS service client
  Very long description will be here
 
 Package: wikigps-tracker
-Architecture: armel
+Architecture: any
 Depends: ${shlibs:Depends},wikigps-libs (>=0.1.2)
 Description: WikiGPS tracker
  has very tiny interface. alfa version.
 
 Package: wikigps-webside
 Architecture: i386
-Depends: ${shlibs:Depends}, wikigps-service, libqt4-dev, witty
+Depends: ${shlibs:Depends}, wikigps-service, libqt4, witty
 Description: Geo2tag website
 
 Package: wikigps-service
 Architecture: i386
-Depends: ${shlibs:Depends}, lighttpd, postgresql, unixodbc, unixodbc-dev, odbc-postgresql, libqt4-dev (>=4), wikigps-libs
+Depends: ${shlibs:Depends}, lighttpd, postgresql, unixodbc, odbc-postgresql, wikigps-libs
 Description: Geo2tag webservice

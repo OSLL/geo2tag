@@ -57,24 +57,23 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-#installing tracker and observer
 	if [ "$(DEB_BUILD_ARCH)" = "armel" ] ; then \
 		echo "armel arch instalation"; \
 		$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
 		install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
 		install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
+                install -d $(CURDIR)/debian/tmp/etc/init.d; \
 		cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
 		cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
-		cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; \
-		cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop; \
-		mkdir $(CURDIR)/debian/tmp/etc; \
-		mkdir $(CURDIR)/debian/tmp/etc/init.d; \
-	        cp $(BUILDDIR)tracker/tracker $(CURDIR)/debian/tmp/etc/init.d/; \
+	        cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop; \
+	        cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; \
+	        cp $(BUILDDIR)tracker/tracker_maemo $(CURDIR)/debian/tmp/etc/init.d/tracke; \
 	else \
 		$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
 		install -d $(CURDIR)/debian/tmp/opt/geo2tag; \
 		install -d $(CURDIR)/debian/tmp/var/www; \
 		install -d $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+	        install -d $(CURDIR)/debian/tmp/etc/init.d; \
 		cp -r $(BUILDDIR)/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
 		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp $(BUILDDIR)/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
@@ -87,6 +86,7 @@ install: build
                 cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
+        	cp $(BUILDDIR)tracker/tracker_linux $(CURDIR)/debian/tmp/etc/init.d/tracker; \
 	fi;
 #	cp -l $(BUILDDOR)src/lib/libmaps* $(CURDIR)/debian/tmp/usr/lib;
 	dh_install -s
