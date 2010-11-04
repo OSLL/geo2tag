@@ -10,8 +10,8 @@ Depends: ${shlibs:Depends}, libqt4-core (>=4), libqt4-gui (>=4), libqt4-webkit (
 Description: Geo2tag libs
 
 Package: wikigps-client
-Architecture: armel
-Depends: wikigps-libs, libqjson (>=0.7), libqtm-location (>=1.0),libqtm-bearer (>=1.0)
+Architecture: any
+Depends: wikigps-libs, libqjson0 [i386],libqjson [armel], libqtm-location (>=1.0) [armel],libqtm-bearer (>=1.0) [armel]
 Description: WikiGPS service client
  Very long description will be here
 

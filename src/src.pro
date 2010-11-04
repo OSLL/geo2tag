@@ -16,13 +16,11 @@ linux {
              service \
              maps \
              gui \
-             tracker
+             tracker \
+             webside
 }
 
 symbian {
 }
 
-webside {
-  SUBDIRS += webside
-}
 

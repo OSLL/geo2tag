@@ -3,7 +3,6 @@ CONFIG += debug
 CONFIG += linux
 #CONFIG += maemo5
 #CONFIG += symbian
-#CONFIG += webside
 
 SOURCE_DIR = $$PWD
 
@@ -33,11 +32,6 @@ linux: {
     MOC_DIR = .moc
 }
 
-webside: {
-    QMAKE_CXXFLAGS += -g3
-    OBJECTS_DIR = .obj
-    MOC_DIR = .moc
-}
 
 LIBS += -L$$SOURCE_DIR/src/lib
 
