@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Version=0.0.1
 Type=Application
-Name=tracker
+Name=tracker-ui
 Icon=tracker
 Exec=tracker
 X-Icon-path=/usr/share/icons/
