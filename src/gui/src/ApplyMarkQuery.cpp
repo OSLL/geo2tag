@@ -125,9 +125,9 @@ namespace GUI
         connect(manager, SIGNAL(finished(QNetworkReply*)),
                 this, SLOT(onManagerFinished(QNetworkReply*)));
         connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-                this, SLOT(onManagerSslErrors()));
+                this, SIGNAL(managerSslErrors()));
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(onReplyError(QNetworkReply::NetworkError)));
+                this, SIGNAL(replyError(QNetworkReply::NetworkError)));
 
         qDebug() << "ApplyMarkQuery did request:\n"
                  << httpQuery << jsonQuery;
@@ -159,7 +159,7 @@ namespace GUI
             emit responseReceived(status,status_description);
         }
     }
-
+/*
     void ApplyMarkQuery::onReplyError(QNetworkReply::NetworkError error)
     {
         qDebug("Network error: %d \n", error);
@@ -168,7 +168,7 @@ namespace GUI
     void ApplyMarkQuery::onManagerSslErrors()
     {
         qDebug("ssl error \n");
-    }
+    }*/
 } // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

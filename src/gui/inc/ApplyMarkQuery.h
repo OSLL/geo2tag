@@ -88,11 +88,11 @@ namespace GUI
 
   signals:
       void responseReceived(QString status,QString status_description);
+      void replyError(QNetworkReply::NetworkError);
+      void managerSslErrors();
 
   private slots:
       void onManagerFinished(QNetworkReply *reply);
-      void onReplyError(QNetworkReply::NetworkError);
-      void onManagerSslErrors();
 
   private:
       /* \todo Do we need next constructor and overloaded operator? */

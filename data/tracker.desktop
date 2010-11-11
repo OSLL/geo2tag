@@ -4,6 +4,6 @@ Version=0.0.1
 Type=Application
 Name=tracker-ui
 Icon=tracker
-Exec=tracker
+Exec=tracker-ui
 X-Icon-path=/usr/share/icons/
 X-Window-Icon=tracker

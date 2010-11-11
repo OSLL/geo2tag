@@ -48,6 +48,8 @@ public slots:
     // TODO refactor this method for writing into log file in /var/
     void setStatus(QString channel,QString channelKey);
 
+    void onNetworkError(QNetworkReply::NetworkError);
+    void onSslError();
 
     void readSettings();
     void setupBearer();

@@ -24,6 +24,8 @@ TrackerDaemon::TrackerDaemon()
     }
 //    m_logOut = new QTextStream(m_log);
     QTimer::singleShot(0, this, SLOT(setupBearer()));
+    connect(&m_applyMarkQuery,SIGNAL(replyError(QNetworkReply::NetworkError)),this,SLOT(onNetworkError(QNetworkReply::NetworkError)));
+    connect(&m_applyMarkQuery,SIGNAL(manageSslErrors()),this,SLOT(onSslError()));
     connect(&m_applyMarkQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyMarkResponse(QString,QString)));
     connect(&m_loginQuery, SIGNAL(responseReceived(QString,QString,QString)), this, SLOT(onLoginResponse(QString,QString,QString)));
     initSettings();
@@ -123,6 +125,21 @@ void TrackerDaemon::onLoginResponse(QString status,QString auth_token,QString st
     }
 }
 
+void TrackerDaemon::onNetworkError(QNetworkReply::NetworkError){
+        //Add here message boxes for error visualisation
+        // Add reconnecting when shirt happens
+        setStatus("Error","Network error occure. Connection will be reopened");
+        stop();
+        start();
+
+}
+
+void TrackerDaemon::onSslError(){
+        //Add visualisation and reconnection for errors.
+        setStatus("Error","Ssl Error occuried");
+        stop();
+        start();
+}
 
 void TrackerDaemon::start()
 {// start adding marks by timer
