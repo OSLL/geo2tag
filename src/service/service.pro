@@ -27,46 +27,27 @@ INCLUDEPATH += \
                ../json/inc
 
 # Input
-HEADERS += inc/AvailableListJsonQuery.h \
-           inc/UnknownJsonQuery.h \
-           inc/SubscribedListJsonQuery.h \
-           inc/LoginJsonQuery.h \
-           inc/SubscribeQuery.h \
-           inc/ApplyMarkJsonQuery.h \
-           inc/ApplyUserJsonQuery.h \
-           inc/ApplyChannelJsonQuery.h \
-           inc/RssFeedJsonQuery.h \
-           inc/IJsonQuery.h \
-           inc/JsonQueryFactory.h \
-           inc/UnsubscribeJsonQuery.h \
+HEADERS += \
            inc/DynamicCastFailure.h \
            inc/engine.h \
-           inc/query.h \
            inc/server.h \
            inc/ChannelInternal.h \
            inc/DataMarkInternal.h \
            inc/UserInternal.h \
-           inc/DbSession.h 
+           inc/DbSession.h \
+    inc/UpdateThread.h 
 
 SOURCES += src/main.cpp \
-           src/SubscribedListJsonQuery.cpp \
-           src/RssFeedJsonQuery.cpp \
-           src/AvailableListJsonQuery.cpp \
-           src/ApplyMarkJsonQuery.cpp \
-           src/ApplyUserJsonQuery.cpp \
-           src/ApplyChannelJsonQuery.cpp \
-           src/LoginJsonQuery.cpp \
-           src/UnknownJsonQuery.cpp \
-           src/SubscribeQuery.cpp \
-           src/UnsubscribeJsonQuery.cpp \
-           src/query.cpp \
            src/server.cpp \
            src/ChannelInternal.cpp \
            src/DataMarkInternal.cpp \
            src/DynamicCastFailure.cpp \
            src/UserInternal.cpp \
-           src/DbSession.cpp 
-LIBS +=  -lfcgiio -lodbc -lcommon -lfcgi -ljson
+           src/DbSession.cpp \
+    src/UpdateThread.cpp
+
+LIBS +=  -lcommon -lfcgi
 OBJECTS_DIR = .obj
 
-QT -= core gui
+QT -= gui
+QT += sql

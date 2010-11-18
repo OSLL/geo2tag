@@ -43,125 +43,46 @@
 #define _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
 
 #include <syslog.h>
-#include "DbConn.h"
+
+#include <QtSql>
+#include <QThread>
+#include <QMap>
+
 #include "DataMarks.h"
 #include "Channel.h"
-#include "Thread.h"
-#include "SwMr.h"
-#include "Sleep.h"
-#include "DynamicCastFailure.h"
-#include <sstream>
+#include "DataChannel.h"
+#include "User.h"
+#include "UpdateThread.h"
+
 namespace common
 {
-  template<typename T>
-  class UpdateThread: public Thread::CThread
-  {
-    bool m_needExit;
-    
-    T*  m_instance;
-
-    void thread()
-    {
-      while(!m_needExit)
-      {
-        // syslog(LOG_INFO, "update thread: updating data");
-        try
-        {
-          m_instance->loadData();
-        }
-        catch(CExceptionSource & e)
-        {
-      	  std::stringstream s; 
-          e.outToStream(s);
-          syslog(LOG_INFO,"%s",s.str().c_str());
-        }
-        mSleep(10000);
-      }
-      // syslog(LOG_INFO, "update thread: exiting...");
-    }
-    public:
-      UpdateThread(T* instance):m_needExit(false), m_instance(instance)
-      {
-        start();
-      }
-
-      void shutdown()
-      {
-        m_needExit = true;
-      }
-  };
-  
-  /*!
+    /*!
    * \brief session with database
    */
-  class DbSession: protected ODBC::CDbEnv, public ODBC::CDbConn
-  {
-    friend class UpdateThread<DbSession>;
+    class DbObjectsCollection
+    {
+        QSharedPointer<Channels>    m_channelsContainer;
+        QSharedPointer<DataMarks>   m_tagsContainer;
+        QSharedPointer<Users>       m_usersContainer;
 
-    CHandlePtr<DataMarks> m_marks; // Marks list
-    CHandlePtr<Channels> m_channels; // Channels list
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > m_users; // Users list
+        UpdateThread                m_updateThread;
+    protected:
 
-    std::map<std::string,CHandlePtr<common::User> > m_tokensMap;
-    CHandlePtr<Thread::CThread> m_updateThread;
+        DbObjectsCollection();
 
-    void loadUsers();
-    void loadChannels();
-    void loadMarks();
-    void loadRelations();
+    public:
 
-    void saveChannels();
-    void saveMarks();
-    void saveRelations();
-  
-  protected:
+        static DbObjectsCollection& getInstance();
 
-    DbSession();
-    
-    void loadData();
+        ~DbObjectsCollection();
 
-    void saveData();
 
-  public:
- 
+    private:
+        DbObjectsCollection(const DbObjectsCollection& obj);
+        DbObjectsCollection& operator=(const DbObjectsCollection& obj);
 
-    ~DbSession();
-    
-    CHandlePtr<DataMarks> getMarks() const;
+    }; // class DbSession
 
-    CHandlePtr<Channels> getChannels() const;
-
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > getUsers() const;
-
-    const std::map<std::string,CHandlePtr<common::User> >& getTokensMap() const;
-
-    void storeMark(CHandlePtr<common::DataMark> m);
-
-    void storeUser(CHandlePtr<common::User> user);
-
-    void removeUser(CHandlePtr<common::User> user);
-  
-    void subscribe(const CHandlePtr<common::User>& user, const CHandlePtr<common::Channel>& channel);
-
-    void unsubscribe(CHandlePtr<common::User> user, CHandlePtr<common::Channel> hannel);
-
-    void storeChannel(CHandlePtr<common::Channel> channel);
-
-    void removeChannel(CHandlePtr<common::Channel> channel);
-
-    /*
-     * \brief add to channel new mark
-     */
-    void updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m); 
-
-    static DbSession& getInstance();
-
-  private:    
-    DbSession(const DbSession& obj);
-    DbSession& operator=(const DbSession& obj);
-
-  }; // class DbSession
-  
 } // namespace common
 
 #endif //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_

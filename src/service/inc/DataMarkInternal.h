@@ -42,28 +42,29 @@
 #define _DataMarkInternal_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
 
 #include "DataMarks.h"
+#include "ChannelInternal.h"
+#include "UserInternal.h"
 
-namespace loader
-{
-  class DataMark: public common::DataMark
-  {
-    unsigned long long m_id;
+    class DbDataMark: public DataMark
+    {
 
-  public:
-    DataMark(unsigned long long id, double latitude, double longitude, 
-             std::string label, std::string description, const std::string& url, const CTime& time,
-             const CHandlePtr<common::User> &user, const CHandlePtr<common::Channel>&channel);
-    
-    unsigned long long getId() const;
-    
-    void setId(unsigned long long id);
+        qlonglong m_id; //!< Tag's identifier
 
-    void setChannel(const CHandlePtr<common::Channel> &channel);
+        qlonglong m_userId; //!< Assotiated user's identifier for the tag
 
-    virtual ~DataMark();
-  };
-  
-} // namespace loader
+    public:
+        DbDataMark(qlonglong id, double latitude, double longitude,
+                 QString label, QString description, const QString& url, const QDateTime& time,
+                 qlonglong userId);
+
+        qlonglong getId() const;
+
+        qlonglong getUserId() const;
+
+        void setId(qlonglong id);
+
+        virtual ~DbDataMark();
+    };
 
 #endif //_DataMarkInternal_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
 

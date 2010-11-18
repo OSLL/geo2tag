@@ -41,65 +41,49 @@
 #ifndef _Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
 #define _Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
 
-#include <string>
-#include <vector>
-#include "DataMarks.h"
-#include "Handle.h"
+#include <QString>
+#include <QVector>
+#include <QSharedPointer>
 
-namespace common
+#include "ConcurrentVector.h"
+
+class Channel: public QObject
 {
-  /*!
-   * 
-   */
-  class Channel
-  {
-    std::string m_name; //!< channel name  
-    std::string m_description; //!< Description for channel
-    std::string m_url; //!< URL for mark
-
-    CHandlePtr<DataMarks> m_marks; //!< Marks for this channel
-    
-    bool m_isDisplayed; //!< Displayed on the UI
-
+    Q_OBJECT
+    QString m_name; //!< channel name
+    QString m_description; //!< Description for channel
+    QString m_url; //!< URL for mark
     double m_activeRadius; //< Radius for visible marks
 
-  protected:
-    Channel(const std::string &name, const std::string &description, const std::string& url, const CHandlePtr<DataMarks> &marks);
+    bool m_isDisplayed; //!< Displayed on the UI
 
-  public:
+protected:
+    Channel(const QString &name, const QString &description, const QString& url);
 
-    const std::string& getDescription() const;
+public:
 
-    const std::string& getName() const;
+    virtual qlonglong getId() const = 0;
 
-    const std::string& getUrl() const;
+    const QString& getDescription() const;
 
-    void setDescription(const std::string& description);
-    
-    void setUrl(const std::string& url);
+    const QString& getName() const;
 
-    const CHandlePtr<DataMarks> getMarks() const;
+    const QString& getUrl() const;
 
-    virtual void addData(CHandlePtr<DataMark> mark);
+    void setDescription(const QString& description);
+
+    void setUrl(const QString& url);
 
     void setRadius(const double &radius);
     double getRadius() const;
 
     bool isDisplayed() const;
-
     void setDisplayed(bool);
 
     virtual ~Channel();
-  }; // class Channel
- 
-  class Channels: public std::vector<CHandlePtr<Channel> >
-  {
-  public:
-    Channels();
+}; // class Channel
 
-    virtual ~Channels();
-  }; // class Channels
-} // namespace common
+typedef ConcurrentVector<Channel> Channels;
 
 #endif //_Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
 

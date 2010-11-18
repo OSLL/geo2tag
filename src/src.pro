@@ -4,23 +4,17 @@ include(../config.pri)
 
 SUBDIRS = common
 
-maemo5 {
+maemo5: {
   SUBDIRS += maps \
              gui \
-    	     tracker
+             tracker
 }
 
-linux {
-  SUBDIRS += json \
-             fcgiio \
-             service \
-             maps \
-             gui \
-             tracker \
-             webside
+linux: {
+  SUBDIRS += service
 }
 
-symbian {
+symbian: {
 }
 
 

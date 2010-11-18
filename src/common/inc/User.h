@@ -39,45 +39,44 @@
 #ifndef _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 #define _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 
-#include <string>
-#include "Handle.h"
+#include <QString>
+#include <QSharedPointer>
 #include "Channel.h"
 
-namespace common
+#include "ConcurrentVector.h"
+
+class User: public QObject
 {
- /*!
-   * User
-   */
-  class User
-  {
-    std::string m_login;
-    std::string m_password;
+    Q_OBJECT
+    QString m_login;
+    QString m_password;
 
-    std::string m_result;
-    std::string m_token;
-    CHandlePtr<Channels> m_channels; // list of subscribed channels
+    QString m_result;
+    QString m_token;
+    QSharedPointer<Channels> m_channels; // list of subscribed channels
 
-  protected:
-    User(const std::string&, const std::string&);
-    
-    /*!
-     * \brief add new channel to list of subscribed channels
-     */
-    void subscribe(const CHandlePtr<Channel>& channel);
-    void unsubscribe(const CHandlePtr<Channel>& channel);
-  public:
+protected:
+    User(const QString&, const QString&);
 
-    const std::string& getLogin() const;
-    const std::string& getPassword() const;
-    const std::string& getToken() const;
-    const CHandlePtr<Channels> getSubscribedChannels() const;
+public:
 
-    void setPassword(const std::string password);
+    virtual qlonglong getId() const = 0;
 
-    virtual ~User();    
-  }; // class User
-  
-} // namespace common
+    void subscribe(const QSharedPointer<Channel>& channel);
+
+    void unsubscribe(const QSharedPointer<Channel>& channel);
+
+    const QString& getLogin() const;
+    const QString& getPassword() const;
+    const QString& getToken() const;
+    const QSharedPointer<Channels> getSubscribedChannels() const;
+
+    void setPassword(const QString password);
+
+    virtual ~User();
+}; // class User
+
+typedef ConcurrentVector<User> Users;
 
 #endif //_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 

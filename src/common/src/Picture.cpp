@@ -43,7 +43,7 @@
 
 namespace common
 {
-  Picture::Picture(const std::vector<char>& data): m_data(data)
+  Picture::Picture(const QVector<char>& data): m_data(data)
   {
   }
 

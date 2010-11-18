@@ -29,148 +29,149 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file DataMarks.cpp
  * \brief DataMarks implementation
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 #include <math.h>
-#include <stdio.h>
-#include <cstring>
+//#include <cstring>
+
 #include "DataMarks.h"
-namespace common
-{
-  void DataMark::setDescription(const std::string& s)
-  {
-    m_description = s;
-  }
-  
-  const std::string& DataMark::getDescription() const
-  {
-    return m_description;
-  }
 
-  DataMark::DataMark(double latitude, double longitude, const std::string& label, 
-             const std::string& description, const std::string& url, const CTime &time,
-             const CHandlePtr<User> &user): 
-             m_latitude(latitude), 
-             m_longitude(longitude), 
-             m_label(label),
-             m_description(description), 
-      	     m_url(url),
-             m_time(time),
-             m_user(user)
-  {
-  }
+    void DataMark::setDescription(const QString& s)
+    {
+        m_description = s;
+    }
 
-  DataMark::~DataMark()
-  {
+    const QString& DataMark::getDescription() const
+    {
+        return m_description;
+    }
 
-  }
+    DataMark::DataMark(double latitude, double longitude, QString label,
+                       QString description, QString url, QDateTime time):
+                                            m_latitude(latitude),
+                                            m_longitude(longitude),
+                                            m_label(label),
+                                            m_description(description),
+                                            m_url(url),
+                                            m_time(time)
+    {
+        m_user = QSharedPointer<User>(NULL);
+        m_channel = QSharedPointer<Channel>(NULL);
+    }
 
-  double DataMark::getLatitude() const
-  {
-    return m_latitude;
-  }
+    void DataMark::setUser(QSharedPointer<User> user)
+    {
+        m_user=user;
+    }
 
-  void DataMark::setLatitude(const double& lat)
-  {
-    m_latitude = lat;
-  }
-  
-  double DataMark::getLongitude() const
-  {
-    return m_longitude;
-  }
+    void DataMark::setChannel(QSharedPointer<Channel> channel)
+    {
+        m_channel=channel;
+    }
 
-  void DataMark::setLongitude(const double &lon)
-  {
-    m_longitude = lon;
-  }
+    DataMark::~DataMark()
+    {
 
-  const std::string& DataMark::getLabel() const
-  {
-    return m_label;
-  }
+    }
 
-  void DataMark::setLabel(const std::string& label)
-  {
-    m_label = label;
-  }
+    double DataMark::getLatitude() const
+    {
+        return m_latitude;
+    }
 
-  const std::string& DataMark::getUrl() const
-  {
-    return m_url;
-  }
+    void DataMark::setLatitude(const double& lat)
+    {
+        m_latitude = lat;
+    }
 
-  void DataMark::setUrl(const std::string& url)
-  {
-    m_url = url;
-  }
+    double DataMark::getLongitude() const
+    {
+        return m_longitude;
+    }
 
-  const CTime& DataMark::getTime() const
-  {
-    return m_time;
-  }
+    void DataMark::setLongitude(const double &lon)
+    {
+        m_longitude = lon;
+    }
 
-  void DataMark::setTime(const CTime& time)
-  {
-    m_time = time;
-  }
-  
-  CHandlePtr<User> DataMark::getUser() const
-  {
-    return m_user;
-  }
+    const QString& DataMark::getLabel() const
+    {
+        return m_label;
+    }
 
-  CHandlePtr<Channel> DataMark::getChannel() const
-  {
-    return m_channel;
-  }
+    void DataMark::setLabel(const QString& label)
+    {
+        m_label = label;
+    }
 
-  DataMarks::DataMarks()
-  {
-  }
+    const QString& DataMark::getUrl() const
+    {
+        return m_url;
+    }
 
-  DataMarks::~DataMarks()
-  { 
-  }
-  
-  CHandlePtr<DataMark> DataMark::createMark(double latitude, double longitude, const std::string& label, 
-             const std::string& description, const std::string& url, const CTime &time, const CHandlePtr<Channel> &channel,const CHandlePtr<User> &user)
-  {
-  //  assert(false); // zps: here will be code bellow, but without DbSession. I think method should have user as IN parameter
-#if 0    
-    return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, url, time,  user, channel));
-#endif    
-  }
+    void DataMark::setUrl(const QString& url)
+    {
+        m_url = url;
+    }
 
+    const QDateTime& DataMark::getTime() const
+    {
+        return m_time;
+    }
 
-  double deg2rad(double deg) 
-  {
-      return (deg * M_PI / 180);
-  }
+    void DataMark::setTime(const QDateTime& time)
+    {
+        m_time = time;
+    }
 
-  double rad2deg(double rad) 
-  {
-      return (rad * 180 / M_PI);
-  }
-  double DataMark::getDistance(double lat1, double lon1, double lat2, double lon2)
-  {
-    double theta, dist;
-    theta = lon1 - lon2;
-    dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta));
-    dist = acos(dist);
-    dist = rad2deg(dist);
-    dist = dist * 60 * 1.1515; // in miles
-    dist = dist * 1.609344; // in kilometers
-    return (dist);
-  }
-} // namespace common
+    QSharedPointer<User> DataMark::getUser() const
+    {
+        return m_user;
+    }
+
+    QSharedPointer<Channel> DataMark::getChannel() const
+    {
+        return m_channel;
+    }
+
+    QSharedPointer<DataMark> DataMark::createMark(double latitude, double longitude, const QString& label,
+                                                      const QString& description, const QString& url, const QDateTime &time, const QSharedPointer<Channel> &channel,const QSharedPointer<User> &user)
+    {
+        //  assert(false); // zps: here will be code bellow, but without DbSession. I think method should have user as IN parameter
+#if 0
+        return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, url, time,  user, channel));
+#endif
+        return QSharedPointer<DataMark>();
+    }
+
+    double deg2rad(double deg)
+    {
+        return (deg * M_PI / 180);
+    }
+
+    double rad2deg(double rad)
+    {
+        return (rad * 180 / M_PI);
+    }
+    double DataMark::getDistance(double lat1, double lon1, double lat2, double lon2)
+    {
+        double theta, dist;
+        theta = lon1 - lon2;
+        dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta));
+        dist = acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515; // in miles
+        dist = dist * 1.609344; // in kilometers
+        return (dist);
+    }
+
 
 /* ===[ End of file  ]=== */

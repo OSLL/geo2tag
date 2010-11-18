@@ -60,7 +60,8 @@ namespace GUI
    * Class description. May use HTML formatting
    *
    */
-    class ChannelListJSON{
+    class ChannelListJSON
+    {
         std::stringstream m_json;
         CHandlePtr<common::Channels> m_channels;
         void convertInJSON();

@@ -33,14 +33,14 @@
  * \file Picture.h
  * \brief Header of Picture
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 
 #ifndef _Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
 #define _Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
 
-#include <vector>
+#include <QVector>
 #include <QImage>
 
 namespace common
@@ -50,9 +50,9 @@ namespace common
    */
     class Picture : public QImage
   {
-    std::vector<char> m_data;
+    QVector<char> m_data;
   public:
-    
+
     Picture(const Picture&);
     Picture(const QImage&);
 
@@ -60,16 +60,16 @@ namespace common
       PNG = 0,
       UNKNOWN
     };
-    
+
     virtual Type getType() const;
 
     virtual ~Picture();
-  
+
   protected:
-    Picture(const std::vector<char>& data);
+    Picture(const QVector<char>& data);
 
   }; // class Picture
-  
+
 } // namespace common
 
 #endif //_Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_

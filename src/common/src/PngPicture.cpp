@@ -41,7 +41,7 @@
 
 namespace common
 {
-  PngPicture::PngPicture(const std::vector<char>& data):Picture(data)
+  PngPicture::PngPicture(const QVector<char>& data):Picture(data)
   {
   }
 

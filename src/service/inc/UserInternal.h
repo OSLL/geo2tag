@@ -39,34 +39,31 @@
 #ifndef _UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 #define _UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 
+#include <QMutex>
 #include "User.h"
 #include "ChannelInternal.h"
 
-namespace loader
-{
  /*!
-   * 
+   *
    */
-  class User: public common::User
+  class DbUser: public User
   {
-    unsigned long m_id;
-    std::string m_token;
+    qlonglong m_id;
+    QString m_token;
 
   public:
-    User(const std::string& login, const std::string& pass, unsigned long id, const std::string& token);
-    
-    unsigned long getId() const;
-    void setId(unsigned long);
-    
-    const std::string& getToken() const;
+    DbUser(const QString& login, const QString& pass, qlonglong id, const QString& token);
 
-    void subscribe(const CHandlePtr<loader::Channel>& channel);
-    void unsubscribe(const CHandlePtr<loader::Channel>& channel);
+    qlonglong getId() const;
+    void setId(qlonglong);
 
-    ~User();
+    const QString& getToken() const;
+
+//    void subscribe(const QSharedPointer<Channel>& channel);
+//    void unsubscribe(const QSharedPointer<Channel>& channel);
+
+    ~DbUser();
   }; // class UserInternal
-  
-} // namespace loader
 
 #endif //_UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 
