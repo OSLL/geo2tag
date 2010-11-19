@@ -72,7 +72,7 @@ QMap<QString, QString> parseQuery(const QString& string)
 QByteArray Server::process(const QString& query, const QByteArray &data)
 {
       QMap<QString, QString> queryParameters = parseQuery(query);
-
+      syslog(LOG_INFO, "queryParameters.value(\"query\") = %s", queryParameters.value("query").toStdString().c_str())  ;
       return common::DbObjectsCollection::getInstance().process(queryParameters.value("query"), data);
 }
 
@@ -105,6 +105,7 @@ void Server::run()
         QString queryString;
         QByteArray queryBody, response;
         extractIncomingData(m_cgi,queryString,queryBody);
+        syslog(LOG_INFO, "query: %s", queryString.toStdString().c_str());
         response = process(queryString, queryBody);
         int written = FCGX_PutStr(response.data(), response.size(), m_cgi.out);
         if(written != response.size())

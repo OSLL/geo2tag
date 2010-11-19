@@ -12,8 +12,10 @@ QByteArray LoginResponseJSON::getJson() const
 {
     QJson::Serializer serializer;
     QVariantMap obj;
-    obj.insert("user", m_usersContainer->at(0)->getLogin());
-    obj.insert("password", m_usersContainer->at(0)->getPassword());
+    if(m_usersContainer->size()>0)
+        obj.insert("auth_token", m_usersContainer->at(0)->getToken());
+    obj.insert("status", m_status);
+    obj.insert("status_description", m_statusMessage);
     return serializer.serialize(obj);
 }
 

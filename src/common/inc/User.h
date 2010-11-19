@@ -58,6 +58,8 @@ class User: public QObject
 protected:
     User(const QString&, const QString&);
 
+    void setToken(const QString&);
+
 public:
 
     virtual qlonglong getId() const = 0;

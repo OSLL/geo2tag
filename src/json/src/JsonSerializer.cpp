@@ -58,3 +58,13 @@ const QString& JsonSerializer::getStatusMessage() const
 {
     return m_statusMessage;
 }
+
+void JsonSerializer::setStatus(const QString &s)
+{
+    m_status = s;
+}
+
+void JsonSerializer::setStatusMessage(const QString &s)
+{
+    m_statusMessage = s;
+}

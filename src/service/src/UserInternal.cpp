@@ -40,26 +40,10 @@
   DbUser::DbUser(const QString &login,
              const QString& pass,
              qlonglong id,
-             const QString& token): User(login,pass), m_id(id), m_token(token)
+             const QString& token): User(login,pass), m_id(id)
   {
+      setToken(token);
   }
-
-//  void User::subscribe(const QSharedPointer<Channel>& channel)
-//  {
-//    bool isntHere=1;
-//    for (Channels::iterator i=getSubscribedChannels()->begin();i!=getSubscribedChannels()->end();i++){
-//        if ((*i)->getName()==channel->getName()) {
-//                isntHere=0;
-//                break;
-//        }
-//        }
-//    if (isntHere) User::subscribe(channel);
-//  }
-
-//  void User::unsubscribe(const QSharedPointer<Channel>& channel)
-//  {
-//    User::unsubscribe(channel);
-//  }
 
   qlonglong DbUser::getId() const
   {
@@ -69,11 +53,6 @@
   void DbUser::setId(qlonglong id)
   {
     m_id = id;
-  }
-
-  const QString& DbUser::getToken() const
-  {
-    return m_token;
   }
 
   DbUser::~DbUser()

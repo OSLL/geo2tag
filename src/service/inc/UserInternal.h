@@ -49,18 +49,12 @@
   class DbUser: public User
   {
     qlonglong m_id;
-    QString m_token;
 
   public:
     DbUser(const QString& login, const QString& pass, qlonglong id, const QString& token);
 
     qlonglong getId() const;
     void setId(qlonglong);
-
-    const QString& getToken() const;
-
-//    void subscribe(const QSharedPointer<Channel>& channel);
-//    void unsubscribe(const QSharedPointer<Channel>& channel);
 
     ~DbUser();
   }; // class UserInternal

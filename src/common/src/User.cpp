@@ -88,6 +88,11 @@ void User::setPassword(QString password)
     m_password = password;
 }
 
+void User::setToken(const QString &token)
+{
+    m_token = token;
+}
+
 User::~User()
 {
 }

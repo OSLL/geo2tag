@@ -38,7 +38,10 @@ public:
     QSharedPointer<Channels> getChannels() const;
 
     const QString& getStatus() const;
+    void setStatus(const QString&);
+
     const QString& getStatusMessage() const;
+    void setStatusMessage(const QString&);
 
     ~JsonSerializer();
 };

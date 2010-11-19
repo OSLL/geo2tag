@@ -76,11 +76,14 @@ namespace common
         if(queryType == "login")
         {
             LoginRequestJSON request;
+            LoginResponseJSON response;
+
             request.parseJson(body);
 
             QSharedPointer<User> dummyUser = request.getUsers()->at(0);
             QSharedPointer<User> realUser; // Null pointer
             QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+
             for(int i=0; i<currentUsers.size(); i++)
             {
                 if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
@@ -92,22 +95,25 @@ namespace common
                     }
                     else
                     {
-                        //wrong password
+                        response.setStatus("Error");
+                        response.setStatusMessage("Wrong login or password");
                     }
                 }
             }
             answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
             if(realUser.isNull())
             {
-
+                response.setStatus("Error");
+                response.setStatusMessage("Wrong login or password");
             }
             else
             {
-                syslog(LOG_INFO, "found token: %s", realUser->getToken().toStdString().c_str());
-                LoginResponseJSON response;
+                response.setStatus("Ok");
+                response.setStatusMessage("Authorization was successful");
                 response.addUser(realUser);
-                answer.append(response.getJson());
             }
+
+            answer.append(response.getJson());
             return answer;
         }
     }
