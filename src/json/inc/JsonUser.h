@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,40 +28,39 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-
-/* $Id$ */
 /*!
- * \file RSSFeedJSON.h
- * \brief Header of RSSFeedJSON
- * \todo add comment here
- *
- * File description
+ * \file JsonUser.h
+ * \brief Header of JsonUser
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 
-#ifndef _RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
-#define _RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+#ifndef _JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+#define _JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 
-#include "DataMarks.h"
-#include "Handle.h"
-#include <sstream>
+#include <QMutex>
+#include "User.h"
 
-class RSSFeedJSON
-{
-    std::stringstream m_json;
-    CHandlePtr<common::DataMarks> m_marks;
-    void convertInMarks();
+ /*!
+   *
+   */
+  class JsonUser: public User
+  {
+    qlonglong m_id;
+    QString m_token;
 
-public:
-    RSSFeedJSON(const std::stringstream& json);
-    ~RSSFeedJSON();
+  public:
+    JsonUser(const QString& login, const QString& pass = "unknown", const QString& token = "unknown");
 
-    const CHandlePtr<common::DataMarks>& getMarks() const ;
+    qlonglong getId() const;
+    void setId(qlonglong);
 
-};//class RSSFeedJSON
+    const QString& getToken() const;
 
-#endif //_RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+    ~JsonUser();
+  }; // class JsonUser
 
-/* ===[ End of file $HeadURL$ ]=== */
+#endif //_JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+
+/* ===[ End of file ]=== */

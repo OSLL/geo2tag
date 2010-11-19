@@ -31,8 +31,8 @@
 
 /* $Id$ */
 /*!
- * \file LoginQuery.h
- * \brief Header of LoginQuery
+ * \file RSSFeedJSON.h
+ * \brief Header of RSSFeedJSON
  * \todo add comment here
  *
  * File description
@@ -41,69 +41,24 @@
  * ---------------------------------------------------------------- */
 
 
-#ifndef _LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
-#define _LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
+#ifndef _RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+#define _RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 
-#include <QObject>
-#include <QString>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+#include "JsonSerializer.h"
 
-namespace GUI
+class RSSFeedResponseJSON: public JsonSerializer
 {
-    /*!
-     * LoginQuery class definition.
-     *
-     * The object of this class represents http query to server.
-     * This query sends user name and password and gets auth_token.
-     *
-     */
-    class LoginQuery: public QObject
-    {
-        Q_OBJECT
+public:
+    RSSFeedResponseJSON();
 
-    private:
-        QNetworkAccessManager *manager;
+    virtual QByteArray getJson() const;
 
-        /* Url of th request */
-        QString httpQuery;
+    virtual void parseJson(const QByteArray&);
 
-        /* Body of the request */
-        QString jsonQuery;
+    ~RSSFeedResponseJSON();
 
-    public:
+};//class RSSFeedJSON
 
-        LoginQuery(QObject *parent = 0);
-
-        LoginQuery(QString user, QString password, QObject *parent = 0);
-
-        void setQuery(QString user, QString password);
-
-        ~LoginQuery();
-
-        const QString& getHttpQuery();
-        const QString& getJsonQuery();
-
-        void doRequest();
-
-    signals:
-        void responseReceived(QString status, QString auth_token,QString status_description);
-        void errorReceived();
-
-    private slots:
-        void onManagerFinished(QNetworkReply *reply);
-        void onReplyError(QNetworkReply::NetworkError);
-        void onManagerSslErrors();
-
-    private:
-        /* \todo Do we need next constructor and overloaded operator? */
-        LoginQuery(const LoginQuery& obj);
-        LoginQuery& operator=(const LoginQuery& obj);
-
-    }; // class LoginQuery
-
-} // namespace GUI
-
-#endif //_LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
+#endif //_RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

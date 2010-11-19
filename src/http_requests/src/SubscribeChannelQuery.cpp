@@ -32,72 +32,66 @@
 /*! ---------------------------------------------------------------
  * $Id$ 
  *
- * \file AvailableChannelsListQuery.cpp
- * \brief AvailableChannelsListQuery implementation
+ * \file SubscribeChannelQuery.cpp
+ * \brief SubscribeChannelQuery implementation
  *
  * File description
  *
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-#include "AvailableChannelsListQuery.h"
 #include "defines.h"
+#include "SubscribeChannelQuery.h"
+#include "SubscribeChannelJSON.h"
 #include <QDebug>
-#include "ChannelListJSON.h"
 
 namespace GUI
 {
-    AvailableChannelsListQuery::AvailableChannelsListQuery(QObject *parent)
+    SubscribeChannelQuery::SubscribeChannelQuery(QObject *parent)
         : QObject(parent)
     {
         jsonQuery = "";
         httpQuery = "";
         manager = new QNetworkAccessManager(this);
 
-        qDebug() << "Free AvailableChannelsListQuery created";
+        qDebug() << "Free SubscribeChannelQuery created";
     }
 
-    AvailableChannelsListQuery::AvailableChannelsListQuery
-            (QString auth_token, qreal latitude, qreal longitude, qreal radius, QObject *parent)
+    SubscribeChannelQuery::SubscribeChannelQuery(QString auth_token, QString channel, QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
-        setQuery(auth_token,latitude,longitude,radius);
-        qDebug() << "AvailableChannelsListQuery created:\n"
+        setQuery(auth_token, channel);
+        qDebug() << "SubscribeChannelQuery created:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void AvailableChannelsListQuery::setQuery(QString auth_token, qreal latitude,
-                                              qreal longitude, qreal radius)
+    void SubscribeChannelQuery::setQuery(QString auth_token, QString channel)
     {
-        jsonQuery = "{\"auth_token\":\"" + auth_token +
-                    "\", \"latitude\":" + QString::number(latitude) +
-                    ", \"longitude\":" + QString::number(longitude) +
-                    ", \"radius\":" + QString::number(radius) +
-                    "}";
-        httpQuery = AVAILABLE_LIST_HTTP_URL;
+        jsonQuery = SubscribeChannelRequesJSON::convertToJSON(auth_token, channel);
+        httpQuery = SUBSCRIBE_HTTP_URL;
     }
 
-    AvailableChannelsListQuery::~AvailableChannelsListQuery()
+    SubscribeChannelQuery::~SubscribeChannelQuery()
     {
 
     }
 
-    const QString& AvailableChannelsListQuery::getHttpQuery()
+    const QString& SubscribeChannelQuery::getHttpQuery()
     {
         return httpQuery;
     }
 
-    const QString& AvailableChannelsListQuery::getJsonQuery()
+    const QString& SubscribeChannelQuery::getJsonQuery()
     {
         return jsonQuery;
     }
 
-    void AvailableChannelsListQuery::doRequest()
+    void SubscribeChannelQuery::doRequest()
     {
         if (httpQuery == "" || jsonQuery == "")
         {
-            qDebug() << "AvailableChannelsListQuery: can't do request cause query isn't set";
+            qDebug() << "SubscribeChannelQuery: can't do request because query isn't set";
             return;
         }
 
@@ -115,11 +109,11 @@ namespace GUI
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(onReplyError(QNetworkReply::NetworkError)));
 
-        qDebug() << "AvailableChannelsListQuery did request:\n"
+        qDebug() << "SubscribeChannelQuery did request:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void AvailableChannelsListQuery::onManagerFinished(QNetworkReply *reply)
+    void SubscribeChannelQuery::onManagerFinished(QNetworkReply *reply)
     {
         QByteArray jsonResponseByteArray = reply->readAll();
 
@@ -127,23 +121,21 @@ namespace GUI
         {
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
-            std::stringstream jsonStream(jsonResponse.toStdString());
-            ChannelListJSON channelList(jsonStream);
-            CHandlePtr<common::Channels> channels = channelList.getChannels();
-            emit responseReceived(channels);
+            QString status = SubscribeChannelRequesJSON::convertToSatus(jsonResponse);
+            QString status_description = SubscribeChannelRequesJSON::convertToSatusDescription(jsonResponse); 
+            emit responseReceived(status,status_description);
         }
     }
 
-    void AvailableChannelsListQuery::onReplyError(QNetworkReply::NetworkError error)
+    void SubscribeChannelQuery::onReplyError(QNetworkReply::NetworkError error)
     {
         qDebug("Network error: %d \n", error);
     }
 
-    void AvailableChannelsListQuery::onManagerSslErrors()
+    void SubscribeChannelQuery::onManagerSslErrors()
     {
         qDebug("ssl error \n");
     }
-
 } // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

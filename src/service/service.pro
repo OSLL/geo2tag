@@ -35,7 +35,7 @@ HEADERS += \
            inc/DataMarkInternal.h \
            inc/UserInternal.h \
            inc/DbSession.h \
-    inc/UpdateThread.h 
+    inc/UpdateThread.h
 
 SOURCES += src/main.cpp \
            src/server.cpp \
@@ -46,7 +46,7 @@ SOURCES += src/main.cpp \
            src/DbSession.cpp \
     src/UpdateThread.cpp
 
-LIBS +=  -lcommon -lfcgi
+LIBS +=  -lcommon -lfcgi -lwikigpsJson
 OBJECTS_DIR = .obj
 
 QT -= gui

@@ -23,15 +23,16 @@ maemo5: {
 
 symbian: {
     #For some reason the default include path doesn't include MOC_DIR on symbian
+    OBJECTS_DIR = obj
+    MOC_DIR = moc
     INCLUDEPATH += $$MOC_DIR
-    DEFINES+= Q_WS_SYMBIA
+    DEFINES+= Q_WS_SYMBIAN
 }
 
 linux: {
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }
-
 
 LIBS += -L$$SOURCE_DIR/src/lib
 

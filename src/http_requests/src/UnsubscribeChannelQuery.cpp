@@ -32,66 +32,66 @@
 /*! ---------------------------------------------------------------
  * $Id$ 
  *
- * \file SubscribedChannelsListQuery.cpp
- * \brief SubscribedChannelsListQuery implementation
+ * \file UnsubscribeChannelQuery.cpp
+ * \brief UnsubscribeChannelQuery implementation
  *
  * File description
  *
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
-#include <sstream>
-#include "SubscribedChannelsListQuery.h"
+
 #include "defines.h"
+#include "UnsubscribeChannelQuery.h"
+#include "SubscribeChannelJSON.h"
 #include <QDebug>
-#include "ChannelListJSON.h"
 
 namespace GUI
 {
-    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QObject *parent)
+    UnsubscribeChannelQuery::UnsubscribeChannelQuery(QObject *parent)
         : QObject(parent)
     {
         jsonQuery = "";
         httpQuery = "";
         manager = new QNetworkAccessManager(this);
 
-        qDebug() << "Free SubscribedChannelsListQuery created";
+        qDebug() << "Free UnsubscribeChannelQuery created";
     }
 
-    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QString auth_token, QObject *parent)
+    UnsubscribeChannelQuery::UnsubscribeChannelQuery(QString auth_token, QString channel, QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
-        setQuery(auth_token);
-        qDebug() << "SubscribedChannelsListQuery created:\n"
+        setQuery(auth_token, channel);
+        qDebug() << "UnsubscribeChannelQuery created:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void SubscribedChannelsListQuery::setQuery(QString auth_token)
+    void UnsubscribeChannelQuery::setQuery(QString auth_token, QString channel)
     {
-        jsonQuery = "{\"auth_token\":\"" + auth_token + "\"}";
-        httpQuery = SUBSCRIBED_LIST_HTTP_URL;
+        jsonQuery = SubscribeChannelRequesJSON::convertToJSON(auth_token, channel);
+        httpQuery = UNSUBSCRIBE_HTTP_URL;
     }
 
-    SubscribedChannelsListQuery::~SubscribedChannelsListQuery()
+    UnsubscribeChannelQuery::~UnsubscribeChannelQuery()
     {
 
     }
 
-    const QString& SubscribedChannelsListQuery::getHttpQuery()
+    const QString& UnsubscribeChannelQuery::getHttpQuery()
     {
         return httpQuery;
     }
 
-    const QString& SubscribedChannelsListQuery::getJsonQuery()
+    const QString& UnsubscribeChannelQuery::getJsonQuery()
     {
         return jsonQuery;
     }
 
-    void SubscribedChannelsListQuery::doRequest()
+    void UnsubscribeChannelQuery::doRequest()
     {
         if (httpQuery == "" || jsonQuery == "")
         {
-            qDebug() << "SubscribedChannelsListQuery: can't do request cause query isn't set";
+            qDebug() << "UnsubscribeChannelQuery: can't do request because query isn't set";
             return;
         }
 
@@ -109,11 +109,11 @@ namespace GUI
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(onReplyError(QNetworkReply::NetworkError)));
 
-        qDebug() << "SubscribedChannelsListQuery did request:\n"
+        qDebug() << "UnsubscribeChannelQuery did request:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void SubscribedChannelsListQuery::onManagerFinished(QNetworkReply *reply)
+    void UnsubscribeChannelQuery::onManagerFinished(QNetworkReply *reply)
     {
         QByteArray jsonResponseByteArray = reply->readAll();
 
@@ -121,19 +121,18 @@ namespace GUI
         {
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
-            std::stringstream jsonStream(jsonResponse.toStdString());
-            ChannelListJSON channelList(jsonStream);
-            CHandlePtr<common::Channels> channels = channelList.getChannels();
-            emit responseReceived(channels);
+            QString status = SubscribeChannelRequesJSON::convertToSatus(jsonResponse);
+            QString status_description = SubscribeChannelRequesJSON::convertToSatusDescription(jsonResponse);
+            emit responseReceived(status,status_description);
         }
     }
 
-    void SubscribedChannelsListQuery::onReplyError(QNetworkReply::NetworkError error)
+    void UnsubscribeChannelQuery::onReplyError(QNetworkReply::NetworkError error)
     {
         qDebug("Network error: %d \n", error);
     }
 
-    void SubscribedChannelsListQuery::onManagerSslErrors()
+    void UnsubscribeChannelQuery::onManagerSslErrors()
     {
         qDebug("ssl error \n");
     }

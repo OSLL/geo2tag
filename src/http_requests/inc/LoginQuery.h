@@ -31,78 +31,59 @@
 
 /* $Id$ */
 /*!
- * \file ApplyMarkQuery.h
- * \brief Header of ApplyMarkQuery
+ * \file LoginQuery.h
+ * \brief Header of LoginQuery
  * \todo add comment here
  *
  * File description
  *
- * PROJ: geo2tag
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 
-#ifndef _ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
-#define _ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
+#ifndef _LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
+#define _LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
 
 #include <QObject>
 #include <QString>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+#include "DefaultQuery.h"
+#include "User.h"
 
-namespace GUI
+/*!
+     * LoginQuery class definition.
+     *
+     * The object of this class represents http query to server.
+     * This query sends user name and password and gets auth_token.
+     *
+     */
+class LoginQuery: public DefaultQuery
 {
- /*!
-   * Class description. May use HTML formatting
-   *
-   */
-  class ApplyMarkQuery : public QObject
-  {
-      Q_OBJECT
+    Q_OBJECT
 
-  private:
-      QNetworkAccessManager *manager;
+    QString m_login;
+    QString m_password;
 
-      /* Url of th request */
-      QString httpQuery;
+    virtual QString getUrl() const;
+    virtual QByteArray getRequestBody() const;
 
-      /* Body of the request */
-      QString jsonQuery;
+private slots:
 
-  public:
-      ApplyMarkQuery(QObject *parent = 0);
+    virtual void processReply(QNetworkReply *reply);
 
-      ApplyMarkQuery(QString auth_token, QString channel, QString title, QString link,
-                     QString description, qreal latitude, qreal longitude,
-                     QString time, QObject *parent = 0);
+public:
 
-      void setQuery(QString auth_token, QString channel, QString title, QString link,
-                    QString description, qreal latitude, qreal longitude,
-                    QString time);
+    LoginQuery(const QString& login, const QString& password, QObject *parent = 0);
 
-      ~ApplyMarkQuery();
+    QSharedPointer<User> getUser() const;
 
-      const QString& getHttpQuery();
-      const QString& getJsonQuery();
+    ~LoginQuery();
 
-      void doRequest();
+signals:
 
-  signals:
-      void responseReceived(QString status,QString status_description);
-      void replyError(QNetworkReply::NetworkError);
-      void managerSslErrors();
+    void connected();
 
-  private slots:
-      void onManagerFinished(QNetworkReply *reply);
+}; // class LoginQuery
 
-  private:
-      /* \todo Do we need next constructor and overloaded operator? */
-      ApplyMarkQuery(const ApplyMarkQuery& obj);
-      ApplyMarkQuery& operator=(const ApplyMarkQuery& obj);
-
-  }; // class ApplyMarkQuery
-  
-} // namespace GUI
-
-#endif //_ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
+#endif //_LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

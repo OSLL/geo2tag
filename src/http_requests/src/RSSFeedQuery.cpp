@@ -32,66 +32,79 @@
 /*! ---------------------------------------------------------------
  * $Id$ 
  *
- * \file UnsubscribeChannelQuery.cpp
- * \brief UnsubscribeChannelQuery implementation
+ * \file RSSFeedQuery.cpp
+ * \brief RSSFeedQuery implementation
  *
  * File description
  *
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
+#include "RSSFeedQuery.h"
+#include "RSSFeedJSON.h"
 #include "defines.h"
-#include "UnsubscribeChannelQuery.h"
-#include "SubscribeChannelJSON.h"
 #include <QDebug>
 
 namespace GUI
 {
-    UnsubscribeChannelQuery::UnsubscribeChannelQuery(QObject *parent)
+    RSSFeedQuery::RSSFeedQuery(QObject *parent)
         : QObject(parent)
     {
         jsonQuery = "";
         httpQuery = "";
         manager = new QNetworkAccessManager(this);
 
-        qDebug() << "Free UnsubscribeChannelQuery created";
+        qDebug() << "Free RSSFeedQuery created";
     }
 
-    UnsubscribeChannelQuery::UnsubscribeChannelQuery(QString auth_token, QString channel, QObject *parent)
+    RSSFeedQuery::RSSFeedQuery
+            (QString user, qreal latitude, qreal longitude, qreal radius, bool isLastOne, QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
-        setQuery(auth_token, channel);
-        qDebug() << "UnsubscribeChannelQuery created:\n"
+        setQuery(user,latitude,longitude,radius,isLastOne);
+
+        qDebug() << "RSSFeedQuery created:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void UnsubscribeChannelQuery::setQuery(QString auth_token, QString channel)
+    void RSSFeedQuery::setQuery(QString auth_token, qreal latitude,
+                                              qreal longitude, qreal radius,bool isLastOne)
     {
-        jsonQuery = SubscribeChannelJSON::convertToJSON(auth_token, channel);
-        httpQuery = UNSUBSCRIBE_HTTP_URL;
+        jsonQuery = "{\"auth_token\":\"" + auth_token +
+                    "\", \"latitude\":" + QString::number(latitude) +
+                    ", \"longitude\":" + QString::number(longitude) +
+                    ", \"radius\":" + QString::number(radius);
+	if (isLastOne){ 
+		 jsonQuery+=", \"type\":\"last_one\"";
+		 qDebug() << "isLastOne=1";
+	}
+	qDebug() << auth_token;
+	jsonQuery += "}";
+//        qDebug() << "++++Builded request ++ "<< jsonQuery;
+        httpQuery = FEED_HTTP_URL;
     }
 
-    UnsubscribeChannelQuery::~UnsubscribeChannelQuery()
+    RSSFeedQuery::~RSSFeedQuery()
     {
 
     }
 
-    const QString& UnsubscribeChannelQuery::getHttpQuery()
+    const QString& RSSFeedQuery::getHttpQuery()
     {
         return httpQuery;
     }
 
-    const QString& UnsubscribeChannelQuery::getJsonQuery()
+    const QString& RSSFeedQuery::getJsonQuery()
     {
         return jsonQuery;
     }
 
-    void UnsubscribeChannelQuery::doRequest()
+    void RSSFeedQuery::doRequest()
     {
         if (httpQuery == "" || jsonQuery == "")
         {
-            qDebug() << "UnsubscribeChannelQuery: can't do request because query isn't set";
+            qDebug() << "RSSFeedQuery: can't do request cause query isn't set";
             return;
         }
 
@@ -109,11 +122,11 @@ namespace GUI
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(onReplyError(QNetworkReply::NetworkError)));
 
-        qDebug() << "UnsubscribeChannelQuery did request:\n"
+        qDebug() << "RSSFeedQuery did request:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void UnsubscribeChannelQuery::onManagerFinished(QNetworkReply *reply)
+    void RSSFeedQuery::onManagerFinished(QNetworkReply *reply)
     {
         QByteArray jsonResponseByteArray = reply->readAll();
 
@@ -121,18 +134,20 @@ namespace GUI
         {
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
-            QString status = SubscribeChannelJSON::convertToSatus(jsonResponse);
-            QString status_description = SubscribeChannelJSON::convertToSatusDescription(jsonResponse);
-            emit responseReceived(status,status_description);
+            std::stringstream jsonStream(jsonResponse.toStdString());
+            RSSFeedResponseJSON rssFeed(jsonStream);
+            CHandlePtr<common::DataMarks> marks = rssFeed.getMarks();
+            emit responseReceived(marks);
+            /* check response and emit signal */
         }
     }
 
-    void UnsubscribeChannelQuery::onReplyError(QNetworkReply::NetworkError error)
+    void RSSFeedQuery::onReplyError(QNetworkReply::NetworkError error)
     {
         qDebug("Network error: %d \n", error);
     }
 
-    void UnsubscribeChannelQuery::onManagerSslErrors()
+    void RSSFeedQuery::onManagerSslErrors()
     {
         qDebug("ssl error \n");
     }

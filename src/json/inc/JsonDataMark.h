@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,41 +28,41 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-
-/* $Id$ */
 /*!
- * \file SubscribeChannelJSON.h
- * \brief Header of SubscribeChannelJSON
- * \todo add comment here
+ * \file JsonDataMark.h
+ * \brief Header of JsonDataMark
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
-#define _SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
 
-#include <QString>
+#ifndef _JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+#define _JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
 
-namespace GUI
+#include "DataMarks.h"
+
+class JsonDataMark: public DataMark
 {
- /*!
-   * Class description. May use HTML formatting
-   *
-   */
-  class SubscribeChannelJSON
-  {
-  public:
 
-    static QString convertToJSON(QString auth_token, QString channel);
-    static QString convertToSatus(QString json);
-    static QString convertToSatusDescription(QString json);
+    qlonglong m_id; //!< Tag's identifier
 
-  }; // class SubscribeChannelJSON
-  
-} // namespace GUI
+    qlonglong m_userId; //!< Assotiated user's identifier for the tag
 
-#endif //_SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
+public:
+    JsonDataMark(double latitude, double longitude,
+                 QString label, QString description, const QString& url, const QDateTime& time);
 
-/* ===[ End of file $HeadURL$ ]=== */
+    qlonglong getId() const;
+
+    qlonglong getUserId() const;
+
+    void setId(qlonglong id);
+
+    virtual ~JsonDataMark();
+};
+
+#endif //_JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+
+/* ===[ End of file ]=== */

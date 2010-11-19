@@ -15,17 +15,8 @@ int main(int argc, char ** argv)
 
 //    DbSession::getInstance();
 
-//    Server s;
-//    s.serve();
-    Users *u = new Users();
-    DataMarks *m = new DataMarks();
-    Channels *c = new Channels();
-    UpdateThread thr(QSharedPointer<DataMarks>(m),
-                     QSharedPointer<Users>(u),
-                     QSharedPointer<Channels>(c),
-                     NULL);
-    thr.start();
-
+    Server s;
+    s.serve();
 
     return app.exec();
 }

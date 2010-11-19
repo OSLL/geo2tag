@@ -29,70 +29,73 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/*! ---------------------------------------------------------------
- * $Id$ 
- *
- * \file SubscribeChannelJSON.cpp
- * \brief SubscribeChannelJSON implementation
+/* $Id$ */
+/*!
+ * \file ApplyMarkQuery.h
+ * \brief Header of ApplyMarkQuery
+ * \todo add comment here
  *
  * File description
  *
- * PROJ: OSLL/geo2tag
+ * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-#include "SubscribeChannelJSON.h"
-#include "qjson/parser.h"
-#include "qjson/serializer.h"
-#include "QVariant"
-#include "QVariantMap"
 
-namespace GUI
+#ifndef _ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
+#define _ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
+
+#include <QObject>
+#include <QString>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+
+class ApplyMarkQuery : public QObject
 {
-    QString SubscribeChannelJSON::convertToJSON(QString auth_token, QString channel)
-    {
-        QVariantMap request;
-        request.insert("auth_token", auth_token);
-        request.insert("channel", channel);
+    Q_OBJECT
 
-        QJson::Serializer serializer;
-        QString json(serializer.serialize(request));
+private:
+    QNetworkAccessManager *manager;
 
-        return json;
-    }
+    /* Url of th request */
+    QString httpQuery;
 
-    QString SubscribeChannelJSON::convertToSatus(QString json)
-    {
-        QJson::Parser parser;
-        bool ok;
-        QVariantMap result = parser.parse(QByteArray(json.toAscii()), &ok).toMap();
-        QString status("");
-        if (!ok)
-        {
-            qFatal("An error occured during parsing json with channel list");
-        }
-        else
-        {
-            status = result["status"].toString();
-        }
-        return status;
-    }
+    /* Body of the request */
+    QString jsonQuery;
 
-    QString SubscribeChannelJSON::convertToSatusDescription(QString json)
-    {
-        QJson::Parser parser;
-        bool ok;
-        QVariantMap result = parser.parse(QByteArray(json.toAscii()), &ok).toMap();
-        QString status_description("");
-        if (!ok)
-        {
-            qFatal("An error occured during parsing json with channel list");
-        }
-        else
-        {
-            status_description = result["status_description"].toString();
-        }
-        return status_description;
-    }
-} // namespace GUI
+public:
+    ApplyMarkQuery(QObject *parent = 0);
+
+    ApplyMarkQuery(QString auth_token, QString channel, QString title, QString link,
+                   QString description, qreal latitude, qreal longitude,
+                   QString time, QObject *parent = 0);
+
+    void setQuery(QString auth_token, QString channel, QString title, QString link,
+                  QString description, qreal latitude, qreal longitude,
+                  QString time);
+
+    ~ApplyMarkQuery();
+
+    const QString& getHttpQuery();
+    const QString& getJsonQuery();
+
+    void doRequest();
+
+signals:
+    void responseReceived(QString status,QString status_description);
+    void replyError(QNetworkReply::NetworkError);
+    void managerSslErrors();
+
+private slots:
+    void onManagerFinished(QNetworkReply *reply);
+
+private:
+    /* \todo Do we need next constructor and overloaded operator? */
+    ApplyMarkQuery(const ApplyMarkQuery& obj);
+    ApplyMarkQuery& operator=(const ApplyMarkQuery& obj);
+
+}; // class ApplyMarkQuery
+
+
+#endif //_ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

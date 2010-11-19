@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,9 +28,11 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+
+/* $Id$ */
 /*!
- * \file DbSession.h
- * \brief Header of DbSession
+ * \file SubscribeChannelJSON.h
+ * \brief Header of SubscribeChannelJSON
  * \todo add comment here
  *
  * File description
@@ -38,55 +40,25 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#ifndef _SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
+#define _SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
 
-#ifndef _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
-#define _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+#include "JsonSerializer.h"
 
-#include <syslog.h>
-
-#include <QtSql>
-#include <QThread>
-#include <QMap>
-
-#include "DataMarks.h"
-#include "Channel.h"
-#include "DataChannel.h"
-#include "User.h"
-#include "UpdateThread.h"
-
-namespace common
+class SubscribeChannelRequesJSON: public JsonSerializer
 {
-    /*!
-   * \brief session with database
-   */
-    class DbObjectsCollection
-    {
-        QSharedPointer<Channels>    m_channelsContainer;
-        QSharedPointer<DataMarks>   m_tagsContainer;
-        QSharedPointer<Users>       m_usersContainer;
+public:
+    SubscribeChannelRequesJSON(const QSharedPointer<Channel>&, const QSharedPointer<User>&);
 
-        UpdateThread                m_updateThread;
-    protected:
+    virtual QByteArray getJson() const;
 
-        DbObjectsCollection();
+    virtual void parseJson(const QByteArray&);
 
-    public:
+    virtual ~SubscribeChannelRequesJSON();
 
-        static DbObjectsCollection& getInstance();
-
-        QByteArray process(const QString& queryType, const QByteArray& body);
-
-        ~DbObjectsCollection();
+}; // class SubscribeChannelJSON
 
 
-    private:
-        DbObjectsCollection(const DbObjectsCollection& obj);
-        DbObjectsCollection& operator=(const DbObjectsCollection& obj);
+#endif //_SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
 
-    }; // class DbSession
-
-} // namespace common
-
-#endif //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
-
-/* ===[ End of file ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

@@ -42,6 +42,9 @@
 #include <syslog.h>
 #include "DbSession.h"
 
+#include "LoginRequestJSON.h"
+#include "LoginResponseJSON.h"
+
 #include <QtSql>
 #include <QMap>
 
@@ -65,6 +68,48 @@ namespace common
     DbObjectsCollection::~DbObjectsCollection()
     {
         m_updateThread.wait();
+    }
+
+    QByteArray DbObjectsCollection::process(const QString& queryType, const QByteArray& body)
+    {
+        QByteArray answer;
+        if(queryType == "login")
+        {
+            LoginRequestJSON request;
+            request.parseJson(body);
+
+            QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+            QSharedPointer<User> realUser; // Null pointer
+            QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+            for(int i=0; i<currentUsers.size(); i++)
+            {
+                if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
+                {
+                    if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
+                    {
+                        realUser = currentUsers.at(i);
+                        break;
+                    }
+                    else
+                    {
+                        //wrong password
+                    }
+                }
+            }
+            answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+            if(realUser.isNull())
+            {
+
+            }
+            else
+            {
+                syslog(LOG_INFO, "found token: %s", realUser->getToken().toStdString().c_str());
+                LoginResponseJSON response;
+                response.addUser(realUser);
+                answer.append(response.getJson());
+            }
+            return answer;
+        }
     }
 } // namespace common
 

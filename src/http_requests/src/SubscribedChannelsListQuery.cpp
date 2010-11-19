@@ -32,82 +32,71 @@
 /*! ---------------------------------------------------------------
  * $Id$ 
  *
- * \file LoginQuery.cpp
- * \brief LoginQuery implementation
+ * \file SubscribedChannelsListQuery.cpp
+ * \brief SubscribedChannelsListQuery implementation
  *
  * File description
  *
- * PROJ: OSLL/fedexday
+ * PROJ: geo2tag
  * ---------------------------------------------------------------- */
-
-#include "LoginQuery.h"
+#include <sstream>
+#include "SubscribedChannelsListQuery.h"
 #include "defines.h"
 #include <QDebug>
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <QVariant>
+#include "ChannelListJSON.h"
 
 namespace GUI
 {
-    LoginQuery::LoginQuery(QObject *parent)
+    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QObject *parent)
         : QObject(parent)
     {
         jsonQuery = "";
         httpQuery = "";
         manager = new QNetworkAccessManager(this);
 
-        qDebug() << "Free LoginQuery created";
+        qDebug() << "Free SubscribedChannelsListQuery created";
     }
 
-    LoginQuery::LoginQuery(QString user, QString password, QObject *parent)
+    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QString auth_token, QObject *parent)
                 : QObject(parent)
     {
         manager = new QNetworkAccessManager(this);
-        setQuery(user, password);
-        qDebug() << "LoginQuery created:\n"
+        setQuery(auth_token);
+        qDebug() << "SubscribedChannelsListQuery created:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void LoginQuery::setQuery(QString user, QString password)
+    void SubscribedChannelsListQuery::setQuery(QString auth_token)
     {
-        QVariantMap request;
-        request.insert("user", user);
-        request.insert("password", password);
-
-        QJson::Serializer serializer;
-        QString json(serializer.serialize(request));
-
-        jsonQuery = json;
-        httpQuery = LOGIN_HTTP_URL;
+        jsonQuery = "{\"auth_token\":\"" + auth_token + "\"}";
+        httpQuery = SUBSCRIBED_LIST_HTTP_URL;
     }
 
-    LoginQuery::~LoginQuery()
+    SubscribedChannelsListQuery::~SubscribedChannelsListQuery()
     {
 
     }
 
-    const QString& LoginQuery::getHttpQuery()
+    const QString& SubscribedChannelsListQuery::getHttpQuery()
     {
         return httpQuery;
     }
 
-    const QString& LoginQuery::getJsonQuery()
+    const QString& SubscribedChannelsListQuery::getJsonQuery()
     {
         return jsonQuery;
     }
 
-    void LoginQuery::doRequest()
+    void SubscribedChannelsListQuery::doRequest()
     {
         if (httpQuery == "" || jsonQuery == "")
         {
-            qDebug() << "LoginQuery: can't do request because query isn't set";
+            qDebug() << "SubscribedChannelsListQuery: can't do request cause query isn't set";
             return;
         }
 
         QNetworkRequest request;
-	QUrl url(httpQuery);
-	url.setPort(DEFAULT_PORT);
-	request.setUrl(url);
+        request.setUrl(QUrl(httpQuery));
 
         QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
 
@@ -120,11 +109,11 @@ namespace GUI
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(onReplyError(QNetworkReply::NetworkError)));
 
-        qDebug() << "LoginQuery did request:\n"
+        qDebug() << "SubscribedChannelsListQuery did request:\n"
                  << httpQuery << jsonQuery;
     }
 
-    void LoginQuery::onManagerFinished(QNetworkReply *reply)
+    void SubscribedChannelsListQuery::onManagerFinished(QNetworkReply *reply)
     {
         QByteArray jsonResponseByteArray = reply->readAll();
 
@@ -132,37 +121,21 @@ namespace GUI
         {
             QString jsonResponse(jsonResponseByteArray);
             qDebug() << "Gotten response (json): " << jsonResponse;
-            QJson::Parser parser;
-            bool ok;
-            QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
-            QString status("");
-            QString status_description;
-            QString auth_token("");
-            if (!ok)
-            {
-                qFatal("An error occured during parsing json with channel list");
-            }
-            else
-            {
-                status = result["status"].toString();
-                status_description = result["status_description"].toString();
-                auth_token = result["auth_token"].toString();
-            }
-
-            emit responseReceived(status, auth_token,status_description);
+            std::stringstream jsonStream(jsonResponse.toStdString());
+            ChannelListResponseJSON channelList(jsonStream);
+            CHandlePtr<common::Channels> channels = channelList.getChannels();
+            emit responseReceived(channels);
         }
     }
 
-    void LoginQuery::onReplyError(QNetworkReply::NetworkError error)
+    void SubscribedChannelsListQuery::onReplyError(QNetworkReply::NetworkError error)
     {
         qDebug("Network error: %d \n", error);
-        emit errorReceived();
     }
 
-    void LoginQuery::onManagerSslErrors()
+    void SubscribedChannelsListQuery::onManagerSslErrors()
     {
         qDebug("ssl error \n");
-        emit errorReceived();
     }
 } // namespace GUI
 

@@ -28,65 +28,41 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file DbSession.h
- * \brief Header of DbSession
- * \todo add comment here
+/*! ---------------------------------------------------------------
+ *
+ *
+ * \file JsonChannel.cpp
+ * \brief JsonChannel implementation
  *
  * File description
  *
- * PROJ: OSLL/geo2tag
+ * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
+#include "JsonChannel.h"
+#include "JsonDataMark.h"
 
-#ifndef _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
-#define _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+static qlonglong globalChannelId = 0;
 
-#include <syslog.h>
-
-#include <QtSql>
-#include <QThread>
-#include <QMap>
-
-#include "DataMarks.h"
-#include "Channel.h"
-#include "DataChannel.h"
-#include "User.h"
-#include "UpdateThread.h"
-
-namespace common
+JsonChannel::JsonChannel(const QString &name,
+                         const QString &description,
+                         const QString &url):
+Channel(name, description, url), m_id(globalChannelId++)
 {
-    /*!
-   * \brief session with database
-   */
-    class DbObjectsCollection
-    {
-        QSharedPointer<Channels>    m_channelsContainer;
-        QSharedPointer<DataMarks>   m_tagsContainer;
-        QSharedPointer<Users>       m_usersContainer;
+}
 
-        UpdateThread                m_updateThread;
-    protected:
+qlonglong JsonChannel::getId() const
+{
+    return m_id;
+}
 
-        DbObjectsCollection();
+void JsonChannel::setId(qlonglong id)
+{
+    m_id=id;
+}
 
-    public:
-
-        static DbObjectsCollection& getInstance();
-
-        QByteArray process(const QString& queryType, const QByteArray& body);
-
-        ~DbObjectsCollection();
-
-
-    private:
-        DbObjectsCollection(const DbObjectsCollection& obj);
-        DbObjectsCollection& operator=(const DbObjectsCollection& obj);
-
-    }; // class DbSession
-
-} // namespace common
-
-#endif //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+JsonChannel::~JsonChannel()
+{
+}
 
 /* ===[ End of file ]=== */

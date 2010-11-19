@@ -28,65 +28,49 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file DbSession.h
- * \brief Header of DbSession
- * \todo add comment here
+/*! ---------------------------------------------------------------
+ *
+ *
+ * \file JsonDataMark.cpp
+ * \brief JsonDataMark implementation
  *
  * File description
  *
- * PROJ: OSLL/geo2tag
+ * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
+#include "JsonDataMark.h"
 
-#ifndef _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
-#define _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+static qlonglong globalTagId = 0;
 
-#include <syslog.h>
-
-#include <QtSql>
-#include <QThread>
-#include <QMap>
-
-#include "DataMarks.h"
-#include "Channel.h"
-#include "DataChannel.h"
-#include "User.h"
-#include "UpdateThread.h"
-
-namespace common
+JsonDataMark::JsonDataMark(double latitude,
+                           double longitude,
+                           QString label,
+                           QString description,
+                           const QString &url,
+                           const QDateTime &time):
+                DataMark(latitude, longitude, label, description, url, time),
+                m_id(globalTagId++)
 {
-    /*!
-   * \brief session with database
-   */
-    class DbObjectsCollection
-    {
-        QSharedPointer<Channels>    m_channelsContainer;
-        QSharedPointer<DataMarks>   m_tagsContainer;
-        QSharedPointer<Users>       m_usersContainer;
+}
 
-        UpdateThread                m_updateThread;
-    protected:
+qlonglong JsonDataMark::getId() const
+{
+    return m_id;
+}
 
-        DbObjectsCollection();
+qlonglong JsonDataMark::getUserId() const
+{
+    return m_userId;
+}
 
-    public:
+void JsonDataMark::setId(qlonglong id)
+{
+    m_id=id;
+}
 
-        static DbObjectsCollection& getInstance();
-
-        QByteArray process(const QString& queryType, const QByteArray& body);
-
-        ~DbObjectsCollection();
-
-
-    private:
-        DbObjectsCollection(const DbObjectsCollection& obj);
-        DbObjectsCollection& operator=(const DbObjectsCollection& obj);
-
-    }; // class DbSession
-
-} // namespace common
-
-#endif //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+JsonDataMark::~JsonDataMark()
+{
+}
 
 /* ===[ End of file ]=== */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,52 +29,37 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file ChannelListJSON.h
- * \brief header of ChannelListJSON
+ * \file JsonChannel.h
+ * \brief Header of JsonChannel
+ * \todo add comment here
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
 
-#ifndef _ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
-#define _ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
+#ifndef _JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
+#define _JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 
 #include "Channel.h"
-#include "Handle.h"
-#include <sstream>
-#include "DataMarks.h"
-#include <assert.h>
-#include <QVariant>
-#include <QVariantMap>
-#include <QVariantList>
-#include <QMap>
-#include <QDebug>
-#include "qjson/parser.h"
-#include <QVariant>
-#include "qjson/serializer.h"
-namespace GUI
-{
-    /*!
-   * Class description. May use HTML formatting
-   *
-   */
-    class ChannelListJSON
+
+    class JsonChannel: public Channel
     {
-        std::stringstream m_json;
-        CHandlePtr<common::Channels> m_channels;
-        void convertInJSON();
-        void convertInChannels();
+        qlonglong m_id;
+
     public:
-        ChannelListJSON(const CHandlePtr<common::Channels>& channels);
-        ChannelListJSON(const std::stringstream& json);
-        const std::stringstream& getJSON() const;
-        const CHandlePtr<common::Channels>& getChannels() const ;
-    };//class ChannelListJSON
+        JsonChannel(const QString &name,
+                const QString &description,
+                const QString &url="");
 
-} // namespace GUI
+        qlonglong getId() const;
 
-#endif //_ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
+        void setId(qlonglong id);
 
-/* ===[ End of file $HeadURL$ ]=== */
+        virtual ~JsonChannel();
+    };
+
+#endif //_JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
+
+/* ===[ End of file ]=== */

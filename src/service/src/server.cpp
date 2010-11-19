@@ -5,19 +5,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <QDebug>
-#include "server.h"
 
-//#include "AvailableListJsonQuery.h"
-//#include "SubscribedListJsonQuery.h"
-//#include "SubscribeQuery.h"
-//#include "ApplyMarkJsonQuery.h"
-//#include "ApplyChannelJsonQuery.h"
-//#include "RssFeedJsonQuery.h"
-//#include "UnknownJsonQuery.h"
-//#include "UnsubscribeJsonQuery.h"
-//#include "LoginJsonQuery.h"
-//#include "DynamicCastFailure.h"
-//#include "ApplyUserJsonQuery.h"
+#include "server.h"
+#include "DbSession.h"
 
 #define LISTENSOCK_FILENO 0
 #define LISTENSOCK_FLAGS 0
@@ -25,17 +15,6 @@
 Server::Server()
 {
     int err = FCGX_Init(); // call before Accept in multithreaded apps
-
-//    m_factory.reg<AvailableList>(AVAILABLE_LIST);
-//    m_factory.reg<SubscribedList>(SUBSCRIBED_LIST);
-//    m_factory.reg<SubscribeQuery>(SUBSCRIBE);
-//    m_factory.reg<ApplyMarkJsonQuery>(APPLYMARK);
-//    m_factory.reg<ApplyChannelJsonQuery>(APPLYCHANNEL);
-//    m_factory.reg<ApplyUserJsonQuery>(APPLYUSER);
-//    m_factory.reg<RssFeedJsonQuery>(RSSFEED);
-//    m_factory.reg<UnsubscribeJsonQuery>(UNSUBSCRIBE);
-//    m_factory.reg<LoginJsonQuery>(LOGIN);
-//    m_factory.reg<UnknownJsonQuery>(UNKNOWN);
 
     if (err)
     {
@@ -53,35 +32,48 @@ Server::Server()
     }
 }
 
+QMap<QString, QString> parseQuery(const QString& string)
+{
+    QMap<QString, QString> map;
+    enum States {
+        READ_NAME,
+        READ_VALUE
+    } state;
+
+    size_t j = 0;
+    std::string paramName(""), paramValue(""), s = string.toStdString();
+    state = READ_NAME;
+    for (size_t i = 0; i < s.size(); ++i) {
+        if (s[i] == '=') {
+            paramName = s.substr(j, i - j);
+            j = i + 1;
+            state=READ_VALUE;
+        }
+        if (s[i] == '&') {
+            if (state == READ_NAME) {
+                // variable without value
+                map.insert(QString::fromStdString(s.substr(j, i - j)), "");
+                j = i + 1;
+                continue;
+            }
+            paramValue = s.substr(j, i - j );
+            j = i + 1;
+            map.insert(QString::fromStdString(paramName), QString::fromStdString(paramValue));
+            state=READ_NAME;
+        }
+    }
+    if (paramName.size()) {
+        paramValue = s.substr(j, s.size() - j);
+        map.insert(QString::fromStdString(paramName), QString::fromStdString(paramValue));
+    }
+    return map;
+}
 
 QByteArray Server::process(const QString& query, const QByteArray &data)
 {
-      QByteArray answer;
+      QMap<QString, QString> queryParameters = parseQuery(query);
 
-      answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-
-//    /*
-//     * We are a FastCGI module so we just need write our result to the standart output.
-//     */
-//    Stream s(m_cgi.out);
-
-//    QString str=q.getStream().str();
-//    QStringstream ss(str);
-//    // syslog(LOG_INFO,ss.str().c_str());
-
-//    QSharedPointer<IJsonQuery> query=m_factory.getJsonQuery(q,ss);
-//    try
-//    {
-//        query->process();
-//        s << "Status: 200 OK\r\nContent-Type: text/html\r\n\r\n";
-//        s << (*query);
-//    }
-//    catch (const CExceptionSource& e)
-//    {
-//        syslog(LOG_INFO,"Dynamic Cast Failure. Line %i, file %s",e.getLine(),e.getSource());
-//        s << "Status: 500 Internal Server Error\r\nContent-Type: text/html\r\n\r\n Error applying mark.";
-//    }
-      return answer;
+      return common::DbObjectsCollection::getInstance().process(queryParameters.value("query"), data);
 }
 
 void Server::extractIncomingData(const FCGX_Request& request, QString& queryString, QByteArray& queryBody)

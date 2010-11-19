@@ -11,7 +11,11 @@ maemo5: {
 }
 
 linux: {
-  SUBDIRS += service
+  SUBDIRS += \
+             json \
+             http_requests \
+             service
+             
 }
 
 symbian: {
