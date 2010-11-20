@@ -1,193 +1,80 @@
 #include "TrackerDaemon.h"
 #include <QSettings>
 #include <QDebug>
-#include <QDateTime>
-#include <QTimer>
 #include <QFile>
-//#include "ApplyMarkQuery.h"
-//#include "SubscribeChannelQuery.h"
+#include <QEventLoop>
 #include "LoginQuery.h"
 
 
 #define DEFAULT_LATITUDE 60.17
 #define DEFAULT_LONGITUDE 24.95
 #define DAEMON_PORT 34243
+
 #define LOG QString("/var/wikigps-tracker")
 
-TrackerDaemon::TrackerDaemon()
+TrackerDaemon::TrackerDaemon(): m_settings("osll","tracker"),
+            m_exitFlag(false),
+            m_isConnected(false)
 {
-    qDebug() << "Starting server";
-    // Create log file and textStream for it
-    m_log = new QFile(LOG,this);
-    if (!m_log->open(QIODevice::WriteOnly | QIODevice::Text)){
-        qDebug() << "cant open file!!!!";
-    }
-//    m_logOut = new QTextStream(m_log);
-    QTimer::singleShot(0, this, SLOT(setupBearer()));
-    connect(&m_applyMarkQuery,SIGNAL(replyError(QNetworkReply::NetworkError)),this,SLOT(onNetworkError(QNetworkReply::NetworkError)));
-    connect(&m_applyMarkQuery,SIGNAL(manageSslErrors()),this,SLOT(onSslError()));
-    connect(&m_applyMarkQuery, SIGNAL(responseReceived(QString,QString)), this, SLOT(onApplyMarkResponse(QString,QString)));
-    connect(&m_loginQuery, SIGNAL(responseReceived(QString,QString,QString)), this, SLOT(onLoginResponse(QString,QString,QString)));
-    initSettings();
-    login(m_settings.user,m_settings.passw);
-}
-void TrackerDaemon::initSettings()
-{
-    QSettings settings("osll","tracker");
+    moveToThread(this);
+//    m_settings.channel = settings.value("channel").toString();
+//    m_settings.key = settings.value("key").toString();
+//    m_settings.user = settings.value("user").toString();
+//    m_settings.passw = settings.value("passwd").toString();
 
-    if( settings.value("magic").toString() == APP_MAGIC )
+}
+
+void TrackerDaemon::run()
+{
+    qDebug() << "Tracker daemon is started";
+    QEventLoop eventLoop;
+    QString login = m_settings.value("user").toString();
+    QString password = m_settings.value("password").toString();
+    if(login.isEmpty())
+        login = "Mark";
+    if(password.isEmpty())
+        password = "test";
+    m_loginQuery = new LoginQuery(login, password, this);
+    m_loginQuery->doRequest();
+    connect(m_loginQuery, SIGNAL(connected()), SLOT(onConnected()));
+    connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
+    qDebug() << "login query was sent";
+    for(;;)
     {
-        qDebug() << "magic = " << settings.value("magic").toString();
-        emit readSettings();
-    }
-    else
-    {
-        setStatus(QString("Error"),QString("No settings!"));
+        if(m_exitFlag) break;
+        if(m_isConnected)
+        {
+            qDebug() << "connected";
+        }
+        qDebug() << ".";
+        eventLoop.processEvents(QEventLoop::ExcludeUserInputEvents, 1000);
+        QThread::msleep(1500);
     }
 }
 
-void TrackerDaemon::readSettings()
+
+void TrackerDaemon::startTracking()
 {
-    QSettings settings("osll","tracker");
-    m_settings.channel = settings.value("channel").toString();
-    m_settings.key = settings.value("key").toString();
-    m_settings.user = settings.value("user").toString();
-    m_settings.passw = settings.value("passwd").toString();
-//    m_settings.auth_token = settings.value("auth_token").toString();
-    m_settings.initialized = true;
+    m_exitFlag = false;
+    start();
 }
 
-
-//TODO learn what it is
-void TrackerDaemon::setupBearer()
-{  /*
-    // Set Internet Access Point
-    QNetworkConfigurationManager manager;
-    const bool canStartIAP = (manager.capabilities()
-        & QNetworkConfigurationManager::CanStartAndStopInterfaces);
-    // Is there default access point, use it
-    QNetworkConfiguration cfg = manager.defaultConfiguration();
-    if (!cfg.isValid() || !canStartIAP) {
-        return;
-    }
-    m_session = new QNetworkSession(cfg);
-    m_session->open();
-    m_session->waitForOpened();
-    */
-}
-
-void TrackerDaemon::timerEvent(QTimerEvent *te)
+void TrackerDaemon::stopTracking()
 {
-    killTimer(te->timerId());
-
-
-    if( m_settings.initialized )
-    {
-        qDebug() << "   ... dropping mark" << QDateTime().currentDateTime();
-        bool result = setMark();
-    }
-
-    startTimer(UPDATE_INTERVAL);
+    m_exitFlag = true;
 }
 
-bool TrackerDaemon::setMark()
+void TrackerDaemon::onError(QString message)
 {
-    qreal latitude = DEFAULT_LATITUDE;
-    qreal longitude = DEFAULT_LONGITUDE;
-
-    latitude = common::GpsInfo::getInstance().getLatitude();
-    longitude = common::GpsInfo::getInstance().getLongitude();
-
-    m_applyMarkQuery.setQuery(m_settings.auth_token,
-                              m_settings.channel,
-                              QString("title"),
-                              QString("url"),
-                              QString("description"),
-                              latitude,
-                              longitude,
-                              QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
-    m_applyMarkQuery.doRequest();
-    return true;
+    qDebug() << "Error occured: " << message;
 }
 
-void TrackerDaemon::onApplyMarkResponse(QString status,QString status_description)
+void TrackerDaemon::onConnected()
 {
-    setStatus(status,status_description);
-    qDebug() << "added mark, status " << status << " " << status_description;
+    m_isConnected = true;
 }
 
-void TrackerDaemon::onLoginResponse(QString status,QString auth_token,QString status_description){
-    setStatus(status,status_description);
-    if (status == QString("Ok"))
-    {
-        m_settings.auth_token=auth_token;
-        start();
-    }
-}
-
-void TrackerDaemon::onNetworkError(QNetworkReply::NetworkError){
-        //Add here message boxes for error visualisation
-        // Add reconnecting when shirt happens
-        setStatus("Error","Network error occure. Connection will be reopened");
-        stop();
-        start();
-
-}
-
-void TrackerDaemon::onSslError(){
-        //Add visualisation and reconnection for errors.
-        setStatus("Error","Ssl Error occuried");
-        stop();
-        start();
-}
-
-void TrackerDaemon::start()
-{// start adding marks by timer
-    qDebug() << "start() slot executed";
-    if(m_settings.auth_token!=QString(""))
-    {
-
-        m_timerID=startTimer(100); // first update should be fast*/
-    }
-    else
-    {
-        // Write UI that we didnt authentificated
-        setStatus(QString("Error"),QString("bad login or password"));
-    }
-}
-
-void TrackerDaemon::stop(){// stop adding marks by timer;
-    qDebug() << "stop() slot executed";
-    if (m_timerID){
-        killTimer(m_timerID);
-        m_timerID=0;
-    }
-    m_log->close();
-}
-
-
-void TrackerDaemon::login(QString login,QString password)
+TrackerDaemon::~TrackerDaemon()
 {
-    qDebug() << "login " << login << " " << password;
-    m_settings.user=login;
-    m_settings.passw=password;
-    m_loginQuery.setQuery(login,password);
-    m_loginQuery.doRequest();
+    delete m_loginQuery;
 }
-
-
-
-
-
-void TrackerDaemon::setStatus(QString status,QString status_description)
-{
-    m_status=status;
-    m_statusDescription=status_description;
-    m_lastAttempt=QDateTime::currentDateTime();
-    QTextStream out(m_log);
-    out << m_lastAttempt.toString(QString("hh:mm:ss dd.MM.yyyy")) << " " << m_status << " " 
-        << m_statusDescription << "\n";
-
-
-}
-

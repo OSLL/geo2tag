@@ -1,6 +1,8 @@
 #ifndef TRACKER_H
 #define TRACKER_H
 
+#include <QString>
+
 namespace
 {
   static const QString APP_MAGIC("ebe2a955-14fa-4acf-899e-9f9d51b38476"); // global app guid

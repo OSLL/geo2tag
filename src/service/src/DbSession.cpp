@@ -57,6 +57,7 @@ namespace common
             m_updateThread(m_tagsContainer, m_usersContainer, m_channelsContainer, NULL)
     {
         m_updateThread.start();
+        m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
     }
 
     DbObjectsCollection& DbObjectsCollection::getInstance()
@@ -72,50 +73,54 @@ namespace common
 
     QByteArray DbObjectsCollection::process(const QString& queryType, const QByteArray& body)
     {
+        ProcessMethod method = m_processors.value(queryType);
+        return (*this.*method)(body);
+    }
+
+    QByteArray DbObjectsCollection::processLoginQuery(const QByteArray &data)
+    {
+        LoginRequestJSON request;
+        LoginResponseJSON response;
         QByteArray answer;
-        if(queryType == "login")
+
+        request.parseJson(data);
+
+        QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+        QSharedPointer<User> realUser; // Null pointer
+        QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+
+        for(int i=0; i<currentUsers.size(); i++)
         {
-            LoginRequestJSON request;
-            LoginResponseJSON response;
-
-            request.parseJson(body);
-
-            QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-            QSharedPointer<User> realUser; // Null pointer
-            QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
-
-            for(int i=0; i<currentUsers.size(); i++)
+            if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
             {
-                if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
+                if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
                 {
-                    if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
-                    {
-                        realUser = currentUsers.at(i);
-                        break;
-                    }
-                    else
-                    {
-                        response.setStatus("Error");
-                        response.setStatusMessage("Wrong login or password");
-                    }
+                    realUser = currentUsers.at(i);
+                    break;
+                }
+                else
+                {
+                    response.setStatus("Error");
+                    response.setStatusMessage("Wrong login or password");
                 }
             }
-            answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-            if(realUser.isNull())
-            {
-                response.setStatus("Error");
-                response.setStatusMessage("Wrong login or password");
-            }
-            else
-            {
-                response.setStatus("Ok");
-                response.setStatusMessage("Authorization was successful");
-                response.addUser(realUser);
-            }
-
-            answer.append(response.getJson());
-            return answer;
         }
+        answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+        if(realUser.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong login or password");
+        }
+        else
+        {
+            response.setStatus("Ok");
+            response.setStatusMessage("Authorization was successful");
+            response.addUser(realUser);
+        }
+
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
     }
 } // namespace common
 

@@ -66,9 +66,14 @@ namespace common
         QSharedPointer<Users>       m_usersContainer;
 
         UpdateThread                m_updateThread;
-    protected:
+
+        typedef QByteArray (DbObjectsCollection::*ProcessMethod)(const QByteArray&);
+
+        QMap<QString, ProcessMethod> m_processors;
 
         DbObjectsCollection();
+
+        QByteArray processLoginQuery(const QByteArray&);
 
     public:
 

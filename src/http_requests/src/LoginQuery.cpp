@@ -47,6 +47,7 @@
 
 #include "JsonUser.h"
 #include "LoginRequestJSON.h"
+#include "LoginResponseJSON.h"
 
 LoginQuery::LoginQuery(const QString &login, const QString &password, QObject *parent):
         DefaultQuery(parent), m_login(login), m_password(password)
@@ -66,124 +67,31 @@ QByteArray LoginQuery::getRequestBody() const
     return request.getJson();
 }
 
+void LoginQuery::processReply(QNetworkReply *reply)
+{
+    LoginResponseJSON response;
+    response.parseJson(reply->readAll());
+    if(response.getStatus() == "Ok")
+    {
+        QSharedPointer<User> user = response.getUsers()->at(0);
+        m_user = QSharedPointer<User>(new JsonUser(m_login, m_password, user->getToken()));
+        emit connected();
+    }
+    else
+    {
+        emit errorOccured(response.getStatusMessage());
+    }
 
-//namespace GUI
-//{
-//    LoginQuery::LoginQuery(QObject *parent)
-//        : QObject(parent)
-//    {
-//        jsonQuery = "";
-//        httpQuery = "";
-//        manager = new QNetworkAccessManager(this);
+}
 
-//        qDebug() << "Free LoginQuery created";
-//    }
+QSharedPointer<User> LoginQuery::getUser() const
+{
+    return m_user;
+}
 
-//    LoginQuery::LoginQuery(QString user, QString password, QObject *parent)
-//                : QObject(parent)
-//    {
-//        manager = new QNetworkAccessManager(this);
-//        setQuery(user, password);
-//        qDebug() << "LoginQuery created:\n"
-//                 << httpQuery << jsonQuery;
-//    }
+LoginQuery::~LoginQuery()
+{
 
-//    void LoginQuery::setQuery(QString user, QString password)
-//    {
-//        QVariantMap request;
-//        request.insert("user", user);
-//        request.insert("password", password);
-
-//        QJson::Serializer serializer;
-//        QString json(serializer.serialize(request));
-
-//        jsonQuery = json;
-//        httpQuery = LOGIN_HTTP_URL;
-//    }
-
-//    LoginQuery::~LoginQuery()
-//    {
-
-//    }
-
-//    const QString& LoginQuery::getHttpQuery()
-//    {
-//        return httpQuery;
-//    }
-
-//    const QString& LoginQuery::getJsonQuery()
-//    {
-//        return jsonQuery;
-//    }
-
-//    void LoginQuery::doRequest()
-//    {
-//        if (httpQuery == "" || jsonQuery == "")
-//        {
-//            qDebug() << "LoginQuery: can't do request because query isn't set";
-//            return;
-//        }
-
-//        QNetworkRequest request;
-//	QUrl url(httpQuery);
-//	url.setPort(DEFAULT_PORT);
-//	request.setUrl(url);
-
-//        QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
-
-//        QNetworkReply *reply = manager->post(request, data);
-
-//        connect(manager, SIGNAL(finished(QNetworkReply*)),
-//                this, SLOT(onManagerFinished(QNetworkReply*)));
-//        connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-//                this, SLOT(onManagerSslErrors()));
-//        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-//                this, SLOT(onReplyError(QNetworkReply::NetworkError)));
-
-//        qDebug() << "LoginQuery did request:\n"
-//                 << httpQuery << jsonQuery;
-//    }
-
-//    void LoginQuery::onManagerFinished(QNetworkReply *reply)
-//    {
-//        QByteArray jsonResponseByteArray = reply->readAll();
-
-//        if (jsonResponseByteArray.size() > 0)
-//        {
-//            QString jsonResponse(jsonResponseByteArray);
-//            qDebug() << "Gotten response (json): " << jsonResponse;
-//            QJson::Parser parser;
-//            bool ok;
-//            QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
-//            QString status("");
-//            QString status_description;
-//            QString auth_token("");
-//            if (!ok)
-//            {
-//                qFatal("An error occured during parsing json with channel list");
-//            }
-//            else
-//            {
-//                status = result["status"].toString();
-//                status_description = result["status_description"].toString();
-//                auth_token = result["auth_token"].toString();
-//            }
-
-//            emit responseReceived(status, auth_token,status_description);
-//        }
-//    }
-
-//    void LoginQuery::onReplyError(QNetworkReply::NetworkError error)
-//    {
-//        qDebug("Network error: %d \n", error);
-//        emit errorReceived();
-//    }
-
-//    void LoginQuery::onManagerSslErrors()
-//    {
-//        qDebug("ssl error \n");
-//        emit errorReceived();
-//    }
-//} // namespace GUI
+}
 
 /* ===[ End of file $HeadURL$ ]=== */

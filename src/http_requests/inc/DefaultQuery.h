@@ -13,10 +13,13 @@ protected:
 
     virtual QString getUrl() const = 0;
     virtual QByteArray getRequestBody() const = 0;
+    virtual void processReply(QNetworkReply *reply) = 0;
 
 protected slots:
 
-    virtual void processReply(QNetworkReply *reply) = 0;
+    void process(QNetworkReply *reply);
+
+    void handleError();
 
 public:
     DefaultQuery(QObject *parent = 0);
@@ -27,7 +30,7 @@ signals:
 
     void responseReceived();
 
-    void errorOccured();
+    void errorOccured(QString);
 };
 
 #endif // DEFAULTQUERY_H

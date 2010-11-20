@@ -14,8 +14,8 @@ linux: {
   SUBDIRS += \
              json \
              http_requests \
-             service
-             
+             service \
+             tracker
 }
 
 symbian: {

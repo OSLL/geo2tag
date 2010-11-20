@@ -1,10 +1,10 @@
 TEMPLATE = subdirs
 
-TARGET = daemon/tracker ui/tracker-ui
+TARGET = daemon/wikigpsTracker
 
 target.path = /usr/bin
 INSTALLS += target
 
 include(../../config.pri)
 
-SUBDIRS= ui daemon
+SUBDIRS = daemon

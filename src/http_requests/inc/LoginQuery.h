@@ -63,6 +63,8 @@ class LoginQuery: public DefaultQuery
     QString m_login;
     QString m_password;
 
+    QSharedPointer<User> m_user; //!< full information about user
+
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
 
