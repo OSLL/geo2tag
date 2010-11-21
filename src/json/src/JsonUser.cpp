@@ -41,8 +41,9 @@ static qlonglong globalUserId = 0;
 
 JsonUser::JsonUser(const QString &login,
                    const QString& pass,
-                   const QString& token): User(login,pass), m_id(globalUserId++), m_token(token)
+                   const QString& token): User(login,pass), m_id(globalUserId++)
 {
+    setToken(token);
 }
 
 qlonglong JsonUser::getId() const
@@ -53,11 +54,6 @@ qlonglong JsonUser::getId() const
 void JsonUser::setId(qlonglong id)
 {
     m_id = id;
-}
-
-const QString& JsonUser::getToken() const
-{
-    return m_token;
 }
 
 JsonUser::~JsonUser()

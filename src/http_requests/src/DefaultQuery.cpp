@@ -26,7 +26,6 @@ void DefaultQuery::doRequest()
 
 void DefaultQuery::process(QNetworkReply *reply)
 {
-    qDebug() << "DefaultQuery::process";
     processReply(reply);
 }
 

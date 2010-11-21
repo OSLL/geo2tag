@@ -45,6 +45,9 @@
 #include "LoginRequestJSON.h"
 #include "LoginResponseJSON.h"
 
+#include "AddNewMarkRequestJSON.h"
+#include "AddNewMarkResponseJSON.h"
+
 #include <QtSql>
 #include <QMap>
 
@@ -54,10 +57,29 @@ namespace common
             m_channelsContainer(new Channels()),
             m_tagsContainer(new DataMarks()),
             m_usersContainer(new Users()),
-            m_updateThread(m_tagsContainer, m_usersContainer, m_channelsContainer, NULL)
+            m_updateThread(NULL)
     {
-        m_updateThread.start();
+
         m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
+        m_processors.insert("apply", &DbObjectsCollection::processAddNewMarkQuery);
+
+        QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
+        database.setHostName("localhost");
+        database.setDatabaseName("geo2tag");
+        database.setUserName("geo2tag");
+        database.setPassword("");
+
+        m_updateThread = new UpdateThread(
+                        QSqlDatabase::cloneDatabase(database,"updateThread"),
+                        m_tagsContainer,
+                        m_usersContainer,
+                        m_channelsContainer,
+                        NULL);
+
+        m_updateThread->start();
+
+        m_queryExecutor = new QueryExecutor(QSqlDatabase::cloneDatabase(database,"executor"), NULL);
+
     }
 
     DbObjectsCollection& DbObjectsCollection::getInstance()
@@ -68,11 +90,18 @@ namespace common
 
     DbObjectsCollection::~DbObjectsCollection()
     {
-        m_updateThread.wait();
+        m_updateThread->wait();
+        delete m_updateThread;
+        delete m_queryExecutor;
     }
 
     QByteArray DbObjectsCollection::process(const QString& queryType, const QByteArray& body)
     {
+        if(!m_queryExecutor->isConnected())
+        {
+            m_queryExecutor->connect();
+        }
+
         ProcessMethod method = m_processors.value(queryType);
         return (*this.*method)(body);
     }
@@ -101,7 +130,7 @@ namespace common
                 else
                 {
                     response.setStatus("Error");
-                    response.setStatusMessage("Wrong login or password");
+                    response.setStatusMessage("Wrong password");
                 }
             }
         }
@@ -122,6 +151,75 @@ namespace common
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;
     }
+
+    QByteArray DbObjectsCollection::processAddNewMarkQuery(const QByteArray &data)
+    {
+        AddNewMarkRequestJSON request;
+        AddNewMarkResponseJSON response;
+        QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+        request.parseJson(data);
+        QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
+        QSharedPointer<User> dummyUser = dummyTag->getUser();
+        QSharedPointer<User> realUser; // Null pointer
+        QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+
+        for(int i=0; i<currentUsers.size(); i++)
+        {
+            if(currentUsers.at(i)->getToken() == dummyUser->getToken())
+            {
+                realUser = currentUsers.at(i);
+            }
+        }
+        if(realUser.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong authentification key");
+            answer.append(response.getJson());
+            return answer;
+        }
+
+        QSharedPointer<Channel> dummyChannel = dummyTag->getChannel();
+        QSharedPointer<Channel> realChannel; // Null pointer
+        QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+
+        for(int i=0; i<currentChannels.size(); i++)
+        {
+            if(currentChannels.at(i)->getName() == dummyChannel->getName())
+            {
+                realChannel = currentChannels.at(i);
+            }
+        }
+        if(realChannel.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong channel's' name");
+            answer.append(response.getJson());
+            return answer;
+        }
+
+        dummyTag->setChannel(realChannel);
+        dummyTag->setUser(realUser);
+        QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);
+        if(realTag ==NULL)
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Internal server error ):");
+            answer.append(response.getJson());
+            return answer;
+        }
+        m_updateThread->lockWriting();
+        m_tagsContainer->push_back(realTag);
+        m_updateThread->unlockWriting();
+
+        response.setStatus("Ok");
+        response.setStatusMessage("Tag has been added");
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+    }
+
+
 } // namespace common
 
 /* ===[ End of file ]=== */

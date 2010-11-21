@@ -1,27 +1,22 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#include <QDebug>
+#include "DefaultResponseJSON.h"
 
-#include "LoginResponseJSON.h"
-#include "JsonUser.h"
-
-LoginResponseJSON::LoginResponseJSON()
+DefaultResponseJSON::DefaultResponseJSON()
 {
 }
 
-QByteArray LoginResponseJSON::getJson() const
+QByteArray DefaultResponseJSON::getJson() const
 {
     QJson::Serializer serializer;
     QVariantMap obj;
-    if(m_usersContainer->size()>0)
-        obj.insert("auth_token", m_usersContainer->at(0)->getToken());
     obj.insert("status", m_status);
     obj.insert("status_description", m_statusMessage);
     return serializer.serialize(obj);
 }
 
-void LoginResponseJSON::parseJson(const QByteArray &data)
+void DefaultResponseJSON::parseJson(const QByteArray &data)
 {
     clearContainers();
 
@@ -36,8 +31,4 @@ void LoginResponseJSON::parseJson(const QByteArray &data)
 
     m_status = result["status"].toString();
     m_statusMessage = result["status_description"].toString();
-
-    QString auth_token = result["auth_token"].toString();
-    QSharedPointer<User> user(new JsonUser("unknown", "unknown", auth_token));
-    m_usersContainer->push_back(user);
 }

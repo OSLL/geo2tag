@@ -72,7 +72,6 @@ QMap<QString, QString> parseQuery(const QString& string)
 QByteArray Server::process(const QString& query, const QByteArray &data)
 {
       QMap<QString, QString> queryParameters = parseQuery(query);
-      syslog(LOG_INFO, "queryParameters.value(\"query\") = %s", queryParameters.value("query").toStdString().c_str())  ;
       return common::DbObjectsCollection::getInstance().process(queryParameters.value("query"), data);
 }
 

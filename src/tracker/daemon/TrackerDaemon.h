@@ -11,6 +11,7 @@
 #include "tracker.h"
 
 #include "LoginQuery.h"
+#include "AddNewMarkQuery.h"
 
 class TrackerDaemon : public QThread
 {
@@ -19,6 +20,7 @@ class TrackerDaemon : public QThread
     QSettings m_settings;
 
     LoginQuery * m_loginQuery; // this field needs because query is asynchronous
+    AddNewMarkQuery * m_tagQuery; // this field needs because query is asynchronous
 
     bool m_exitFlag;
     bool m_isConnected;
@@ -27,7 +29,7 @@ class TrackerDaemon : public QThread
 private slots:
 
     void onConnected(); //calls when login/pass were accepted
-
+    void onTagAdded();
     void onError(QString);
 
 public:

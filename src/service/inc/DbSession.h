@@ -53,6 +53,7 @@
 #include "DataChannel.h"
 #include "User.h"
 #include "UpdateThread.h"
+#include "QueryExecutor.h"
 
 namespace common
 {
@@ -61,19 +62,23 @@ namespace common
    */
     class DbObjectsCollection
     {
+
         QSharedPointer<Channels>    m_channelsContainer;
         QSharedPointer<DataMarks>   m_tagsContainer;
         QSharedPointer<Users>       m_usersContainer;
 
-        UpdateThread                m_updateThread;
+        UpdateThread *              m_updateThread;
 
         typedef QByteArray (DbObjectsCollection::*ProcessMethod)(const QByteArray&);
 
         QMap<QString, ProcessMethod> m_processors;
 
+        QueryExecutor *             m_queryExecutor;
+
         DbObjectsCollection();
 
         QByteArray processLoginQuery(const QByteArray&);
+        QByteArray processAddNewMarkQuery(const QByteArray&);
 
     public:
 

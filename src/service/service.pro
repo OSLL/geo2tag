@@ -35,7 +35,8 @@ HEADERS += \
            inc/DataMarkInternal.h \
            inc/UserInternal.h \
            inc/DbSession.h \
-    inc/UpdateThread.h
+    inc/UpdateThread.h \
+    inc/QueryExecutor.h
 
 SOURCES += src/main.cpp \
            src/server.cpp \
@@ -44,7 +45,8 @@ SOURCES += src/main.cpp \
            src/DynamicCastFailure.cpp \
            src/UserInternal.cpp \
            src/DbSession.cpp \
-    src/UpdateThread.cpp
+    src/UpdateThread.cpp \
+    src/QueryExecutor.cpp
 
 LIBS +=  -lcommon -lfcgi -lwikigpsJson
 OBJECTS_DIR = .obj

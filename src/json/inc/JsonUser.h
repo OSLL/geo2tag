@@ -48,15 +48,12 @@
   class JsonUser: public User
   {
     qlonglong m_id;
-    QString m_token;
 
   public:
     JsonUser(const QString& login, const QString& pass = "unknown", const QString& token = "unknown");
 
     qlonglong getId() const;
     void setId(qlonglong);
-
-    const QString& getToken() const;
 
     ~JsonUser();
   }; // class JsonUser

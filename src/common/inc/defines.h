@@ -49,7 +49,7 @@
 
 #define SUBSCRIBE_HTTP_URL        SERVER_HTTP_URL"example?query=subscribe"
 #define UNSUBSCRIBE_HTTP_URL      SERVER_HTTP_URL"example?query=unsubscribe"
-#define APPLY_HTTP_URL            SERVER_HTTP_URL"example?query=applymark"
+#define APPLY_HTTP_URL            SERVER_HTTP_URL"example?query=apply"
 #define FEED_HTTP_URL             SERVER_HTTP_URL"example?query=rss"
 #define SUBSCRIBED_LIST_HTTP_URL  SERVER_HTTP_URL"example?query=subscribed"
 #define AVAILABLE_LIST_HTTP_URL   SERVER_HTTP_URL"example?query=channels"

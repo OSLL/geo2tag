@@ -30,10 +30,15 @@ class UpdateThread: public QThread
 
 public:
     UpdateThread(
+            const QSqlDatabase &db,
             const QSharedPointer<DataMarks>& tags,
             const QSharedPointer<Users>& users,
             const QSharedPointer<Channels>& channels,
             QObject *parent = 0);
+
+    void lockWriting();
+
+    void unlockWriting();
 
 signals:
 

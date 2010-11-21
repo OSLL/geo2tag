@@ -1,20 +1,28 @@
+#include <syslog.h>
 #include <QDebug>
 #include "UpdateThread.h"
 
-UpdateThread::UpdateThread(const QSharedPointer<DataMarks> &tags,
+UpdateThread::UpdateThread(const QSqlDatabase &db,
+                           const QSharedPointer<DataMarks> &tags,
                            const QSharedPointer<Users> &users,
                            const QSharedPointer<Channels> &channels,
                            QObject *parent):
     QThread(parent),
     m_channelsContainer(channels),
     m_tagsContainer(tags),
-    m_usersContainer(users)
+    m_usersContainer(users),
+    m_database(db)
 {
-    m_database = QSqlDatabase::addDatabase("QPSQL");
-    m_database.setHostName("localhost");
-    m_database.setDatabaseName("geo2tag");
-    m_database.setUserName("geo2tag");
-    m_database.setPassword("");
+}
+
+void UpdateThread::lockWriting()
+{
+    m_updateLock.lockForWrite();
+}
+
+void UpdateThread::unlockWriting()
+{
+    m_updateLock.unlock();
 }
 
 void UpdateThread::run()
@@ -38,15 +46,15 @@ void UpdateThread::run()
         loadTags(tagsContainer);
         loadChannels(channelsContainer);
 
-        m_updateLock.lockForWrite();
+        lockWriting();
         m_usersContainer->merge(usersContainer);
         m_tagsContainer->merge(tagsContainer);
         m_channelsContainer->merge(channelsContainer);
-        m_updateLock.unlock();
+        unlockWriting();
 
-        qDebug() << "current users' size = " << m_usersContainer->size();
-        qDebug() << "current tags' size = " << m_tagsContainer->size();
-        qDebug() << "current channels' size = " << m_channelsContainer->size();
+        syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
+        syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());
+        syslog(LOG_INFO,  "current channels' size = %d", m_channelsContainer->size());
         m_database.close();
         QThread::msleep(10000);
     }
@@ -106,7 +114,7 @@ void UpdateThread::loadTags(DataMarks &container)
             // skip record
             continue;
         }
-        QDateTime time = query.record().value("time").toDateTime();
+        QDateTime time = query.record().value("time").toDateTime().toTimeSpec(Qt::LocalTime);
         qreal latitude = query.record().value("latitude").toReal();
         qreal longitude = query.record().value("longitude").toReal();
         QString label = query.record().value("label").toString();
