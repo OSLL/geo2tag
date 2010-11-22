@@ -7,16 +7,4 @@ namespace
   static const int UPDATE_INTERVAL = (1000 * 57); // 57 sec
 }
 
-struct Settings
-{
-  bool initialized;
-  QString channel;
-  QString key;
-  QString user;
-  QString passw;
-  QString auth_token;
-
-  Settings() : initialized(false){}
-};
-
 #endif // TRACKER_H

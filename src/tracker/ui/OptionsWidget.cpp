@@ -9,9 +9,10 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <DaemonManager.h>
+#include "tracker.h"
 
 OptionsWidget::OptionsWidget(QWidget *parent) :
-        QWidget(parent)
+        QWidget(parent), m_settings("osll","tracker")
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(new QLabel("Login:"));
@@ -36,143 +37,58 @@ OptionsWidget::OptionsWidget(QWidget *parent) :
 
 QString OptionsWidget::name()
 {
-    return m_settings.user;
+    m_settings.value("user").toString();
 }
 
 QString OptionsWidget::password()
 {
-    return m_settings.passw;
+    m_settings.value("password").toString();
 }
 
 QString OptionsWidget::channel()
 {
-    return m_settings.channel;
+    m_settings.value("channel").toString();
 }
 
 void OptionsWidget::onDoneClicked()
 {
-    int changed = 0;
-
-    if (m_nameEdit->text() == "")
-    {
-        QMessageBox::information(this, "Tracker", "User's name can be empy");
-        return;
-    }
-    else if (m_passwordEdit->text() == "")
-    {
-        QMessageBox::information(this, "Tracker", "User's password can be empy");
-        return;
-    }
-    else if (m_channelEdit->text() == "")
-    {
-        QMessageBox::information(this, "Tracker", "Channel's name can be empy");
-        return;
-    }
-
-    if (m_settings.user != m_nameEdit->text())
-    {
-        changed = 1;
-        m_settings.user = m_nameEdit->text();
-        qDebug() << "new name: " << m_settings.user;
-    }
-    if (m_settings.passw != m_passwordEdit->text())
-    {
-        changed = 1;
-        m_settings.passw = m_passwordEdit->text();
-        qDebug() << "new password: " << m_settings.passw;
-    }
-    if (m_settings.channel != m_channelEdit->text())
-    {
-        changed = 1;
-        m_settings.channel = m_channelEdit->text();
-        qDebug() << "new channel: " << m_settings.channel;
-    }
-
-    if (changed)
-    {
-        QDateTime prevModified = DaemonManager::getInstance().lastStatusModification();
-
-        // 1. stop daemon
-        DaemonManager::getInstance().stop();
-
-        // 2. update qsettings
-        createSettings();
-
-        // 3. start daemon
-        DaemonManager::getInstance().start();
-
-        // 4. check status
-        for (int i = 0; i < 100000; i++)
-            if (prevModified != DaemonManager::getInstance().lastStatusModification())
-                break;
-
-        if (prevModified != DaemonManager::getInstance().lastStatusModification())
-        {
-            struct Status status = DaemonManager::getInstance().getStatus();
-            if (status.status == "Error")
-            {
-                QMessageBox::information(this, "Tracker", "Error: " + status.description);
-                return;
-            }
-        }
-    }
-
-    m_backupSettings = m_settings;
-    emit this->done();
+    m_settings.setValue("user", m_nameEdit->text());
+    m_settings.setValue("password", m_passwordEdit->text());
+    m_settings.setValue("channel", m_channelEdit->text());
+    emit done();
 }
 
 void OptionsWidget::onCancelClicked()
 {
-    m_settings = m_backupSettings;
-    m_nameEdit->setText(m_settings.user);
-    m_passwordEdit->setText(m_settings.passw);
-    m_channelEdit->setText(m_settings.channel);
-
-    emit this->done();
+    initSettings();
+    emit cancel();
 }
 
 void OptionsWidget::initSettings()
 {
-    QSettings settings("osll","tracker");
-
-    if( settings.value("magic").toString() == APP_MAGIC )
+    if( m_settings.value("magic").toString() == APP_MAGIC )
     {
-        qDebug() << "magic = " << settings.value("magic").toString();
-        emit readSettings();
+        qDebug() << "magic = " << m_settings.value("magic").toString();
+        readSettings();
     }
     else
     {
-        emit createSettings();
+        createSettings();
     }
 }
 
 void OptionsWidget::readSettings()
 {
     QSettings settings("osll","tracker");
-    m_settings.channel = settings.value("channel").toString();
-    m_settings.key = settings.value("key").toString();
-    m_settings.user = settings.value("user").toString();
-    m_settings.passw = settings.value("passwd").toString();
-    m_settings.auth_token = settings.value("auth_token").toString();
-    m_settings.initialized = true;
-
-    m_nameEdit->setText(m_settings.user);
-    m_passwordEdit->setText(m_settings.passw);
-    m_channelEdit->setText(m_settings.channel);
-
-    m_backupSettings = m_settings;
+    m_nameEdit->setText(m_settings.value("user").toString());
+    m_passwordEdit->setText(m_settings.value("password").toString());
+    m_channelEdit->setText(m_settings.value("channel").toString());
 }
 
 void OptionsWidget::createSettings()
 {
-    QSettings settings("osll","tracker");
-    settings.setValue("channel",m_settings.channel);
-    settings.setValue("key",m_settings.key);
-    settings.setValue("user",m_settings.user);
-    settings.setValue("passwd",m_settings.passw);
-    settings.setValue("auth_token",m_settings.auth_token);
-    settings.setValue("magic",APP_MAGIC);
-    m_settings.initialized = true;
-
-    m_backupSettings = m_settings;
+    m_settings.setValue("channel",m_channelEdit->text());
+    m_settings.setValue("user",m_nameEdit->text());
+    m_settings.setValue("password",m_passwordEdit->text());
+    m_settings.setValue("magic",APP_MAGIC);
 }

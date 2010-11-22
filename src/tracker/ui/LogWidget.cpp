@@ -25,7 +25,7 @@ void LogWidget::setLog(QString log)
 
 void LogWidget::addToLog(QString string)
 {
-    m_log->setText(string + "\n \n" + m_log->toPlainText());
+    m_log->setText(string + "\n" + m_log->toPlainText());
 }
 
 void LogWidget::onOkClicked()

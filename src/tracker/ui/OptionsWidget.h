@@ -4,15 +4,11 @@
 #include <QWidget>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QtXml/QDomElement>
-#include "tracker.h"
+#include <QSettings>
 
 class OptionsWidget : public QWidget
 {
     Q_OBJECT
-
-    Settings m_settings;
-    Settings m_backupSettings;
 
     QLineEdit *m_nameEdit;
     QLineEdit *m_passwordEdit;
@@ -24,6 +20,8 @@ class OptionsWidget : public QWidget
 
     QPushButton *m_doneButton;
     QPushButton *m_cancelButton;
+
+    QSettings m_settings;
 
 public:
     OptionsWidget(QWidget *parent = 0);

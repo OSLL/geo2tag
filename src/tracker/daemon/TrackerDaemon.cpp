@@ -10,24 +10,36 @@
 
 #include "LoginQuery.h"
 #include "AddNewMarkQuery.h"
+#include "ReportThread.h"
 
 #define DEFAULT_LATITUDE 60.17
 #define DEFAULT_LONGITUDE 24.95
 #define DAEMON_PORT 34243
 
-#define LOG QString("/var/wikigps-tracker")
-
 TrackerDaemon::TrackerDaemon(): m_settings("osll","tracker"),
-            m_exitFlag(false),
+            m_pauseFlag(true),
             m_isConnected(false),
             m_loginQuery(NULL),
             m_tagQuery(NULL)
 {
     moveToThread(this);
+    m_controlServer = new QTcpServer(NULL);
+    connect(m_controlServer, SIGNAL(newConnection()),SLOT(newControlConnection()));
+    m_controlServer->listen(QHostAddress::LocalHost, 31234);
+}
+
+void TrackerDaemon::newControlConnection()
+{
+    qDebug() << "new connection to control socket";
+    while(m_controlServer->hasPendingConnections())
+    {
+        ControlThread *t = new ControlThread(m_controlServer->nextPendingConnection(),this,this);
+    }
 }
 
 void TrackerDaemon::run()
 {
+    qDebug() << "thread started";
     QEventLoop eventLoop;
     QString login = m_settings.value("user").toString();
     QString password = m_settings.value("password").toString();
@@ -41,8 +53,7 @@ void TrackerDaemon::run()
     m_loginQuery->doRequest();
     for(;;)
     {
-        if(m_exitFlag) break;
-        if(m_isConnected)
+        if(!m_pauseFlag && m_isConnected)
         {
             qDebug() << "connected: auth_token=" << m_loginQuery->getUser()->getToken();
             qDebug() << "trying push new tag";
@@ -61,13 +72,23 @@ void TrackerDaemon::run()
 
 void TrackerDaemon::startTracking()
 {
-    m_exitFlag = false;
+    m_pauseFlag = false;
     start();
 }
 
 void TrackerDaemon::stopTracking()
 {
-    m_exitFlag = true;
+    m_pauseFlag = true;
+}
+
+bool TrackerDaemon::isTracking() const
+{
+    return !m_pauseFlag;
+}
+
+QStringList TrackerDaemon::getLog() const
+{
+    return QStringList("dummy");
 }
 
 void TrackerDaemon::onError(QString message)
@@ -99,4 +120,5 @@ void TrackerDaemon::onTagAdded()
 
 TrackerDaemon::~TrackerDaemon()
 {
+    delete m_controlServer;
 }

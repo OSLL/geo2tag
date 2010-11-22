@@ -1,10 +1,11 @@
 #include <QApplication>
 #include "TrackerGUI.h"
+#include "MainWindow.h"
 
 int main(int c, char **v)
 {
   QApplication app(c,v);
-  TrackerGUI gui;
-  gui.showMaximized();
+  MainWindow main;
+  main.show();
   return app.exec();
 }

@@ -8,7 +8,7 @@ int main(int c, char **v)
   QCoreApplication app(c,v);
   qDebug() << "Application is started";
   TrackerDaemon daemon;
-  daemon.startTracking();
+  daemon.start();
 //  QObject::connect(&app,SIGNAL(aboutToQuit()),&daemon,SLOT(stop()));
   return app.exec();
 }

@@ -9,11 +9,12 @@
 #include <QFile>
 #include "GpsInfo.h"
 #include "tracker.h"
-
+#include "QTcpServer"
 #include "LoginQuery.h"
 #include "AddNewMarkQuery.h"
+#include "Control.h"
 
-class TrackerDaemon : public QThread
+class TrackerDaemon : public QThread, public Control
 {
     Q_OBJECT;
 
@@ -22,8 +23,10 @@ class TrackerDaemon : public QThread
     LoginQuery * m_loginQuery; // this field needs because query is asynchronous
     AddNewMarkQuery * m_tagQuery; // this field needs because query is asynchronous
 
-    bool m_exitFlag;
+    bool m_pauseFlag;
     bool m_isConnected;
+
+    QTcpServer * m_controlServer;
 
     void run();
 private slots:
@@ -32,11 +35,16 @@ private slots:
     void onTagAdded();
     void onError(QString);
 
+    void newControlConnection();
+
 public:
     TrackerDaemon();
 
-    void stopTracking();
-    void startTracking();
+    virtual void stopTracking();
+    virtual void startTracking();
+    virtual bool isTracking() const;
+
+    QStringList getLog() const;
 
     ~TrackerDaemon();
 

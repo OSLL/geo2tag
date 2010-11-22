@@ -24,9 +24,12 @@ INCLUDEPATH += . \
 # Input
 SOURCES += main.cpp \
            TrackerDaemon.cpp \
+    ReportThread.cpp
 
 HEADERS += TrackerDaemon.h \
-           tracker.h
+           tracker.h \
+    ReportThread.h \
+    Control.h
 
 LIBS += -lqjson -lcommon -lwikigpsHttp -lwikigpsJson
 

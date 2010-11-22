@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-TARGET = tracker-ui
+TARGET = wikigpsTracker-ui
 
 target.path = /usr/bin
 INSTALLS += target
@@ -12,29 +12,24 @@ QT += network xml
 
 
 DEPENDPATH += . \
-              ../../gui/inc \
-              ../../gui/src
-	      
+
 INCLUDEPATH += . \
-               ../../gui/inc \
                ../../common/inc
 
 # Input
 SOURCES += main.cpp \
-           RequestSender.cpp \
-           TrackerGUI.cpp \
            OptionsWidget.cpp \
            LogWidget.cpp \
-    DaemonManager.cpp
+    MainWindow.cpp
 
 HEADERS += tracker.h \
-           ../../common/inc/defines.h \
-           RequestSender.h \
            Status.h \
-           TrackerGUI.h \
            OptionsWidget.h \
            LogWidget.h \
-    DaemonManager.h
+    MainWindow.h
 
 RESOURCES += \
     images.qrc
+
+FORMS += \
+    MainWindow.ui
