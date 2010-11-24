@@ -61,6 +61,8 @@ void TrackerDaemon::run()
             if(m_tagQuery)
             {
                 m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());
+                m_tagQuery->getTag()->setLatitude(common::GpsInfo::getInstance().getLatitude());
+                m_tagQuery->getTag()->setLongitude(common::GpsInfo::getInstance().getLongitude());
                 m_tagQuery->doRequest();
             }
         }
@@ -101,9 +103,14 @@ void TrackerDaemon::onConnected()
     m_isConnected = true;
     if(m_tagQuery == NULL)
     {
-        QSharedPointer<DataMark> mark(new JsonDataMark(DEFAULT_LATITUDE,DEFAULT_LONGITUDE,"tracker's tag",
-                                                       "this tag was generated automaticaly by tracker application",
-                                                       "unknown", QDateTime::currentDateTime()));
+        QSharedPointer<DataMark> mark(
+                new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
+                                 common::GpsInfo::getInstance().getLongitude(),
+                        //DEFAULT_LATITUDE,DEFAULT_LONGITUDE,
+                                 "tracker's tag",
+                                 "this tag was generated automaticaly by tracker application",
+                                 "unknown",
+                                 QDateTime::currentDateTime()));
         QSharedPointer<Channel> channel(new JsonChannel("My channel","dummy channel"));
         mark->setChannel(channel);
         mark->setUser(m_loginQuery->getUser());
