@@ -95,7 +95,7 @@ public:
     void setUrl(const QString&);
 
     const QDateTime& getTime() const;
-    void setTime(const QDateTime& time=QDateTime::currentDateTimeUtc());
+    void setTime(const QDateTime& time=QDateTime::currentDateTime().toUTC());
 
     QSharedPointer<User> getUser() const;
 
@@ -107,7 +107,7 @@ public:
             const QString& label="Default label",
             const QString& description="No descrption",
             const QString& url="",
-            const QDateTime &time=QDateTime::currentDateTimeUtc(),
+            const QDateTime &time=QDateTime::currentDateTime().toUTC(),
             const QSharedPointer<Channel>&channel =QSharedPointer<Channel>(),
             const QSharedPointer<User>&user=QSharedPointer<User>());
 

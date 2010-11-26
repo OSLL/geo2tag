@@ -29,69 +29,42 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/* $Id$ */
-/*!
- * \file RSSFeedQuery.h
- * \brief Header of RSSFeedQuery
- * \todo add comment here
- *
- * File description
- *
- * PROJ: geo2tag
- * ---------------------------------------------------------------- */
+#ifndef RSSFEEDREQUESTJSON_H
+#define RSSFEEDREQUESTJSON_H
 
+#include "JsonSerializer.h"
 
-#ifndef _RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
-#define _RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
-
-#include <QObject>
 #include <QString>
-#include <DefaultQuery.h>
 
-#include "DataMarks.h"
-
-/*!
-     * RSSFeedQuery class definition.
-     *
-     * The object of this class represents http query to server.
-     * This query includes json request to get RSS feed.
-     */
-class RSSFeedQuery : public DefaultQuery
+class RSSFeedRequestJSON: public JsonSerializer
 {
-    Q_OBJECT
-
     QString m_auth_token;
-    qreal m_latitude;
-    qreal m_longitude;
-    qreal m_radius;
+    double m_latitude;
+    double m_longitude;
+    double m_radius;
     QString m_type;
 
-    QSharedPointer<DataMarks> m_marks;
-
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
-
-private slots:
-
-    virtual void processReply(QNetworkReply *reply);
-
 public:
+    RSSFeedRequestJSON();
 
-    RSSFeedQuery(QString auth_token, qreal latitude,
-                 qreal longitude, qreal radius,
-                 QString type,
-                 QObject *parent = 0);
+    QString getAuthToken();
+    double getLatitude();
+    double getLongitude();
+    double getRadius();
+    QString getType();
 
-   QSharedPointer<DataMarks> getMarks() const;
+    void setAuthToken(QString auth_token);
+    void setLatitude(double latitude);
+    void setLongitude(double longitude);
+    void setRadius(double radius);
+    void setType(QString type);
 
-    ~RSSFeedQuery();
+    virtual QByteArray getJson() const;
 
-signals:
+    virtual void parseJson(const QByteArray&);
 
-    void connected();
+    ~RSSFeedRequestJSON();
 
-}; // class RSSFeedQuery
+};//class RSSFeedRequestJSON
 
-#endif //_RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
-
-/* ===[ End of file $HeadURL$ ]=== */
+#endif // RSSFEEDREQUESTJSON_H

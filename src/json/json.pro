@@ -14,6 +14,7 @@ INCLUDEPATH += . inc \
 HEADERS += \
            inc/ChannelListJSON.h \
            inc/RSSFeedJSON.h \
+           inc/RSSFeedRequestJSON.h \
            inc/SubscribeChannelJSON.h \
            inc/JsonUser.h \
            inc/JsonDataMark.h \
@@ -28,6 +29,7 @@ HEADERS += \
 SOURCES += \
            src/ChannelListJSON.cpp \
            src/RSSFeedJSON.cpp \
+           src/RSSFeedRequestJSON.cpp \
            src/SubscribeChannelJSON.cpp \
            src/JsonUser.cpp \
            src/JsonChannel.cpp \

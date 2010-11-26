@@ -15,7 +15,8 @@ INCLUDEPATH += . inc \
 HEADERS += \
            inc/LoginQuery.h \
            inc/DefaultQuery.h \
-    inc/AddNewMarkQuery.h
+           inc/RSSFeedQuery.h \
+           inc/AddNewMarkQuery.h
 
 #            inc/ApplyMarkQuery.h \
 #           inc/AvailableChannelsListQuery.h \
@@ -29,7 +30,8 @@ HEADERS += \
 SOURCES += \
            src/LoginQuery.cpp \
            src/DefaultQuery.cpp \
-    src/AddNewMarkQuery.cpp
+           src/RSSFeedQuery.cpp \
+           src/AddNewMarkQuery.cpp
 
 # src/ApplyMarkQuery.cpp \
 #           src/AvailableChannelsListQuery.cpp \

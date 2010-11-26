@@ -41,116 +41,86 @@
  * ---------------------------------------------------------------- */
 
 #include "RSSFeedQuery.h"
-#include "RSSFeedJSON.h"
 #include "defines.h"
 #include <QDebug>
+#include "RSSFeedJSON.h"
+#include "RSSFeedRequestJSON.h"
+#include "JsonDataMark.h"
+#include "JsonUser.h"
 
-namespace GUI
+RSSFeedQuery::RSSFeedQuery(QString auth_token, qreal latitude, qreal longitude,
+                           qreal radius, QString type, QObject *parent):
+        DefaultQuery(parent), m_auth_token(auth_token), m_latitude(latitude),
+        m_longitude(longitude), m_radius(radius), m_type(type)
 {
-    RSSFeedQuery::RSSFeedQuery(QObject *parent)
-        : QObject(parent)
+}
+
+QString RSSFeedQuery::getUrl() const
+{
+    return FEED_HTTP_URL;
+}
+
+QByteArray RSSFeedQuery::getRequestBody() const
+{
+    RSSFeedRequestJSON request;
+    request.setAuthToken(m_auth_token);
+    request.setLatitude(m_latitude);
+    request.setLongitude(m_longitude);
+    request.setRadius(m_radius);
+    request.setType(m_type);
+
+    return request.getJson();
+}
+
+void RSSFeedQuery::processReply(QNetworkReply *reply)
+{
+    RSSFeedResponseJSON response;
+    response.parseJson(reply->readAll());
+    if(response.getStatus() == "Ok")
     {
-        jsonQuery = "";
-        httpQuery = "";
-        manager = new QNetworkAccessManager(this);
+        QSharedPointer<DataMarks> marks = response.getTags();
+        QSharedPointer<DataMarks> newMarks(new DataMarks());
 
-        qDebug() << "Free RSSFeedQuery created";
-    }
-
-    RSSFeedQuery::RSSFeedQuery
-            (QString user, qreal latitude, qreal longitude, qreal radius, bool isLastOne, QObject *parent)
-                : QObject(parent)
-    {
-        manager = new QNetworkAccessManager(this);
-        setQuery(user,latitude,longitude,radius,isLastOne);
-
-        qDebug() << "RSSFeedQuery created:\n"
-                 << httpQuery << jsonQuery;
-    }
-
-    void RSSFeedQuery::setQuery(QString auth_token, qreal latitude,
-                                              qreal longitude, qreal radius,bool isLastOne)
-    {
-        jsonQuery = "{\"auth_token\":\"" + auth_token +
-                    "\", \"latitude\":" + QString::number(latitude) +
-                    ", \"longitude\":" + QString::number(longitude) +
-                    ", \"radius\":" + QString::number(radius);
-	if (isLastOne){ 
-		 jsonQuery+=", \"type\":\"last_one\"";
-		 qDebug() << "isLastOne=1";
-	}
-	qDebug() << auth_token;
-	jsonQuery += "}";
-//        qDebug() << "++++Builded request ++ "<< jsonQuery;
-        httpQuery = FEED_HTTP_URL;
-    }
-
-    RSSFeedQuery::~RSSFeedQuery()
-    {
-
-    }
-
-    const QString& RSSFeedQuery::getHttpQuery()
-    {
-        return httpQuery;
-    }
-
-    const QString& RSSFeedQuery::getJsonQuery()
-    {
-        return jsonQuery;
-    }
-
-    void RSSFeedQuery::doRequest()
-    {
-        if (httpQuery == "" || jsonQuery == "")
+        int size = marks->size();
+        for (int i = 0; i < size; i++)
         {
-            qDebug() << "RSSFeedQuery: can't do request cause query isn't set";
-            return;
+            QString title = marks->at(i)->getLabel();
+            QString link = marks->at(i)->getUrl();
+            QString description = marks->at(i)->getDescription();
+            double latitude = marks->at(i)->getLatitude();
+            double longitude = marks->at(i)->getLongitude();
+            QDateTime time = marks->at(i)->getTime();
+
+            QSharedPointer<User> user(new JsonUser(marks->at(i)->getUser()->getLogin()));
+
+            QSharedPointer<JsonDataMark> newMark(new JsonDataMark(latitude,
+                                                     longitude,
+                                                     title,
+                                                     description,
+                                                     link,
+                                                     time));
+            newMark->setUser(user);
+            newMarks->push_back(newMark);
         }
 
-        QNetworkRequest request;
-        request.setUrl(QUrl(httpQuery));
-
-        QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
-
-        QNetworkReply *reply = manager->post(request, data);
-
-        connect(manager, SIGNAL(finished(QNetworkReply*)),
-                this, SLOT(onManagerFinished(QNetworkReply*)));
-        connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-                this, SLOT(onManagerSslErrors()));
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(onReplyError(QNetworkReply::NetworkError)));
-
-        qDebug() << "RSSFeedQuery did request:\n"
-                 << httpQuery << jsonQuery;
+        m_marks = newMarks;
+        emit connected();
     }
-
-    void RSSFeedQuery::onManagerFinished(QNetworkReply *reply)
+    else
     {
-        QByteArray jsonResponseByteArray = reply->readAll();
-
-        if (jsonResponseByteArray.size() > 0)
-        {
-            QString jsonResponse(jsonResponseByteArray);
-            qDebug() << "Gotten response (json): " << jsonResponse;
-            std::stringstream jsonStream(jsonResponse.toStdString());
-            RSSFeedResponseJSON rssFeed(jsonStream);
-            CHandlePtr<common::DataMarks> marks = rssFeed.getMarks();
-            emit responseReceived(marks);
-            /* check response and emit signal */
-        }
+        emit errorOccured(response.getStatusMessage());
     }
 
-    void RSSFeedQuery::onReplyError(QNetworkReply::NetworkError error)
-    {
-        qDebug("Network error: %d \n", error);
-    }
+}
 
-    void RSSFeedQuery::onManagerSslErrors()
-    {
-        qDebug("ssl error \n");
-    }
-} // namespace GUI
+QSharedPointer<DataMarks> RSSFeedQuery::getMarks() const
+{
+    return m_marks;
+}
+
+RSSFeedQuery::~RSSFeedQuery()
+{
+
+}
 
 /* ===[ End of file $HeadURL$ ]=== */
