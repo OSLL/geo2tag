@@ -44,16 +44,26 @@
 #ifndef _RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 #define _RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 
+#include <QMultiHash>
 #include "JsonSerializer.h"
+#include "Channel.h"
+#include "DataMarks.h"
 
 class RSSFeedResponseJSON: public JsonSerializer
 {
+    // map will contain channels and marks which should be serialized to JSON
+    QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > m_hashMap;
+
 public:
+    RSSFeedResponseJSON(const QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> >&);
+
     RSSFeedResponseJSON();
 
     virtual QByteArray getJson() const;
 
     virtual void parseJson(const QByteArray&);
+
+    QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > getRSSFeed() const;
 
     ~RSSFeedResponseJSON();
 

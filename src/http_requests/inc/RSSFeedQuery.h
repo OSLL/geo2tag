@@ -49,6 +49,8 @@
 #include <DefaultQuery.h>
 
 #include "DataMarks.h"
+#include "User.h"
+#include "Channel.h"
 
 /*!
      * RSSFeedQuery class definition.
@@ -60,13 +62,12 @@ class RSSFeedQuery : public DefaultQuery
 {
     Q_OBJECT
 
-    QString m_auth_token;
-    qreal m_latitude;
-    qreal m_longitude;
-    qreal m_radius;
-    QString m_type;
+    QSharedPointer<User> m_user;
+    double m_latitude;
+    double m_longitude;
+    double m_radius;
 
-    QSharedPointer<DataMarks> m_marks;
+    QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > m_hashMap;
 
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
@@ -77,18 +78,19 @@ private slots:
 
 public:
 
-    RSSFeedQuery(QString auth_token, qreal latitude,
-                 qreal longitude, qreal radius,
-                 QString type,
+    RSSFeedQuery(QSharedPointer<User> &user,
+                 double latitude,
+                 double longitude,
+                 double radius,
                  QObject *parent = 0);
-
-   QSharedPointer<DataMarks> getMarks() const;
 
     ~RSSFeedQuery();
 
+     QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > getRSSFeed() const;
+
 signals:
 
-    void connected();
+     void rssFeedReceived();
 
 }; // class RSSFeedQuery
 

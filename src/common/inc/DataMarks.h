@@ -116,6 +116,8 @@ public:
     virtual ~DataMark();
 };
 
+bool operator<(const QSharedPointer<DataMark> &a, const QSharedPointer<DataMark> &b);
+
 typedef ConcurrentVector<DataMark> DataMarks;
 
 #endif //_DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_

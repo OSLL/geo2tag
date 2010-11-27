@@ -30,7 +30,7 @@
  */
 
 /*! ---------------------------------------------------------------
- * $Id$ 
+ * $Id$
  *
  * \file RSSFeedQuery.cpp
  * \brief RSSFeedQuery implementation
@@ -48,10 +48,15 @@
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 
-RSSFeedQuery::RSSFeedQuery(QString auth_token, qreal latitude, qreal longitude,
-                           qreal radius, QString type, QObject *parent):
-        DefaultQuery(parent), m_auth_token(auth_token), m_latitude(latitude),
-        m_longitude(longitude), m_radius(radius), m_type(type)
+RSSFeedQuery::RSSFeedQuery(QSharedPointer<User> &user,
+                           double latitude,
+                           double longitude,
+                           double radius,
+                           QObject *parent): DefaultQuery(parent),
+                           m_user(user),
+                           m_latitude(latitude),
+                           m_longitude(longitude),
+                           m_radius(radius)
 {
 }
 
@@ -62,13 +67,8 @@ QString RSSFeedQuery::getUrl() const
 
 QByteArray RSSFeedQuery::getRequestBody() const
 {
-    RSSFeedRequestJSON request;
-    request.setAuthToken(m_auth_token);
-    request.setLatitude(m_latitude);
-    request.setLongitude(m_longitude);
-    request.setRadius(m_radius);
-    request.setType(m_type);
-
+    RSSFeedRequestJSON request(m_latitude, m_longitude, m_radius);
+    request.addUser(m_user);
     return request.getJson();
 }
 
@@ -78,33 +78,9 @@ void RSSFeedQuery::processReply(QNetworkReply *reply)
     response.parseJson(reply->readAll());
     if(response.getStatus() == "Ok")
     {
-        QSharedPointer<DataMarks> marks = response.getTags();
-        QSharedPointer<DataMarks> newMarks(new DataMarks());
+        m_hashMap = response.getRSSFeed();
 
-        int size = marks->size();
-        for (int i = 0; i < size; i++)
-        {
-            QString title = marks->at(i)->getLabel();
-            QString link = marks->at(i)->getUrl();
-            QString description = marks->at(i)->getDescription();
-            double latitude = marks->at(i)->getLatitude();
-            double longitude = marks->at(i)->getLongitude();
-            QDateTime time = marks->at(i)->getTime();
-
-            QSharedPointer<User> user(new JsonUser(marks->at(i)->getUser()->getLogin()));
-
-            QSharedPointer<JsonDataMark> newMark(new JsonDataMark(latitude,
-                                                     longitude,
-                                                     title,
-                                                     description,
-                                                     link,
-                                                     time));
-            newMark->setUser(user);
-            newMarks->push_back(newMark);
-        }
-
-        m_marks = newMarks;
-        emit connected();
+        emit rssFeedReceived();
     }
     else
     {
@@ -113,9 +89,9 @@ void RSSFeedQuery::processReply(QNetworkReply *reply)
 
 }
 
-QSharedPointer<DataMarks> RSSFeedQuery::getMarks() const
+QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > RSSFeedQuery::getRSSFeed() const
 {
-    return m_marks;
+    return m_hashMap;
 }
 
 RSSFeedQuery::~RSSFeedQuery()

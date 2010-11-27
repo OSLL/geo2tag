@@ -57,10 +57,7 @@ void User::subscribe(const QSharedPointer<Channel>& channel)
 
 void User::unsubscribe(const QSharedPointer<Channel>& channel)
 {
-    //    Channels::iterator it = std::find(m_channels->begin(), m_channels->end(), channel);
-    //    if(it != m_channels->end())
-    //       m_channels->erase(it);
-    throw 5;
+    m_channels->erase(channel);
 }
 
 const QString& User::getLogin() const

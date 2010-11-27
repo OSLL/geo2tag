@@ -77,8 +77,11 @@ namespace common
 
         DbObjectsCollection();
 
+        QSharedPointer<User> findUserFromToken(const QSharedPointer<User>&) const;
+
         QByteArray processLoginQuery(const QByteArray&);
         QByteArray processAddNewMarkQuery(const QByteArray&);
+        QByteArray processRssFeedQuery(const QByteArray&);
 
     public:
 

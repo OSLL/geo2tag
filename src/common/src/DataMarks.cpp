@@ -174,4 +174,9 @@
     }
 
 
+    bool operator<(const QSharedPointer<DataMark> &a, const QSharedPointer<DataMark> &b)
+    {
+        return a->getTime() < b->getTime();
+    }
+
 /* ===[ End of file  ]=== */

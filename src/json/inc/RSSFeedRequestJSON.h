@@ -38,26 +38,26 @@
 
 class RSSFeedRequestJSON: public JsonSerializer
 {
-    QString m_auth_token;
     double m_latitude;
     double m_longitude;
     double m_radius;
-    QString m_type;
 
 public:
+    RSSFeedRequestJSON(double latitude,
+                       double longitude,
+                       double radius);
+
     RSSFeedRequestJSON();
 
-    QString getAuthToken();
-    double getLatitude();
-    double getLongitude();
-    double getRadius();
-    QString getType();
+    double getLatitude() const;
+    double getLongitude() const;
+    double getRadius() const;
+    QString getAuthToken() const;
 
-    void setAuthToken(QString auth_token);
+
     void setLatitude(double latitude);
     void setLongitude(double longitude);
     void setRadius(double radius);
-    void setType(QString type);
 
     virtual QByteArray getJson() const;
 

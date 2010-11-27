@@ -40,6 +40,11 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 
+RSSFeedRequestJSON::RSSFeedRequestJSON(double latitude, double longitude, double radius):
+        m_latitude(latitude), m_longitude(longitude), m_radius(radius)
+{
+}
+
 RSSFeedRequestJSON::RSSFeedRequestJSON()
 {
 }
@@ -58,53 +63,42 @@ void RSSFeedRequestJSON::parseJson(const QByteArray &data)
         return;
     }
 
-    m_auth_token = result["auth_token"].toString();
+    QString authToken = result["auth_token"].toString();
+    m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("dummyUser[RSSFeedRequest]","dummyPassword",authToken)));
     m_latitude = result["latitude"].toDouble();
     m_longitude = result["longitude"].toDouble();
     m_radius = result["radius"].toDouble();
-    m_type = result["type"].toString();
 }
 
 QByteArray RSSFeedRequestJSON::getJson() const
 {
     QJson::Serializer serializer;
     QVariantMap obj;
-    obj.insert("auth_token", m_auth_token);
-    obj.insert("latitude", m_latitude);
-    obj.insert("longitude", m_longitude);
-    obj.insert("radius", m_radius);
-    obj.insert("type", m_type);
+    obj.insert("auth_token", getAuthToken());
+    obj.insert("latitude", getLatitude());
+    obj.insert("longitude", getLongitude());
+    obj.insert("radius", getRadius());
     return serializer.serialize(obj);
 }
 
-QString RSSFeedRequestJSON::getAuthToken()
+QString RSSFeedRequestJSON::getAuthToken() const
 {
-    return m_auth_token;
+    return m_usersContainer->at(0)->getToken();
 }
 
-double RSSFeedRequestJSON::getLatitude()
+double RSSFeedRequestJSON::getLatitude() const
 {
     return m_latitude;
 }
 
-double RSSFeedRequestJSON::getLongitude()
+double RSSFeedRequestJSON::getLongitude() const
 {
     return m_longitude;
 }
 
-double RSSFeedRequestJSON::getRadius()
+double RSSFeedRequestJSON::getRadius() const
 {
     return m_radius;
-}
-
-QString RSSFeedRequestJSON::getType()
-{
-    return m_type;
-}
-
-void RSSFeedRequestJSON::setAuthToken(QString auth_token)
-{
-    m_auth_token = auth_token;
 }
 
 void RSSFeedRequestJSON::setLatitude(double latitude)
@@ -120,11 +114,6 @@ void RSSFeedRequestJSON::setLongitude(double longitude)
 void RSSFeedRequestJSON::setRadius(double radius)
 {
     m_radius = radius;
-}
-
-void RSSFeedRequestJSON::setType(QString type)
-{
-    m_type = type;
 }
 
 RSSFeedRequestJSON::~RSSFeedRequestJSON()

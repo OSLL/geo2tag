@@ -88,6 +88,14 @@ public:
         }
     }
 
+    void erase(const QSharedPointer<T> &val)
+    {
+        QMutexLocker locker(&m_lock);
+        int i = m_container.indexOf(val);
+        if(i != -1)
+            m_container.remove(i);
+    }
+
     QVector<QSharedPointer<T> > vector() const
     {
         QMutexLocker locker(&m_lock);

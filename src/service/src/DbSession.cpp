@@ -48,6 +48,9 @@
 #include "AddNewMarkRequestJSON.h"
 #include "AddNewMarkResponseJSON.h"
 
+#include "RSSFeedRequestJSON.h"
+#include "RSSFeedJSON.h"
+
 #include <QtSql>
 #include <QMap>
 
@@ -62,6 +65,7 @@ namespace common
 
         m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
         m_processors.insert("apply", &DbObjectsCollection::processAddNewMarkQuery);
+        m_processors.insert("rss", &DbObjectsCollection::processRssFeedQuery);
 
         QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
         database.setHostName("localhost");
@@ -73,6 +77,9 @@ namespace common
                         QSqlDatabase::cloneDatabase(database,"updateThread"),
                         m_tagsContainer,
                         m_usersContainer,
+                        //    request.setLatitude(m_latitude);
+                        //    request.setLongitude(m_longitude);
+                        //    request.setRadius(m_radius);
                         m_channelsContainer,
                         NULL);
 
@@ -104,6 +111,21 @@ namespace common
 
         ProcessMethod method = m_processors.value(queryType);
         return (*this.*method)(body);
+    }
+
+    QSharedPointer<User> DbObjectsCollection::findUserFromToken(const QSharedPointer<User> &dummyUser) const
+    {
+        QSharedPointer<User> realUser; // Null pointer
+        QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+
+        for(int i=0; i<currentUsers.size(); i++)
+        {
+            if(currentUsers.at(i)->getToken() == dummyUser->getToken())
+            {
+                realUser = currentUsers.at(i);
+            }
+        }
+        return realUser;
     }
 
     QByteArray DbObjectsCollection::processLoginQuery(const QByteArray &data)
@@ -161,16 +183,8 @@ namespace common
         request.parseJson(data);
         QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
         QSharedPointer<User> dummyUser = dummyTag->getUser();
-        QSharedPointer<User> realUser; // Null pointer
-        QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+        QSharedPointer<User> realUser = findUserFromToken(dummyUser);
 
-        for(int i=0; i<currentUsers.size(); i++)
-        {
-            if(currentUsers.at(i)->getToken() == dummyUser->getToken())
-            {
-                realUser = currentUsers.at(i);
-            }
-        }
         if(realUser.isNull())
         {
             response.setStatus("Error");
@@ -220,6 +234,28 @@ namespace common
     }
 
 
+    QByteArray DbObjectsCollection::processRssFeedQuery(const QByteArray &data)
+    {
+        RSSFeedRequestJSON request;
+        RSSFeedResponseJSON response;
+        QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+        request.parseJson(data);
+        QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+        QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+        if(realUser.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong authentification key");
+            answer.append(response.getJson());
+            return answer;
+        }
+        // ToDo
+
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+
+    }
 } // namespace common
 
 /* ===[ End of file ]=== */

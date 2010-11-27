@@ -1,14 +1,13 @@
 #ifndef DATACHANNEL_H
 #define DATACHANNEL_H
 
-#include <QSharedData>
 #include <QSharedPointer>
 #include "Channel.h"
 #include "DataMarks.h"
 
 namespace common
 {
-    class DataChannel : public QSharedData
+    class DataChannel
     {
         QSharedPointer<Channel> m_channel;
 
@@ -16,9 +15,6 @@ namespace common
 
     public:
         DataChannel(const QSharedPointer<Channel>& channel, const QSharedPointer<DataMarks> marks);
-
-        DataChannel(const DataChannel &);
-        DataChannel &operator=(const DataChannel &);
 
         virtual ~DataChannel();
     };
