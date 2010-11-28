@@ -7,4 +7,4 @@ INSTALLS += target
 
 include(../../config.pri)
 
-SUBDIRS = daemon ui
+SUBDIRS = daemon ui observer

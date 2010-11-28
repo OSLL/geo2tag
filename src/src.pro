@@ -15,6 +15,7 @@ linux: {
              json \
              http_requests \
              service \
+             maps \
              tracker
 }
 

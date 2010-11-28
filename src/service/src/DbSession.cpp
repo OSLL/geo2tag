@@ -254,8 +254,8 @@ namespace common
 
         QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
         DataChannels feed;
-        syslog(LOG_INFO, "rssfeed processing: user %s has %d channels subscribed",
-               realUser->getLogin().toStdString().c_str(), channels->size());
+//        syslog(LOG_INFO, "rssfeed processing: user %s has %d channels subscribed",
+//               realUser->getLogin().toStdString().c_str(), channels->size());
         for(int i = 0; i<channels->size(); i++)
         {
             QSharedPointer<Channel> channel = channels->at(i);
@@ -264,7 +264,7 @@ namespace common
             QList<QSharedPointer<DataMark> > last10 = tags.mid(tags.size()>10?tags.size()-10:0, 10);
             for(int j = 0; j<last10.size(); j++)
             {
-                syslog(LOG_INFO,"rssfeed: adding tag with time: %s", last10.at(j)->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str());
+//                syslog(LOG_INFO,"rssfeed: adding tag with time: %s", last10.at(j)->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str());
                 feed.insert(channel, last10.at(j));
             }
         }

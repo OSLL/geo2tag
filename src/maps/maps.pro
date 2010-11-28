@@ -14,17 +14,10 @@ INCLUDEPATH += . inc ../common/inc ../common/common/inc ../common/thread/inc \
                ../common/exception/inc
 
 # Input
-HEADERS += inc/MapLoader.h \
-           inc/GoogleMapLoader.h \
-           inc/GoogleClientLogin.h \
-           inc/MapLoaderFactory.h \
-           inc/GoogleMapsApiKey.h \
-           inc/OpenStreetMapLoader.h
-SOURCES += src/GoogleClientLogin.cpp \
-           src/GoogleMapLoader.cpp \
-           src/MapLoader.cpp \
-           src/MapLoaderFactory.cpp \
-           src/OpenStreetMapLoader.cpp
+HEADERS += inc/SlippyMap.h \
+           inc/LightMap.h
+SOURCES += src/SlippyMap.cpp \
+           src/LightMap.cpp
 
 OBJECTS_DIR = .obj
 
