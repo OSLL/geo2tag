@@ -63,9 +63,10 @@ namespace common
     class DbObjectsCollection
     {
 
-        QSharedPointer<Channels>    m_channelsContainer;
-        QSharedPointer<DataMarks>   m_tagsContainer;
-        QSharedPointer<Users>       m_usersContainer;
+        QSharedPointer<Channels>     m_channelsContainer;
+        QSharedPointer<DataMarks>    m_tagsContainer;
+        QSharedPointer<Users>        m_usersContainer;
+        QSharedPointer<DataChannels> m_dataChannelsMap;
 
         UpdateThread *              m_updateThread;
 

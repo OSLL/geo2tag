@@ -8,14 +8,16 @@
 #include "DataMarkInternal.h"
 #include "UserInternal.h"
 #include "ChannelInternal.h"
+#include "DataChannel.h"
 
 class UpdateThread: public QThread
 {
     Q_OBJECT
 
-    QSharedPointer<Channels>    m_channelsContainer;
-    QSharedPointer<DataMarks>   m_tagsContainer;
-    QSharedPointer<Users>       m_usersContainer;
+    QSharedPointer<Channels>     m_channelsContainer;
+    QSharedPointer<DataMarks>    m_tagsContainer;
+    QSharedPointer<Users>        m_usersContainer;
+    QSharedPointer<DataChannels> m_dataChannelsMap;
 
     QSqlDatabase m_database;
 
@@ -34,6 +36,7 @@ public:
             const QSharedPointer<DataMarks>& tags,
             const QSharedPointer<Users>& users,
             const QSharedPointer<Channels>& channels,
+            const QSharedPointer<DataChannels>& dataChannelsMap,
             QObject *parent = 0);
 
     void lockWriting();

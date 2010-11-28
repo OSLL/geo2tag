@@ -17,6 +17,9 @@ class ConcurrentVector
 
 public:
 
+    typedef typename QVector<QSharedPointer<T> >::iterator iterator;
+    typedef typename QVector<QSharedPointer<T> >::const_iterator const_iterator;
+
     ConcurrentVector(const QVector<QSharedPointer<T> > &container=QVector<QSharedPointer<T> >()):
             m_container(container)
     {

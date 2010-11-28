@@ -6,11 +6,13 @@ UpdateThread::UpdateThread(const QSqlDatabase &db,
                            const QSharedPointer<DataMarks> &tags,
                            const QSharedPointer<Users> &users,
                            const QSharedPointer<Channels> &channels,
+                           const QSharedPointer<DataChannels>& dataChannelsMap,
                            QObject *parent):
     QThread(parent),
     m_channelsContainer(channels),
     m_tagsContainer(tags),
     m_usersContainer(users),
+    m_dataChannelsMap(dataChannelsMap),
     m_database(db)
 {
 }
@@ -29,11 +31,11 @@ void UpdateThread::run()
 {
     for(;;)
     {
-        qDebug("trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
+        syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
         bool result = m_database.open();
         if(!result)
         {
-            qDebug() << "connection error" << m_database.lastError();
+            syslog(LOG_INFO, "connection error %s",m_database.lastError().text().toStdString().c_str());
             QThread::msleep(1000);
             continue;
         }
@@ -50,6 +52,21 @@ void UpdateThread::run()
         m_usersContainer->merge(usersContainer);
         m_tagsContainer->merge(tagsContainer);
         m_channelsContainer->merge(channelsContainer);
+
+        updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer);
+
+        for(int i=0; i<m_tagsContainer->size(); i++)
+        {
+            QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
+            QSharedPointer<Channel> channel = tag->getChannel();
+            if(!m_dataChannelsMap->contains(channel, tag))
+            {
+                syslog(LOG_INFO, "adding tag %s to channel %s",
+                       tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(),
+                       channel->getName().toStdString().c_str());
+                m_dataChannelsMap->insert(channel, tag);
+            }
+        }
         unlockWriting();
 
         syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
@@ -115,6 +132,7 @@ void UpdateThread::loadTags(DataMarks &container)
             continue;
         }
         QDateTime time = query.record().value("time").toDateTime().toTimeSpec(Qt::LocalTime);
+//        syslog(LOG_INFO, "loaded tag with time: %s", time.toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str());
         qreal latitude = query.record().value("latitude").toReal();
         qreal longitude = query.record().value("longitude").toReal();
         QString label = query.record().value("label").toString();
@@ -154,9 +172,14 @@ void UpdateThread::updateReflections(DataMarks &tags, Users &users, Channels &ch
         {
             qlonglong tag_id = query.record().value("tag_id").toLongLong();
             qlonglong channel_id = query.record().value("channel_id").toLongLong();
-            tags.item(tag_id)->setChannel(channels.item(channel_id));
+
+            QSharedPointer<Channel> channel = channels.item(channel_id);
+            QSharedPointer<DataMark> tag = tags.item(tag_id);
+
+            tag->setChannel(channel);
         }
     }
+
     for(int i=0; i<tags.size(); i++)
     {
         tags[i]->setUser(users.item(tags.at(i).dynamicCast<DbDataMark>()->getUserId()));

@@ -35,8 +35,7 @@ SOURCES += \
     src/Picture.cpp \
     src/PngPicture.cpp \
     src/Channel.cpp \
-    src/User.cpp \
-    src/DataChannel.cpp
+    src/User.cpp
 
 linux: {
     HEADERS +=  \

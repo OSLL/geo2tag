@@ -89,7 +89,7 @@ void RSSFeedQuery::processReply(QNetworkReply *reply)
 
 }
 
-QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > RSSFeedQuery::getRSSFeed() const
+const DataChannels& RSSFeedQuery::getRSSFeed() const
 {
     return m_hashMap;
 }

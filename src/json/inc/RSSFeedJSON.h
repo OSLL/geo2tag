@@ -48,14 +48,15 @@
 #include "JsonSerializer.h"
 #include "Channel.h"
 #include "DataMarks.h"
+#include "DataChannel.h"
 
 class RSSFeedResponseJSON: public JsonSerializer
 {
     // map will contain channels and marks which should be serialized to JSON
-    QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > m_hashMap;
+    DataChannels m_hashMap;
 
 public:
-    RSSFeedResponseJSON(const QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> >&);
+    RSSFeedResponseJSON(const DataChannels &);
 
     RSSFeedResponseJSON();
 
@@ -63,7 +64,7 @@ public:
 
     virtual void parseJson(const QByteArray&);
 
-    QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > getRSSFeed() const;
+    const DataChannels& getRSSFeed() const;
 
     ~RSSFeedResponseJSON();
 

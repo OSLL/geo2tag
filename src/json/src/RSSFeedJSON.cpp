@@ -54,7 +54,7 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 
-RSSFeedResponseJSON::RSSFeedResponseJSON(const QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > &hashMap):
+RSSFeedResponseJSON::RSSFeedResponseJSON(const DataChannels &hashMap):
         m_hashMap(hashMap)
 {
 }
@@ -116,7 +116,7 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
                                                                   link,
                                                                   time));
             newMark->setUser(user);
-            m_hashMap.insertMulti(channel, newMark);
+            m_hashMap.insert(channel, newMark);
         }
     }
 }
@@ -126,19 +126,18 @@ QByteArray RSSFeedResponseJSON::getJson() const
     QJson::Serializer serializer;
     QVariantMap obj, rss, jchannel;
 
-    QList<QSharedPointer<Channel> > hashKeys = m_hashMap.keys();
+    QList<QSharedPointer<Channel> > hashKeys = m_hashMap.uniqueKeys();
     QVariantList jchannels;
 
     for(int i=0; i<hashKeys.size(); i++)
     {
         QList<QSharedPointer<DataMark> > tags = m_hashMap.values(hashKeys.at(i));
-        qSort(tags);
         QVariantList jtags;
         QVariantMap channel;
 
         for(int j=0; j<tags.size(); j++)
         {
-            QSharedPointer<DataMark> tag = tags.at(i);
+            QSharedPointer<DataMark> tag = tags.at(j);
             QVariantMap jtag;
             jtag["title"] = tag->getLabel();
             jtag["link"] = tag->getUrl();
@@ -159,7 +158,7 @@ QByteArray RSSFeedResponseJSON::getJson() const
     return serializer.serialize(rss);
 }
 
-QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > RSSFeedResponseJSON::getRSSFeed() const
+const DataChannels& RSSFeedResponseJSON::getRSSFeed() const
 {
     return m_hashMap;
 }

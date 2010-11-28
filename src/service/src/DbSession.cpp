@@ -60,6 +60,7 @@ namespace common
             m_channelsContainer(new Channels()),
             m_tagsContainer(new DataMarks()),
             m_usersContainer(new Users()),
+            m_dataChannelsMap(new DataChannels()),
             m_updateThread(NULL)
     {
 
@@ -77,10 +78,8 @@ namespace common
                         QSqlDatabase::cloneDatabase(database,"updateThread"),
                         m_tagsContainer,
                         m_usersContainer,
-                        //    request.setLatitude(m_latitude);
-                        //    request.setLongitude(m_longitude);
-                        //    request.setRadius(m_radius);
                         m_channelsContainer,
+                        m_dataChannelsMap,
                         NULL);
 
         m_updateThread->start();
@@ -117,12 +116,14 @@ namespace common
     {
         QSharedPointer<User> realUser; // Null pointer
         QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
-
+        syslog(LOG_INFO, "checking user's key: %s from %d known users", dummyUser->getToken().toStdString().c_str(),
+                                currentUsers.size());
         for(int i=0; i<currentUsers.size(); i++)
         {
             if(currentUsers.at(i)->getToken() == dummyUser->getToken())
             {
                 realUser = currentUsers.at(i);
+                break;
             }
         }
         return realUser;
@@ -237,7 +238,6 @@ namespace common
     QByteArray DbObjectsCollection::processRssFeedQuery(const QByteArray &data)
     {
         RSSFeedRequestJSON request;
-        RSSFeedResponseJSON response;
         QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
         request.parseJson(data);
@@ -245,16 +245,35 @@ namespace common
         QSharedPointer<User> realUser = findUserFromToken(dummyUser);
         if(realUser.isNull())
         {
+            RSSFeedResponseJSON response;
             response.setStatus("Error");
             response.setStatusMessage("Wrong authentification key");
             answer.append(response.getJson());
             return answer;
         }
-        // ToDo
 
+        QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
+        DataChannels feed;
+        syslog(LOG_INFO, "rssfeed processing: user %s has %d channels subscribed",
+               realUser->getLogin().toStdString().c_str(), channels->size());
+        for(int i = 0; i<channels->size(); i++)
+        {
+            QSharedPointer<Channel> channel = channels->at(i);
+            QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
+            qSort(tags);
+            QList<QSharedPointer<DataMark> > last10 = tags.mid(tags.size()>10?tags.size()-10:0, 10);
+            for(int j = 0; j<last10.size(); j++)
+            {
+                syslog(LOG_INFO,"rssfeed: adding tag with time: %s", last10.at(j)->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str());
+                feed.insert(channel, last10.at(j));
+            }
+        }
+        RSSFeedResponseJSON response(feed);
+        response.setStatus("Ok");
+        response.setStatusMessage("feed has been generated");
+        answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;
-
     }
 } // namespace common
 

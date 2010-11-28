@@ -51,6 +51,7 @@
 #include "DataMarks.h"
 #include "User.h"
 #include "Channel.h"
+#include "DataChannel.h"
 
 /*!
      * RSSFeedQuery class definition.
@@ -67,7 +68,7 @@ class RSSFeedQuery : public DefaultQuery
     double m_longitude;
     double m_radius;
 
-    QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > m_hashMap;
+    DataChannels m_hashMap;
 
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
@@ -86,7 +87,7 @@ public:
 
     ~RSSFeedQuery();
 
-     QMultiHash<QSharedPointer<Channel>, QSharedPointer<DataMark> > getRSSFeed() const;
+     const DataChannels& getRSSFeed() const;
 
 signals:
 
