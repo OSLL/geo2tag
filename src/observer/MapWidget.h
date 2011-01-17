@@ -31,6 +31,7 @@ protected:
   void mousePressEvent( QMouseEvent * event );
   void mouseReleaseEvent(QMouseEvent * event );
 
+
 public slots:
 
 	void scaleChanged(int newScale);

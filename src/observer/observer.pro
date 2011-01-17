@@ -9,7 +9,7 @@ INCLUDEPATH += . inc \
     ../fcgiio/inc \
     ../json/inc
 
-#SUBDIRS= ../common
+SUBDIRS= ../common
 
 SOURCES += main.cpp \
     observer.cpp \
