@@ -6,27 +6,27 @@ Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6)
 
 Package: wikigps-libs
 Architecture: any
-Depends: ${shlibs:Depends}, libqt4-core (>=4), libqt4-gui (>=4), libqt4-webkit (>=4), libqt4-network (>=4), unixodbc [i386], unixodbc-dev [i386], libxml2 (>=2.6)
+Depends: ${shlibs:Depends}, libqt4-core (>=4), libqt4-gui (>=4), libqt4-webkit (>=4), libqt4-phonon (>=4), libqt4-network (>=4), unixodbc [i386], unixodbc-dev [i386], libxml2 (>=2.6)
 Description: Geo2tag libs
 
 Package: wikigps-client
-Architecture: armel
-Depends: wikigps-libs, libqjson (>=0.7), libqtm-location (>=1.0),libqtm-bearer (>=1.0)
+Architecture: any
+Depends: wikigps-libs, libqjson0 [i386],libqjson [armel], libqtm-location (>=1.0) [armel],libqtm-bearer (>=1.0) [armel]
 Description: WikiGPS service client
  Very long description will be here
 
 Package: wikigps-tracker
-Architecture: armel
-Depends: ${shlibs:Depends}
+Architecture: any
+Depends: ${shlibs:Depends},wikigps-libs (>=0.1.2)
 Description: WikiGPS tracker
  has very tiny interface. alfa version.
 
 Package: wikigps-webside
 Architecture: i386
-Depends: ${shlibs:Depends}, wikigps-service, libqt4-dev, witty
+Depends: ${shlibs:Depends}, wikigps-service, libqt4, witty
 Description: Geo2tag website
 
 Package: wikigps-service
 Architecture: i386
-Depends: ${shlibs:Depends}, lighttpd, postgresql, unixodbc, unixodbc-dev, odbc-postgresql, libqt4-dev (>=4), wikigps-libs
+Depends: ${shlibs:Depends}, lighttpd, postgresql, unixodbc, odbc-postgresql, wikigps-libs
 Description: Geo2tag webservice

@@ -33,22 +33,25 @@
  * \file GpsModeller.h
  * \brief Header of GpsModeller
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 
 #ifndef _GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
 #define _GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
 
-#include <string>
+#include <QDateTime>
+#include <QString>
+#include <QThread>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+
 #include "GpsInfo.h"
-#include "Thread.h"
-#include "Time.h"
 #include "defines.h"
 
-#ifdef SIMULATE_GPS 
+
+// This file maybe used only if SIMULATE_GPS is turned on
+#ifdef SIMULATE_GPS
 
 namespace common
 {
@@ -56,30 +59,30 @@ namespace common
    * Class description. May use HTML formatting
    *
    */
-  class GpsModeller: public Gps, private Thread::CThread
+  class GpsModeller: public Gps, private QThread
   {
     double m_longitude;
     double m_latitude;
-   
-    CTime begin;
-    CTime currentModellerTime;
+
+    QDateTime begin;
+    QDateTime currentModellerTime;
 
     xmlDoc *m_doc;
-  
+
     void searchElement(xmlNode *node);
 
-    void thread(); 
+    void run();
 
   public:
-    GpsModeller(const std::string &gpxFile=GPS_MODELLER_FILE);
-    
+    GpsModeller(const QString &gpxFile=GPS_MODELLER_FILE);
+
     virtual double getLongitude() const;
 
     virtual double getLatitude() const;
-    
+
    ~GpsModeller();
   }; // class GpsModeller
-  
+
 } // namespace common
 
 #endif // SIMULATE_GPS

@@ -1,17 +1,20 @@
 #ifndef _SERVER_H_
 #define _SERVER_H_
 
+#include <QThread>
 #include <fcgiapp.h>
-#include "query.h"
-#include "JsonQueryFactory.h"
-class Server {
+
+class Server: private QThread
+{
 
     FCGX_Request m_cgi;
-    JsonQueryFactory m_factory;
 
+    void extractIncomingData(const FCGX_Request& request, QString& queryString, QByteArray& queryBody);
 public:
 
-    void process(const Query& q);
+    QByteArray process(const QString&, const QByteArray&);
+
+    void run();
 
 public:
 

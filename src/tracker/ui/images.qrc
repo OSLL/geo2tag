@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/start-256.png</file>
+        <file>images/stop-256.png</file>
+        <file>images/settings-256.png</file>
+        <file>images/logs-256.png</file>
+        <file>images/earth-256.png</file>
+    </qresource>
+</RCC>

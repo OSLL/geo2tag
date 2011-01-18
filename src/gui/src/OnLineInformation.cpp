@@ -68,21 +68,21 @@ namespace GUI
         m_updateTimer = new QTimer(this);
         m_updateTimer->setInterval(15 * 1000); /* one time per 15 seconds */
 
-        connect(applyMarkQuery, SIGNAL(responseReceived(QString)),
-                this, SLOT(onApplyMarkQueryResponseReceived(QString)));
+        connect(applyMarkQuery, SIGNAL(responseReceived(QString,QString)),
+                this, SLOT(onApplyMarkQueryResponseReceived(QString,QString)));
         connect(availableChannelsListQuery, SIGNAL(responseReceived(CHandlePtr<common::Channels>&)),
                 this, SLOT(onAvailableChannelsListQueryResponseReceived(CHandlePtr<common::Channels>&)));
         connect(rssFeedQuery, SIGNAL(responseReceived(CHandlePtr<common::DataMarks>&)),
                 this, SLOT(onRSSFeedQueryResponseReceived(CHandlePtr<common::DataMarks>&)));
-        connect(subscribeChannelQuery, SIGNAL(responseReceived(QString)),
-                this, SLOT(onSubscribeChannelQueryResponseReceived(QString)));
-        connect(unsubscribeChannelQuery, SIGNAL(responseReceived(QString)),
-                this, SLOT(onUnsubscribeChannelQueryResponseReceived(QString)));
+        connect(subscribeChannelQuery, SIGNAL(responseReceived(QString,QString)),
+                this, SLOT(onSubscribeChannelQueryResponseReceived(QString,QString)));
+        connect(unsubscribeChannelQuery, SIGNAL(responseReceived(QString,QString)),
+                this, SLOT(onUnsubscribeChannelQueryResponseReceived(QString,QString)));
         connect(subscribedChannelsListQuery, SIGNAL(responseReceived(CHandlePtr<common::Channels>&)),
                 this, SLOT(onSubscribedChannelsListQueryResponseReceived(CHandlePtr<common::Channels>&)));
         connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateAvailableChannels()));
-        connect(loginQuery, SIGNAL(responseReceived(QString,QString)),
-                this, SLOT(onLoginQueryResponseReceived(QString,QString)));
+        connect(loginQuery, SIGNAL(responseReceived(QString,QString,QString)),
+                this, SLOT(onLoginQueryResponseReceived(QString,QString,QString)));
 
     }
 
@@ -214,9 +214,9 @@ namespace GUI
         }
     }
 
-    void OnLineInformation::onApplyMarkQueryResponseReceived(QString status)
+    void OnLineInformation::onApplyMarkQueryResponseReceived(QString status,QString status_description)
     {
-        if (status == QString("ok"))
+        if (status == QString("Ok"))
         {
             updateMarks();
             emit markApplied(1);
@@ -258,7 +258,7 @@ namespace GUI
         emit marksUpdated(m_marks);
     }
 
-    void OnLineInformation::onSubscribeChannelQueryResponseReceived(QString status)
+    void OnLineInformation::onSubscribeChannelQueryResponseReceived(QString status,QString status_description)
     {
         updateSubscribedChannels();
         updateMarks();
@@ -268,7 +268,7 @@ namespace GUI
         }
     }
 
-    void OnLineInformation::onUnsubscribeChannelQueryResponseReceived(QString status)
+    void OnLineInformation::onUnsubscribeChannelQueryResponseReceived(QString status,QString status_description)
     {
         updateSubscribedChannels();
         updateMarks();
@@ -290,7 +290,7 @@ namespace GUI
         emit subscribedChannelsUpdated(m_subscribedChannels);
     }
 
-    void OnLineInformation::onLoginQueryResponseReceived(QString status, QString auth_token)
+    void OnLineInformation::onLoginQueryResponseReceived(QString status, QString auth_token,QString status_description)
     {
         if (status == QString("Ok"))
         {

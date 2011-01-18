@@ -7,7 +7,7 @@ include(../../config.pri)
 TARGET = sketch.wt
 DEPENDPATH += . inc src
 INCLUDEPATH += . inc
-
+QMAKE_CXXFLAGS += -g3
 # Wt
 INCLUDEPATH += /usr/local/include/Wt
 LIBS += -lwtfcgi

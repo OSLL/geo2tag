@@ -14,11 +14,11 @@ class Engine
      * \return Reply object with JSON reply.
      * This routine use SQL/other ways for access to data.
      */
-    Reply processSubscribe(const std::stringstream& query);
+    Reply processSubscribe(const QStringstream& query);
 
-    Reply processAvailableList(const std::stringstream& query);
+    Reply processAvailableList(const QStringstream& query);
 
-    Reply processSubscribedList(const std::stringstream& query);
+    Reply processSubscribedList(const QStringstream& query);
 
 public:
     static const Engine& getInstance();

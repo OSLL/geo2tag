@@ -8,9 +8,9 @@
 namespace common
 {
 
-void removeAllWhite (std::string &str)
+void removeAllWhite (QString &str)
 {
-    std::string temp;
+    QString temp;
     for (unsigned int i = 0; i < str.length(); i++)
         if (str[i] != ' ') temp += str[i];
     str = temp;
@@ -33,20 +33,20 @@ Parameters::Parameters()
         {
             /* reading parameter's value */
             str[i] = '\0';
-            std::string line(str);
-            std::string parameter;
-            std::string value;
+            QString line(str);
+            QString parameter;
+            QString value;
             int found = -1;
-            if ((found = line.find("=")) != std::string::npos)
+            if ((found = line.find("=")) != QString::npos)
             {
                 char buffer[255];
                 line.copy(buffer, found, 0);
                 buffer[found] = '\0';
-                parameter = std::string(buffer);
+                parameter = QString(buffer);
                 removeAllWhite(parameter);
                 line.copy(buffer, line.size() - found - 1, found + 1);
                 buffer[line.size() - found - 1] = '\0';
-                value = std::string(buffer);
+                value = QString(buffer);
                 removeAllWhite(value);
             }
 

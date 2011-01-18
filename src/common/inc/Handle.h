@@ -52,7 +52,7 @@
 /*
  * модель представления объектов:
  * Указатель -> Описатель -> Объект
- * Указатель -- smart-pointer (далее -- CHandlePtr)
+ * Указатель -- smart-pointer (далее -- QSharedPointer)
  * Описатель -- прокси для объекта, предоставляющий поддержку smart-pointer'у
  * Зачем?
  * 1) описатель создает уровень абстракции от способа размещения в памяти
@@ -72,9 +72,9 @@ namespace Handle
  * \param T: [typename] тип Объекта
  */
 template<typename T>
-class CHandlePtr
+class QSharedPointer
 {
-  template<typename Y> friend class CHandlePtr;
+  template<typename Y> friend class QSharedPointer;
   
   CPtr<T> m_rp;
   CCntPtr<CCounted> m_p;
@@ -84,23 +84,23 @@ protected:
    * \brief конструктор создания hp из Объекта и Описателя.
    * \note используется Описателем через потомка этого класса
    */
-  CHandlePtr(T* rp,const CCntPtr<CCounted>& p): m_rp(rp),m_p(p)
+  QSharedPointer(T* rp,const CCntPtr<CCounted>& p): m_rp(rp),m_p(p)
   {
   }
   
 public:
   typedef T Type;
   
-  CHandlePtr()
+  QSharedPointer()
   {
   }
 
-  explicit CHandlePtr(Handle::CHandle<T> *p): m_rp(*p),m_p(p)
+  explicit QSharedPointer(Handle::CHandle<T> *p): m_rp(*p),m_p(p)
   {
   }
   
   template<typename Y>
-  CHandlePtr(CHandlePtr<Y> p): m_rp(p),m_p(p.m_p)
+  QSharedPointer(QSharedPointer<Y> p): m_rp(p),m_p(p.m_p)
   {
   }
 
@@ -117,23 +117,23 @@ public:
   /*!
    * \brief динамическое приведение к HandlePtr другого типа
    *
-   * CHandlePtr<A> pa; CHandlePtr<B> pb=pa.dynamicCast<B>();
+   * QSharedPointer<A> pa; QSharedPointer<B> pb=pa.dynamicCast<B>();
    */
   template<typename NewType>
-  CHandlePtr<NewType> dynamicCast() const
+  QSharedPointer<NewType> dynamicCast() const
   {
-    return CHandlePtr<NewType>(m_rp.dynamicCast<NewType*>(),m_p);
+    return QSharedPointer<NewType>(m_rp.dynamicCast<NewType*>(),m_p);
   }
 
   /*!
    * \brief статическое приведение к HandlePtr другого типа
    *
-   * CHandlePtr<A> pa; CHandlePtr<B> pb=pa.staticCast<B>();
+   * QSharedPointer<A> pa; QSharedPointer<B> pb=pa.staticCast<B>();
    */
   template<typename NewType>
-  CHandlePtr<NewType> staticCast() const
+  QSharedPointer<NewType> staticCast() const
   {
-    return CHandlePtr<NewType>(m_rp.staticCast<NewType*>(),m_p);
+    return QSharedPointer<NewType>(m_rp.staticCast<NewType*>(),m_p);
   }
   
   /*!
@@ -151,15 +151,15 @@ public:
    * средствами языка.
    */
   template<typename NewType>
-  CHandlePtr<NewType> repointCast(NewType *ptr) const
+  QSharedPointer<NewType> repointCast(NewType *ptr) const
   {
-    return CHandlePtr<NewType>(ptr,m_p);
+    return QSharedPointer<NewType>(ptr,m_p);
   }
 
   template<typename NewType>
-  CHandlePtr<NewType> repointCast(CHandlePtr<NewType> ptr) const
+  QSharedPointer<NewType> repointCast(QSharedPointer<NewType> ptr) const
   {
-    return CHandlePtr<NewType>(ptr.m_rp,m_p);
+    return QSharedPointer<NewType>(ptr.m_rp,m_p);
   }
   
   /*!
@@ -175,10 +175,10 @@ public:
 /*!
  * \brief статическое приведение HandlePtr к указателю
  *
- * CHandlePtr<A> pa; B* pb=staticCast<B*>(pa);
+ * QSharedPointer<A> pa; B* pb=staticCast<B*>(pa);
  */
 template<typename NewType,typename T>
-NewType staticCast(const CHandlePtr<T>& p)
+NewType staticCast(const QSharedPointer<T>& p)
 {
   return static_cast<NewType>((T*)p);
 }
@@ -186,10 +186,10 @@ NewType staticCast(const CHandlePtr<T>& p)
 /*!
  * \brief динамическое приведение HandlePtr к указателю
  *
- * CHandlePtr<A> pa; B* pb=dynamicCast<B*>(pa);
+ * QSharedPointer<A> pa; B* pb=dynamicCast<B*>(pa);
  */
 template<typename NewType,typename T>
-NewType dynamicCast(const CHandlePtr<T>& p)
+NewType dynamicCast(const QSharedPointer<T>& p)
 {
   return dynamic_cast<NewType>((T*)p);
 }
@@ -280,7 +280,7 @@ namespace Handle
      * \return Указатель на Описатель полного Объекта, или пустой, если Объект не зарегистрирован
      */
     template<typename T>
-    static CHandlePtr<T> get(T* p);
+    static QSharedPointer<T> get(T* p);
   };
   
   /*!
@@ -314,9 +314,9 @@ namespace Handle
     }
 
   public:
-    static CHandlePtr<T> getHandle(T* pObj)
+    static QSharedPointer<T> getHandle(T* pObj)
     {
-      CHandlePtr<T> p(CHandleMap::get(pObj));
+      QSharedPointer<T> p(CHandleMap::get(pObj));
       assert(p);
       return p;
     }
@@ -324,17 +324,17 @@ namespace Handle
   };
   
   template<typename T>
-  class CHandlePtrFactory: public CHandlePtr<T>
+  class QSharedPointerFactory: public QSharedPointer<T>
   {
-    CHandlePtrFactory(T* rp,const CCntPtr<CCounted>& p):
-      CHandlePtr<T>(rp,p)
+    QSharedPointerFactory(T* rp,const CCntPtr<CCounted>& p):
+      QSharedPointer<T>(rp,p)
     {
     }
       
   public:
-    static CHandlePtr<T> createHandle(T* rp,const CCntPtr<CCounted>& p)
+    static QSharedPointer<T> createHandle(T* rp,const CCntPtr<CCounted>& p)
     {
-      return CHandlePtrFactory(rp,p);
+      return QSharedPointerFactory(rp,p);
     }
   };
     
@@ -342,18 +342,18 @@ namespace Handle
    * \note см. 114882:1998 п. 9.2:12
    */
   template<typename T>
-  CHandlePtr<T> CHandleMap::get(T* p)
+  QSharedPointer<T> CHandleMap::get(T* p)
   {
     CLock::CReadLock l(getMap());
     std::map<const void*,CHandleMap*>::const_iterator it=getMap().upper_bound(p);
     if(it==getMap().begin())
-      return CHandlePtr<T>();
+      return QSharedPointer<T>();
       
     --it;
     if(static_cast<const char*>(it->first)+it->second->m_sz<static_cast<const void*>(p+1))
-      return CHandlePtr<T>();
+      return QSharedPointer<T>();
       
-    return CHandlePtrFactory<T>::createHandle(p,it->second);
+    return QSharedPointerFactory<T>::createHandle(p,it->second);
   }
 
   /*!
@@ -369,12 +369,12 @@ namespace Handle
 
   public:
 
-    static CHandlePtr<T> makeHandle(T* pObj)
+    static QSharedPointer<T> makeHandle(T* pObj)
     {
-      CHandlePtr<T> p(CHandleMap::get<T>(pObj));
+      QSharedPointer<T> p(CHandleMap::get<T>(pObj));
       if(p)
         return p;
-      return CHandlePtr<T>(new CRefHandle(pObj));
+      return QSharedPointer<T>(new CRefHandle(pObj));
     }
   };
   
@@ -412,12 +412,12 @@ namespace Handle
     
   public:
 
-    static CHandlePtr<T> makeHandle(T* pObj,Disposer d)
+    static QSharedPointer<T> makeHandle(T* pObj,Disposer d)
     {
-      CHandlePtr<T> p(CHandleMap::get<T>(pObj));
+      QSharedPointer<T> p(CHandleMap::get<T>(pObj));
       if(p)
         return p;
-      return CHandlePtr<T>(new COwnHandle(pObj,d));
+      return QSharedPointer<T>(new COwnHandle(pObj,d));
     }
   };  
 }//namespace Handle
@@ -427,7 +427,7 @@ namespace Handle
  * \param pObj: [in] ссылка на объект
  */
 template<typename T>
-CHandlePtr<T> makeHandle(T& obj)
+QSharedPointer<T> makeHandle(T& obj)
 {
   return Handle::CRefHandle<T>::makeHandle(&obj);
 }
@@ -440,7 +440,7 @@ CHandlePtr<T> makeHandle(T& obj)
  * при освобождении хэндла вызывается d(pObj)
  */
 template<typename T,typename Disposer>
-CHandlePtr<T> makeHandle(T* pObj,Disposer d)
+QSharedPointer<T> makeHandle(T* pObj,Disposer d)
 {
   return Handle::COwnHandle<T,Disposer>::makeHandle(pObj,d);
 }
@@ -451,7 +451,7 @@ CHandlePtr<T> makeHandle(T* pObj,Disposer d)
  * \param d: [in] функция-член для разрушения объекта
  */
 template<typename T,typename DisposerClass>
-CHandlePtr<T> makeHandle(T* pObj,void (DisposerClass::*d)())
+QSharedPointer<T> makeHandle(T* pObj,void (DisposerClass::*d)())
 {
   return makeHandle(pObj,std::mem_fun(d));
 }
@@ -462,7 +462,7 @@ CHandlePtr<T> makeHandle(T* pObj,void (DisposerClass::*d)())
  * \param isOwner: [in] создавать владеющий (true, по умолчанию) или ссылочный HandlePtr
  */
 template<typename T>
-CHandlePtr<T> makeHandle(T* pObj,bool isOwner=true)
+QSharedPointer<T> makeHandle(T* pObj,bool isOwner=true)
 {
   if(isOwner)
     return makeHandle(pObj,Handle::CDefaultDisposer<T>());
@@ -475,7 +475,7 @@ CHandlePtr<T> makeHandle(T* pObj,bool isOwner=true)
  * \param pObj: [in] указатель на объект
  */
 template<typename T>
-CHandlePtr<const T> makeHandle(const T* pObj)
+QSharedPointer<const T> makeHandle(const T* pObj)
 {
   return Handle::CRefHandle<const T>::makeHandle(pObj);
 }
@@ -485,7 +485,7 @@ CHandlePtr<const T> makeHandle(const T* pObj)
  * \param pObj: [in] указатель на объект
  */
 template<typename T>
-CHandlePtr<T> getHandle(T* pObj)
+QSharedPointer<T> getHandle(T* pObj)
 {
   return Handle::CHandle<T>::getHandle(pObj);
 }
@@ -495,7 +495,7 @@ CHandlePtr<T> getHandle(T* pObj)
  * \param pObj: [in] ссылка на объект
  */
 template<typename T>
-CHandlePtr<T> getHandle(T& obj)
+QSharedPointer<T> getHandle(T& obj)
 {
   return Handle::CHandle<T>::getHandle(&obj);
 }
@@ -504,9 +504,9 @@ CHandlePtr<T> getHandle(T& obj)
 /*!
  * \brief создать void NULL HandlePtr
  */
-inline CHandlePtr<void> makeHandle()
+inline QSharedPointer<void> makeHandle()
 {
-  return CHandlePtr<void>();
+  return QSharedPointer<void>();
 }
 
 #endif //_CHandle_H_87C0433B_EE7A_4FE1_9E5F_E8997B96094E_INCLUDED_

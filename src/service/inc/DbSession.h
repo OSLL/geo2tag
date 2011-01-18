@@ -43,125 +43,62 @@
 #define _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
 
 #include <syslog.h>
-#include "DbConn.h"
+
+#include <QtSql>
+#include <QThread>
+#include <QMap>
+
 #include "DataMarks.h"
 #include "Channel.h"
-#include "Thread.h"
-#include "SwMr.h"
-#include "Sleep.h"
-#include "DynamicCastFailure.h"
-#include <sstream>
+#include "DataChannel.h"
+#include "User.h"
+#include "UpdateThread.h"
+#include "QueryExecutor.h"
+
 namespace common
 {
-  template<typename T>
-  class UpdateThread: public Thread::CThread
-  {
-    bool m_needExit;
-    
-    T*  m_instance;
-
-    void thread()
-    {
-      while(!m_needExit)
-      {
-        // syslog(LOG_INFO, "update thread: updating data");
-        try
-        {
-          m_instance->loadData();
-        }
-        catch(CExceptionSource & e)
-        {
-      	  std::stringstream s; 
-          e.outToStream(s);
-          syslog(LOG_INFO,"%s",s.str().c_str());
-        }
-        mSleep(10000);
-      }
-      // syslog(LOG_INFO, "update thread: exiting...");
-    }
-    public:
-      UpdateThread(T* instance):m_needExit(false), m_instance(instance)
-      {
-        start();
-      }
-
-      void shutdown()
-      {
-        m_needExit = true;
-      }
-  };
-  
-  /*!
+    /*!
    * \brief session with database
    */
-  class DbSession: protected ODBC::CDbEnv, public ODBC::CDbConn
-  {
-    friend class UpdateThread<DbSession>;
+    class DbObjectsCollection
+    {
 
-    CHandlePtr<DataMarks> m_marks; // Marks list
-    CHandlePtr<Channels> m_channels; // Channels list
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > m_users; // Users list
+        QSharedPointer<Channels>     m_channelsContainer;
+        QSharedPointer<DataMarks>    m_tagsContainer;
+        QSharedPointer<Users>        m_usersContainer;
+        QSharedPointer<DataChannels> m_dataChannelsMap;
 
-    std::map<std::string,CHandlePtr<common::User> > m_tokensMap;
-    CHandlePtr<Thread::CThread> m_updateThread;
+        UpdateThread *              m_updateThread;
 
-    void loadUsers();
-    void loadChannels();
-    void loadMarks();
-    void loadRelations();
+        typedef QByteArray (DbObjectsCollection::*ProcessMethod)(const QByteArray&);
 
-    void saveChannels();
-    void saveMarks();
-    void saveRelations();
-  
-  protected:
+        QMap<QString, ProcessMethod> m_processors;
 
-    DbSession();
-    
-    void loadData();
+        QueryExecutor *             m_queryExecutor;
 
-    void saveData();
+        DbObjectsCollection();
 
-  public:
- 
+        QSharedPointer<User> findUserFromToken(const QSharedPointer<User>&) const;
 
-    ~DbSession();
-    
-    CHandlePtr<DataMarks> getMarks() const;
+        QByteArray processLoginQuery(const QByteArray&);
+        QByteArray processAddNewMarkQuery(const QByteArray&);
+        QByteArray processRssFeedQuery(const QByteArray&);
 
-    CHandlePtr<Channels> getChannels() const;
+    public:
 
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > getUsers() const;
+        static DbObjectsCollection& getInstance();
 
-    const std::map<std::string,CHandlePtr<common::User> >& getTokensMap() const;
+        QByteArray process(const QString& queryType, const QByteArray& body);
 
-    void storeMark(CHandlePtr<common::DataMark> m);
+        ~DbObjectsCollection();
 
-    void storeUser(CHandlePtr<common::User> user);
 
-    void removeUser(CHandlePtr<common::User> user);
-  
-    void subscribe(const CHandlePtr<common::User>& user, const CHandlePtr<common::Channel>& channel);
+    private:
+        DbObjectsCollection(const DbObjectsCollection& obj);
+        DbObjectsCollection& operator=(const DbObjectsCollection& obj);
 
-    void unsubscribe(CHandlePtr<common::User> user, CHandlePtr<common::Channel> hannel);
+    }; // class DbSession
 
-    void storeChannel(CHandlePtr<common::Channel> channel);
-
-    void removeChannel(CHandlePtr<common::Channel> channel);
-
-    /*
-     * \brief add to channel new mark
-     */
-    void updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m); 
-
-    static DbSession& getInstance();
-
-  private:    
-    DbSession(const DbSession& obj);
-    DbSession& operator=(const DbSession& obj);
-
-  }; // class DbSession
-  
 } // namespace common
 
 #endif //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_

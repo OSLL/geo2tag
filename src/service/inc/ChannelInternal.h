@@ -44,24 +44,22 @@
 
 #include "Channel.h"
 
-namespace loader
-{
-  class Channel: public common::Channel
-  {
-    unsigned long long m_id;
+    class DbChannel: public Channel
+    {
+        qlonglong m_id;
 
-  public:
-    Channel(unsigned long long id, const std::string &name, const std::string &description, const std::string &url="", const CHandlePtr<common::DataMarks> &marks=makeHandle(new common::DataMarks()));
-    
-    unsigned long long getId() const;
-    
-    void setId(unsigned long long id);
-    
-    virtual void addData(CHandlePtr<common::DataMark> mark);
+    public:
+        DbChannel(qlonglong id,
+                const QString &name,
+                const QString &description,
+                const QString &url="");
 
-    virtual ~Channel();
-  };
-} // namespace loader
+        qlonglong getId() const;
+
+        void setId(qlonglong id);
+
+        virtual ~DbChannel();
+    };
 
 #endif //_ChannelInternal_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 

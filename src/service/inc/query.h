@@ -40,12 +40,11 @@
 #ifndef _QUERY_H_
 #define _QUERY_H_
 
-#include <map>
-#include <string>
-#include <sstream>
-#include "stream.h"
+#include <QMap>
+#include <QString>
 
-enum QueryType {
+enum QueryType
+{
     SUBSCRIBE,        //! Query subscribe to the channel
     AVAILABLE_LIST,   //! The list with available channels
     SUBSCRIBED_LIST,  //! The list with subscribed by user channels
@@ -56,31 +55,32 @@ enum QueryType {
     UNSUBSCRIBE,
     LOGIN,
     UNKNOWN
-    };
+};
 
 
-class Query {
-    std::map<std::string, std::string> m_params;
-    
-    std::stringstream m_query; //! query's data
+class Query
+{
+    QMap<QString, QString> m_params;
+
+    QStringstream m_query; //! query's data
 
     QueryType m_type;
 
 public:
 
-    Query(const std::string &s, Stream& stm);
+    Query(const QString &s/*, Stream& stm*/);
 
-    const std::string& getParam(const std::string& param) const;
-    
+    const QString& getParam(const QString& param) const;
+
     /*!
      * \brief Routine return type of query
      */
     QueryType getType() const;
-    
+
     /*!
      * \brief Routine return content of request
      */
-    const std::stringstream& getStream() const;
+    const QStringstream& getStream() const;
 };//class Query
 
 #endif//_QUERY_H_

@@ -3,7 +3,6 @@ CONFIG += debug
 CONFIG += linux
 #CONFIG += maemo5
 #CONFIG += symbian
-#CONFIG += webside
 
 SOURCE_DIR = $$PWD
 
@@ -24,17 +23,13 @@ maemo5: {
 
 symbian: {
     #For some reason the default include path doesn't include MOC_DIR on symbian
+    OBJECTS_DIR = obj
+    MOC_DIR = moc
     INCLUDEPATH += $$MOC_DIR
-    DEFINES+= Q_WS_SYMBIA
+    DEFINES+= Q_WS_SYMBIAN
 }
 
 linux: {
-    OBJECTS_DIR = .obj
-    MOC_DIR = .moc
-}
-
-webside: {
-    QMAKE_CXXFLAGS += -g3
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }

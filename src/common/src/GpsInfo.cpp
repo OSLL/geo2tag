@@ -29,20 +29,20 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file GpsInfo.cpp
  * \brief GpsInfo implementation
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 #include <iostream>
 #include "GpsInfo.h"
 #include "GpsModeller.h"
-#ifndef NO_GPS
+#ifndef SIMULATE_GPS
 #include "MobilityGps.h"
 #endif
 
@@ -55,11 +55,11 @@ namespace common
 
   Gps& GpsInfo::getInstance()
   {
-#ifdef NO_GPS  
+#ifdef SIMULATE_GPS
     static GpsModeller gps;
 #else
     static MobilityGps gps;
-#endif    
+#endif
     return gps;
   }
 } // namespace common

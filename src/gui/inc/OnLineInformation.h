@@ -124,13 +124,13 @@ namespace GUI
         void markApplied(int status);
 
     private slots:
-        void onApplyMarkQueryResponseReceived(QString status);
+        void onApplyMarkQueryResponseReceived(QString status,QString status_description);
         void onAvailableChannelsListQueryResponseReceived(CHandlePtr<common::Channels>& channels);
         void onRSSFeedQueryResponseReceived(CHandlePtr<common::DataMarks>& marks);
-        void onSubscribeChannelQueryResponseReceived(QString status);
-        void onUnsubscribeChannelQueryResponseReceived(QString status);
+        void onSubscribeChannelQueryResponseReceived(QString status,QString status_description);
+        void onUnsubscribeChannelQueryResponseReceived(QString status,QString status_description);
         void onSubscribedChannelsListQueryResponseReceived(CHandlePtr<common::Channels>& channels);
-        void onLoginQueryResponseReceived(QString status, QString auth_token);
+        void onLoginQueryResponseReceived(QString status, QString auth_token,QString status_description);
 
     private:
         OnLineInformation(const OnLineInformation& obj);

@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file ChannelInternal.cpp
  * \brief ChannelInternal implementation
@@ -44,38 +44,27 @@
 #include "DbSession.h"
 #include "DynamicCastFailure.h"
 #include <syslog.h>
-namespace loader
-{
-  Channel::Channel(unsigned long long id, const std::string &name, const std::string &description, const std::string &url, const CHandlePtr<common::DataMarks> &marks): 
-                  common::Channel(name, description, url, marks), m_id(id)
+
+  DbChannel::DbChannel(qlonglong id,
+                   const QString &name,
+                   const QString &description,
+                   const QString &url):
+                   Channel(name, description, url), m_id(id)
   {
   }
-  
-  unsigned long long Channel::getId() const
+
+  qlonglong DbChannel::getId() const
   {
     return m_id;
   }
-  
-  void Channel::setId(unsigned long long id)
+
+  void DbChannel::setId(qlonglong id)
   {
     m_id=id;
   }
 
-  void Channel::addData(CHandlePtr<common::DataMark> mark)
-  {
-    CHandlePtr<loader::DataMark> m = mark.dynamicCast<loader::DataMark>();
-    if(!m)
-    {
-      syslog(LOG_INFO,"Failure at loader::Channel::addData");
-      return;
-    }
-    // update relation betwean mark and channel
-    common::Channel::addData(mark);
-  }
-
-  Channel::~Channel()
+  DbChannel::~DbChannel()
   {
   }
-} // namespace loader
 
 /* ===[ End of file ]=== */

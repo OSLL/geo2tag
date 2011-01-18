@@ -37,47 +37,25 @@
 
 #include "UserInternal.h"
 
-namespace loader
-{
-  User::User(const std::string &login, const std::string& pass, unsigned long id, const std::string& token):common::User(login,pass), m_id(id), m_token(token)
+  DbUser::DbUser(const QString &login,
+             const QString& pass,
+             qlonglong id,
+             const QString& token): User(login,pass), m_id(id)
   {
-  }
-  
-  void User::subscribe(const CHandlePtr<loader::Channel>& channel)
-  {
-    bool isntHere=1;
-    for (common::Channels::iterator i=getSubscribedChannels()->begin();i!=getSubscribedChannels()->end();i++){
-	if ((*i)->getName()==channel->getName()) {
-		isntHere=0;
-		break;
-	}
-	}
-    if (isntHere) common::User::subscribe(channel);
-  }
-  
-  void User::unsubscribe(const CHandlePtr<loader::Channel>& channel)
-  {
-    common::User::unsubscribe(channel);
+      setToken(token);
   }
 
-  unsigned long User::getId() const
+  qlonglong DbUser::getId() const
   {
     return m_id;
   }
-  
-  void User::setId(unsigned long id)
+
+  void DbUser::setId(qlonglong id)
   {
     m_id = id;
   }
 
-  const std::string& User::getToken() const
-  {
-    return m_token;
-  }
-
-  User::~User()
+  DbUser::~DbUser()
   {
   }
-} // namespace loader
-
 /* ===[ End of file ]=== */

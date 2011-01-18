@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file DataMarkInternal.cpp
  * \brief DataMarkInternal implementation
@@ -41,35 +41,37 @@
 
 #include "DataMarkInternal.h"
 
-namespace loader
-{
-  DataMark::DataMark(unsigned long long id, double latitude, double longitude, 
-             std::string label, std::string description, const std::string& url, const CTime& time,
-             const CHandlePtr<common::User> &user, const CHandlePtr<common::Channel> &channel):
-              common::DataMark(latitude, longitude, label, description, url, time, user), m_id(id)
+    DbDataMark::DbDataMark(qlonglong id,
+                       double latitude,
+                       double longitude,
+                       QString label,
+                       QString description,
+                       const QString &url,
+                       const QDateTime &time,
+                       qlonglong userId):
+                DataMark(latitude, longitude, label, description, url, time),
+                m_id(id),
+                m_userId(userId)
     {
-	m_channel = channel; // \ToDo Fix channel at common object
     }
-    
-  unsigned long long DataMark::getId() const
-  {
-    return m_id;
-  }
-  
-  void DataMark::setId(unsigned long long id)
-  {
-    m_id=id;
-  }
 
-  void DataMark::setChannel(const CHandlePtr<common::Channel> &channel)
-  {
-    m_channel = channel;
-  }
-  
-  DataMark::~DataMark()
-  {
-  }
+    qlonglong DbDataMark::getId() const
+    {
+        return m_id;
+    }
 
-} // namespace loader
+    qlonglong DbDataMark::getUserId() const
+    {
+        return m_userId;
+    }
+
+    void DbDataMark::setId(qlonglong id)
+    {
+        m_id=id;
+    }
+
+    DbDataMark::~DbDataMark()
+    {
+    }
 
 /* ===[ End of file ]=== */

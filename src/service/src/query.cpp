@@ -36,7 +36,7 @@
  *
  *  PROJ: OSLL/geo2tag
  *
- * 
+ *
  * ------------------------------------------------------------------------ */
 
 #include <iostream>
@@ -45,72 +45,73 @@
 #include <string.h>
 #include "query.h"
 
-Query::Query(const std::string &s,Stream& stm) {
-    enum States {
-        READ_NAME,
-        READ_VALUE
-    } state;
+Query::Query(const QString &s/*,Stream& stm*/)
+//{
+//    enum States {
+//        READ_NAME,
+//        READ_VALUE
+//    } state;
 
-    size_t j = 0;
-    std::string paramName(""), paramValue("");
-    state = READ_NAME;
-    for (size_t i = 0; i < s.size(); ++i) {
-        if (s[i] == '=') {
-            paramName = s.substr(j, i - j);
-            j = i + 1;
-            state=READ_VALUE;
-        }
-        if (s[i] == '&') {
-            if (state == READ_NAME) {
-                // variable without value
-                m_params[s.substr(j, i - j)]="";
-                j = i + 1;
-                continue;
-            }
-            paramValue = s.substr(j, i - j );
-            j = i + 1;
-            m_params[paramName] = paramValue;
-            state=READ_NAME;
-        }
-    }
-    if (paramName.size()) {
-        paramValue = s.substr(j, s.size() - j);
-        m_params[paramName] = paramValue;
-    }
-    std::string tmp="";
-    stm >> tmp;
-    m_query << tmp;
-    std::ostringstream ss;
-    for(std::map<std::string, std::string>::const_iterator it=m_params.begin();it!=m_params.end(); ++it)
-      ss << it->first << "=" << it->second << " &&& ";
-    // syslog(LOG_INFO, ss.str().c_str());
+//    size_t j = 0;
+//    QString paramName(""), paramValue("");
+//    state = READ_NAME;
+//    for (size_t i = 0; i < s.size(); ++i) {
+//        if (s[i] == '=') {
+//            paramName = s.substr(j, i - j);
+//            j = i + 1;
+//            state=READ_VALUE;
+//        }
+//        if (s[i] == '&') {
+//            if (state == READ_NAME) {
+//                // variable without value
+//                m_params[s.substr(j, i - j)]="";
+//                j = i + 1;
+//                continue;
+//            }
+//            paramValue = s.substr(j, i - j );
+//            j = i + 1;
+//            m_params[paramName] = paramValue;
+//            state=READ_NAME;
+//        }
+//    }
+//    if (paramName.size()) {
+//        paramValue = s.substr(j, s.size() - j);
+//        m_params[paramName] = paramValue;
+//    }
+//    QString tmp="";
+//    stm >> tmp;
+//    m_query << tmp;
+//    std::ostringstream ss;
+//    for(std::map<QString, QString>::const_iterator it=m_params.begin();it!=m_params.end(); ++it)
+//      ss << it->first << "=" << it->second << " &&& ";
+//    // syslog(LOG_INFO, ss.str().c_str());
 
-    if (getParam("query")==std::string("subscribe")) m_type=SUBSCRIBE;
-    else if (getParam("query")==std::string("channels")) m_type=AVAILABLE_LIST;
-    else if (getParam("query")==std::string("subscribed")) m_type=SUBSCRIBED_LIST;
-    else if (getParam("query")==std::string("applymark")) m_type=APPLYMARK;
-    else if (getParam("query")==std::string("rss"))m_type=RSSFEED;
-    else if (getParam("query")==std::string("unsubscribe"))m_type=UNSUBSCRIBE;
-    else if (getParam("query")==std::string("login"))m_type=LOGIN;
-    else if (getParam("query")==std::string("addChannel"))m_type=APPLYCHANNEL;
-    else if (getParam("query")==std::string("addUser"))m_type=APPLYUSER;
-    else  m_type=UNKNOWN;
+//    if (getParam("query")==QString("subscribe")) m_type=SUBSCRIBE;
+//    else if (getParam("query")==QString("channels")) m_type=AVAILABLE_LIST;
+//    else if (getParam("query")==QString("subscribed")) m_type=SUBSCRIBED_LIST;
+//    else if (getParam("query")==QString("applymark")) m_type=APPLYMARK;
+//    else if (getParam("query")==QString("rss"))m_type=RSSFEED;
+//    else if (getParam("query")==QString("unsubscribe"))m_type=UNSUBSCRIBE;
+//    else if (getParam("query")==QString("login"))m_type=LOGIN;
+//    else if (getParam("query")==QString("addChannel"))m_type=APPLYCHANNEL;
+//    else if (getParam("query")==QString("addUser"))m_type=APPLYUSER;
+//    else  m_type=UNKNOWN;
 }
 
-const std::string& Query::getParam(const std::string& param) const
+const QString& Query::getParam(const QString& param) const
 {
-  static std::string nothing("");
+  static QString nothing("");
   if(m_params.count(param))
     return m_params.find(param)->second;
  return nothing;
 }
 
 QueryType Query::getType() const{
-  return m_type; 
+  return m_type;
 }
 
 
-const std::stringstream& Query::getStream() const{
+const QStringstream& Query::getStream() const{
   return m_query;
 }
 /* ===[ End of file  ]=== */

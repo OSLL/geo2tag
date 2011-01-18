@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file DbSession.cpp
  * \brief DbSession implementation
@@ -39,1082 +39,242 @@
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
-#include <sstream>
-#include <iostream>
-#include <vector>
-#include <map>
-#include <string.h>
 #include <syslog.h>
-#include "Handle.h"
 #include "DbSession.h"
-#include "DbQueryX.h"
-#include "DbConn.h"
-#include "Transaction.h"
-#include "ExecuteClose.h"
-#include "DataMarkInternal.h"
-#include "ChannelInternal.h"
-#include "UserInternal.h"
-#include "DynamicCastFailure.h"
-#include "defines.h"
 
-static std::map<long, CHandlePtr<loader::DataMark> > s_marks = std::map<long, CHandlePtr<loader::DataMark> >();
-static std::map<long, CHandlePtr<loader::Channel> > s_channels = std::map<long, CHandlePtr<loader::Channel> >();
-static std::map<long, CHandlePtr<loader::User> > s_users = std::map<long, CHandlePtr<loader::User> >();
+#include "LoginRequestJSON.h"
+#include "LoginResponseJSON.h"
 
-namespace db
-{
+#include "AddNewMarkRequestJSON.h"
+#include "AddNewMarkResponseJSON.h"
 
-  struct User
-  {
-    char login[50];
-    char password[50];
-    unsigned long id;
-    char token[65];
+#include "RSSFeedRequestJSON.h"
+#include "RSSFeedJSON.h"
 
-    User():id(0)
-    {
-      memset(login, 0, 50);
-      memset(password, 0, 50);
-      memset(token, 0, 50);
-    }
-  };
-
-  struct Mark
-  {
-    unsigned long id;
-    double latitude;
-    double longitude;
-    char label[1024];
-    char description[2048];
-    char url[2048];
-    SQL_TIMESTAMP_STRUCT time;
-    SQLLEN timeLen;
-    unsigned long user_id;
-
-    Mark():id(0), latitude(0.), longitude(0.), user_id(0)
-    {
-      memset(label, 0, 1024);
-      memset(description, 0, 2048);
-      memset(url, 0, 2048);
-      memset(&time, 0, sizeof(time));
-      memset(&timeLen, 0, sizeof(timeLen));
-    }
-  };
-
-  struct Channel
-  {
-    unsigned long id;
-    char name[300];
-    char description[2048];
-    char url[2048];
-
-    Channel():id(0)
-    {
-      memset(name, 0, 1024);
-      memset(description, 0, 2048);
-      memset(url, 0, 2048);
-    }
-  };
-
-  struct MarkRelation
-  {
-    unsigned long mark;
-    unsigned long channel;
-
-    MarkRelation():mark(0), channel(0)
-    {
-    }
-  };
-  
-  struct SubscribeRelation
-  {
-    unsigned long user;
-    unsigned long channel;
-
-    SubscribeRelation():user(0), channel(0)
-    {
-    }
-  };
-
-  using namespace ODBC;
-
-  class LoadMarksQuery: public Mark, public CDbQueryX
-  {
-  public:
-    LoadMarksQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-      COL_NAME(    1, "id",          SQL_C_LONG, id)
-      COL_NAME_LEN(2, "time",        SQL_C_TIMESTAMP, time, timeLen)
-      COL_NAME(    3, "latitude",    SQL_C_DOUBLE, latitude)
-      COL_NAME(    4, "longitude",   SQL_C_DOUBLE, longitude)
-      COL_NAME(    5, "label",       SQL_C_CHAR, label)
-      COL_NAME(    6, "description", SQL_C_CHAR, description)
-      COL_NAME(    7, "url",         SQL_C_CHAR, url)
-      COL_NAME(    8, "user_id",     SQL_C_LONG, user_id)
-    END_COLMAP()
-    
-    const char* sql() const
-    {
-      return "select id, time, latitude, longitude, label, description, url, user_id from tag order by time;";
-    }
-  };
-
-  class NewMarkKeyQuery: public CDbQueryX
-  {
-  public:
-    long m_seq;
-    
-    NewMarkKeyQuery(const CDbConn &dbConn) : CDbQueryX(dbConn)
-    {
-    }
-
-    BEGIN_COLMAP()
-      COL_NAME(1,"seq",SQL_C_LONG,m_seq)
-    END_COLMAP()
-    
-    const char *sql() const
-    {
-      return "select nextval('tags_seq') as seq;";
-    }
-  };
-
-  class StoreMarkQuery: public Mark, public CDbQueryX
-  {
-  public:
-    StoreMarkQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-    
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_DOUBLE, SQL_DOUBLE, latitude)
-      PAR(2, SQL_C_DOUBLE, SQL_DOUBLE, longitude)
-      PAR(3, SQL_C_CHAR, SQL_CHAR, label)
-      PAR(4, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(5, SQL_C_CHAR, SQL_CHAR, url)
-      PAR(6, SQL_C_LONG, SQL_INTEGER, user_id)
-      PAR(7, SQL_C_LONG, SQL_INTEGER, id)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "insert into tag (latitude, longitude, label, description, url, user_id, id) values(?,?,?,?,?,?,?);";
-    }
-  };
-  
-  class UpdateMarkQuery: public Mark, public CDbQueryX
-  {
-  public:
-    UpdateMarkQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-    
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_DOUBLE, SQL_DOUBLE, latitude)
-      PAR(2, SQL_C_DOUBLE, SQL_DOUBLE, longitude)
-      PAR(3, SQL_C_CHAR, SQL_CHAR, label)
-      PAR(4, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(5, SQL_C_CHAR, SQL_CHAR, url)
-      PAR(6, SQL_C_LONG, SQL_INTEGER, id)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "update tag set latitude=?, longitude=?, label=?, description=?, url=? where id=?;";
-    }
-  };
-
-  /////// Channels 
-  
-  class LoadChannelQuery: public Channel, public CDbQueryX
-  {
-  public:
-    LoadChannelQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-      COL_NAME(1, "id", SQL_C_LONG, id)
-      COL_NAME(2, "description", SQL_C_CHAR, description)
-      COL_NAME(3, "name", SQL_C_CHAR, name)
-      COL_NAME(4, "url", SQL_C_CHAR, url)
-    END_COLMAP()
-
-    const char* sql() const
-    {
-      return "select id, description, name, url from channel order by id;";
-    }
-  };
-
-  class NewChannelKeyQuery: public CDbQueryX
-  {
-  public:
-    long m_key;
-    
-    NewChannelKeyQuery(const CDbConn &dbConn) : CDbQueryX(dbConn)
-    {
-    }
-
-    BEGIN_COLMAP()
-      COL_NAME(1,"key",SQL_C_LONG,m_key)
-    END_COLMAP()
-    
-    const char *sql() const
-    {
-      return "select nextval('channels_seq') as key;";
-    }
-  };
-
-  class StoreChannelQuery: public Channel, public CDbQueryX
-  {
-  public:
-    StoreChannelQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-    
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_CHAR, SQL_CHAR, name)
-      PAR(2, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(3, SQL_C_CHAR, SQL_CHAR, url)
-      PAR(4, SQL_C_LONG, SQL_INTEGER, id)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "insert into channel (name, description, url, id) values(?,?,?,?);";
-    }
-  };
-  
-  class UpdateChannelQuery: public Channel, public CDbQueryX
-  {
-  public:
-    UpdateChannelQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-    
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_CHAR, SQL_CHAR, description)
-      PAR(2, SQL_C_CHAR, SQL_CHAR, url)
-      PAR(3, SQL_C_LONG, SQL_INTEGER, id)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "update channel set description=?, url=? where id=?;";
-    }
-  };
-  
-  class RemoveChannelQuery: public Channel, public CDbQueryX
-  {
-  public:
-    RemoveChannelQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-    
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_LONG, SQL_INTEGER, id)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "delete from channel where id=?;";
-    }
-  };
-  /////// Marks: Mark <---> Channel
-  
-  class LoadMarkRelationsQuery: public MarkRelation, public CDbQueryX
-  {
-  public:
-    LoadMarkRelationsQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-      COL_NAME(1, "tag_id", SQL_C_LONG, mark)
-      COL_NAME(2, "channel_id", SQL_C_LONG, channel)
-    END_COLMAP()
-
-    const char* sql() const
-    {
-      return "select tag_id, channel_id from tags;";
-    }
-  };
-
-  class StoreMarkRelationQuery: public MarkRelation, public CDbQueryX
-  {
-  public:
-    StoreMarkRelationQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-    
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_LONG, SQL_INTEGER, mark)
-      PAR(2, SQL_C_LONG, SQL_INTEGER, channel)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "insert into tags (tag_id,channel_id) values(?,?);";
-    }
-  };
-  
-  class UpdateMarkRelationQuery: public MarkRelation, public CDbQueryX
-  {
-  public:
-    UpdateMarkRelationQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-    
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_LONG, SQL_INTEGER, channel)
-      PAR(2, SQL_C_LONG, SQL_INTEGER, mark)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "update tags set channel_id=? where tag_id=?;";
-    }
-  };
-
-  //////////// Users
-  
-  class NewUserKeyQuery: public CDbQueryX
-  {
-  public:
-    long m_key;
-    
-    NewUserKeyQuery(const CDbConn &dbConn) : CDbQueryX(dbConn)
-    {
-    }
-
-    BEGIN_COLMAP()
-      COL_NAME(1,"key",SQL_C_LONG,m_key)
-    END_COLMAP()
-    
-    const char *sql() const
-    {
-      return "select nextval('users_seq') as key;";
-    }
-  };
-
-  class LoadUsersQuery: public User, public CDbQueryX
-  {
-  public:
-    LoadUsersQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-      COL_NAME(1, "id", SQL_C_LONG, id)
-      COL_NAME(2, "login", SQL_C_CHAR, login)
-      COL_NAME(3, "password", SQL_C_CHAR, password)
-      COL_NAME(4, "token", SQL_C_CHAR, token)
-    END_COLMAP()
-
-    const char* sql() const
-    {
-      return "select id, login, password, token from users order by id;";
-    }
-  };
-  
-  class StoreUserQuery: public User, public CDbQueryX
-  {
-  public:
-    StoreUserQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_LONG, SQL_INTEGER, id)
-      PAR(2, SQL_C_CHAR, SQL_CHAR, token)
-      PAR(3, SQL_C_CHAR, SQL_CHAR, login)
-      PAR(4, SQL_C_CHAR, SQL_CHAR, password)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "insert into users (id, token, login, password) values(?,?,?,?);";
-    }
-  };
-
-  class RemoveUserQuery: public User, public CDbQueryX
-  {
-  public:
-    RemoveUserQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_LONG, SQL_INTEGER, id)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "delete from users where id=?;";
-    }
-  };
-  
-  class UpdateUserQuery: public User, public CDbQueryX
-  {
-  public:
-    UpdateUserQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_CHAR, SQL_CHAR, token)
-      PAR(2, SQL_C_CHAR, SQL_CHAR, login)
-      PAR(3, SQL_C_CHAR, SQL_CHAR, password)
-      PAR(4, SQL_C_LONG, SQL_INTEGER, id)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "update users set token=?, login=?, password=? where id=?;";
-    }
-  };
-  
-  /////// Users: User <--(subscribed)--> Channel
-  
-  class LoadSubscribedQuery: public SubscribeRelation, public CDbQueryX
-  {
-  public:
-    LoadSubscribedQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-      COL_NAME(1, "user_id", SQL_C_LONG, user)
-      COL_NAME(2, "channel_id", SQL_C_LONG, channel)
-    END_COLMAP()
-
-    const char* sql() const
-    {
-      return "select user_id, channel_id from subscribe;";
-    }
-  };
-
-  class StoreSubscribedQuery: public SubscribeRelation, public CDbQueryX
-  {
-  public:
-    StoreSubscribedQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-    
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_LONG, SQL_INTEGER, user)
-      PAR(2, SQL_C_LONG, SQL_INTEGER, channel)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "insert into subscribe (user_id,channel_id) values(?,?);";
-    }
-  };
-  
-  class RemoveSubscribedQuery: public SubscribeRelation, public CDbQueryX
-  {
-  public:
-    RemoveSubscribedQuery(const CDbConn& conn): CDbQueryX(conn)
-    {
-    }
-
-    BEGIN_COLMAP()
-    END_COLMAP()
-    
-    BEGIN_PARMAP()
-      PAR(1, SQL_C_LONG, SQL_INTEGER, user)
-      PAR(2, SQL_C_LONG, SQL_INTEGER, channel)
-    END_PARMAP()
-
-    const char* sql() const
-    {
-      return "delete from subscribe where user_id=? and channel_id=?;";
-    }
-  };
-}
+#include <QtSql>
+#include <QMap>
 
 namespace common
 {
-  DbSession::DbSession(): ODBC::CDbConn(*(ODBC::CDbEnv*)this), m_marks(makeHandle(new DataMarks)), m_channels(makeHandle(new Channels))
-  {
-    m_users = makeHandle(new std::vector<CHandlePtr<common::User> >());
-    syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %ld", __FILE__, __LINE__);
-    try
+    DbObjectsCollection::DbObjectsCollection():
+            m_channelsContainer(new Channels()),
+            m_tagsContainer(new DataMarks()),
+            m_usersContainer(new Users()),
+            m_dataChannelsMap(new DataChannels()),
+            m_updateThread(NULL)
     {
-      connect(DATABASE_NAME);
-      syslog(LOG_INFO, "connected to database " DATABASE_NAME);
-      m_updateThread = makeHandle(new UpdateThread<DbSession>(this));
-    }
-    catch(...)
-    {
-      syslog(LOG_INFO, "UUuuups...");
-    }
-  }
 
-  void DbSession::loadUsers()
-  {
-    db::LoadUsersQuery query(*this);
-    query.prepare();
-    ODBC::CExecuteClose x(query);
-    while(query.fetch())
-    {
-      if(s_users.count(query.id)>0) // This user already exists we shoudl skip it.
-        continue;
-      CHandlePtr<loader::User> u = makeHandle(new loader::User(query.login, query.password, query.id, query.token));
-      m_users->push_back(u);
-      s_users[query.id] = u;
-      m_tokensMap[query.token] = u; // store alias between hash and User. 
+        m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
+        m_processors.insert("apply", &DbObjectsCollection::processAddNewMarkQuery);
+        m_processors.insert("rss", &DbObjectsCollection::processRssFeedQuery);
+
+        QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
+        database.setHostName("localhost");
+        database.setDatabaseName("geo2tag");
+        database.setUserName("geo2tag");
+        database.setPassword("");
+
+        m_updateThread = new UpdateThread(
+                        QSqlDatabase::cloneDatabase(database,"updateThread"),
+                        m_tagsContainer,
+                        m_usersContainer,
+                        m_channelsContainer,
+                        m_dataChannelsMap,
+                        NULL);
+
+        m_updateThread->start();
+
+        m_queryExecutor = new QueryExecutor(QSqlDatabase::cloneDatabase(database,"executor"), NULL);
+
     }
-  }
- 
-  void DbSession::storeUser(CHandlePtr<common::User> user)
-  {
-      CHandlePtr<loader::User> us = user.dynamicCast<loader::User>();
-      if(!us)
-      {
-        syslog(LOG_INFO,"Failure at storeChannel, dynamicCast<loader::Channel>() at storeChannel");
-	throw CDynamicCastFailure(1,SRC(),1);
-	      //return; 
-      }
-      
-      if(us->getId()==0)
-      {
-        ODBC::CTransaction tr(*this);
-        // Here is new object, has been created by user
-        db::NewUserKeyQuery query(*this);
-        query.prepare();
+
+    DbObjectsCollection& DbObjectsCollection::getInstance()
+    {
+        static DbObjectsCollection s;
+        return s;
+    }
+
+    DbObjectsCollection::~DbObjectsCollection()
+    {
+        m_updateThread->wait();
+        delete m_updateThread;
+        delete m_queryExecutor;
+    }
+
+    QByteArray DbObjectsCollection::process(const QString& queryType, const QByteArray& body)
+    {
+        if(!m_queryExecutor->isConnected())
         {
-          ODBC::CExecuteClose keyExec(query);
-          query.fetchNoEmpty();
+            m_queryExecutor->connect();
         }
-        
-        us->setId(query.m_key);
-        db::StoreUserQuery storeQuery(*this);
-        storeQuery.id = us->getId();
-        strncpy(storeQuery.login,us->getLogin().c_str(),49);
-        storeQuery.login[49]='\0';
-        strncpy(storeQuery.password,us->getPassword().c_str(),49);
-        storeQuery.password[49]='\0';
-        strncpy(storeQuery.token,us->getToken().c_str(),60);
-        storeQuery.token[59]='\0';
-        
-        storeQuery.prepare();
-        storeQuery.execute();
-        
-        s_users[us->getId()]=us;
-        m_users->push_back(us);
-        m_tokensMap[us->getToken()]=us;
-      }
-      else
-      {
-        ODBC::CTransaction tr(*this);
-        // this object need to be updated in data base
-        
-        db::UpdateUserQuery updateQuery(*this);
-        updateQuery.id = us->getId();
-        strncpy(updateQuery.login,us->getLogin().c_str(),49);
-        updateQuery.login[49]='\0';
-        strncpy(updateQuery.password,us->getPassword().c_str(),49);
-        updateQuery.password[49]='\0';
-        strncpy(updateQuery.token,us->getToken().c_str(),59);
-        updateQuery.token[59]='\0';
 
-        updateQuery.prepare();
-        updateQuery.execute();
-      }
-  }
-
-  void DbSession::removeUser(CHandlePtr<common::User> user)
-  {
-      CHandlePtr<loader::User> us = user.dynamicCast<loader::User>();
-      if (!us)
-      {
-          syslog(LOG_INFO, "Failure at removeUser, dynamicCast<loader::User>()"
-                           " at removeUser");
-          throw CDynamicCastFailure(1,SRC(),1);
-          //return;
-      }
-
-      if (us->getId() == 0)
-      {
-          syslog(LOG_INFO, "Failure at us->getId(), "
-                           "dynamicCast<loader::User>() at removeUser");
-          throw CDynamicCastFailure(1,SRC(),1);
-          //        return;
-      }
-      else
-      {
-          ODBC::CTransaction tr(*this);
-          db::RemoveUserQuery removeQuery(*this);
-          removeQuery.id = us->getId();
-/* delete user from stack */
-          removeQuery.prepare();
-          removeQuery.execute();
-          for (int i = 0; i < m_users->size(); i++)
-          {
-              if (m_users->at(i).dynamicCast<loader::User>()->getId()
-                  == us->getId())
-              {
-                  m_users->erase(m_users->begin() + i);
-                  break;
-              }
-          }
-          s_users.erase(us->getId());
-          m_tokensMap.erase(us->getToken());
-      }
-  }
-
-  const std::map<std::string,CHandlePtr<common::User> >& DbSession::getTokensMap() const
-  {
-    return m_tokensMap;
-  }
- 
-  void DbSession::loadMarks()
-  {
-    int i = 0;
-    db::LoadMarksQuery query(*this);
-    query.prepare();
-    query.execute();
-    while(query.fetch())
-    {
-      if(s_marks.count(query.id)>0)
-      {
-        continue;
-      }
-      i++;
-      CHandlePtr<loader::DataMark> mark= makeHandle(new loader::DataMark(query.id,
-                            query.latitude,
-                            query.longitude,
-                            query.label,
-                            query.description,
-                            query.url,
-                            ODBC::convertTime(query.time,CTime::UTC),
-                            s_users.find(query.user_id)->second,
-                            CHandlePtr<loader::Channel>()));
-
-      s_marks[query.id] = mark;
-      m_marks->push_back(mark);
-      // syslog(LOG_INFO, "loaded new %i mark at [%f,%f]", query.id, query.latitude, query.longitude);
-    }
-    // syslog(LOG_INFO, "loaded new %i marks", i);
-  }
-  
-  void DbSession::storeMark(CHandlePtr<common::DataMark> m)
-  {
-    CHandlePtr<loader::DataMark> mark = m.dynamicCast<loader::DataMark>();
-    if(!mark)
-    {
-      syslog(LOG_INFO,"Failure at storeMark, dynamicCast<loader::DataMark>() is NULL... Mark wasn't stored ");
-      throw CDynamicCastFailure(1,SRC(),1);
-
-      //return;
-    }
-    
-    if(mark->getId()==0) // It means that it's new mark and we should call insert into Database
-    {
-      CHandlePtr<loader::User> user = mark->getUser().dynamicCast<loader::User>();
-      if(!user)
-      {
-        syslog(LOG_INFO,"Failure at storeMark, dynamicCast<loader::User>(), is NULL... Mark wasn't added");
-        throw CDynamicCastFailure(1,SRC(),1);
-
-        //return; 
-      }
-
-      ODBC::CTransaction tr(*this);
-      // Here is new object, has been created by user
-      db::NewMarkKeyQuery query(*this);
-      query.prepare();
-      {
-        ODBC::CExecuteClose keyExec(query);
-        query.fetchNoEmpty();
-      }
-      mark->setId(query.m_seq);
-      s_marks[mark->getId()] = mark;
-      m_marks->push_back(mark); // update global marks list
-      db::StoreMarkQuery storeQuery(*this);
-      storeQuery.id = mark->getId();
-      storeQuery.latitude = mark->getLatitude();
-      storeQuery.longitude = mark->getLongitude();
-      strncpy(storeQuery.label,mark->getLabel().c_str(),1023);
-      storeQuery.label[1023]='\0';
-      strncpy(storeQuery.description,mark->getDescription().c_str(),2047);
-      storeQuery.description[2047]='\0';
-      strncpy(storeQuery.url,mark->getUrl().c_str(),2047);
-      storeQuery.url[2047]='\0';
-      storeQuery.user_id = user->getId();
-      
-      storeQuery.prepare();
-      storeQuery.execute();
-    }
-    else // Mark has Id and was loaded from Database... Updating mark with calling "update"
-    {
-      ODBC::CTransaction tr(*this);
-      
-      db::UpdateMarkQuery updateQuery(*this);
-      updateQuery.id = mark->getId();
-      updateQuery.latitude = mark->getLatitude();
-      updateQuery.longitude = mark->getLongitude();
-      strncpy(updateQuery.label,mark->getLabel().c_str(),1023);
-      updateQuery.label[1023]='\0';
-      strncpy(updateQuery.description,mark->getDescription().c_str(),2047);
-      updateQuery.description[2047]='\0';
-      strncpy(updateQuery.url,mark->getUrl().c_str(),2047);
-      updateQuery.url[2047]='\0';
-      
-      updateQuery.prepare();
-      updateQuery.execute();
-    }
-  }
-
-  void DbSession::saveMarks()
-  { 
-    for(int i=0; i<m_marks->size(); i++)
-    {
-      storeMark((*m_marks)[i]);
-    }
-  }
-  
-
-  void DbSession::unsubscribe(CHandlePtr<common::User> user, CHandlePtr<common::Channel> channel)
-  {
-    CHandlePtr<loader::User> u = user.dynamicCast<loader::User>();
-    CHandlePtr<loader::Channel> c = channel.dynamicCast<loader::Channel>();
-    if (!u || !c)
-    {
-       // we need error checking & processing here
-        throw CDynamicCastFailure(1,SRC(),1);
-
-//       return;
-    }
-    unsigned long long user_id=u->getId(), channel_id=c->getId();
-    
-    db::RemoveSubscribedQuery query(*this);
-    query.user = user_id;
-    query.channel = channel_id;
-    try
-    {
-      ODBC::CTransaction tr(*this);
-      query.prepare();
-      query.execute();
-      u->unsubscribe(c);
-    }
-    catch (...)
-    {
-      // we need error checking & processing here
-      throw;
-    }
-    
-  }
-  
-  void DbSession::subscribe(const CHandlePtr<common::User>& user, const CHandlePtr<common::Channel>& channel)
-  {
-    CHandlePtr<loader::Channel> ch = channel.dynamicCast<loader::Channel>();
-    CHandlePtr<loader::User> us = user.dynamicCast<loader::User>(); 
-    if(!ch && !us)
-    {
-      throw CDynamicCastFailure(1,SRC(),1);
-//    return;
+        ProcessMethod method = m_processors.value(queryType);
+        return (*this.*method)(body);
     }
 
-    CHandlePtr<common::Channels> subscribedChannels = us->getSubscribedChannels();
-    for(size_t i=0;i<subscribedChannels->size();i++)
+    QSharedPointer<User> DbObjectsCollection::findUserFromToken(const QSharedPointer<User> &dummyUser) const
     {
-      if((*subscribedChannels)[i] == ch)
-      {
-        throw CDynamicCastFailure(1,SRC(),1);
- //       return;
-      }
-    }
-
-    db::StoreSubscribedQuery query(*this);
-    query.user = us->getId();
-    query.channel = ch->getId();
-    try
-    {
-      ODBC::CTransaction tr(*this);
-      query.prepare();
-      query.execute();
-      us->subscribe(ch);
-    }
-    catch(...)
-    {
-      // it is hack, but we need it
-    }
-  }
-  void DbSession::updateChannel(unsigned long long channel_id,  CHandlePtr<common::DataMark> m) //! this routine will be in private area
-  {
-    CHandlePtr<loader::DataMark> mark = m.dynamicCast<loader::DataMark>();
-    if(mark->getId()!=0)
-    {
-      // syslog(LOG_INFO,"Failure at updateChannel, dynamicCast<loader::DataMark>(), in Dbsession::updateChannel");
-      // It's not a failure. because this mark already in channel!
-    	return;
-    }
-    storeMark(mark); // store(update) mark to DB
-    
-    db::StoreMarkRelationQuery query(*this);
-    query.mark = mark->getId();
-    query.channel = channel_id;
-    try
-    {
-      ODBC::CTransaction tr(*this);
-      query.prepare();
-      query.execute();
-    }
-    catch (...)
-    {
-      // it is hack, but we need it
-    }
-  }
-  
-  void DbSession::loadChannels()
-  {
-    db::LoadChannelQuery query(*this);
-    query.prepare();
-    ODBC::CExecuteClose x(query);
-    while(query.fetch())
-    {
-      if(s_channels.count(query.id)>0)
-        continue;
-
-      CHandlePtr<loader::Channel> ch= makeHandle(new loader::Channel(query.id,
-                            std::string(&(query.name[0])), std::string(&(query.description[0])) ));
-      m_channels->push_back(ch);
-      s_channels[query.id] = ch;
-    }
-
-  }
-
-  void DbSession::removeChannel(CHandlePtr<common::Channel> c)
-  {
-      CHandlePtr<loader::Channel> ch = c.dynamicCast<loader::Channel>();
-      if(!ch)
-      {
-        syslog(LOG_INFO,"Failure at removeChannel, dynamicCast<loader::Channel>() at removeChannel");
-        throw CDynamicCastFailure(1,SRC(),1);
-//      return; 
-      }
-      
-      if(ch->getId()==0)
-      {
-	syslog(LOG_INFO,"Failure at ch->getId(), dynamicCast<loader::Channel>() at removeChannel");
-        throw CDynamicCastFailure(1,SRC(),1);
-//        return;
-      }
-      else
-      {
-        ODBC::CTransaction tr(*this);
-        db::RemoveChannelQuery removeQuery(*this);
-        removeQuery.id = ch->getId();
-        removeQuery.prepare();
-        removeQuery.execute();
-      }
-  }
-
-  void DbSession::storeChannel(CHandlePtr<common::Channel> c)
-  {
-      CHandlePtr<loader::Channel> ch = c.dynamicCast<loader::Channel>();
-      if(!ch)
-      {
-        syslog(LOG_INFO,"Failure at storeChannel, dynamicCast<loader::Channel>() at storeChannel");
-        throw CDynamicCastFailure(1,SRC(),1);
-//      return; 
-      }
-      
-      if(ch->getId()==0)
-      {
-        ODBC::CTransaction tr(*this);
-        // Here is new object, has been created by user
-        db::NewChannelKeyQuery query(*this);
-        query.prepare();
+        QSharedPointer<User> realUser; // Null pointer
+        QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+        syslog(LOG_INFO, "checking user's key: %s from %d known users", dummyUser->getToken().toStdString().c_str(),
+                                currentUsers.size());
+        for(int i=0; i<currentUsers.size(); i++)
         {
-          ODBC::CExecuteClose keyExec(query);
-          query.fetchNoEmpty();
+            if(currentUsers.at(i)->getToken() == dummyUser->getToken())
+            {
+                realUser = currentUsers.at(i);
+                break;
+            }
         }
-        
-        ch->setId(query.m_key);
-        db::StoreChannelQuery storeQuery(*this);
-        storeQuery.id = ch->getId();
-        strncpy(storeQuery.description,ch->getDescription().c_str(),2047);
-        storeQuery.description[2047]='\0';
-        strncpy(storeQuery.name,ch->getName().c_str(),300);
-        storeQuery.name[299]='\0';
-        strncpy(storeQuery.url,ch->getUrl().c_str(),2047);
-        storeQuery.url[2047]='\0';
-        
-        storeQuery.prepare();
-        storeQuery.execute();
-        
-        s_channels[ch->getId()]=ch;
-        m_channels->push_back(ch);
-      }
-      else
-      {
-        ODBC::CTransaction tr(*this);
-        // this object need to be updated in data base
-        
-        db::UpdateChannelQuery updateQuery(*this);
-        updateQuery.id = ch->getId();
-        strncpy(updateQuery.description,ch->getDescription().c_str(),2047);
-        updateQuery.description[2047]='\0';
-        // we don't need save Channel's name because we don't update it in SQL query 
-        strncpy(updateQuery.url,ch->getUrl().c_str(),2047);
-        updateQuery.url[2047]='\0';
-
-        updateQuery.prepare();
-        updateQuery.execute();
-      }
-  }
-
-  void DbSession::saveChannels()
-  {
-    for(int i=0; i<m_channels->size(); i++)
-    {
-      storeChannel((*m_channels)[i]);
+        return realUser;
     }
-  }
-  
-  void DbSession::loadRelations()
-  {
-    { // LoadMarkRelationsQuery block
-      // syslog(LOG_INFO, "loading MarkRelations: mark <=> tag");
-      db::LoadMarkRelationsQuery query(*this);
-      query.prepare();
-      query.execute();
-      while(query.fetch())
-      {
-        // syslog(LOG_INFO, "loadRelations, fetch");
-        CHandlePtr<loader::Channel> channel;
-        CHandlePtr<loader::DataMark> mark;
-        if(s_channels.count(query.channel))
+
+    QByteArray DbObjectsCollection::processLoginQuery(const QByteArray &data)
+    {
+        LoginRequestJSON request;
+        LoginResponseJSON response;
+        QByteArray answer;
+
+        request.parseJson(data);
+
+        QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+        QSharedPointer<User> realUser; // Null pointer
+        QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+
+        for(int i=0; i<currentUsers.size(); i++)
         {
-          channel = s_channels.find(query.channel)->second;
+            if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
+            {
+                if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
+                {
+                    realUser = currentUsers.at(i);
+                    break;
+                }
+                else
+                {
+                    response.setStatus("Error");
+                    response.setStatusMessage("Wrong password");
+                }
+            }
+        }
+        answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+        if(realUser.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong login or password");
         }
         else
         {
-          // syslog(LOG_INFO, "channel id=[%lu] is missing", query.channel);
-          continue;
+            response.setStatus("Ok");
+            response.setStatusMessage("Authorization was successful");
+            response.addUser(realUser);
         }
-        if(s_marks.count(query.mark))
-        {
-          mark = s_marks.find(query.mark)->second;
-        }
-        else
-        {
-          // syslog(LOG_INFO, "mark id=[%lu] is missing", query.mark);
-          continue;
-        }
-        mark->setChannel(channel);
-        channel->addData(mark);
-      }
+
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
     }
-    { 
-      // LoadSubscribedQuery block
-      // syslog(LOG_INFO, "loading MarkRelations: user <=> channel");
-      db::LoadSubscribedQuery query(*this);
-      query.prepare();
-      query.execute();
-      while(query.fetch())
-      {
-	      bool alreadyHas=0;
-        CHandlePtr<common::Channels> subscribedChannels = s_users.find(query.user)->second->getSubscribedChannels();
-        for(common::Channels::iterator i=subscribedChannels->begin(); i!=subscribedChannels->end();i++)
-		    {
-			    if(((*i)->getName())==(s_channels.find(query.channel)->second->getName())) 
-          {
-				    alreadyHas=1;
-				    break;
-			    }
-		    }
-        if (!alreadyHas) s_users.find(query.user)->second->subscribe(s_channels.find(query.channel)->second);
-      }
+
+    QByteArray DbObjectsCollection::processAddNewMarkQuery(const QByteArray &data)
+    {
+        AddNewMarkRequestJSON request;
+        AddNewMarkResponseJSON response;
+        QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+        request.parseJson(data);
+        QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
+        QSharedPointer<User> dummyUser = dummyTag->getUser();
+        QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+        if(realUser.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong authentification key");
+            answer.append(response.getJson());
+            return answer;
+        }
+
+        QSharedPointer<Channel> dummyChannel = dummyTag->getChannel();
+        QSharedPointer<Channel> realChannel; // Null pointer
+        QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+
+        for(int i=0; i<currentChannels.size(); i++)
+        {
+            if(currentChannels.at(i)->getName() == dummyChannel->getName())
+            {
+                realChannel = currentChannels.at(i);
+            }
+        }
+        if(realChannel.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong channel's' name");
+            answer.append(response.getJson());
+            return answer;
+        }
+
+        dummyTag->setChannel(realChannel);
+        dummyTag->setUser(realUser);
+        QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);
+        if(realTag ==NULL)
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Internal server error ):");
+            answer.append(response.getJson());
+            return answer;
+        }
+        m_updateThread->lockWriting();
+        m_tagsContainer->push_back(realTag);
+        m_updateThread->unlockWriting();
+
+        response.setStatus("Ok");
+        response.setStatusMessage("Tag has been added");
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
     }
-  }
 
-  void DbSession::saveRelations()
-  {
-    // nothing
-  }
 
-  CHandlePtr<DataMarks> DbSession::getMarks() const
-  {
-    return m_marks;
-  }
+    QByteArray DbObjectsCollection::processRssFeedQuery(const QByteArray &data)
+    {
+        RSSFeedRequestJSON request;
+        QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
-  CHandlePtr<Channels> DbSession::getChannels() const
-  {
-    return m_channels;
-  }
-  
-  CHandlePtr<std::vector<CHandlePtr<common::User> > > DbSession::getUsers() const
-  {
-    return m_users;
-  }
+        request.parseJson(data);
+        QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+        QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+        if(realUser.isNull())
+        {
+            RSSFeedResponseJSON response;
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong authentification key");
+            answer.append(response.getJson());
+            return answer;
+        }
 
-  void DbSession::loadData()
-  {
-    loadUsers();
-    loadChannels();
-    loadMarks(); 
-    loadRelations();
-    syslog(LOG_INFO,"Objects has been updated");
-  }
-
-  void DbSession::saveData()
-  {
-    saveChannels();
-    saveMarks();
-    saveRelations();
-}
-
-  DbSession& DbSession::getInstance()
-  {
-    static DbSession s;
-    return s;
-  }
-  
-  DbSession::~DbSession()
-  {
-    m_updateThread.staticCast<UpdateThread<DbSession> >()->shutdown();
-    m_updateThread->join();
-  }
+        QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
+        DataChannels feed;
+//        syslog(LOG_INFO, "rssfeed processing: user %s has %d channels subscribed",
+//               realUser->getLogin().toStdString().c_str(), channels->size());
+        for(int i = 0; i<channels->size(); i++)
+        {
+            QSharedPointer<Channel> channel = channels->at(i);
+            QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
+            qSort(tags);
+            QList<QSharedPointer<DataMark> > last10 = tags.mid(tags.size()>10?tags.size()-10:0, 10);
+            for(int j = 0; j<last10.size(); j++)
+            {
+//                syslog(LOG_INFO,"rssfeed: adding tag with time: %s", last10.at(j)->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str());
+                feed.insert(channel, last10.at(j));
+            }
+        }
+        RSSFeedResponseJSON response(feed);
+        response.setStatus("Ok");
+        response.setStatusMessage("feed has been generated");
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+    }
 } // namespace common
 
 /* ===[ End of file ]=== */

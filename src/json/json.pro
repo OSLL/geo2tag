@@ -1,22 +1,50 @@
 TEMPLATE = lib
-TARGET =  ../lib/json
-
 include(../../config.pri)
 
+TARGET = ../lib/wikigpsJson
 DEPENDPATH += . inc src
-INCLUDEPATH += . inc
+
+target.path = /usr/bin
+INSTALLS += target
+
+INCLUDEPATH += . inc \
+                 ../common/inc/
 
 # Input
-HEADERS += inc/cast.h \
-           inc/elements.h \
-           inc/exception.h \
-           inc/quick.h \
-           inc/reader.h \
-           inc/visitor.h \
-           inc/writer.h \
-           inc/quick.inl \
-           inc/cast.inl
-SOURCES += src/elements.cpp src/quick.cpp src/reader.cpp src/writer.cpp
+HEADERS += \
+           inc/ChannelListJSON.h \
+           inc/RSSFeedJSON.h \
+           inc/RSSFeedRequestJSON.h \
+           inc/SubscribeChannelJSON.h \
+           inc/JsonUser.h \
+           inc/JsonDataMark.h \
+           inc/JsonChannel.h \
+    inc/JsonSerializer.h \
+    inc/LoginRequestJSON.h \
+    inc/LoginResponseJSON.h \
+    inc/AddNewMarkRequestJSON.h \
+    inc/AddNewMarkResponseJSON.h \
+    inc/DefaultResponseJSON.h
 
-OBJECTS_DIR = .obj
-MOC_DIR = .moc
+SOURCES += \
+           src/ChannelListJSON.cpp \
+           src/RSSFeedJSON.cpp \
+           src/RSSFeedRequestJSON.cpp \
+           src/SubscribeChannelJSON.cpp \
+           src/JsonUser.cpp \
+           src/JsonChannel.cpp \
+           src/JsonDataMark.cpp \
+    src/JsonSerializer.cpp \
+    src/LoginRequestJSON.cpp \
+    src/LoginResponseJSON.cpp \
+    src/AddNewMarkRequestJSON.cpp \
+    src/DefaultResponseJSON.cpp
+
+LIBS    +=  -lcommon -lqjson
+
+linux: {
+    DEFINES += DESKTOP_STYLE
+}
+
+QT += core
+QT -= gui

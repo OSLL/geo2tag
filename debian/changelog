@@ -1,8 +1,14 @@
-wikigps (0.1.4) unstable; urgency=low
+wikigps (0.1.3) unstable; urgency=low
 
-  * small bugs are fixed
+  * tracker init.d script changed
 
- -- Paul Zubarev <zps@osll.spb.ru>  Mon, 17 Jan 2011 20:41:37 +0300 
+ -- Paul Zubarev <zps@osll.spb.ru>  Sun, 31 Oct 2010 11:30:01 +0300
+
+wikigps (0.1.2) unstable; urgency=low
+
+  * tracker splited for two parts
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Sat, 30 Oct 2010 18:39:11 +0400
 
 wikigps (0.1.1) unstable; urgency=low
 

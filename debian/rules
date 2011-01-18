@@ -37,7 +37,6 @@ build-stamp:
 		echo $$PWD ; \
 		echo "i386 architecture selection"; \
 		cd $(BUILDDIR) && qmake "CONFIG +=linux" -after *.pro && $(MAKE); \
-		qmake "CONFIG +=webside" -after *.pro && $(MAKE); \
 		cd ../../; \
 	else \
 	cd $(BUILDDIR) && qmake "CONFIG += maemo" -after *.pro; \
@@ -57,18 +56,14 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-#installing tracker and observer
+	$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; 
+	install -d $(CURDIR)/debian/tmp/etc/init.d; 
+	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
+	install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
 	if [ "$(DEB_BUILD_ARCH)" = "armel" ] ; then \
 		echo "armel arch instalation"; \
-		$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
-		install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
-		install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
-		cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
-		cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
-		cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; \
-		cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop; \
+	        cp $(BUILDDIR)tracker/tracker_maemo $(CURDIR)/debian/tmp/etc/init.d/tracker; \
 	else \
-		$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; \
 		install -d $(CURDIR)/debian/tmp/opt/geo2tag; \
 		install -d $(CURDIR)/debian/tmp/var/www; \
 		install -d $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
@@ -84,8 +79,13 @@ install: build
                 cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
+        	cp $(BUILDDIR)tracker/tracker_linux $(CURDIR)/debian/tmp/etc/init.d/tracker; \
 	fi;
-#	cp -l $(BUILDDOR)src/lib/libmaps* $(CURDIR)/debian/tmp/usr/lib;
+	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
+        cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; \
+	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon
+	cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop
+
 	dh_install -s
 	
 

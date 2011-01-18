@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file User.cpp
  * \brief User implementation
@@ -41,53 +41,57 @@
 
 #include "User.h"
 #include <algorithm>
-namespace common
+
+User::User(const QString& name, const QString& pass):
+        m_login(name),
+        m_password(pass),
+        m_channels(new Channels())
 {
-  User::User(const std::string& name, const std::string& pass): m_login(name), m_password(pass), m_channels(makeHandle(new Channels()))
-  {
-  }
-  
-  void User::subscribe(const CHandlePtr<Channel>& channel)
-  {
-    //!> ToDo: check that this channel does not exist in m_channels
-    m_channels->push_back(channel);
-  }
+}
 
-  void User::unsubscribe(const CHandlePtr<Channel>& channel)
-  {
-    Channels::iterator it = std::find(m_channels->begin(), m_channels->end(), channel);
-    if(it != m_channels->end())
-       m_channels->erase(it);
-  }
-  
-  const std::string& User::getLogin() const
-  {
+void User::subscribe(const QSharedPointer<Channel>& channel)
+{
+    if(!m_channels->exist(channel->getId()))
+        m_channels->push_back(channel);
+}
+
+void User::unsubscribe(const QSharedPointer<Channel>& channel)
+{
+    m_channels->erase(channel);
+}
+
+const QString& User::getLogin() const
+{
     return m_login;
-  }
+}
 
-  const std::string& User::getToken() const
-  {
+const QString& User::getToken() const
+{
     return m_token;
-  }
+}
 
-  const std::string& User::getPassword() const
-  {
+const QString& User::getPassword() const
+{
     return m_password;
-  }
-  
-  const CHandlePtr<Channels> User::getSubscribedChannels() const
-  {
+}
+
+const QSharedPointer<Channels> User::getSubscribedChannels() const
+{
     return m_channels;
-  }
+}
 
-  void User::setPassword(std::string password)
-  {
-      m_password = password;
-  }
+void User::setPassword(QString password)
+{
+    m_password = password;
+}
 
-  User::~User()
-  {
-  }
-} // namespace common
+void User::setToken(const QString &token)
+{
+    m_token = token;
+}
+
+User::~User()
+{
+}
 
 /* ===[ End of file ]=== */

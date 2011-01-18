@@ -51,7 +51,7 @@ namespace common
   {
 
   public:
-    PngPicture(const std::vector<char>& data);
+    PngPicture(const QVector<char>& data);
 
     Picture::Type getType() const;
 
