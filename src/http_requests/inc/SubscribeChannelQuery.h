@@ -48,6 +48,7 @@
 #include <QString>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include "DefaultQuery.h"
 
 namespace GUI
 {
@@ -58,49 +59,36 @@ namespace GUI
      * This query includes json request to subscribe channel.
      *
      */
-    class SubscribeChannelQuery: public QObject
+    class SubscribeChannelQuery: public DefaultQuery
     {
-        Q_OBJECT
+    Q_OBJECT
 
-    private:
-        QNetworkAccessManager *manager;
+    QSharedPointer<User> m_user;
+    QSharedPointer<Channel> m_channel;
+    QString m_status;
+    virtual QString getUrl() const;
+    virtual QByteArray getRequestBody() const;
 
-        /* Url of th request */
-        QString httpQuery;
+private slots:
 
-        /* Body of the request */
-        QString jsonQuery;
+    virtual void processReply(QNetworkReply *reply);
 
-    public:
+public:
 
         SubscribeChannelQuery(QObject *parent = 0);
 
-        SubscribeChannelQuery(QString auth_token, QString channel, QObject *parent = 0);
+        SubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
 
-        void setQuery(QString auth_token, QString channel);
+        void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
 
         ~SubscribeChannelQuery();
 
-        const QString& getHttpQuery();
-        const QString& getJsonQuery();
-
-        void doRequest();
+	const QString& getStatus() const;
 
     signals:
-        void responseReceived(QString status,QString status_description);
-
-    private slots:
-        void onManagerFinished(QNetworkReply *reply);
-        void onReplyError(QNetworkReply::NetworkError);
-        void onManagerSslErrors();
-
-    private:
-        /* \todo Do we need next constructor and overloaded operator? */
-        SubscribeChannelQuery(const SubscribeChannelQuery& obj);
-        SubscribeChannelQuery& operator=(const SubscribeChannelQuery& obj);
+        void responseReceived();
 
     }; // class SubscribeChannelQuery
-
 } // namespace GUI
 
 #endif //_SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_

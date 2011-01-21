@@ -52,7 +52,7 @@ int ListModel::columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) co
   return 3;
 }
 
-CHandlePtr<common::Channel> ListModel::getCurrentChannel() const
+QSharedPointer<Channel> ListModel::getCurrentChannel() const
 {
   return m_currentChannel;
 }
@@ -68,7 +68,7 @@ void ListModel::setDescription(int row, const std::string& data)
       break;
   }
 
-  (*m_data)[i]->setDescription(data);
+  (*m_data)[i]->setDescription(QString(data.c_str()));
 }
 
 QVariant ListModel::data(const QModelIndex &index, int role) const
@@ -88,15 +88,15 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
     switch(index.column())
     {
     case 0:
-     value = (*m_data)[i]->getLabel().c_str();
+     value = (*m_data)[i]->getLabel();
      break;
 
     case 1:
-      value = (*m_data)[i]->getDescription().c_str();
+      value = (*m_data)[i]->getDescription();
       break;
 
     case 2:
-      value = (*m_data)[i]->getUser()->getLogin().c_str();
+      value = (*m_data)[i]->getUser()->getLogin();
       break;
 
     default:
@@ -108,18 +108,18 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
   return QVariant();
 }
 
-void ListModel::layoutUpdate(CHandlePtr<common::Channel> channel)
+void ListModel::layoutUpdate(QSharedPointer<Channel> channel)
 {
-    qDebug() << "current channel = " << m_currentChannelName.c_str();
+    qDebug() << "current channel = " << m_currentChannelName;
     if(channel!=0)
     {
         m_currentChannel=channel;
-        m_currentChannelName = channel->getName();
-        qDebug() << m_currentChannelName.c_str();
+        m_currentChannelName = (*channel).getName();
+//        qDebug() << m_currentChannelName;
     }
     else if (m_currentChannelName != "")
     {
-        CHandlePtr<common::Channel> newChannelPtr = OnLineInformation::getInstance().findChannel(m_currentChannelName);
+        QSharedPointer<Channel> newChannelPtr = OnLineInformation::getInstance().findChannel(m_currentChannelName);
         if (newChannelPtr != 0)
         {
             m_currentChannel = newChannelPtr;
@@ -132,11 +132,11 @@ void ListModel::layoutUpdate(CHandlePtr<common::Channel> channel)
     //m_data = OnLineInformation::getInstance().getMarks();
     for(size_t i=0; i<m_data->size(); i++)
     {
-        CHandlePtr<common::DataMark> mark = (*m_data)[i];
+        QSharedPointer<DataMark> mark = (*m_data)[i];
         qDebug() << "radius = " << mark->getChannel()->getRadius() 
-                 << "disctance=" << common::DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude());
+                 << "disctance=" << DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude());
         if(mark->getChannel()              == m_currentChannel &&
-       mark->getChannel()->getRadius()*100 >  common::DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude()))
+       mark->getChannel()->getRadius()*100 >  DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude()))
             size++;
     }
     m_size = size;
@@ -144,7 +144,7 @@ void ListModel::layoutUpdate(CHandlePtr<common::Channel> channel)
     setRowCount(size);
     emit layoutChanged();
 }
-void ListModel::marksUp(CHandlePtr<common::DataMarks> m_marks)
+void ListModel::marksUp(QSharedPointer<DataMarks> m_marks)
 {
     qDebug() << "marksUp got new marks set";
     m_data=m_marks;

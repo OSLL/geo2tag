@@ -9,17 +9,17 @@
 #include <Wt/WMessageBox>
 #include <Wt/WBreak>
 
-ChannelsWidget::ChannelsWidget(const std::string &token, WContainerWidget *parent)
+ChannelsWidget::ChannelsWidget(const QSharedPointer<User> user, WContainerWidget *parent)
     : WContainerWidget(parent)
 {
-    m_token = token;
+    m_user=user;
     channelsText = new WText("Available channels:", this);
     WBreak *break1 = new WBreak(this);
     channelsTable = new WTableView(this);
     channelsTable->setMinimumSize(WLength(300), WLength(400));
     WBreak *break2 = new WBreak(this);
     /* create a table model*/
-    channelsModel = new ChannelsModel(m_token, channelsTable->parent());
+    channelsModel = new ChannelsModel(m_user, channelsTable->parent());
     channelsModel->channelsUpdated.connect(this, &ChannelsWidget::onModelUpdated);
     channelsTable->setModel(channelsModel);
     channelsTable->setSelectionMode(ExtendedSelection);
@@ -33,7 +33,7 @@ ChannelsWidget::ChannelsWidget(const std::string &token, WContainerWidget *paren
 void ChannelsWidget::updateChannelsModel()
 {
     ChannelsModel *oldModel = channelsModel;
-    channelsModel = new ChannelsModel(m_token, channelsTable->parent());
+    channelsModel = new ChannelsModel(m_user, channelsTable->parent());
     channelsModel->channelsUpdated.connect(this, &ChannelsWidget::onModelUpdated);
     channelsTable->setModel(channelsModel);
     if (oldModel != 0)

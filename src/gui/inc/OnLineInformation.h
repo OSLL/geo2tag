@@ -72,13 +72,13 @@ namespace GUI
     {
         Q_OBJECT
 
-        CHandlePtr<common::DataMarks> m_marks;
-        CHandlePtr<common::Channels>  m_availableChannels;
-        CHandlePtr<common::Channels>  m_subscribedChannels;
-        CHandlePtr<std::vector<CHandlePtr<common::User> > > m_users;
+        QSharedPointer<DataMarks> m_marks;
+        QSharedPointer<Channels>  m_availableChannels;
+        QSharedPointer<Channels>  m_subscribedChannels;
+        QSharedPointer<Users > m_users;
 
         /* We need something that represents user */
-        CHandlePtr<common::User> m_user;
+        QSharedPointer<User> m_user;
         QString m_userName;
         QString m_userPassword;
         QString m_auth_token;
@@ -98,12 +98,12 @@ namespace GUI
         ~OnLineInformation();
         static OnLineInformation& getInstance();
 
-        CHandlePtr<common::DataMarks> getMarks() const;
-        CHandlePtr<common::Channels> getAvailableChannels() const;
-        CHandlePtr<common::Channels> getSubscribedChannels() const;
-        CHandlePtr<common::User> getUser() const;
-        CHandlePtr<std::vector<CHandlePtr<common::User> > > getUsers() const;
-        CHandlePtr<common::Channel> findChannel(const std::string& channel) const;
+        QSharedPointer<DataMarks> getMarks() const;
+        QSharedPointer<Channels> getAvailableChannels() const;
+        QSharedPointer<Channels> getSubscribedChannels() const;
+        QSharedPointer<User> getUser() const;
+        QSharedPointer<Users> getUsers() const;
+        QSharedPointer<Channel> findChannel(const QString& channel) const;
 
     public slots:
         void updateMarks();
@@ -116,20 +116,20 @@ namespace GUI
         void setAuthToken(QString token);
 
     signals:
-        void marksUpdated(CHandlePtr<common::DataMarks> );
-        void availableChannelsUpdated(CHandlePtr<common::Channels> );
-        void subscribedChannelsUpdated(CHandlePtr<common::Channels> );
+        void marksUpdated(QSharedPointer<DataMarks> );
+        void availableChannelsUpdated(QSharedPointer<Channels> );
+        void subscribedChannelsUpdated(QSharedPointer<Channels> );
         void subscribedChannel();
         void unsubscribedChannel();
         void markApplied(int status);
 
     private slots:
         void onApplyMarkQueryResponseReceived(QString status,QString status_description);
-        void onAvailableChannelsListQueryResponseReceived(CHandlePtr<common::Channels>& channels);
-        void onRSSFeedQueryResponseReceived(CHandlePtr<common::DataMarks>& marks);
+        void onAvailableChannelsListQueryResponseReceived(QSharedPointer<Channels>& channels);
+        void onRSSFeedQueryResponseReceived(QSharedPointer<DataMarks>& marks);
         void onSubscribeChannelQueryResponseReceived(QString status,QString status_description);
         void onUnsubscribeChannelQueryResponseReceived(QString status,QString status_description);
-        void onSubscribedChannelsListQueryResponseReceived(CHandlePtr<common::Channels>& channels);
+        void onSubscribedChannelsListQueryResponseReceived(QSharedPointer<Channels>& channels);
         void onLoginQueryResponseReceived(QString status, QString auth_token,QString status_description);
 
     private:

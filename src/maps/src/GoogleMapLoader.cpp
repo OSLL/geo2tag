@@ -85,7 +85,7 @@ namespace maps
         return "0x0000FF";
     }
 
-    std::string GoogleMapLoader::preprocessQuery(double latitude, double longitude, short size, int width, int height, const common::DataMarks& marks)
+    std::string GoogleMapLoader::preprocessQuery(double latitude, double longitude, short size, int width, int height, const DataMarks& marks)
     {
         m_data.clear();
 
@@ -98,9 +98,9 @@ namespace maps
         qDebug() << "process map " << marks.size();
         for(size_t i=0; i<marks.size(); i++)
         {
-            CHandlePtr<common::DataMark> mark = marks[i];
+            QSharedPointer<DataMark> mark = marks[i];
             if(mark->getDescription()!="" /*&& 
-               (mark->getChannel()->getRadius()*100) >  common::DataMark::getDistance(clatitude, clongitude,mark->getLatitude(), mark->getLongitude())*/)
+               (mark->getChannel()->getRadius()*100) >  DataMark::getDistance(clatitude, clongitude,mark->getLatitude(), mark->getLongitude())*/)
                 s << "&markers=color:"<< getColor(marks[i]->getLabel()[0]) <<"|label:" <<
                         marks[i]->getLabel()[0] << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude();
         }
@@ -139,7 +139,7 @@ namespace maps
         return common::Picture(QImage::fromData(byteArray));//PngPicture(m_data);
     }
 
-    common::Picture GoogleMapLoader::getMapWithMarks(double latitude, double longitude, short size, int width, int height, const common::DataMarks& marks)
+    common::Picture GoogleMapLoader::getMapWithMarks(double latitude, double longitude, short size, int width, int height, const DataMarks& marks)
     {
         if (size > 18)
         {

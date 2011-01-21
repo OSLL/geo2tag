@@ -52,11 +52,11 @@
 
 namespace GUI
 {
-    OnLineInformation::OnLineInformation(): m_users(makeHandle(new std::vector<CHandlePtr<common::User> >()))
+    OnLineInformation::OnLineInformation(): m_users(QSharedPointer<Users>())
     {
-        m_marks = makeHandle(new common::DataMarks());
-        m_availableChannels = makeHandle(new common::Channels());
-        m_subscribedChannels = makeHandle(new common::Channels());
+        m_marks = QSharedPointer<DataMarks>();
+        m_availableChannels = QSharedPointer<Channels>();
+        m_subscribedChannels = QSharedPointer<Channels>();
 
         applyMarkQuery = new ApplyMarkQuery(this);
         availableChannelsListQuery = new AvailableChannelsListQuery(this);
@@ -70,16 +70,16 @@ namespace GUI
 
         connect(applyMarkQuery, SIGNAL(responseReceived(QString,QString)),
                 this, SLOT(onApplyMarkQueryResponseReceived(QString,QString)));
-        connect(availableChannelsListQuery, SIGNAL(responseReceived(CHandlePtr<common::Channels>&)),
-                this, SLOT(onAvailableChannelsListQueryResponseReceived(CHandlePtr<common::Channels>&)));
-        connect(rssFeedQuery, SIGNAL(responseReceived(CHandlePtr<common::DataMarks>&)),
-                this, SLOT(onRSSFeedQueryResponseReceived(CHandlePtr<common::DataMarks>&)));
+        connect(availableChannelsListQuery, SIGNAL(responseReceived(QSharedPointer<Channels>&)),
+                this, SLOT(onAvailableChannelsListQueryResponseReceived(QSharedPointer<Channels>&)));
+        connect(rssFeedQuery, SIGNAL(responseReceived(QSharedPointer<DataMarks>&)),
+                this, SLOT(onRSSFeedQueryResponseReceived(QSharedPointer<DataMarks>&)));
         connect(subscribeChannelQuery, SIGNAL(responseReceived(QString,QString)),
                 this, SLOT(onSubscribeChannelQueryResponseReceived(QString,QString)));
         connect(unsubscribeChannelQuery, SIGNAL(responseReceived(QString,QString)),
                 this, SLOT(onUnsubscribeChannelQueryResponseReceived(QString,QString)));
-        connect(subscribedChannelsListQuery, SIGNAL(responseReceived(CHandlePtr<common::Channels>&)),
-                this, SLOT(onSubscribedChannelsListQueryResponseReceived(CHandlePtr<common::Channels>&)));
+        connect(subscribedChannelsListQuery, SIGNAL(responseReceived(QSharedPointer<Channels>&)),
+                this, SLOT(onSubscribedChannelsListQueryResponseReceived(QSharedPointer<Channels>&)));
         connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateAvailableChannels()));
         connect(loginQuery, SIGNAL(responseReceived(QString,QString,QString)),
                 this, SLOT(onLoginQueryResponseReceived(QString,QString,QString)));
@@ -97,33 +97,33 @@ namespace GUI
         return onLineInformation;
     }
 
-    CHandlePtr<common::DataMarks> OnLineInformation::getMarks() const
+    QSharedPointer<DataMarks> OnLineInformation::getMarks() const
     {
         return m_marks;
     }
 
-    CHandlePtr<common::Channels> OnLineInformation::getAvailableChannels() const
+    QSharedPointer<Channels> OnLineInformation::getAvailableChannels() const
     {
         return m_availableChannels;
     }
 
-    CHandlePtr<common::Channels> OnLineInformation::getSubscribedChannels() const
+    QSharedPointer<Channels> OnLineInformation::getSubscribedChannels() const
     {
         return m_subscribedChannels;
     }
 
-    CHandlePtr<common::User> OnLineInformation::getUser() const
+    QSharedPointer<User> OnLineInformation::getUser() const
     {
         return m_user;
     }
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > OnLineInformation::getUsers() const
+    QSharedPointer<Users> OnLineInformation::getUsers() const
     {
         return m_users;
     }
 
-    CHandlePtr<common::Channel> OnLineInformation::findChannel(const std::string& channel) const
+    QSharedPointer<Channel> OnLineInformation::findChannel(const QString& channel) const
     {
-        CHandlePtr<common::Channel> empty;
+        QSharedPointer<Channel> empty;
 
         for (int i = 0; i < m_availableChannels->size(); i++)
         {
@@ -137,10 +137,10 @@ namespace GUI
     {
         if (m_auth_token != QString(""))
         {
-            rssFeedQuery->setQuery(m_auth_token,
+            rssFeedQuery->setQuery(m_user,
                                    common::GpsInfo::getInstance().getLatitude(),
                                    common::GpsInfo::getInstance().getLongitude(),
-                                   DEFAULT_RADIUS);
+				   double(DEFAULT_RADIUS));
             rssFeedQuery->doRequest();
         }
     }
@@ -152,7 +152,7 @@ namespace GUI
             availableChannelsListQuery->setQuery(m_auth_token,
                                                  common::GpsInfo::getInstance().getLatitude(),
                                                  common::GpsInfo::getInstance().getLongitude(),
-                                                 DEFAULT_RADIUS);
+                                                 double(DEFAULT_RADIUS));
             availableChannelsListQuery->doRequest();
         }
     }
@@ -228,12 +228,12 @@ namespace GUI
     }
 
     void OnLineInformation::onAvailableChannelsListQueryResponseReceived
-            (CHandlePtr<common::Channels> &channels)
+            (QSharedPointer<Channels> &channels)
     {
         m_availableChannels->clear();
         for (size_t i = 0; i < channels->size(); i++)
         {
-            CHandlePtr<common::Channel> channel = (*channels)[i];
+            QSharedPointer<Channel> channel = (*channels)[i];
             m_availableChannels->push_back(channel);
             channel->setDisplayed(true);
         }
@@ -246,12 +246,12 @@ namespace GUI
     }
 
     void OnLineInformation::onRSSFeedQueryResponseReceived
-            (CHandlePtr<common::DataMarks> &marks)
+            (QSharedPointer<DataMarks> &marks)
     {
         m_marks->clear();
         for(size_t i=0; i<marks->size(); ++i)
         {
-          CHandlePtr<common::DataMark> mark = (*marks)[i];
+          QSharedPointer<DataMark> mark = (*marks)[i];
           m_marks->push_back(mark);
         }
 
@@ -279,12 +279,12 @@ namespace GUI
     }
 
     void OnLineInformation::onSubscribedChannelsListQueryResponseReceived
-            (CHandlePtr<common::Channels> &channels)
+            (QSharedPointer<Channels> &channels)
     {
         m_subscribedChannels->clear();
         for (size_t i = 0; i < channels->size(); i++)
         {
-            CHandlePtr<common::Channel> channel = (*channels)[i];
+            QSharedPointer<Channel> channel = (*channels)[i];
             m_subscribedChannels->push_back(channel);
         }
         emit subscribedChannelsUpdated(m_subscribedChannels);

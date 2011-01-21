@@ -123,7 +123,7 @@ namespace GUI
             qDebug() << "Gotten response (json): " << jsonResponse;
             std::stringstream jsonStream(jsonResponse.toStdString());
             ChannelListResponseJSON channelList(jsonStream);
-            CHandlePtr<common::Channels> channels = channelList.getChannels();
+            QSharedPointer<Channels> channels = channelList.getChannels();
             emit responseReceived(channels);
         }
     }

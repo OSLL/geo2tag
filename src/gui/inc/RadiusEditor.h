@@ -39,10 +39,10 @@ namespace GUI
     class RadiusEditor: public QDialog
     {
       Q_OBJECT;
-      CHandlePtr<common::Channel> m_channel;
+      QSharedPointer<Channel> m_channel;
       QSpinBox *m_value;
     public:
-      RadiusEditor(QWidget *parent, CHandlePtr<common::Channel> channel);
+      RadiusEditor(QWidget *parent, QSharedPointer<Channel> channel);
     public slots:
       virtual void accept();
     };

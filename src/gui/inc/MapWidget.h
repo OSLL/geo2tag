@@ -52,6 +52,7 @@
 #include <QtCore/QTimer>
 #include "MapLoader.h"
 #include "OnLineInformation.h"
+#include "SlippyMap.h"
 
 namespace GUI
 {

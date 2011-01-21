@@ -28,21 +28,21 @@ std::string formatCoord(double coord)
     return strm.str();
 }
 
-bool comp(CHandlePtr<common::DataMark> x1,CHandlePtr<common::DataMark> x2){return x1->getTime() < x2->getTime();}
+bool comp(QSharedPointer<DataMark> x1,QSharedPointer<DataMark> x2){return x1->getTime() < x2->getTime();}
 
 MarksModel::MarksModel(const std::string &token, const WString &channel, WObject *parent)
     : WAbstractTableModel(parent)
 {
     m_token = token;
-    CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().getMarks();
-    m_marks=makeHandle(new common::DataMarks());
+    QSharedPointer<DataMarks> marks = common::DbSession::getInstance().getMarks();
+    m_marks=makeHandle(new DataMarks());
     m_marks->clear();
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
-    CHandlePtr<common::Channels> channels;
+    QSharedPointer<std::vector<QSharedPointer<common::User> > > users=common::DbSession::getInstance().getUsers();
+    QSharedPointer<Channels> channels;
 
     for (int i = 0; i < users->size(); i++)
     {
-        CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+        QSharedPointer<loader::User> user = users->at(i).dynamicCast<loader::User>();
         WString token = WString(user->getToken());
         if (token == WString(m_token))
         {
@@ -133,7 +133,7 @@ boost::any MarksModel::headerData(int section,
         return "url";
 }
 
-CHandlePtr<common::DataMarks> MarksModel::getMarks() const
+QSharedPointer<DataMarks> MarksModel::getMarks() const
 {
     return m_marks;
 }
@@ -149,14 +149,14 @@ void MarksModel::update()
 {
     int curSize = m_marks->size();
 
-    CHandlePtr<common::DataMarks> marks = common::DbSession::getInstance().getMarks();
+    QSharedPointer<DataMarks> marks = common::DbSession::getInstance().getMarks();
     m_marks->clear();
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
-    CHandlePtr<common::Channels> channels;
+    QSharedPointer<std::vector<QSharedPointer<common::User> > > users=common::DbSession::getInstance().getUsers();
+    QSharedPointer<Channels> channels;
 
     for (int i = 0; i < users->size(); i++)
     {
-        CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+        QSharedPointer<loader::User> user = users->at(i).dynamicCast<loader::User>();
         WString token = WString(user->getToken());
         if (token == WString(m_token))
         {

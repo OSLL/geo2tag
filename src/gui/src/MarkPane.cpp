@@ -78,7 +78,7 @@ namespace GUI
         //TODO:: here's image dialog, please
         // QMessageBox::information(this,"MarkImage","IIMAGE DBG IMAGE DBG IMAGE DBG IMAGE DBG MAGE DBG ");
         // We are looking for real index of selected mark ( we store all marks and show only for current channel)
-        CHandlePtr<common::DataMarks> marks = OnLineInformation::getInstance().getMarks();
+        QSharedPointer<DataMarks> marks = OnLineInformation::getInstance().getMarks();
         size_t c=0,i=0;
         for(; i<marks->size(); i++)
         {
@@ -94,7 +94,7 @@ namespace GUI
     }
 
 
-    void MarkPane::refresh(CHandlePtr<common::Channel> channel)
+    void MarkPane::refresh(QSharedPointer<Channel> channel)
     {
       qDebug() << "refresh marks view";
       qobject_cast<ListModel*>((m_list)->model())->layoutUpdate(channel);

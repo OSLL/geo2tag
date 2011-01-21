@@ -8,17 +8,27 @@
 #include "Handle.h"
 #include <sstream>
 
+#include "SubscribedChannelsListQuery.h"
+#include "AvailableChannelsListQuery.h"
+#include "SubscribeChannelQuery.h"
+#include "UnsubscribeChannelQuery.h"
+
 using namespace Wt;
 
 class ChannelsModel : public WAbstractTableModel
 {
+	SubscribedChannelsListQuery subscribedQuery;
+	AvailableChannelsListQuery availableQuery;
+	SubscribeChannelQuery subscribeQuery;
+	UnsubscribeChannelQuery unsubscribeQuery;
 
-    std::string m_token;
-    CHandlePtr<common::Channels> m_subscribedChannels;
-    CHandlePtr<common::Channels> m_availableChannels;
+	QSharedPointer<User> m_user;
+//    std::string m_token;
+    QSharedPointer<Channels> m_subscribedChannels;
+    QSharedPointer<Channels> m_availableChannels;
 
 public:
-    ChannelsModel(const std::string &token, WObject *parent);
+    ChannelsModel(const QSharedPointer<User> user, WObject *parent);
     virtual int columnCount(const WModelIndex & parent = WModelIndex()) const;
     virtual int rowCount(const WModelIndex & parent = WModelIndex()) const;
     virtual boost::any data(const WModelIndex & index,
@@ -28,9 +38,9 @@ public:
                                   int role = DisplayRole) const;
     WFlags<ItemFlag> flags(const WModelIndex &index) const;
 
-    CHandlePtr<common::Channels> getAvailableChannels() const;
+    QSharedPointer<Channels> getAvailableChannels() const;
     virtual bool setData(const WModelIndex &index, const boost::any &value, int role = EditRole);
-//    CHandlePtr<common::Channels> getSubscribedChannels() const;          
+//    QSharedPointer<Channels> getSubscribedChannels() const;          
     void update();
 
     /* signals */

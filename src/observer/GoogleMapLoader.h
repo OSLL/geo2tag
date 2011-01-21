@@ -31,13 +31,13 @@ namespace maps
 
     virtual common::Picture getMap(double latitude, double longitude, short size, int width, int height);
     
-    virtual common::Picture getMapWithMarks(double latitude, double longitude, short size, int width, int height, common::DataMarks marks);
+    virtual common::Picture getMapWithMarks(double latitude, double longitude, short size, int width, int height, DataMarks marks);
 
     virtual ~GoogleMapLoader();
 
   private: 
    
-    std::string preprocessQuery(double latitude, double longitude, short size, int width, int height, common::DataMarks marks = common::DataMarks());
+    std::string preprocessQuery(double latitude, double longitude, short size, int width, int height, DataMarks marks = DataMarks());
     /*!
      * \brief routine for writing data from stream
      */

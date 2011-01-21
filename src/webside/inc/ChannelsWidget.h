@@ -8,20 +8,23 @@
 #include <Wt/WTableView>
 #include "Channel.h"
 #include "ChannelsModel.h"
+#include <QSharedPointer>
+#include "User.h"
 using namespace Wt;
 
 class ChannelsWidget : public WContainerWidget
 {
-    std::string m_token;
+	QSharedPointer<User> m_user;
+//    std::string m_token;
     WText *channelsText;
     WTableView *channelsTable;
     ChannelsModel *channelsModel;
 
-//    CHandlePtr<common::Channels> m_subscribedChannels;
-//    CHandlePtr<common::Channels> m_availableChannels;
+//    QSharedPointer<Channels> m_subscribedChannels;
+//    QSharedPointer<Channels> m_availableChannels;
 
 public:
-    ChannelsWidget(const std::string &token, WContainerWidget *parent = 0);
+    ChannelsWidget(const QSharedPointer<User> user, WContainerWidget *parent = 0);
     void updateChannelsModel();
 
     /* signals */

@@ -51,18 +51,18 @@
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 
-SubscribeChannelRequesJSON::SubscribeChannelRequesJSON(const QSharedPointer<Channel> &channel, const QSharedPointer<User> &user)
+SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel, const QSharedPointer<User> &user)
 {
     m_usersContainer->push_back(user);
     m_channelsContainer->push_back(channel);
 }
 
-SubscribeChannelRequesJSON::~SubscribeChannelRequesJSON()
+SubscribeChannelRequestJSON::~SubscribeChannelRequestJSON()
 {
 
 }
 
-void SubscribeChannelRequesJSON::parseJson(const QByteArray &data)
+void SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
 {
     clearContainers();
 
@@ -84,7 +84,7 @@ void SubscribeChannelRequesJSON::parseJson(const QByteArray &data)
     m_usersContainer->push_back(dummyUser);
 }
 
-QByteArray SubscribeChannelRequesJSON::getJson() const
+QByteArray SubscribeChannelRequestJSON::getJson() const
 {
     QJson::Serializer serializer;
     QVariantMap request;

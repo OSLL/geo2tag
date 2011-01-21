@@ -61,11 +61,11 @@ UsersWidget::UsersWidget(const std::string &token,WContainerWidget *parent)
 void UsersWidget::updateUsersBox()
 {
     usersBox->clear();
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > users =
+    QSharedPointer<std::vector<QSharedPointer<common::User> > > users =
             common::DbSession::getInstance().getUsers();
     for (int i = 0; i < users->size(); i++)
     {
-        CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+        QSharedPointer<loader::User> user = users->at(i).dynamicCast<loader::User>();
         WString login = WString(user->getLogin());
         usersBox->addItem(login);
     }
@@ -79,7 +79,7 @@ void UsersWidget::addClicked()
 
 void UsersWidget::removeClicked()
 {
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > users =
+    QSharedPointer<std::vector<QSharedPointer<common::User> > > users =
             common::DbSession::getInstance().getUsers();
 
     std::string userToDelete("");
@@ -95,7 +95,7 @@ void UsersWidget::removeClicked()
 
     for (int i = 0; i < users->size(); i++)
     {
-        CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+        QSharedPointer<loader::User> user = users->at(i).dynamicCast<loader::User>();
 
         std::string login = user->getLogin();
         if (userToDelete == login)
@@ -113,7 +113,7 @@ void UsersWidget::removeClicked()
 
 void UsersWidget::addUserClicked()
 {
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > users=
+    QSharedPointer<std::vector<QSharedPointer<common::User> > > users=
             common::DbSession::getInstance().getUsers();
 
     if (password->text() != password2->text())
@@ -126,7 +126,7 @@ void UsersWidget::addUserClicked()
     std::string m_password = password->text().toUTF8();
     std::string m_token;
 
-    for(std::vector<CHandlePtr<common::User> >::iterator i=users->begin();i!=users->end();i++)
+    for(std::vector<QSharedPointer<common::User> >::iterator i=users->begin();i!=users->end();i++)
     {
         if((*i).dynamicCast<loader::User>()->getLogin()==m_login)
         {
@@ -136,10 +136,10 @@ void UsersWidget::addUserClicked()
     }
 
     std::ostringstream s(""), token("");
-    s << "token" << CTime::now()
+    s << "token" << QDateTime::now()
             << m_login
             << m_password
-            << CTime::now();
+            << QDateTime::now();
     CCrc32 crc;
     unsigned long crc32 = crc.add(s.str().c_str(), s.str().size());
     token << crc32 << m_login;
@@ -147,7 +147,7 @@ void UsersWidget::addUserClicked()
     BitTools::reverse(&crc32, sizeof(crc32));
     token << crc32;
     m_token = token.str();
-    CHandlePtr<loader::User> user =
+    QSharedPointer<loader::User> user =
             makeHandle(new loader::User(m_login, m_password, 0, m_token));
 
     try

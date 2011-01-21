@@ -4,7 +4,7 @@ TARGET = ../lib/maps
 
 target.path = /usr/lib
 INSTALLS += target
-include(../config.pri)
+include(../../config.pri)
 
 QT += network
 

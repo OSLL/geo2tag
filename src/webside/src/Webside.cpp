@@ -41,8 +41,8 @@ Webside::Webside(WContainerWidget *parent)
     loginWidget->loginSuccessful.connect(SLOT(this, Webside::onLoginSuccess));
 }
 
-void Webside::onLoginSuccess(std::string token)
+void Webside::onLoginSuccess(QSharedPointer<User> user)
 {
-    mainWidget = new Sketch(token, stackedWidget);
+    mainWidget = new Sketch(user stackedWidget);
     stackedWidget->setCurrentWidget(mainWidget);
 }

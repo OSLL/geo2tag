@@ -71,7 +71,7 @@ namespace GUI
   
   public slots:
 
-    void refresh(CHandlePtr<common::Channel> channel);
+    void refresh(QSharedPointer<Channel> channel);
     
     void updateCurrentChannelRadius();
 

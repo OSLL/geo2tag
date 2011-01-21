@@ -11,6 +11,7 @@ INCLUDEPATH += . inc \
                  /usr/include/jqson/ \
                  ../common/inc/ \
                  ../maps/inc \
+		 ../http_requests/inc \
                  ../common/common/inc \
                  ../common/thread/inc \
                  ../common/exception/inc \
@@ -43,14 +44,10 @@ HEADERS += inc/ApplyMarkQuery.h \
            inc/SubscribeChannelQuery.h \
            inc/SubscribedChannelsListQuery.h \
            inc/UnsubscribeChannelQuery.h
-SOURCES += src/ApplyMarkQuery.cpp \
-           src/AvailableChannelsListQuery.cpp \
-           src/ChannelListJSON.cpp \
-           src/ChannelModel.cpp \
+SOURCES += src/ChannelModel.cpp \
            src/ChannelPane.cpp \
            src/ListModel.cpp \
            src/ListView.cpp \
-           src/LoginQuery.cpp \
            src/main.cpp \
            src/MainWindow.cpp \
            src/MapPane.cpp \
@@ -63,17 +60,17 @@ SOURCES += src/ApplyMarkQuery.cpp \
            src/OnLineInformation.cpp \
            src/OptionsPane.cpp \
            src/RadiusEditor.cpp \
-           src/RSSFeedJSON.cpp \
-           src/RSSFeedQuery.cpp \
-           src/UnsubscribeChannelQuery.cpp \
-           src/SubscribeChannelJSON.cpp \
-           src/SubscribeChannelQuery.cpp \
-           src/SubscribedChannelsListQuery.cpp \
            src/CentralWidget.cpp
-
+#           src/RSSFeedJSON.cpp \
+#           src/RSSFeedQuery.cpp \
+#           src/UnsubscribeChannelQuery.cpp \
+#           src/SubscribeChannelJSON.cpp \
+#           src/SubscribeChannelQuery.cpp \
+#           src/SubscribedChannelsListQuery.cpp \
+#
 FORMS  +=  src/LoginForm.ui
 
-LIBS    +=  -lcommon  -lmaps -lqjson
+LIBS    +=  -lcommon  -lmaps -lqjson -lwikigpsHttp -lwikigpsJson
 
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
@@ -82,4 +79,4 @@ linux: {
     DEFINES += DESKTOP_STYLE
 }
 
-QT += core gui webkit phonon network
+QT += core gui webkit network

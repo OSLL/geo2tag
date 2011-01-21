@@ -9,10 +9,10 @@
 #include "query.h"
 #include "server.h"
 
-class TestChannel: public common::Channel
+class TestChannel: public Channel
 {
 public: 
-  TestChannel():Channel("Test channel","test","",CHandlePtr<common::DataMarks>())
+  TestChannel():Channel("Test channel","test","",QSharedPointer<DataMarks>())
   {
   }
 };
@@ -20,7 +20,7 @@ public:
 int main()
 {
 /* 
-  CHandlePtr<common::Channels> a = makeHandle(new common::Channels());
+  QSharedPointer<Channels> a = makeHandle(new Channels());
   a->push_back(makeHandle(new TestChannel()));
   a->push_back(makeHandle(new TestChannel()));
   a->push_back(makeHandle(new TestChannel()));

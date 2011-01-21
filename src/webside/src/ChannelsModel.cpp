@@ -9,22 +9,22 @@
 #include "defines.h"
 #include "UserInternal.h"
 
-ChannelsModel::ChannelsModel(const std::string &token, WObject *parent)
+ChannelsModel::ChannelsModel(const QSharedPointer<User> user, WObject *parent)
     : WAbstractTableModel(parent)
 {
-    m_token = token;
-    m_availableChannels = common::DbSession::getInstance().getChannels();
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
+    m_user=user;
+/*    m_availableChannels = common::DbSession::getInstance().getChannels();
+    QSharedPointer<std::vector<QSharedPointer<common::User> > > users=common::DbSession::getInstance().getUsers();
     for (int i = 0; i < users->size(); i++)
     {
-        CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+        QSharedPointer<loader::User> user = users->at(i).dynamicCast<loader::User>();
 //        WString token = WString(user->getToken());
         if (m_token == user->getToken())
         {
             m_subscribedChannels = user->getSubscribedChannels();
             break;
         }
-    }
+    }*/
 }
 
 
@@ -93,7 +93,7 @@ boost::any ChannelsModel::headerData(int section,
         return "subscription";
 }
 
-CHandlePtr<common::Channels> ChannelsModel::getAvailableChannels() const
+QSharedPointer<Channels> ChannelsModel::getAvailableChannels() const
 {
     return m_availableChannels;
 }
@@ -115,10 +115,10 @@ void ChannelsModel::update()
     m_availableChannels->clear();
     m_subscribedChannels->clear();
     m_availableChannels = common::DbSession::getInstance().getChannels();
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > users=common::DbSession::getInstance().getUsers();
+    QSharedPointer<std::vector<QSharedPointer<common::User> > > users=common::DbSession::getInstance().getUsers();
     for (int i = 0; i < users->size(); i++)
     {
-        CHandlePtr<loader::User> user = users->at(i).dynamicCast<loader::User>();
+        QSharedPointer<loader::User> user = users->at(i).dynamicCast<loader::User>();
 //        WString token = WString(user->getToken());
         if (m_token == user->getToken())
         {
@@ -137,8 +137,8 @@ void ChannelsModel::update()
 bool ChannelsModel::setData(const WModelIndex &index, const boost::any &value, int role)
 {
 	if (index.column() == 3) {
-	        CHandlePtr<common::User> du;
-        	CHandlePtr<common::Channel> ch;
+	        QSharedPointer<common::User> du;
+        	QSharedPointer<Channel> ch;
 		ch = m_availableChannels->at(index.row());
 		du = common::DbSession::getInstance().getTokensMap().find(std::string(m_token))->second;
 		bool subscribed=false;

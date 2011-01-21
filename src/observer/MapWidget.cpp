@@ -17,7 +17,7 @@ MapWidget::MapWidget(QWidget *parent)
   m_B=0.;
   m_L=0.;
   m_moving=false;
-  m_marks=makeHandle(new common::DataMarks);
+  m_marks=makeHandle(new DataMarks);
 }
 
 void MapWidget::paintEvent(QPaintEvent *pe)
@@ -32,7 +32,7 @@ void MapWidget::paintEvent(QPaintEvent *pe)
 //	update(rect());
 }
 
-void MapWidget::updated(CHandlePtr<common::DataMarks>& marks)
+void MapWidget::updated(QSharedPointer<DataMarks>& marks)
 {
  //connect this to RSSFeed slot with the same parametres
   m_marks=marks;

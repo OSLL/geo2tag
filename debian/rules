@@ -73,17 +73,16 @@ install: build
 		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp $(BUILDDIR)/service/wikigps-service.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp $(BUILDDIR)/service/pg_hba.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp -l $(BUILDDIR)/lib/libfcgiio* $(CURDIR)/debian/tmp/usr/lib; \
-		cp -l $(BUILDDIR)/lib/libjson* $(CURDIR)/debian/tmp/usr/lib; \
                 cp $(BUILDDIR)/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
         	cp $(BUILDDIR)tracker/tracker_linux $(CURDIR)/debian/tmp/etc/init.d/tracker; \
 	fi;
-	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
-        cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; \
-	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon
+	cp -l $(BUILDDIR)/lib/lib* $(CURDIR)/debian/tmp/usr/lib; 
+#	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps;
+#	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; 
+#	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon
 	cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop
 
 	dh_install -s

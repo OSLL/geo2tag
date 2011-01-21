@@ -48,94 +48,58 @@
 namespace GUI
 {
     SubscribeChannelQuery::SubscribeChannelQuery(QObject *parent)
-        : QObject(parent)
+        : DefaultQuery(parent)
     {
-        jsonQuery = "";
-        httpQuery = "";
-        manager = new QNetworkAccessManager(this);
-
-        qDebug() << "Free SubscribeChannelQuery created";
     }
 
-    SubscribeChannelQuery::SubscribeChannelQuery(QString auth_token, QString channel, QObject *parent)
-                : QObject(parent)
+    SubscribeChannelQuery::SubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent)
+                : DefaultQuery(parent),m_user(user),m_channel(channel)
     {
-        manager = new QNetworkAccessManager(this);
-        setQuery(auth_token, channel);
-        qDebug() << "SubscribeChannelQuery created:\n"
-                 << httpQuery << jsonQuery;
     }
 
-    void SubscribeChannelQuery::setQuery(QString auth_token, QString channel)
+    void SubscribeChannelQuery::setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel)
     {
-        jsonQuery = SubscribeChannelRequesJSON::convertToJSON(auth_token, channel);
-        httpQuery = SUBSCRIBE_HTTP_URL;
+	m_user=user;
+	m_channel=channel;
     }
 
     SubscribeChannelQuery::~SubscribeChannelQuery()
     {
-
     }
 
-    const QString& SubscribeChannelQuery::getHttpQuery()
+    QString SubscribeChannelQuery::getUrl() const
     {
-        return httpQuery;
+	return SUBSCRIBE_HTTP_URL;
     }
 
-    const QString& SubscribeChannelQuery::getJsonQuery()
+    QByteArray SubscribeChannelQuery::getRequestBody() const
     {
-        return jsonQuery;
+        SubscribeChannelRequestJSON request(m_channel,m_user);
+	return request.getJson();
     }
 
-    void SubscribeChannelQuery::doRequest()
+    const QString& SubscribeChannelQuery::getStatus() const
     {
-        if (httpQuery == "" || jsonQuery == "")
-        {
-            qDebug() << "SubscribeChannelQuery: can't do request because query isn't set";
-            return;
-        }
-
-        QNetworkRequest request;
-        request.setUrl(QUrl(httpQuery));
-
-        QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
-
-        QNetworkReply *reply = manager->post(request, data);
-
-        connect(manager, SIGNAL(finished(QNetworkReply*)),
-                this, SLOT(onManagerFinished(QNetworkReply*)));
-        connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-                this, SLOT(onManagerSslErrors()));
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(onReplyError(QNetworkReply::NetworkError)));
-
-        qDebug() << "SubscribeChannelQuery did request:\n"
-                 << httpQuery << jsonQuery;
+	return m_status;
     }
 
-    void SubscribeChannelQuery::onManagerFinished(QNetworkReply *reply)
+    void SubscribeChannelQuery::processReply(QNetworkReply *reply)
     {
-        QByteArray jsonResponseByteArray = reply->readAll();
-
-        if (jsonResponseByteArray.size() > 0)
-        {
-            QString jsonResponse(jsonResponseByteArray);
-            qDebug() << "Gotten response (json): " << jsonResponse;
-            QString status = SubscribeChannelRequesJSON::convertToSatus(jsonResponse);
-            QString status_description = SubscribeChannelRequesJSON::convertToSatusDescription(jsonResponse); 
-            emit responseReceived(status,status_description);
-        }
+	DefaultResponseJSON response;
+	response.parseJson(reply->readAll());
+	if(response.getStatus() == "Ok"){
+		m_status="Ok";
+		emit responseReceived();
+	}
+	else {
+		emit errorOccured(response.getStatusMessage());
+	}
     }
 
-    void SubscribeChannelQuery::onReplyError(QNetworkReply::NetworkError error)
+    SubscribeChannelQuery::~SubscribeChannelQuery()
     {
-        qDebug("Network error: %d \n", error);
     }
 
-    void SubscribeChannelQuery::onManagerSslErrors()
-    {
-        qDebug("ssl error \n");
-    }
 } // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

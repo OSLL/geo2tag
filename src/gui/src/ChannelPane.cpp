@@ -61,9 +61,9 @@ namespace GUI
       subscribeButton = new QPushButton(tr("Subscribe/unsubscribe"), this);
       tagsButton = new QPushButton(tr("Channel's tags"), this);
 
-      connect(&OnLineInformation::getInstance(), SIGNAL(availableChannelsUpdated(CHandlePtr<common::Channels>)),
+      connect(&OnLineInformation::getInstance(), SIGNAL(availableChannelsUpdated(QSharedPointer<Channels>)),
               this, SLOT(onChannelsUpdated()));
-      connect(&OnLineInformation::getInstance(), SIGNAL(subscribedChannelsUpdated(CHandlePtr<common::Channels>)),
+      connect(&OnLineInformation::getInstance(), SIGNAL(subscribedChannelsUpdated(QSharedPointer<Channels>)),
               this, SLOT(onChannelsUpdated()));
       connect(subscribeButton, SIGNAL(clicked()), this, SLOT(onSubscribeButtonClicked()));
 

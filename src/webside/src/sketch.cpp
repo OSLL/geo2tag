@@ -11,13 +11,13 @@
  * constructor so it is typically also an argument for your custom
  * application constructor.
 */
-Sketch::Sketch(const std::string &token, WContainerWidget *parent)
+Sketch::Sketch(QSharedPoitner<User> user, WContainerWidget *parent)
     : WContainerWidget(parent)
 {
     //setTitle("Geo2tag"); // application title
     // common::DbSession::getInstance();
 
-    m_token = token;
+    m_user = user;
     menuContainer = new WContainerWidget(this);
     stackedWidget = new WStackedWidget(this);
     prefButton = new WPushButton("Preferences", menuContainer);
@@ -25,11 +25,11 @@ Sketch::Sketch(const std::string &token, WContainerWidget *parent)
     marksButton = new WPushButton("Marks", menuContainer);
     optionsButton = new WPushButton("Options", menuContainer);
     adminButton = new WPushButton("Users management", menuContainer);
-    channelsWidget = new ChannelsWidget(m_token, stackedWidget);
-    marksWidget = new MarksWidget(m_token, stackedWidget);
+    channelsWidget = new ChannelsWidget(m_user, stackedWidget);
+    marksWidget = new MarksWidget(m_user, stackedWidget);
     optionsWidget = new OptionsWidget(stackedWidget);
-    usersWidget = new UsersWidget(m_token,stackedWidget);
-    prefWidget = new PrefWidget(token, stackedWidget);
+    usersWidget = new UsersWidget(m_user,stackedWidget);
+    prefWidget = new PrefWidget(m_user, stackedWidget);
     //WSelectionBox *box = new WSelectionBox(root());
 
     stackedWidget->setCurrentWidget(channelsWidget);

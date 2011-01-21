@@ -42,8 +42,8 @@ namespace GUI
         m_model->setHeaderData(1, Qt::Horizontal, tr("Tag text"));
         m_model->setHeaderData(2, Qt::Horizontal, tr("Author"));
 
-        connect(&OnLineInformation::getInstance(), SIGNAL(marksUpdated(CHandlePtr<common::DataMarks>)),
-                (ListModel*)m_model, SLOT(marksUp(CHandlePtr<common::DataMarks>)));
+        connect(&OnLineInformation::getInstance(), SIGNAL(marksUpdated(QSharedPointer<DataMarks>)),
+                (ListModel*)m_model, SLOT(marksUp(QSharedPointer<DataMarks>)));
 
         setItemDelegate(new MarkTableDelegat(this));
         horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);

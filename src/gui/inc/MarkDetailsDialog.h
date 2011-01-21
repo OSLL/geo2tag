@@ -37,10 +37,10 @@ namespace GUI
 {
   class MarkDetailsDialog: public QDialog
   {
-      CHandlePtr<common::DataMark> m_mark;
+      QSharedPointer<DataMark> m_mark;
 
     public:
-      MarkDetailsDialog(QWidget *parent, CHandlePtr<common::DataMark> mark);
+      MarkDetailsDialog(QWidget *parent, QSharedPointer<DataMark> mark);
   };
 }
 

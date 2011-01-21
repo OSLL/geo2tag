@@ -32,15 +32,16 @@
 #define LISTMODEL_H
 
 #include "MarkTableDelegat.h"
+#include <QString>
 namespace GUI
 {
-static std::string m_currentChannelName;
+static QString m_currentChannelName;
 class ListModel : public QStandardItemModel
 {
     Q_OBJECT;
 
-    CHandlePtr<common::DataMarks> m_data;
-    CHandlePtr<common::Channel> m_currentChannel;
+    QSharedPointer<DataMarks> m_data;
+    QSharedPointer<Channel> m_currentChannel;
 
     size_t m_size;
 public:
@@ -51,15 +52,15 @@ public:
     int rowCount(const QModelIndex &/*parent = QModelIndex()*/)const;
     int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const;
 
-    CHandlePtr<common::Channel> getCurrentChannel() const;
+    QSharedPointer<Channel> getCurrentChannel() const;
 
     void setDescription(int row, const std::string& data);
 
     QVariant data(const QModelIndex &index, int role) const;
 
  public slots:
-    void marksUp(CHandlePtr<common::DataMarks> m_marks=CHandlePtr<common::DataMarks>());
-    void layoutUpdate(CHandlePtr<common::Channel> channel = CHandlePtr<common::Channel>());
+    void marksUp(QSharedPointer<DataMarks> m_marks=QSharedPointer<DataMarks>());
+    void layoutUpdate(QSharedPointer<Channel> channel = QSharedPointer<Channel>());
 };
 
 }

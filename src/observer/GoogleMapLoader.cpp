@@ -52,7 +52,7 @@ namespace maps
     return "0x0000FF";
   }
 
-  std::string GoogleMapLoader::preprocessQuery(double latitude, double longitude, short size, int width, int height, common::DataMarks marks)
+  std::string GoogleMapLoader::preprocessQuery(double latitude, double longitude, short size, int width, int height, DataMarks marks)
   {
 	  m_data.clear();
 
@@ -99,7 +99,7 @@ namespace maps
     return common::PngPicture(m_data);
   }
 
-  common::Picture GoogleMapLoader::getMapWithMarks(double latitude, double longitude, short size, int width, int height, common::DataMarks marks)
+  common::Picture GoogleMapLoader::getMapWithMarks(double latitude, double longitude, short size, int width, int height, DataMarks marks)
   {
     std::string s = preprocessQuery(latitude, longitude, size, width, height, marks);           
     std::vector<char> header;

@@ -32,9 +32,9 @@
 
 namespace GUI
 {
-    RadiusEditor::RadiusEditor(QWidget *parent, CHandlePtr<common::Channel> channel):QDialog(parent), m_channel(channel)
+    RadiusEditor::RadiusEditor(QWidget *parent, QSharedPointer<Channel> channel):QDialog(parent), m_channel(channel)
     {
-      setWindowTitle(QString("Editing radius for channel: ") + QString(channel->getName().c_str()));
+      setWindowTitle(QString("Editing radius for channel: ") + QString(channel->getName()));
       QVBoxLayout *vbox = new QVBoxLayout();
       m_value = new QSpinBox();
       m_value->setMinimum(200);

@@ -16,7 +16,7 @@ class Observer : public QDialog
     // last user login
     QString m_lastLogin;
     // dataMarks
-    CHandlePtr<common::DataMarks> m_marks;
+    QSharedPointer<DataMarks> m_marks;
     //optimal scale
     int m_optScale;
     double m_optB;
@@ -28,10 +28,10 @@ public:
     Observer();
 
 signals:
-    void dataMarksGotten(CHandlePtr<common::DataMarks>& marks);
+    void dataMarksGotten(QSharedPointer<DataMarks>& marks);
 public slots:
     void tokenRecieved(QString status,QString auth_token);
-    void updateData(CHandlePtr<common::DataMarks>& marks);
+    void updateData(QSharedPointer<DataMarks>& marks);
     void showAllMarks();
     void buttonPushed();
     void doRequest();

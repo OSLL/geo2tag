@@ -38,12 +38,12 @@ void PrefWidget::onChangeClicked()
     {
         errorText->hide();
 
-        CHandlePtr<std::vector<CHandlePtr<common::User> > > users =
+        QSharedPointer<std::vector<QSharedPointer<common::User> > > users =
                 common::DbSession::getInstance().getUsers();
 
         for (int i = 0; i < users->size(); i++)
         {
-            CHandlePtr<loader::User> user = users->at(i).
+            QSharedPointer<loader::User> user = users->at(i).
                                             dynamicCast<loader::User>();
 
             std::string token = user->getToken();

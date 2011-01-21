@@ -47,95 +47,60 @@
 
 namespace GUI
 {
+
     UnsubscribeChannelQuery::UnsubscribeChannelQuery(QObject *parent)
-        : QObject(parent)
+        : DefaultQuery(parent)
     {
-        jsonQuery = "";
-        httpQuery = "";
-        manager = new QNetworkAccessManager(this);
-
-        qDebug() << "Free UnsubscribeChannelQuery created";
     }
 
-    UnsubscribeChannelQuery::UnsubscribeChannelQuery(QString auth_token, QString channel, QObject *parent)
-                : QObject(parent)
+    UnsubscribeChannelQuery::UnsubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent)
+                : DefaultQuery(parent),m_user(user),m_channel(channel)
     {
-        manager = new QNetworkAccessManager(this);
-        setQuery(auth_token, channel);
-        qDebug() << "UnsubscribeChannelQuery created:\n"
-                 << httpQuery << jsonQuery;
     }
 
-    void UnsubscribeChannelQuery::setQuery(QString auth_token, QString channel)
+    void UnsubscribeChannelQuery::setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel)
     {
-        jsonQuery = SubscribeChannelRequesJSON::convertToJSON(auth_token, channel);
-        httpQuery = UNSUBSCRIBE_HTTP_URL;
+	m_user=user;
+	m_channel=channel;
     }
 
     UnsubscribeChannelQuery::~UnsubscribeChannelQuery()
     {
-
     }
 
-    const QString& UnsubscribeChannelQuery::getHttpQuery()
+    QString UnsubscribeChannelQuery::getUrl() const
     {
-        return httpQuery;
+	return UNSUBSCRIBE_HTTP_URL;
     }
 
-    const QString& UnsubscribeChannelQuery::getJsonQuery()
+    QByteArray UnsubscribeChannelQuery::getRequestBody() const
     {
-        return jsonQuery;
+        SubscribeChannelRequestJSON request(m_channel,m_user);
+	return request.getJson();
     }
 
-    void UnsubscribeChannelQuery::doRequest()
+    const QString& UnsubscribeChannelQuery::getStatus() const
     {
-        if (httpQuery == "" || jsonQuery == "")
-        {
-            qDebug() << "UnsubscribeChannelQuery: can't do request because query isn't set";
-            return;
-        }
-
-        QNetworkRequest request;
-        request.setUrl(QUrl(httpQuery));
-
-        QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
-
-        QNetworkReply *reply = manager->post(request, data);
-
-        connect(manager, SIGNAL(finished(QNetworkReply*)),
-                this, SLOT(onManagerFinished(QNetworkReply*)));
-        connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-                this, SLOT(onManagerSslErrors()));
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(onReplyError(QNetworkReply::NetworkError)));
-
-        qDebug() << "UnsubscribeChannelQuery did request:\n"
-                 << httpQuery << jsonQuery;
+	return m_status;
     }
 
-    void UnsubscribeChannelQuery::onManagerFinished(QNetworkReply *reply)
+    void UnsubscribeChannelQuery::processReply(QNetworkReply *reply)
     {
-        QByteArray jsonResponseByteArray = reply->readAll();
-
-        if (jsonResponseByteArray.size() > 0)
-        {
-            QString jsonResponse(jsonResponseByteArray);
-            qDebug() << "Gotten response (json): " << jsonResponse;
-            QString status = SubscribeChannelRequesJSON::convertToSatus(jsonResponse);
-            QString status_description = SubscribeChannelRequesJSON::convertToSatusDescription(jsonResponse);
-            emit responseReceived(status,status_description);
-        }
+	DefaultResponseJSON response;
+	response.parseJson(reply->readAll());
+	if(response.getStatus() == "Ok"){
+		m_status="Ok";
+		emit responseReceived();
+	}
+	else {
+		emit errorOccured(response.getStatusMessage());
+	}
     }
 
-    void UnsubscribeChannelQuery::onReplyError(QNetworkReply::NetworkError error)
+    UnsubscribeChannelQuery::~UnsubscribeChannelQuery()
     {
-        qDebug("Network error: %d \n", error);
     }
 
-    void UnsubscribeChannelQuery::onManagerSslErrors()
-    {
-        qDebug("ssl error \n");
-    }
 } // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

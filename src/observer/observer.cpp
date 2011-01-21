@@ -22,14 +22,14 @@ Observer::Observer() : QDialog(NULL)
 {
     m_ui.setupUi(this);
     m_lastLogin= "";
-    m_marks=makeHandle(new common::DataMarks);
+    m_marks=makeHandle(new DataMarks);
     loginQuery=new GUI::LoginQuery(this);
     qDebug() << "starting" ;
     rssFeedQuery=new GUI::RSSFeedQuery(this);
-    connect(rssFeedQuery,SIGNAL(responseReceived(CHandlePtr<common::DataMarks>& )),
-           this,SLOT(updateData(CHandlePtr<common::DataMarks>&)));
-    connect(this,SIGNAL(dataMarksGotten(CHandlePtr<common::DataMarks>& )),
-           m_ui.m_mapArea,SLOT(updated(CHandlePtr<common::DataMarks>&)));
+    connect(rssFeedQuery,SIGNAL(responseReceived(QSharedPointer<DataMarks>& )),
+           this,SLOT(updateData(QSharedPointer<DataMarks>&)));
+    connect(this,SIGNAL(dataMarksGotten(QSharedPointer<DataMarks>& )),
+           m_ui.m_mapArea,SLOT(updated(QSharedPointer<DataMarks>&)));
     connect(m_ui.m_updateButton, SIGNAL(clicked()), this, SLOT(doRequest()));
     connect(m_ui.m_scale,SIGNAL(sliderMoved(int)),m_ui.m_mapArea,SLOT(scaleChanged(int)));
     connect(m_ui.m_updateButton, SIGNAL(pressed()), this, SLOT(buttonPushed()));
@@ -38,7 +38,7 @@ Observer::Observer() : QDialog(NULL)
 
 
 
-void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
+void Observer::updateData(QSharedPointer<DataMarks>& marks)
 {
     if (rssFeedQuery){
     qDebug() << "updateData slot";
@@ -51,7 +51,7 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
       //    Count width and height of rect that marks are take place
       //    Find optimal scale in wich all marks shown on a screen
       double maxLat=(*marks)[0]->getLatitude(),minLat=(*marks)[0]->getLatitude(),maxLon=(*marks)[0]->getLongitude(),minLon=(*marks)[0]->getLongitude();
-      for (common::DataMarks::iterator i=marks->begin();i!=marks->end();i++,j++)
+      for (DataMarks::iterator i=marks->begin();i!=marks->end();i++,j++)
       {
         //Finding min and max Latitude and Longitude
         if ((*i)->getLatitude()<minLat) minLat=(*i)->getLatitude();
@@ -66,9 +66,9 @@ void Observer::updateData(CHandlePtr<common::DataMarks>& marks)
       }
       qDebug() << "Lat " << maxLat-minLat << " Lon "<<maxLon-minLon;
       //Count size of rect where all marks can be placed
-      // Because common::DataMark::getDistance return result in meters we need to transform 
-      double height_optimal= common::DataMark::getDistance(maxLat,maxLon,maxLat,minLon)*KILOMETERS2METERS;
-      double width_optimal = common::DataMark::getDistance(maxLat,maxLon,minLat,maxLon)*KILOMETERS2METERS;
+      // Because DataMark::getDistance return result in meters we need to transform 
+      double height_optimal= DataMark::getDistance(maxLat,maxLon,maxLat,minLon)*KILOMETERS2METERS;
+      double width_optimal = DataMark::getDistance(maxLat,maxLon,minLat,maxLon)*KILOMETERS2METERS;
       qDebug() << "height " << height_optimal << " width "<< width_optimal;
       qDebug() << "height " << height() << " width "<< width();
       m_optB=(maxLat+minLat)/2.;

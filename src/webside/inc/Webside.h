@@ -3,7 +3,8 @@
 
 #include <Wt/WStackedWidget>
 #include <Wt/WContainerWidget>
-
+#include <QSharedPointer>
+#include "User.h"
 #include "LoginWidget.h"
 #include "sketch.h"
 
@@ -19,7 +20,7 @@ public:
     Webside(WContainerWidget *parent = 0);
 
     /* slots */
-    void onLoginSuccess(std::string token);
+    void onLoginSuccess(QSharedPointer<User> user);
 };
 
 #endif // WEBSIDE_H

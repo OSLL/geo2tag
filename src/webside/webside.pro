@@ -8,8 +8,9 @@ TARGET = sketch.wt
 DEPENDPATH += . inc src
 INCLUDEPATH += . inc
 QMAKE_CXXFLAGS += -g3
+QT+= sql
 # Wt
-INCLUDEPATH += /usr/local/include/Wt
+INCLUDEPATH += /usr/include/Wt
 LIBS += -lwtfcgi
 
 # Common library
@@ -17,8 +18,9 @@ INCLUDEPATH += ../common/inc \
                ../common/common/inc \
                ../common/thread/inc \
                ../common/exception/inc \
+	       ../json/inc \
                ../common/odbc/inc
-LIBS += -lcommon
+LIBS += -lcommon -lwikigpsJson
 
 # DbSession (from service)
 INCLUDEPATH += ../service/inc
@@ -29,6 +31,12 @@ HEADERS += DbSession.h \
            DataMarkInternal.h \
            UserInternal.h \
            DynamicCastFailure.h \
+	   inc/LoginRequestJSON.h \
+	   inc/LoginResponseJSON.h \
+	   inc/AddNewMarkRequestJSON.h \
+	   inc/RSSFeedJSON.h \
+	   inc/RSSFeedRequestJSON.h \
+	   inc/AddNewMarkResponseJSON.h \
     inc/LoginWidget.h \
     inc/Webside.h \
     inc/UsersWidget.h

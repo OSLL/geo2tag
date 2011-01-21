@@ -1,4 +1,1 @@
 debian/tmp/usr/lib/lib*
-#debian/tmp/usr/lib/libfcgiio.*
-#debian/tmp/usr/lib/libjson.*
-#debian/tmp/usr/lib/libmaps.*

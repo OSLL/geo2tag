@@ -60,6 +60,21 @@ RSSFeedQuery::RSSFeedQuery(QSharedPointer<User> &user,
 {
 }
 
+RSSFeedQuery::RSSFeedQuery(QObject *parent): DefaultQuery(parent)
+{
+}
+
+void RSSFeedQuery::setQuery(QSharedPointer<User> &user,
+                 double latitude,
+                 double longitude,
+                 double radius)
+{
+     m_user=user;
+     m_latitude=latitude;
+     m_longitude=longitude;
+     m_radius=radius;
+}
+
 QString RSSFeedQuery::getUrl() const
 {
     return FEED_HTTP_URL;

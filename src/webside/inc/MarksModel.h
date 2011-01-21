@@ -19,7 +19,7 @@ class MarksModel : public WAbstractTableModel
     double m_longitude;
     double m_radius;
 
-    CHandlePtr<common::DataMarks> m_marks;
+    QSharedPointer<DataMarks> m_marks;
 
 public:
 
@@ -41,7 +41,7 @@ public:
                                   int role = DisplayRole) const;
     WFlags<ItemFlag> flags(const WModelIndex &index) const;
 
-    CHandlePtr<common::DataMarks> getMarks() const;
+    QSharedPointer<DataMarks> getMarks() const;
 
     void update();
 };

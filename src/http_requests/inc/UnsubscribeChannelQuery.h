@@ -64,43 +64,32 @@ namespace GUI
     {
         Q_OBJECT
 
-    private:
-        QNetworkAccessManager *manager;
+    QSharedPointer<User> m_user;
+    QSharedPointer<Channel> m_channel;
+    QString m_status;
+    virtual QString getUrl() const;
+    virtual QByteArray getRequestBody() const;
 
-        /* Url of th request */
-        QString httpQuery;
+private slots:
+   
+    virtual void processReply(QNetworkReply *reply);
 
-        /* Body of the request */
-        QString jsonQuery;
-
-    public:
+public:
 
         UnsubscribeChannelQuery(QObject *parent = 0);
 
-        UnsubscribeChannelQuery(QString auth_token, QString channel, QObject *parent = 0);
-
-        void setQuery(QString auth_token, QString channel);
-
+        UnsubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
+   
+        void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
+        
         ~UnsubscribeChannelQuery();
-
-        const QString& getHttpQuery();
-        const QString& getJsonQuery();
-
-        void doRequest();
-
-    signals:
-        void responseReceived(QString status,QString status_description);
-
-    private slots:
-        void onManagerFinished(QNetworkReply *reply);
-        void onReplyError(QNetworkReply::NetworkError);
-        void onManagerSslErrors();
-
-    private:
-        /* \todo Do we need next constructor and overloaded operator? */
-        UnsubscribeChannelQuery(const UnsubscribeChannelQuery& obj);
-        UnsubscribeChannelQuery& operator=(const UnsubscribeChannelQuery& obj);
-
+       
+        const QString& getStatus() const;
+    
+    signals:    
+        void responseReceived();
+    
+    
     }; // class UnsubscribeChannelQuery
 
 } // namespace GUI

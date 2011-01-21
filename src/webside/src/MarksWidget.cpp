@@ -36,7 +36,7 @@ void MarksWidget::updateModel()
 
 void MarksWidget::updateMap()
 {
-    CHandlePtr<common::DataMarks> marks = marksModel->getMarks();
+    QSharedPointer<DataMarks> marks = marksModel->getMarks();
     marksMapWidget->clearOverlays();
     for (int i = 0; i < marks->size(); i++)
     {

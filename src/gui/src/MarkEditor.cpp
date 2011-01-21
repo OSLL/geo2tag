@@ -45,7 +45,6 @@
 #include <QtGui/QVBoxLayout>
 #include "DataMarks.h"
 #include "Channel.h"
-#include "Handle.h"
 #include "GpsInfo.h"
 #include <QDateTime>
 
@@ -60,9 +59,9 @@ namespace GUI
 
         connect(m_ok, SIGNAL(pressed()), this, SLOT(applyMark()));
         connect(&OnLineInformation::getInstance(),
-                SIGNAL(subscribedChannelsUpdated(CHandlePtr<common::Channels>)),
+                SIGNAL(subscribedChannelsUpdated(QSharedPointer<Channels>)),
                 this,
-                SLOT(onSubscribedChannelsUpdated(CHandlePtr<common::Channels>)));
+                SLOT(onSubscribedChannelsUpdated(QSharedPointer<Channels>)));
         connect(&OnLineInformation::getInstance(), SIGNAL(markApplied(int)),
                 this, SLOT(onMarkApplied(int)));
 
@@ -81,13 +80,13 @@ namespace GUI
         OnLineInformation::getInstance().updateSubscribedChannels();
     }/* Request done. If response received: */
 
-    void MarkEditor::onSubscribedChannelsUpdated(CHandlePtr<common::Channels> channels)
+    void MarkEditor::onSubscribedChannelsUpdated(QSharedPointer<Channels> channels)
     {
         m_combo->clear();
         int i = 0;
-        for(common::Channels::iterator it = channels->begin(); it != channels->end(); it++)
+        for(; i<channels->size(); i++)
         {
-            m_combo->insertItem(i++,QObject::tr((*it)->getName().c_str()));
+            m_combo->insertItem(i,QObject::tr(channels->at(i)->getName().toStdString().c_str()));
         }
     }
 

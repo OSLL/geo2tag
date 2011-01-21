@@ -43,8 +43,8 @@
 
 namespace GUI
 {
-    ChannelModel::ChannelModel(CHandlePtr<common::Channels> availableChannels,
-                               CHandlePtr<common::Channels> subscribedChannels,
+    ChannelModel::ChannelModel(QSharedPointer<Channels> availableChannels,
+                               QSharedPointer<Channels> subscribedChannels,
                                QObject* parent) : QStandardItemModel(availableChannels->size(),1,parent)
     {
       m_availableChannels = availableChannels;
@@ -53,12 +53,12 @@ namespace GUI
 
     QString ChannelModel::getChannelName(int index) const
     {
-      return (*m_availableChannels)[index]->getName().c_str();
+      return (*m_availableChannels)[index]->getName();
     }
 
     QString ChannelModel::getChannelDescription(int index) const
     {
-      return (*m_availableChannels)[index]->getDescription().c_str();
+      return (*m_availableChannels)[index]->getDescription();
     }
 
     bool ChannelModel::IsSelected(int index) const

@@ -74,7 +74,7 @@ namespace maps
      */
     virtual common::Picture getMap(double latitude, double longitude, short scale, int width, int height)=0;
     
-    virtual common::Picture getMapWithMarks(double latitude, double longitude, short scale, int width, int height, const common::DataMarks& marks)=0;
+    virtual common::Picture getMapWithMarks(double latitude, double longitude, short scale, int width, int height, const DataMarks& marks)=0;
 
     virtual QByteArray& getMapByteArray()=0;
 

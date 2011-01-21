@@ -15,7 +15,7 @@ class MapWidget : public QWidget
   double m_L;
   QPointF m_mousePosition;
   ///
-  CHandlePtr<common::DataMarks> m_marks;
+  QSharedPointer<DataMarks> m_marks;
 
 public:
 
@@ -35,7 +35,7 @@ protected:
 public slots:
 
 	void scaleChanged(int newScale);
-	void updated(CHandlePtr<common::DataMarks>& marks);
+	void updated(QSharedPointer<DataMarks>& marks);
 	
 };
 #endif

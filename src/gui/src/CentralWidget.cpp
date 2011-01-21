@@ -81,7 +81,7 @@ namespace GUI
     void CentralWidget::switchFeed(const QModelIndex& index)
     {
       m_feedView->refresh((*OnLineInformation::getInstance().getAvailableChannels())[index.row()]);
-      QMessageBox::information(this,"Channel information",(*OnLineInformation::getInstance().getAvailableChannels())[index.row()]->getDescription().c_str());
+      QMessageBox::information(this,"Channel information",(*OnLineInformation::getInstance().getAvailableChannels())[index.row()]->getDescription());
       m_layout->setCurrentWidget(m_feedView); 
     }
 

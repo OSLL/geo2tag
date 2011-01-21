@@ -34,18 +34,18 @@
 #include <QUrl>
 namespace GUI
 {
-    MarkDetailsDialog::MarkDetailsDialog(QWidget *parent, CHandlePtr<common::DataMark> mark): QDialog(parent), m_mark(mark)
+    MarkDetailsDialog::MarkDetailsDialog(QWidget *parent, QSharedPointer<DataMark> mark): QDialog(parent), m_mark(mark)
     {
-      setWindowTitle(mark->getLabel().c_str());
+      setWindowTitle(mark->getLabel());
       QHBoxLayout *hbox = new QHBoxLayout();
       if(m_mark->getUrl() != "")
       {
         QWebView *picture = new QWebView();
-        picture->load(QUrl(m_mark->getUrl().c_str()));
+        picture->load(QUrl(m_mark->getUrl()));
         picture->setMaximumSize(200,200);
         hbox->addWidget(picture);
       }
-      QLabel *description = new QLabel(m_mark->getDescription().c_str());
+      QLabel *description = new QLabel(m_mark->getDescription());
       hbox->addWidget(description);
 
       setLayout(hbox);

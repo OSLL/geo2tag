@@ -5,26 +5,34 @@
 #include <Wt/WLineEdit>
 #include <Wt/WPushButton>
 
+#include <QSharedPointer>
+#include "LoginQuery.h"
 #include "GoogleMap.h"
 
 using namespace Wt;
 
-class LoginWidget : public WContainerWidget
+class LoginWidget : public WContainerWidget,QObject
 {
+	Q_OBJECT;
    WLineEdit *usernameEdit;
    WLineEdit *passwordEdit;
    WPushButton *loginButton;
    WGoogleMap *map;
+   QSharedPointer<User> user;
+//   std::string m_token;
 
-   std::string m_token;
+public slots:
+
+   void userRecieved();
 
 public:
     LoginWidget(WContainerWidget *parent = 0);
     void fillMap();
 
     /* signals */
-    Wt::Signal<std::string> loginSuccessful;
+//    Wt::Signal<std::string> loginSuccessful;
 
+    Wt::Signal<QSharedPointer<User> > loginSuccessful;
     /* slots */
     void loginClicked();
 };

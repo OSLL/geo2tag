@@ -60,14 +60,14 @@ namespace GUI
 
     Q_OBJECT;
     
-    CHandlePtr<common::Channels> m_availableChannels;
-    CHandlePtr<common::Channels> m_subscribedChannels;
+    QSharedPointer<Channels> m_availableChannels;
+    QSharedPointer<Channels> m_subscribedChannels;
 
   public:
 
 
-    ChannelModel(CHandlePtr<common::Channels> availableChannels,
-                 CHandlePtr<common::Channels> subscribedChannels,
+    ChannelModel(QSharedPointer<Channels> availableChannels,
+                 QSharedPointer<Channels> subscribedChannels,
                  QObject* parent);
 
     QString getChannelName(int index) const;

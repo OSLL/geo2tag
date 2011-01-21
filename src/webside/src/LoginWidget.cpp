@@ -1,8 +1,8 @@
 #include "inc/LoginWidget.h"
 
-#include "DbSession.h"
-#include "UserInternal.h"
-#include "DataMarks.h"
+//#include "DbSession.h"
+//#include "UserInternal.h"
+//#include "DataMarks.h"
 #include "Channel.h"
 #include "defines.h"
 #include "OpenStreetMap.h"
@@ -55,7 +55,7 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
 
 void LoginWidget::fillMap()
 {
-    CHandlePtr<common::DataMarks> marks = common::DbSession::
+    QSharedPointer<DataMarks> marks = common::DbSession::
                                           getInstance().getMarks();
     map->clearOverlays();
     for (int i = 0; i < marks->size(); i++)
@@ -71,7 +71,7 @@ void LoginWidget::loginClicked()
 {
     std::string name = usernameEdit->text().toUTF8();
     std::string pass = passwordEdit->text().toUTF8();
-    CHandlePtr<std::vector<CHandlePtr<common::User> > > users =
+/*    QSharedPointer<Users> users =
             common::DbSession::getInstance().getUsers();
     for (int i = 0; i < users->size(); i++)
     {
@@ -84,9 +84,15 @@ void LoginWidget::loginClicked()
         }
     }
 
-    /* For testing without db */
     if (users->size() == 0)
     {
         loginSuccessful.emit(std::string(DEFAULT_TOKEN));
-    }
+    }*/
+	connect(&loginQuery,SIGNAL(connected),this,SLOT(userRecieved()));
+	loginQuery.setQuery(name,pass);
+	
+}
+
+void LoginWidget::userRecieved(){
+	loginSuccessful.emit(loginQuery.getUser());
 }

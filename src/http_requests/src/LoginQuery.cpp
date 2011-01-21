@@ -54,6 +54,11 @@ LoginQuery::LoginQuery(const QString &login, const QString &password, QObject *p
 {
 }
 
+LoginQuery::LoginQuery(QObject *parent):
+        DefaultQuery(parent)
+{
+}
+
 QString LoginQuery::getUrl() const
 {
     return LOGIN_HTTP_URL;
@@ -82,6 +87,11 @@ void LoginQuery::processReply(QNetworkReply *reply)
         emit errorOccured(response.getStatusMessage());
     }
 
+}
+
+void LoginQuery::setQuery(const QString& login, const QString& password){
+	m_login=login;
+	m_password=password;
 }
 
 QSharedPointer<User> LoginQuery::getUser() const

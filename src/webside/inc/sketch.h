@@ -13,6 +13,7 @@
 #include "OptionsWidget.h"
 #include "UsersWidget.h"
 
+#include <QSharedPointer>
 using namespace Wt;
 
 /*
@@ -21,10 +22,11 @@ using namespace Wt;
 class Sketch : public WContainerWidget
 {
 public:
-    Sketch(const std::string &token, WContainerWidget *parent = 0);
+    Sketch(QSharedPointer<User> user, WContainerWidget *parent = 0);
 
 private:
-    std::string m_token;
+//    std::string m_token;
+	QSharedPointer<User> m_user;	
 
     WPushButton *prefButton;
     WPushButton *channelsButton;

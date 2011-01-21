@@ -75,7 +75,7 @@ namespace GUI
 
     private slots:
         void applyMark();
-        void onSubscribedChannelsUpdated(CHandlePtr<common::Channels> channels);
+        void onSubscribedChannelsUpdated(QSharedPointer<Channels> channels);
         void onMarkApplied(int status);
 
     private:

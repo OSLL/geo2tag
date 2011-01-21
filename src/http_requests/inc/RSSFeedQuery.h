@@ -85,6 +85,13 @@ public:
                  double radius,
                  QObject *parent = 0);
 
+    RSSFeedQuery(QObject *parent = 0);
+
+    void setQuery(QSharedPointer<User> &user,
+                 double latitude,
+                 double longitude,
+                 double radius);
+
     ~RSSFeedQuery();
 
      const DataChannels& getRSSFeed() const;

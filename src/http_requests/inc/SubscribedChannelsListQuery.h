@@ -89,7 +89,7 @@ namespace GUI
       void doRequest();
 
   signals:
-      void responseReceived(CHandlePtr<common::Channels>& channels);
+      void responseReceived(QSharedPointer<Channels>& channels);
 
   private slots:
       void onManagerFinished(QNetworkReply *reply);
