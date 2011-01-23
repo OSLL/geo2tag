@@ -4,7 +4,7 @@ include(../../config.pri)
 TARGET = ../lib/wikigpsJson
 DEPENDPATH += . inc src
 
-target.path = /usr/bin
+target.path = /usr/lib
 INSTALLS += target
 
 INCLUDEPATH += . inc \

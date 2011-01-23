@@ -25,17 +25,17 @@ Sketch::Sketch(QSharedPoitner<User> user, WContainerWidget *parent)
     marksButton = new WPushButton("Marks", menuContainer);
     optionsButton = new WPushButton("Options", menuContainer);
     adminButton = new WPushButton("Users management", menuContainer);
-    channelsWidget = new ChannelsWidget(m_user, stackedWidget);
+   // channelsWidget = new ChannelsWidget(m_user, stackedWidget);
     marksWidget = new MarksWidget(m_user, stackedWidget);
-    optionsWidget = new OptionsWidget(stackedWidget);
-    usersWidget = new UsersWidget(m_user,stackedWidget);
-    prefWidget = new PrefWidget(m_user, stackedWidget);
+   // optionsWidget = new OptionsWidget(stackedWidget);
+ //   usersWidget = new UsersWidget(m_user,stackedWidget);
+  //  prefWidget = new PrefWidget(m_user, stackedWidget);
     //WSelectionBox *box = new WSelectionBox(root());
 
     stackedWidget->setCurrentWidget(channelsWidget);
 
     /* signals and slots */
-    prefButton->clicked().connect(this, &Sketch::onPrefClicked);
+  /*  prefButton->clicked().connect(this, &Sketch::onPrefClicked);
     channelsButton->clicked().connect(this, &Sketch::onChannelsClicked);
     marksButton->clicked().connect(this, &Sketch::onMarksClicked);
     optionsButton->clicked().connect(this, &Sketch::onOptionsClicked);
@@ -51,13 +51,13 @@ void Sketch::onPrefClicked()
 void Sketch::onChannelsClicked()
 {
     stackedWidget->setCurrentWidget(channelsWidget);
-}
+}*/
 
 void Sketch::onMarksClicked()
 {
     stackedWidget->setCurrentWidget(marksWidget);
 }
-
+/*
 void Sketch::onOptionsClicked()
 {
     stackedWidget->setCurrentWidget(optionsWidget);
@@ -66,5 +66,5 @@ void Sketch::onOptionsClicked()
 void Sketch::onAdminClicked()
 {
     stackedWidget->setCurrentWidget(usersWidget);
-}
+}*/
 

@@ -50,26 +50,16 @@ namespace GUI
     SubscribedChannelsListQuery::SubscribedChannelsListQuery(QObject *parent)
         : QObject(parent)
     {
-        jsonQuery = "";
-        httpQuery = "";
-        manager = new QNetworkAccessManager(this);
-
-        qDebug() << "Free SubscribedChannelsListQuery created";
     }
 
-    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QString auth_token, QObject *parent)
-                : QObject(parent)
+    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent)
+                : DefaultQuery(parent),m_user(user)
     {
-        manager = new QNetworkAccessManager(this);
-        setQuery(auth_token);
-        qDebug() << "SubscribedChannelsListQuery created:\n"
-                 << httpQuery << jsonQuery;
     }
 
-    void SubscribedChannelsListQuery::setQuery(QString auth_token)
+    void SubscribedChannelsListQuery::setQuery(QSharedPointer<User> user)
     {
-        jsonQuery = "{\"auth_token\":\"" + auth_token + "\"}";
-        httpQuery = SUBSCRIBED_LIST_HTTP_URL;
+	m_user=user;
     }
 
     SubscribedChannelsListQuery::~SubscribedChannelsListQuery()
@@ -77,65 +67,33 @@ namespace GUI
 
     }
 
-    const QString& SubscribedChannelsListQuery::getHttpQuery()
+    QString& SubscribedChannelsListQuery::getUrl() const
     {
-        return httpQuery;
+        return SUBSCRIBED_LIST_HTTP_URL;
     }
 
-    const QString& SubscribedChannelsListQuery::getJsonQuery()
+    QByteArray SubscribedChannelsListQuery::getRequestBody() const
     {
-        return jsonQuery;
+        SubscribedChannelsRequestJSON request(m_user);
+	return request.getJson();
     }
 
-    void SubscribedChannelsListQuery::doRequest()
+    const QSharedPointer<Channels>& SubscribedChannelsQuery::getChannels() const
     {
-        if (httpQuery == "" || jsonQuery == "")
-        {
-            qDebug() << "SubscribedChannelsListQuery: can't do request cause query isn't set";
-            return;
-        }
-
-        QNetworkRequest request;
-        request.setUrl(QUrl(httpQuery));
-
-        QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
-
-        QNetworkReply *reply = manager->post(request, data);
-
-        connect(manager, SIGNAL(finished(QNetworkReply*)),
-                this, SLOT(onManagerFinished(QNetworkReply*)));
-        connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-                this, SLOT(onManagerSslErrors()));
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(onReplyError(QNetworkReply::NetworkError)));
-
-        qDebug() << "SubscribedChannelsListQuery did request:\n"
-                 << httpQuery << jsonQuery;
+	return m_channels;
     }
 
-    void SubscribedChannelsListQuery::onManagerFinished(QNetworkReply *reply)
+    void SubscribedChannelsQuery::processReply(QNetworkReply *reply)
     {
-        QByteArray jsonResponseByteArray = reply->readAll();
-
-        if (jsonResponseByteArray.size() > 0)
-        {
-            QString jsonResponse(jsonResponseByteArray);
-            qDebug() << "Gotten response (json): " << jsonResponse;
-            std::stringstream jsonStream(jsonResponse.toStdString());
-            ChannelListResponseJSON channelList(jsonStream);
-            QSharedPointer<Channels> channels = channelList.getChannels();
-            emit responseReceived(channels);
-        }
-    }
-
-    void SubscribedChannelsListQuery::onReplyError(QNetworkReply::NetworkError error)
-    {
-        qDebug("Network error: %d \n", error);
-    }
-
-    void SubscribedChannelsListQuery::onManagerSslErrors()
-    {
-        qDebug("ssl error \n");
+	ChannelListJSON response;
+	response.parseJson(reply->readAll());
+	if(response.getStatus() == "Ok"){
+		m_channels=response.getChannels();
+		emit responseReceived();
+	}
+	else {
+		emit errorOccured(response.getStatusMessage());
+	}
     }
 } // namespace GUI
 

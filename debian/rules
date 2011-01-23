@@ -67,10 +67,6 @@ install: build
 		install -d $(CURDIR)/debian/tmp/opt/geo2tag; \
 		install -d $(CURDIR)/debian/tmp/var/www; \
 		install -d $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
-		cp -r $(BUILDDIR)/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
-		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp $(BUILDDIR)/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp $(BUILDDIR)/service/wikigps-service.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp $(BUILDDIR)/service/pg_hba.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp $(BUILDDIR)/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
@@ -79,9 +75,17 @@ install: build
                 cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
         	cp $(BUILDDIR)tracker/tracker_linux $(CURDIR)/debian/tmp/etc/init.d/tracker; \
 	fi;
-	cp -l $(BUILDDIR)/lib/lib* $(CURDIR)/debian/tmp/usr/lib; 
+# Put this code after 
+# install -d $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+# Code:
+#		cp -r $(BUILDDIR)/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
+#		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
+#		cp $(BUILDDIR)/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
+#		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+# /Code
+#	cp -l $(BUILDDIR)/lib/lib* $(CURDIR)/debian/tmp/usr/lib; 
 #	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps;
-#	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; 
+	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; 
 #	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon
 	cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop
 

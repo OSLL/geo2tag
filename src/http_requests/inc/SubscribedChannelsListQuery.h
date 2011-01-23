@@ -48,7 +48,7 @@
 #include <QString>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-
+#include "DefaultQuery.h"
 #include "Channel.h"
 
 namespace GUI
@@ -60,47 +60,33 @@ namespace GUI
      * This query includes json request for list of subscribed channels.
      *
      */
-  class SubscribedChannelsListQuery : public QObject
+  class SubscribedChannelsListQuery : public DefaultQuery
   {
-      Q_OBJECT
+	Q_OBJECT
 
-  private:
-      QNetworkAccessManager *manager;
+	QSharedPointer<User> m_user;
+	QSharedPointer<Channels> m_channels;
 
-      /* Url of th request */
-      QString httpQuery;
+	virtual QString getUrl() const;
+	virtual QByteArray getRequestBody() const;
 
-      /* Body of the request */
-      QString jsonQuery;
+private slots:
 
-  public:
+	virtual void processReply(QNetworkReply *reply);
 
-      SubscribedChannelsListQuery(QObject *parent = 0);
+public:
 
-      SubscribedChannelsListQuery(QString auth_token, QObject *parent = 0);
+	SubscribedChannelsListQuery(QObject *parent = 0);
 
-      void setQuery(QString auth_token);
+	SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent = 0);
+	
+        ~SubscribeChannelQuery();
 
-      ~SubscribedChannelsListQuery();
+	const QSharedPointer<Channels>& getChannels() const;
 
-      const QString& getHttpQuery();
-      const QString& getJsonQuery();
+signals:
 
-      void doRequest();
-
-  signals:
-      void responseReceived(QSharedPointer<Channels>& channels);
-
-  private slots:
-      void onManagerFinished(QNetworkReply *reply);
-      void onReplyError(QNetworkReply::NetworkError);
-      void onManagerSslErrors();
-
-  private:
-
-      /* \todo Do we need next constructor and overloaded operator? */
-      SubscribedChannelsListQuery(const SubscribedChannelsListQuery& obj);
-      SubscribedChannelsListQuery& operator=(const SubscribedChannelsListQuery& obj);
+        void responseReceived();
 
   }; // class SubscribedChannelsListQuery
 

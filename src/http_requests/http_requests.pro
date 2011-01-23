@@ -47,6 +47,6 @@ LIBS    +=  -lcommon -lqjson
 linux: {
     DEFINES += DESKTOP_STYLE
 }
-
+config+=network
 QT += core network
 QT -= gui

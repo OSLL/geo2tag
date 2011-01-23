@@ -22,7 +22,7 @@ Description: WikiGPS tracker
  has very tiny interface. alfa version.
 
 Package: wikigps-webside
-Architecture: i386
+Architecture: armel
 Depends: ${shlibs:Depends}, wikigps-service, libqt4, witty
 Description: Geo2tag website
 

@@ -8,7 +8,8 @@ TARGET = sketch.wt
 DEPENDPATH += . inc src
 INCLUDEPATH += . inc
 QMAKE_CXXFLAGS += -g3
-QT+= sql
+QT+= sql network
+config+= network
 # Wt
 INCLUDEPATH += /usr/include/Wt
 LIBS += -lwtfcgi
@@ -18,14 +19,17 @@ INCLUDEPATH += ../common/inc \
                ../common/common/inc \
                ../common/thread/inc \
                ../common/exception/inc \
-	       ../json/inc \
-               ../common/odbc/inc
-LIBS += -lcommon -lwikigpsJson
+	       ../http_requests/inc \
+               ../common/odbc/inc \
+	       ../json/inc 
+
+LIBS += -lcommon -lwikigpsHttp -lwikigpsJson
 
 # DbSession (from service)
 INCLUDEPATH += ../service/inc
 DEPENDPATH += ../service/inc \
               ../service/src
+
 HEADERS += DbSession.h \
            ChannelInternal.h \
            DataMarkInternal.h \
@@ -34,42 +38,55 @@ HEADERS += DbSession.h \
 	   inc/LoginRequestJSON.h \
 	   inc/LoginResponseJSON.h \
 	   inc/AddNewMarkRequestJSON.h \
+	   inc/LoginQuery.h \
 	   inc/RSSFeedJSON.h \
 	   inc/RSSFeedRequestJSON.h \
 	   inc/AddNewMarkResponseJSON.h \
-    inc/LoginWidget.h \
-    inc/Webside.h \
-    inc/UsersWidget.h
+           inc/LoginWidget.h \
+           inc/LoginRequestJSON.h \
+           inc/LoginResponseJSON.h \
+           inc/AddNewMarkRequestJSON.h \
+	   inc/AddNewMarkResponseJSON.h \
+	   inc/RSSFeedRequestJSON.h \
+	   inc/RSSFeedJSON.h \
+	   inc/Webside.h 
+#    inc/UsersWidget.h
+
 SOURCES += DbSession.cpp \
            ChannelInternal.cpp \
            DataMarkInternal.cpp \
            UserInternal.cpp \
            DynamicCastFailure.cpp \
     src/LoginWidget.cpp \
-    src/Webside.cpp \
-    src/UsersWidget.cpp
+    src/Webside.cpp 
+#    src/UsersWidget.cpp
 
 # Input
-HEADERS += inc/ChannelsWidget.h \
-	   inc/ChannelsModel.h \
-           inc/MarksWidget.h \
+HEADERS += inc/MarksWidget.h \
            inc/MarksModel.h \
-           inc/OptionsModel.h \
-           inc/OptionsWidget.h \
-           inc/PrefWidget.h \
-           inc/sketch.h \
+           inc/sketch.h \ 
            inc/GoogleMap.h \
            inc/OpenStreetMap.h \
-           inc/YandexMap.h
-SOURCES += src/ChannelsWidget.cpp \
-	   src/ChannelsModel.cpp \
-           src/main.cpp \
+	   inc/LoginQuery.h \
+           inc/RSSFeedQuery.h \
+           inc/YandexMap.h 
+
+#	   inc/ChannelsWidget.h \
+#	   inc/ChannelsModel.h \
+#           inc/OptionsModel.h \
+#           inc/OptionsWidget.h \
+#           inc/PrefWidget.h 
+SOURCES += src/main.cpp \
            src/MarksModel.cpp \
            src/MarksWidget.cpp \
-           src/OptionsModel.cpp \
-           src/OptionsWidget.cpp \
-           src/PrefWidget.cpp \
            src/sketch.cpp \
            src/GoogleMap.cpp \
            src/OpenStreetMap.cpp \
+	   src/LoginQuery.cpp \
+           src/RSSFeedQuery.cpp \
            src/YandexMap.cpp
+#	   src/ChannelsWidget.cpp \
+#	   src/ChannelsModel.cpp \
+#           src/OptionsModel.cpp \
+#           src/OptionsWidget.cpp \
+#           src/PrefWidget.cpp 

@@ -38,11 +38,13 @@ private:
     WContainerWidget *menuContainer;
     WStackedWidget *stackedWidget;
 
-    PrefWidget *prefWidget;
-    ChannelsWidget *channelsWidget;
+/* temporary removed to provide only tracker functionality  */
+//    PrefWidget *prefWidget;
+//    ChannelsWidget *channelsWidget;
     MarksWidget *marksWidget;
-    OptionsWidget *optionsWidget;
-    UsersWidget *usersWidget;
+/* temporary removed to provide only tracker functionality  */
+///    OptionsWidget *optionsWidget;
+//    UsersWidget *usersWidget;
 
     /* slots */
     void onPrefClicked();

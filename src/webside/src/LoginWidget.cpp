@@ -55,7 +55,7 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
 
 void LoginWidget::fillMap()
 {
-    QSharedPointer<DataMarks> marks = common::DbSession::
+/*    QSharedPointer<DataMarks> marks = common::DbSession::
                                           getInstance().getMarks();
     map->clearOverlays();
     for (int i = 0; i < marks->size(); i++)
@@ -64,13 +64,13 @@ void LoginWidget::fillMap()
                        Coordinate(marks->at(i)->getLatitude(),
                                   marks->at(i)->getLongitude()),
                        marks->at(i)->getDescription());
-    }
+    }*/
 }
 
 void LoginWidget::loginClicked()
 {
-    std::string name = usernameEdit->text().toUTF8();
-    std::string pass = passwordEdit->text().toUTF8();
+    QString name = QString(usernameEdit->text().toUTF8().c_str());
+    QString pass =QString( passwordEdit->text().toUTF8().c_str());
 /*    QSharedPointer<Users> users =
             common::DbSession::getInstance().getUsers();
     for (int i = 0; i < users->size(); i++)
@@ -85,14 +85,16 @@ void LoginWidget::loginClicked()
     }
 
     if (users->size() == 0)
-    {
-        loginSuccessful.emit(std::string(DEFAULT_TOKEN));
-    }*/
+    {*/
+    //    loginSuccessful.emit(std::string(DEFAULT_TOKEN));
+//    }
 	connect(&loginQuery,SIGNAL(connected),this,SLOT(userRecieved()));
 	loginQuery.setQuery(name,pass);
 	
 }
 
 void LoginWidget::userRecieved(){
-	loginSuccessful.emit(loginQuery.getUser());
+QSharedPointer<User> us=loginQuery.getUser();
+	loginSuccessful.emit(us);
+//loginSuccessful.emit(std::string(DEFAULT_TOKEN));
 }
