@@ -61,12 +61,13 @@ void UpdateThread::run()
             QSharedPointer<Channel> channel = tag->getChannel();
             if(!m_dataChannelsMap->contains(channel, tag))
             {
-                syslog(LOG_INFO, "adding tag %s to channel %s",
+                syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i,m_tagsContainer->size(),
                        tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(),
                        channel->getName().toStdString().c_str());
                 m_dataChannelsMap->insert(channel, tag);
             }
         }
+	syslog(LOG_INFO, "tags added. trying to unlock");
         unlockWriting();
 
         syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());

@@ -28,5 +28,5 @@ Description: Geo2tag website
 
 Package: wikigps-service
 Architecture: i386
-Depends: ${shlibs:Depends}, lighttpd, postgresql, unixodbc, odbc-postgresql, wikigps-libs
+Depends: ${shlibs:Depends}, lighttpd, postgresql, unixodbc, odbc-postgresql, wikigps-libs, libpq5, libqt4-sql-psql
 Description: Geo2tag webservice

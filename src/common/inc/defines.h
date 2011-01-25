@@ -45,7 +45,7 @@
 #define SERVER_HTTP_URL "http://192.168.56.101/"
 #define DEFAULT_PORT 80
 
-#define DATABASE_NAME "trackerimproving" // "demo"
+#define DATABASE_NAME "geo2tag" // "demo"
 
 #define SUBSCRIBE_HTTP_URL        SERVER_HTTP_URL"example?query=subscribe"
 #define UNSUBSCRIBE_HTTP_URL      SERVER_HTTP_URL"example?query=unsubscribe"
