@@ -40,10 +40,11 @@ HEADERS += \
 	   inc/LoginRequestJSON.h \
   	   inc/LoginResponseJSON.h \
 	   inc/AddNewMarkRequestJSON.h \
-    	inc/AddNewMarkResponseJSON.h \
-    inc/RSSFeedRequestJSON.h \
-    inc/RSSFeedJSON.h \
-    inc/QueryExecutor.h
+     	   inc/AddNewMarkResponseJSON.h \
+   	   inc/SubscribeChannelResponseJSON.h \
+    	   inc/RSSFeedRequestJSON.h \
+           inc/RSSFeedJSON.h \
+           inc/QueryExecutor.h
 
 SOURCES += src/main.cpp \
            src/server.cpp \
@@ -52,8 +53,8 @@ SOURCES += src/main.cpp \
            src/DynamicCastFailure.cpp \
            src/UserInternal.cpp \
            src/DbSession.cpp \
-    src/UpdateThread.cpp \
-    src/QueryExecutor.cpp
+           src/UpdateThread.cpp \
+           src/QueryExecutor.cpp
 
 LIBS +=  -lcommon -lfcgi -lwikigpsJson -lpq 
 OBJECTS_DIR = .obj

@@ -19,12 +19,13 @@ HEADERS += \
            inc/JsonUser.h \
            inc/JsonDataMark.h \
            inc/JsonChannel.h \
-    inc/JsonSerializer.h \
-    inc/LoginRequestJSON.h \
-    inc/LoginResponseJSON.h \
-    inc/AddNewMarkRequestJSON.h \
-    inc/AddNewMarkResponseJSON.h \
-    inc/DefaultResponseJSON.h
+	   inc/JsonSerializer.h \
+	   inc/LoginRequestJSON.h \
+	   inc/LoginResponseJSON.h \
+	   inc/AddNewMarkRequestJSON.h \
+	   inc/AddNewMarkResponseJSON.h \
+	   inc/SubscribeChannelResponseJSON.h \
+	   inc/DefaultResponseJSON.h
 
 SOURCES += \
            src/ChannelListJSON.cpp \
@@ -34,11 +35,11 @@ SOURCES += \
            src/JsonUser.cpp \
            src/JsonChannel.cpp \
            src/JsonDataMark.cpp \
-    src/JsonSerializer.cpp \
-    src/LoginRequestJSON.cpp \
-    src/LoginResponseJSON.cpp \
-    src/AddNewMarkRequestJSON.cpp \
-    src/DefaultResponseJSON.cpp
+           src/JsonSerializer.cpp \
+           src/LoginRequestJSON.cpp \
+           src/LoginResponseJSON.cpp \
+           src/AddNewMarkRequestJSON.cpp \
+           src/DefaultResponseJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 

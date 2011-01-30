@@ -86,3 +86,25 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
     t->setChannel(tag->getChannel());
     return t;
 }
+
+
+bool QueryExecutor::subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel)
+{
+    bool result;
+    QSqlQuery insertNewSubscribtion(m_database);
+    insertNewSubscribtion.prepare("insert into subscribe (channel_id,user_id) values(:channel_id,:user_id);");
+    insertNewSubscribtion.bindValue(":channel_id",channel->getId());
+    insertNewSubscribtion.bindValue(":user_id",user->getId());
+    m_database.transaction();
+    result=insertNewSubscribtion.exec();
+    if(!result)
+    {
+      syslog(LOG_INFO,"Rollback for subscribeChannel sql query");
+      m_database.rollback();
+    }else 
+    {
+      syslog(LOG_INFO,"Commit for subscribeChannel sql query");
+      m_database.commit();
+    }
+    return result;
+}

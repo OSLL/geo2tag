@@ -51,6 +51,8 @@
 #include "RSSFeedRequestJSON.h"
 #include "RSSFeedJSON.h"
 
+#include "SubscribeChannelJSON.h"
+#include "SubscribeChannelResponseJSON.h"
 #include <QtSql>
 #include <QMap>
 
@@ -67,6 +69,7 @@ namespace common
         m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
         m_processors.insert("apply", &DbObjectsCollection::processAddNewMarkQuery);
         m_processors.insert("rss", &DbObjectsCollection::processRssFeedQuery);
+        m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
 
         QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
         database.setHostName("localhost");
@@ -109,6 +112,7 @@ namespace common
         }
 
         ProcessMethod method = m_processors.value(queryType);
+	syslog(LOG_INFO,"calling %s processor %s",queryType.toStdString().c_str(),QString(body).toStdString().c_str());
         return (*this.*method)(body);
     }
 
@@ -271,6 +275,65 @@ namespace common
         RSSFeedResponseJSON response(feed);
         response.setStatus("Ok");
         response.setStatusMessage("feed has been generated");
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+    }
+//TODO create function that will check validity of authkey, and channel name
+    QByteArray DbObjectsCollection::processSubscribeQuery(const QByteArray &data)
+    {
+	syslog(LOG_INFO, "starting SubscribeQuery processing");    
+        SubscribeChannelRequestJSON request;
+	syslog(LOG_INFO, " SubscribeChannelRequestJSON created, now create SubscribeChannelResponseJSON ");
+        SubscribeChannelResponseJSON response;
+        QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+        syslog(LOG_INFO, "Starting Json parsing for SubscribeQuery");
+        request.parseJson(data);
+	syslog(LOG_INFO, "Json parsed for SubscribeQuery");
+        QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
+        QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+        if(realUser.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong authentification key");
+            answer.append(response.getJson());
+            return answer;
+        }
+
+        QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
+        QSharedPointer<Channel> realChannel; // Null pointer
+        QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+
+        for(int i=0; i<currentChannels.size(); i++)
+        {
+            if(currentChannels.at(i)->getName() == dummyChannel->getName())
+            {
+                realChannel = currentChannels.at(i);
+            }
+        }
+        if(realChannel.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong channel's' name");
+            answer.append(response.getJson());
+            return answer;
+        }
+	syslog(LOG_INFO, "Sending sql request for SubscribeQuery");
+        bool result = m_queryExecutor->subscribeChannel(dummyUser,dummyChannel);
+        if(!result)
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Internal server error ):");
+            answer.append(response.getJson());
+            return answer;
+        }
+        m_updateThread->lockWriting();
+	realUser->subscribe(dummyChannel);
+        m_updateThread->unlockWriting();
+
+        response.setStatus("Ok");
+        response.setStatusMessage("Tag has been added");
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;

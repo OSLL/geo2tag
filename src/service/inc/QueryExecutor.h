@@ -24,6 +24,7 @@ public:
 
     qlonglong nextUserKey() const;
 
+    bool subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel);
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
 
 signals:

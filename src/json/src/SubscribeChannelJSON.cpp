@@ -50,6 +50,11 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
+#include <syslog.h>
+SubscribeChannelRequestJSON::SubscribeChannelRequestJSON()
+{
+	syslog(LOG_INFO,"SubscribeChannelRequestJSON::SubscribeChannelRequestJSON()");
+}
 
 SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel, const QSharedPointer<User> &user)
 {
