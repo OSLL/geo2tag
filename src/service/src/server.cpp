@@ -72,7 +72,9 @@ QMap<QString, QString> parseQuery(const QString& string)
 QByteArray Server::process(const QString& query, const QByteArray &data)
 {
       QMap<QString, QString> queryParameters = parseQuery(query);
-      return common::DbObjectsCollection::getInstance().process(queryParameters.value("query"), data);
+      common::DbObjectsCollection &dboc = common::DbObjectsCollection::getInstance();
+			QByteArray result = dboc.process(queryParameters.value("query"), data);
+			return result;
 }
 
 void Server::extractIncomingData(const FCGX_Request& request, QString& queryString, QByteArray& queryBody)

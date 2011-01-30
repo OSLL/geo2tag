@@ -63,7 +63,8 @@ namespace common
             m_tagsContainer(new DataMarks()),
             m_usersContainer(new Users()),
             m_dataChannelsMap(new DataChannels()),
-            m_updateThread(NULL)
+            m_updateThread(NULL),
+						m_queryExecutor(NULL)
     {
 
         m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
@@ -93,7 +94,7 @@ namespace common
 
     DbObjectsCollection& DbObjectsCollection::getInstance()
     {
-        static DbObjectsCollection s;
+        DbObjectsCollection s;
         return s;
     }
 
