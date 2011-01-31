@@ -16,6 +16,7 @@ HEADERS += \
            inc/RSSFeedJSON.h \
            inc/RSSFeedRequestJSON.h \
            inc/SubscribeChannelJSON.h \
+           inc/UnsubscribeChannelRequestJSON.h \
            inc/JsonUser.h \
            inc/JsonDataMark.h \
            inc/JsonChannel.h \
@@ -25,6 +26,7 @@ HEADERS += \
 	   inc/AddNewMarkRequestJSON.h \
 	   inc/AddNewMarkResponseJSON.h \
 	   inc/SubscribeChannelResponseJSON.h \
+	   inc/UnsubscribeChannelResponseJSON.h \
 	   inc/DefaultResponseJSON.h
 
 SOURCES += \
