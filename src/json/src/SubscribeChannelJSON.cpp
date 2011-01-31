@@ -62,10 +62,10 @@ SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Ch
     m_channelsContainer->push_back(channel);
 }
 
-SubscribeChannelRequestJSON::~SubscribeChannelRequestJSON()
+/*SubscribeChannelRequestJSON::~SubscribeChannelRequestJSON()
 {
 
-}
+}*/
 
 void SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
 {

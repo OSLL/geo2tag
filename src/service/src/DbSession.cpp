@@ -94,7 +94,7 @@ namespace common
 
     DbObjectsCollection& DbObjectsCollection::getInstance()
     {
-        DbObjectsCollection s;
+        static DbObjectsCollection s;
         return s;
     }
 

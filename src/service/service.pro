@@ -35,14 +35,14 @@ HEADERS += \
            inc/DataMarkInternal.h \
            inc/UserInternal.h \
            inc/DbSession.h \
-	   inc/LoginRequestJSON.h \
-	   inc/UpdateThread.h \
-	   inc/LoginRequestJSON.h \
-  	   inc/LoginResponseJSON.h \
-	   inc/AddNewMarkRequestJSON.h \
-     	   inc/AddNewMarkResponseJSON.h \
-   	   inc/SubscribeChannelResponseJSON.h \
-    	   inc/RSSFeedRequestJSON.h \
+				   inc/LoginRequestJSON.h \
+				   inc/UpdateThread.h \
+				   inc/LoginRequestJSON.h \
+		  	   inc/LoginResponseJSON.h \
+				   inc/AddNewMarkRequestJSON.h \
+	     	   inc/AddNewMarkResponseJSON.h \
+  	 		   inc/SubscribeChannelResponseJSON.h \
+    		   inc/RSSFeedRequestJSON.h \
            inc/RSSFeedJSON.h \
            inc/QueryExecutor.h
 
@@ -56,7 +56,7 @@ SOURCES += src/main.cpp \
            src/UpdateThread.cpp \
            src/QueryExecutor.cpp
 
-LIBS +=  -lcommon -lfcgi -lwikigpsJson -lpq 
+LIBS +=  -lcommon -lfcgi -lwikigpsJson 
 OBJECTS_DIR = .obj
 
 QT -= gui
