@@ -305,7 +305,6 @@ namespace common
         QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
         QSharedPointer<Channel> realChannel; // Null pointer
         QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
-
         for(int i=0; i<currentChannels.size(); i++)
         {
             if(currentChannels.at(i)->getName() == dummyChannel->getName())
@@ -321,7 +320,7 @@ namespace common
             return answer;
         }
 	syslog(LOG_INFO, "Sending sql request for SubscribeQuery");
-        bool result = m_queryExecutor->subscribeChannel(dummyUser,dummyChannel);
+        bool result = m_queryExecutor->subscribeChannel(realUser,realChannel);
         if(!result)
         {
             response.setStatus("Error");
@@ -334,7 +333,7 @@ namespace common
         m_updateThread->unlockWriting();
 
         response.setStatus("Ok");
-        response.setStatusMessage("Tag has been added");
+        response.setStatusMessage("Channel subscribed");
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;

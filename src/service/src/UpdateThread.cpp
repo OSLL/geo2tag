@@ -93,6 +93,7 @@ void UpdateThread::loadUsers(Users &container)
         QString login = query.record().value("login").toString();
         QString password = query.record().value("password").toString();
         QString token = query.record().value("token").toString();
+				syslog(LOG_INFO,"Pushing | %d | %s | %s ",id,login.toStdString().c_str(),token.toStdString().c_str());
         DbUser *newUser = new DbUser(login,password,id,token);
         QSharedPointer<DbUser> pointer(newUser);
         container.push_back(pointer);
