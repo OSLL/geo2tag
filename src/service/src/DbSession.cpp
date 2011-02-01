@@ -48,6 +48,9 @@
 #include "AddNewMarkRequestJSON.h"
 #include "AddNewMarkResponseJSON.h"
 
+#include "AddUserRequestJSON.h"
+#include "AddUserResponseJSON.h"
+
 #include "RSSFeedRequestJSON.h"
 #include "RSSFeedJSON.h"
 
@@ -71,6 +74,7 @@ namespace common
         m_processors.insert("apply", &DbObjectsCollection::processAddNewMarkQuery);
         m_processors.insert("rss", &DbObjectsCollection::processRssFeedQuery);
         m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
+        m_processors.insert("addUser", &DbObjectsCollection::processAddUserQuery);
 
         QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
         database.setHostName("localhost");
@@ -338,6 +342,53 @@ namespace common
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;
     }
+
+    QByteArray DbObjectsCollection::processAddUserQuery(const QByteArray &data)
+    {
+				syslog(LOG_INFO, "starting AddUser processing");    
+        AddUserRequestJSON request;
+				syslog(LOG_INFO, " AddUserRequestJSON created, now create AddUserResponseJSON ");
+        AddUserResponseJSON response;
+        QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+        syslog(LOG_INFO, "Starting Json parsing for AddUserQuery");
+        request.parseJson(data);
+				// Look for user with the same name
+        QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+        QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+        for(int i=0; i<currentUsers.size(); i++)
+        {
+            if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
+            {
+                    response.setStatus("Error");
+                    response.setStatusMessage("Username already exists!");
+        						answer.append(response.getJson());
+        						syslog(LOG_INFO, "answer: %s", answer.data());
+						        return answer;
+            }
+        }
+
+				syslog(LOG_INFO, "Sending sql request for AddUser");
+        QSharedPointer<User> addedUser = m_queryExecutor->insertNewUser(dummyUser);
+        if(!addedUser)
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Internal server error ):");
+            answer.append(response.getJson());
+        		syslog(LOG_INFO, "answer: %s", answer.data());
+            return answer;
+        }
+        m_updateThread->lockWriting();
+				// Here will be adding user into user container
+				m_usersContainer->push_back(addedUser);
+        m_updateThread->unlockWriting();
+
+        response.setStatus("Ok");
+        response.setStatusMessage("Channel subscribed");
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+
+		}
 } // namespace common
 
 /* ===[ End of file ]=== */

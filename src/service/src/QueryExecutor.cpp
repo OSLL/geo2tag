@@ -1,4 +1,5 @@
 #include <syslog.h>
+#include <QCryptographicHash>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
@@ -36,16 +37,30 @@ qlonglong QueryExecutor::nextKey(const QString &sequence) const
 }
 
 
-qlonglong QueryExecutor::nextUserKey() const
+qlonglong QueryExecutor::nextTagKey() const
 {
     return nextKey("tags_seq");
 }
 
+
+qlonglong QueryExecutor::nextUserKey() const
+{
+    return nextKey("users_seq");
+}
+
+const QString& QueryExecutor::generateNewToken(const QSharedPointer<User>& user) const
+{
+		QByteArray pass(user->getPassword().toStdString().c_str());
+		QCryptographicHash hasher(QCryptographicHash::Md5);
+		hasher.addData(pass);
+		QByteArray hash=hasher.result().toHex();
+		return QString(hash);
+}
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
     bool result;
     QSqlQuery newTagQuery(m_database);
-    qlonglong newId = nextUserKey();
+    qlonglong newId = nextTagKey();
     newTagQuery.prepare("insert into tag (latitude, longitude, label, description, url, user_id, time, id) "
                         "         values(:latitude,:longitude,:label,:description,:url,:user_id,:time,:id);");
     newTagQuery.bindValue(":latitude", tag->getLatitude());
@@ -87,6 +102,34 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
     return t;
 }
 
+QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& user)
+{
+    bool result;
+    QSqlQuery newUserQuery(m_database);
+		qlonglong newId = nextTagKey();
+		syslog(LOG_INFO,"Generating token for new user");
+		QString newToken = generateNewToken(user);
+		newUserQuery.prepare("insert into users (id,login,password,token) values(:id,:login,:password,:token);");
+		newUserQuery.bindValue(":id",newId);
+		newUserQuery.bindValue(":login",user->getLogin());
+		newUserQuery.bindValue(":password",user->getPassword());
+		newUserQuery.bindValue(":token",newToken);
+
+    m_database.transaction();
+    result=newUserQuery.exec();
+    if(!result)
+    {
+      syslog(LOG_INFO,"Rollback for NewUser sql query");
+      m_database.rollback();
+			return QSharedPointer<User>(NULL);
+    }else 
+    {
+      syslog(LOG_INFO,"Commit for NewUser sql query");
+      m_database.commit();
+    }
+		QSharedPointer<DbUser> newUser(new DbUser(user->getLogin(),user->getPassword(),newId,newToken));
+    return newUser;
+}
 
 bool QueryExecutor::subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel)
 {

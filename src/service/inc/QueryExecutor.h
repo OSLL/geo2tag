@@ -23,9 +23,12 @@ public:
     bool connect();
 
     qlonglong nextUserKey() const;
+    qlonglong nextTagKey() const;
+		const QString& generateNewToken(const QSharedPointer<User>&) const;
 
     bool subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel);
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
+    QSharedPointer<User> insertNewUser(const QSharedPointer<User>&);
 
 signals:
 

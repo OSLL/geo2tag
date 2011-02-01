@@ -84,6 +84,7 @@ namespace common
         QByteArray processAddNewMarkQuery(const QByteArray&);
         QByteArray processRssFeedQuery(const QByteArray&);
         QByteArray processSubscribeQuery(const QByteArray&);
+        QByteArray processAddUserQuery(const QByteArray&);
 
     public:
 
