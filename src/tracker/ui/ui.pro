@@ -20,13 +20,13 @@ INCLUDEPATH += . \
 SOURCES += main.cpp \
            OptionsWidget.cpp \
            LogWidget.cpp \
-    MainWindow.cpp
+           MainWindow.cpp
 
 HEADERS += tracker.h \
            Status.h \
            OptionsWidget.h \
            LogWidget.h \
-    MainWindow.h
+           MainWindow.h
 
 RESOURCES += \
     images.qrc

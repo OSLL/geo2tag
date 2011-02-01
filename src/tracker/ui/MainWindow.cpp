@@ -50,12 +50,12 @@ void MainWindow::startButtonClicked()
     if(!m_isServiceStarted)
     {
         startButton->setIcon(QIcon(":/images/start-256.png"));
-        (*m_device) << "stop";
+        (*m_device) << "stop ";
     }
     else
     {
         startButton->setIcon(QIcon(":/images/stop-256.png"));
-        (*m_device) << "start";
+        (*m_device) << "start ";
     }
 
 }
@@ -80,7 +80,7 @@ void MainWindow::updateState()
     //requesting status
     if(m_daemon->state() >= QAbstractSocket::ConnectedState)
     {
-        (*m_device) << "status";
+        (*m_device) << "status ";
         m_device->flush();
     }
 }

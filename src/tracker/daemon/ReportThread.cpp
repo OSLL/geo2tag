@@ -1,4 +1,5 @@
 #include <QEventLoop>
+#include <QStringList>
 #include <QDebug>
 #include "ReportThread.h"
 
@@ -17,10 +18,14 @@ void ControlThread::run()
 {
     QString query = m_device->readAll();
     qDebug() << "ControlThread running, query =" << query;
-    if(!query.isEmpty() && m_processors.contains(query))
-    {
-        ProcessMethod method = m_processors.value(query);
-        (*this.*method)();
+    QStringList commands=query.split(" ",QString::SkipEmptyParts);
+    for (int i=0;i<commands.size();i++){
+            qDebug() << "processing " << i << " command = " << commands.at(i);
+            if(!commands.at(i).isEmpty() && m_processors.contains(commands.at(i)))
+            {
+                ProcessMethod method = m_processors.value(commands.at(i));
+                (*this.*method)();
+            }
     }
 }
 
