@@ -48,14 +48,15 @@ qlonglong QueryExecutor::nextUserKey() const
     return nextKey("users_seq");
 }
 
-const QString& QueryExecutor::generateNewToken(const QSharedPointer<User>& user) const
+const QString& QueryExecutor::generateNewToken(const QString login,const QString password) const
 {
-		QByteArray pass(user->getPassword().toStdString().c_str());
-		QCryptographicHash hasher(QCryptographicHash::Md5);
-		hasher.addData(pass);
-		QByteArray hash=hasher.result().toHex();
-		return QString(hash);
+//		QByteArray toHash(QString(user->getPassword()+user->getLogin()).toStdString().c_str());
+//		QCryptographicHash hasher(QCryptographicHash::Md5);
+//		hasher.addData(toHash);
+//		return QString(toHash.toHex()/*hasher.result().toHex()*/);
+		return QString(login).append(password);//+password;
 }
+
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
     bool result;
@@ -106,14 +107,16 @@ QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& us
 {
     bool result;
     QSqlQuery newUserQuery(m_database);
-		qlonglong newId = nextTagKey();
-		syslog(LOG_INFO,"Generating token for new user");
-		QString newToken = generateNewToken(user);
-		newUserQuery.prepare("insert into users (id,login,password,token) values(:id,:login,:password,:token);");
+		qlonglong newId = nextUserKey();
+		syslog(LOG_INFO,"Generating token for new user, %s : %s",user->getLogin().toStdString().c_str()
+																											  		,user->getPassword().toStdString().c_str());
+		QString newToken = generateNewToken(user->getLogin(),user->getPassword());
+		syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
+		newUserQuery.prepare("insert into users (id,login,password,token) values(:id,:login,:password,:auth_t);");
 		newUserQuery.bindValue(":id",newId);
 		newUserQuery.bindValue(":login",user->getLogin());
 		newUserQuery.bindValue(":password",user->getPassword());
-		newUserQuery.bindValue(":token",newToken);
+		newUserQuery.bindValue(":auth_t",newToken);
 
     m_database.transaction();
     result=newUserQuery.exec();

@@ -39,6 +39,8 @@ HEADERS += \
 				   inc/UpdateThread.h \
 				   inc/LoginRequestJSON.h \
 		  	   inc/LoginResponseJSON.h \
+				   inc/AddUserRequestJSON.h \
+		  	   inc/AddUserResponseJSON.h \
 				   inc/AddNewMarkRequestJSON.h \
 	     	   inc/AddNewMarkResponseJSON.h \
   	 		   inc/SubscribeChannelResponseJSON.h \

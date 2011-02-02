@@ -383,7 +383,7 @@ namespace common
         m_updateThread->unlockWriting();
 
         response.setStatus("Ok");
-        response.setStatusMessage("Channel subscribed");
+        response.setStatusMessage("User added");
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;
