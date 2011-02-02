@@ -111,12 +111,12 @@ QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& us
 		syslog(LOG_INFO,"Generating token for new user, %s : %s",user->getLogin().toStdString().c_str()
 																											  		,user->getPassword().toStdString().c_str());
 		QString newToken = generateNewToken(user->getLogin(),user->getPassword());
-		syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
-		newUserQuery.prepare("insert into users (id,login,password,token) values(:id,:login,:password,:auth_t);");
+//		syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
+		newUserQuery.prepare("insert into users (id,login,password,token) values(:id,:login,:password,:token);");
 		newUserQuery.bindValue(":id",newId);
 		newUserQuery.bindValue(":login",user->getLogin());
 		newUserQuery.bindValue(":password",user->getPassword());
-		newUserQuery.bindValue(":auth_t",newToken);
+		newUserQuery.bindValue(":token",newToken);
 
     m_database.transaction();
     result=newUserQuery.exec();
