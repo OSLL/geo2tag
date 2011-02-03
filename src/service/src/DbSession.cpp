@@ -152,6 +152,7 @@ namespace common
 
         for(int i=0; i<currentUsers.size(); i++)
         {
+						syslog(LOG_INFO,"Look up in %s and %s",currentUsers.at(i)->getLogin().toStdString().c_str(),currentUsers.at(i)->getPassword().toStdString().c_str());
             if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
             {
                 if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())

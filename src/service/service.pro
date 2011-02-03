@@ -58,7 +58,7 @@ SOURCES += src/main.cpp \
            src/UpdateThread.cpp \
            src/QueryExecutor.cpp
 
-LIBS +=  -lcommon -lfcgi -lwikigpsJson 
+LIBS +=  -lcommon -lfcgi -lwikigpsJson -lpq 
 OBJECTS_DIR = .obj
 
 QT -= gui
