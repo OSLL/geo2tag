@@ -48,13 +48,14 @@ qlonglong QueryExecutor::nextUserKey() const
     return nextKey("users_seq");
 }
 
-const QString& QueryExecutor::generateNewToken(const QString login,const QString password) const
+const QString QueryExecutor::generateNewToken(const QString& login,const QString& password) const
 {
-//		QByteArray toHash(QString(user->getPassword()+user->getLogin()).toStdString().c_str());
-//		QCryptographicHash hasher(QCryptographicHash::Md5);
-//		hasher.addData(toHash);
-//		return QString(toHash.toHex()/*hasher.result().toHex()*/);
-		return QString(login).append(password);//+password;
+		QString log=login+password;
+		QByteArray toHash(log.toUtf8());
+	toHash=QCryptographicHash::hash(log.toUtf8(),QCryptographicHash::Md5);
+		QString result(toHash.toHex());
+		syslog(LOG_INFO,"TOken = %s",result.toStdString().c_str());
+		return result;
 }
 
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
