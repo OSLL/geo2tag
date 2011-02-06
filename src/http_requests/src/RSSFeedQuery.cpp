@@ -101,7 +101,6 @@ void RSSFeedQuery::processReply(QNetworkReply *reply)
     {
         emit errorOccured(response.getStatusMessage());
     }
-
 }
 
 const DataChannels& RSSFeedQuery::getRSSFeed() const

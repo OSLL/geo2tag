@@ -77,7 +77,8 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
         qFatal("An error occured during parsing json with rss feed");
         return;
     }
-
+    setStatus(result["status"].toString());
+    setStatusMessage(result["status_description"].toString());
     QVariantMap rss = result["rss"].toMap();
     QVariantMap channelVariant = rss["channels"].toMap();
     QVariantList channelsList = channelVariant["items"].toList();
@@ -155,7 +156,9 @@ QByteArray RSSFeedResponseJSON::getJson() const
     jchannel["items"] = jchannels;
     rss["channels"] = jchannel;
     obj["rss"] = rss;
-    return serializer.serialize(rss);
+    obj["status"]=getStatus();
+    obj["status_description"]=getStatusMessage();
+    return serializer.serialize(obj);
 }
 
 const DataChannels& RSSFeedResponseJSON::getRSSFeed() const
