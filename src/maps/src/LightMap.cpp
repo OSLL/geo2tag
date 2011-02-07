@@ -211,6 +211,7 @@ void LightMap::mouseReleaseEvent(QMouseEvent *)
 void LightMap::setMarks(DataChannels marks)
 {
     m_marks=marks;
+    m_normalMap->invalidate();
 }
 
 void LightMap::wheelEvent(QWheelEvent *event)
@@ -281,12 +282,10 @@ void LightMap::drawMarks(QPainter& painter)
             qDebug() << i << " mark x = " << winCenter.x()+pos.x()-center.x() << " , y = " << winCenter.y()-pos.y()+center.y();
             pos=center-tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom);
             posOnMap=winCenter-pos*qreal(tdim);    
-//            posOnMap=QPointF(winCenter.x()+pos.x()-center.x(),winCenter.y()-pos.y()+center.y());
-
-            painter.setBrush(Qt::blue);
-            painter.drawEllipse(posOnMap,10,10);
-            painter.setBrush(Qt::darkBlue);
-            painter.drawEllipse(posOnMap,4,4);
+           painter.setBrush(Qt::blue);
+           painter.drawEllipse(posOnMap,10,10);
+           painter.setBrush(Qt::black);
+           painter.drawEllipse(posOnMap,3,3);
 
     }
 }

@@ -19,6 +19,7 @@ class TrackerDaemon : public QThread, public Control
     Q_OBJECT;
 
     QSettings m_settings;
+    QString m_channelName;
 
     LoginQuery * m_loginQuery; // this field needs because query is asynchronous
     AddNewMarkQuery * m_tagQuery; // this field needs because query is asynchronous

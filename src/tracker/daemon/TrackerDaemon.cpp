@@ -43,6 +43,7 @@ void TrackerDaemon::run()
     QEventLoop eventLoop;
     QString login = m_settings.value("user").toString();
     QString password = m_settings.value("password").toString();
+    m_channelName = m_settings.value("channel").toString();
     if(login.isEmpty())
         login = "Mark";
     if(password.isEmpty())
@@ -111,7 +112,7 @@ void TrackerDaemon::onConnected()
                                  "this tag was generated automaticaly by tracker application",
                                  "unknown",
                                  QDateTime::currentDateTime()));
-        QSharedPointer<Channel> channel(new JsonChannel("My channel","dummy channel"));
+        QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
         mark->setChannel(channel);
         mark->setUser(m_loginQuery->getUser());
         m_tagQuery = new AddNewMarkQuery(mark,this);
