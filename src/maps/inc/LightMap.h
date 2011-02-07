@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QPixmap>
 #include <QBasicTimer>
-
+#include "DataChannel.h"
 #include "SlippyMap.h"
 class LightMap: public QWidget
 {
@@ -23,6 +23,9 @@ class LightMap: public QWidget
     QPixmap maskPixmap;
     bool invert;
 
+    void drawMarks(QPainter& painter);
+
+    DataChannels m_marks;
 private slots:
     void updateMap(const QRect &r);
 
@@ -47,6 +50,8 @@ protected:
 
 public:
     LightMap(QWidget *parent = 0);
+
+    void setMarks(DataChannels marks);
 
     void setCenter(qreal lat, qreal lng);
 

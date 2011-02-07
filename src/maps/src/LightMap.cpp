@@ -1,6 +1,6 @@
 #include <QPainter>
 #include <QPaintEvent>
-
+#include <QDebug>
 #include "LightMap.h"
 
 // how long (milliseconds) the user need to hold (after a tap on the screen)
@@ -81,6 +81,7 @@ void LightMap::paintEvent(QPaintEvent *event)
 #endif
     p.drawText(rect(),  Qt::AlignBottom | Qt::TextWordWrap,
                "Map data CCBYSA 2009 OpenStreetMap.org contributors");
+    drawMarks(p);
     p.end();
 
     if (zoomed)
@@ -207,6 +208,11 @@ void LightMap::mouseReleaseEvent(QMouseEvent *)
     update();
 }
 
+void LightMap::setMarks(DataChannels marks)
+{
+    m_marks=marks;
+}
+
 void LightMap::keyPressEvent(QKeyEvent *event)
 {
     if (!zoomed)
@@ -246,5 +252,28 @@ void LightMap::keyPressEvent(QKeyEvent *event)
             dragPos += delta;
             update();
         }
+    }
+}
+void LightMap::drawMarks(QPainter& painter)
+{
+    QList<QSharedPointer<DataMark> > marks = m_marks.values();
+    double tdim=256.;
+    QPointF center=tileForCoordinate(m_normalMap->latitude,m_normalMap->longitude,m_normalMap->zoom);
+    QPointF pos,posOnMap,winCenter(m_normalMap->width/2,m_normalMap->height/2);
+
+    for (int i=0;i<marks.size();i++)
+    {
+  //          pos=tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom)*tdim;
+            qDebug() << "position translated " << pos.x() << " " << pos.y();
+            qDebug() << i << " mark x = " << winCenter.x()+pos.x()-center.x() << " , y = " << winCenter.y()-pos.y()+center.y();
+            pos=center-tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom);
+            posOnMap=winCenter-pos*qreal(tdim);    
+//            posOnMap=QPointF(winCenter.x()+pos.x()-center.x(),winCenter.y()-pos.y()+center.y());
+
+            painter.setBrush(Qt::blue);
+            painter.drawEllipse(posOnMap,10,10);
+            painter.setBrush(Qt::darkBlue);
+            painter.drawEllipse(posOnMap,4,4);
+
     }
 }

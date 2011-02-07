@@ -3,8 +3,8 @@
 #include "DataThread.h"
 #include <QList>
 
-DataThread::DataThread(QObject *parent) :
-    QThread(parent),  m_settings("osll","tracker"), m_isConnected(false),m_requestIsSended(false)
+DataThread::DataThread(LightMap* map,QObject *parent) :
+    QThread(parent),  m_settings("osll","tracker"), m_isConnected(false),m_requestIsSended(false),m_map(map)
 {
         connect(this,SIGNAL(getFeed()),this,SLOT(onGetFeed()));
 }
@@ -54,15 +54,15 @@ void DataThread::onConnected()
 void DataThread::onMarksGotten()
 {
     m_marks=m_rssQuery->getRSSFeed();
+    m_map->setMarks(m_marks);
     QList<QSharedPointer<DataMark> > marks = m_marks.values(); 
-    qDebug() << "RssFeed gotten!!!!! " <<  m_marks.size() << "marks recieved";
+    qDebug() << "RssFeed gotten!!!!! " <<  m_marks.count() << "marks recieved";
     for (int i=0;i<marks.size();i++)
     {
             qDebug() << "mark at " << marks.at(i)->getLatitude()  << " " << marks.at(i)->getLongitude();
     }
     m_requestIsSended=false;
     //and now redraw canvas
-    drawMarks();
 }
 
 void DataThread::onGetFeed()
@@ -77,10 +77,6 @@ void DataThread::onGetFeed()
 }
 
 
-void DataThread::drawMarks()
-{
-
-}
 
 
 void DataThread::onError(QString message)
