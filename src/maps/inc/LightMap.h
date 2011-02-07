@@ -39,6 +39,8 @@ protected:
 
     void timerEvent(QTimerEvent *);
 
+    void wheelEvent(QWheelEvent *event);
+
     void mousePressEvent(QMouseEvent *event);
 
     void mouseMoveEvent(QMouseEvent *event);

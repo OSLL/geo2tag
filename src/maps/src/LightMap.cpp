@@ -84,7 +84,7 @@ void LightMap::paintEvent(QPaintEvent *event)
     drawMarks(p);
     p.end();
 
-    if (zoomed)
+/*    if (zoomed)
     {
         int dim = qMin(width(), height());
         int magnifierSize = qMin(MAX_MAGNIFIER, dim * 2 / 3);
@@ -147,7 +147,7 @@ void LightMap::paintEvent(QPaintEvent *event)
         p.drawPixmap(corner, maskPixmap);
         p.setPen(Qt::gray);
         p.drawPath(clipPath);
-    }
+    }*/
     if (invert)
     {
         QPainter p(this);
@@ -211,6 +211,19 @@ void LightMap::mouseReleaseEvent(QMouseEvent *)
 void LightMap::setMarks(DataChannels marks)
 {
     m_marks=marks;
+}
+
+void LightMap::wheelEvent(QWheelEvent *event)
+{
+    if (event->delta()>0 && m_normalMap->zoom<15)
+    {
+            m_normalMap->zoom++;
+            m_normalMap->invalidate();//update();
+    }else if (event->delta()<0 && m_normalMap->zoom>1)
+    {
+            m_normalMap->zoom--;
+            m_normalMap->invalidate();//update();
+    }
 }
 
 void LightMap::keyPressEvent(QKeyEvent *event)
