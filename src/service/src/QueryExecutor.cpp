@@ -48,6 +48,11 @@ qlonglong QueryExecutor::nextUserKey() const
     return nextKey("users_seq");
 }
 
+qlonglong QueryExecutor::nextChannelKey() const
+{
+    return nextKey("channels_seq");
+}
+
 const QString QueryExecutor::generateNewToken(const QString& login,const QString& password) const
 {
 		QString log=login+password;
@@ -104,6 +109,33 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
     return t;
 }
 
+QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Channel>& channel)
+{
+    bool result;
+    QSqlQuery newChannelQuery(m_database);
+		qlonglong newId = nextChannelKey();
+		syslog(LOG_INFO,"NewId ready, now preparing sql query for adding new channel");
+		newChannelQuery.prepare("insert into channel (id,name,description,url) values(:id,:name,:description,:url);");
+		newChannelQuery.bindValue(":id",newId);
+		newChannelQuery.bindValue(":name",channel->getName());
+		newChannelQuery.bindValue(":description",channel->getDescription());
+		newChannelQuery.bindValue(":url",channel->getUrl());
+		
+    m_database.transaction();
+    result=newChannelQuery.exec();
+    if(!result)
+    {
+      syslog(LOG_INFO,"Rollback for NewChannel sql query");
+      m_database.rollback();
+			return QSharedPointer<Channel>(NULL);
+    }else 
+    {
+      syslog(LOG_INFO,"Commit for NewChannel sql query");
+      m_database.commit();
+    }
+		QSharedPointer<DbChannel> newChannel(new DbChannel(newId,channel->getName(),channel->getDescription(),channel->getUrl()));
+    return newChannel;
+}
 QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& user)
 {
     bool result;

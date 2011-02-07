@@ -54,6 +54,10 @@
 #include "RSSFeedRequestJSON.h"
 #include "RSSFeedJSON.h"
 
+#include "AddChannelRequestJSON.h"
+#include "AddChannelResponseJSON.h"
+
+
 #include "SubscribeChannelJSON.h"
 #include "SubscribeChannelResponseJSON.h"
 #include <QtSql>
@@ -75,6 +79,7 @@ namespace common
         m_processors.insert("rss", &DbObjectsCollection::processRssFeedQuery);
         m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
         m_processors.insert("addUser", &DbObjectsCollection::processAddUserQuery);
+        m_processors.insert("addChannel", &DbObjectsCollection::processAddChannelQuery);
 
         QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
         database.setHostName("localhost");
@@ -389,6 +394,66 @@ namespace common
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;
 
+		}
+
+		QByteArray DbObjectsCollection::processAddChannelQuery(const QByteArray &data)
+		{
+				syslog(LOG_INFO, "starting AddChannelQuery processing");    
+        AddChannelRequestJSON request;
+				syslog(LOG_INFO, " AddChannelRequestJSON created, now create AddChannelResponseJSON ");
+        AddChannelResponseJSON response;
+        QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+        syslog(LOG_INFO, "Starting Json parsing for AddChannelQuery");
+        request.parseJson(data);
+				syslog(LOG_INFO, "Json parsed for AddChanenlQuery");
+        QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
+        QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+        if(realUser.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong authentification key");
+            answer.append(response.getJson());
+            return answer;
+        }
+
+        QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
+        QSharedPointer<Channel> realChannel; // Null pointer
+        QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+        for(int i=0; i<currentChannels.size(); i++)
+        {
+            if(currentChannels.at(i)->getName() == dummyChannel->getName())
+            {
+                realChannel = currentChannels.at(i);
+            }
+        }
+        if(!realChannel.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Channel exists!");
+            answer.append(response.getJson());
+            return answer;
+        }
+				syslog(LOG_INFO, "Sending sql request for AddChannel");
+        QSharedPointer<Channel> addedChannel = m_queryExecutor->insertNewChannel(dummyChannel);
+        if(!addedChannel)
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Internal server error ):");
+            answer.append(response.getJson());
+        		syslog(LOG_INFO, "answer: %s", answer.data());
+            return answer;
+        }
+        m_updateThread->lockWriting();
+				// Here will be adding user into user container
+				m_channelsContainer->push_back(addedChannel);
+        m_updateThread->unlockWriting();
+
+        response.setStatus("Ok");
+        response.setStatusMessage("Channel added");
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
 		}
 } // namespace common
 

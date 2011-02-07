@@ -85,6 +85,7 @@ namespace common
         QByteArray processRssFeedQuery(const QByteArray&);
         QByteArray processSubscribeQuery(const QByteArray&);
         QByteArray processAddUserQuery(const QByteArray&);
+				QByteArray processAddChannelQuery(const QByteArray&);
 
     public:
 

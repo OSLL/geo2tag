@@ -46,6 +46,8 @@ HEADERS += \
   	 		   inc/SubscribeChannelResponseJSON.h \
     		   inc/RSSFeedRequestJSON.h \
            inc/RSSFeedJSON.h \
+					 inc/AddChannelRequestJSON.h \
+					 inc/AddChannelResponseJSON.h \
            inc/QueryExecutor.h
 
 SOURCES += src/main.cpp \
