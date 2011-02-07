@@ -85,7 +85,7 @@ install: build
 # /Code
 #	cp -l $(BUILDDIR)/lib/lib* $(CURDIR)/debian/tmp/usr/lib; 
 #	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps;
-	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/tracker.png; 
+	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/wikigpsTracker-ui.png; 
 #	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon
 	cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop
 

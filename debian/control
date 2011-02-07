@@ -21,6 +21,12 @@ Depends: ${shlibs:Depends},wikigps-libs (>=0.1.2)
 Description: WikiGPS tracker
  has very tiny interface. alfa version.
 
+Package: wikigps-observer
+Architecture: i386
+Depends: ${shlibs:Depends},wikigps-libs (>=0.1.2)
+Description: WikiGPS observer
+ observs marks setted by tracker.
+
 Package: wikigps-webside
 Architecture: armel
 Depends: ${shlibs:Depends}, wikigps-service, libqt4, witty
