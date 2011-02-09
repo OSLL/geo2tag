@@ -1,15 +1,13 @@
 #include <QApplication>
+#include <QMenu>
+#include <QVBoxLayout>
 #include "LightMap.h"
 #include "DataThread.h"
-
+#include "MainWindow.h"
 int main(int c, char **v)
 {
   QApplication app(c,v);
-  LightMap map;
-  map.setCenter( 60 , 30);
-  map.show();
-  DataThread thr(&map);
-  thr.start();
-
+  MainWindow window;
+  window.show();
   return app.exec();
 }
