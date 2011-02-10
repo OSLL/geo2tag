@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_message = "";
 
-    m_optionsWidget = new OptionsWidget(this);
+    m_optionsWidget = new OptionsWidget("tracker",this);
     m_logWidget = new LogWidget(this);
     m_stackedWidget->addWidget(m_optionsWidget);
     m_stackedWidget->addWidget(m_logWidget);

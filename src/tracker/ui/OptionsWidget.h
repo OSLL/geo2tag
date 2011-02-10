@@ -17,6 +17,7 @@ class OptionsWidget : public QWidget
     QString m_name;
     QString m_password;
     QString m_channel;
+    QString m_productName;
 
     QPushButton *m_doneButton;
     QPushButton *m_cancelButton;
@@ -24,7 +25,7 @@ class OptionsWidget : public QWidget
     QSettings m_settings;
 
 public:
-    OptionsWidget(QWidget *parent = 0);
+    OptionsWidget(QString productName,QWidget *parent = 0);
 
     QString name();
     QString password();

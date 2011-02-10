@@ -44,7 +44,7 @@ linux: {
     SOURCES +=  \
                 src/GpsModeller.cpp
 
-    LIBS += -lxml2 -lodbc
+    LIBS += -lxml2
 
     DEFINES += SIMULATE_GPS
 }

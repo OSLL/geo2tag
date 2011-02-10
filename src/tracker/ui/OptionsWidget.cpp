@@ -11,8 +11,8 @@
 #include <DaemonManager.h>
 #include "tracker.h"
 
-OptionsWidget::OptionsWidget(QWidget *parent) :
-        QWidget(parent), m_settings("osll","tracker")
+OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
+        QWidget(parent), m_productName(productName), m_settings("osll",m_productName)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(new QLabel("Login:"));
@@ -79,7 +79,7 @@ void OptionsWidget::initSettings()
 
 void OptionsWidget::readSettings()
 {
-    QSettings settings("osll","tracker");
+    QSettings settings("osll",m_productName);
     m_nameEdit->setText(m_settings.value("user").toString());
     m_passwordEdit->setText(m_settings.value("password").toString());
     m_channelEdit->setText(m_settings.value("channel").toString());
