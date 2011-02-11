@@ -4,7 +4,7 @@
 MainWindow::MainWindow(QWidget* parent):
          QMainWindow(parent)
 {
-
+  m_stackedWidget = new QStackedWidget(this);
   m_map = new LightMap(this);
   QVBoxLayout *layout = new QVBoxLayout;
   m_menu = new QMenu(this);
@@ -17,7 +17,9 @@ MainWindow::MainWindow(QWidget* parent):
   m_menu=menuBar()->addMenu("Options");
   m_menu->addAction(m_settingsAction);
   m_map->setCenter( 60 , 30);
-  setCentralWidget(m_map);
+  m_stackedWidget->addWidget(m_map);
+  m_stackedWidget->addWidget(m_optWidget);
+  setCentralWidget(m_stackedWidget);
 //  layout->addWidget(m_menu);
  //layout->addWidget(m_map);
 //  setLayout(layout);
@@ -29,10 +31,10 @@ MainWindow::MainWindow(QWidget* parent):
 void MainWindow::settings()
 {
   qDebug() << "MainWindow::settings()";
-  m_optWidget->show();
+  m_stackedWidget->setCurrentWidget(m_optWidget);
 }
 
 void MainWindow::settingsDone()
 {
-  m_optWidget->hide();
+  m_stackedWidget->setCurrentWidget(m_map);
 }
