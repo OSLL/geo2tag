@@ -1,0 +1,16 @@
+debian/tmp/usr/lib/qt4/plugins/sqldrivers/libqsqlpsql.so
+debian/tmp/usr/lib/libQtSql.so.4
+debian/tmp/usr/lib/libQtSql.so.4.7
+debian/tmp/usr/lib/libQtSql.so.4.7.0
+debian/tmp/usr/share/lintian/overrides/libqt4-sql
+debian/tmp/etc/xdg/Trolltech.conf
+debian/tmp/usr/lib/libQtCLucene.so.4
+debian/tmp/usr/lib/libQtCLucene.so.4.7
+debian/tmp/usr/lib/libQtCLucene.so.4.7.0
+debian/tmp/usr/lib/libQtCore.so.4
+debian/tmp/usr/lib/libQtCore.so.4.7
+debian/tmp/usr/lib/libQtCore.so.4.7.0
+debian/tmp/usr/lib/qt4/plugins/codecs/libqcncodecs.so
+debian/tmp/usr/lib/qt4/plugins/codecs/libqjpcodecs.so
+debian/tmp/usr/lib/qt4/plugins/codecs/libqkrcodecs.so
+debian/tmp/usr/lib/qt4/plugins/codecs/libqtwcodecs.so
