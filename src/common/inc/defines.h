@@ -42,20 +42,23 @@
 #ifndef _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #define _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 
-#define SERVER_HTTP_URL "http://178.252.121.244/"
+const QString& getServerUrl();
+void setServerUrl(const QString& serverUrl);
+
+#define DEFAULT_SERVER "http://178.252.121.244/"
 #define DEFAULT_PORT 8080
 
 #define DATABASE_NAME "geo2tag" // "demo"
 
-#define SUBSCRIBE_HTTP_URL        SERVER_HTTP_URL"service?query=subscribe"
-#define UNSUBSCRIBE_HTTP_URL      SERVER_HTTP_URL"service?query=unsubscribe"
-#define APPLY_HTTP_URL            SERVER_HTTP_URL"service?query=apply"
-#define FEED_HTTP_URL             SERVER_HTTP_URL"service?query=rss"
-#define SUBSCRIBED_LIST_HTTP_URL  SERVER_HTTP_URL"service?query=subscribed"
-#define AVAILABLE_LIST_HTTP_URL   SERVER_HTTP_URL"service?query=channels"
-#define LOGIN_HTTP_URL            SERVER_HTTP_URL"service?query=login"
-#define APPLY_CHANNEL_HTTP_URL    SERVER_HTTP_URL"service?query=addChannel"
-#define ADD_USER_HTTP_URL         SERVER_HTTP_URL"service?query=addUser"
+#define SUBSCRIBE_HTTP_URL        getServerUrl()+QString("service?query=subscribe")
+#define UNSUBSCRIBE_HTTP_URL      getServerUrl()+QString("service?query=unsubscribe")
+#define APPLY_HTTP_URL            getServerUrl()+QString("service?query=apply")
+#define FEED_HTTP_URL             getServerUrl()+QString("service?query=rss")
+#define SUBSCRIBED_LIST_HTTP_URL  getServerUrl()+QString("service?query=subscribed")
+#define AVAILABLE_LIST_HTTP_URL   getServerUrl()+QString("service?query=channels")
+#define LOGIN_HTTP_URL            getServerUrl()+QString("service?query=login")
+#define APPLY_CHANNEL_HTTP_URL    getServerUrl()+QString("service?query=addChannel")
+#define ADD_USER_HTTP_URL         getServerUrl()+QString("service?query=addUser")
 
 #define GPS_MODELLER_FILE         "/usr/share/wikigps/helsinki.gpx"
 #define CONFIG_FILE               "/usr/share/wikigps/wikigps.conf"

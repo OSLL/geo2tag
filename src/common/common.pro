@@ -35,6 +35,7 @@ SOURCES += \
     src/Picture.cpp \
     src/PngPicture.cpp \
     src/Channel.cpp \
+    src/defines.cpp \
     src/User.cpp
 
 linux: {
