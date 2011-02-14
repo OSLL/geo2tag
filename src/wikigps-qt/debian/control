@@ -2,9 +2,9 @@ Source: wikigps-qt
 Section: web
 Priority: optional
 Maintainer: Pavel Zubarev <zps@osll.spb.ru>
-Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6)
+Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6), libqt4-sql, libqt4-sql-psql, libqtcore4
 
 Package: wikigps-qt
 Architecture: any
-Depends: ${shlibs:Depends}, libqt4-sql, libqt4-sql-psql, libqtcore4
+Depends: ${shlibs:Depends}
 Description: qt 4.7 libs needed for wikigps-service
