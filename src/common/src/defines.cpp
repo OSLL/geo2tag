@@ -1,7 +1,7 @@
 #include <QSettings>
 #include "defines.h"
 
-const QString& getServerUrl()
+const QString getServerUrl()
 {
         QSettings settings("osll","libs");
         if (settings.value("server_url").isNull()){
