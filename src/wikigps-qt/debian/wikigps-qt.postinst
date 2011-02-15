@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo touch /etc/ld.so.conf.d/wikigps-qt.conf
+sudo echo "/opt/geo2tag/lib/qt" >> /etc/ld.so.conf
+sudo ldconfig

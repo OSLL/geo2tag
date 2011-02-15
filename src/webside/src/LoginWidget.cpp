@@ -1,8 +1,5 @@
-#include "inc/LoginWidget.h"
+#include "LoginWidget.h"
 
-//#include "DbSession.h"
-//#include "UserInternal.h"
-//#include "DataMarks.h"
 #include "Channel.h"
 #include "defines.h"
 #include "OpenStreetMap.h"
@@ -88,7 +85,7 @@ void LoginWidget::loginClicked()
     {*/
     //    loginSuccessful.emit(std::string(DEFAULT_TOKEN));
 //    }
-	connect(&loginQuery,SIGNAL(connected),this,SLOT(userRecieved()));
+	connect(&loginQuery,Q_SIGNAL(connected()),this,Q_SLOT(userRecieved()));
 	loginQuery.setQuery(name,pass);
 	
 }

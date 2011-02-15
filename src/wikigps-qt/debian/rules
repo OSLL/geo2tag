@@ -15,7 +15,9 @@ CFLAGS = -Wall -g
 
 BUILDDIR = ./debian/build/
 
-FILES_TO_COPY= /usr/lib/qt4/plugins/sqldrivers/libqsqlpsql.so /usr/lib/libQtSql.so.4 /usr/lib/libQtSql.so.4.7 /usr/lib/libQtSql.so.4.7.0 /usr/share/lintian/overrides/libqt4-sql /etc/xdg/Trolltech.conf /usr/lib/libQtCLucene.so.4 /usr/lib/libQtCLucene.so.4.7 /usr/lib/libQtCLucene.so.4.7.0 /usr/lib/libQtCore.so.4 /usr/lib/libQtCore.so.4.7 /usr/lib/libQtCore.so.4.7.0 /usr/lib/qt4/plugins/codecs/libqcncodecs.so /usr/lib/qt4/plugins/codecs/libqjpcodecs.so /usr/lib/qt4/plugins/codecs/libqkrcodecs.so /usr/lib/qt4/plugins/codecs/libqtwcodecs.so
+COPY_AND_CREATE_DIR= /usr/lib/qt4/plugins/sqldrivers/libqsqlpsql.so /usr/share/lintian/overrides/libqt4-sql /etc/xdg/Trolltech.conf /usr/lib/qt4/plugins/codecs/libqcncodecs.so /usr/lib/qt4/plugins/codecs/libqjpcodecs.so /usr/lib/qt4/plugins/codecs/libqkrcodecs.so /usr/lib/qt4/plugins/codecs/libqtwcodecs.so
+
+JUST_COPY= /usr/lib/libQtSql.so* /usr/lib/libQtCLucene.so* /usr/lib/libQtCore.so* /usr/lib/libqjson.so* 
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
@@ -41,8 +43,10 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	for i in $(FILES_TO_COPY) ; do install -d debian/tmp`echo $$i | grep -o '^.*/'` ;done
-	for i in $(FILES_TO_COPY) ; do install $$i debian/tmp`echo $$i | grep -o '^.*/'` ;done
+	for i in $(COPY_AND_CREATE_DIR) ; do install -d debian/tmp`echo $$i | grep -o '^.*/'` ;done
+	for i in $(COPY_AND_CREATE_DIR) ; do install $$i debian/tmp`echo $$i | grep -o '^.*/'` ;done
+	install -d debian/tmp/opt/geo2tag/lib/qt;
+	for i in $(JUST_COPY) ; do cp -l $$i debian/tmp/opt/geo2tag/lib/qt ;done
 	dh_install -s
 	
 

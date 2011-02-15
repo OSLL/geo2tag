@@ -1,7 +1,5 @@
 #include "ChannelsWidget.h"
-#include "DbSession.h"
 #include "defines.h"
-#include "UserInternal.h"
 
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>

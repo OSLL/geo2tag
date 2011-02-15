@@ -70,7 +70,7 @@ namespace GUI
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
 
-private slots:
+private Q_SLOTS:
    
     virtual void processReply(QNetworkReply *reply);
 
@@ -86,7 +86,7 @@ public:
        
         const QString& getStatus() const;
     
-    signals:    
+    Q_SIGNALS:    
         void responseReceived();
     
     

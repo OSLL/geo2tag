@@ -9,7 +9,8 @@ DEPENDPATH += . inc src
 INCLUDEPATH += . inc
 QMAKE_CXXFLAGS += -g3
 QT+= sql network
-config+= network
+config += network
+CONFIG += no_keywords
 # Wt
 INCLUDEPATH += /usr/include/Wt
 LIBS += -lwtfcgi
@@ -25,17 +26,8 @@ INCLUDEPATH += ../common/inc \
 
 LIBS += -lcommon -lwikigpsHttp -lwikigpsJson
 
-# DbSession (from service)
-INCLUDEPATH += ../service/inc
-DEPENDPATH += ../service/inc \
-              ../service/src
 
-HEADERS += DbSession.h \
-           ChannelInternal.h \
-           DataMarkInternal.h \
-           UserInternal.h \
-           DynamicCastFailure.h \
-	   inc/LoginRequestJSON.h \
+HEADERS += inc/LoginRequestJSON.h \
 	   inc/LoginResponseJSON.h \
 	   inc/AddNewMarkRequestJSON.h \
 	   inc/LoginQuery.h \
@@ -52,12 +44,7 @@ HEADERS += DbSession.h \
 	   inc/Webside.h 
 #    inc/UsersWidget.h
 
-SOURCES += DbSession.cpp \
-           ChannelInternal.cpp \
-           DataMarkInternal.cpp \
-           UserInternal.cpp \
-           DynamicCastFailure.cpp \
-    src/LoginWidget.cpp \
+SOURCES += src/LoginWidget.cpp \
     src/Webside.cpp 
 #    src/UsersWidget.cpp
 

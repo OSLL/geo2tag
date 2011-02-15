@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6)
 
 Package: wikigps-libs
 Architecture: any
-Depends: ${shlibs:Depends},wikigps-qt [i386], unixodbc [i386], unixodbc-dev [i386], libxml2 (>=2.6),libqt4-core [armel],libqt4-network [armel],libqt4-gui [armel]
+Depends: wikigps-qt [i386], unixodbc [i386], unixodbc-dev [i386], libxml2 (>=2.6),libqt4-core [armel],libqt4-network [armel],libqt4-gui [armel]
 Description: Geo2tag libs
 
 Package: wikigps-client
@@ -34,5 +34,5 @@ Description: Geo2tag website
 
 Package: wikigps-service
 Architecture: i386
-Depends: ${shlibs:Depends}, lighttpd, postgresql, unixodbc, odbc-postgresql, wikigps-libs, libpq5
+Depends: lighttpd, postgresql, unixodbc, odbc-postgresql, wikigps-libs, libpq5, libfcgi0ldbl
 Description: Geo2tag webservice

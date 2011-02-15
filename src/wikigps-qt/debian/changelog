@@ -1,3 +1,15 @@
+wikigps-qt (0.3.1) unstable; urgency=low
+
+  * shared librabrarty are copied properly
+
+ -- Mark Zaslavskiy <mark.zaslavskiy@gmail.com>  Mon, 15 Feb 2011 15:34:02 +0300
+
+wikigps-qt (0.3) unstable; urgency=low
+
+  * remove shlibs dependency
+
+ -- Mark Zaslavskiy <mark.zaslavskiy@gmail.com>  Mon, 15 Feb 2011 00:00:02 +0300
+
 wikigps-qt (0.2) unstable; urgency=low
 
   * first build

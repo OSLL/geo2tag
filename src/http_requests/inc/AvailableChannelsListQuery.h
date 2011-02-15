@@ -91,10 +91,10 @@ namespace GUI
 
         void doRequest();
 
-    signals:
+    Q_SIGNALS:
         void responseReceived(QSharedPointer<Channels>& channels);
 
-    private slots:
+    private Q_SLOTS:
         void onManagerFinished(QNetworkReply *reply);
         void onReplyError(QNetworkReply::NetworkError);
         void onManagerSslErrors();

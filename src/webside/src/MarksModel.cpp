@@ -4,8 +4,6 @@
 
 #include <algorithm>
 
-#include "UserInternal.h"
-#include "DbSession.h"
 #include "defines.h"
 
 std::string formatCoord(double coord)

@@ -4,8 +4,6 @@
 #include <Wt/WBreak>
 #include <Wt/WLabel>
 
-#include "DbSession.h"
-#include "UserInternal.h"
 #include "Time.h"
 #include "Handle.h"
 #include "Crc.h"

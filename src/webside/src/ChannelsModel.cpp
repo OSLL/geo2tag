@@ -1,13 +1,8 @@
 #define AMOUNT_OF_COLUMNS 4
 #include <Wt/WContainerWidget>
 #include "ChannelsModel.h"
-#include "UserInternal.h"
-#include "DbSession.h"
-#include "defines.h"
 #include <Wt/WCheckBox>
-#include "DbSession.h"
 #include "defines.h"
-#include "UserInternal.h"
 
 ChannelsModel::ChannelsModel(const QSharedPointer<User> user, WObject *parent)
     : WAbstractTableModel(parent)

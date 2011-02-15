@@ -15,7 +15,7 @@ protected:
     virtual QByteArray getRequestBody() const = 0;
     virtual void processReply(QNetworkReply *reply) = 0;
 
-protected slots:
+protected Q_SLOTS:
 
     void process(QNetworkReply *reply);
 
@@ -26,7 +26,7 @@ public:
 
     void doRequest();
 
-signals:
+Q_SIGNALS:
 
     void responseReceived();
 

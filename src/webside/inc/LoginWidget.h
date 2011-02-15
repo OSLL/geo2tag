@@ -14,7 +14,7 @@ using namespace Wt;
 
 class LoginWidget : public WContainerWidget,QObject
 {
-	Q_OBJECT;
+	Q_OBJECT
    WLineEdit *usernameEdit;
    WLineEdit *passwordEdit;
    WPushButton *loginButton;
@@ -24,7 +24,7 @@ class LoginWidget : public WContainerWidget,QObject
    LoginQuery loginQuery;
 //   std::string m_token;
 
-public slots:
+public Q_SLOTS:
 
    void userRecieved();
  

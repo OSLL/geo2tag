@@ -80,12 +80,12 @@ public:
 
     void doRequest();
 
-signals:
+Q_SIGNALS:
     void responseReceived(QString status,QString status_description);
     void replyError(QNetworkReply::NetworkError);
     void managerSslErrors();
 
-private slots:
+private Q_SLOTS:
     void onManagerFinished(QNetworkReply *reply);
 
 private:

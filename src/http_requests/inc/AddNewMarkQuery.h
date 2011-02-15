@@ -25,7 +25,7 @@ public:
     QSharedPointer<DataMark> getTag();
     const QSharedPointer<DataMark>& getTag() const;
 
-signals:
+Q_SIGNALS:
 
     void tagAdded();
 };

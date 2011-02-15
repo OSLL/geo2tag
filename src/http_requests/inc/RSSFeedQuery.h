@@ -73,7 +73,7 @@ class RSSFeedQuery : public DefaultQuery
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
 
-private slots:
+private Q_SLOTS:
 
     virtual void processReply(QNetworkReply *reply);
 
@@ -96,7 +96,7 @@ public:
 
      const DataChannels& getRSSFeed() const;
 
-signals:
+Q_SIGNALS:
 
      void rssFeedReceived();
 

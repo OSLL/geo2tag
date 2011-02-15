@@ -21,8 +21,6 @@ HEADERS += \
     inc/DefaultException.h \
     inc/GpsInfo.h \
     inc/User.h \
-    inc/Picture.h \
-    inc/PngPicture.h \
     inc/Channel.h \
     inc/defines.h \
     inc/ConcurrentVector.h \
@@ -32,8 +30,6 @@ SOURCES += \
     src/DataMarks.cpp \
     src/DefaultException.cpp \
     src/GpsInfo.cpp \
-    src/Picture.cpp \
-    src/PngPicture.cpp \
     src/Channel.cpp \
     src/defines.cpp \
     src/User.cpp
@@ -45,6 +41,7 @@ linux: {
     SOURCES +=  \
                 src/GpsModeller.cpp
 
+    QT -= gui
     LIBS += -lxml2
 
     DEFINES += SIMULATE_GPS

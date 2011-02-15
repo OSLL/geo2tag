@@ -1,3 +1,21 @@
+wikigps (0.1.5b) unstable; urgency=low
+
+  * remove sharedlib dependece
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Tue, 15 Feb 2011 16:17:51 +0300
+
+wikigps (0.1.5a) unstable; urgency=low
+
+  * remove sharedlib dependece
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Mon, 15 Feb 2011 00:17:51 +0300
+
+wikigps (0.1.5) unstable; urgency=low
+
+  * added dependence from wikigps-qt
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Mon, 14 Feb 2011 23:37:51 +0300
+
 wikigps (0.1.4) unstable; urgency=low
 
   * replacing for QSharedPointer
