@@ -95,11 +95,11 @@ void RSSFeedQuery::processReply(QNetworkReply *reply)
     {
         m_hashMap = response.getRSSFeed();
 
-        emit rssFeedReceived();
+        Q_EMIT rssFeedReceived();
     }
     else
     {
-        emit errorOccured(response.getStatusMessage());
+        Q_EMIT errorOccured(response.getStatusMessage());
     }
 }
 

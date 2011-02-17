@@ -90,10 +90,10 @@ namespace GUI
 	response.parseJson(reply->readAll());
 	if(response.getStatus() == "Ok"){
 		m_status="Ok";
-		emit responseReceived();
+		Q_EMIT responseReceived();
 	}
 	else {
-		emit errorOccured(response.getStatusMessage());
+		Q_EMIT errorOccured(response.getStatusMessage());
 	}
     }
 

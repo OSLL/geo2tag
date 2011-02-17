@@ -130,7 +130,7 @@ namespace GUI
             std::stringstream jsonStream(jsonResponse.toStdString());
             ChannelListResponseJSON channelList(jsonStream);
             QSharedPointer<Channels> channels = channelList.getChannels();
-            emit responseReceived(channels);
+            Q_EMIT responseReceived(channels);
         }
     }
 

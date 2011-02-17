@@ -1,4 +1,4 @@
-#include "inc/Webside.h"
+#include "Webside.h"
 
 /* Shortcut for a <div id=""> */
 class Div : public WContainerWidget
@@ -38,11 +38,11 @@ Webside::Webside(WContainerWidget *parent)
     //WText *footerWrapper = new WText(tr("footer_wrapper"), this);
     //footerWrapper->setId("footer_wrapper");
 
-    loginWidget->loginSuccessful.connect(SLOT(this, Webside::onLoginSuccess));
+    loginWidget->loginSuccessful.connect(this, &Webside::onLoginSuccess);
 }
 
 void Webside::onLoginSuccess(QSharedPointer<User> user)
 {
-    mainWidget = new Sketch(user stackedWidget);
+    mainWidget = new Sketch(user, stackedWidget);
     stackedWidget->setCurrentWidget(mainWidget);
 }

@@ -80,7 +80,7 @@ public:
 
 	SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent = 0);
 	
-        ~SubscribeChannelQuery();
+        ~SubscribedChannelsListQuery();
 
 	const QSharedPointer<Channels>& getChannels() const;
 

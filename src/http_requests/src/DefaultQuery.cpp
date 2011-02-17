@@ -31,5 +31,5 @@ void DefaultQuery::process(QNetworkReply *reply)
 
 void DefaultQuery::handleError()
 {
-    emit errorOccured("network error occcured");
+    Q_EMIT errorOccured("network error occcured");
 }

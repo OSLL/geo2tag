@@ -4,7 +4,7 @@
 #include "defines.h"
 #include "OpenStreetMap.h"
 #include "YandexMap.h"
-
+#include <QObject>
 #include <Wt/WLabel>
 #include <Wt/WText>
 #include <Wt/WBreak>
@@ -33,7 +33,6 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
     map->setMaximumSize(WLength(500), WLength(400));
     map->setCenter(Wt::WGoogleMap::Coordinate(60, 30));
     map->enableScrollWheelZoom();
-
 //    WBreak *break3 = new WBreak(this);
 //    WOpenStreetMap *map2 = new WOpenStreetMap(this);
 //    map2->setMinimumSize(WLength(300), WLength(400));
@@ -46,6 +45,8 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
     loginButton->clicked().connect(this, &LoginWidget::loginClicked);
 
     fillMap();
+
+    m_con=new Connector<LoginWidget>(&m_loginQuery,LoginQueryConnected,&LoginWidget::userRecieved,this);
 
     //this->setStyleClass("login_wigdet");
 }
@@ -85,13 +86,13 @@ void LoginWidget::loginClicked()
     {*/
     //    loginSuccessful.emit(std::string(DEFAULT_TOKEN));
 //    }
-	connect(&loginQuery,Q_SIGNAL(connected()),this,Q_SLOT(userRecieved()));
-	loginQuery.setQuery(name,pass);
+	m_loginQuery.setQuery(name,pass);
+	m_loginQuery.doRequest();
 	
 }
 
 void LoginWidget::userRecieved(){
-QSharedPointer<User> us=loginQuery.getUser();
-	loginSuccessful.emit(us);
+	QSharedPointer<User> us=this->m_loginQuery.getUser();
+	this->loginSuccessful.emit(us);
 //loginSuccessful.emit(std::string(DEFAULT_TOKEN));
 }

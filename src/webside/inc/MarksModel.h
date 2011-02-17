@@ -5,7 +5,6 @@
 
 #include "DataMarks.h"
 #include "Channel.h"
-#include "Handle.h"
 #include <sstream>
 
 using namespace Wt;

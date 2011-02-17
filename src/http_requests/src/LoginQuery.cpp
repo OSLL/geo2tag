@@ -80,11 +80,11 @@ void LoginQuery::processReply(QNetworkReply *reply)
     {
         QSharedPointer<User> user = response.getUsers()->at(0);
         m_user = QSharedPointer<User>(new JsonUser(m_login, m_password, user->getToken()));
-        emit connected();
+        Q_EMIT connected();
     }
     else
     {
-        emit errorOccured(response.getStatusMessage());
+        Q_EMIT errorOccured(response.getStatusMessage());
     }
 
 }

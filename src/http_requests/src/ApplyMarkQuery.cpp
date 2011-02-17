@@ -156,7 +156,7 @@ namespace GUI
                 status_description = result["status_description"].toString();
             }
 
-            emit responseReceived(status,status_description);
+            Q_EMIT responseReceived(status,status_description);
         }
     }
 /*

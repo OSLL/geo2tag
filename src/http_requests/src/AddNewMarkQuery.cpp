@@ -27,11 +27,11 @@ void AddNewMarkQuery::processReply(QNetworkReply *reply)
     response.parseJson(reply->readAll());
     if(response.getStatus() == "Ok")
     {
-        emit tagAdded();
+        Q_EMIT tagAdded();
     }
     else
     {
-        emit errorOccured(response.getStatusMessage());
+        Q_EMIT errorOccured(response.getStatusMessage());
     }
 }
 

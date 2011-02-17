@@ -27,20 +27,7 @@ INCLUDEPATH += ../common/inc \
 LIBS += -lcommon -lwikigpsHttp -lwikigpsJson
 
 
-HEADERS += inc/LoginRequestJSON.h \
-	   inc/LoginResponseJSON.h \
-	   inc/AddNewMarkRequestJSON.h \
-	   inc/LoginQuery.h \
-	   inc/RSSFeedJSON.h \
-	   inc/RSSFeedRequestJSON.h \
-	   inc/AddNewMarkResponseJSON.h \
-           inc/LoginWidget.h \
-           inc/LoginRequestJSON.h \
-           inc/LoginResponseJSON.h \
-           inc/AddNewMarkRequestJSON.h \
-	   inc/AddNewMarkResponseJSON.h \
-	   inc/RSSFeedRequestJSON.h \
-	   inc/RSSFeedJSON.h \
+HEADERS += inc/LoginWidget.h \
 	   inc/Webside.h 
 #    inc/UsersWidget.h
 
@@ -54,8 +41,7 @@ HEADERS += inc/MarksWidget.h \
            inc/sketch.h \ 
            inc/GoogleMap.h \
            inc/OpenStreetMap.h \
-	   inc/LoginQuery.h \
-           inc/RSSFeedQuery.h \
+	   inc/Connector.h \
            inc/YandexMap.h 
 
 #	   inc/ChannelsWidget.h \
@@ -65,12 +51,11 @@ HEADERS += inc/MarksWidget.h \
 #           inc/PrefWidget.h 
 SOURCES += src/main.cpp \
            src/MarksModel.cpp \
+	   src/Connector.cpp \
            src/MarksWidget.cpp \
            src/sketch.cpp \
            src/GoogleMap.cpp \
            src/OpenStreetMap.cpp \
-	   src/LoginQuery.cpp \
-           src/RSSFeedQuery.cpp \
            src/YandexMap.cpp
 #	   src/ChannelsWidget.cpp \
 #	   src/ChannelsModel.cpp \

@@ -10,23 +10,21 @@
 #include "LoginQuery.h"
 #include "GoogleMap.h"
 #include "RSSFeedQuery.h"
+
+#include "Connector.h"
 using namespace Wt;
 
-class LoginWidget : public WContainerWidget,QObject
+class LoginWidget : public WContainerWidget
 {
-	Q_OBJECT
-   WLineEdit *usernameEdit;
-   WLineEdit *passwordEdit;
-   WPushButton *loginButton;
-   WGoogleMap *map;
-
+   WLineEdit * usernameEdit;
+   WLineEdit * passwordEdit;
+   WPushButton * loginButton;
+   WGoogleMap * map;
+   Connector<LoginWidget> * m_con;
    QSharedPointer<User> m_user;
-   LoginQuery loginQuery;
+   LoginQuery m_loginQuery;
 //   std::string m_token;
 
-public Q_SLOTS:
-
-   void userRecieved();
  
 public:
     LoginWidget(WContainerWidget *parent = 0);
@@ -38,6 +36,7 @@ public:
     Wt::Signal<QSharedPointer<User> > loginSuccessful;
     /* slots */
     void loginClicked();
+    void userRecieved();
 };
 
 #endif // LOGINWIDGET_H

@@ -5,7 +5,6 @@
 
 #include "DataMarks.h"
 #include "Channel.h"
-#include "Handle.h"
 #include <sstream>
 
 #include "SubscribedChannelsListQuery.h"
@@ -17,10 +16,10 @@ using namespace Wt;
 
 class ChannelsModel : public WAbstractTableModel
 {
-	SubscribedChannelsListQuery subscribedQuery;
-	AvailableChannelsListQuery availableQuery;
-	SubscribeChannelQuery subscribeQuery;
-	UnsubscribeChannelQuery unsubscribeQuery;
+	GUI::SubscribedChannelsListQuery subscribedQuery;
+	GUI::AvailableChannelsListQuery availableQuery;
+	GUI::SubscribeChannelQuery subscribeQuery;
+	GUI::UnsubscribeChannelQuery unsubscribeQuery;
 
 	QSharedPointer<User> m_user;
 //    std::string m_token;
