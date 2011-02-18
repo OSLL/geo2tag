@@ -94,7 +94,7 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
 
         for(int j=0; j<markList.size(); j++)
         {
-            QVariantMap markMap = markList.at(i).toMap();
+            QVariantMap markMap = markList.at(j).toMap();
 
             QString title = markMap["title"].toString();
             QString link = markMap["link"].toString();
