@@ -8,4 +8,8 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-SOURCES += getcolor.cpp
+SOURCES += getcolor.cpp \
+    testwidget.cpp
+
+HEADERS += \
+    testwidget.h

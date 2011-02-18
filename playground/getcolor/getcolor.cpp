@@ -1,25 +1,17 @@
 #include <QApplication>
 #include <QDebug>
 #include <QColor>
+#include "testwidget.h"
 
 
-QColor getColor()
+
+int main(int c, char **v)
 {
-  static int counter = 0; // times of getting color
-  QColor color; 
+  QApplication app(c,v);
+  TestWidget tw(NULL);
 
-   ///
-
-  return color;
-}
+  tw.show();
 
 
-
-int main()
-{
-
-  for(int i=0;i<9999;++i)
-    qDebug() << getColor().name();
-
-  return 0;
+  return app.exec();
 }
