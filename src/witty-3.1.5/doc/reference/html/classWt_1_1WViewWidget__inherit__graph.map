@@ -1,4 +1,0 @@
-<area shape="rect" href="$classWt_1_1WStaticModelView.html" title="A widget that implements a view for a non&#45;changing model." alt="" coords="5,304,235,331">
-<area shape="rect" href="$classWt_1_1WWebWidget.html" title="A base class for widgets with an HTML counterpart." alt="" coords="59,155,181,181">
-<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="72,80,168,107">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="72,5,168,32">

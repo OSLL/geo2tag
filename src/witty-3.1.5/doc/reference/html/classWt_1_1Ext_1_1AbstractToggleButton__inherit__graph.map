@@ -1,8 +1,0 @@
-<area shape="rect" href="$classWt_1_1Ext_1_1CheckBox.html" title="A user control that represents a check box." alt="" coords="5,528,139,555">
-<area shape="rect" href="$classWt_1_1Ext_1_1RadioButton.html" title="A user control that represents a radio button." alt="" coords="163,528,307,555">
-<area shape="rect" href="$classWt_1_1Ext_1_1FormField.html" title="An abstract base class for form fields." alt="" coords="88,379,219,405">
-<area shape="rect" href="$classWt_1_1Ext_1_1Component.html" title="An abstract base class for widgets that can be visually disabled." alt="" coords="84,304,223,331">
-<area shape="rect" href="$classWt_1_1Ext_1_1Widget.html" title="An abstract base class for all Ext widgets." alt="" coords="97,229,209,256">
-<area shape="rect" href="$classWt_1_1WWebWidget.html" title="A base class for widgets with an HTML counterpart." alt="" coords="92,155,215,181">
-<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="105,80,201,107">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="105,5,201,32">

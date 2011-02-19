@@ -1,5 +1,0 @@
-<area shape="rect" href="$classWt_1_1WAggregateProxyModel.html" title="A proxy model for Wt&#39;s item models that provides column aggregation." alt="" coords="5,237,189,267">
-<area shape="rect" href="$classWt_1_1WBatchEditProxyModel.html" title="A proxy model for Wt&#39;s item models that provides batch editing." alt="" coords="213,237,397,267">
-<area shape="rect" href="$classWt_1_1WSortFilterProxyModel.html" title="A proxy model for Wt&#39;s item models that provides filtering and/or sorting." alt="" coords="421,237,600,267">
-<area shape="rect" href="$classWt_1_1WAbstractItemModel.html" title="An abstract model for use with Wt&#39;s view classes." alt="" coords="223,83,388,112">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="259,5,352,35">

@@ -1,4 +1,0 @@
-<area shape="rect" href="$classWt_1_1WViewWidget.html" title="An abstract base class for an MVC view that is rendered using a widget." alt="" coords="57,229,183,256">
-<area shape="rect" href="$classWt_1_1WWebWidget.html" title="A base class for widgets with an HTML counterpart." alt="" coords="59,155,181,181">
-<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="72,80,168,107">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="72,5,168,32">

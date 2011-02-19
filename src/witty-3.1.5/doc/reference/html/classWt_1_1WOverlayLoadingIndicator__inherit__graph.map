@@ -1,6 +1,0 @@
-<area shape="rect" href="$classWt_1_1WContainerWidget.html" title="A widget that holds and manages child widgets." alt="" coords="5,304,157,331">
-<area shape="rect" href="$classWt_1_1WInteractWidget.html" title="An abstract widget that can receive user&#45;interface interaction." alt="" coords="11,229,152,256">
-<area shape="rect" href="$classWt_1_1WWebWidget.html" title="A base class for widgets with an HTML counterpart." alt="" coords="20,155,143,181">
-<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="33,80,129,107">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="33,5,129,32">
-<area shape="rect" href="$classWt_1_1WLoadingIndicator.html" title="An abstract interface for a loading indicator." alt="" coords="181,304,333,331">

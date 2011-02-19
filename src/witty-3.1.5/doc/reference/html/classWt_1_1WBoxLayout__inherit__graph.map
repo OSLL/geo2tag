@@ -1,5 +1,0 @@
-<area shape="rect" href="$classWt_1_1WHBoxLayout.html" title="A layout manager which arranges widgets horizontally." alt="" coords="5,229,133,256">
-<area shape="rect" href="$classWt_1_1WVBoxLayout.html" title="A layout manager which arranges widgets vertically." alt="" coords="157,229,285,256">
-<area shape="rect" href="$classWt_1_1WLayout.html" title="An abstract base class for layout managers." alt="" coords="97,80,193,107">
-<area shape="rect" href="$classWt_1_1WLayoutItem.html" title="An abstract base class for items that can participate in a layout." alt="" coords="17,5,140,32">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="164,5,260,32">

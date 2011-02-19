@@ -1,6 +1,0 @@
-<area shape="rect" href="$classWt_1_1WAbstractToggleButton.html" title="An abstract base class for radio buttons and check boxes." alt="" coords="5,379,187,405">
-<area shape="rect" href="$classWt_1_1WFormWidget.html" title="An abstract widget that corresponds to an HTML form element." alt="" coords="32,304,160,331">
-<area shape="rect" href="$classWt_1_1WInteractWidget.html" title="An abstract widget that can receive user&#45;interface interaction." alt="" coords="25,229,167,256">
-<area shape="rect" href="$classWt_1_1WWebWidget.html" title="A base class for widgets with an HTML counterpart." alt="" coords="35,155,157,181">
-<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="48,80,144,107">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="48,5,144,32">

@@ -1,4 +1,0 @@
-<area shape="rect" href="$classWt_1_1Dbo_1_1Exception.html" title="Exception base class for Wt::Dbo." alt="" coords="7,59,140,88">
-<area shape="rect" href="$classWt_1_1Dbo_1_1NoUniqueResultException.html" title="Exception thrown when a query unexpectedly finds a non&#45;unique result." alt="" coords="191,5,417,35">
-<area shape="rect" href="$classWt_1_1Dbo_1_1ObjectNotFoundException.html" title="Exception thrown when trying to load a non&#45;existing object." alt="" coords="191,59,417,88">
-<area shape="rect" href="$classWt_1_1Dbo_1_1StaleObjectException.html" title="Exception thrown when Wt::Dbo detects a concurrent modification" alt="" coords="203,112,405,141">

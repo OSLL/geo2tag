@@ -1,3 +1,0 @@
-<area shape="rect" href="$classWt_1_1WLocalizedStrings.html" title="An abstract class that provides support for localized strings." alt="" coords="7,32,159,61">
-<area shape="rect" href="$classWt_1_1WCombinedLocalizedStrings.html" title="A localized string resolver that bundles multiple string resolvers." alt="" coords="208,5,419,35">
-<area shape="rect" href="$classWt_1_1WMessageResourceBundle.html" title="Support for localized strings using XML files." alt="" coords="211,59,416,88">

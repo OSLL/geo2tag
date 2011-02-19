@@ -1,4 +1,0 @@
-<area shape="rect" href="$classWt_1_1WCircleArea.html" title="A interactive area in a widget, specified by a circle." alt="" coords="5,155,123,181">
-<area shape="rect" href="$classWt_1_1WPolygonArea.html" title="An interactive area in a widget, specified by a polygon." alt="" coords="147,155,277,181">
-<area shape="rect" href="$classWt_1_1WRectArea.html" title="A interactive area in a widget, specified by a rectangle." alt="" coords="301,155,413,181">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="164,5,260,32">

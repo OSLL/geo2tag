@@ -1,7 +1,0 @@
-<area shape="rect" href="$classWt_1_1Ext_1_1Button.html" title="A button." alt="" coords="5,453,117,480">
-<area shape="rect" href="$classWt_1_1Ext_1_1MenuItem.html" title="An item in a menu." alt="" coords="141,453,272,480">
-<area shape="rect" href="$classWt_1_1Ext_1_1Component.html" title="An abstract base class for widgets that can be visually disabled." alt="" coords="64,304,203,331">
-<area shape="rect" href="$classWt_1_1Ext_1_1Widget.html" title="An abstract base class for all Ext widgets." alt="" coords="77,229,189,256">
-<area shape="rect" href="$classWt_1_1WWebWidget.html" title="A base class for widgets with an HTML counterpart." alt="" coords="72,155,195,181">
-<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="85,80,181,107">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="85,5,181,32">

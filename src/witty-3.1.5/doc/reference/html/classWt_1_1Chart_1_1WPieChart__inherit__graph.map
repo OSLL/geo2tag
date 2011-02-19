@@ -1,6 +1,0 @@
-<area shape="rect" href="$classWt_1_1Chart_1_1WAbstractChart.html" title="Abstract base class for MVC&#45;based charts." alt="" coords="5,379,181,405">
-<area shape="rect" href="$classWt_1_1WPaintedWidget.html" title="A widget that is painted using vector graphics." alt="" coords="23,304,164,331">
-<area shape="rect" href="$classWt_1_1WInteractWidget.html" title="An abstract widget that can receive user&#45;interface interaction." alt="" coords="23,229,164,256">
-<area shape="rect" href="$classWt_1_1WWebWidget.html" title="A base class for widgets with an HTML counterpart." alt="" coords="32,155,155,181">
-<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="45,80,141,107">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="45,5,141,32">

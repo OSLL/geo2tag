@@ -1,3 +1,0 @@
-<area shape="rect" href="$classWt_1_1Dbo_1_1SqlConnection.html" title="Abstract base class for an SQL connection." alt="" coords="5,32,165,61">
-<area shape="rect" href="$classWt_1_1Dbo_1_1backend_1_1Postgres.html" title="A PostgreSQL connection." alt="" coords="213,5,397,35">
-<area shape="rect" href="$classWt_1_1Dbo_1_1backend_1_1Sqlite3.html" title="An SQLite3 connection." alt="" coords="219,59,392,88">

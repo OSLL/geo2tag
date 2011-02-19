@@ -1,9 +1,0 @@
-<area shape="rect" href="$classWt_1_1Ext_1_1ComboBox.html" title="A widget that provides a drop&#45;down combo&#45;box control." alt="" coords="5,528,141,555">
-<area shape="rect" href="$classWt_1_1Ext_1_1DateField.html" title="A form field for conveniently editing a date using a calendar popup." alt="" coords="165,528,293,555">
-<area shape="rect" href="$classWt_1_1Ext_1_1NumberField.html" title="A form field for editing a number." alt="" coords="317,528,464,555">
-<area shape="rect" href="$classWt_1_1Ext_1_1FormField.html" title="An abstract base class for form fields." alt="" coords="164,379,295,405">
-<area shape="rect" href="$classWt_1_1Ext_1_1Component.html" title="An abstract base class for widgets that can be visually disabled." alt="" coords="160,304,299,331">
-<area shape="rect" href="$classWt_1_1Ext_1_1Widget.html" title="An abstract base class for all Ext widgets." alt="" coords="173,229,285,256">
-<area shape="rect" href="$classWt_1_1WWebWidget.html" title="A base class for widgets with an HTML counterpart." alt="" coords="168,155,291,181">
-<area shape="rect" href="$classWt_1_1WWidget.html" title="The abstract base class for a user&#45;interface component." alt="" coords="181,80,277,107">
-<area shape="rect" href="$classWt_1_1WObject.html" title="A base class for objects that participate in the signal/slot system." alt="" coords="181,5,277,32">
