@@ -3,6 +3,7 @@
 
 #include <QStringList>
 
+
 class Control
 {
 public:
