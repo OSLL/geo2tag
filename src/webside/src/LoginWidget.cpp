@@ -52,7 +52,13 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
 
 void LoginWidget::initCons()
 {
+  typedef void (LoginWidget::*SIGNAL)();
 //	loginButton->clicked().connect(this, &LoginWidget::loginClicked);
+  SIGNAL p;
+	p = &LoginWidget::loginClicked;
+  EventSignal< WMouseEvent > me(NULL,NULL);
+	me.connect(this,p);
+	loginButton->clicked().connect(this,&LoginWidget::loginClicked);
 	m_con=new Connector<LoginWidget>(&m_loginQuery,LoginQueryConnected,&LoginWidget::userRecieved,this);
 }
 

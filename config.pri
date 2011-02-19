@@ -3,7 +3,6 @@ CONFIG += debug
 CONFIG += linux
 #CONFIG += maemo5
 #CONFIG += symbian
-
 SOURCE_DIR = $$PWD
 
 #contains(QT_CONFIG, reduce_exports):CONFIG+=hide_symbols
@@ -30,6 +29,8 @@ symbian: {
 }
 
 linux: {
+		QMAKE_CXX = g++-4.5
+		QMAKE_LINK = g++-4.5
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }
