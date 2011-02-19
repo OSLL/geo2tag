@@ -16,8 +16,8 @@ linux: {
              http_requests \
              service \
              maps \
-	     webside \
              tracker
+# Mark, you have to check that trunk is able to build before commit such invalid webside 
 }
 
 symbian: {
