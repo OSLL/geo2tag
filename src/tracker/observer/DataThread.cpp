@@ -4,7 +4,12 @@
 #include <QList>
 
 DataThread::DataThread(LightMap* map,QObject *parent) :
-    QThread(parent),  m_settings("osll","tracker"), m_isConnected(false),m_requestIsSended(false),m_map(map)
+    QThread(parent),  
+		m_settings("osll","tracker"), 
+		m_map(map),
+		m_isConnected(false),
+		m_requestIsSent(false)
+
 {
         connect(this,SIGNAL(getFeed()),this,SLOT(onGetFeed()));
 }
@@ -61,18 +66,18 @@ void DataThread::onMarksGotten()
     {
             qDebug() << "mark at " << marks.at(i)->getLatitude()  << " " << marks.at(i)->getLongitude();
     }
-    m_requestIsSended=false;
+    m_requestIsSent=false;
     //and now redraw canvas
 }
 
 void DataThread::onGetFeed()
 {
     qDebug() << "onGetFeed";
-    if (!m_requestIsSended)
+    if (!m_requestIsSent)
     {
             qDebug() << " m_rssQuery->doRequest()";
             m_rssQuery->doRequest();
-            m_requestIsSended=true;
+            m_requestIsSent=true;
     }
 }
 

@@ -142,15 +142,6 @@
         return m_channel;
     }
 
-    QSharedPointer<DataMark> DataMark::createMark(double latitude, double longitude, const QString& label,
-                                                      const QString& description, const QString& url, const QDateTime &time, const QSharedPointer<Channel> &channel,const QSharedPointer<User> &user)
-    {
-        //  assert(false); // zps: here will be code bellow, but without DbSession. I think method should have user as IN parameter
-#if 0
-        return makeHandle(new loader::DataMark(0,latitude,longitude, label, description, url, time,  user, channel));
-#endif
-        return QSharedPointer<DataMark>();
-    }
 
     double deg2rad(double deg)
     {

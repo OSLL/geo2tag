@@ -37,17 +37,17 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
 
 QString OptionsWidget::name()
 {
-    m_settings.value("user").toString();
+    return m_settings.value("user").toString();
 }
 
 QString OptionsWidget::password()
 {
-    m_settings.value("password").toString();
+    return m_settings.value("password").toString();
 }
 
 QString OptionsWidget::channel()
 {
-    m_settings.value("channel").toString();
+    return m_settings.value("channel").toString();
 }
 
 void OptionsWidget::onDoneClicked()

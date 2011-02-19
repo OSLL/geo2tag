@@ -100,17 +100,6 @@ public:
     QSharedPointer<User> getUser() const;
 
     QSharedPointer<Channel> getChannel() const;
-
-    static QSharedPointer<DataMark> createMark(
-            double latitude=0.,
-            double longitude=0.,
-            const QString& label="Default label",
-            const QString& description="No descrption",
-            const QString& url="",
-            const QDateTime &time=QDateTime::currentDateTime().toUTC(),
-            const QSharedPointer<Channel>&channel =QSharedPointer<Channel>(),
-            const QSharedPointer<User>&user=QSharedPointer<User>());
-
     static double getDistance(double lat1, double lon1, double lat2, double lon2);
 
     virtual ~DataMark();

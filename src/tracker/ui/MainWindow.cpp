@@ -91,7 +91,8 @@ void MainWindow::readData()
     QRegExp statusExp("<status>(\\S)</status>");
     QRegExp logExp("<status>(\\S)</status>");
     int pos = 0;
-    while( pos = statusExp.indexIn(m_message,0) != -1)
+
+    while( (pos = statusExp.indexIn(m_message,0)) != -1)
     {
         int length = statusExp.matchedLength();
         QString status = statusExp.cap(1);
@@ -102,7 +103,7 @@ void MainWindow::readData()
         m_message.remove(pos,length);
     }
     pos = 0;
-    while( pos = logExp.indexIn(m_message,0) != -1)
+    while( (pos = logExp.indexIn(m_message,0)) != -1)
     {
         int length = statusExp.matchedLength();
         QString logs = statusExp.cap(1);

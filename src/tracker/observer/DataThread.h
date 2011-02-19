@@ -21,7 +21,7 @@ class DataThread : public QThread
     RSSFeedQuery * m_rssQuery; // this field needs because query is asynchronous
 
     bool m_isConnected;
-    bool m_requestIsSended;
+    bool m_requestIsSent;
 
     void run();
         

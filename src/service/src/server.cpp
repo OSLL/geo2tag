@@ -1,10 +1,11 @@
+#include <QDebug>
 #include <sstream>
 #include <syslog.h>
 #include <string.h>
 #include <fcgi_stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <QDebug>
+
 
 #include "server.h"
 #include "DbSession.h"
@@ -18,17 +19,14 @@ Server::Server()
 
     if (err)
     {
-        std::ostringstream s;
-        s << "FCGX_Init failed: " << err;
-        syslog(LOG_INFO, s.str().c_str());
+        syslog(LOG_INFO, "FCGX_Init failed, errcode=%d",err);
     }
-
-    err = FCGX_InitRequest(&m_cgi,LISTENSOCK_FILENO, LISTENSOCK_FLAGS);
-    if (err)
+    
+		err = FCGX_InitRequest(&m_cgi,LISTENSOCK_FILENO, LISTENSOCK_FLAGS);
+    
+		if (err)
     {
-        std::ostringstream s;
-        s << "FCGX_InitRequest failed: " << err;
-        syslog(LOG_INFO, s.str().c_str());
+        syslog(LOG_INFO, "FCGX_InitRequest failed, errcode=%d",err);
     }
 }
 

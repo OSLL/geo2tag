@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget* parent):
 {
   m_stackedWidget = new QStackedWidget(this);
   m_map = new LightMap(this);
-  QVBoxLayout *layout = new QVBoxLayout;
+//kkv why?  QVBoxLayout *layout = new QVBoxLayout;
   m_menu = new QMenu(this);
   m_settingsAction = new QAction("Settings...",this);
   connect(m_settingsAction,SIGNAL(triggered()),this,SLOT(settings()));

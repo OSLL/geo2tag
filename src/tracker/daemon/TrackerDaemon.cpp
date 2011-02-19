@@ -17,10 +17,10 @@
 #define DAEMON_PORT 34243
 
 TrackerDaemon::TrackerDaemon(): m_settings("osll","tracker"),
-            m_pauseFlag(true),
-            m_isConnected(false),
             m_loginQuery(NULL),
-            m_tagQuery(NULL)
+            m_tagQuery(NULL),
+            m_pauseFlag(true),
+            m_isConnected(false)
 {
     moveToThread(this);
     m_controlServer = new QTcpServer(NULL);
@@ -33,7 +33,7 @@ void TrackerDaemon::newControlConnection()
     qDebug() << "new connection to control socket";
     while(m_controlServer->hasPendingConnections())
     {
-        ControlThread *t = new ControlThread(m_controlServer->nextPendingConnection(),this,this);
+        new ControlThread(m_controlServer->nextPendingConnection(),this,this);
     }
 }
 

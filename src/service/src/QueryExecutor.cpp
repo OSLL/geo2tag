@@ -177,7 +177,7 @@ bool QueryExecutor::subscribeChannel(const QSharedPointer<User>& user,const QSha
     insertNewSubscribtion.prepare("insert into subscribe (channel_id,user_id) values(:channel_id,:user_id);");
     insertNewSubscribtion.bindValue(":channel_id",channel->getId());
     insertNewSubscribtion.bindValue(":user_id",user->getId());
-		syslog(LOG_INFO,"Subscribing %s (Id = %d) for %s (Id = %d)",user->getLogin().toStdString().c_str(),user->getId(),
+		syslog(LOG_INFO,"Subscribing %s (Id = %lld) for %s (Id = %lld)",user->getLogin().toStdString().c_str(),user->getId(),
 				channel->getName().toStdString().c_str(),channel->getId());
 
     m_database.transaction();
