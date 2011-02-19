@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer,SIGNAL(timeout()), SLOT(checkDaemon()));
     timer->start(5000);
 
-    m_message = "";
+//    m_message = "";
 
     m_optionsWidget = new OptionsWidget("tracker",this);
     m_logWidget = new LogWidget(this);
