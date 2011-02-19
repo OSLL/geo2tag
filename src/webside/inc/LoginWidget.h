@@ -24,7 +24,7 @@ class LoginWidget : public WContainerWidget
    QSharedPointer<User> m_user;
    LoginQuery m_loginQuery;
 //   std::string m_token;
-
+   void initCons();
  
 public:
     LoginWidget(WContainerWidget *parent = 0);

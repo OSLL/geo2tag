@@ -42,13 +42,18 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
 //    WYandexMap *map3 = new WYandexMap(this);
 //    map3->setMinimumSize(WLength(300), WLength(400));
 
-    loginButton->clicked().connect(this, &LoginWidget::loginClicked);
-
+  //  loginButton->clicked().connect(this, &LoginWidget::loginClicked);
     fillMap();
-
-    m_con=new Connector<LoginWidget>(&m_loginQuery,LoginQueryConnected,&LoginWidget::userRecieved,this);
+    initCons();
+//    m_con=new Connector<LoginWidget>(&m_loginQuery,LoginQueryConnected,&LoginWidget::userRecieved,this);
 
     //this->setStyleClass("login_wigdet");
+}
+
+void LoginWidget::initCons()
+{
+//	loginButton->clicked().connect(this, &LoginWidget::loginClicked);
+	m_con=new Connector<LoginWidget>(&m_loginQuery,LoginQueryConnected,&LoginWidget::userRecieved,this);
 }
 
 void LoginWidget::fillMap()
@@ -68,7 +73,7 @@ void LoginWidget::fillMap()
 void LoginWidget::loginClicked()
 {
     QString name = QString(usernameEdit->text().toUTF8().c_str());
-    QString pass =QString( passwordEdit->text().toUTF8().c_str());
+    QString pass = QString( passwordEdit->text().toUTF8().c_str());
 /*    QSharedPointer<Users> users =
             common::DbSession::getInstance().getUsers();
     for (int i = 0; i < users->size(); i++)
@@ -93,6 +98,7 @@ void LoginWidget::loginClicked()
 
 void LoginWidget::userRecieved(){
 	QSharedPointer<User> us=this->m_loginQuery.getUser();
-	this->loginSuccessful.emit(us);
+	loginSuccessful.emit(us);
+
 //loginSuccessful.emit(std::string(DEFAULT_TOKEN));
 }
