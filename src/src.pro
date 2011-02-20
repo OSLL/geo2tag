@@ -5,8 +5,10 @@ SUBDIRS = common
 
 maemo5: {
   SUBDIRS += maps \
-             gui \
+             json \
+	     http_requests \ 
              tracker
+	     
 }
 
 linux: {

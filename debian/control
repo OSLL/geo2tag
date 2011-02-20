@@ -10,7 +10,7 @@ Depends: wikigps-qt [i386], unixodbc [i386], unixodbc-dev [i386], libxml2 (>=2.6
 Description: Geo2tag libs
 
 Package: wikigps-client
-Architecture: armel 
+Architecture: i386 
 Depends: wikigps-libs, libqjson0 [i386],libqjson [armel], libqtm-location (>=1.0) [armel],libqtm-bearer (>=1.0) [armel]
 Description: WikiGPS service client
  Very long description will be here
@@ -28,7 +28,7 @@ Description: WikiGPS observer
  observs marks setted by tracker.
 
 Package: wikigps-webside
-Architecture: armel
+Architecture: i386
 Depends: ${shlibs:Depends}, wikigps-service, libqt4, witty
 Description: Geo2tag website
 

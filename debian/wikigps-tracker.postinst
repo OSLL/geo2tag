@@ -1,5 +1,4 @@
-#!/bin/bash
-#cd /etc/init.d;
-touch /var/wikigps-tracker;
-chmod a+w /var/wikigps-tracker;
+#!/bin/sh
+/usr/bin/wikigpsTracker&
 update-rc.d tracker defaults;
+exit 0
