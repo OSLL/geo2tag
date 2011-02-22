@@ -1,4 +1,4 @@
 #!/bin/sh
-/usr/bin/wikigpsTracker&
+/usr/bin/wikigpsTracker > /dev/null 2>&1 &
 update-rc.d tracker defaults;
 exit 0
