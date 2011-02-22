@@ -9,11 +9,12 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <DaemonManager.h>
+#include <QtNetwork/QNetworkProxy>
 #include "tracker.h"
 
 OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
         QWidget(parent), m_productName(productName), m_settings("osll",m_productName)
-{
+{   
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(new QLabel("Login:"));
     layout->addWidget(m_nameEdit = new QLineEdit());
@@ -21,15 +22,42 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     layout->addWidget(m_passwordEdit = new QLineEdit());
     layout->addWidget(new QLabel("Channel name:"));
     layout->addWidget(m_channelEdit = new QLineEdit());
+
     layout->addStretch();
+
+    m_proxyType = new QComboBox();
+    m_proxyType->addItem("NoProxy", QNetworkProxy::NoProxy);
+    m_proxyType->addItem("HttpProxy", QNetworkProxy::HttpProxy);
+    m_proxyType->addItem("Socks5Proxy", QNetworkProxy::Socks5Proxy);
+    m_proxyType->addItem("FtpCachingProxy", QNetworkProxy::FtpCachingProxy);
+
+    QHBoxLayout *layout_proxy_type = new QHBoxLayout();
+    layout_proxy_type->addWidget(new QLabel("Type"));
+    layout_proxy_type->addWidget(m_proxyType);
+
+    layout->addLayout(layout_proxy_type);
+
+    m_layout_proxy_host = new QHBoxLayout();
+    m_layout_proxy_host->addWidget(new QLabel("Host:"));
+    m_layout_proxy_host->addWidget(m_proxyHostEdit = new QLineEdit());
+    m_layout_proxy_host->addWidget(new QLabel("port:"));
+    m_layout_proxy_host->addWidget(m_proxyPortEdit = new QSpinBox());
+    m_proxyPortEdit->setMinimum(0);
+    m_proxyPortEdit->setMaximum(65535);
+
+    layout->addLayout(m_layout_proxy_host);
+
+    layout->addStretch();
+
     QHBoxLayout *buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(m_doneButton = new QPushButton("Done"));
     buttonLayout->addWidget(m_cancelButton = new QPushButton("Cancel"));
     layout->addLayout(buttonLayout);
-    this->setLayout(layout);
 
+    this->setLayout(layout);
     connect(m_doneButton, SIGNAL(clicked()), this, SLOT(onDoneClicked()));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
+    connect(m_proxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged(int)));
 
     initSettings();
 
@@ -55,6 +83,17 @@ void OptionsWidget::onDoneClicked()
     m_settings.setValue("user", m_nameEdit->text());
     m_settings.setValue("password", m_passwordEdit->text());
     m_settings.setValue("channel", m_channelEdit->text());
+
+    /*
+    QNetworkProxy proxy;
+    QNetworkProxy::ProxyType proxy_type;
+    proxy_type = m_proxyType->itemData(m_proxyType->currentIndex()).value<QNetworkProxy::ProxyType>();
+    proxy.setType(proxy_type);
+    proxy.setHostName(m_proxyHostEdit->text());
+    proxy.setPort(m_proxyPortEdit->value());
+    QNetworkProxy::setApplicationProxy(proxy);
+    */
+
     emit done();
 }
 
@@ -62,6 +101,12 @@ void OptionsWidget::onCancelClicked()
 {
     initSettings();
     emit cancel();
+}
+
+void OptionsWidget::onProxyTypeChanged(int index)
+{
+    m_proxyHostEdit->setEnabled(index != 0);
+    m_proxyPortEdit->setEnabled(index != 0);
 }
 
 void OptionsWidget::initSettings()
