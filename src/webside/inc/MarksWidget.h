@@ -12,13 +12,13 @@ using namespace Wt;
 
 class MarksWidget : public WTabWidget
 {
-    std::string m_token;
+    QSharedPointer<User> m_user;
     WGoogleMap *marksMapWidget;
     WTableView *marksTable;
     MarksModel *marksModel;
 
 public:
-    MarksWidget(const std::string &token, WContainerWidget *parent = 0);
+    MarksWidget(QSharedPointer<User> user, WContainerWidget *parent = 0);
     void updateModel();
     void updateMap();
 

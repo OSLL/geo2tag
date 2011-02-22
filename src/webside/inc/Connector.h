@@ -1,28 +1,57 @@
 #ifndef _CONNECTOR_H_
 #define _CONNECTOR_H_
 #include <QObject>
-#include <Wt/WContainerWidget>
+#include "LoginQuery.h"
+#include "RSSFeedQuery.h"
+#include <Wt/WObject>
 using namespace Wt;
 
 enum sign
 {
      LoginQueryConnected,
+     RssFeedRecieved,
      Unknown
 };
+
 template< class wClass >
 class Connector: public QObject
 {
 	Q_OBJECT;
-//	typedef void (wClass::*wtFunction)(void);
+	
         void (wClass::*m_Function)(void);
-//	wtFunction m_Function;
         QObject * m_obj;
-	WContainerWidget * m_wt;
+	WObject * m_wt;
+	sign m_action;
+
+
 public:
-	Connector(QObject * obj,sign a,void (wClass::*func)(void),WContainerWidget * wt,QObject * parent=0);
-	void setWtFunction(void (wClass::*function)(void));
+
+	Connector(QObject * obj,sign a,void (wClass::*func)(void),WObject * wt,QObject * parent=0):
+						QObject(parent),m_obj(obj),m_Function(func),m_wt(wt),m_action(a)
+	{
+		decide();
+	}
+
+       void decide(){
+		switch (m_action){
+			case LoginQueryConnected:{ 
+				QObject::connect(m_obj,Q_SIGNAL(connected()),this,Q_SLOT(trigerred()));
+				break;
+			}
+			case RssFeedRecieved: {
+				QObject::connect(m_obj,Q_SIGNAL(rssFeedReceived()),this,Q_SLOT(trigerred()));
+				break;
+			}
+		}
+       }
 
 private Q_SLOTS:
-	void triggered();
+
+	void triggered()
+	{
+		dynamic_cast<wClass>(m_wt)->*m_Function();
+	}
 };
+
+
 #endif

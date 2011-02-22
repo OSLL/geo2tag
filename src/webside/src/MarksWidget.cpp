@@ -1,9 +1,9 @@
 #include "MarksWidget.h"
 
-MarksWidget::MarksWidget(const std::string &token, WContainerWidget *parent)
+MarksWidget::MarksWidget(QSharedPointer<User> user, WContainerWidget *parent)
     : WTabWidget(parent)
 {
-    m_token = token;
+    m_user = user;
     marksTable = new WTableView();
     marksTable->setMinimumSize(WLength(100), WLength(400));
     marksMapWidget = new WGoogleMap();
@@ -11,7 +11,7 @@ MarksWidget::MarksWidget(const std::string &token, WContainerWidget *parent)
     marksMapWidget->setMaximumSize(WLength(500), WLength(400));
     marksMapWidget->setCenter(Wt::WGoogleMap::Coordinate(60, 30));
     marksMapWidget->enableScrollWheelZoom();
-    marksModel = new MarksModel(m_token, WString(""), marksTable->parent());
+    marksModel = new MarksModel(m_user, WString(""), marksTable->parent());
     marksTable->setModel(marksModel);
     marksTable->setSelectable(true);
     
@@ -26,7 +26,7 @@ void MarksWidget::updateModel()
 { 
     // marksModel->update();
     MarksModel *oldModel = marksModel;
-    marksModel = new MarksModel(m_token, WString(""), marksTable->parent());
+    marksModel = new MarksModel(m_user, WString(""), marksTable->parent());
     marksTable->setModel(marksModel);
     if (oldModel != 0)
         delete oldModel;
@@ -36,12 +36,12 @@ void MarksWidget::updateModel()
 
 void MarksWidget::updateMap()
 {
-    QSharedPointer<DataMarks> marks = marksModel->getMarks();
+    QList<QSharedPointer<DataMark> > marks = marksModel->getMarks();
     marksMapWidget->clearOverlays();
-    for (int i = 0; i < marks->size(); i++)
+    for (int i = 0; i < marks.size(); i++)
     {
-        marksMapWidget->addMarker(WGoogleMap::Coordinate(marks->at(i)->getLatitude(),
-                                                         marks->at(i)->getLongitude()),
-                                  marks->at(i)->getDescription());
+        marksMapWidget->addMarker(WGoogleMap::Coordinate(marks.at(i)->getLatitude(),
+                                                         marks.at(i)->getLongitude()),
+                                  marks.at(i)->getDescription().toStdString());
     }
 }

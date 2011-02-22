@@ -1,3 +1,9 @@
+wikigps (0.1.5c) unstable; urgency=low
+
+  * splited lib ans service for -standalone packages
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Tue, 22 Feb 2011 21:37:51 +0300
+
 wikigps (0.1.5b) unstable; urgency=low
 
   * remove sharedlib dependece

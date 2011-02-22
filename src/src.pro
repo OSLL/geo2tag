@@ -18,7 +18,6 @@ linux: {
              service \
              maps \
              tracker
-# Mark, you have to check that trunk is able to build before commit such invalid webside 
 }
 
 symbian: {

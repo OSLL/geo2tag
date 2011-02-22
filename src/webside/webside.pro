@@ -8,7 +8,7 @@ TARGET = sketch.wt
 DEPENDPATH += . inc src
 INCLUDEPATH += . inc
 QMAKE_CXXFLAGS += -g3
-QT+= sql network
+QT+= network
 config += network
 CONFIG += no_keywords
 # Wt
@@ -36,12 +36,12 @@ SOURCES += src/LoginWidget.cpp \
 #    src/UsersWidget.cpp
 
 # Input
-HEADERS += inc/MarksWidget.h \
+HEADERS +=   inc/Connector.h \
+	    inc/MarksWidget.h \
            inc/MarksModel.h \
            inc/sketch.h \ 
            inc/GoogleMap.h \
            inc/OpenStreetMap.h \
-	   inc/Connector.h \
            inc/YandexMap.h 
 
 #	   inc/ChannelsWidget.h \
@@ -51,7 +51,6 @@ HEADERS += inc/MarksWidget.h \
 #           inc/PrefWidget.h 
 SOURCES += src/main.cpp \
            src/MarksModel.cpp \
-	   src/Connector.cpp \
            src/MarksWidget.cpp \
            src/sketch.cpp \
            src/GoogleMap.cpp \

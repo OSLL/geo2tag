@@ -5,6 +5,9 @@
 
 #include "DataMarks.h"
 #include "Channel.h"
+#include "Connector.h"
+#include "RSSFeedQuery.h"
+#include <QList>
 #include <sstream>
 
 using namespace Wt;
@@ -12,14 +15,15 @@ using namespace Wt;
 class MarksModel : public WAbstractTableModel
 {
 
-
-    std::string m_token;
+    QSharedPointer<User> m_user;
     double m_latitude;
     double m_longitude;
     double m_radius;
+    Connector<MarksModel> * m_con;
+    RSSFeedQuery  m_rss;
+    QList<QSharedPointer<DataMark> > m_marks;
 
-    QSharedPointer<DataMarks> m_marks;
-
+    void init();
 public:
 
     enum Type
@@ -29,7 +33,7 @@ public:
     };
 
     Type   m_type;
-    MarksModel(const std::string &token, const WString &channel, WObject *parent = 0);
+    MarksModel(QSharedPointer<User> user, const WString &channel, WObject *parent = 0);
     
     virtual int columnCount(const WModelIndex & parent = WModelIndex()) const;
     virtual int rowCount(const WModelIndex & parent = WModelIndex()) const;
@@ -40,8 +44,8 @@ public:
                                   int role = DisplayRole) const;
     WFlags<ItemFlag> flags(const WModelIndex &index) const;
 
-    QSharedPointer<DataMarks> getMarks() const;
-
+    const QList<QSharedPointer<DataMark> >& getMarks() const;
+    void marksRecieved();
     void update();
 };
 

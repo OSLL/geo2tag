@@ -23,6 +23,11 @@ symbian {
     DEFINES+= Q_WS_SYMBIA
 }
 
+linux{
+		QMAKE_CXX = g++-4.5
+		QMAKE_LINK = g++-4.5
+}
+
 LIBS += -L$$SOURCE_DIR/build/lib
 
 OBJECTS_DIR = .obj

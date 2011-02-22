@@ -9,9 +9,8 @@
 #include <QSharedPointer>
 #include "LoginQuery.h"
 #include "GoogleMap.h"
-#include "RSSFeedQuery.h"
-
 #include "Connector.h"
+
 using namespace Wt;
 
 class LoginWidget : public WContainerWidget
