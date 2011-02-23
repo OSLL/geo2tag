@@ -87,4 +87,5 @@ void DataThread::onGetFeed()
 void DataThread::onError(QString message)
 {
     qDebug() << "Error occured!" << message ;
+    m_requestIsSent = false; // If request failed we need to try again
 }
