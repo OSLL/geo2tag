@@ -20,32 +20,28 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     layout->addWidget(m_nameEdit = new QLineEdit());
     layout->addWidget(new QLabel("Password:"));
     layout->addWidget(m_passwordEdit = new QLineEdit());
+    layout->addWidget(m_passwordCheckBox = new QCheckBox("Show password"));
     layout->addWidget(new QLabel("Channel name:"));
     layout->addWidget(m_channelEdit = new QLineEdit());
 
-    layout->addStretch();
+    m_passwordEdit->setEchoMode(QLineEdit::Password);
+    m_passwordCheckBox->setChecked(false);
 
-    m_proxyType = new QComboBox();
+    layout->addWidget(new QLabel("Proxy type"));
+    layout->addWidget(m_proxyType = new QComboBox());
+    layout->addWidget(new QLabel("Host:"));
+    layout->addWidget(m_proxyHostEdit = new QLineEdit());
+    layout->addWidget(new QLabel("port:"));
+    layout->addWidget(m_proxyPortEdit = new QSpinBox());
+
+    m_proxyType->addItem("DefaultProxy", QNetworkProxy::DefaultProxy);
+    m_proxyType->addItem("Socks5Proxy", QNetworkProxy::Socks5Proxy);
     m_proxyType->addItem("NoProxy", QNetworkProxy::NoProxy);
     m_proxyType->addItem("HttpProxy", QNetworkProxy::HttpProxy);
-    m_proxyType->addItem("Socks5Proxy", QNetworkProxy::Socks5Proxy);
+    m_proxyType->addItem("HttpCachingProxy", QNetworkProxy::HttpCachingProxy);
     m_proxyType->addItem("FtpCachingProxy", QNetworkProxy::FtpCachingProxy);
-
-    QHBoxLayout *layout_proxy_type = new QHBoxLayout();
-    layout_proxy_type->addWidget(new QLabel("Type"));
-    layout_proxy_type->addWidget(m_proxyType);
-
-    layout->addLayout(layout_proxy_type);
-
-    m_layout_proxy_host = new QHBoxLayout();
-    m_layout_proxy_host->addWidget(new QLabel("Host:"));
-    m_layout_proxy_host->addWidget(m_proxyHostEdit = new QLineEdit());
-    m_layout_proxy_host->addWidget(new QLabel("port:"));
-    m_layout_proxy_host->addWidget(m_proxyPortEdit = new QSpinBox());
     m_proxyPortEdit->setMinimum(0);
     m_proxyPortEdit->setMaximum(65535);
-
-    layout->addLayout(m_layout_proxy_host);
 
     layout->addStretch();
 
@@ -58,6 +54,9 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     connect(m_doneButton, SIGNAL(clicked()), this, SLOT(onDoneClicked()));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
     connect(m_proxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged(int)));
+    connect(m_passwordCheckBox, SIGNAL(clicked(bool)), this, SLOT(onShowPasswordChecked(bool)));
+
+    onProxyTypeChanged(m_proxyType->currentIndex());
 
     initSettings();
 
@@ -84,15 +83,20 @@ void OptionsWidget::onDoneClicked()
     m_settings.setValue("password", m_passwordEdit->text());
     m_settings.setValue("channel", m_channelEdit->text());
 
-    /*
     QNetworkProxy proxy;
     QNetworkProxy::ProxyType proxy_type;
-    proxy_type = m_proxyType->itemData(m_proxyType->currentIndex()).value<QNetworkProxy::ProxyType>();
+    proxy_type = (QNetworkProxy::ProxyType) m_proxyType->itemData(m_proxyType->currentIndex()).value<int>();
     proxy.setType(proxy_type);
     proxy.setHostName(m_proxyHostEdit->text());
     proxy.setPort(m_proxyPortEdit->value());
     QNetworkProxy::setApplicationProxy(proxy);
-    */
+
+    qDebug() << "Proxy type set to " << proxy.type() << "\n";
+    if(proxy.type() != 0 && proxy_type != 2)
+    {
+        qDebug() << "Proxy host set to " << proxy.hostName() << "\n";
+        qDebug() << "Proxy port set to " << proxy.port() << "\n";
+    }
 
     emit done();
 }
@@ -105,8 +109,17 @@ void OptionsWidget::onCancelClicked()
 
 void OptionsWidget::onProxyTypeChanged(int index)
 {
-    m_proxyHostEdit->setEnabled(index != 0);
-    m_proxyPortEdit->setEnabled(index != 0);
+    bool enabled_flag = index != 0 && index != 2;
+    m_proxyHostEdit->setEnabled(enabled_flag);
+    m_proxyPortEdit->setEnabled(enabled_flag);
+}
+
+void OptionsWidget::onShowPasswordChecked(bool checked)
+{
+    if(checked)
+        m_passwordEdit->setEchoMode(QLineEdit::Normal);
+    else
+        m_passwordEdit->setEchoMode(QLineEdit::Password);
 }
 
 void OptionsWidget::initSettings()

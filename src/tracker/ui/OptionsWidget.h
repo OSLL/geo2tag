@@ -3,23 +3,23 @@
 
 #include <QWidget>
 #include <QLineEdit>
+#include <QCheckBox>
 #include <QPushButton>
-#include <QSettings>
-
 #include <QHBoxLayout>
 #include <QSpinBox>
 #include <QComboBox>
+#include <QSettings>
 
 class OptionsWidget : public QWidget
 {
     Q_OBJECT
 
-    QHBoxLayout *m_layout_proxy_host;
-
     QLineEdit *m_nameEdit;
     QLineEdit *m_passwordEdit;
     QLineEdit *m_channelEdit;
     QLineEdit *m_proxyHostEdit;
+
+    QCheckBox *m_passwordCheckBox;
 
     QSpinBox *m_proxyPortEdit;
     QComboBox *m_proxyType;
@@ -50,6 +50,7 @@ public slots:
     void onDoneClicked();
     void onCancelClicked();
     void onProxyTypeChanged(int index);
+    void onShowPasswordChecked(bool checked);
 
 signals:
     /* is emitted when "ok" button is pressed */
