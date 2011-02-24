@@ -12,9 +12,10 @@
 #include "QTcpServer"
 #include "LoginQuery.h"
 #include "AddNewMarkQuery.h"
+#include <QTimer>
 #include "Control.h"
 
-class TrackerDaemon : public QThread, public Control
+class TrackerDaemon : /*public QThread,*/ public Control
 {
     Q_OBJECT;
 
@@ -28,7 +29,7 @@ class TrackerDaemon : public QThread, public Control
     bool m_isConnected;
 
     QTcpServer * m_controlServer;
-
+public:
     void run();
 private slots:
 

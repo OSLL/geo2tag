@@ -4,7 +4,7 @@
 #include <QStringList>
 
 
-class Control
+class Control: public QObject
 {
 public:
     virtual void startTracking() = 0;

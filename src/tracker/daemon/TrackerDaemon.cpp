@@ -7,7 +7,6 @@
 #include "JsonDataMark.h"
 #include "JsonChannel.h"
 #include "JsonUser.h"
-
 #include "LoginQuery.h"
 #include "AddNewMarkQuery.h"
 #include "ReportThread.h"
@@ -22,7 +21,7 @@ TrackerDaemon::TrackerDaemon(): m_settings("osll","tracker"),
             m_pauseFlag(true),
             m_isConnected(false)
 {
-    moveToThread(this);
+//    moveToThread(this);
     m_controlServer = new QTcpServer(NULL);
     connect(m_controlServer, SIGNAL(newConnection()),SLOT(newControlConnection()));
     m_controlServer->listen(QHostAddress::LocalHost, 31234);
@@ -52,31 +51,38 @@ void TrackerDaemon::run()
     connect(m_loginQuery, SIGNAL(connected()), SLOT(onConnected()));
     connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
     m_loginQuery->doRequest();
-    for(;;)
+    qDebug() << "sended LoginRequest";
+/*    for(;;)
     {
+	    qDebug() << "going in for loop";
         if(!m_pauseFlag && m_isConnected)
         {
             qDebug() << "connected: auth_token=" << m_loginQuery->getUser()->getToken();
             qDebug() << "trying push new tag";
 
-            if(m_tagQuery)
-            {
+           if(m_tagQuery)
+           {
                 m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());
                 m_tagQuery->getTag()->setLatitude(common::GpsInfo::getInstance().getLatitude());
                 m_tagQuery->getTag()->setLongitude(common::GpsInfo::getInstance().getLongitude());
                 m_tagQuery->doRequest();
             }
         }
-        eventLoop.processEvents(QEventLoop::ExcludeUserInputEvents, 1000);
-        QThread::msleep(5000);
-    }
+        eventLoop.processEvents(QEventLoop::ExcludeUserInputEvents, 1000);	
+	QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
+
+
+   //     QThread::msleep(5000);
+    }*/
 }
 
 
 void TrackerDaemon::startTracking()
 {
     m_pauseFlag = false;
-    start();
+    onTagAdded();
+//    start();
+    run();
 }
 
 void TrackerDaemon::stopTracking()
@@ -102,6 +108,7 @@ void TrackerDaemon::onError(QString message)
 void TrackerDaemon::onConnected()
 {
     m_isConnected = true;
+    qDebug() << "Connected";
     if(m_tagQuery == NULL)
     {
         QSharedPointer<DataMark> mark(
@@ -118,12 +125,28 @@ void TrackerDaemon::onConnected()
         m_tagQuery = new AddNewMarkQuery(mark,this);
         connect(m_tagQuery, SIGNAL(tagAdded()), SLOT(onTagAdded()));
         connect(m_tagQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
+	onTagAdded();
     }
+
 }
 
 void TrackerDaemon::onTagAdded()
 {
     qDebug() << "Eeeh!! We did it";
+     QEventLoop eventLoop;
+     QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
+        if(!m_pauseFlag && m_isConnected)
+        {
+            qDebug() << "connected: auth_token=" << m_loginQuery->getUser()->getToken();
+            qDebug() << "trying push new tag";
+           if(m_tagQuery)
+           {
+                m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());
+                m_tagQuery->getTag()->setLatitude(common::GpsInfo::getInstance().getLatitude());
+                m_tagQuery->getTag()->setLongitude(common::GpsInfo::getInstance().getLongitude());
+                m_tagQuery->doRequest();
+            }
+	}
 }
 
 TrackerDaemon::~TrackerDaemon()
