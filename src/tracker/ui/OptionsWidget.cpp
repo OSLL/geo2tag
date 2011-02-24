@@ -79,9 +79,12 @@ QString OptionsWidget::channel()
 
 void OptionsWidget::onDoneClicked()
 {
+    /*
     m_settings.setValue("user", m_nameEdit->text());
     m_settings.setValue("password", m_passwordEdit->text());
     m_settings.setValue("channel", m_channelEdit->text());
+    */
+    createSettings();
 
     QNetworkProxy proxy;
     QNetworkProxy::ProxyType proxy_type;
@@ -141,12 +144,18 @@ void OptionsWidget::readSettings()
     m_nameEdit->setText(m_settings.value("user").toString());
     m_passwordEdit->setText(m_settings.value("password").toString());
     m_channelEdit->setText(m_settings.value("channel").toString());
+    m_proxyType->setCurrentIndex(m_proxyType->findData(m_settings.value("proxy_type").toInt()));
+    m_proxyHostEdit->setText(m_settings.value("proxy_host").toString());
+    m_proxyPortEdit->setValue(m_settings.value("proxy_port").toInt());
 }
 
 void OptionsWidget::createSettings()
 {
-    m_settings.setValue("channel",m_channelEdit->text());
-    m_settings.setValue("user",m_nameEdit->text());
-    m_settings.setValue("password",m_passwordEdit->text());
-    m_settings.setValue("magic",APP_MAGIC);
+    m_settings.setValue("channel", m_channelEdit->text());
+    m_settings.setValue("user", m_nameEdit->text());
+    m_settings.setValue("password", m_passwordEdit->text());
+    m_settings.setValue("proxy_type", m_proxyType->itemData(m_proxyType->currentIndex()).value<int>());
+    m_settings.setValue("proxy_host", m_proxyHostEdit->text());
+    m_settings.setValue("proxy_port", m_proxyPortEdit->value());
+    m_settings.setValue("magic", APP_MAGIC);
 }

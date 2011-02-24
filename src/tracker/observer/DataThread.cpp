@@ -40,6 +40,11 @@ void DataThread::run()
             //ToDo query RSS
 
         }
+		else
+		{
+			m_loginQuery->doRequest();
+		}
+
         eventLoop.processEvents(QEventLoop::ExcludeUserInputEvents, 1000);
         QThread::msleep(5000);
     }
@@ -88,4 +93,5 @@ void DataThread::onError(QString message)
 {
     qDebug() << "Error occured!" << message ;
     m_requestIsSent = false; // If request failed we need to try again
+	m_isConnected = false;
 }
