@@ -6,11 +6,12 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QScrollArea>
 #include <QSpinBox>
 #include <QComboBox>
 #include <QSettings>
 
-class OptionsWidget : public QWidget
+class OptionsWidget : public QScrollArea
 {
     Q_OBJECT
 
@@ -18,6 +19,8 @@ class OptionsWidget : public QWidget
     QLineEdit *m_passwordEdit;
     QLineEdit *m_channelEdit;
     QLineEdit *m_proxyHostEdit;
+
+    QWidget *m_widg;
 
     QCheckBox *m_passwordCheckBox;
 

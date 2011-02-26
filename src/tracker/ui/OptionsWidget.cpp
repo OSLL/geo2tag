@@ -13,9 +13,10 @@
 #include "tracker.h"
 
 OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
-        QWidget(parent), m_productName(productName), m_settings("osll",m_productName)
+        QScrollArea(parent), m_productName(productName), m_settings("osll",m_productName)
 {   
-    QVBoxLayout *layout = new QVBoxLayout();
+    m_widg=new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(m_widg);
     layout->addWidget(new QLabel("Login:"));
     layout->addWidget(m_nameEdit = new QLineEdit());
     layout->addWidget(new QLabel("Password:"));
@@ -50,7 +51,9 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     buttonLayout->addWidget(m_cancelButton = new QPushButton("Cancel"));
     layout->addLayout(buttonLayout);
 
-    this->setLayout(layout);
+    m_widg->setLayout(layout);
+    this->setWidget(m_widg);
+    this->setWidgetResizable(true);
     connect(m_doneButton, SIGNAL(clicked()), this, SLOT(onDoneClicked()));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
     connect(m_proxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged(int)));
