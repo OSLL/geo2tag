@@ -12,7 +12,7 @@
 #include "MarksWidget.h"
 #include "OptionsWidget.h"
 #include "UsersWidget.h"
-
+#include <User.h>
 #include <QSharedPointer>
 using namespace Wt;
 
@@ -25,8 +25,7 @@ public:
     Sketch(QSharedPointer<User> user, WContainerWidget *parent = 0);
 
 private:
-//    std::string m_token;
-	QSharedPointer<User> m_user;	
+    QSharedPointer<User> m_user;	
 
     WPushButton *prefButton;
     WPushButton *channelsButton;
@@ -47,11 +46,11 @@ private:
 //    UsersWidget *usersWidget;
 
     /* slots */
-    void onPrefClicked();
-    void onChannelsClicked();
+//    void onPrefClicked();
+//    void onChannelsClicked();
     void onMarksClicked();
-    void onOptionsClicked();
-    void onAdminClicked();
+//    void onOptionsClicked();
+ //   void onAdminClicked();
 
 };
 

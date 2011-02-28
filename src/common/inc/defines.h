@@ -44,7 +44,8 @@
 
 const QString getServerUrl();
 void setServerUrl(const QString& serverUrl);
-
+const int getServerPort();
+void setServerPort(const int& port);
 #define DEFAULT_SERVER "http://178.252.121.244/"
 #define DEFAULT_PORT 8080
 

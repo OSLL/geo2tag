@@ -1,20 +1,12 @@
-
 #include "sketch.h"
-#include "DbSession.h"
-
 #include <Wt/WVBoxLayout>
 #include <Wt/WHBoxLayout>
+using namespace Wt;
 
-/*
- * The env argument contains information about the new session, and
- * the initial request. It must be passed to the WApplication
- * constructor so it is typically also an argument for your custom
- * application constructor.
-*/
-Sketch::Sketch(QSharedPoitner<User> user, WContainerWidget *parent)
+/*Sketch::Sketch(QSharedPoitner<User> user, WContainerWidget *parent)
     : WContainerWidget(parent)
 {
-    //setTitle("Geo2tag"); // application title
+    setTitle("Geo2tag"); // application title
     // common::DbSession::getInstance();
 
     m_user = user;
@@ -33,7 +25,7 @@ Sketch::Sketch(QSharedPoitner<User> user, WContainerWidget *parent)
     //WSelectionBox *box = new WSelectionBox(root());
 
     stackedWidget->setCurrentWidget(channelsWidget);
-
+}
     /* signals and slots */
   /*  prefButton->clicked().connect(this, &Sketch::onPrefClicked);
     channelsButton->clicked().connect(this, &Sketch::onChannelsClicked);
@@ -41,8 +33,8 @@ Sketch::Sketch(QSharedPoitner<User> user, WContainerWidget *parent)
     optionsButton->clicked().connect(this, &Sketch::onOptionsClicked);
     adminButton->clicked().connect(this, &Sketch::onAdminClicked);
     channelsWidget->channelsUpdated.connect(marksWidget, &MarksWidget::updateModel);
-}
-
+}*/
+/*
 void Sketch::onPrefClicked()
 {
     stackedWidget->setCurrentWidget(prefWidget);

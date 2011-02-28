@@ -16,7 +16,7 @@ void DefaultQuery::doRequest()
     QNetworkRequest request;
 
     QUrl url(getUrl());
-    url.setPort(DEFAULT_PORT);
+    url.setPort(getServerPort());
     request.setUrl(url);
 
     qDebug() << "doing post to" << url << " with body: " << getRequestBody();

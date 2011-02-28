@@ -6,6 +6,8 @@
 #include <Wt/WObject>
 using namespace Wt;
 
+
+
 enum sign
 {
      LoginQueryConnected,
@@ -13,10 +15,10 @@ enum sign
      Unknown
 };
 
-template< class wClass >
+template<class wClass>
 class Connector: public QObject
 {
-	Q_OBJECT;
+//	Q_OBJECT;
 	
         void (wClass::*m_Function)(void);
         QObject * m_obj;
@@ -25,33 +27,12 @@ class Connector: public QObject
 
 
 public:
-
-	Connector(QObject * obj,sign a,void (wClass::*func)(void),WObject * wt,QObject * parent=0):
-						QObject(parent),m_obj(obj),m_Function(func),m_wt(wt),m_action(a)
-	{
-		decide();
-	}
-
-       void decide(){
-		switch (m_action){
-			case LoginQueryConnected:{ 
-				QObject::connect(m_obj,Q_SIGNAL(connected()),this,Q_SLOT(trigerred()));
-				break;
-			}
-			case RssFeedRecieved: {
-				QObject::connect(m_obj,Q_SIGNAL(rssFeedReceived()),this,Q_SLOT(trigerred()));
-				break;
-			}
-		}
-       }
-
+	Connector(QObject * obj,sign a,void (wClass::*func)(void),WObject * wt,QObject * parent=0);
+        void  decide();
 private Q_SLOTS:
 
-	void triggered()
-	{
-		dynamic_cast<wClass>(m_wt)->*m_Function();
-	}
-};
+	void triggered();
+	};
 
 
 #endif

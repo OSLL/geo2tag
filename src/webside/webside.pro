@@ -13,7 +13,7 @@ config += network
 CONFIG += no_keywords
 # Wt
 INCLUDEPATH += /usr/include/Wt
-LIBS += -lwtfcgi
+LIBS += -lwtfcgi -lwt -lboost_signals
 
 # Common library
 INCLUDEPATH += ../common/inc \
@@ -51,6 +51,7 @@ HEADERS +=   inc/Connector.h \
 #           inc/PrefWidget.h 
 SOURCES += src/main.cpp \
            src/MarksModel.cpp \
+	   src/Connector.cpp \
            src/MarksWidget.cpp \
            src/sketch.cpp \
            src/GoogleMap.cpp \
