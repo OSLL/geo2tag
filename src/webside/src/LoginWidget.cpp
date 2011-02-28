@@ -2,8 +2,8 @@
 #include "Connector.h"
 #include "Channel.h"
 #include "defines.h"
-#include "OpenStreetMap.h"
-#include "YandexMap.h"
+//#include "OpenStreetMap.h"
+//#include "YandexMap.h"
 #include <QObject>
 #include <Wt/WLabel>
 #include <Wt/WText>
@@ -74,23 +74,6 @@ void LoginWidget::loginClicked()
 {
     QString name = QString(usernameEdit->text().toUTF8().c_str());
     QString pass = QString( passwordEdit->text().toUTF8().c_str());
-/*    QSharedPointer<Users> users =
-            common::DbSession::getInstance().getUsers();
-    for (int i = 0; i < users->size(); i++)
-    {
-        if ((users->at(i)->getLogin() == name) &&
-            (users->at(i)->getPassword() == pass))
-        {
-            m_token = users->at(i).dynamicCast<loader::User>()->getToken();
-            loginSuccessful.emit(m_token);
-            break;
-        }
-    }
-
-    if (users->size() == 0)
-    {*/
-    //    loginSuccessful.emit(std::string(DEFAULT_TOKEN));
-//    }
 	m_loginQuery.setQuery(name,pass);
 	m_loginQuery.doRequest();
 	

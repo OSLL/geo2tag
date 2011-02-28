@@ -13,7 +13,9 @@ config += network
 CONFIG += no_keywords
 # Wt
 INCLUDEPATH += /usr/include/Wt
-LIBS += -lwtfcgi -lwt -lboost_signals
+LIBS += -lwtfcgi 
+#LIBS += -lwt -lboost_signals
+
 
 # Common library
 INCLUDEPATH += ../common/inc \

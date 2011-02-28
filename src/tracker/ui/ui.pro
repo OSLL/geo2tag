@@ -7,7 +7,7 @@ INSTALLS += target
 
 include(../../../config.pri)
 
-
+LIBS += -lcommon
 QT += network xml
 
 

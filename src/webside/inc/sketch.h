@@ -21,10 +21,6 @@ using namespace Wt;
  */
 class Sketch : public WContainerWidget
 {
-public:
-    Sketch(QSharedPointer<User> user, WContainerWidget *parent = 0);
-
-private:
     QSharedPointer<User> m_user;	
 
     WPushButton *prefButton;
@@ -51,6 +47,10 @@ private:
     void onMarksClicked();
 //    void onOptionsClicked();
  //   void onAdminClicked();
+
+public:
+    Sketch(QSharedPointer<User> user, WContainerWidget *parent = 0);
+
 
 };
 

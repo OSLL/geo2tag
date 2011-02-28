@@ -3,10 +3,9 @@
 #include <Wt/WHBoxLayout>
 using namespace Wt;
 
-/*Sketch::Sketch(QSharedPoitner<User> user, WContainerWidget *parent)
-    : WContainerWidget(parent)
+Sketch::Sketch(QSharedPointer<User> user, WContainerWidget *parent):WContainerWidget(parent)
 {
-    setTitle("Geo2tag"); // application title
+//    setTitle("Geo2tag"); // application title
     // common::DbSession::getInstance();
 
     m_user = user;
@@ -20,20 +19,21 @@ using namespace Wt;
    // channelsWidget = new ChannelsWidget(m_user, stackedWidget);
     marksWidget = new MarksWidget(m_user, stackedWidget);
    // optionsWidget = new OptionsWidget(stackedWidget);
- //   usersWidget = new UsersWidget(m_user,stackedWidget);
-  //  prefWidget = new PrefWidget(m_user, stackedWidget);
-    //WSelectionBox *box = new WSelectionBox(root());
+   // usersWidget = new UsersWidget(m_user,stackedWidget);
+   // prefWidget = new PrefWidget(m_user, stackedWidget);
+   // WSelectionBox *box = new WSelectionBox(root());
 
-    stackedWidget->setCurrentWidget(channelsWidget);
+    stackedWidget->setCurrentWidget(marksWidget);
 }
     /* signals and slots */
-  /*  prefButton->clicked().connect(this, &Sketch::onPrefClicked);
-    channelsButton->clicked().connect(this, &Sketch::onChannelsClicked);
-    marksButton->clicked().connect(this, &Sketch::onMarksClicked);
-    optionsButton->clicked().connect(this, &Sketch::onOptionsClicked);
-    adminButton->clicked().connect(this, &Sketch::onAdminClicked);
-    channelsWidget->channelsUpdated.connect(marksWidget, &MarksWidget::updateModel);
-}*/
+//    prefButton->clicked().connect(this, &Sketch::onPrefClicked);
+//    channelsButton->clicked().connect(this, &Sketch::onChannelsClicked);
+//    marksButton->clicked().connect(this, &Sketch::onMarksClicked);
+///    optionsButton->clicked().connect(this, &Sketch::onOptionsClicked);
+//    adminButton->clicked().connect(this, &Sketch::onAdminClicked);
+//    channelsWidget->channelsUpdated.connect(marksWidget, &MarksWidget::updateModel);
+//}
+
 /*
 void Sketch::onPrefClicked()
 {

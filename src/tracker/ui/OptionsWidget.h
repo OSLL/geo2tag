@@ -10,7 +10,7 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QSettings>
-
+#include "defines.h"
 class OptionsWidget : public QScrollArea
 {
     Q_OBJECT
@@ -19,6 +19,8 @@ class OptionsWidget : public QScrollArea
     QLineEdit *m_passwordEdit;
     QLineEdit *m_channelEdit;
     QLineEdit *m_proxyHostEdit;
+    QLineEdit *m_serverUrlEdit;
+    QSpinBox *m_serverPortEdit;
 
     QWidget *m_widg;
 

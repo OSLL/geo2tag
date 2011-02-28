@@ -34,6 +34,8 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     layout->addWidget(m_proxyHostEdit = new QLineEdit());
     layout->addWidget(new QLabel("port:"));
     layout->addWidget(m_proxyPortEdit = new QSpinBox());
+    layout->addWidget(m_serverUrlEdit = new QLineEdit());
+    layout->addWidget(m_serverPortEdit = new QSpinBox());
 
     m_proxyType->addItem("DefaultProxy", QNetworkProxy::DefaultProxy);
     m_proxyType->addItem("Socks5Proxy", QNetworkProxy::Socks5Proxy);
@@ -43,6 +45,8 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     m_proxyType->addItem("FtpCachingProxy", QNetworkProxy::FtpCachingProxy);
     m_proxyPortEdit->setMinimum(0);
     m_proxyPortEdit->setMaximum(65535);
+    m_serverPortEdit->setMinimum(0);
+    m_serverPortEdit->setMaximum(65535);
 
     layout->addStretch();
 
@@ -150,6 +154,8 @@ void OptionsWidget::readSettings()
     m_proxyType->setCurrentIndex(m_proxyType->findData(m_settings.value("proxy_type").toInt()));
     m_proxyHostEdit->setText(m_settings.value("proxy_host").toString());
     m_proxyPortEdit->setValue(m_settings.value("proxy_port").toInt());
+    m_serverUrlEdit->setText(getServerUrl());
+    m_serverPortEdit->setValue(getServerPort());
 }
 
 void OptionsWidget::createSettings()
@@ -159,6 +165,8 @@ void OptionsWidget::createSettings()
     m_settings.setValue("password", m_passwordEdit->text());
     m_settings.setValue("proxy_type", m_proxyType->itemData(m_proxyType->currentIndex()).value<int>());
     m_settings.setValue("proxy_host", m_proxyHostEdit->text());
+    setServerUrl(m_serverUrlEdit->text());
+    setServerPort(m_serverPortEdit->value());
     m_settings.setValue("proxy_port", m_proxyPortEdit->value());
     m_settings.setValue("magic", APP_MAGIC);
 }
