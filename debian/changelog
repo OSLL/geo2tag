@@ -1,3 +1,9 @@
+wikigps (0.1.5d) unstable; urgency=low
+
+  * provided fix for QNetworkpointer
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Tue, 01 Mar 2011 21:34:56 +0300
+
 wikigps (0.1.5c) unstable; urgency=low
 
   * splited lib ans service for -standalone packages
