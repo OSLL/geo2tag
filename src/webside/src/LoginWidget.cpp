@@ -1,5 +1,4 @@
 #include "LoginWidget.h"
-#include "Connector.h"
 #include "Channel.h"
 #include "defines.h"
 //#include "OpenStreetMap.h"

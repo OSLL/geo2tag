@@ -120,7 +120,10 @@ void MainWindow::checkDaemon()
             m_daemon->connectToHost("127.0.0.1", 31234);
     }
     if(m_daemon->state() >= QAbstractSocket::ConnectedState)
+    {
         updateState();
+        m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": connected to daemon");
+    }
     else
         m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");
 }
