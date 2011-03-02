@@ -119,6 +119,8 @@ void TrackerDaemon::onConnected()
                                  "this tag was generated automaticaly by tracker application",
                                  "unknown",
                                  QDateTime::currentDateTime()));
+		m_lastCoords.setX(common::GpsInfo::getInstance().getLatitude());
+		m_lastCoords.setY(common::GpsInfo::getInstance().getLongitude());
         QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
         mark->setChannel(channel);
         mark->setUser(m_loginQuery->getUser());
@@ -144,9 +146,16 @@ void TrackerDaemon::onTagAdded()
                 m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());
                 m_tagQuery->getTag()->setLatitude(common::GpsInfo::getInstance().getLatitude());
                 m_tagQuery->getTag()->setLongitude(common::GpsInfo::getInstance().getLongitude());
+		m_lastCoords.setX(common::GpsInfo::getInstance().getLatitude());
+		m_lastCoords.setY(common::GpsInfo::getInstance().getLongitude());
                 m_tagQuery->doRequest();
             }
 	}
+}
+
+const QPointF& TrackerDaemon::getLastCoords() const
+{
+	return m_lastCoords;
 }
 
 TrackerDaemon::~TrackerDaemon()

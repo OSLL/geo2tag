@@ -32,23 +32,25 @@ void ControlThread::run()
 void ControlThread::processStartQuery()
 {
     m_daemon->startTracking();
-    (*m_device) << "<status>started</status>";
+    (*m_device) << "lastCoords_" << m_daemon->getLastCoords().x() << "," << m_daemon->getLastCoords().y()<< " ";
+    //(*m_device) << "started ";//"<status>started</status>";
     m_device->flush();
 }
 
 void ControlThread::processStopQuery()
 {
     m_daemon->stopTracking();
-    (*m_device) << "<status>stoped</status>";
+    (*m_device) << "stoped ";//"<status>stoped</status>";
     m_device->flush();
 }
 
 void ControlThread::processStatusQuery()
 {
     if(m_daemon->isTracking())
-        (*m_device) << "<status>started</status>";
+    	(*m_device) << "lastCoords_" << m_daemon->getLastCoords().x() << "," << m_daemon->getLastCoords().y()<<" ";
+        //(*m_device) << "started ";//"<status>started</status>";
     else
-        (*m_device) << "<status>stoped</status>";
+        (*m_device) << "stoped ";//"<status>stoped</status>";
     m_device->flush();
 }
 

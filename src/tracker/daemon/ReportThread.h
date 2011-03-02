@@ -4,7 +4,7 @@
 #include <QThread>
 #include <QTcpSocket>
 #include <QTextStream>
-
+#include "TrackerDaemon.h"
 #include "Control.h"
 
 class ControlThread : public QObject
@@ -13,7 +13,7 @@ class ControlThread : public QObject
 
     QTcpSocket *m_client;
     QTextStream *m_device;
-    Control *m_daemon;
+    TrackerDaemon *m_daemon;
 
     typedef void (ControlThread::*ProcessMethod)(void);
 

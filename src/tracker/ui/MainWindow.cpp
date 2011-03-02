@@ -1,7 +1,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include "MainWindow.h"
-
+#include <QLabel>
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
@@ -91,15 +91,22 @@ void MainWindow::readData()
     QRegExp statusExp("<status>(\\S)</status>");
     QRegExp logExp("<status>(\\S)</status>");
     int pos = 0;
-
-    while( (pos = statusExp.indexIn(m_message,0)) != -1)
+// split recieved message for many parts, process last and clean
+    QStringList commands=m_message.split(" ",QString::SkipEmptyParts); 
+    qDebug() << "recieved from trackerDaemon " << m_message;
+   /* while( (pos = statusExp.indexIn(m_message,0)) != -1)
     {
         int length = statusExp.matchedLength();
         QString status = statusExp.cap(1);
-        if(status == "started")
+        if(status == "started"){
+		qDebug() << "text now " <<m_daemonIndicator->text();
+            m_daemonIndicator->setText("Tracker runned");
             m_isServiceStarted = true;
-        if(status == "stoped")
+	}
+        if(status == "stoped"){
+            m_daemonIndicator->setText("Tracker stopped");
             m_isServiceStarted = false;
+	}
         m_message.remove(pos,length);
     }
     pos = 0;
@@ -109,7 +116,19 @@ void MainWindow::readData()
         QString logs = statusExp.cap(1);
         m_logWidget->addToLog(logs);
         m_message.remove(pos,length);
+    }*/
+    if (commands.last().indexOf("lastCoords_")!=-1){
+	    QString buf=commands.last();
+	    QString coords = buf.right(buf.size()-QString("lastCoords_").size());
+            m_daemonIndicator->setText(QString("Mark placed at ")+coords);
+            qDebug() << "text now " <<m_daemonIndicator->text();
+            m_isServiceStarted = true;
     }
+    if (commands.last()=="stoped"){
+            m_daemonIndicator->setText("Tracker stopped");
+            m_isServiceStarted = false;
+    }
+    m_message.clear();
 
 }
 

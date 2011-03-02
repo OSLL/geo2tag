@@ -14,6 +14,7 @@
 #include "AddNewMarkQuery.h"
 #include <QTimer>
 #include "Control.h"
+#include <QPointF>
 
 class TrackerDaemon : /*public QThread,*/ public Control
 {
@@ -21,6 +22,7 @@ class TrackerDaemon : /*public QThread,*/ public Control
 
     QSettings m_settings;
     QString m_channelName;
+    QPointF m_lastCoords;
 
     LoginQuery * m_loginQuery; // this field needs because query is asynchronous
     AddNewMarkQuery * m_tagQuery; // this field needs because query is asynchronous
@@ -45,6 +47,7 @@ public:
     virtual void stopTracking();
     virtual void startTracking();
     virtual bool isTracking() const;
+    const QPointF& getLastCoords() const; 
 
     QStringList getLog() const;
 
