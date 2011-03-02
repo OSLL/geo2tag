@@ -39,6 +39,9 @@ class OptionsWidget : public QScrollArea
 
     QSettings m_settings;
 
+private:
+    void applyProxySettings();
+
 public:
     OptionsWidget(QString productName,QWidget *parent = 0);
 

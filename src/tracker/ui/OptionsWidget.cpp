@@ -12,6 +12,17 @@
 #include <QtNetwork/QNetworkProxy>
 #include "tracker.h"
 
+void OptionsWidget::applyProxySettings()
+{
+    QNetworkProxy proxy;
+    QNetworkProxy::ProxyType proxy_type;
+    proxy_type = (QNetworkProxy::ProxyType) m_proxyType->itemData(m_proxyType->currentIndex()).value<int>();
+    proxy.setType(proxy_type);
+    proxy.setHostName(m_proxyHostEdit->text());
+    proxy.setPort(m_proxyPortEdit->value());
+    QNetworkProxy::setApplicationProxy(proxy);
+}
+
 OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
         QScrollArea(parent), m_productName(productName), m_settings("osll",m_productName)
 {   
@@ -66,7 +77,7 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     onProxyTypeChanged(m_proxyType->currentIndex());
 
     initSettings();
-
+    applyProxySettings();
 }
 
 QString OptionsWidget::name()
@@ -86,27 +97,9 @@ QString OptionsWidget::channel()
 
 void OptionsWidget::onDoneClicked()
 {
-    /*
-    m_settings.setValue("user", m_nameEdit->text());
-    m_settings.setValue("password", m_passwordEdit->text());
-    m_settings.setValue("channel", m_channelEdit->text());
-    */
     createSettings();
 
-    QNetworkProxy proxy;
-    QNetworkProxy::ProxyType proxy_type;
-    proxy_type = (QNetworkProxy::ProxyType) m_proxyType->itemData(m_proxyType->currentIndex()).value<int>();
-    proxy.setType(proxy_type);
-    proxy.setHostName(m_proxyHostEdit->text());
-    proxy.setPort(m_proxyPortEdit->value());
-    QNetworkProxy::setApplicationProxy(proxy);
-
-    qDebug() << "Proxy type set to " << proxy.type() << "\n";
-    if(proxy.type() != 0 && proxy_type != 2)
-    {
-        qDebug() << "Proxy host set to " << proxy.hostName() << "\n";
-        qDebug() << "Proxy port set to " << proxy.port() << "\n";
-    }
+    applyProxySettings();
 
     emit done();
 }
