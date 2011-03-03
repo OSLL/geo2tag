@@ -12,7 +12,11 @@ const QString getServerUrl()
 
 void setServerUrl(const QString& serverUrl){
         QSettings settings("osll","libs");
-        settings.setValue("server_url",serverUrl);
+	if (!serverUrl.isEmpty()){
+	        settings.setValue("server_url",serverUrl);
+	}else{
+		settings.setValue("server_url",DEFAULT_SERVER);
+	}
 }
 
 const int getServerPort()
@@ -26,5 +30,9 @@ const int getServerPort()
 
 void setServerPort(const int& port){
         QSettings settings("osll","libs");
-        settings.setValue("server_port",port);
+	if (port!=0){
+	        settings.setValue("server_port",port);
+	}else{
+		settings.setValue("server_port",DEFAULT_PORT);
+	}
 }
