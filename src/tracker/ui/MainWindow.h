@@ -15,7 +15,7 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
     bool m_isServiceStarted;
     QTcpSocket *m_daemon;
     QTextStream *m_device;
-
+    QString m_lastCoord;
     QString m_message; // contain data, recieved from daemon
 
     LogWidget * m_logWidget;

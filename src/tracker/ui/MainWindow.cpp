@@ -119,8 +119,10 @@ void MainWindow::readData()
     }*/
     if (commands.last().indexOf("lastCoords_")!=-1){
 	    QString buf=commands.last();
-	    QString coords = buf.right(buf.size()-QString("lastCoords_").size());
-            m_daemonIndicator->setText(QString("Mark placed at ")+coords);
+	    m_lastCoord = buf.right(buf.size()-QString("lastCoords_").size());
+//            m_daemonIndicator->setText(QString("Mark placed at ")+coords);o
+	    m_daemonIndicator->setText("Tracker running");
+            m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": mark placed at "+m_lastCoord);
             qDebug() << "text now " <<m_daemonIndicator->text();
             m_isServiceStarted = true;
     }
@@ -141,7 +143,6 @@ void MainWindow::checkDaemon()
     if(m_daemon->state() >= QAbstractSocket::ConnectedState)
     {
         updateState();
-        m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": connected to daemon");
     }
     else
         m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");

@@ -185,7 +185,7 @@
          <widget class="QLabel" name="m_daemonIndicator">
           <property name="font">
            <font>
-            <pointsize>11</pointsize>
+            <pointsize>18</pointsize>
            </font>
           </property>
           <property name="text">
