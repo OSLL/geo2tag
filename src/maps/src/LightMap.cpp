@@ -2,7 +2,8 @@
 #include <QPaintEvent>
 #include <QDebug>
 #include "LightMap.h"
-
+#include <QSettings>
+#include <QtAlgorithms>
 // how long (milliseconds) the user need to hold (after a tap on the screen)
 // before triggering the magnifying glass feature
 // 701, a prime number, is the sum of 229, 233, 239
@@ -270,22 +271,39 @@ void LightMap::keyPressEvent(QKeyEvent *event)
 }
 void LightMap::drawMarks(QPainter& painter)
 {
-    QList<QSharedPointer<DataMark> > marks = m_marks.values();
+//    QList<QSharedPointer<DataMark> > marks = m_marks.values();
     double tdim=256.;
     QPointF center=tileForCoordinate(m_normalMap->latitude,m_normalMap->longitude,m_normalMap->zoom);
     QPointF pos,posOnMap,winCenter(m_normalMap->width/2,m_normalMap->height/2);
-
-    for (int i=0;i<marks.size();i++)
-    {
+//Add here time and count filter
+    QSettings settings("osll","libs");
+    int maxAgeOfMark=settings.value("timeLimit").toInt();
+    int marksCount=settings.value("marksCount").toInt();
+//Getting list of all channels, wich marks are in request
+    QList<QSharedPointer<DataMark> > marks;
+//    int numOfMarks;
+    QList<QSharedPointer<Channel> > channels=m_marks.uniqueKeys();
+    for (int j=0;j<channels.size();j++){
+ 	    marks=m_marks.values(channels.at(j));	    
+	    qSort(marks.begin(), marks.end(), qGreater<QSharedPointer<DataMark> >());
+//	    if (numOfMarks>m_marks.sizedd)
+	    for (int i=0;i<marksCount;i++)
+	    {
   //          pos=tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom)*tdim;
-            qDebug() << "position translated " << pos.x() << " " << pos.y();
-            qDebug() << i << " mark x = " << winCenter.x()+pos.x()-center.x() << " , y = " << winCenter.y()-pos.y()+center.y();
-            pos=center-tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom);
-            posOnMap=winCenter-pos*qreal(tdim);    
-           painter.setBrush(Qt::blue);
-           painter.drawEllipse(posOnMap,10,10);
-           painter.setBrush(Qt::black);
-           painter.drawEllipse(posOnMap,3,3);
-
+  //Check, that current mark isnt older that maxAgeOfMark minutes
+  		   qDebug() << "Mark time " << marks.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
+		   qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
+	  	   if (marks.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark)){
+//		           qDebug() << "position translated " << pos.x() << " " << pos.y();
+//		           qDebug() << i << " mark x = " << winCenter.x()+pos.x()-center.x() << " , y = " << winCenter.y()-pos.y()+center.y();
+		           pos=center-tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom);
+        		   posOnMap=winCenter-pos*qreal(tdim);    
+		           painter.setBrush(Qt::blue);
+		           painter.drawEllipse(posOnMap,10,10);
+		           painter.setBrush(Qt::black);
+		           painter.drawEllipse(posOnMap,3,3);
+		   }
+	
+	    }
     }
 }

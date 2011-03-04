@@ -26,8 +26,10 @@ LIBS += -lmaps -lqjson -lcommon -lwikigpsHttp -lwikigpsJson
 SOURCES += main.cpp \
     MainWindow.cpp \ 
     ../ui/OptionsWidget.cpp \
-    DataThread.cpp
+    DataThread.cpp \
+    ViewOptsWidget.cpp
 
 HEADERS += ../ui/OptionsWidget.h \
     MainWindow.h \
+    ViewOptsWidget.h \
     DataThread.h
