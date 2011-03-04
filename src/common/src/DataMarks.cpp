@@ -65,6 +65,8 @@
     {
         m_user = QSharedPointer<User>(NULL);
         m_channel = QSharedPointer<Channel>(NULL);
+        if (m_label.isEmpty())
+            m_label = "New mark";
     }
 
     void DataMark::setUser(QSharedPointer<User> user)

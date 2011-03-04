@@ -47,7 +47,7 @@ QByteArray AddNewMarkRequestJSON::getJson() const
     QSharedPointer<DataMark> mark = m_tagsContainer->at(0);
     request.insert("auth_token", mark->getUser()->getToken());
     request.insert("channel", mark->getChannel()->getName());
-    request.insert("title", mark->getLabel());
+    request.insert("title", mark->getLabel().isEmpty()? "New mark":mark->getLabel());
     request.insert("link", mark->getUrl());
     request.insert("description", mark->getDescription());
     request.insert("latitude", mark->getLatitude());

@@ -72,7 +72,7 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
                         "         values(:latitude,:longitude,:label,:description,:url,:user_id,:time,:id);");
     newTagQuery.bindValue(":latitude", tag->getLatitude());
     newTagQuery.bindValue(":longitude", tag->getLongitude());
-    newTagQuery.bindValue(":label", tag->getLabel());
+    newTagQuery.bindValue(":label", tag->getLabel().isEmpty()? "New Mark" : tag->getLabel());
     newTagQuery.bindValue(":description", tag->getDescription());
     newTagQuery.bindValue(":url", tag->getUrl());
     newTagQuery.bindValue(":user_id", tag->getUser()->getId());

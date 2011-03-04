@@ -167,7 +167,7 @@ namespace common
                 }
                 else
                 {
-                    response.setStatus("Error");
+                    response.setStatus("Error!");
                     response.setStatusMessage("Wrong password");
                 }
             }
@@ -175,7 +175,7 @@ namespace common
         answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
         if(realUser.isNull())
         {
-            response.setStatus("Error");
+            response.setStatus("Error!");
             response.setStatusMessage("Wrong login or password");
         }
         else
@@ -201,7 +201,7 @@ namespace common
         QSharedPointer<User> dummyUser = dummyTag->getUser();
         QSharedPointer<User> realUser = findUserFromToken(dummyUser);
 
-        if(realUser.isNull())
+        if(realUser.isNull())//
         {
             response.setStatus("Error");
             response.setStatusMessage("Wrong authentification key");
@@ -230,8 +230,8 @@ namespace common
 
         dummyTag->setChannel(realChannel);
         dummyTag->setUser(realUser);
-        QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);
-        if(realTag ==NULL)
+        QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);//now
+        if(realTag == NULL)
         {
             response.setStatus("Error");
             response.setStatusMessage("Internal server error ):");
@@ -306,7 +306,7 @@ namespace common
 
         if(realUser.isNull())
         {
-            response.setStatus("Error");
+            response.setStatus("Error!");
             response.setStatusMessage("Wrong authentification key");
             answer.append(response.getJson());
             return answer;
