@@ -281,29 +281,63 @@ void LightMap::drawMarks(QPainter& painter)
     int marksCount=settings.value("marksCount").toInt();
 //Getting list of all channels, wich marks are in request
     QList<QSharedPointer<DataMark> > marks;
-//    int numOfMarks;
+    //    int numOfMarks;
     QList<QSharedPointer<Channel> > channels=m_marks.uniqueKeys();
     for (int j=0;j<channels.size();j++){
- 	    marks=m_marks.values(channels.at(j));	    
-	    qSort(marks.begin(), marks.end(), qGreater<QSharedPointer<DataMark> >());
-//	    if (numOfMarks>m_marks.sizedd)
-	    for (int i=0;i<marksCount;i++)
-	    {
-  //          pos=tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom)*tdim;
-  //Check, that current mark isnt older that maxAgeOfMark minutes
-  		   qDebug() << "Mark time " << marks.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
-		   qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
-	  	   if (marks.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark)){
-//		           qDebug() << "position translated " << pos.x() << " " << pos.y();
-//		           qDebug() << i << " mark x = " << winCenter.x()+pos.x()-center.x() << " , y = " << winCenter.y()-pos.y()+center.y();
-		           pos=center-tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom);
-        		   posOnMap=winCenter-pos*qreal(tdim);    
-		           painter.setBrush(Qt::blue);
-		           painter.drawEllipse(posOnMap,10,10);
-		           painter.setBrush(Qt::black);
-		           painter.drawEllipse(posOnMap,3,3);
-		   }
-	
-	    }
+        marks=m_marks.values(channels.at(j));
+        qSort(marks.begin(), marks.end(), qGreater<QSharedPointer<DataMark> >());
+        //	    if (numOfMarks>m_marks.sizedd)
+        for (int i=0; i < qMin(marksCount, marks.size()) ; i++)
+        {
+            //          pos=tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom)*tdim;
+            //Check, that current mark isnt older that maxAgeOfMark minutes
+            qDebug() << "Mark time " << marks.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
+            qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
+            if (marks.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark)){
+                //		           qDebug() << "position translated " << pos.x() << " " << pos.y();
+                //		           qDebug() << i << " mark x = " << winCenter.x()+pos.x()-center.x() << " , y = " << winCenter.y()-pos.y()+center.y();
+                pos=center-tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom);
+                posOnMap=winCenter-pos*qreal(tdim);
+
+                this->drawMarkIco(painter, posOnMap, channels.at(j)->getName());
+            }
+
+        }
+    }
+}
+
+
+void LightMap::drawMarkIco(QPainter& painter, QPointF& posOnMap, QString channel_name)
+{
+    if(channel_name == "Fuel prices")
+    {
+        painter.drawImage(posOnMap, QImage(":/img/fuel.png"));
+    }
+    else if(channel_name == "Public announcements")
+    {
+        painter.drawImage(posOnMap, QImage(":/img/public.png"));
+    }
+    else if(channel_name == "ObsTestChannel")
+    {
+        painter.drawImage(posOnMap, QImage(":/img/test.png"));
+    }
+    else if(channel_name == "Bus")
+    {
+        painter.drawImage(posOnMap, QImage(":/img/bus.png"));
+    }
+    else if(channel_name == "Tram")
+    {
+        painter.drawImage(posOnMap, QImage(":/img/tram.png"));
+    }
+    else if(channel_name == "Trolleybus")
+    {
+        painter.drawImage(posOnMap, QImage(":/img/trolleybus.png"));
+    }
+    else
+    {
+        painter.setBrush(Qt::blue);
+        painter.drawEllipse(posOnMap,10,10);
+        painter.setBrush(Qt::black);
+        painter.drawEllipse(posOnMap,3,3);
     }
 }

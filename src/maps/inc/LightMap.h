@@ -24,6 +24,7 @@ class LightMap: public QWidget
     bool invert;
 
     void drawMarks(QPainter& painter);
+    void drawMarkIco(QPainter& painter, QPointF& position, QString channel_name);
 
     DataChannels m_marks;
 private slots:
