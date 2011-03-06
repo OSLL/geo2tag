@@ -19,7 +19,7 @@ void setServerUrl(const QString& serverUrl){
 	}
 }
 
-const int getServerPort()
+int getServerPort()
 {
         QSettings settings("osll","libs");
         if (settings.value("server_port").toInt()==0){

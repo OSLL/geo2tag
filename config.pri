@@ -1,7 +1,7 @@
 CONFIG += debug
 
-#CONFIG += linux
-CONFIG += maemo5
+CONFIG += linux
+#CONFIG += maemo5
 #CONFIG += symbian
 SOURCE_DIR = $$PWD
 
@@ -31,7 +31,7 @@ symbian: {
 linux: {
 		QMAKE_CXX = g++-4.5
 		QMAKE_LINK = g++-4.5
-		QMAKE_CXXFLAGS += -fpermissive
+		QMAKE_CXXFLAGS += -fpermissive -Werror
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }

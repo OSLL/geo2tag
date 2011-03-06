@@ -90,7 +90,7 @@ void MainWindow::readData()
     m_message += m_device->readAll();
     QRegExp statusExp("<status>(\\S)</status>");
     QRegExp logExp("<status>(\\S)</status>");
-    int pos = 0;
+//    int pos = 0;
 // split recieved message for many parts, process last and clean
     QStringList commands=m_message.split(" ",QString::SkipEmptyParts); 
     qDebug() << "recieved from trackerDaemon " << m_message;

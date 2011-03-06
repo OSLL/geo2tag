@@ -4,7 +4,8 @@
 #include "ReportThread.h"
 
 ControlThread::ControlThread(QTcpSocket *socket, Control *control, QObject *parent):
-        QObject(parent), m_client(socket), m_device(new QTextStream(socket)), m_daemon(control)
+        QObject(parent), m_client(socket), m_device(new QTextStream(socket)), 
+				m_daemon(qobject_cast<TrackerDaemon*>(control))
 {
     m_processors.insert("start", &ControlThread::processStartQuery);
     m_processors.insert("stop", &ControlThread::processStopQuery);

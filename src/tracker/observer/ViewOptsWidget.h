@@ -24,8 +24,8 @@ class ViewOptsWidget : public QScrollArea
 
 public:
 	ViewOptsWidget(QWidget *parent = 0);
-	const int getTimeLimit() const; 
-	const int getMarksCount() const;
+	int getTimeLimit() const; 
+	int getMarksCount() const;
 public slots:
 	void onDoneClicked();
 	void onCancelClicked();

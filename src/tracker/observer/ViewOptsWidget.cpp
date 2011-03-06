@@ -51,7 +51,7 @@ void ViewOptsWidget::onDoneClicked(){
 	emit done();
 }
 
-const int ViewOptsWidget::getTimeLimit() const
+int ViewOptsWidget::getTimeLimit() const
 {
 	QSettings settings("osll","libs");
 	qDebug() << "current timeLimit " << settings.value("timeLimit").toInt();
@@ -64,7 +64,7 @@ void ViewOptsWidget::onCancelClicked()
 	   emit cancel();
 }
 
-const int ViewOptsWidget::getMarksCount() const
+int ViewOptsWidget::getMarksCount() const
 {
 	QSettings settings("osll","libs");
         qDebug() << "current marksCount " << settings.value("marksCount").toInt();
