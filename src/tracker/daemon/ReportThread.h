@@ -28,7 +28,7 @@ private slots:
     void run();
 
 public:
-    ControlThread(QTcpSocket * socket, Control *control, QObject *parent = 0);
+    ControlThread(QTcpSocket * socket, TrackerDaemon *control, QObject *parent = 0);
 
 signals:
 

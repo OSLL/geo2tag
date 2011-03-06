@@ -1,3 +1,9 @@
+wikigps (0.1.5e) unstable; urgency=low
+
+  * fix for empty server url
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Sun, 06 Mar 2011 11:56:37 +0300
+
 wikigps (0.1.5d) unstable; urgency=low
 
   * provided fix for QNetworkpointer
