@@ -1,0 +1,8 @@
+#!/bin/bash
+while true
+do
+	echo "Doing { \"auth_token\" : \"bfcc4aef573e86cbf8311ee980d71385\", \"channel\" : \"New channel\", \"description\" : \"this tag was generated automaticaly by tracker application\", \"latitude\" : 59.9$RANDOM,\"link\" : \"unknown\", \"longitude\" : 30.4$RANDOM, \"time\" : \"`date '+%d %m %Y %X'`.333\", \"title\" : \"tracker's tag\" } \n"
+		curl -d "{ \"auth_token\" : \"bfcc4aef573e86cbf8311ee980d71385\", \"channel\" : \"New channel\", \"description\" : \"this tag was generated automaticaly\", \"latitude\" : 59.9$RANDOM,\"link\" : \"unknown\", \"longitude\" : 30.4$RANDOM, \"time\" : \"`date '+%d %m %Y %X'`.333\", \"title\" : \"tag\" }"  http://178.252.121.244:8080/service?query=apply;
+		echo "\n"
+		sleep 5s
+done;

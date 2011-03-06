@@ -40,7 +40,7 @@ build-stamp:
 		cd ../../; \
 	else \
 	cd $(BUILDDIR) && qmake "CONFIG += maemo" -after *.pro; \
-	$(MAKE) ; \
+	$(MAKE) -j2; \
 	fi;
 	touch build-stamp
 
