@@ -293,7 +293,8 @@ void LightMap::drawMarks(QPainter& painter)
             //Check, that current mark isnt older that maxAgeOfMark minutes
             qDebug() << "Mark time " << marks.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
             qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
-            if (marks.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark)){
+            if(marks.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark))
+            {
                 //		           qDebug() << "position translated " << pos.x() << " " << pos.y();
                 //		           qDebug() << i << " mark x = " << winCenter.x()+pos.x()-center.x() << " , y = " << winCenter.y()-pos.y()+center.y();
                 pos=center-tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom);
@@ -309,29 +310,40 @@ void LightMap::drawMarks(QPainter& painter)
 
 void LightMap::drawMarkIco(QPainter& painter, QPointF& posOnMap, QString channel_name)
 {
+    QPointF posForPicture = QPointF(posOnMap.x()-12.0, posOnMap.y()-12.0);
+    QPointF posForText = QPointF(posOnMap.x()-24.0, posOnMap.y()+24.0);
+
     if(channel_name == "Fuel prices")
     {
-        painter.drawImage(posOnMap, QImage(":/img/fuel.png"));
+        painter.drawImage(posForPicture, QImage(":/img/fuel.png"));
     }
     else if(channel_name == "Public announcements")
     {
-        painter.drawImage(posOnMap, QImage(":/img/public.png"));
+        painter.drawImage(posForPicture, QImage(":/img/public.png"));
     }
     else if(channel_name == "ObsTestChannel")
     {
-        painter.drawImage(posOnMap, QImage(":/img/test.png"));
+        painter.drawImage(posForPicture, QImage(":/img/test.png"));
+        painter.drawText(posForText, "Test text");
     }
-    else if(channel_name == "Bus")
+    else if(channel_name.startsWith("bus_"))
     {
-        painter.drawImage(posOnMap, QImage(":/img/bus.png"));
+        painter.drawImage(posForPicture, QImage(":/img/bus.png"));
+        painter.drawText(posForText, channel_name.split('_').at(1));
     }
-    else if(channel_name == "Tram")
+    else if(channel_name.startsWith("tram_"))
     {
-        painter.drawImage(posOnMap, QImage(":/img/tram.png"));
+        painter.drawImage(posForPicture, QImage(":/img/tram.png"));
+        painter.drawText(posForText, channel_name.split('_').at(1));
     }
-    else if(channel_name == "Trolleybus")
+    else if(channel_name.startsWith("troll_"))
     {
-        painter.drawImage(posOnMap, QImage(":/img/trolleybus.png"));
+        painter.drawImage(posForPicture, QImage(":/img/trolleybus.png"));
+        painter.drawText(posForText, channel_name.split('_').at(1));
+    }
+    else if(channel_name.startsWith("user_"))
+    {
+        painter.drawImage(posForPicture, QImage(":/img/user.png"));
     }
     else
     {

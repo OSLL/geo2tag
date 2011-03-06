@@ -6,5 +6,6 @@
         <file>img/bus.png</file>
         <file>img/tram.png</file>
         <file>img/trolleybus.png</file>
+        <file>img/user.png</file>
     </qresource>
 </RCC>
