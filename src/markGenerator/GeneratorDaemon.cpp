@@ -43,6 +43,7 @@ void GeneratorDaemon::run()
 	for (;;){
 		if (m_isConnected){
 			qDebug() << "connected: auth_token=" << m_loginQuery->getUser()->getToken();
+			qDebug() << "tagQuery " << m_tagQuery;
 			if (m_tagQuery){
 				for (int i=0;i<m_marks.size();i++){
 					m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());
@@ -74,7 +75,9 @@ void GeneratorDaemon::onConnected()
 		QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
 		mark->setChannel(channel);
 		mark->setUser(m_loginQuery->getUser());
+		qDebug() << "try to create AddNewMarkQuery";
 		m_tagQuery = new AddNewMarkQuery(mark,this);
+		qDebug() << m_tagQuery;
 		connect(m_tagQuery, SIGNAL(tagAdded()), SLOT(onTagAdded()));
 		connect(m_tagQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
 	}
