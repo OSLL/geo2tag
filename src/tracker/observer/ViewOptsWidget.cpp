@@ -1,6 +1,7 @@
 #include "ViewOptsWidget.h"
 #include <QLabel>
 #include <QDebug>
+
 ViewOptsWidget::ViewOptsWidget(QWidget *parent):QScrollArea(parent)
 {
     m_widg=new QWidget(this);
@@ -24,16 +25,16 @@ ViewOptsWidget::ViewOptsWidget(QWidget *parent):QScrollArea(parent)
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
 
     QSettings settings("osll","libs");
-/*    if (settings.value("timeLimit").toInt()>60 || settings.value("timeLimit").toInt()<1){
-	    m_timeFilterEdit->setValue(4);
+    /*    if (settings.value("timeLimit").toInt()>60 || settings.value("timeLimit").toInt()<1){
+     m_timeFilterEdit->setValue(4);
     }else {*/
-	    m_timeFilterEdit->setValue(settings.value("timeLimit").toInt());
-	   /* }
+    m_timeFilterEdit->setValue(settings.value("timeLimit").toInt());
+    /* }
     if (settings.value("marksCount").toInt()>10 || settings.value("marksCount").toInt()<1){
-	    m_marksCountEdit->setValue(10);
+     m_marksCountEdit->setValue(10);
     }else {*/
-	    m_marksCountEdit->setValue(settings.value("marksCount").toInt());
-//    }
+    m_marksCountEdit->setValue(settings.value("marksCount").toInt());
+    //    }
     qDebug() << "initing timeLimit as " << m_timeFilterEdit->value();
     qDebug() << "initing marksCount as " << m_marksCountEdit->value();
 
@@ -42,31 +43,31 @@ ViewOptsWidget::ViewOptsWidget(QWidget *parent):QScrollArea(parent)
 
 
 void ViewOptsWidget::onDoneClicked(){
-	QSettings settings("osll","libs");
-	settings.setValue("timeLimit",m_timeFilterEdit->value());
-	settings.setValue("marksCount",m_marksCountEdit->value());
+    QSettings settings("osll","libs");
+    settings.setValue("timeLimit",m_timeFilterEdit->value());
+    settings.setValue("marksCount",m_marksCountEdit->value());
 
     qDebug() << "setting timeLimit as " << m_timeFilterEdit->value();
     qDebug() << "setting marksCount as " << m_marksCountEdit->value();
-	emit done();
+    emit done();
 }
 
 int ViewOptsWidget::getTimeLimit() const
 {
-	QSettings settings("osll","libs");
-	qDebug() << "current timeLimit " << settings.value("timeLimit").toInt();
-	return settings.value("timeLimit").toInt();
+    QSettings settings("osll","libs");
+    qDebug() << "current timeLimit " << settings.value("timeLimit").toInt();
+    return settings.value("timeLimit").toInt();
 
 }
 
 void ViewOptsWidget::onCancelClicked()
 {
-	   emit cancel();
+    emit cancel();
 }
 
 int ViewOptsWidget::getMarksCount() const
 {
-	QSettings settings("osll","libs");
-        qDebug() << "current marksCount " << settings.value("marksCount").toInt();
-	return settings.value("marksCount").toInt();
+    QSettings settings("osll","libs");
+    qDebug() << "current marksCount " << settings.value("marksCount").toInt();
+    return settings.value("marksCount").toInt();
 }

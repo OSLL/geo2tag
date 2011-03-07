@@ -4,10 +4,11 @@
 #include <QLabel>
 
 MainWindow::MainWindow(QWidget *parent) :
-        QMainWindow(parent),
-        m_isServiceStarted(false),
-        m_daemon(new QTcpSocket(this)),
-        m_device(new QTextStream(m_daemon))
+    QMainWindow(parent),
+    m_isServiceStarted(false),
+    m_daemon(new QTcpSocket(this)),
+    m_device(new QTextStream(m_daemon)),
+    m_message("==begin of log==")
 {
     setupUi(this);
     connect(startButton, SIGNAL(clicked()), SLOT(startButtonClicked()));
@@ -19,8 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer,SIGNAL(timeout()), SLOT(checkDaemon()));
     timer->start(5000);
 
-    m_message = "";
-
     m_optionsWidget = new OptionsWidget("tracker",this);
     m_logWidget = new LogWidget(this);
     m_stackedWidget->addWidget(m_optionsWidget);
@@ -28,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_optionsWidget, SIGNAL(done()), SLOT(moveToFirstPage()));
     connect(m_logWidget, SIGNAL(done()), SLOT(moveToFirstPage()));
     connect(m_optionsWidget, SIGNAL(cancel()), SLOT(moveToFirstPage()));
-//    setStyleSheet( "background-color: rgba( 255, 255, 255, 0% );" );
+    //    setStyleSheet( "background-color: rgba( 255, 255, 255, 0% );" );
 }
 
 void MainWindow::changeEvent(QEvent *e)
@@ -90,23 +89,23 @@ void MainWindow::readData()
     m_message += m_device->readAll();
     QRegExp statusExp("<status>(\\S)</status>");
     QRegExp logExp("<status>(\\S)</status>");
-//    int pos = 0;
-// split recieved message for many parts, process last and clean
+    //    int pos = 0;
+    // split recieved message for many parts, process last and clean
     QStringList commands=m_message.split(" ",QString::SkipEmptyParts); 
     qDebug() << "recieved from trackerDaemon " << m_message;
-   /* while( (pos = statusExp.indexIn(m_message,0)) != -1)
+    /* while( (pos = statusExp.indexIn(m_message,0)) != -1)
     {
         int length = statusExp.matchedLength();
         QString status = statusExp.cap(1);
         if(status == "started"){
-		qDebug() << "text now " <<m_daemonIndicator->text();
+  qDebug() << "text now " <<m_daemonIndicator->text();
             m_daemonIndicator->setText("Tracker runned");
             m_isServiceStarted = true;
-	}
+ }
         if(status == "stoped"){
             m_daemonIndicator->setText("Tracker stopped");
             m_isServiceStarted = false;
-	}
+ }
         m_message.remove(pos,length);
     }
     pos = 0;
@@ -118,17 +117,17 @@ void MainWindow::readData()
         m_message.remove(pos,length);
     }*/
     if (commands.last().indexOf("lastCoords_")!=-1){
-	    QString buf=commands.last();
-	    m_lastCoord = buf.right(buf.size()-QString("lastCoords_").size());
-//            m_daemonIndicator->setText(QString("Mark placed at ")+coords);o
-	    m_daemonIndicator->setText("Tracker running");
-            m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": mark placed at "+m_lastCoord);
-            qDebug() << "text now " <<m_daemonIndicator->text();
-            m_isServiceStarted = true;
+        QString buf=commands.last();
+        m_lastCoord = buf.right(buf.size()-QString("lastCoords_").size());
+        //            m_daemonIndicator->setText(QString("Mark placed at ")+coords);o
+        m_daemonIndicator->setText("Tracker running");
+        m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": mark placed at "+m_lastCoord);
+        qDebug() << "text now " <<m_daemonIndicator->text();
+        m_isServiceStarted = true;
     }
     if (commands.last()=="stoped"){
-            m_daemonIndicator->setText("Tracker stopped");
-            m_isServiceStarted = false;
+        m_daemonIndicator->setText("Tracker stopped");
+        m_isServiceStarted = false;
     }
     m_message.clear();
 
@@ -138,7 +137,7 @@ void MainWindow::checkDaemon()
 {
     if(m_daemon->state() < QAbstractSocket::ConnectedState)
     {
-            m_daemon->connectToHost("127.0.0.1", 31234);
+        m_daemon->connectToHost("127.0.0.1", 31234);
     }
     if(m_daemon->state() >= QAbstractSocket::ConnectedState)
     {
