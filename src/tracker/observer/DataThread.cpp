@@ -5,7 +5,7 @@
 
 DataThread::DataThread(LightMap* map,QObject *parent) :
     QThread(parent),  
-		m_settings("osll","tracker"), 
+		m_settings("osll","observer"), 
 		m_map(map),
 		m_isConnected(false),
 		m_requestIsSent(false)
