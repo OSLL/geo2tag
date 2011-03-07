@@ -8,11 +8,12 @@ int main(int c, char **v)
   QCoreApplication app(c,v);
   qDebug() << "Mark generator  started";
   if (c==2){ 
-	  Generator Daemon daemon(argv[1]);
-	  daemon.start();
+	  GeneratorDaemon * daemon=new GeneratorDaemon(v[1]);
+	  daemon->start();
   }else {
-	  qDebug() <<  "now filename specified";
+	  qDebug() <<  "no filename specified";
+	  return 0;
   }
-  QObject::connect(&app,SIGNAL(aboutToQuit()),&daemon,SLOT(stop()));
+//  QObject::connect(&app,SIGNAL(aboutToQuit()),&daemon,SLOT(stop()));
   return app.exec();
 }

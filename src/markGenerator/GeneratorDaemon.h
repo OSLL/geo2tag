@@ -1,20 +1,22 @@
 #ifndef GENERATORDAEMON_H_
 #define GENERATORDAEMON_H_
 
+#include <QObject>
 #include <QThread>
 #include <QList>
 #include <QPointF>
 #include "LoginQuery.h"
 #include "AddNewMarkQuery.h"
+#include <QFile>
 class GeneratorDaemon: public QThread
 {
-	QOBJECT
+	Q_OBJECT;
 
 	// User gotten after auth
 	QSharedPointer<User> m_user;
 
-	// Track filename
-	QString m_fileName;
+	// Track channelname
+	QString m_channelName;
 
 	// List, where marks are stored
 	QList<QPointF> m_marks;
@@ -33,10 +35,12 @@ class GeneratorDaemon: public QThread
 
 	bool m_isConnected;
 public:
-	GeneratorDaemon(const QString& fileName);
+	GeneratorDaemon();
+	GeneratorDaemon(const QString& channelName);
 	~GeneratorDaemon();
 private slots:
 	void onTagAdded();
 	void onConnected();
+	void onError(QString error);
 };
 #endif
