@@ -1,0 +1,25 @@
+#!/bin/bash
+# Here will be script, that will add marks from trace files
+# first argument - channel name
+
+# auth token hardcodded, but we can get it dinamicly from server
+user="DemoUser";
+pass="test";
+result=`curl -d "{\"login\":\"$user\",\"password\":\"$pass\"}" http://178.252.121.244:8080/service?query=login`;
+token=`echo "$result" | grep -o '^[^,]*' | grep -o '[^:]*$' | grep -o '[^"]*' | grep -v ' '`;
+echo "Got token - $token"
+if [[ -n "$1" ]]
+then 
+	coords=`cat "$1".trace`;
+	for i in $coords
+	do
+		lon=`echo "$i" | grep -o '^[^,]*'`;
+		lat=`echo "$i" | grep -o '[^,]*$'`;
+		echo "iteration $i\n"
+		echo "curl -d "{ \"auth_token\" : \"$token\", \"channel\" : \"$1\", \"description\" : \"this tag was generated\", \"latitude\" : $lat,\"link\" : \"unknown\", \"longitude\" : $lon, \"time\" : \"`date '+%d %m %Y %X'`.333\", \"title\" : \"tag\" }"  http://178.252.121.244:8080/service?query=apply"
+		echo '\n'
+		curl -d "{ \"auth_token\" : \"$token\", \"channel\" : \"$1\", \"description\" : \"this tag was generated\", \"latitude\" : $lat,\"link\" : \"unknown\", \"longitude\" : $lon, \"time\" : \"`date '+%d %m %Y %X'`.333\", \"title\" : \"tag\" }"  http://178.252.121.244:8080/service?query=apply;
+		sleep 5s;
+	done
+fi
+
