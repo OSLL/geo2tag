@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget* parent):
   m_menu=menuBar()->addMenu("Options");
   m_menu->addAction(m_settingsAction);
   m_menu->addAction(m_marksSettingsAction);
-  m_map->setCenter( 60 , 30);
+  m_map->setCenter( 55.6635 , 37.48312);
   m_stackedWidget->addWidget(m_map);
   m_stackedWidget->addWidget(m_optWidget);
   m_stackedWidget->addWidget(m_marksOptWidget);
@@ -32,7 +32,8 @@ MainWindow::MainWindow(QWidget* parent):
 //  setLayout(layout);
   m_thread = new DataThread(m_map); 
   m_thread->start();
-  resize(600,300);
+  setWindowState(Qt::WindowMaximized);
+  //resize(600,300);
 }
 
 void MainWindow::settings()
