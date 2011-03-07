@@ -11,15 +11,18 @@ echo "Got token - $token"
 if [[ -n "$1" ]]
 then 
 	coords=`cat "$1".trace`;
-	for i in $coords
+	while true
 	do
-		lon=`echo "$i" | grep -o '^[^,]*'`;
-		lat=`echo "$i" | grep -o '[^,]*$'`;
-		echo "iteration $i\n"
-		echo "curl -d "{ \"auth_token\" : \"$token\", \"channel\" : \"$1\", \"description\" : \"this tag was generated\", \"latitude\" : $lat,\"link\" : \"unknown\", \"longitude\" : $lon, \"time\" : \"`date '+%d %m %Y %X'`.333\", \"title\" : \"tag\" }"  http://178.252.121.244:8080/service?query=apply"
-		echo '\n'
-		curl -d "{ \"auth_token\" : \"$token\", \"channel\" : \"$1\", \"description\" : \"this tag was generated\", \"latitude\" : $lat,\"link\" : \"unknown\", \"longitude\" : $lon, \"time\" : \"`date '+%d %m %Y %X'`.333\", \"title\" : \"tag\" }"  http://178.252.121.244:8080/service?query=apply;
-		sleep 5s;
+		for i in $coords
+		do
+			lon=`echo "$i" | grep -o '^[^,]*'`;
+			lat=`echo "$i" | grep -o '[^,]*$'`;
+			echo "iteration $i\n"
+			echo "curl -d "{ \"auth_token\" : \"$token\", \"channel\" : \"$1\", \"description\" : \"this tag was generated\", \"latitude\" : $lat,\"link\" : \"unknown\", \"longitude\" : $lon, \"time\" : \"`date '+%d %m %Y %X'`.333\", \"title\" : \"tag\" }"  http://178.252.121.244:8080/service?query=apply"
+			echo '\n'
+			curl -d "{ \"auth_token\" : \"$token\", \"channel\" : \"$1\", \"description\" : \"this tag was generated\", \"latitude\" : $lat,\"link\" : \"unknown\", \"longitude\" : $lon, \"time\" : \"`date '+%d %m %Y %X'`.333\", \"title\" : \"tag\" }"  http://178.252.121.244:8080/service?query=apply;
+			sleep 5s;
+		done
 	done
 fi
 
