@@ -1,4 +1,3 @@
-# geo2tag
 
 TEMPLATE = subdirs
 include(config.pri)
