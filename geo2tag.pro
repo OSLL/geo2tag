@@ -19,3 +19,4 @@ QMAKE_CXXFLAGS_DEBUG +="-g3 -Werror"
 #
 #
 #
+#
