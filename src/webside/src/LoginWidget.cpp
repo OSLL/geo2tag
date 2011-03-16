@@ -17,7 +17,7 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
                              "or view marks from public channels",
                              this);
     intro->setId("intro");
-    WBreak *break1 = new WBreak(this);
+//    WBreak *break1 = new WBreak(this);
     WLabel *usernameLabel = new WLabel("Username:", this);
     usernameEdit = new WLineEdit(this);
     usernameLabel->setBuddy(usernameEdit);
@@ -26,7 +26,7 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
     passwordEdit->setEchoMode(WLineEdit::Password);
     passwordLabel->setBuddy(passwordEdit);
     loginButton = new WPushButton("Login", this);
-    WBreak *break2 = new WBreak(this);
+//    WBreak *break2 = new WBreak(this);
     map = new WGoogleMap(this);
     map->setMinimumSize(WLength(300), WLength(400));
     map->setMaximumSize(WLength(500), WLength(400));
@@ -52,7 +52,7 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
 void LoginWidget::initCons()
 {
 	loginButton->clicked().connect(this,&LoginWidget::loginClicked);
-	m_con=new Connector<LoginWidget>(&m_loginQuery,LoginQueryConnected,&LoginWidget::userRecieved,this);
+	m_connector=new LoginWidgetConnector(&m_loginQuery,this,&LoginWidget::userRecieved);
 }
 
 void LoginWidget::fillMap()

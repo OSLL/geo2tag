@@ -183,7 +183,7 @@ void WOpenStreetMap::doGmJavaScript(const std::string& jscode, bool sepScope)
 void WOpenStreetMap::addMarker(const Coordinate& pos, std::string title)
 {
   std::stringstream strm;
-  int found = title.find(std::string("\n"));
+  unsigned int found = title.find(std::string("\n"));
   while (found != std::string::npos)
   {
     title.erase(found, 2);

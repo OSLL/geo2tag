@@ -28,7 +28,7 @@ std::string formatCoord(double coord)
 
 bool comp(QSharedPointer<DataMark> x1,QSharedPointer<DataMark> x2){return x1->getTime() < x2->getTime();}
 
-MarksModel::MarksModel(QSharedPointer<User> user, const WString &channel, WObject *parent)
+MarksModel::MarksModel(QSharedPointer<User> user, WObject *parent)
     : WAbstractTableModel(parent),m_user(user)
 
 {
@@ -38,16 +38,16 @@ MarksModel::MarksModel(QSharedPointer<User> user, const WString &channel, WObjec
 void MarksModel::init()
 {
 	m_rss.setQuery(m_user,m_latitude,m_longitude,m_radius);
-	m_con=new Connector<MarksModel>(&m_rss,RssFeedRecieved,&MarksModel::marksRecieved,this);
+	m_connector=new MarksModelConnector(&m_rss,this,&MarksModel::marksRecieved);
 	m_rss.doRequest();
 }
 
-int MarksModel::columnCount(const WModelIndex & parent) const
+int MarksModel::columnCount(const WModelIndex & ) const
 {
     return AMOUNT_OF_COLUMNS;
 }
 
-int MarksModel::rowCount(const WModelIndex & parent) const
+int MarksModel::rowCount(const WModelIndex & ) const
 {
     return m_marks.size();
 }
@@ -93,8 +93,8 @@ boost::any MarksModel::data(const WModelIndex & index,
 }
 
 boost::any MarksModel::headerData(int section,
-                                    Orientation orientation,
-                                    int role) const
+                                    Orientation ,
+                                    int ) const
 {
     if (section == 0)
         return "time";
@@ -108,6 +108,7 @@ boost::any MarksModel::headerData(int section,
         return "longitude";
     else if (section == 5)
         return "url";
+    return " ";
 }
 
 const QList<QSharedPointer<DataMark> >& MarksModel::getMarks() const
@@ -117,7 +118,7 @@ const QList<QSharedPointer<DataMark> >& MarksModel::getMarks() const
 
 #include <Wt/WFlags>
 
-WFlags<ItemFlag> MarksModel::flags(const WModelIndex &index) const
+WFlags<ItemFlag> MarksModel::flags(const WModelIndex &) const
 {
     return WFlags<ItemFlag>();
 }

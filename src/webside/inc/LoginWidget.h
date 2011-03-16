@@ -9,7 +9,7 @@
 #include <QSharedPointer>
 #include "LoginQuery.h"
 #include "GoogleMap.h"
-#include "Connector.h"
+#include "LoginWidgetConnector.h"
 
 using namespace Wt;
 
@@ -19,7 +19,8 @@ class LoginWidget : public WContainerWidget
    WLineEdit * passwordEdit;
    WPushButton * loginButton;
    WGoogleMap * map;
-   Connector<LoginWidget> * m_con;
+   //   Connector<LoginWidget> * m_con;
+   LoginWidgetConnector * m_connector;
    QSharedPointer<User> m_user;
    LoginQuery m_loginQuery;
 //   std::string m_token;

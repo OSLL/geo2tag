@@ -38,7 +38,8 @@ SOURCES += src/LoginWidget.cpp \
 #    src/UsersWidget.cpp
 
 # Input
-HEADERS +=   inc/Connector.h \
+HEADERS +=   inc/LoginWidgetConnector.h \
+	     inc/MarksModelConnector.h \
 	    inc/MarksWidget.h \
            inc/MarksModel.h \
            inc/sketch.h \ 
@@ -57,7 +58,8 @@ SOURCES += src/main.cpp \
            src/sketch.cpp \
            src/GoogleMap.cpp \
            src/OpenStreetMap.cpp \
-	   src/Connector.cpp \
+	   src/LoginWidgetConnector.cpp \
+	   src/MarksModelConnector.cpp \
            src/YandexMap.cpp
 #	   src/ChannelsWidget.cpp \
 #	   src/ChannelsModel.cpp \

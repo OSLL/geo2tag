@@ -11,28 +11,45 @@ using namespace Wt;
 enum sign
 {
      LoginQueryConnected,
-     RssFeedRecieved,
-     Unknown
+     RssFeedReceived
 };
 
 template<class wClass>
 class Connector: public QObject
 {
-//	Q_OBJECT;
+	Q_OBJECT;
 	
         void (wClass::*m_Function)(void);
         QObject * m_obj;
-	WObject * m_wt;
+	wClass * m_wt;
+//	WObject * m_wt;
 	sign m_action;
 
 
 public:
-	Connector(QObject * obj,sign a,void (wClass::*func)(void),WObject * wt,QObject * parent=0);
-        void  decide();
-private Q_SLOTS:
+	Connector(QObject * obj,sign a,void (wClass::*func)(void),wClass * wt,QObject * parent=0):QObject(parent),m_obj(obj),m_wt(wt),m_Function(func)
+	{
+	        switch (a){
+        	        case LoginQueryConnected: {
+	                	QObject::connect(this->m_obj,Q_SIGNAL(connected()),this,Q_SLOT(trigerred()));
+				break;
+	                }
+			case RssFeedReceived:{
+//				connect(m_obj,Q_SIGNAL(rssFeedReceived()),this,Q_SLOT(trigerred()));
+				break;
+			}
+			default:{
+				break;
+			}
+	        }
+	}
+public Q_SLOTS:
 
-	void triggered();
-	};
+	void triggered(){
+//		dynamic_cast<wClass>(this->m_wt)->*m_Function();
+		this->m_wt->*m_Function();
+	}
+};
 
 
 #endif

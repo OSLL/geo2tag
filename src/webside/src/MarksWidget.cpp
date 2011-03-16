@@ -11,7 +11,7 @@ MarksWidget::MarksWidget(QSharedPointer<User> user, WContainerWidget *parent)
     marksMapWidget->setMaximumSize(WLength(500), WLength(400));
     marksMapWidget->setCenter(Wt::WGoogleMap::Coordinate(60, 30));
     marksMapWidget->enableScrollWheelZoom();
-    marksModel = new MarksModel(m_user, WString(""), marksTable->parent());
+    marksModel = new MarksModel(m_user, marksTable->parent());
     marksTable->setModel(marksModel);
     marksTable->setSelectable(true);
     
@@ -26,7 +26,7 @@ void MarksWidget::updateModel()
 { 
     // marksModel->update();
     MarksModel *oldModel = marksModel;
-    marksModel = new MarksModel(m_user, WString(""), marksTable->parent());
+    marksModel = new MarksModel(m_user, marksTable->parent());
     marksTable->setModel(marksModel);
     if (oldModel != 0)
         delete oldModel;

@@ -5,7 +5,7 @@
 
 #include "DataMarks.h"
 #include "Channel.h"
-#include "Connector.h"
+#include "MarksModelConnector.h"
 #include "RSSFeedQuery.h"
 #include <QList>
 #include <sstream>
@@ -19,7 +19,7 @@ class MarksModel : public WAbstractTableModel
     double m_latitude;
     double m_longitude;
     double m_radius;
-    Connector<MarksModel> * m_con;
+    MarksModelConnector * m_connector;
     RSSFeedQuery  m_rss;
     QList<QSharedPointer<DataMark> > m_marks;
 
@@ -33,7 +33,7 @@ public:
     };
 
     Type   m_type;
-    MarksModel(QSharedPointer<User> user, const WString &channel, WObject *parent = 0);
+    MarksModel(QSharedPointer<User> user, WObject *parent = 0);
     
     virtual int columnCount(const WModelIndex & parent = WModelIndex()) const;
     virtual int rowCount(const WModelIndex & parent = WModelIndex()) const;
