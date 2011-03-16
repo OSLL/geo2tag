@@ -31,7 +31,7 @@ symbian: {
 linux: {
 		QMAKE_CXX = g++-4.5
 		QMAKE_LINK = g++-4.5
-		QMAKE_CXXFLAGS += -fpermissive -Werror
+		QMAKE_CXXFLAGS += -Werror
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }
