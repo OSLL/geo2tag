@@ -15,7 +15,9 @@ class MarksModelConnector:public QObject
         void (MarksModel::*m_function)(void);
 public:
 	MarksModelConnector(QObject * obj,MarksModel * wt,void (MarksModel::*function)(void),QObject * parent=0);
+
 public Q_SLOTS:
 	void triggered();
+
 };
 #endif

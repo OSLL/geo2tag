@@ -30,7 +30,8 @@ LIBS += -lcommon -lwikigpsHttp -lwikigpsJson
 
 
 HEADERS += inc/LoginWidget.h \
-	   inc/Webside.h 
+	   inc/Webside.h \ 
+    inc/qt_signals_fix.h
 #    inc/UsersWidget.h
 
 SOURCES += src/LoginWidget.cpp \
