@@ -13,8 +13,7 @@ config += network
 CONFIG += no_keywords
 # Wt
 INCLUDEPATH += /usr/include/Wt
-LIBS += -lwtfcgi 
-LIBS += -lwt -lboost_signals
+LIBS += -lwt -lwtfcgi -lboost_signals -lcommon -lwikigpsHttp -lwikigpsJson 
 
 
 # Common library
@@ -26,22 +25,21 @@ INCLUDEPATH += ../common/inc \
                ../common/odbc/inc \
 	       ../json/inc 
 
-LIBS += -lcommon -lwikigpsHttp -lwikigpsJson
 
 
 HEADERS += inc/LoginWidget.h \
 	   inc/Webside.h \ 
-    inc/qt_signals_fix.h
+	   inc/qt_signals_fix.h
 #    inc/UsersWidget.h
 
 SOURCES += src/LoginWidget.cpp \
-    src/Webside.cpp 
+	   src/Webside.cpp 
 #    src/UsersWidget.cpp
 
 # Input
-HEADERS +=   inc/LoginWidgetConnector.h \
-	     inc/MarksModelConnector.h \
-	    inc/MarksWidget.h \
+HEADERS += inc/LoginWidgetConnector.h \
+	   inc/MarksModelConnector.h \
+	   inc/MarksWidget.h \
            inc/MarksModel.h \
            inc/sketch.h \ 
            inc/GoogleMap.h \
@@ -50,9 +48,9 @@ HEADERS +=   inc/LoginWidgetConnector.h \
 
 #	   inc/ChannelsWidget.h \
 #	   inc/ChannelsModel.h \
-#           inc/OptionsModel.h \
-#           inc/OptionsWidget.h \
-#           inc/PrefWidget.h 
+#          inc/OptionsModel.h \
+#          inc/OptionsWidget.h \
+#          inc/PrefWidget.h 
 SOURCES += src/main.cpp \
            src/MarksModel.cpp \
            src/MarksWidget.cpp \
@@ -64,6 +62,6 @@ SOURCES += src/main.cpp \
            src/YandexMap.cpp
 #	   src/ChannelsWidget.cpp \
 #	   src/ChannelsModel.cpp \
-#           src/OptionsModel.cpp \
-#           src/OptionsWidget.cpp \
-#           src/PrefWidget.cpp 
+#          src/OptionsModel.cpp \
+#          src/OptionsWidget.cpp \
+#          src/PrefWidget.cpp 

@@ -1,3 +1,9 @@
+wikigps (0.1.5f) unstable; urgency=low
+
+  * added webside(again)
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Sun, 20 Mar 2011 11:11:08 +0300
+
 wikigps (0.1.5e) unstable; urgency=low
 
   * fix for empty server url

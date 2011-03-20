@@ -1,4 +1,5 @@
 #include <Wt/WApplication>
+#include <syslog.h>
 #include "Webside.h"
 
 WApplication *createApplication(const WEnvironment& env)
@@ -8,6 +9,7 @@ WApplication *createApplication(const WEnvironment& env)
    * the user has permission to start a new application
    */
     WApplication *app = new WApplication(env);
+    openlog("geo2tag_webside", LOG_CONS | LOG_NDELAY, LOG_USER);
     std::string cssPath("css/wt");
     //app->useStyleSheet(cssPath + "/wt.css");
     //app->useStyleSheet(cssPath + "/wt_ie.css", "lt IE 7");
@@ -16,8 +18,9 @@ WApplication *createApplication(const WEnvironment& env)
     app->useStyleSheet("wt/wt.css");
     app->useStyleSheet("style.css");
     app->setTitle("Geo2tag");
-//    Webside *webside = new Webside(app->root());
-    Webside webside(app->root());
+    Webside *webside;
+    webside = new Webside(app->root());
+//    Webside webside(app->root());
     return app;
 }
 

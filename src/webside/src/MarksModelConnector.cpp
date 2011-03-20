@@ -10,5 +10,5 @@ MarksModelConnector::MarksModelConnector(QObject * obj,MarksModel * wt,void (Mar
 
 void MarksModelConnector::triggered()
 {
-        //todo m_function();
+        (m_marksModel->*m_function)();
 }

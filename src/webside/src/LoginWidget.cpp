@@ -46,7 +46,7 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
     initCons();
 //    m_con=new Connector<LoginWidget>(&m_loginQuery,LoginQueryConnected,&LoginWidget::userRecieved,this);
 
-    //this->setStyleClass("login_wigdet");
+    this->setStyleClass("login_wigdet");
 }
 
 void LoginWidget::initCons()

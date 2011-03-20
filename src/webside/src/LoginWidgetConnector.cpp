@@ -16,5 +16,5 @@ void LoginWidgetConnector::act()
 
 void LoginWidgetConnector::triggered()
 {
-        //m_loginWidget->m_function();
+        (m_loginWidget->*m_function)();
 }

@@ -5,9 +5,6 @@ using namespace Wt;
 
 Sketch::Sketch(QSharedPointer<User> user, WContainerWidget *parent):WContainerWidget(parent)
 {
-//    setTitle("Geo2tag"); // application title
-    // common::DbSession::getInstance();
-
     m_user = user;
     menuContainer = new WContainerWidget(this);
     stackedWidget = new WStackedWidget(this);
