@@ -1,4 +1,5 @@
 #include <Wt/WApplication>
+#include "defines.h"
 #include <syslog.h>
 #include "Webside.h"
 
@@ -24,6 +25,16 @@ WApplication *createApplication(const WEnvironment& env)
     return app;
 }
 
+void readParams()
+{
+    ifstream in("/opt/geo2tag/geo2tag.conf");
+    std::string serverUrl;
+    int serverPort;
+    in >> serverUrl >> serverPort;
+    setServerUrl(serverUrl);
+    setServerPort(serverPort);
+}
+
 int main(int argc, char **argv)
 {
   /*
@@ -37,5 +48,6 @@ int main(int argc, char **argv)
    * support. The function should return a newly instantiated application
    * object.
    */
+    readParams();
     return WRun(argc, argv, &createApplication);
 }

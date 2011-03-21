@@ -4,7 +4,7 @@
 
 #include <Wt/WFlags>
 
-OptionsModel::OptionsModel(const WString &configPath, WObject *parent)
+OptionsModel::OptionsModel(WObject *parent)
     : WAbstractTableModel(parent)
 {
 

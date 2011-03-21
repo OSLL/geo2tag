@@ -1,3 +1,9 @@
+wikigps (0.1.5g) unstable; urgency=low
+
+  * added config file for server port configuring
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Mon, 21 Mar 2011 20:10:12 +0300
+
 wikigps (0.1.5f) unstable; urgency=low
 
   * added webside(again)
