@@ -1,4 +1,4 @@
 #!/bin/sh
 
-VBoxManage controlvm g2t_server savestate
+VBoxManage controlvm geo2tag-vm poweroff
 
