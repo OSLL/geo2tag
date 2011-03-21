@@ -46,8 +46,8 @@ const QString getServerUrl();
 void setServerUrl(const QString& serverUrl);
 int getServerPort();
 void setServerPort(const int& port);
-#define DEFAULT_SERVER "http://178.252.121.244/"
-#define DEFAULT_PORT 8080
+#define DEFAULT_SERVER "http://localhost/"
+#define DEFAULT_PORT 80
 
 #define DATABASE_NAME "geo2tag" // "demo"
 

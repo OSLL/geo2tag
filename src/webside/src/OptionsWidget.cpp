@@ -11,7 +11,7 @@ OptionsWidget::OptionsWidget(WContainerWidget *parent)
     optionsText = new WText("Options of the server:", this);
     WBreak *break1 = new WBreak(this);
     optionsTable = new WTableView(this);
-    optionsModel = new OptionsModel("/opt/geo2tag/geo2tag.conf", this);
+    optionsModel = new OptionsModel(this);
     optionsTable->setModel(optionsModel);
     optionsTable->setMinimumSize(WLength(100), WLength(100));
     optionsTable->setSelectable(true);

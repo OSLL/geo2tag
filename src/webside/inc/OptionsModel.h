@@ -10,7 +10,7 @@ class OptionsModel : public WAbstractTableModel
     WString configPath;
 
 public:
-    OptionsModel(const WString &configPath, WObject *parent = 0);
+    OptionsModel(WObject *parent = 0);
     
     virtual int columnCount(const WModelIndex & parent = WModelIndex()) const;
     virtual int rowCount(const WModelIndex & parent = WModelIndex()) const;
