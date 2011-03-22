@@ -45,8 +45,6 @@
 
 class DbTimeSlot: public TimeSlot
 {
-
-    Q_OBJECT;
     qlonglong m_id;
 
 public:

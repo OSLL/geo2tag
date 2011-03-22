@@ -8,9 +8,8 @@
 #include "User.h"
 
 
-class JsonSerializer : public QObject
+class JsonSerializer
 {
-	Q_OBJECT;
 
 protected:
     QSharedPointer<Channels>    m_channelsContainer;

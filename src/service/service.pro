@@ -51,7 +51,7 @@ SOURCES += src/main.cpp \
            src/QueryExecutor.cpp \
            src/TimeSlotInternal.cpp
 
-LIBS +=   -lfcgi -lwikigpsJson -lcommon -lwikigpsJson -lpq 
+LIBS +=  -lcommon -lfcgi -lwikigpsJson -lpq 
 OBJECTS_DIR = .obj
 
 QT -= gui
