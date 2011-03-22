@@ -2,13 +2,14 @@
 #define JSONSERIALIZER_H
 
 #include <QByteArray>
+#include <QObject>
 #include <QVariantMap>
 #include "DataMarks.h"
 #include "Channel.h"
 #include "User.h"
 
 
-class JsonSerializer
+class JsonSerializer:public QObject
 {
 
 protected:
@@ -23,7 +24,7 @@ protected:
 
     void clearContainers();
 public:
-    JsonSerializer();
+    JsonSerializer(QObject * parent=0);
 
     void addChannel(const QSharedPointer<Channel>&);
     void addTag(const QSharedPointer<DataMark>&);

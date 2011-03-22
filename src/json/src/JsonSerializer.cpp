@@ -1,6 +1,6 @@
 #include "JsonSerializer.h"
 
-JsonSerializer::JsonSerializer():
+JsonSerializer::JsonSerializer(QObject * parent):QObject(parent),
         m_channelsContainer(new Channels),
         m_tagsContainer(new DataMarks),
         m_usersContainer(new Users)

@@ -20,6 +20,7 @@ HEADERS += \
            inc/JsonUser.h \
            inc/JsonDataMark.h \
            inc/JsonChannel.h \
+	   inc/JsonTimeSlot.h \
 	   inc/JsonSerializer.h \
 	   inc/LoginRequestJSON.h \
 	   inc/LoginResponseJSON.h \
@@ -31,6 +32,8 @@ HEADERS += \
 	   inc/UnsubscribeChannelResponse.h \
 	   inc/AddChannelRequestJSON.h \
 	   inc/AddChannelResponseJSON.h \
+	   inc/GetTimeSlotRequestJSON.h \
+	   inc/GetTimeSlotResponseJSON.h \
 	   inc/DefaultResponseJSON.h
 
 SOURCES += \
@@ -40,12 +43,15 @@ SOURCES += \
            src/SubscribeChannelJSON.cpp \
            src/JsonUser.cpp \
            src/JsonChannel.cpp \
+	   src/JsonTimeSlot.cpp \
            src/JsonDataMark.cpp \
            src/JsonSerializer.cpp \
            src/LoginRequestJSON.cpp \
            src/LoginResponseJSON.cpp \
            src/AddNewMarkRequestJSON.cpp \
 	   src/AddChannelRequestJSON.cpp \
+	   src/GetTimeSlotRequestJSON.cpp \
+	   src/GetTimeSlotResponseJSON.cpp \
            src/DefaultResponseJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
