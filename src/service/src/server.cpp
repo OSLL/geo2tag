@@ -22,9 +22,9 @@ Server::Server()
         syslog(LOG_INFO, "FCGX_Init failed, errcode=%d",err);
     }
     
-		err = FCGX_InitRequest(&m_cgi,LISTENSOCK_FILENO, LISTENSOCK_FLAGS);
+    err = FCGX_InitRequest(&m_cgi,LISTENSOCK_FILENO, LISTENSOCK_FLAGS);
     
-		if (err)
+    if (err)
     {
         syslog(LOG_INFO, "FCGX_InitRequest failed, errcode=%d",err);
     }
@@ -71,8 +71,8 @@ QByteArray Server::process(const QString& query, const QByteArray &data)
 {
       QMap<QString, QString> queryParameters = parseQuery(query);
       common::DbObjectsCollection &dboc = common::DbObjectsCollection::getInstance();
-			QByteArray result = dboc.process(queryParameters.value("query"), data);
-			return result;
+      QByteArray result = dboc.process(queryParameters.value("query"), data);
+      return result;
 }
 
 void Server::extractIncomingData(const FCGX_Request& request, QString& queryString, QByteArray& queryBody)

@@ -35,19 +35,9 @@ HEADERS += \
            inc/DataMarkInternal.h \
            inc/UserInternal.h \
            inc/DbSession.h \
-				   inc/UpdateThread.h \
+	   inc/UpdateThread.h \
            inc/QueryExecutor.h \
-#				   ../json/inc/LoginRequestJSON.h \
-#		  	   ../json/inc/LoginResponseJSON.h \
-#				   ../json/inc/AddUserRequestJSON.h \
-#		  	   ../json/inc/AddUserResponseJSON.h \
-#				   ../json/inc/AddNewMarkRequestJSON.h \
-#	     	   ../json/inc/AddNewMarkResponseJSON.h \
-# 	 		   ../json/inc/SubscribeChannelResponseJSON.h \
-#   		   ../json/inc/RSSFeedRequestJSON.h \
-#           ../json/inc/RSSFeedJSON.h \
-#					 ../json/inc/AddChannelRequestJSON.h \
-#					 ../json/inc/AddChannelResponseJSON.h \
+    	   inc/TimeSlotInternal.h
 
 
 SOURCES += src/main.cpp \
@@ -58,7 +48,8 @@ SOURCES += src/main.cpp \
            src/UserInternal.cpp \
            src/DbSession.cpp \
            src/UpdateThread.cpp \
-           src/QueryExecutor.cpp
+           src/QueryExecutor.cpp \
+           src/TimeSlotInternal.cpp
 
 LIBS +=  -lcommon -lfcgi -lwikigpsJson -lpq 
 OBJECTS_DIR = .obj

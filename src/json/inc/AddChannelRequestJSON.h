@@ -5,6 +5,7 @@
 
 class AddChannelRequestJSON: public JsonSerializer
 {
+	Q_OBJECT;
 public:
     AddChannelRequestJSON();
 

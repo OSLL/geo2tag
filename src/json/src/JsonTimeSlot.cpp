@@ -31,86 +31,37 @@
 /*! ---------------------------------------------------------------
  *
  *
- * \file Channel.cpp
- * \brief Channel implementation
+ * \file JsonTimeSlot.cpp
+ * \brief JsonTimeSlot implementation
  *
  * File description
  *
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
-#include <QDebug>
-#include "Channel.h"
 
-    Channel::Channel(const QString &name,
-                     const QString &description,
-                     const QString &url):
-                            m_name(name),
-                            m_description(description),
-                            m_url(url),
-                            m_isDisplayed(true)
-    {
-        m_activeRadius = 5.0; // 5 km
-        m_timeSlot = QSharedPointer<TimeSlot>(NULL);  //!!!my_change
-    }
+#include "JsonTimeSlot.h"
 
-    const QString& Channel::getDescription() const
-    {
-        return m_description;
-    }
+static qlonglong globalTimeSlotId = 0;
 
-    const QString& Channel::getName() const
-    {
-        return m_name;
-    }
+JsonTimeSlot::JsonTimeSlot(const QString &slot):
+                            TimeSlot(slot),
+                            m_id(globalTimeSlotId++)
+{
+}
 
-    void Channel::setDescription(const QString& description)
-    {
-        m_description = description;
-    }
+qlonglong JsonTimeSlot::getId() const
+{
+    return m_id;
+}
 
-    const QString& Channel::getUrl() const
-    {
-        return m_url;
-    }
+void JsonTimeSlot::setId(qlonglong id)
+{
+    m_id=id;
+}
 
-    void Channel::setUrl(const QString& url)
-    {
-        m_url = url;
-    }
-
-    bool Channel::isDisplayed() const
-    {
-        return m_isDisplayed;
-    }
-
-    void Channel::setDisplayed(bool fl)
-    {
-        m_isDisplayed = fl;
-    }
-
-    void Channel::setRadius(const double& radius)
-    {
-        m_activeRadius = radius;
-    }
-
-    double Channel::getRadius() const
-    {
-        return m_activeRadius;
-    }
-
-    void Channel::setTimeSlot(QSharedPointer<TimeSlot> timeSlot) //!!!my_change
-    {
-        m_timeSlot = timeSlot;
-    }
-
-    QSharedPointer<TimeSlot> Channel::getTimeSlot() const   //!!!my_change
-    {
-        return m_timeSlot;
-    }
-
-    Channel::~Channel()
-    {
-    }
-
+JsonTimeSlot::~JsonTimeSlot()
+{
+}
 
 /* ===[ End of file ]=== */
+

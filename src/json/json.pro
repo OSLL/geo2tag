@@ -28,7 +28,7 @@ HEADERS += \
 	   inc/AddNewMarkRequestJSON.h \
 	   inc/AddNewMarkResponseJSON.h \
 	   inc/SubscribeChannelResponseJSON.h \
-	   inc/UnsubscribeChannelResponseJSON.h \
+	   inc/UnsubscribeChannelResponse.h \
 		 inc/AddChannelRequestJSON.h \
 		 inc/AddChannelResponseJSON.h \
 	   inc/DefaultResponseJSON.h

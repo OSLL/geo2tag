@@ -5,6 +5,7 @@
 
 class LoginResponseJSON : public JsonSerializer
 {
+	Q_OBJECT;
 public:
     LoginResponseJSON();
 

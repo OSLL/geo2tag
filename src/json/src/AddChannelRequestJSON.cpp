@@ -15,8 +15,8 @@ QByteArray AddChannelRequestJSON::getJson() const
     QVariantMap obj;
     obj.insert("auth_token", m_usersContainer->at(0)->getToken());
     obj.insert("name", m_channelsContainer->at(0)->getName());
-		obj.insert("description",m_channelsContainer->at(0)->getDescription());
-		obj.insert("url",m_channelsContainer->at(0)->getUrl());
+    obj.insert("description",m_channelsContainer->at(0)->getDescription());
+    obj.insert("url",m_channelsContainer->at(0)->getUrl());
     return serializer.serialize(obj);
 }
 
@@ -33,8 +33,8 @@ void AddChannelRequestJSON::parseJson(const QByteArray&data)
     }
     QString auth_token = result["auth_token"].toString();
     QString name = result["name"].toString();
-		QString description = result["description"].toString();
-		QString url = result["url"].toString();
-		m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown",auth_token)));
-		m_channelsContainer->push_back(QSharedPointer<Channel>(new JsonChannel(name,description,url)));
+    QString description = result["description"].toString();
+    QString url = result["url"].toString();
+    m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown",auth_token)));
+    m_channelsContainer->push_back(QSharedPointer<Channel>(new JsonChannel(name,description,url)));
 }

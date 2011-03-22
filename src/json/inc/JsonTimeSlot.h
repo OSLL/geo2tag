@@ -28,89 +28,35 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
- *
- *
- * \file Channel.cpp
- * \brief Channel implementation
+/*!
+ * \file JsonTimeSlot.h
+ * \brief Header of JsonTimeSlot
+ * \todo add comment here
  *
  * File description
  *
- * PROJ: OSLL/geoblog
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
-#include <QDebug>
-#include "Channel.h"
 
-    Channel::Channel(const QString &name,
-                     const QString &description,
-                     const QString &url):
-                            m_name(name),
-                            m_description(description),
-                            m_url(url),
-                            m_isDisplayed(true)
+#ifndef _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
+#define _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
+
+#include "TimeSlot.h"
+
+    class JsonTimeSlot: public TimeSlot
     {
-        m_activeRadius = 5.0; // 5 km
-        m_timeSlot = QSharedPointer<TimeSlot>(NULL);  //!!!my_change
-    }
+        qlonglong m_id;
 
-    const QString& Channel::getDescription() const
-    {
-        return m_description;
-    }
+    public:
+        JsonTimeSlot(const QString &slot);
 
-    const QString& Channel::getName() const
-    {
-        return m_name;
-    }
+        qlonglong getId() const;
 
-    void Channel::setDescription(const QString& description)
-    {
-        m_description = description;
-    }
+        void setId(qlonglong id);
 
-    const QString& Channel::getUrl() const
-    {
-        return m_url;
-    }
+        ~JsonTimeSlot();
+    };
 
-    void Channel::setUrl(const QString& url)
-    {
-        m_url = url;
-    }
-
-    bool Channel::isDisplayed() const
-    {
-        return m_isDisplayed;
-    }
-
-    void Channel::setDisplayed(bool fl)
-    {
-        m_isDisplayed = fl;
-    }
-
-    void Channel::setRadius(const double& radius)
-    {
-        m_activeRadius = radius;
-    }
-
-    double Channel::getRadius() const
-    {
-        return m_activeRadius;
-    }
-
-    void Channel::setTimeSlot(QSharedPointer<TimeSlot> timeSlot) //!!!my_change
-    {
-        m_timeSlot = timeSlot;
-    }
-
-    QSharedPointer<TimeSlot> Channel::getTimeSlot() const   //!!!my_change
-    {
-        return m_timeSlot;
-    }
-
-    Channel::~Channel()
-    {
-    }
-
+#endif // _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
 
 /* ===[ End of file ]=== */

@@ -24,7 +24,8 @@ HEADERS += \
     inc/Channel.h \
     inc/defines.h \
     inc/ConcurrentVector.h \
-    inc/DataChannel.h
+    inc/DataChannel.h \
+    inc/TimeSlot.h
 
 SOURCES += \
     src/DataMarks.cpp \
@@ -32,7 +33,8 @@ SOURCES += \
     src/GpsInfo.cpp \
     src/Channel.cpp \
     src/defines.cpp \
-    src/User.cpp
+    src/User.cpp \
+    src/TimeSlot.cpp
 
 linux: {
     HEADERS +=  \
