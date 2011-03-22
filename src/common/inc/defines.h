@@ -42,10 +42,12 @@
 #ifndef _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #define _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 
-const QString getServerUrl();
+#include <QString>
+
+QString getServerUrl();
 void setServerUrl(const QString& serverUrl);
 int getServerPort();
-void setServerPort(const int& port);
+void setServerPort(int port);
 #define DEFAULT_SERVER "http://localhost/"
 #define DEFAULT_PORT 80
 

@@ -1,6 +1,7 @@
 #include <Wt/WApplication>
 #include "defines.h"
 #include <syslog.h>
+#include <fstream>
 #include "Webside.h"
 
 WApplication *createApplication(const WEnvironment& env)
@@ -27,12 +28,12 @@ WApplication *createApplication(const WEnvironment& env)
 
 void readParams()
 {
-    ifstream in("/opt/geo2tag/geo2tag.conf");
+    std::ifstream in("/opt/geo2tag/geo2tag.conf");
     std::string serverUrl;
     int serverPort;
     in >> serverUrl >> serverPort;
-    setServerUrl(serverUrl);
-    setServerPort(serverPort);
+    //setServerUrl(serverUrl.c_str());
+    //setServerPort(serverPort);
 }
 
 int main(int argc, char **argv)
