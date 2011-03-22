@@ -10,6 +10,9 @@ make install
 
 popd
 
+
+
+
 #qmake-qt4
 #make
 
