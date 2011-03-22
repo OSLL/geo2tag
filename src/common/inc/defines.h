@@ -41,7 +41,7 @@
 
 #ifndef _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #define _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
-
+#include <QString>
 const QString getServerUrl();
 void setServerUrl(const QString& serverUrl);
 int getServerPort();

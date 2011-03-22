@@ -1,6 +1,7 @@
 #include "LoginWidget.h"
 #include "Channel.h"
 #include "defines.h"
+#include <QString>
 #include <syslog.h>
 //#include "OpenStreetMap.h"
 //#include "YandexMap.h"
@@ -77,7 +78,7 @@ void LoginWidget::loginClicked()
     QString name = QString(usernameEdit->text().toUTF8().c_str());
     QString pass = QString(passwordEdit->text().toUTF8().c_str());
     syslog(LOG_INFO,"LoginWidget::loginClicked(), %s - %s",usernameEdit->text().toUTF8().c_str(),passwordEdit->text().toUTF8().c_str());
-    syslog(LOG_INFO,"Server url: %s, server port: %i",getServerUrl().toStdString().c_str(),getServerPort().toStdString().c_str());
+    syslog(LOG_INFO,"Server url: %s, server port: %i",getServerUrl().toStdString().c_str(),getServerPort());
     m_loginQuery.setQuery(name,pass);
     m_loginQuery.doRequest();
 	
