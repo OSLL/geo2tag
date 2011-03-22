@@ -25,7 +25,7 @@ public:
     qlonglong nextUserKey() const;
     qlonglong nextChannelKey() const;
     qlonglong nextTagKey() const;
-		const QString generateNewToken(const QString& login,const QString& password) const;
+    const QString generateNewToken(const QString& login,const QString& password) const;
 
     bool subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel);
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);

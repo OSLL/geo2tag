@@ -29,8 +29,8 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file Channel.h
- * \brief Header of Channel
+ * \file TimeSlot.h
+ * \brief Header of TimeSlot
  *
  * File description
  *
@@ -38,59 +38,37 @@
  * ---------------------------------------------------------------- */
 
 
-#ifndef _Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
-#define _Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
+#ifndef _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
+#define _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
 
 #include <QString>
 #include <QVector>
 #include <QSharedPointer>
 
 #include "ConcurrentVector.h"
-#include "TimeSlot.h"           //!!!my_change
 
-class Channel: public QObject
+class TimeSlot: public QObject
 {
     Q_OBJECT
-    QString m_name; //!< channel name
-    QString m_description; //!< Description for channel
-    QString m_url; //!< URL for mark
-    double m_activeRadius; //< Radius for visible marks
-
-    bool m_isDisplayed; //!< Displayed on the UI
-
-    QSharedPointer<TimeSlot> m_timeSlot; //!!!my_change
+    QString m_slot; // time slot
 
 protected:
-    Channel(const QString &name, const QString &description, const QString& url);
+
+    TimeSlot(const QString &slot);
 
 public:
 
     virtual qlonglong getId() const = 0;
 
-    const QString& getDescription() const;
+    const QString& getTimeSlot() const;
+    void setTimeSlot(const QString& slot);
 
-    const QString& getName() const;
+    virtual ~TimeSlot();
 
-    const QString& getUrl() const;
+}; //class TimeSlot
 
-    void setDescription(const QString& description);
+typedef ConcurrentVector<TimeSlot> TimeSlots;
 
-    void setUrl(const QString& url);
-
-    void setRadius(const double &radius);
-    double getRadius() const;
-
-    bool isDisplayed() const;
-    void setDisplayed(bool);
-
-    void setTimeSlot(QSharedPointer<TimeSlot> timeSlot); //!!!my_change
-    QSharedPointer<TimeSlot> getTimeSlot() const;       //!!!my_change
-
-    virtual ~Channel();
-}; // class Channel
-
-typedef ConcurrentVector<Channel> Channels;
-
-#endif //_Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
+#endif // _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
 
 /* ===[ End of file ]=== */

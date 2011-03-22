@@ -6,12 +6,14 @@ UpdateThread::UpdateThread(const QSqlDatabase &db,
                            const QSharedPointer<DataMarks> &tags,
                            const QSharedPointer<Users> &users,
                            const QSharedPointer<Channels> &channels,
+                           const QSharedPointer<TimeSlots> &timeSlots,//!!!my_change
                            const QSharedPointer<DataChannels>& dataChannelsMap,
                            QObject *parent):
     QThread(parent),
     m_channelsContainer(channels),
     m_tagsContainer(tags),
     m_usersContainer(users),
+    m_timeSlotsContainer(timeSlots),//!!!my_change
     m_dataChannelsMap(dataChannelsMap),
     m_database(db)
 {
@@ -43,17 +45,20 @@ void UpdateThread::run()
         Users       usersContainer(*m_usersContainer);
         DataMarks   tagsContainer(*m_tagsContainer);
         Channels    channelsContainer(*m_channelsContainer);
+        TimeSlots   timeSlotsContainer(*m_timeSlotsContainer);//!!!my_change
 
         loadUsers(usersContainer);
         loadTags(tagsContainer);
         loadChannels(channelsContainer);
+        loadTimeSlots(timeSlotsContainer);//!!!my_change
 
         lockWriting();
         m_usersContainer->merge(usersContainer);
         m_tagsContainer->merge(tagsContainer);
         m_channelsContainer->merge(channelsContainer);
+        m_timeSlotsContainer->merge(timeSlotsContainer);//!!!my_change
 
-        updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer);
+        updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer, *m_timeSlotsContainer);//!!!my_change
 
         for(int i=0; i<m_tagsContainer->size(); i++)
         {
@@ -93,7 +98,7 @@ void UpdateThread::loadUsers(Users &container)
         QString login = query.record().value("login").toString();
         QString password = query.record().value("password").toString();
         QString token = query.record().value("token").toString();
-				syslog(LOG_INFO,"Pushing | %lld | %s | %s ",id,login.toStdString().c_str(),token.toStdString().c_str());
+        syslog(LOG_INFO,"Pushing | %lld | %s | %s ",id,login.toStdString().c_str(),token.toStdString().c_str());
         DbUser *newUser = new DbUser(login,password,id,token);
         QSharedPointer<DbUser> pointer(newUser);
         container.push_back(pointer);
@@ -121,6 +126,25 @@ void UpdateThread::loadChannels(Channels &container)
     }
 }
 
+void UpdateThread::loadTimeSlots(TimeSlots &container) //!!!my_change
+{
+    QSqlQuery query(m_database);
+    query.exec("select id, slot from timeSlot order by id;");
+    while (query.next())
+    {
+        qlonglong id = query.record().value("id").toLongLong();
+        if(container.exist(id))
+        {
+            // skip record
+            continue;
+        }
+        QString slot = query.record().value("slot").toString();
+        DbTimeSlot * newTimeSlot = new DbTimeSlot(id, slot);
+        QSharedPointer<DbTimeSlot> pointer(newTimeSlot);
+        container.push_back(pointer);
+    }
+}
+
 void UpdateThread::loadTags(DataMarks &container)
 {
     QSqlQuery query(m_database);
@@ -143,19 +167,19 @@ void UpdateThread::loadTags(DataMarks &container)
         qlonglong userId = query.record().value("user_id").toLongLong();
 
         DbDataMark *newMark = new DbDataMark(id,
-                                                         latitude,
-                                                         longitude,
-                                                         label,
-                                                         description,
-                                                         url,
-                                                         time,
-                                                         userId);
+                                             latitude,
+                                             longitude,
+                                             label,
+                                             description,
+                                             url,
+                                             time,
+                                             userId);
         QSharedPointer<DbDataMark> pointer(newMark);
         container.push_back(pointer);
     }
 }
 
-void UpdateThread::updateReflections(DataMarks &tags, Users &users, Channels &channels)
+void UpdateThread::updateReflections(DataMarks &tags, Users &users, Channels &channels, TimeSlots & timeSlots)//!!!my_change
 {
     {
         QSqlQuery query(m_database);
@@ -185,6 +209,21 @@ void UpdateThread::updateReflections(DataMarks &tags, Users &users, Channels &ch
     for(int i=0; i<tags.size(); i++)
     {
         tags[i]->setUser(users.item(tags.at(i).dynamicCast<DbDataMark>()->getUserId()));
+    }
+
+    {  //!!!my_change
+        QSqlQuery query(m_database);
+        query.exec("select channel_id, timeslot_id from channeltimeslot;");
+        while (query.next())
+        {
+            qlonglong timeslot_id = query.record().value("timeslot_id").toLongLong();
+            qlonglong channel_id = query.record().value("channel_id").toLongLong();
+
+            QSharedPointer<Channel> channel = channels.item(channel_id);
+            QSharedPointer<TimeSlot> timeslot = timeSlots.item(timeslot_id);
+
+            channel->setTimeSlot(timeslot);
+        }
     }
 
 }

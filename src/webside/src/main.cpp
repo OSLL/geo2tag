@@ -2,6 +2,7 @@
 #include "defines.h"
 #include <fstream>
 #include <syslog.h>
+#include <fstream>
 #include "Webside.h"
 
 WApplication *createApplication(const WEnvironment& env)

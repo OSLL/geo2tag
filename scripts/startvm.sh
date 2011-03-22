@@ -1,5 +1,5 @@
 #!/bin/sh
 
-VBoxManage startvm g2t_server --type=headless
+VBoxManage startvm geo2tag-vm --type=headless
 
 

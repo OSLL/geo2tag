@@ -11,6 +11,7 @@
 #include <DaemonManager.h>
 #include <QtNetwork/QNetworkProxy>
 #include "tracker.h"
+#include "defines.h"
 
 void OptionsWidget::applyProxySettings()
 {
@@ -159,7 +160,7 @@ void OptionsWidget::createSettings()
     m_settings.setValue("proxy_type", m_proxyType->itemData(m_proxyType->currentIndex()).value<int>());
     m_settings.setValue("proxy_host", m_proxyHostEdit->text());
     setServerUrl(m_serverUrlEdit->text());
-    setServerPort(m_serverPortEdit->value());
+    //BUG#2024 setServerPort(m_serverPortEdit->value());
     m_settings.setValue("proxy_port", m_proxyPortEdit->value());
     m_settings.setValue("magic", APP_MAGIC);
 }

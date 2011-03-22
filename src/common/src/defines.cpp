@@ -2,7 +2,7 @@
 #include <QDebug>
 #include "defines.h"
 
-const QString getServerUrl()
+QString getServerUrl()
 {
         QSettings settings("osll","libs");
         if (settings.value("server_url").toString().isEmpty()){
@@ -12,7 +12,8 @@ const QString getServerUrl()
         return settings.value("server_url").toString();
 }
 
-void setServerUrl(const QString& serverUrl){
+void setServerUrl(const QString& serverUrl)
+{
         QSettings settings("osll","libs");
 	if (!serverUrl.isEmpty()){
 	        settings.setValue("server_url",serverUrl);
@@ -32,7 +33,8 @@ int getServerPort()
         return settings.value("server_port").toInt();
 }
 
-void setServerPort(const int& port){
+void setServerPort(int port)
+{
         QSettings settings("osll","libs");
 	if (port!=0){
 	        settings.setValue("server_port",port);

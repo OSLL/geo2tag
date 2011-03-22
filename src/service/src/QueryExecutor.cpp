@@ -140,20 +140,20 @@ QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& us
 {
     bool result;
     QSqlQuery newUserQuery(m_database);
-		qlonglong newId = nextUserKey();
-		syslog(LOG_INFO,"Generating token for new user, %s : %s",user->getLogin().toStdString().c_str()
-																											  		,user->getPassword().toStdString().c_str());
-		QString newToken = generateNewToken(user->getLogin(),user->getPassword());
-//		syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
-		newUserQuery.prepare("insert into users (id,login,password,token) values(:id,:login,:password,:a_t);");
-		newUserQuery.bindValue(":id",newId);
-		syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
-		newUserQuery.bindValue(":login",user->getLogin());
-		syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
-		newUserQuery.bindValue(":password",user->getPassword());
-		syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
-		newUserQuery.bindValue(":a_t",newToken);
-		syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
+    qlonglong newId = nextUserKey();
+    syslog(LOG_INFO,"Generating token for new user, %s : %s",user->getLogin().toStdString().c_str()
+                                                                                                                                                                                                                            ,user->getPassword().toStdString().c_str());
+    QString newToken = generateNewToken(user->getLogin(),user->getPassword());
+//  syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
+    newUserQuery.prepare("insert into users (id,login,password,token) values(:id,:login,:password,:a_t);");
+    newUserQuery.bindValue(":id",newId);
+    syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
+    newUserQuery.bindValue(":login",user->getLogin());
+    syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
+    newUserQuery.bindValue(":password",user->getPassword());
+    syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
+    newUserQuery.bindValue(":a_t",newToken);
+    syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
     m_database.transaction();
     result=newUserQuery.exec();
     if(!result)

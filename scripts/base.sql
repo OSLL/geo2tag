@@ -52,6 +52,25 @@ CREATE TABLE subscribe (
                                                        on delete cascade
 );
 
+CREATE SEQUENCE timeSlot_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
+
+CREATE TABLE timeSlot (
+  id NUMERIC(9,0) NOT NULL DEFAULT nextval('timeSlot_seq'),
+  slot INTERVAL NOT NULL,  /*interval(?)*/
+  constraint timeSlot_pkey primary key (id)
+  
+);
+
+CREATE TABLE channelTimeSlot (
+  channel_id NUMERIC(9,0) NOT NULL,
+  timeSlot_id NUMERIC(9,0) NOT NULL,
+  constraint fk_timeSlot foreign key (timeSlot_id) references timeSlot(id)
+                                                       on delete cascade,
+  constraint fk_channels foreign key (channel_id) references channel(id)
+                                                       on delete cascade
+);
+
+
 
 INSERT into channel (name, description, url) values ('Tourist information', 'This is free read-only tourist information channel. You can get information about buildings, sights around your location', '');
 INSERT into channel (name, description, url) values ('Public announcements', 'This is free read-only channel with public announcements from the city of your current location', '');
@@ -81,3 +100,14 @@ INSERT into tags (channel_id, tag_id) values (4, 5);
 INSERT into tags (channel_id, tag_id) values (4, 6);
 INSERT into tags (channel_id, tag_id) values (5, 7);
 INSERT into tags (channel_id, tag_id) values (1, 8);
+
+INSERT into timeSlot (slot) values ('P5Y');
+INSERT into timeSlot (slot) values ('P1M');
+INSERT into timeSlot (slot) values ('P1W');
+INSERT into timeSlot (slot) values ('P1DT12H');
+
+INSERT into channelTimeSlot (channel_id, timeSlot_id) values (1, 1);
+INSERT into channelTimeSlot (channel_id, timeSlot_id) values (2, 2);
+INSERT into channelTimeSlot (channel_id, timeSlot_id) values (3, 3);
+INSERT into channelTimeSlot (channel_id, timeSlot_id) values (4, 3);
+INSERT into channelTimeSlot (channel_id, timeSlot_id) values (5, 2);
