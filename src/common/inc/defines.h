@@ -42,12 +42,14 @@
 #ifndef _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #define _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 
-const QString getServerUrl();
+#include <QString>
+
+QString getServerUrl();
 void setServerUrl(const QString& serverUrl);
 int getServerPort();
-void setServerPort(const int& port);
-#define DEFAULT_SERVER "http://178.252.121.244/"
-#define DEFAULT_PORT 8080
+void setServerPort(int port);
+#define DEFAULT_SERVER "http://localhost/"
+#define DEFAULT_PORT 80
 
 #define DATABASE_NAME "geo2tag" // "demo"
 

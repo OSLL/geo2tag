@@ -33,8 +33,8 @@ Description: WikiGPS observer
  observs marks setted by tracker.
 
 Package: wikigps-webside
-Architecture: armel
-Depends: ${shlibs:Depends}, wikigps-service, libqt4, witty
+Architecture:i386 
+Depends: ${shlibs:Depends}, wikigps-service, wikigps-libs
 Description: Geo2tag website
 
 Package: wikigps-service

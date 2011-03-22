@@ -1,4 +1,7 @@
 #include <Wt/WApplication>
+#include "defines.h"
+#include <syslog.h>
+#include <fstream>
 #include "Webside.h"
 
 WApplication *createApplication(const WEnvironment& env)
@@ -8,6 +11,7 @@ WApplication *createApplication(const WEnvironment& env)
    * the user has permission to start a new application
    */
     WApplication *app = new WApplication(env);
+    openlog("geo2tag_webside", LOG_CONS | LOG_NDELAY, LOG_USER);
     std::string cssPath("css/wt");
     //app->useStyleSheet(cssPath + "/wt.css");
     //app->useStyleSheet(cssPath + "/wt_ie.css", "lt IE 7");
@@ -16,9 +20,20 @@ WApplication *createApplication(const WEnvironment& env)
     app->useStyleSheet("wt/wt.css");
     app->useStyleSheet("style.css");
     app->setTitle("Geo2tag");
-//    Webside *webside = new Webside(app->root());
-    Webside webside(app->root());
+    Webside *webside;
+    webside = new Webside(app->root());
+//    Webside webside(app->root());
     return app;
+}
+
+void readParams()
+{
+    std::ifstream in("/opt/geo2tag/geo2tag.conf");
+    std::string serverUrl;
+    int serverPort;
+    in >> serverUrl >> serverPort;
+    //setServerUrl(serverUrl.c_str());
+    //setServerPort(serverPort);
 }
 
 int main(int argc, char **argv)
@@ -34,5 +49,6 @@ int main(int argc, char **argv)
    * support. The function should return a newly instantiated application
    * object.
    */
+    readParams();
     return WRun(argc, argv, &createApplication);
 }

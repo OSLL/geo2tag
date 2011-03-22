@@ -1,6 +1,7 @@
 #include "LoginWidget.h"
 #include "Channel.h"
 #include "defines.h"
+#include <syslog.h>
 //#include "OpenStreetMap.h"
 //#include "YandexMap.h"
 #include <QObject>
@@ -46,13 +47,15 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
     initCons();
 //    m_con=new Connector<LoginWidget>(&m_loginQuery,LoginQueryConnected,&LoginWidget::userRecieved,this);
 
-    //this->setStyleClass("login_wigdet");
+    this->setStyleClass("login_wigdet");
 }
 
 void LoginWidget::initCons()
 {
 	loginButton->clicked().connect(this,&LoginWidget::loginClicked);
+	syslog(LOG_INFO,"trying create LoginWidgetConnector object");
 	m_connector=new LoginWidgetConnector(&m_loginQuery,this,&LoginWidget::userRecieved);
+	syslog(LOG_INFO,"successfull creation");
 }
 
 void LoginWidget::fillMap()
@@ -72,13 +75,16 @@ void LoginWidget::fillMap()
 void LoginWidget::loginClicked()
 {
     QString name = QString(usernameEdit->text().toUTF8().c_str());
-    QString pass = QString( passwordEdit->text().toUTF8().c_str());
-	m_loginQuery.setQuery(name,pass);
-	m_loginQuery.doRequest();
+    QString pass = QString(passwordEdit->text().toUTF8().c_str());
+    syslog(LOG_INFO,"LoginWidget::loginClicked(), %s - %s",usernameEdit->text().toUTF8().c_str(),passwordEdit->text().toUTF8().c_str());
+    syslog(LOG_INFO,"Server url: %s, server port: %i",getServerUrl().toStdString().c_str(),getServerPort());
+    m_loginQuery.setQuery(name,pass);
+    m_loginQuery.doRequest();
 	
 }
 
 void LoginWidget::userRecieved(){
+	syslog(LOG_INFO,"LoginWidget::userRecieved()");
 	QSharedPointer<User> us=this->m_loginQuery.getUser();
 	loginSuccessful.emit(us);
 
