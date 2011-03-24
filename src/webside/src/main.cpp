@@ -33,8 +33,8 @@ void readParams()
     std::string serverUrl;
     int serverPort;
     in >> serverUrl >> serverPort;
-    setServerUrl(serverUrl.c_str());
-    setServerPort(serverPort);
+    //setServerUrl(serverUrl.c_str());
+    //setServerPort(serverPort);
 }
 
 int main(int argc, char **argv)
