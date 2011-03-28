@@ -48,6 +48,7 @@
 #include "JsonUser.h"
 #include "LoginRequestJSON.h"
 #include "LoginResponseJSON.h"
+#include <syslog.h>
 
 LoginQuery::LoginQuery(const QString &login, const QString &password, QObject *parent):
         DefaultQuery(parent), m_login(login), m_password(password)
@@ -80,6 +81,7 @@ void LoginQuery::processReply(QNetworkReply *reply)
     {
         QSharedPointer<User> user = response.getUsers()->at(0);
         m_user = QSharedPointer<User>(new JsonUser(m_login, m_password, user->getToken()));
+	syslog(LOG_INFO,"!!connected!"); 
         Q_EMIT connected();
     }
     else

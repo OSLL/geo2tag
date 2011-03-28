@@ -33,9 +33,8 @@ WApplication *createApplication(const WEnvironment& env)
     app->useStyleSheet("wt/wt.css");
     app->useStyleSheet("style.css");
     app->setTitle("Geo2tag");
-    Webside *webside;
+    Webside * webside;
     webside = new Webside(app->root());
-//    Webside webside(app->root());
     return app;
 }
 

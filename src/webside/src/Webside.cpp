@@ -17,11 +17,11 @@ Webside::Webside(WContainerWidget *parent)
     Div *topWrapper;
     topWrapper= new Div(this, "top_wrapper");
 
-    WText *topText;
-    topText= new WText(tr("top_wrapper"), this);
-    WBreak *break1;
-    break1= new WBreak(this);
-    topWrapper->setId("top_wrapper");
+  //  WText *topText;
+   // topText= new WText(tr("top_wrapper"), this);
+//    WBreak *break1;
+//    break1= new WBreak(this);
+//    topWrapper->setId("top_wrapper");
 
     Div *bannerWrapper;
     bannerWrapper= new Div(this, "banner_wrapper");
@@ -44,7 +44,7 @@ Webside::Webside(WContainerWidget *parent)
     Div *footerWrapper;
     footerWrapper= new Div(this, "footer_wrapper");
 //  WText *footerWrapper = new WText(tr("footer_wrapper"), this);
-    footerWrapper->setId("footer_wrapper");
+//    footerWrapper->setId("footer_wrapper");
 
     loginWidget->loginSuccessful.connect(this, &Webside::onLoginSuccess);
 }
