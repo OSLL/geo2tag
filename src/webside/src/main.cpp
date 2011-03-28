@@ -5,6 +5,18 @@
 #include <fstream>
 #include "Webside.h"
 
+/*void readParams()
+{
+    std::ifstream in("/opt/geo2tag/geo2tag.conf");
+    std::string serverUrl;
+    int serverPort;
+    in >> serverUrl >> serverPort;
+    syslog(LOG_INFO,"Reading from /opt/geo2tag/geo2tag.conf : %s , %i",serverUrl.c_str(),serverPort);
+    setServerUrl(QString(serverUrl.c_str()));
+    setServerPort(serverPort);
+//    syslog(LOG_INFO,"After options set : %s , %i",getServerUrl().toStdString().c_str(),getServerPort());
+}*/
+
 WApplication *createApplication(const WEnvironment& env)
 {
   /*
@@ -27,15 +39,6 @@ WApplication *createApplication(const WEnvironment& env)
     return app;
 }
 
-void readParams()
-{
-    std::ifstream in("/opt/geo2tag/geo2tag.conf");
-    std::string serverUrl;
-    int serverPort;
-    in >> serverUrl >> serverPort;
-    setServerUrl(serverUrl.c_str());
-    setServerPort(serverPort);
-}
 
 int main(int argc, char **argv)
 {
@@ -50,6 +53,5 @@ int main(int argc, char **argv)
    * support. The function should return a newly instantiated application
    * object.
    */
-    readParams();
     return WRun(argc, argv, &createApplication);
 }

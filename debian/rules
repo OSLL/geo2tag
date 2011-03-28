@@ -76,7 +76,6 @@ install: build
         	cp $(BUILDDIR)tracker/tracker_linux $(CURDIR)/debian/tmp/etc/init.d/tracker; \
 		cp -r $(BUILDDIR)/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
 		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp $(BUILDDIR)/webside/geo2tag.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 	fi;
 #	cp -l $(BUILDDIR)/lib/lib* $(CURDIR)/debian/tmp/usr/lib; 

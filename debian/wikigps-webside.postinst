@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ ! -e "/etc/xdg/osll/libs.conf" ]
+then
+sudo mkdir -v -p /etc/xdg/osll/
+echo -e "[General]\nserver_url=http://localhost/\nserver_port=80" > /etc/xdg/osll/libs.conf
+fi
 sudo mkdir -v -p /var/run/wt
 sudo chown -R www-data:www-data /var/run/wt
 sudo /etc/init.d/lighttpd restart

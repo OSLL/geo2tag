@@ -7,6 +7,7 @@
 LoginWidgetConnector::LoginWidgetConnector(LoginQuery * obj,LoginWidget * wt,void (LoginWidget::*function)(void),QObject * parent):
                 QObject(parent),m_obj(obj),m_loginWidget(wt),m_function(function)
 		{
+			act();
 		}
 
 void LoginWidgetConnector::act()

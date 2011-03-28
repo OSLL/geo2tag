@@ -22,7 +22,7 @@ class LoginWidget : public WContainerWidget
    //   Connector<LoginWidget> * m_con;
    LoginWidgetConnector * m_connector;
    QSharedPointer<User> m_user;
-   LoginQuery m_loginQuery;
+   LoginQuery * m_loginQuery;
 //   std::string m_token;
    void initCons();
  
