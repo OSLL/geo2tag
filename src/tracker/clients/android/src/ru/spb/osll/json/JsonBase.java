@@ -20,6 +20,8 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ru.spb.osll.json.IRequest.IResponse;
+
 public class JsonBase {
     private final int TIMEOUT_MILLISEC = 20000; // = 10 seconds
     private HttpClient m_httpClient;
@@ -81,4 +83,15 @@ public class JsonBase {
         }
         return sb.toString();
     }
+    
+    public static String getString(JSONObject jsonObject, String key){
+    	String result = null;
+    	try {
+			result = jsonObject.getString(key);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+    }    
 }

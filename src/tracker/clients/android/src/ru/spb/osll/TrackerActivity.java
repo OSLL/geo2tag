@@ -1,51 +1,31 @@
 package ru.spb.osll;
 
-import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonLoginRequest;
-
+import ru.spb.osll.json.IRequest.IResponse;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TrackerActivity extends Activity {
 	public static String LOG = "Tracker";
@@ -54,17 +34,29 @@ public class TrackerActivity extends Activity {
 //	private Logger m_loggerGetLocation = new Logger(SD_CARD_PATH + "/loggerGetLocation.txt");
 	
 	TextView logView;
+	private boolean m_status = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		logView = (TextView) findViewById(R.id.TextField);
-		Button btnTest = (Button) findViewById(R.id.TestButton);
+		
+		
+		final Button btnTest = (Button) findViewById(R.id.TestButton);
 		btnTest.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d(LOG, "TestButton is activate");
-                mySendPostJSON();
+                Log.d(LOG, "START TRACKER");
+                
+                if (m_status == false){
+                    m_status = true;
+                    btnTest.setText("STOP");
+                    startTracker();
+                }
+                else {
+                	m_status = false;
+                    btnTest.setText("START");
+                }
             }
         });
 		
@@ -176,32 +168,45 @@ public class TrackerActivity extends Activity {
 	// ----------------------------------------------------------------
 
 
-	public void mySendPostJSON(){
+	public void startTracker(){
 		try {
-			JSONObject JSONResponse = new JsonLoginRequest("Mark", "test").doRequest();			
+		
+			JSONObject JSONResponse = null;
+			while(JSONResponse == null){
+				JSONResponse = new JsonLoginRequest("Mark", "test").doRequest();				
+			}
+			
+			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
+			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
+			if(status.equals(IResponse.OK_STATUS)){
+				showToast(statusDescription);
+				applyChannel(JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN));
+			} else {
+				showToast(statusDescription);
+			}
 
-			logView.append("\n" + JSONResponse.get("auth_token") + "\n" + 
-					JSONResponse.get("status") + "\n" +
-					JSONResponse.get("status_description"));
-
-			JSONResponse = new JsonApplyChannelRequest("KKKKKKKKKK", 
-					"Test channel", "my new super chanel", "http://osll.spb.ru/", 3000
-					).doRequest();
-			
-			logView.append(
-					"\n" + 
-					JSONResponse.get("status") + "\n" +
-					JSONResponse.get("status_description"));
-			
-			JSONResponse = new JsonApplyMarkRequest("KKKKKKKKKK", "My channel", "title",
-					"unknown", "this tag was generated automaticaly by tracker application",
-					60.0, 30.0, "04 03 2011 15:33:47.630"
-					).doRequest();
-			
-			logView.append(
-					"\n" + 
-					JSONResponse.get("status") + "\n" +
-					JSONResponse.get("status_description"));
+//			logView.append("\n" + JSONResponse.get("auth_token") + "\n" + 
+//					JSONResponse.get("status") + "\n" +
+//					JSONResponse.get("status_description"));
+//
+//			JSONResponse = new JsonApplyChannelRequest("KKKKKKKKKK", 
+//					"Test channel", "my new super chanel", "http://osll.spb.ru/", 3000
+//					).doRequest();
+//			
+//			logView.append(
+//					"\n" + 
+//					JSONResponse.get("status") + "\n" +
+//					JSONResponse.get("status_description"));
+//			
+//			JSONResponse = new JsonApplyMarkRequest("KKKKKKKKKK", "My channel", "title",
+//					"unknown", "this tag was generated automaticaly by tracker application",
+//					60.0, 30.0, "04 03 2011 15:33:47.630"
+//					).doRequest();
+//			
+//			logView.append(
+//					"\n" + 
+//					JsonBase.getString(JSONResponse, IResponse.STATUS) + "\n" +
+//					JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION));
 			
 			
 		} catch (Exception e){
@@ -209,4 +214,68 @@ public class TrackerActivity extends Activity {
 		}
 	}
 	
+	private void applyChannel(String authToken) {
+		JSONObject JSONResponse = null;
+		while (JSONResponse == null) {
+			JSONResponse = new JsonApplyChannelRequest("KKKKKKKKKK", "Test channel",
+					"my new super chanel", "http://osll.spb.ru/", 3000)
+					.doRequest();
+		}
+		
+		String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
+		String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
+		
+		if (status.equals(IResponse.OK_STATUS) ||
+				statusDescription.equals(IResponse.CHANNEL_EXTSTS)){
+			showToast(statusDescription);
+			//applyMark();	TODO
+		} 
+	}
+
+	private void applyMark(){
+		Runnable runnable = new Runnable() {
+			
+			@Override
+			public void run() {
+				JSONObject JSONResponse;
+				while (m_status) {
+					JSONResponse = new JsonApplyMarkRequest(
+							"KKKKKKKKKK",
+							"My channel",
+							"title",
+							"unknown",
+							"this tag was generated automaticaly by tracker application",
+							60.0, 30.0, "04 03 2011 15:33:47.630").doRequest();
+					
+//					String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
+					//showToast("HELLO");
+//					try {
+//						Thread.sleep(1000);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//						return;
+//					}
+
+				}
+				//showToast("STOP");
+			}
+		};
+	
+		Thread t = new Thread(runnable);
+		t.start();
+	}
+	
+//	private void showToast2(final String mess){
+//		runOnUiThread(new Runnable() {
+//			@Override
+//			public void run() {
+//				Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
+//			}
+//		});
+//	}
+
+	private void showToast(final String mess){
+		Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
+	}
 }

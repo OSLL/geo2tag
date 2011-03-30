@@ -8,10 +8,6 @@ public interface IRequest {
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";
-
-		String STATUS = "status";
-		String STATUS_DESCRIPTION = "status_description";
-		String AUTH_TOKEN = "auth_token";
 	}
 	
 	public interface IApplyChannel{
@@ -22,9 +18,6 @@ public interface IRequest {
 		String DESCRIPTION = "description";
 		String URL = "url";
 		String ACTIVE_RADIUS = "activeRadius";
-
-        String STATUS = "status";
-        String STATUS_DESCRIPTION = "status_description";
 	}
 
 	public interface IApplyMark{
@@ -38,9 +31,16 @@ public interface IRequest {
 		String LATITUDE = "latitude";
 		String LONGITUDE = "longitude";
 		String TIME = "time";
-		
-        String STATUS = "status";
-        String STATUS_DESCRIPTION = "status_description";
 	}
+	
+	public interface IResponse{
+		String STATUS = "status";
+		String STATUS_DESCRIPTION = "status_description";
+		String AUTH_TOKEN = "auth_token";
 
+		String OK_STATUS = "Ok";
+		String ERROR_STATUS = "Error";
+
+		String CHANNEL_EXTSTS = "Channel exists!";
+	}
 }
