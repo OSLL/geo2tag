@@ -30,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import ru.spb.osll.json.JsonApplyChannelRequest;
+import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonLoginRequest;
 
@@ -173,132 +175,38 @@ public class TrackerActivity extends Activity {
 	
 	// ----------------------------------------------------------------
 
-	public void TestJSON(){
-		HttpClient httpclient = new DefaultHttpClient();
-		
-		try {
-			JSONObject object;
-			
-			URI uri = new URI(urlStr);
-			HttpPost post = new HttpPost(uri);
-			object = new JSONObject();
-			object.put("login", "Makr");
-			object.put("password", "test");
-
-			logView.append("\n" + object.toString());
-			HttpEntity entity = new StringEntity(object.toString());
-			post.setEntity(entity);
-			//post.setHeader("login", "application/json");
-
-			HttpResponse response = httpclient.execute(post);
-			// TODO working with response
-			// Get hold of the response entity
-            HttpEntity httpEntity = response.getEntity();
-            
-//            InputStream jsonfile = response.getEntity().getContent();
-//			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(jsonfile));
-//			logView.append("\n" + bufferedReader.readLine());
-            // If the response does not enclose an entity, there is no need
-            // to worry about connection release
- 
-            if (httpEntity != null) {
- 
-                // A Simple JSON Response Read
-                InputStream instream = httpEntity.getContent();
-                String result= convertStreamToString(instream);
-                logView.append("\n" + result);
-                
-                // A Simple JSONObject Creation
-                try {
-					JSONObject json=new JSONObject(result);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-//                Log.i("Praeda","<jsonobject>\n"+json.toString()+"\n</jsonobject>");
-// 
-//                // A Simple JSONObject Parsing
-//                JSONArray nameArray=json.names();
-//                JSONArray valArray=json.toJSONArray(nameArray);
-//                for(int i=0;i<valArray.length();i++)
-//                {
-//                    Log.i("Praeda","<jsonname"+i+">\n"+nameArray.getString(i)+"\n</jsonname"+i+">\n"
-//                            +"<jsonvalue"+i+">\n"+valArray.getString(i)+"\n</jsonvalue"+i+">");
-//                }
-// 
-//                // A Simple JSONObject Value Pushing
-//                json.put("sample key", "sample value");
-//                Log.i("Praeda","<jsonobject>\n"+json.toString()+"\n</jsonobject>");
-// 
-                // Closing the input stream will trigger connection release
-                instream.close();
-            }
-
-		} catch (Exception e) {
-		   // TODO Auto-generated catch block
-			logView.append("\n" + e.getMessage());
-		}
-	}
-	
-	private final String urlStr = "http://178.252.121.244:8080/service?query=login";
 
 	public void mySendPostJSON(){
-//        int TIMEOUT_MILLISEC = 10000; // = 10 seconds
-//        HttpParams httpParams = new BasicHttpParams();
-//        HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
-//        HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
-//
-//		HttpClient httpClient = new DefaultHttpClient(httpParams);
-//		HttpPost httpPost = new HttpPost();
-
 		try {
-//			logView.append("\n" + json.toString());
-//			StringEntity stringEntity = new StringEntity(json.toString());
-//			stringEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_ENCODING, "application/json"));
-//			stringEntity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-//			logView.append("\n" + stringEntity.toString());
-//			httpPost.setURI(uri);
-//
-//			
-//			httpPost.setEntity(stringEntity);
-			
 			JSONObject JSONResponse = new JsonLoginRequest("Mark", "test").doRequest();			
-			
+
 			logView.append("\n" + JSONResponse.get("auth_token") + "\n" + 
 					JSONResponse.get("status") + "\n" +
 					JSONResponse.get("status_description"));
+
+			JSONResponse = new JsonApplyChannelRequest("KKKKKKKKKK", 
+					"Test channel", "my new super chanel", "http://osll.spb.ru/", 3000
+					).doRequest();
+			
+			logView.append(
+					"\n" + 
+					JSONResponse.get("status") + "\n" +
+					JSONResponse.get("status_description"));
+			
+			JSONResponse = new JsonApplyMarkRequest("KKKKKKKKKK", "My channel", "title",
+					"unknown", "this tag was generated automaticaly by tracker application",
+					60.0, 30.0, "04 03 2011 15:33:47.630"
+					).doRequest();
+			
+			logView.append(
+					"\n" + 
+					JSONResponse.get("status") + "\n" +
+					JSONResponse.get("status_description"));
+			
 			
 		} catch (Exception e){
 			logView.append("\n" + e.getMessage());
 		}
 	}
-
-    private static String convertStreamToString(InputStream is) {
-        /*
-         * To convert the InputStream to String we use the BufferedReader.readLine()
-         * method. We iterate until the BufferedReader return null which means
-         * there's no more data to read. Each line will appended to a StringBuilder
-         * and returned as String.
-         */
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
- 
-        String line = null;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();
-    }
-
 	
 }

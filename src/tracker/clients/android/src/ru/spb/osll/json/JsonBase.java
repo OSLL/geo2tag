@@ -21,7 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JsonBase {
-    private final int TIMEOUT_MILLISEC = 10000; // = 10 seconds
+    private final int TIMEOUT_MILLISEC = 20000; // = 10 seconds
     private HttpClient m_httpClient;
     private HttpPost m_httpPost;
     
