@@ -1,3 +1,15 @@
+wikigps (0.1.5i) unstable; urgency=low
+
+  * fix for login
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Thu, 24 Mar 2011 23:24:58 +0300
+
+wikigps (0.1.5h) unstable; urgency=low
+
+  * fix for login
+
+ -- Paul Zubarev <zps@osll.spb.ru>  Wed, 23 Mar 2011 18:41:09 +0300
+
 wikigps (0.1.5g) unstable; urgency=low
 
   * added config file for server port configuring

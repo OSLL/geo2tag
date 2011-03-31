@@ -44,7 +44,7 @@
 #include <QString>
 
 QString getServerUrl();
-void setServerUrl(const QString& serverUrl);
+void setServerUrl(QString serverUrl);
 int getServerPort();
 void setServerPort(int port);
 #define DEFAULT_SERVER "http://localhost/"
