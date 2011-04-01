@@ -14,10 +14,10 @@ INCLUDEPATH += . inc ../common/inc ../common/common/inc ../common/thread/inc \
                ../common/exception/inc
 
 # Input
-HEADERS += inc/SlippyMap.h \
-           inc/LightMap.h
-SOURCES += src/SlippyMap.cpp \
-           src/LightMap.cpp
+HEADERS += inc/MapsUploader.h \
+		   inc/MapScene.h
+SOURCES += src/MapsUploader.cpp \
+		   src/MapScene.cpp
 
 OBJECTS_DIR = .obj
 

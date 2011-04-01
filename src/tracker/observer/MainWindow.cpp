@@ -1,11 +1,12 @@
 #include "MainWindow.h"
 #include <QDebug>
 #include <QMenuBar>
+
 MainWindow::MainWindow(QWidget* parent):
          QMainWindow(parent)
 {
   m_stackedWidget = new QStackedWidget(this);
-  m_map = new LightMap(this);
+  m_map = new MapScene(this);//LightMap(this);
 //kkv why?  QVBoxLayout *layout = new QVBoxLayout;
   m_menu = new QMenu(this);
   m_settingsAction = new QAction("Settings...",this);
@@ -22,8 +23,10 @@ MainWindow::MainWindow(QWidget* parent):
   m_menu=menuBar()->addMenu("Options");
   m_menu->addAction(m_settingsAction);
   m_menu->addAction(m_marksSettingsAction);
-  m_map->setCenter( 55.6635 , 37.48312);
-  m_stackedWidget->addWidget(m_map);
+//  m_map->setCenter( 55.6635 , 37.48312);
+  m_view = new QGraphicsView(this);
+  m_view->setScene(m_map);
+  m_stackedWidget->addWidget(m_view);
   m_stackedWidget->addWidget(m_optWidget);
   m_stackedWidget->addWidget(m_marksOptWidget);
   setCentralWidget(m_stackedWidget);
@@ -50,5 +53,5 @@ void MainWindow::marksSettings()
 
 void MainWindow::settingsDone()
 {
-  m_stackedWidget->setCurrentWidget(m_map);
+  m_stackedWidget->setCurrentWidget(m_view);
 }

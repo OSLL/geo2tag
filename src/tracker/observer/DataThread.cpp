@@ -3,7 +3,7 @@
 #include "DataThread.h"
 #include <QList>
 
-DataThread::DataThread(LightMap* map,QObject *parent) :
+DataThread::DataThread(MapScene * map,QObject * parent) :
     QThread(parent),  
 		m_settings("osll","observer"), 
 		m_map(map),
@@ -64,7 +64,7 @@ void DataThread::onConnected()
 void DataThread::onMarksGotten()
 {
     m_marks=m_rssQuery->getRSSFeed();
-    m_map->setMarks(m_marks);
+    //m_map->setMarks(m_marks);
     QList<QSharedPointer<DataMark> > marks = m_marks.values(); 
     qDebug() << "RssFeed gotten!!!!! " <<  m_marks.count() << "marks recieved";
     for (int i=0;i<marks.size();i++)
