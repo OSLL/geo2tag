@@ -8,9 +8,13 @@
 #include <QGraphicsView>
 #include <QScrollBar>
 #include <QPolygon>
+#include <QSettings>
 
 #include <QGraphicsProxyWidget>
 #include <QPushButton>
+
+#include <QList>
+#include <QSharedPointer>
 
 //Move distance for one arrow key press
 #define KEY_MOVE_DIST 10
@@ -117,6 +121,103 @@ void MapScene::removeMark(QGraphicsItem * mark)
     */
 }
 
+void MapScene::setMarks(DataChannels marks)
+{
+	double tdim=256.;
+	QPointF pos;
+
+	//Add here time and count filter
+	QSettings settings("osll","libs");
+	int maxAgeOfMark = settings.value("timeLimit").toInt();
+    int marksCount = settings.value("marksCount").toInt();
+
+	//Getting list of all channels, wich marks are in request
+    QList<QSharedPointer<DataMark> > marks_to_show;
+
+	m_marks.clear();
+
+	QList<QSharedPointer<Channel> > channels = marks.uniqueKeys();
+	for (int j = 0; j < channels.size(); j++)
+	{
+		marks_to_show = marks.values(channels.at(j));
+		qSort(marks_to_show.begin(), marks_to_show.end(), qGreater<QSharedPointer<DataMark> >());
+		for (int i = 0; i < qMin( marksCount, marks_to_show.size() ); i++)
+		{
+			//Check, that current mark isnt older that maxAgeOfMark minutes
+			qDebug() << "Mark time " << marks_to_show.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
+			qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
+			if(true)//marks_to_show.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark))
+			{
+				pos = convertCoordinates(
+										marks_to_show.at(i)->getLatitude(), 
+										marks_to_show.at(i)->getLongitude(),
+										m_zoom);
+				pos = pos * qreal(tdim);
+				this->add_mark(pos, channels.at(j)->getName());
+			}
+		}
+	}
+}
+
+void MapScene::add_mark(QPointF pos, QString channel_name)
+{
+	QPointF posForPicture = QPointF(pos.x()-12.0, pos.y()-12.0);
+	QPointF posForText = QPointF(pos.x()-24.0, pos.y()+24.0);
+	QGraphicsPixmapItem * pi = 0;
+
+	if(channel_name == "Fuel prices")
+	{
+		pi = addPixmap(QPixmap(":/img/fuel.png"));
+	}
+	else if(channel_name == "Public announcements")
+	{
+		pi = addPixmap(QPixmap(":/img/public.png"));
+	}
+    else if(channel_name == "ObsTestChannel")
+    {
+		pi = addPixmap(QPixmap(":/img/test.png"));
+		//painter.drawText(posForText, "Test text");
+    }
+    else if(channel_name.startsWith("bus_"))
+    {
+		pi = addPixmap(QPixmap(":/img/bus.png"));
+        //painter.drawText(posForText, channel_name.split('_').at(1));
+    }
+    else if(channel_name.startsWith("tram_"))
+    {
+        pi = addPixmap(QPixmap(":/img/tram.png"));
+        //painter.drawText(posForText, channel_name.split('_').at(1));
+    }
+    else if(channel_name.startsWith("troll_"))
+    {
+        pi = addPixmap(QPixmap(":/img/trolleybus.png"));
+        //painter.drawText(posForText, channel_name.split('_').at(1));
+    }
+    else if(channel_name.startsWith("user_"))
+    {
+        pi = addPixmap(QPixmap(":/img/user.png"));
+    }
+    else
+    {
+		QPixmap pixmap(24, 24);
+	    pixmap.fill(Qt::transparent);
+    	QPoint center(pixmap.width()/2, pixmap.height()/2);
+
+	    QPainter painter;
+    	painter.begin(&pixmap);
+    	painter.setBrush(Qt::blue);
+    	painter.drawEllipse(center, pixmap.width()/2, pixmap.height()/2);
+    	painter.setBrush(Qt::black);
+    	painter.drawEllipse(center, pixmap.width()/10, pixmap.height()/10);
+    	painter.end();
+
+    	pi = this->addPixmap(pixmap);
+    }
+
+	pi->setX(posForPicture.x());
+	pi->setY(posForPicture.y());
+}
+
 void MapScene::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (event->delta()>0 && m_zoom<18)
@@ -156,7 +257,7 @@ void MapScene::set_zoom()
     if(!views().isEmpty())
         this->views()[0]->centerOn(center_point);
 
-    qDebug() << center_point.x() << "\t" << center_point.y() << "\n";
+//    qDebug() << center_point.x() << "\t" << center_point.y() << "\n";
 
     this->update_state();
 }
@@ -233,6 +334,13 @@ void MapScene::update_state()
 {
     if(this->views().isEmpty())
         return;
+
+/*
+	QPointF center_point =  convertCoordinates(m_latitude, m_longitude, m_zoom);
+	center_point.setX(center_point.x()*256);
+	center_point.setY(center_point.y()*256);
+	this->views()[0]->centerOn(center_point);
+*/
 
     QPoint point_top_left = (this->views()[0]->mapToScene(this->views()[0]->frameRect().topLeft())).toPoint();
     QPoint point_bottom_right = (this->views()[0]->mapToScene(this->views()[0]->frameRect().bottomRight())).toPoint();

@@ -7,6 +7,7 @@
 #include <QHash>
 #include <QPoint>
 #include "MapsUploader.h"
+#include "DataChannel.h"
 
 
 class MapScene : public QGraphicsScene
@@ -19,6 +20,7 @@ public:
     void addMark(qreal x, qreal y, QVariant data);
     void addMark(qreal x, qreal y, QVariant data, QWidget * widget);
     void removeMark(QGraphicsItem * mark);
+	void setMarks(DataChannels marks);
 
 public:
     virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
@@ -30,6 +32,7 @@ public:
 
 private:
     void update_state();
+	void add_mark(QPointF pos, QString channel_name);
 
     QPointF convertCoordinates(qreal lat, qreal lng, int zoom);
 
@@ -43,6 +46,7 @@ private:
 private:
 
     QHash<TilePoint, QGraphicsPixmapItem *> m_maps;
+	QHash<TilePoint, QGraphicsPixmapItem *> m_marks;
     MapsUploader * m_uploader;
 
     int m_zoom;
