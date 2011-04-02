@@ -10,6 +10,7 @@ include(../../../config.pri)
 
 QT += network
 
+LIBS += -lcommon
 
 DEPENDPATH += . \
 

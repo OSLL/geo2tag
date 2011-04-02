@@ -45,12 +45,12 @@ TimeSlot::TimeSlot(const QString &slot):m_slot(slot)
 {
 }
 
-const QString& TimeSlot::getTimeSlot() const
+const QString& TimeSlot::getSlot() const
 {
     return m_slot;
 }
 
-void TimeSlot::setTimeSlot(const QString& slot)
+void TimeSlot::setSlot(const QString& slot)
 {
     m_slot = slot;
 }

@@ -60,8 +60,8 @@ public:
 
     virtual qlonglong getId() const = 0;
 
-    const QString& getTimeSlot() const;
-    void setTimeSlot(const QString& slot);
+    const QString& getSlot() const;
+    void setSlot(const QString& slot);
 
     virtual ~TimeSlot();
 

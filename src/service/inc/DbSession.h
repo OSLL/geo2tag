@@ -52,7 +52,7 @@
 #include "Channel.h"
 #include "DataChannel.h"
 #include "User.h"
-#include "TimeSlot.h" //!!!my_change
+#include "TimeSlot.h"
 #include "UpdateThread.h"
 #include "QueryExecutor.h"
 
@@ -67,7 +67,7 @@ namespace common
         QSharedPointer<Channels>     m_channelsContainer;
         QSharedPointer<DataMarks>    m_tagsContainer;
         QSharedPointer<Users>        m_usersContainer;
-        QSharedPointer<TimeSlots>    m_timeSlotsContainer;//!!!my_change
+        QSharedPointer<TimeSlots>    m_timeSlotsContainer;
         QSharedPointer<DataChannels> m_dataChannelsMap;        
 
         UpdateThread *              m_updateThread;
@@ -88,7 +88,7 @@ namespace common
         QByteArray processSubscribeQuery(const QByteArray&);
         QByteArray processAddUserQuery(const QByteArray&);
         QByteArray processAddChannelQuery(const QByteArray&);
-        QByteArray processGetTimeSlotQuery(const QByteArray&); //!!!my_change
+        QByteArray processGetTimeSlotQuery(const QByteArray&);
 
     public:
 

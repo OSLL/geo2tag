@@ -60,11 +60,12 @@
 #include "SubscribeChannelJSON.h"
 #include "SubscribeChannelResponseJSON.h"
 
-#include "GetTimeSlotRequestJSON.h" //!!!my_change
-#include "GetTimeSlotResponseJSON.h" //!!!my_change
+#include "GetTimeSlotRequestJSON.h"
+#include "GetTimeSlotResponseJSON.h"
 
 #include <QtSql>
 #include <QMap>
+#include <QDebug>
 
 namespace common
 {
@@ -72,7 +73,7 @@ namespace common
             m_channelsContainer(new Channels()),
             m_tagsContainer(new DataMarks()),
             m_usersContainer(new Users()),
-            m_timeSlotsContainer(new TimeSlots()), //!!!my_change
+            m_timeSlotsContainer(new TimeSlots()),
             m_dataChannelsMap(new DataChannels()),            
             m_updateThread(NULL),
             m_queryExecutor(NULL)
@@ -84,7 +85,7 @@ namespace common
         m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
         m_processors.insert("addUser", &DbObjectsCollection::processAddUserQuery);
         m_processors.insert("addChannel", &DbObjectsCollection::processAddChannelQuery);
-        m_processors.insert("getTimeSlot", &DbObjectsCollection::processGetTimeSlotQuery); //!!!my_change
+        m_processors.insert("getTimeSlot", &DbObjectsCollection::processGetTimeSlotQuery);
 
         QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
         database.setHostName("localhost");
@@ -97,7 +98,7 @@ namespace common
                         m_tagsContainer,
                         m_usersContainer,
                         m_channelsContainer,
-                        m_timeSlotsContainer, //!!!my_change
+                        m_timeSlotsContainer,
                         m_dataChannelsMap,
                         NULL);
 
@@ -167,7 +168,7 @@ namespace common
 
         for(int i=0; i<currentUsers.size(); i++)
         {
-						syslog(LOG_INFO,"Look up in %s and %s",currentUsers.at(i)->getLogin().toStdString().c_str(),currentUsers.at(i)->getPassword().toStdString().c_str());
+            syslog(LOG_INFO,"Look up in %s and %s",currentUsers.at(i)->getLogin().toStdString().c_str(),currentUsers.at(i)->getPassword().toStdString().c_str());
             if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
             {
                 if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
@@ -500,9 +501,9 @@ namespace common
             QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
             syslog(LOG_INFO, "Starting Json parsing for GetTimeSlotQuery");
             request.parseJson(data);
-            syslog(LOG_INFO, "Json parsed for GetTimeSlotQuery");
+            syslog(LOG_INFO, "Json parsed for GetTimeSlotQuery");            
 
-            QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
+            QSharedPointer<User> dummyUser = request.getUsers()->at(0);
             QSharedPointer<User> realUser = findUserFromToken(dummyUser);
 
             if(realUser.isNull())
@@ -513,7 +514,7 @@ namespace common
                 return answer;
             }
 
-            QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
+            QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;            
             QSharedPointer<Channel> realChannel; // Null pointer
             QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
             for(int i=0; i<currentChannels.size(); i++)
@@ -522,8 +523,8 @@ namespace common
                 {
                     realChannel = currentChannels.at(i);
                 }
-            }
-            if(!realChannel.isNull())
+            }           
+            if(realChannel.isNull())
             {
                 response.setStatus("Error");
                 response.setStatusMessage("Wrong channel's' name!");

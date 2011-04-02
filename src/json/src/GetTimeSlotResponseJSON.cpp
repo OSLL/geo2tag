@@ -20,7 +20,7 @@ QByteArray GetTimeSlotResponseJSON::getJson() const
 
     QSharedPointer<Channel> channel = m_channelsContainer->at(0);
 
-    obj.insert("timeSlot", channel->getTimeSlot()->getId());
+    obj.insert("timeSlot", channel->getTimeSlot()->getSlot()/*getTimeSlot()*/);
     return serializer.serialize(obj);
 }
 
