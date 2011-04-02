@@ -34,7 +34,9 @@ HEADERS += \
 	   inc/AddChannelResponseJSON.h \
 	   inc/GetTimeSlotRequestJSON.h \
 	   inc/GetTimeSlotResponseJSON.h \
-	   inc/DefaultResponseJSON.h
+	   inc/DefaultResponseJSON.h \
+    inc/SetTimeSlotRequestJSON.h \
+    inc/SetTimeSlotResponseJSON.h
 
 SOURCES += \
            src/ChannelListJSON.cpp \
@@ -52,7 +54,9 @@ SOURCES += \
 	   src/AddChannelRequestJSON.cpp \
 	   src/GetTimeSlotRequestJSON.cpp \
 	   src/GetTimeSlotResponseJSON.cpp \
-           src/DefaultResponseJSON.cpp
+           src/DefaultResponseJSON.cpp \
+    src/SetTimeSlotRequestJSON.cpp \
+    src/SetTimeSlotResponseJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 

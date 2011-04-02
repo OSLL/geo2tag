@@ -29,68 +29,29 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file Channel.h
- * \brief Header of Channel
+ * \file SetTimeSlotRequestJSON.h
+ * \brief Header of SetTimeSlotRequestJSON
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#ifndef _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_
+#define _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_
 
-#ifndef _Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
-#define _Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
+#include "JsonSerializer.h"
 
-#include <QString>
-#include <QVector>
-#include <QSharedPointer>
-
-#include "ConcurrentVector.h"
-#include "TimeSlot.h"           //!!!my_change
-
-class Channel: public QObject
+class SetTimeSlotRequestJSON : public JsonSerializer
 {
-    Q_OBJECT
-    QString m_name; //!< channel name
-    QString m_description; //!< Description for channel
-    QString m_url; //!< URL for mark
-    double m_activeRadius; //< Radius for visible marks
-
-    bool m_isDisplayed; //!< Displayed on the UI
-
-    QSharedPointer<TimeSlot> m_timeSlot; //!!!my_change
-
-protected:
-    Channel(const QString &name, const QString &description, const QString& url="", const QString &timeSlot="");
-
+        Q_OBJECT;
 public:
+    SetTimeSlotRequestJSON();
 
-    virtual qlonglong getId() const = 0;
+    QByteArray getJson() const;
 
-    const QString& getDescription() const;
+    void parseJson(const QByteArray&);
+};
 
-    const QString& getName() const;
 
-    const QString& getUrl() const;
-
-    void setDescription(const QString& description);
-
-    void setUrl(const QString& url);
-
-    void setRadius(const double &radius);
-    double getRadius() const;
-
-    bool isDisplayed() const;
-    void setDisplayed(bool);
-
-    void setTimeSlot(QSharedPointer<TimeSlot> timeSlot); //!!!my_change
-    QSharedPointer<TimeSlot> getTimeSlot() const;       //!!!my_change
-
-    virtual ~Channel();
-}; // class Channel
-
-typedef ConcurrentVector<Channel> Channels;
-
-#endif //_Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
-
-/* ===[ End of file ]=== */
+#endif // _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_

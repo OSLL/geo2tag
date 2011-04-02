@@ -52,7 +52,8 @@
         DbChannel(qlonglong id,
                 const QString &name,
                 const QString &description,
-                const QString &url="");
+                const QString &url="",
+                const QString &timeSlot="");
 
         qlonglong getId() const;
 

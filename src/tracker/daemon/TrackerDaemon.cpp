@@ -121,7 +121,7 @@ void TrackerDaemon::onConnected()
                                  QDateTime::currentDateTime()));
 		m_lastCoords.setX(common::GpsInfo::getInstance().getLatitude());
 		m_lastCoords.setY(common::GpsInfo::getInstance().getLongitude());
-        QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
+                QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
         mark->setChannel(channel);
         mark->setUser(m_loginQuery->getUser());
         m_tagQuery = new AddNewMarkQuery(mark,this);
