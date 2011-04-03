@@ -6,6 +6,7 @@
 #include <QPixmap>
 #include <QNetworkAccessManager>
 #include <QUrl>
+#include <QFile>
 
 typedef QPair<QPoint,int> TilePoint;
 
@@ -17,9 +18,14 @@ class MapsUploader : public QObject
     QNetworkAccessManager m_manager;
     QUrl m_url;
     QVector<TilePoint> m_loaded;
+	QVector<QFile *> m_files;
+
+private:
+	void loadCachedFiles();
 
 public:
     explicit MapsUploader(QObject *parent = 0);
+	~MapsUploader();
 
 signals:
     void tileUploaded(const QPixmap pixmap, const QPoint point, const int zoom);

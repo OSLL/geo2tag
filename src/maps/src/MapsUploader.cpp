@@ -6,6 +6,7 @@
 #include <QVector>
 #include <QVectorIterator>
 #include <QDebug>
+#include <QDir>
 
 
 QPointF tileForCoordinate(qreal lat, qreal lng, int zoom)
@@ -38,10 +39,28 @@ MapsUploader::MapsUploader(QObject *parent) :
     QNetworkDiskCache *cache = new QNetworkDiskCache;
     cache->setCacheDirectory(QDesktopServices::storageLocation
                              (QDesktopServices::CacheLocation));
-
     m_manager.setCache(cache);
+
+	this->loadCachedFiles();
+
     connect(&m_manager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(handleNetworkData(QNetworkReply*)));
+}
+
+MapsUploader::~MapsUploader()
+{
+//	for(QVectorIterator<QFile *> it = m_files.begin(); it != m_files.end(); ++it)
+//	{
+//		if(*it != 0) it->unmap();
+//	}
+}
+
+void MapsUploader::loadCachedFiles()
+{
+	QDir home_dir = QDir::home();
+
+	if(!home_dir.exists(".geo2tag/uploaded_maps/"))
+		home_dir.mkpath(".geo2tag/uploaded_maps/");
 }
 
 
@@ -60,6 +79,16 @@ void MapsUploader::handleNetworkData(QNetworkReply *reply)
     if(!img.isNull())
     {
         QPixmap pixmap = QPixmap::fromImage(img);
+		QDir file_store_path = QDir().home();
+		if(!file_store_path.exists(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/"))
+			file_store_path.mkpath(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
+		file_store_path.cd(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
+		QString file_name = file_store_path.path() + "/" + QString::number(tp.x()) + "_" + QString::number(tp.y()) + ".png";
+		if(!QFile(file_name).exists())
+		{
+			qDebug() << file_name << "\n";
+			pixmap.save(file_name, 0, 100);
+		}
         emit this->tileUploaded(pixmap, tp, zoom);
     }
 }
@@ -67,6 +96,33 @@ void MapsUploader::handleNetworkData(QNetworkReply *reply)
 void MapsUploader::downloadTile(int lat, int lg, int zoom)
 {
     QPoint grab(lg, lat);
+
+	QDir file_store_path = QDir().home();
+	if(!file_store_path.exists(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/"))
+		file_store_path.mkpath(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
+	file_store_path.cd(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
+	QString file_name = file_store_path.path() + "/" + QString::number(lg) + "_" + QString::number(lat) + ".png";
+	QFile * pixmap_file = new QFile(file_name);
+	if(pixmap_file->exists())
+	{
+		qDebug() << file_name << "\n";
+		m_files.push_back(pixmap_file);
+		pixmap_file->open(QFile::ReadOnly);
+		uchar * maped = pixmap_file->map(0, pixmap_file->size());
+		qDebug() << maped << "\n";
+		QPixmap pixmap;
+		if(pixmap.loadFromData(maped, pixmap_file->size()))
+		{
+			qDebug() << "File mapped and uploaded\n";
+			emit this->tileUploaded(pixmap, grab, zoom);
+			return;
+		}
+		else
+		{
+			qDebug() << "Error!\n";
+		}
+	}
+
 
     QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
     m_url = QUrl(path.arg(zoom).arg(lg).arg(lat));
