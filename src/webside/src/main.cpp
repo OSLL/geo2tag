@@ -1,6 +1,5 @@
 #include <Wt/WApplication>
 #include "defines.h"
-#include <fstream>
 #include <syslog.h>
 #include <fstream>
 #include "Webside.h"
