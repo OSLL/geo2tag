@@ -1,6 +1,4 @@
 debian/tmp/opt/geo2tag/fcgi_server
 debian/tmp/etc/lighttpd/conf-enabled/wikigps-service.conf
-debian/tmp/opt/geo2tag/odbc.ini
-debian/tmp/opt/geo2tag/odbcinst.ini
 debian/tmp/opt/geo2tag/base.sql
 debian/tmp/opt/geo2tag/pg_hba.conf
