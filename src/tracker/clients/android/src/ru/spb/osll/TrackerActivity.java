@@ -13,13 +13,19 @@ import org.json.JSONObject;
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBase;
-import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.IRequest.IResponse;
+import ru.spb.osll.services.RequestService;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,33 +40,14 @@ public class TrackerActivity extends Activity {
 //	private Logger m_loggerGetLocation = new Logger(SD_CARD_PATH + "/loggerGetLocation.txt");
 	
 	TextView logView;
-	private boolean m_status = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		logView = (TextView) findViewById(R.id.TextField);
-		
-		
-		final Button btnTest = (Button) findViewById(R.id.TestButton);
-		btnTest.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.d(LOG, "START TRACKER");
-                
-                if (m_status == false){
-                    m_status = true;
-                    btnTest.setText("STOP");
-                    startTracker();
-                }
-                else {
-                	m_status = false;
-                    btnTest.setText("START");
-                }
-            }
-        });
-		
-
+			
+		initialization();
 //		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 //		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 		//runOnUiThread(new LogUpdateder());
@@ -75,6 +62,66 @@ public class TrackerActivity extends Activity {
 		m_loggerLocationListner.destroy();
 	}
 
+	// ----------------------------------------------------------------
+	private void initialization(){
+		final Button btnService = (Button) findViewById(R.id.serviceButton);
+		if (RequestService.isActive()){
+			btnService.setText("STOP TRACKER");
+		} else {
+			btnService.setText("START TRACKER");
+		}
+		
+		btnService.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	startTracker();
+            }
+        });
+	}
+	
+	
+	private static final int ID = 1;
+	private void startTracker(){
+		try {
+			if (RequestService.isActive()){
+				stopService(new Intent(this, RequestService.class));
+				NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+				nm.cancel(ID);
+			} else if (isOnline()){
+				Intent serviceIntent = new Intent(this, RequestService.class); 
+				serviceIntent.setAction(Intent.ACTION_MAIN);
+				serviceIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+				startService(serviceIntent);
+
+				startActivity(new Intent().setAction(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER));
+				
+				notify("geo2tag tracker", "geo2tag tracker service");
+			}
+		} catch (Exception e){
+			logView.append("\n" + e.getMessage());
+		}
+	}
+	
+	
+	private void notify(String text, String details)
+	{
+		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+		Intent notificationIntent = new Intent(this, TrackerActivity.class);
+//	    notificationIntent.setAction(Intent.ACTION_MAIN);
+//	    notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0); 
+	    Notification note = new Notification(R.drawable.icon, text,System.currentTimeMillis()); 
+
+	    note.setLatestEventInfo(this, text, details, contentIntent);
+	    note.flags = Notification.FLAG_AUTO_CANCEL;
+	    
+	    nm.notify(ID, note);
+	}
+	
+	// ------------------------------------------------------------------
+	
+	
 	public static Location getLocation(Context ctx) {
 		Location location = null;
 		String provider = LocationManager.NETWORK_PROVIDER;
@@ -165,25 +212,37 @@ public class TrackerActivity extends Activity {
 	}
 	
 	
-	// ----------------------------------------------------------------
 
-
-	public void startTracker(){
+	
+	public void startTracker2(){
 		try {
 		
-			JSONObject JSONResponse = null;
-			while(JSONResponse == null){
-				JSONResponse = new JsonLoginRequest("Mark", "test").doRequest();				
+			NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+			int id = 1;
+			if (RequestService.isActive()){
+				nm.cancel(id);
+
+				stopService(new Intent(this, RequestService.class));
+			} else if (isOnline()){
+				Notification notification = new Notification(R.drawable.icon, "Geo2Tag", System.currentTimeMillis());
+				String expandedTitle = "Geo2Tag Tracker Service";
+				String expandedText = "Geo2Tag Tracker is running";
+				Intent i = new Intent(this, TrackerActivity.class);
+				PendingIntent launchIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
+				notification.setLatestEventInfo(getApplicationContext(), expandedTitle, expandedText, launchIntent);
+				nm.notify(id,notification);
+				
+				startService(new Intent(this, RequestService.class));
 			}
 			
-			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
-			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
-			if(status.equals(IResponse.OK_STATUS)){
-				showToast(statusDescription);
-				applyChannel(JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN));
-			} else {
-				showToast(statusDescription);
-			}
+//			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
+//			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
+//			if(status.equals(IResponse.OK_STATUS)){
+//				showToast(statusDescription);
+//				applyChannel(JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN));
+//			} else {
+//				showToast(statusDescription);
+//			}
 
 //			logView.append("\n" + JSONResponse.get("auth_token") + "\n" + 
 //					JSONResponse.get("status") + "\n" +
@@ -207,7 +266,6 @@ public class TrackerActivity extends Activity {
 //					"\n" + 
 //					JsonBase.getString(JSONResponse, IResponse.STATUS) + "\n" +
 //					JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION));
-			
 			
 		} catch (Exception e){
 			logView.append("\n" + e.getMessage());
@@ -238,7 +296,7 @@ public class TrackerActivity extends Activity {
 			@Override
 			public void run() {
 				JSONObject JSONResponse;
-				while (m_status) {
+				while (RequestService.isActive()) {
 					JSONResponse = new JsonApplyMarkRequest(
 							"KKKKKKKKKK",
 							"My channel",
@@ -265,7 +323,22 @@ public class TrackerActivity extends Activity {
 		Thread t = new Thread(runnable);
 		t.start();
 	}
-	
+
+	private boolean isOnline() {
+	    ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo nInfo = cm.getActiveNetworkInfo();
+	    if (nInfo != null && nInfo.isConnected()) {
+	    	showToast("ONLINE");
+	    	Log.v(LOG, "ONLINE");
+	        return true;
+	    }
+	    else {
+	    	showToast("OFFLINE");
+	        Log.v(LOG, "OFFLINE");
+	        return false;
+	    }
+	}
+
 //	private void showToast2(final String mess){
 //		runOnUiThread(new Runnable() {
 //			@Override
@@ -278,4 +351,7 @@ public class TrackerActivity extends Activity {
 	private void showToast(final String mess){
 		Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
 	}
+	
+	
+
 }

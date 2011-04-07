@@ -6,21 +6,21 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 abstract class JsonRequest {
+	public static String JSON_LOG = "JsonLog";
 	
 	public JSONObject doRequest(){
 		JSONObject resultJSON = null; 
 		try {
 			resultJSON = doRequestInternal(); 
 		} catch (JSONException e) {
-			e.printStackTrace();
-			// TODO Auto-generated catch block
+			Log.v(JSON_LOG, e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
-			// TODO: handle exception
+			Log.v(JSON_LOG, e.getMessage());
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
-			// TODO Auto-generated catch block
+			Log.v(JSON_LOG, e.getMessage());
 		}
 		return resultJSON;
 	}	
