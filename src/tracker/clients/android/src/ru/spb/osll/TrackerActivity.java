@@ -60,7 +60,7 @@ public class TrackerActivity extends Activity {
 
 	// ----------------------------------------------------------------
 	private void initialization(){
-		final Button btnService = (Button) findViewById(R.id.serviceButton);
+		final Button btnService = (Button) findViewById(R.id.TestButton);
 		if (RequestService.isActive()){
 			btnService.setText("STOP TRACKER");
 		} else {
@@ -80,13 +80,13 @@ public class TrackerActivity extends Activity {
 		try {
 			if (RequestService.isActive()){
 				stopService(new Intent(this, RequestService.class));
-				//stopService(new Intent(this, LocationService.class));
+				stopService(new Intent(this, LocationService.class));
 				
 				NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 				nm.cancel(ID);
 			} else if (isOnline()){
 				startService(new Intent(this, RequestService.class));
-				//startService(new Intent(this, LocationService.class));
+				startService(new Intent(this, LocationService.class));
 				
 				notify("geo2tag tracker", "geo2tag tracker service");
 			}
@@ -95,14 +95,13 @@ public class TrackerActivity extends Activity {
 		}
 	}
 	
-	
 	private void notify(String text, String details)
 	{
 		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
 		Intent notificationIntent = new Intent(this, TrackerActivity.class);
-//	    notificationIntent.setAction(Intent.ACTION_MAIN);
-//	    notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+	    notificationIntent.setAction(Intent.ACTION_MAIN);
+	    notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
 	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0); 
 	    Notification note = new Notification(R.drawable.icon, text,System.currentTimeMillis()); 

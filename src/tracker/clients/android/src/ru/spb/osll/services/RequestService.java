@@ -12,7 +12,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class RequestService extends Service {
 	private static boolean TRAKER_STATUS = false;
@@ -36,9 +35,7 @@ public class RequestService extends Service {
 		Log.v(TrackerActivity.LOG, "service start");
 		
 		setServiceStatus(true);
-		//login();
-
-		new Thread(r).run();
+		login();
 	}
 
 	@Override
@@ -94,7 +91,8 @@ public class RequestService extends Service {
 			if (status.equals(IResponse.OK_STATUS) ||
 					statusDescription.equals(IResponse.CHANNEL_EXTSTS)){
 				Log.v(TrackerActivity.LOG, "apply channel status : " + statusDescription);
-				//applyMarkRunnable(); //TODO
+
+				new Thread(markRunnable).start();
 			} 
 			
 		} else {
@@ -104,37 +102,34 @@ public class RequestService extends Service {
 
 	
 	private static final int DELAY = 5000; 
-		Runnable r = new Runnable() {
-			@Override
-			public void run() {
-				while (isActive()){
-					try {
-//						applyMark();
-						Log.v(TrackerActivity.LOG, "apply mark status : ");
-						Thread.sleep(DELAY);
-					} catch (InterruptedException e) {
-						setServiceStatus(false);
-					}
+	Runnable markRunnable = new Runnable() {
+		@Override
+		public void run() {
+			while (isActive()){
+				try {
+					applyMark();
+					Thread.sleep(DELAY);
+				} catch (InterruptedException e) {
+					setServiceStatus(false);
 				}
 			}
-		};
-		
+		}
+	};
+	
 	
 	private void applyMark(){
 		JSONObject JSONResponse;
-		while (RequestService.isActive()) {
-			JSONResponse = new JsonApplyMarkRequest(
-					"KKKKKKKKKK",
-					"My channel",
-					"title",
-					"unknown",
-					"this tag was generated automaticaly by tracker application",
-					60.0, 30.0, "04 03 2011 15:33:47.630").doRequest();
-			if (JSONResponse != null){
-				String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
-				String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
-				Log.v(TrackerActivity.LOG, "apply mark status : " + statusDescription);
-			}
+		JSONResponse = new JsonApplyMarkRequest(
+				"KKKKKKKKKK",
+				"My channel",
+				"title",
+				"unknown",
+				"this tag was generated automaticaly by tracker application",
+				60.0, 30.0, "04 03 2011 15:33:47.630").doRequest();
+		if (JSONResponse != null){
+			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
+			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
+			Log.v(TrackerActivity.LOG, "apply mark status : " + statusDescription);
 		}
 	}
 	
