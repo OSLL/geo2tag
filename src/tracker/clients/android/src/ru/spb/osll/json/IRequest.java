@@ -1,7 +1,7 @@
 package ru.spb.osll.json;
 
 public interface IRequest {
-	public String BASE_URL = "http://178.252.121.244:8080/service"; // FIXME
+	public String BASE_URL = "http://tracklife.ru/service"; // FIXME
 
 	public interface ILogin{
 		String REQUEST = BASE_URL + "?query=login";

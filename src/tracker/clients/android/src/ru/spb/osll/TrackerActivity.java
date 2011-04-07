@@ -13,7 +13,9 @@ import org.json.JSONObject;
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBase;
+import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.IRequest.IResponse;
+import ru.spb.osll.services.LocationService;
 import ru.spb.osll.services.RequestService;
 import android.app.Activity;
 import android.app.Notification;
@@ -48,17 +50,11 @@ public class TrackerActivity extends Activity {
 		logView = (TextView) findViewById(R.id.TextField);
 			
 		initialization();
-//		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		//runOnUiThread(new LogUpdateder());
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		locationManager.removeUpdates(locationListener);
-
 		m_loggerLocationListner.destroy();
 	}
 
@@ -84,15 +80,13 @@ public class TrackerActivity extends Activity {
 		try {
 			if (RequestService.isActive()){
 				stopService(new Intent(this, RequestService.class));
+				//stopService(new Intent(this, LocationService.class));
+				
 				NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 				nm.cancel(ID);
 			} else if (isOnline()){
-				Intent serviceIntent = new Intent(this, RequestService.class); 
-				serviceIntent.setAction(Intent.ACTION_MAIN);
-				serviceIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-				startService(serviceIntent);
-
-				startActivity(new Intent().setAction(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER));
+				startService(new Intent(this, RequestService.class));
+				//startService(new Intent(this, LocationService.class));
 				
 				notify("geo2tag tracker", "geo2tag tracker service");
 			}
@@ -120,40 +114,6 @@ public class TrackerActivity extends Activity {
 	}
 	
 	// ------------------------------------------------------------------
-	
-	
-	public static Location getLocation(Context ctx) {
-		Location location = null;
-		String provider = LocationManager.NETWORK_PROVIDER;
-		LocationManager lm = (LocationManager) ctx
-				.getSystemService(Context.LOCATION_SERVICE);
-
-		if (lm != null) {
-			if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				provider = LocationManager.GPS_PROVIDER;
-			}
-			location = lm.getLastKnownLocation(provider);
-		}
-		return location;
-	}
-
-	// TODO
-	class LogUpdateder implements Runnable {
-		@Override
-		public void run() {
-			int i = 0;
-			while (i < 10) {
-				i++;
-				try {
-					Location location = getLocation(getApplicationContext());
-					String data = location != null ? location.toString() : "null";
-					Thread.sleep(5000);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 
 	LocationListener locationListener = new LocationListener() {
 		int count = 0;
