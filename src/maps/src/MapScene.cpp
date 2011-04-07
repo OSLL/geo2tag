@@ -57,6 +57,70 @@ void MapScene::tileUploaded(const QPixmap pixmap, const QPoint point, const int 
     m_maps.value(tp)->setVisible(zoom == m_zoom);
 }
 
+void MapScene::preFetch()
+{
+    if(this->views().isEmpty())
+        return;
+
+    QPoint point_top_left = (this->views()[0]->mapToScene(this->views()[0]->frameRect().topLeft())).toPoint();
+    QPoint point_bottom_right = (this->views()[0]->mapToScene(this->views()[0]->frameRect().bottomRight())).toPoint();
+
+    point_top_left.setX(point_top_left.x()-256);
+    point_top_left.setY(point_top_left.y()-256);
+
+    if(point_top_left.x() < 0) point_top_left.setX(0);
+    if(point_top_left.y() < 0) point_top_left.setY(0);
+
+    point_bottom_right.setX(point_bottom_right.x()+256);
+    point_bottom_right.setY(point_bottom_right.y()+256);
+
+    if(point_bottom_right.x() > this->sceneRect().width()) point_bottom_right.setX(this->sceneRect().width());
+    if(point_bottom_right.y() > this->sceneRect().width()) point_bottom_right.setY(this->sceneRect().width());
+
+    point_top_left.setX(point_top_left.x()/256);
+    point_top_left.setY(point_top_left.y()/256);
+
+    point_bottom_right.setX(point_bottom_right.x()/256);
+    point_bottom_right.setY(point_bottom_right.y()/256);
+
+	int zoom = m_zoom;
+
+	while(zoom <= 18)
+	{
+
+		qDebug() << "Upload tile " << point_top_left << "\t" << point_bottom_right << "\n";
+
+		QVector<TilePoint> tiles_for_upload;
+
+		for(int x = point_top_left.x(); x <= point_bottom_right.x(); x++)
+		{
+			for(int y = point_top_left.y(); y <= point_bottom_right.y(); y++)
+			{
+	            TilePoint tp = qMakePair(QPoint(y,x), zoom);
+            	if(!m_maps.contains(tp))
+            	    tiles_for_upload.push_back(tp);
+
+				if(tiles_for_upload.size() >= 20)
+				{
+	        		emit this->uploadTiles(tiles_for_upload);
+					tiles_for_upload.clear();
+				}
+        	}
+    	}
+
+		if(!tiles_for_upload.isEmpty())
+	        emit this->uploadTiles(tiles_for_upload);
+
+		zoom++;
+		point_top_left.setX(point_top_left.x()*2);
+		point_top_left.setY(point_top_left.y()*2);
+
+		point_bottom_right.setX(point_bottom_right.x()*2+1);
+		point_bottom_right.setY(point_bottom_right.y()*2+1);
+	}
+
+}
+
 void MapScene::addMark(qreal latitude, qreal longitude, QVariant data)
 {   
     QPixmap pixmap(20,20);
@@ -300,7 +364,12 @@ void MapScene::keyPressEvent(QKeyEvent *event)
 {
     QPoint screen_delta(0,0);
 
-    if (event->key() == Qt::Key_Right)
+	if(event->key() == Qt::Key_F)
+	{
+		qDebug() << "F pressed\n";
+		this->preFetch();
+	}
+    if(event->key() == Qt::Key_Right)
         screen_delta.setX(screen_delta.x() - KEY_MOVE_DIST);
     if(event->key() == Qt::Key_Left)
         screen_delta.setX(screen_delta.x() + KEY_MOVE_DIST);

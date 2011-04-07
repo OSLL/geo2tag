@@ -60,6 +60,7 @@ signals:
 
 public slots:
     void tileUploaded(const QPixmap pixmap, const QPoint point, const int zoom);
+	void preFetch();
 
 };
 
