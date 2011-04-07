@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBase;
-import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.services.LocationService;
 import ru.spb.osll.services.RequestService;
@@ -25,7 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -73,7 +71,6 @@ public class TrackerActivity extends Activity {
             }
         });
 	}
-	
 	
 	private static final int ID = 1;
 	private void startTracker(){

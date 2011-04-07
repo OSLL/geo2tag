@@ -10,6 +10,7 @@ import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.IRequest.IResponse;
 import android.app.Service;
 import android.content.Intent;
+import android.location.Location;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -26,13 +27,13 @@ public class RequestService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.v(TrackerActivity.LOG, "service create");
+		Log.v(TrackerActivity.LOG, "request service create");
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		Log.v(TrackerActivity.LOG, "service start");
+		Log.v(TrackerActivity.LOG, "request service start");
 		
 		setServiceStatus(true);
 		login();
@@ -41,7 +42,7 @@ public class RequestService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.v(TrackerActivity.LOG, "service destroy");
+		Log.v(TrackerActivity.LOG, "request service destroy");
 		setServiceStatus(false);
 	}
 
@@ -116,8 +117,12 @@ public class RequestService extends Service {
 		}
 	};
 	
-	
 	private void applyMark(){
+		Location location = LocationService.getLocation(this);
+		if (location == null)
+			return;
+		Log.v(TrackerActivity.LOG, "location " + location);
+		
 		JSONObject JSONResponse;
 		JSONResponse = new JsonApplyMarkRequest(
 				"KKKKKKKKKK",
@@ -125,7 +130,7 @@ public class RequestService extends Service {
 				"title",
 				"unknown",
 				"this tag was generated automaticaly by tracker application",
-				60.0, 30.0, "04 03 2011 15:33:47.630").doRequest();
+				location.getLatitude(), location.getLongitude(), "04 03 2011 15:33:47.630").doRequest();
 		if (JSONResponse != null){
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
