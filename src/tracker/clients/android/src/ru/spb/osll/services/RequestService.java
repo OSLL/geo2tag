@@ -36,7 +36,9 @@ public class RequestService extends Service {
 		Log.v(TrackerActivity.LOG, "request service start");
 		
 		setServiceStatus(true);
-		login();
+		//login();
+		
+		new Thread(loginRunnable).start();
 	}
 
 	@Override
@@ -51,9 +53,17 @@ public class RequestService extends Service {
 		return null;
 	}
 
+	private Runnable loginRunnable = new Runnable() {
+		@Override
+		public void run() {
+			login();
+		}
+	};
+	
+	private final int ATTEMPT = 1;
 	private void login(){
 		JSONObject JSONResponse = null;
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < ATTEMPT; i++){
 			JSONResponse = new JsonLoginRequest("Mark", "test").doRequest();
 			if (JSONResponse != null) 
 				break;
@@ -70,6 +80,7 @@ public class RequestService extends Service {
 				Log.v(TrackerActivity.LOG, "login status : " + statusDescription);
 			}
 		} else {
+			Log.v(TrackerActivity.LOG, "login fail");
 			// TODO login fail
 		}
 	}
@@ -78,7 +89,7 @@ public class RequestService extends Service {
 	private void applyChannel(String authToken) {
 		JSONObject JSONResponse = null;
 		
-		for (int i = 0; i < 10; i++){
+		for (int i = 0; i < ATTEMPT; i++){
 			JSONResponse = new JsonApplyChannelRequest("KKKKKKKKKK", "Test channel",
 					"my new super chanel", "http://osll.spb.ru/", 3000)
 					.doRequest();
@@ -136,6 +147,12 @@ public class RequestService extends Service {
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
 			Log.v(TrackerActivity.LOG, "apply mark status : " + statusDescription);
 		}
+	}
+	
+	
+	private void onFail(String mess){
+		//TODO
+//		TrackerActivity.Instance.showToast("login fail");
 	}
 	
 }

@@ -41,6 +41,8 @@ public class TrackerActivity extends Activity {
 	
 	TextView logView;
 
+	public static TrackerActivity Instance;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class TrackerActivity extends Activity {
 		logView = (TextView) findViewById(R.id.TextField);
 			
 		initialization();
+		Instance = this;
 	}
 
 	@Override
@@ -58,6 +61,8 @@ public class TrackerActivity extends Activity {
 
 	// ----------------------------------------------------------------
 	private void initialization(){
+		Log.v(LOG, "TrackerActivity - initialization");
+		
 		final Button btnService = (Button) findViewById(R.id.TestButton);
 		if (RequestService.isActive()){
 			btnService.setText("STOP TRACKER");
@@ -85,7 +90,8 @@ public class TrackerActivity extends Activity {
 				startService(new Intent(this, RequestService.class));
 				startService(new Intent(this, LocationService.class));
 				
-				notify("geo2tag tracker", "geo2tag tracker service");
+				//notify("geo2tag tracker", "geo2tag tracker service");
+				notify2();
 			}
 		} catch (Exception e){
 			logView.append("\n" + e.getMessage());
@@ -97,8 +103,8 @@ public class TrackerActivity extends Activity {
 		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
 		Intent notificationIntent = new Intent(this, TrackerActivity.class);
-	    notificationIntent.setAction(Intent.ACTION_MAIN);
-	    notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+//	    notificationIntent.setAction(Intent.ACTION_MAIN);
+//	    notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
 	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0); 
 	    Notification note = new Notification(R.drawable.icon, text,System.currentTimeMillis()); 
@@ -109,40 +115,19 @@ public class TrackerActivity extends Activity {
 	    nm.notify(ID, note);
 	}
 	
+	private void notify2(){
+		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+		Notification notification = new Notification(R.drawable.icon, "NewMaps",System.currentTimeMillis());
+		String expandedTitle = "New Map Service";
+		String expandedText = "New Map Service is running";
+		Intent i = new Intent(this, TrackerActivity.class);
+		PendingIntent launchIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
+		notification.setLatestEventInfo(getApplicationContext(), expandedTitle, expandedText, launchIntent);
+		nm.notify(ID,notification);
+	}
+	
 	// ------------------------------------------------------------------
-
-	LocationListener locationListener = new LocationListener() {
-		int count = 0;
-		
-		public void onLocationChanged(Location location) {
-			if (location != null){
-				Log.v(LOG, "onLocationChanged  " + location.toString());
-				m_loggerLocationListner.println("onLocationChanged  " + location.toString());
-
-				logView.append("\n" + count + ": onLocationChanged " + location.getLatitude() + " " + location.getLongitude());
-				count++;
-			}
-		}
-
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			Log.v(LOG, "onStatusChanged " + provider + " " + status + " " + extras);
-			
-			m_loggerLocationListner.println("onStatusChanged " + provider + " " + status + " " + extras);
-			logView.append("\n" + count + ": onStatusChanged " + status);
-			count++;
-		}
-
-		public void onProviderEnabled(String provider) {
-			Log.v(LOG, "onProviderEnabled " + provider);
-			m_loggerLocationListner.println("onProviderEnabled " + provider);
-		}
-
-		public void onProviderDisabled(String provider) {
-			Log.v(LOG, "onProviderDisabled " + provider);
-			m_loggerLocationListner.println("onProviderDisabled " + provider);
-		}
-	};
-
 	
 	private class Logger {
 		private PrintWriter m_logger;
@@ -167,119 +152,6 @@ public class TrackerActivity extends Activity {
 		}
 	}
 	
-	
-
-	
-	public void startTracker2(){
-		try {
-		
-			NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-			int id = 1;
-			if (RequestService.isActive()){
-				nm.cancel(id);
-
-				stopService(new Intent(this, RequestService.class));
-			} else if (isOnline()){
-				Notification notification = new Notification(R.drawable.icon, "Geo2Tag", System.currentTimeMillis());
-				String expandedTitle = "Geo2Tag Tracker Service";
-				String expandedText = "Geo2Tag Tracker is running";
-				Intent i = new Intent(this, TrackerActivity.class);
-				PendingIntent launchIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
-				notification.setLatestEventInfo(getApplicationContext(), expandedTitle, expandedText, launchIntent);
-				nm.notify(id,notification);
-				
-				startService(new Intent(this, RequestService.class));
-			}
-			
-//			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
-//			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
-//			if(status.equals(IResponse.OK_STATUS)){
-//				showToast(statusDescription);
-//				applyChannel(JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN));
-//			} else {
-//				showToast(statusDescription);
-//			}
-
-//			logView.append("\n" + JSONResponse.get("auth_token") + "\n" + 
-//					JSONResponse.get("status") + "\n" +
-//					JSONResponse.get("status_description"));
-//
-//			JSONResponse = new JsonApplyChannelRequest("KKKKKKKKKK", 
-//					"Test channel", "my new super chanel", "http://osll.spb.ru/", 3000
-//					).doRequest();
-//			
-//			logView.append(
-//					"\n" + 
-//					JSONResponse.get("status") + "\n" +
-//					JSONResponse.get("status_description"));
-//			
-//			JSONResponse = new JsonApplyMarkRequest("KKKKKKKKKK", "My channel", "title",
-//					"unknown", "this tag was generated automaticaly by tracker application",
-//					60.0, 30.0, "04 03 2011 15:33:47.630"
-//					).doRequest();
-//			
-//			logView.append(
-//					"\n" + 
-//					JsonBase.getString(JSONResponse, IResponse.STATUS) + "\n" +
-//					JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION));
-			
-		} catch (Exception e){
-			logView.append("\n" + e.getMessage());
-		}
-	}
-	
-	private void applyChannel(String authToken) {
-		JSONObject JSONResponse = null;
-		while (JSONResponse == null) {
-			JSONResponse = new JsonApplyChannelRequest("KKKKKKKKKK", "Test channel",
-					"my new super chanel", "http://osll.spb.ru/", 3000)
-					.doRequest();
-		}
-		
-		String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
-		String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
-		
-		if (status.equals(IResponse.OK_STATUS) ||
-				statusDescription.equals(IResponse.CHANNEL_EXTSTS)){
-			showToast(statusDescription);
-			//applyMark();	TODO
-		} 
-	}
-
-	private void applyMark(){
-		Runnable runnable = new Runnable() {
-			
-			@Override
-			public void run() {
-				JSONObject JSONResponse;
-				while (RequestService.isActive()) {
-					JSONResponse = new JsonApplyMarkRequest(
-							"KKKKKKKKKK",
-							"My channel",
-							"title",
-							"unknown",
-							"this tag was generated automaticaly by tracker application",
-							60.0, 30.0, "04 03 2011 15:33:47.630").doRequest();
-					
-//					String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
-					//showToast("HELLO");
-//					try {
-//						Thread.sleep(1000);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//						return;
-//					}
-
-				}
-				//showToast("STOP");
-			}
-		};
-	
-		Thread t = new Thread(runnable);
-		t.start();
-	}
-
 	private boolean isOnline() {
 	    ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo nInfo = cm.getActiveNetworkInfo();
@@ -295,19 +167,17 @@ public class TrackerActivity extends Activity {
 	    }
 	}
 
-//	private void showToast2(final String mess){
-//		runOnUiThread(new Runnable() {
-//			@Override
-//			public void run() {
-//				Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
-//			}
-//		});
-//	}
-
-	private void showToast(final String mess){
-		Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
+	public void showToast(final String mess){
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
+			}
+		});
 	}
-	
-	
 
+//	public void showToast(final String mess){
+//		Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
+//	}
+		
 }
