@@ -514,7 +514,7 @@ namespace common
                 return answer;
             }
 
-            QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;            
+            QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
             QSharedPointer<Channel> realChannel; // Null pointer
             QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
             for(int i=0; i<currentChannels.size(); i++)

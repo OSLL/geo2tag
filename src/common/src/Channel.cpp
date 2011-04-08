@@ -43,16 +43,14 @@
 
     Channel::Channel(const QString &name,
                      const QString &description,
-                     const QString &url,
-                     const QString &timeSlot):
+                     const QString &url):
                             m_name(name),
                             m_description(description),
                             m_url(url),
                             m_isDisplayed(true)
     {
         m_activeRadius = 5.0; // 5 km
-        m_timeSlot = QSharedPointer<TimeSlot>(NULL);
-        m_timeSlot->setSlot(timeSlot);
+        m_timeSlot = QSharedPointer<TimeSlot>(NULL);       
     }
 
     const QString& Channel::getDescription() const

@@ -51,8 +51,7 @@
     public:
         JsonChannel(const QString &name,
                 const QString &description,
-                const QString &url="",
-                const QString &timeSlot="");
+                const QString &url="");
 
         qlonglong getId() const;
 

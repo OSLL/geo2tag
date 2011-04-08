@@ -6,6 +6,8 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
+#include "JsonTimeSlot.h"
+
 
 SetTimeSlotRequestJSON::SetTimeSlotRequestJSON()
 {
@@ -40,8 +42,9 @@ void SetTimeSlotRequestJSON::parseJson(const QByteArray &data)
     QString channel = result["channel"].toString();
     QString timeSlot = result["timeSlot"].toString();
 
-    m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));
-    m_channelsContainer->push_back(QSharedPointer<Channel> (new JsonChannel(channel, "unknown", "unknown", timeSlot)));
+    m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));    
+    m_channelsContainer->push_back(QSharedPointer<Channel> (new JsonChannel(channel, "unknown", "unknown")));
+    m_channelsContainer->at(0)->setTimeSlot(QSharedPointer<TimeSlot>(new JsonTimeSlot(timeSlot)));
 }
 
 

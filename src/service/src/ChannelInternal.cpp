@@ -48,9 +48,8 @@
   DbChannel::DbChannel(qlonglong id,
                    const QString &name,
                    const QString &description,
-                   const QString &url,
-                   const QString &timeSlot):
-                   Channel(name, description, url, timeSlot), m_id(id)
+                   const QString &url):
+                   Channel(name, description, url), m_id(id)
   {
   }
 

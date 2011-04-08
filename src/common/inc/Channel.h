@@ -46,7 +46,7 @@
 #include <QSharedPointer>
 
 #include "ConcurrentVector.h"
-#include "TimeSlot.h"           //!!!my_change
+#include "TimeSlot.h"
 
 class Channel: public QObject
 {
@@ -58,10 +58,10 @@ class Channel: public QObject
 
     bool m_isDisplayed; //!< Displayed on the UI
 
-    QSharedPointer<TimeSlot> m_timeSlot; //!!!my_change
+    QSharedPointer<TimeSlot> m_timeSlot;
 
 protected:
-    Channel(const QString &name, const QString &description, const QString& url="", const QString &timeSlot="");
+    Channel(const QString &name, const QString &description, const QString& url="");
 
 public:
 
@@ -83,8 +83,8 @@ public:
     bool isDisplayed() const;
     void setDisplayed(bool);
 
-    void setTimeSlot(QSharedPointer<TimeSlot> timeSlot); //!!!my_change
-    QSharedPointer<TimeSlot> getTimeSlot() const;       //!!!my_change
+    void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
+    QSharedPointer<TimeSlot> getTimeSlot() const;
 
     virtual ~Channel();
 }; // class Channel

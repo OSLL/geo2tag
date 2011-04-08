@@ -67,8 +67,8 @@ void UpdateThread::run()
             if(!m_dataChannelsMap->contains(channel, tag))
             {
                 syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i,m_tagsContainer->size(),
-                       tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(),
-                       channel->getName().toStdString().c_str());
+                tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(),
+                channel->getName().toStdString().c_str());
                 m_dataChannelsMap->insert(channel, tag);
             }
         }

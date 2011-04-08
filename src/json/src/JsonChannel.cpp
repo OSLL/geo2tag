@@ -46,9 +46,8 @@ static qlonglong globalChannelId = 0;
 
 JsonChannel::JsonChannel(const QString &name,
                          const QString &description,
-                         const QString &url,
-                         const QString &timeSlot):
-Channel(name, description, url, timeSlot), m_id(globalChannelId++)
+                         const QString &url):
+Channel(name, description, url), m_id(globalChannelId++)
 {
 }
 
