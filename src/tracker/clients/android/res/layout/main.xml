@@ -10,7 +10,11 @@
 	    android:layout_height="wrap_content" 
 	    android:text="test"
 	/>    
-    
+	<Button android:id="@+id/settingsButton"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:text="test"
+	/>    
 	<TextView android:id="@+id/TextField"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 

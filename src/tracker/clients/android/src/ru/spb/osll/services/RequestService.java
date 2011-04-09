@@ -10,6 +10,7 @@ import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.IRequest.IResponse;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.IBinder;
 import android.util.Log;
@@ -28,16 +29,26 @@ public class RequestService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		Log.v(TrackerActivity.LOG, "request service create");
+	
+		getTestPreferences();
 	}
 
+	// TODO test 
+	private void getTestPreferences(){
+		SharedPreferences settings = getSharedPreferences(TrackerActivity.LOG, 0);
+        String login = settings.getString("Login", " sasas ");
+        String password = settings.getString("Password"," ");
+        Log.v(TrackerActivity.LOG, "settings : " + login +  " " + password);
+	}
+
+	
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		Log.v(TrackerActivity.LOG, "request service start");
-		
+
 		setServiceStatus(true);
 		//login();
-		
 		new Thread(loginRunnable).start();
 	}
 
@@ -81,7 +92,7 @@ public class RequestService extends Service {
 			}
 		} else {
 			Log.v(TrackerActivity.LOG, "login fail");
-			// TODO login fail
+			onFail("login fail");
 		}
 	}
 
@@ -149,10 +160,10 @@ public class RequestService extends Service {
 		}
 	}
 	
-	
 	private void onFail(String mess){
-		//TODO
-//		TrackerActivity.Instance.showToast("login fail");
+		if (TrackerActivity.Instance != null){
+			TrackerActivity.Instance.showToast("login fail");
+		}
 	}
 	
 }

@@ -2,4 +2,20 @@
 <resources>
     <string name="hello">Hello World, TrackerActivity!</string>
     <string name="app_name">BusTracker</string>
+    
+    
+<!-- settings -->
+   	<string name="login">Login</string>
+   	<string name="password">Password</string>
+   	<string name="channel">Channel</string>
+   	<string name="key">Key</string>
+   	<string name="server_address">Geo2Tag server</string>
+   	<string name="time_request">Time between ticks</string>
+	<string name="radius">Radius</string>
+	<string name="uri">Uri</string>
+
+<!-- buttons -->
+	<string name="btnOk">Ok</string>
+	<string name="btnCancel">Cancel</string>
+	
 </resources>

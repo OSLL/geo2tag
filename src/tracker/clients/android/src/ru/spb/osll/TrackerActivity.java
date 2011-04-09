@@ -8,12 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.json.JSONObject;
-
-import ru.spb.osll.json.JsonApplyChannelRequest;
-import ru.spb.osll.json.JsonApplyMarkRequest;
-import ru.spb.osll.json.JsonBase;
-import ru.spb.osll.json.IRequest.IResponse;
+import ru.spb.osll.preferences.SettingsActivity;
 import ru.spb.osll.services.LocationService;
 import ru.spb.osll.services.RequestService;
 import android.app.Activity;
@@ -22,8 +17,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -40,7 +34,6 @@ public class TrackerActivity extends Activity {
 //	private Logger m_loggerGetLocation = new Logger(SD_CARD_PATH + "/loggerGetLocation.txt");
 	
 	TextView logView;
-
 	public static TrackerActivity Instance;
 	
 	@Override
@@ -51,6 +44,8 @@ public class TrackerActivity extends Activity {
 			
 		initialization();
 		Instance = this;
+		
+		setTrackerPreferences();
 	}
 
 	@Override
@@ -75,6 +70,15 @@ public class TrackerActivity extends Activity {
             	startTracker();
             }
         });
+
+		final Button settingsBtn= (Button) findViewById(R.id.settingsButton);
+		settingsBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
+			}
+		});
+		
 	}
 	
 	private static final int ID = 1;
@@ -180,4 +184,16 @@ public class TrackerActivity extends Activity {
 //		Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
 //	}
 		
+	
+	// TODO test
+	private void setTrackerPreferences(){
+//	      SharedPreferences settings = getSharedPreferences(LOG, 0);
+//	      SharedPreferences.Editor editor = settings.edit();
+//	      editor.putString("Login", "bac1ca");
+//	      editor.putString("Password", "123456");
+//	 
+//	      /* Сохраняем данные. Если не выполнить - ничего не сохранится =) */
+//	      editor.commit();
+	}
+	
 }
