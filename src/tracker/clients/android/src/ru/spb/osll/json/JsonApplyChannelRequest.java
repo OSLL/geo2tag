@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ru.spb.osll.services.RequestService;
+
 public class JsonApplyChannelRequest extends JsonRequest implements IRequest.IApplyChannel {
 
 	private String m_authToken;
@@ -33,6 +35,6 @@ public class JsonApplyChannelRequest extends JsonRequest implements IRequest.IAp
 		jsonObject.put(DESCRIPTION, m_description);
 		jsonObject.put(URL, m_url);
 		jsonObject.put(ACTIVE_RADIUS, m_activeRadius);
-		return JsonBase.instance().doRequest(jsonObject, new URI(REQUEST));
+		return JsonBase.instance().doRequest(jsonObject, new URI(RequestService.SERVER + REQUEST));
 	}	
 }

@@ -9,11 +9,12 @@ import org.json.JSONObject;
 
 import ru.spb.osll.services.RequestService;
 
-public class JsonLoginRequest extends JsonRequest implements IRequest.ILogin {
+public class JsonAddUserRequest extends JsonRequest implements IRequest.IAddUser {
+
 	private String m_login;
 	private String m_password;
 	
-	public JsonLoginRequest(String login, String password){
+	public JsonAddUserRequest(String login, String password){
 		m_login = login;
 		m_password = password;
 	}
@@ -28,4 +29,3 @@ public class JsonLoginRequest extends JsonRequest implements IRequest.ILogin {
 	}
 
 }
-

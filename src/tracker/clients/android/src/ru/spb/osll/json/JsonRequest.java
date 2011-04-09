@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-abstract class JsonRequest {
+public abstract class JsonRequest {
 	public static String JSON_LOG = "JsonLog";
 	
 	public JSONObject doRequest(){

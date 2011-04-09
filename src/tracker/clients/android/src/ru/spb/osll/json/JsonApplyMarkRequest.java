@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ru.spb.osll.services.RequestService;
+
 public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IApplyMark {
 	private String m_authToken;
 	private String m_channel;
@@ -42,6 +44,6 @@ public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IAppl
 		jsonObject.put(LATITUDE, m_latitude);
 		jsonObject.put(LONGITUDE, m_longitude);
 		jsonObject.put(TIME, m_time);
-		return JsonBase.instance().doRequest(jsonObject, new URI(REQUEST));
+		return JsonBase.instance().doRequest(jsonObject, new URI(RequestService.SERVER + REQUEST));
 	}
 }

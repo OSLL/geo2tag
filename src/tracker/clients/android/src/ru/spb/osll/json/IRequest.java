@@ -4,14 +4,21 @@ public interface IRequest {
 	public String BASE_URL = "http://tracklife.ru/service"; // FIXME
 
 	public interface ILogin{
-		String REQUEST = BASE_URL + "?query=login";
+		String REQUEST = "?query=login";
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";
 	}
-	
+
+	public interface IAddUser{
+		String REQUEST = "?query=addUser";
+		
+		String LOGIN = "login";
+		String PASSWORD = "password";
+	}
+
 	public interface IApplyChannel{
-		String REQUEST = BASE_URL + "?query=addChannel";
+		String REQUEST = "?query=addChannel";
 		
 		String AUTH_TOKEN = "auth_token";
 		String NAME = "name";
@@ -21,7 +28,7 @@ public interface IRequest {
 	}
 
 	public interface IApplyMark{
-		String REQUEST = BASE_URL + "?query=apply";
+		String REQUEST = "?query=apply";
 
 		String AUTH_TOKEN = "auth_token";
 		String CHANNEL = "channel";
