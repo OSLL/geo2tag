@@ -8,6 +8,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.json.JSONObject;
+
+import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.SettingsActivity;
 import ru.spb.osll.services.LocationService;
@@ -83,6 +86,15 @@ public class TrackerActivity extends Activity {
 				startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
 			}
 		});
+		
+		final Button jsonBtn= (Button) findViewById(R.id.testJsonButton);
+		jsonBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				TestJson();
+			}
+		});
+		
 		
 	}
 	
@@ -188,4 +200,29 @@ public class TrackerActivity extends Activity {
 //	public void showToast(final String mess){
 //		Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
 //	}
+
+
+	private void TestJson(){
+		/*
+		 * "{ \"auth_token\" : \"KKKKKKKKKK\", 
+		 * \"channel\" : \"My channel\",
+		 *  \"description\" : \"this tag was generated automaticaly by tracker application\",
+		 *   \"latitude\" : 60.0,
+		 *   \"link\" : \"unknown\", 
+		 *   \"longitude\" : 30.0, 
+		 *   \"time\" : \"04 03 2011 15:33:47.630\",
+		 *    \"title\" : \"tracker's tag\" }"
+		 */
+		
+//		DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
+//		Log.v(LOG, "date: " + dateFormat.format(new Date()));
+//		
+//		
+//		JSONObject response = new JsonApplyMarkRequest("KKKKKKKKKK", "Test channel",
+//				"tracker's tag", "unknown",
+//				"this tag was generated automaticaly by tracker application", 60.0, 30.0,
+//				dateFormat.format(new Date())).doRequest();
+//		Log.v(LOG, "s: " + response.toString());
+		
+	}
 }

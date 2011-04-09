@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ru.spb.osll.services.RequestService;
+import android.util.Log;
 
 public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IApplyMark {
 	private String m_authToken;
@@ -44,6 +45,8 @@ public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IAppl
 		jsonObject.put(LATITUDE, m_latitude);
 		jsonObject.put(LONGITUDE, m_longitude);
 		jsonObject.put(TIME, m_time);
-		return JsonBase.instance().doRequest(jsonObject, new URI(RequestService.SERVER + REQUEST));
+		Log.v(JSON_LOG, jsonObject.toString());
+		
+		return JsonBase.instance().doRequest(jsonObject, new URI(IRequest.BASE_URL + REQUEST)); // TODO
 	}
 }

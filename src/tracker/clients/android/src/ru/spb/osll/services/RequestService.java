@@ -19,6 +19,7 @@ import ru.spb.osll.json.JsonRequest;
 import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.Settings.ITrackerSettings;
+import ru.spb.osll.utils.TrackerUtil;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
@@ -163,7 +164,7 @@ public class RequestService extends Service {
 	}
 
 	
-	private static final int DELAY = 5000; 
+	private static final int DELAY = 10000; 
 	Runnable markRunnable = new Runnable() {
 		@Override
 		public void run() {
@@ -180,12 +181,12 @@ public class RequestService extends Service {
 
 	private void applyMark(){
 		Location location = LocationService.getLocation(this);
-		if (location == null)
-			return;
-		Log.v(TrackerActivity.LOG, "location " + location);
+		// FIXME
+//		if (location == null)
+//			return;
+//		Log.v(TrackerActivity.LOG, "location " + location);
 		
 		String channel = new Settings(this).getPreferences().getString(ITrackerSettings.CHANNEL, "Test channel");
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/dd/MM/HH/mm/ss");
 		
 		JSONObject JSONResponse;
 		JSONResponse = new JsonApplyMarkRequest(
@@ -194,9 +195,9 @@ public class RequestService extends Service {
 				"title",
 				"unknown",
 				"this tag was generated automaticaly by tracker application",
-				location.getLatitude(),
-				location.getLongitude(),
-				dateFormat.format(new Date())).doRequest();
+				/*location.getLatitude()*/ 30.0,	// FIXME
+				/*location.getLongitude()*/60.0,	// FIXME
+				TrackerUtil.getTime(new Date())).doRequest();
 		if (JSONResponse != null){
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
@@ -210,13 +211,4 @@ public class RequestService extends Service {
 		}
 	}
 	
-	
-	private JsonRequest m_loginRequest = new JsonRequest() {
-		@Override
-		protected JSONObject doRequestInternal() 
-			throws JSONException, IOException, URISyntaxException {
-		
-			return null;
-		}
-	};	
 }

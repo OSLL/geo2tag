@@ -20,8 +20,6 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ru.spb.osll.json.IRequest.IResponse;
-
 public class JsonBase {
     private final int TIMEOUT_MILLISEC = 20000; // = 10 seconds
     private HttpClient m_httpClient;

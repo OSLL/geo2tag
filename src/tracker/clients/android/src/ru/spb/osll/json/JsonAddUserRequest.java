@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import ru.spb.osll.services.RequestService;
 
 public class JsonAddUserRequest extends JsonRequest implements IRequest.IAddUser {
@@ -25,6 +27,7 @@ public class JsonAddUserRequest extends JsonRequest implements IRequest.IAddUser
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(LOGIN, m_login);
 		jsonObject.put(PASSWORD, m_password);
+		Log.v(JSON_LOG, jsonObject.toString());
 		return JsonBase.instance().doRequest(jsonObject, new URI(RequestService.SERVER + REQUEST));
 	}
 

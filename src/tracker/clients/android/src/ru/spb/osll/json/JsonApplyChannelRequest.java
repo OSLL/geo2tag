@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import ru.spb.osll.services.RequestService;
 
 public class JsonApplyChannelRequest extends JsonRequest implements IRequest.IApplyChannel {
@@ -35,6 +37,7 @@ public class JsonApplyChannelRequest extends JsonRequest implements IRequest.IAp
 		jsonObject.put(DESCRIPTION, m_description);
 		jsonObject.put(URL, m_url);
 		jsonObject.put(ACTIVE_RADIUS, m_activeRadius);
+		Log.v(JSON_LOG, jsonObject.toString());
 		return JsonBase.instance().doRequest(jsonObject, new URI(RequestService.SERVER + REQUEST));
 	}	
 }
