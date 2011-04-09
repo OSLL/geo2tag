@@ -4,6 +4,7 @@ import ru.spb.osll.R;
 import ru.spb.osll.preferences.Settings.ITrackerSettings;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -47,13 +48,19 @@ public class SettingsActivity extends Activity implements ITrackerSettings {
 	}
 	
 	private void savePreferences(){
-		// TODO
+		Editor prefEditor = new Settings(this).getPreferencesEditor();
+		saveField(LOGIN, R.id.edit_login, prefEditor);
+		saveField(PASSWORD, R.id.edit_password, prefEditor);
+		saveField(CHANNEL, R.id.edit_channel, prefEditor);
+		saveField(CHANNEL_KEY, R.id.edit_key, prefEditor);
+		saveField(SERVER_URL, R.id.edit_server_address, prefEditor);
+		prefEditor.commit();
 	}
 	
 	private Runnable m_saveToast = new Runnable() {
 		@Override
 		public void run() {
-			Toast.makeText(SettingsActivity.this, "sasasa", Toast.LENGTH_SHORT).show();
+			Toast.makeText(SettingsActivity.this, "Settings saved!", Toast.LENGTH_SHORT).show();
 		}
 	};
 
@@ -62,4 +69,10 @@ public class SettingsActivity extends Activity implements ITrackerSettings {
 		String str = settings.getString(key, "?????");
 		((EditText) findViewById(idField)).setText(str);
 	}
+
+	private void saveField(String key, int idField, Editor prefEditor){
+		String str = ((EditText) findViewById(idField)).getText().toString().trim();
+		prefEditor.putString(key, str);
+	}
+
 }
