@@ -50,7 +50,6 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/edit_channel"
-				android:password="true"
 				android:singleLine="true"
 				android:paddingBottom="20px"/>
 
@@ -63,7 +62,6 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/edit_key"
-				android:password="true"
 				android:singleLine="true"
 				android:paddingBottom="20px"/>
 
@@ -76,7 +74,6 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/edit_server_address"
-				android:password="true"
 				android:singleLine="true"
 				android:paddingBottom="20px"/>
 

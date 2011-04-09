@@ -1,14 +1,16 @@
 package ru.spb.osll.preferences;
 
 import ru.spb.osll.R;
+import ru.spb.osll.preferences.Settings.ITrackerSettings;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
-public class SettingsActivity extends Activity {
-
+public class SettingsActivity extends Activity implements ITrackerSettings {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,11 @@ public class SettingsActivity extends Activity {
 	}
 	
 	private void initializeFields(){
-		// TODO
+		initField(LOGIN, R.id.edit_login);
+		initField(PASSWORD, R.id.edit_password);
+		initField(CHANNEL, R.id.edit_channel);
+		initField(CHANNEL_KEY, R.id.edit_key);
+		initField(SERVER_URL, R.id.edit_server_address);
 	}
 	
 	private void savePreferences(){
@@ -50,5 +56,10 @@ public class SettingsActivity extends Activity {
 			Toast.makeText(SettingsActivity.this, "sasasa", Toast.LENGTH_SHORT).show();
 		}
 	};
-	
+
+	private void initField(String key, int idField){
+		SharedPreferences settings = new Settings(this).getPreferences();
+		String str = settings.getString(key, "?????");
+		((EditText) findViewById(idField)).setText(str);
+	}
 }

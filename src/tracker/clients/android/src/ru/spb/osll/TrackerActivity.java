@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.SettingsActivity;
 import ru.spb.osll.services.LocationService;
 import ru.spb.osll.services.RequestService;
@@ -45,7 +46,11 @@ public class TrackerActivity extends Activity {
 		initialization();
 		Instance = this;
 		
-		setTrackerPreferences();
+		
+		Settings settings = new Settings(this);
+		if (settings.isSettingsEmpty()){
+			settings.setDefaultSettrings();
+		}
 	}
 
 	@Override
@@ -183,17 +188,4 @@ public class TrackerActivity extends Activity {
 //	public void showToast(final String mess){
 //		Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
 //	}
-		
-	
-	// TODO test
-	private void setTrackerPreferences(){
-//	      SharedPreferences settings = getSharedPreferences(LOG, 0);
-//	      SharedPreferences.Editor editor = settings.edit();
-//	      editor.putString("Login", "bac1ca");
-//	      editor.putString("Password", "123456");
-//	 
-//	      /* Сохраняем данные. Если не выполнить - ничего не сохранится =) */
-//	      editor.commit();
-	}
-	
 }
