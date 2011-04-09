@@ -10,10 +10,12 @@ import org.json.JSONObject;
 public class JsonLoginRequest extends JsonRequest implements IRequest.ILogin {
 	private String m_login;
 	private String m_password;
+	private String m_addUser;
 	
-	public JsonLoginRequest(String login, String password){
+	public JsonLoginRequest(String login, String password, boolean addUser){
 		m_login = login;
 		m_password = password;
+		m_addUser = addUser;
 	}
 
 	@Override
