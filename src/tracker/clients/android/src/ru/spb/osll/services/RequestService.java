@@ -8,9 +8,10 @@ import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.IRequest.IResponse;
+import ru.spb.osll.preferences.Settings;
+import ru.spb.osll.preferences.Settings.ITrackerSettings;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.IBinder;
 import android.util.Log;
@@ -24,31 +25,18 @@ public class RequestService extends Service {
 		TRAKER_STATUS = status;
 	}
 	
-	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Log.v(TrackerActivity.LOG, "request service create");
-	
-		getTestPreferences();
 	}
 
-	// TODO test 
-	private void getTestPreferences(){
-		SharedPreferences settings = getSharedPreferences(TrackerActivity.LOG, 0);
-        String login = settings.getString("Login", " sasas ");
-        String password = settings.getString("Password"," ");
-        Log.v(TrackerActivity.LOG, "settings : " + login +  " " + password);
-	}
-
-	
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		Log.v(TrackerActivity.LOG, "request service start");
 
 		setServiceStatus(true);
-		//login();
 		new Thread(loginRunnable).start();
 	}
 
@@ -71,11 +59,15 @@ public class RequestService extends Service {
 		}
 	};
 	
-	private final int ATTEMPT = 1;
+	private final int ATTEMPT = 5;
 	private void login(){
+		Settings settings = new Settings(this);
+		String login = settings.getPreferences().getString(ITrackerSettings.LOGIN, "Makr");
+		String password = settings.getPreferences().getString(ITrackerSettings.PASSWORD, "test");
+		
 		JSONObject JSONResponse = null;
 		for(int i = 0; i < ATTEMPT; i++){
-			JSONResponse = new JsonLoginRequest("Mark", "test").doRequest();
+			JSONResponse = new JsonLoginRequest(login, password).doRequest();
 			if (JSONResponse != null) 
 				break;
 		}
