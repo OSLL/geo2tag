@@ -9,23 +9,22 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import ru.spb.osll.services.RequestService;
-
 public class JsonApplyChannelRequest extends JsonRequest implements IRequest.IApplyChannel {
-
 	private String m_authToken;
 	private String m_name;
 	private String m_description;
 	private String m_url;
 	private Integer m_activeRadius;
+	private String m_serverUrl;
 	
 	public JsonApplyChannelRequest(String authToken, String name, 
-			String description, String url, Integer activeRadius){
+			String description, String url, Integer activeRadius, String serverUrl){
 		m_authToken = authToken;
 		m_name = name;
 		m_description = description;
 		m_url = url;
 		m_activeRadius = activeRadius;
+		m_serverUrl = serverUrl;
 	}
 	
 	@Override
@@ -38,6 +37,6 @@ public class JsonApplyChannelRequest extends JsonRequest implements IRequest.IAp
 		jsonObject.put(URL, m_url);
 		jsonObject.put(ACTIVE_RADIUS, m_activeRadius);
 		Log.v(JSON_LOG, jsonObject.toString());
-		return JsonBase.instance().doRequest(jsonObject, new URI(RequestService.SERVER + REQUEST));
+		return JsonBase.instance().doRequest(jsonObject, new URI(m_serverUrl + REQUEST));
 	}	
 }

@@ -1,22 +1,15 @@
 package ru.spb.osll.services;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import ru.spb.osll.R;
 import ru.spb.osll.TrackerActivity;
 import ru.spb.osll.json.JsonAddUserRequest;
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonLoginRequest;
-import ru.spb.osll.json.JsonRequest;
 import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.Settings.ITrackerSettings;
@@ -29,17 +22,14 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class RequestService extends Service {
-	
-	public static String SERVER; // FIXME bad smells in code
-	private String m_authToken;
-
 	// get in settings
 	private String m_login;
 	private String m_password;
 	private String m_channel;
-	private String m_channelKey;
 	private String m_serverUrl;
 	
+	private String m_authToken;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -50,9 +40,8 @@ public class RequestService extends Service {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		Log.v(TrackerActivity.LOG, "request service start");
+
 		getSettingsValues();
-		
-		SERVER = new Settings(this).getPreferences().getString(ITrackerSettings.SERVER_URL, ""); // TODO bad smells in code
 		setServiceStatus(true);
 		new Thread(loginRunnable).start();
 	}
@@ -74,7 +63,7 @@ public class RequestService extends Service {
 		m_login = settings.getString(ITrackerSettings.LOGIN, "");
 		m_password = settings.getString(ITrackerSettings.PASSWORD, "");
 		m_channel = settings.getString(ITrackerSettings.CHANNEL, "");
-		m_channelKey = settings.getString(ITrackerSettings.CHANNEL_KEY, "");
+		//m_channelKey = settings.getString(ITrackerSettings.CHANNEL_KEY, "");
 		m_serverUrl = settings.getString(ITrackerSettings.SERVER_URL, "");
 	}
 	
@@ -89,7 +78,7 @@ public class RequestService extends Service {
 	private void login(){
 		JSONObject JSONResponse = null;
 		for(int i = 0; i < ATTEMPT; i++){
-			JSONResponse = new JsonLoginRequest(m_login, m_password).doRequest();
+			JSONResponse = new JsonLoginRequest(m_login, m_password, m_serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
 		}
@@ -98,20 +87,15 @@ public class RequestService extends Service {
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
 			m_authToken = JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN);
+
+			showMess("login:" + status + ","  + statusDescription, false);
 			if(status.equals(IResponse.OK_STATUS)){
-				Log.v(TrackerActivity.LOG, "login status : " + statusDescription);
-				TrackerUtil.appendToLogView("login status : " + status);
-				TrackerUtil.appendToLogView("login statusDescription : " + statusDescription);
 				applyChannel();
 			} else {
-				Log.v(TrackerActivity.LOG, "login status : " + statusDescription);
-				TrackerUtil.appendToLogView("login status : " + status);
-				TrackerUtil.appendToLogView("login statusDescription : " + statusDescription);
 				addUser();
 			}
 		} else {
-			Log.v(TrackerActivity.LOG, "login fail");
-			TrackerUtil.showToast("login fail");
+			onFail(FAIL_MESS_CONNECTION_TO_SERVER);
 		}
 	}
 	
@@ -120,7 +104,7 @@ public class RequestService extends Service {
 		
 		JSONObject JSONResponse = null;
 		for(int i = 0; i < ATTEMPT; i++){
-			JSONResponse = new JsonAddUserRequest(m_login, m_password).doRequest();
+			JSONResponse = new JsonAddUserRequest(m_login, m_password, m_serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
 		}
@@ -128,52 +112,39 @@ public class RequestService extends Service {
 		if (JSONResponse != null) {
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
+			showMess("add user:" + status + ","  + statusDescription, false);
 			if(status.equals(IResponse.OK_STATUS)){
-				Log.v(TrackerActivity.LOG, "addUser status : " + statusDescription);
-				TrackerUtil.appendToLogView("addUser status : " + status);
-				TrackerUtil.appendToLogView("addUser statusDescription : " + statusDescription);
 				login();
 			} else {
-				Log.v(TrackerActivity.LOG, "addUser status : " + statusDescription);
-				TrackerUtil.appendToLogView("addUser status : " + status);
-				TrackerUtil.appendToLogView("addUser statusDescription : " + statusDescription);
+				onFail("add user fail " + statusDescription);
 			}
 		} else {
-			Log.v(TrackerActivity.LOG, "addUser fail");
+			onFail(FAIL_MESS_CONNECTION_TO_SERVER);
 		}
 	}
 
-	// TODO
 	private void applyChannel() {
-		Log.v(TrackerActivity.LOG, "applyChannel()");
-				
 		JSONObject JSONResponse = null;
 		for (int i = 0; i < ATTEMPT; i++){
 			JSONResponse = new JsonApplyChannelRequest(m_authToken, m_channel,
-					"Geo2Tag tracker channel", "http://osll.spb.ru/", 3000)
+					"Geo2Tag tracker channel", "http://osll.spb.ru/", 3000, m_serverUrl)
 					.doRequest();
 			if(JSONResponse != null)
 				break;
 		}
 
 		if(JSONResponse != null){
-			Log.v(TrackerActivity.LOG, "JSonResponse = " + JSONResponse.toString());
-			
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
+			showMess("apply channel:" + status + ","  + statusDescription, false);	
 			if (status.equals(IResponse.OK_STATUS) ||
 					statusDescription.equals(IResponse.CHANNEL_EXTSTS)){
-				Log.v(TrackerActivity.LOG, "apply channel status : " + statusDescription);
-				TrackerUtil.appendToLogView("apply channel status status : " + status);
-				TrackerUtil.appendToLogView("apply channel status statusDescription : " + statusDescription);
 				new Thread(markRunnable).start();
 			} else {
-				TrackerUtil.appendToLogView("apply channel status status : " + status);
-				TrackerUtil.appendToLogView("apply channel status statusDescription : " + statusDescription);
+				onFail("apply channel fail " + statusDescription);
 			}
 		} else {
-			Log.v(TrackerActivity.LOG, "apply channel fail");
-			// TODO apply channel fail
+			onFail(FAIL_MESS_CONNECTION_TO_SERVER);
 		}
 	}
 
@@ -194,12 +165,17 @@ public class RequestService extends Service {
 	};
 
 	private void applyMark(){
+		double latitude = 30.0;
+		double longitude = 60.0;
+	
 		Location location = LocationService.getLocation(this);
-		// FIXME
-//		if (location == null)
-//			return;
-//		Log.v(TrackerActivity.LOG, "location " + location);
-				
+		if (location == null){
+			//return; //FIXME
+		} else {
+			latitude = location.getLatitude();
+			longitude = location.getLongitude();
+		}
+		
 		JSONObject JSONResponse;
 		JSONResponse = new JsonApplyMarkRequest(
 				m_authToken,
@@ -207,17 +183,36 @@ public class RequestService extends Service {
 				"title",
 				"unknown",
 				"this tag was generated automaticaly by tracker application",
-				/*location.getLatitude()*/ 30.0,	// FIXME
-				/*location.getLongitude()*/60.0,	// FIXME
-				TrackerUtil.getTime(new Date())).doRequest();
+				latitude,	
+				longitude,	
+				TrackerUtil.getTime(new Date()), 
+				m_serverUrl).doRequest();
 		if (JSONResponse != null){
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
-			Log.v(TrackerActivity.LOG, "apply mark status : " + statusDescription);
-
-			TrackerUtil.appendToLogView("apply mark status : " + status);
-			TrackerUtil.appendToLogView("apply mark status statusDescription : " + statusDescription);
-		}
+			if (status.equals(IResponse.OK_STATUS)){
+				showMess("tick:{" + latitude + "," + longitude + "}", true);
+			} else {
+				showMess("apply mark:" + status + "," + statusDescription, false);
+			}
+		} 
+	}
+	
+	private void showMess(String mess, boolean isShowToast){
+		Log.v(TrackerActivity.LOG, mess);
+		TrackerUtil.appendToLogView(mess);
+		if (isShowToast)
+			TrackerUtil.showToast(mess);
+	}
+	
+	private static String FAIL_MESS_CONNECTION_TO_SERVER = "fail connection to server...";
+	private void onFail(String mess){
+		String failMess = "FAIL: " + mess;
+		Log.v(TrackerActivity.LOG, failMess);
+		TrackerUtil.showToast(failMess);
+		TrackerUtil.appendToLogView(failMess);
+		TrackerUtil.disnotify(this);
+		setServiceStatus(false);
 	}
 	
 	private static boolean TRAKER_STATUS = false;

@@ -19,9 +19,10 @@ public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IAppl
 	private double m_latitude;
 	private double m_longitude;
 	private String m_time;
+	private String m_serverUrl;
 	
 	public JsonApplyMarkRequest(String authToken, String channel, String title, String link,
-			String description, double latitude, double longitude, String time){
+			String description, double latitude, double longitude, String time, String serverUrl){
 		m_authToken = authToken;
 		m_channel = channel;
 		m_title = title;
@@ -30,6 +31,7 @@ public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IAppl
 		m_latitude = latitude;
 		m_longitude = longitude;
 		m_time = time;
+		m_serverUrl = serverUrl;
 	}
 	
 	
@@ -47,6 +49,6 @@ public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IAppl
 		jsonObject.put(TIME, m_time);
 		Log.v(JSON_LOG, jsonObject.toString());
 		
-		return JsonBase.instance().doRequest(jsonObject, new URI(IRequest.BASE_URL + REQUEST)); // TODO
+		return JsonBase.instance().doRequest(jsonObject, new URI(m_serverUrl + REQUEST)); // TODO
 	}
 }

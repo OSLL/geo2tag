@@ -87,28 +87,5 @@ public class TrackerUtil {
 				m_logger.close();
 		}
 	}
-	
-	private void TestJson(){
-		/*
-		 * "{ \"auth_token\" : \"KKKKKKKKKK\", 
-		 * \"channel\" : \"My channel\",
-		 *  \"description\" : \"this tag was generated automaticaly by tracker application\",
-		 *   \"latitude\" : 60.0,
-		 *   \"link\" : \"unknown\", 
-		 *   \"longitude\" : 30.0, 
-		 *   \"time\" : \"04 03 2011 15:33:47.630\",
-		 *    \"title\" : \"tracker's tag\" }"
-		 */
-		
-//		DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
-//		Log.v(LOG, "date: " + dateFormat.format(new Date()));
-//		
-//		
-//		JSONObject response = new JsonApplyMarkRequest("KKKKKKKKKK", "Test channel",
-//				"tracker's tag", "unknown",
-//				"this tag was generated automaticaly by tracker application", 60.0, 30.0,
-//				dateFormat.format(new Date())).doRequest();
-//		Log.v(LOG, "s: " + response.toString());
-	}
 
 }

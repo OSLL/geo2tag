@@ -21,6 +21,7 @@ public class TrackerActivity extends Activity {
 	public static String LOG = "Tracker";
 	
 	TextView m_logView;
+	Button m_btnService;
 	public static TrackerActivity Instance;
 	
 	@Override
@@ -47,14 +48,14 @@ public class TrackerActivity extends Activity {
 	private void initialization(){
 		Log.v(LOG, "TrackerActivity - initialization");
 		
-		final Button btnService = (Button) findViewById(R.id.TestButton);
+		m_btnService = (Button) findViewById(R.id.TestButton);
 		if (RequestService.isActive()){
-			btnService.setText("STOP TRACKER");
+			m_btnService.setText("STOP TRACKER");
 		} else {
-			btnService.setText("START TRACKER");
+			m_btnService.setText("START TRACKER");
 		}
 		
-		btnService.setOnClickListener(new View.OnClickListener() {
+		m_btnService.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	startTracker();
             }
@@ -72,23 +73,23 @@ public class TrackerActivity extends Activity {
 		jsonBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//
+				// TODO
 			}
 		});
-		
-		
 	}
 	
 	private void startTracker(){
 		try {
 			if (RequestService.isActive()){
+				TrackerUtil.disnotify(this);
+				m_btnService.setText("START");
 				stopService(new Intent(this, RequestService.class));
 				stopService(new Intent(this, LocationService.class));
-				TrackerUtil.disnotify(this);
 			} else if (isOnline()){
+				TrackerUtil.notify(this);
+				m_btnService.setText("STOP");
 				startService(new Intent(this, RequestService.class));
 				startService(new Intent(this, LocationService.class));
-				TrackerUtil.notify(this);
 			}
 		} catch (Exception e){
 			m_logView.append("\n" + e.getMessage());
@@ -147,6 +148,5 @@ public class TrackerActivity extends Activity {
 			}
 		});
 	}
-
 	
 }
