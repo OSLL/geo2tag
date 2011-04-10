@@ -2,6 +2,7 @@ package ru.spb.osll.preferences;
 
 import ru.spb.osll.R;
 import ru.spb.osll.preferences.Settings.ITrackerSettings;
+import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -60,7 +61,7 @@ public class SettingsActivity extends Activity implements ITrackerSettings {
 	private Runnable m_saveToast = new Runnable() {
 		@Override
 		public void run() {
-			Toast.makeText(SettingsActivity.this, "Settings saved!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(SettingsActivity.this, TrackerUtil.MESS_SETTINGS_SAVED, Toast.LENGTH_SHORT).show();
 		}
 	};
 

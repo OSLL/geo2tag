@@ -116,7 +116,7 @@ public class RequestService extends Service {
 			if(status.equals(IResponse.OK_STATUS)){
 				login();
 			} else {
-				onFail("add user fail " + statusDescription);
+				onFail(TrackerUtil.MESS_FAIL_ADDUSER + statusDescription);
 			}
 		} else {
 			onFail(TrackerUtil.MESS_FAIL_CONNECTION_TO_SERVER);
@@ -141,14 +141,14 @@ public class RequestService extends Service {
 					statusDescription.equals(IResponse.CHANNEL_EXTSTS)){
 				new Thread(markRunnable).start();
 			} else {
-				onFail("apply channel fail " + statusDescription);
+				onFail(TrackerUtil.MESS_FAIL_APPLY_CHANNEL + statusDescription);
 			}
 		} else {
 			onFail(TrackerUtil.MESS_FAIL_CONNECTION_TO_SERVER);
 		}
 	}
 
-	
+	// TODO
 	private static final int DELAY = 2500; 
 	Runnable markRunnable = new Runnable() {
 		@Override
@@ -221,5 +221,4 @@ public class RequestService extends Service {
 	public synchronized void setServiceStatus(boolean status){
 		TRAKER_STATUS = status;
 	}
-
 }

@@ -91,8 +91,8 @@ public class TrackerActivity extends Activity {
 		}
 	}
 
+	
 	// ------------------------------------------------------------------
-
 	public void showToast(final String mess){
 		runOnUiThread(new Runnable() {
 			@Override
@@ -128,5 +128,4 @@ public class TrackerActivity extends Activity {
 			}
 		});
 	}
-	
 }

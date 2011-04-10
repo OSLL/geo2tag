@@ -17,7 +17,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 public class TrackerUtil {
 	private static DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
@@ -104,7 +103,13 @@ public class TrackerUtil {
 	// messages
 	public static final String MESS_FAIL_CONNECTION = "Connection fail...";
 	public static final String MESS_FAIL_CONNECTION_TO_SERVER = "Fail connection to server...";
+	public static final String MESS_FAIL_ADDUSER = "add user fail:"; 
+	public static final String MESS_FAIL_APPLY_CHANNEL = "apply channel fail:";
+	public static final String MESS_FAIL_APPLY_MARK = "apply mark fail:";
+	
 	public static final String MESS_TRACKER_ALREADY_RUNNING = "Tracker is already running...";
 	public static final String MESS_TRACKER_START = "Tracker is running...";
 	public static final String MESS_TRACKER_STOP = "Tracker stopped...";
+	
+	public static final String MESS_SETTINGS_SAVED = "Settings saved...";
 }

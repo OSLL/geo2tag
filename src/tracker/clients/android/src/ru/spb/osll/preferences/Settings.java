@@ -16,7 +16,7 @@ public class Settings {
 	}
 	
 	public SharedPreferences getPreferences(){
-		return m_context.getSharedPreferences(ITrackerSettings.TRAKER_SETTINGS, 0);
+		return m_context.getSharedPreferences(ITrackerSettings.TRACKER_SETTINGS, 0);
 	}
 	
 	public Editor getPreferencesEditor(){
@@ -43,7 +43,7 @@ public class Settings {
 	}
 	
 	public interface ITrackerSettings{
-		String TRAKER_SETTINGS = "tracker_settings";
+		String TRACKER_SETTINGS = "tracker_settings";
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";
