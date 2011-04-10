@@ -63,7 +63,11 @@ public class TrackerActivity extends Activity {
 		settingsBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
+				if (RequestService.isActive()){
+					showToast(TrackerUtil.MESS_SETTINGS_NOT_AVAILABLE);
+				} else {
+					startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
+				}
 			}
 		});
 	}
