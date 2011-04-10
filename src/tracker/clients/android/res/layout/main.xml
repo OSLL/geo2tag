@@ -20,10 +20,15 @@
 	    android:layout_height="wrap_content" 
 	    android:text="test"
 	/> 
+	
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/TextField"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="@string/hello"
+	    />
+	</ScrollView>
 	 
-	<TextView android:id="@+id/TextField"
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    android:text="@string/hello"
-    />
 </LinearLayout>

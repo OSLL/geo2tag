@@ -100,18 +100,24 @@ public class RequestService extends Service {
 			m_authToken = JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN);
 			if(status.equals(IResponse.OK_STATUS)){
 				Log.v(TrackerActivity.LOG, "login status : " + statusDescription);
+				TrackerUtil.appendToLogView("login status : " + status);
+				TrackerUtil.appendToLogView("login statusDescription : " + statusDescription);
 				applyChannel();
 			} else {
-				addUser();
 				Log.v(TrackerActivity.LOG, "login status : " + statusDescription);
+				TrackerUtil.appendToLogView("login status : " + status);
+				TrackerUtil.appendToLogView("login statusDescription : " + statusDescription);
+				addUser();
 			}
 		} else {
 			Log.v(TrackerActivity.LOG, "login fail");
-			onFail("login fail");
+			TrackerUtil.showToast("login fail");
 		}
 	}
 	
 	private void addUser(){
+		Log.v(TrackerActivity.LOG, "addUser()");
+		
 		JSONObject JSONResponse = null;
 		for(int i = 0; i < ATTEMPT; i++){
 			JSONResponse = new JsonAddUserRequest(m_login, m_password).doRequest();
@@ -122,16 +128,18 @@ public class RequestService extends Service {
 		if (JSONResponse != null) {
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
-			m_authToken = JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN);
 			if(status.equals(IResponse.OK_STATUS)){
 				Log.v(TrackerActivity.LOG, "addUser status : " + statusDescription);
-				applyChannel();
+				TrackerUtil.appendToLogView("addUser status : " + status);
+				TrackerUtil.appendToLogView("addUser statusDescription : " + statusDescription);
+				login();
 			} else {
 				Log.v(TrackerActivity.LOG, "addUser status : " + statusDescription);
+				TrackerUtil.appendToLogView("addUser status : " + status);
+				TrackerUtil.appendToLogView("addUser statusDescription : " + statusDescription);
 			}
 		} else {
 			Log.v(TrackerActivity.LOG, "addUser fail");
-			onFail("addUser fail");
 		}
 	}
 
@@ -149,21 +157,28 @@ public class RequestService extends Service {
 		}
 
 		if(JSONResponse != null){
+			Log.v(TrackerActivity.LOG, "JSonResponse = " + JSONResponse.toString());
+			
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
 			if (status.equals(IResponse.OK_STATUS) ||
 					statusDescription.equals(IResponse.CHANNEL_EXTSTS)){
 				Log.v(TrackerActivity.LOG, "apply channel status : " + statusDescription);
-
+				TrackerUtil.appendToLogView("apply channel status status : " + status);
+				TrackerUtil.appendToLogView("apply channel status statusDescription : " + statusDescription);
 				new Thread(markRunnable).start();
-			} 
+			} else {
+				TrackerUtil.appendToLogView("apply channel status status : " + status);
+				TrackerUtil.appendToLogView("apply channel status statusDescription : " + statusDescription);
+			}
 		} else {
+			Log.v(TrackerActivity.LOG, "apply channel fail");
 			// TODO apply channel fail
 		}
 	}
 
 	
-	private static final int DELAY = 10000; 
+	private static final int DELAY = 2500; 
 	Runnable markRunnable = new Runnable() {
 		@Override
 		public void run() {
@@ -199,15 +214,11 @@ public class RequestService extends Service {
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
 			Log.v(TrackerActivity.LOG, "apply mark status : " + statusDescription);
+
+			TrackerUtil.appendToLogView("apply mark status : " + status);
+			TrackerUtil.appendToLogView("apply mark status statusDescription : " + statusDescription);
 		}
 	}
-	
-	private void onFail(String mess){
-		if (TrackerActivity.Instance != null){
-			TrackerActivity.Instance.showToast("login fail");
-		}
-	}
-	
 	
 	private static boolean TRAKER_STATUS = false;
 	public synchronized static boolean isActive(){
