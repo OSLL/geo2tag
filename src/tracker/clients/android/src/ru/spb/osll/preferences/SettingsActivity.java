@@ -22,6 +22,7 @@ public class SettingsActivity extends Activity implements ITrackerSettings {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 	
+		setTitle("Tracker Settings");
 		initializeFields();
 		initializeTimeTickBtn();
 		
