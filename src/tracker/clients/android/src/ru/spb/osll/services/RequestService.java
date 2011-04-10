@@ -148,15 +148,15 @@ public class RequestService extends Service {
 		}
 	}
 
-	// TODO
-	private static final int DELAY = 2500; 
 	Runnable markRunnable = new Runnable() {
 		@Override
 		public void run() {
+			int delay = new Settings(RequestService.this).
+				getPreferences().getInt(ITrackerSettings.TIME_TICK, 5);
 			while (isActive()){
 				try {
 					applyMark();
-					Thread.sleep(DELAY);
+					Thread.sleep(delay*1000);
 				} catch (InterruptedException e) {
 					setServiceStatus(false);
 				}

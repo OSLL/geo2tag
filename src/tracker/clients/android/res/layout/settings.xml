@@ -77,6 +77,17 @@
 				android:id="@+id/edit_server_address"
 				android:singleLine="true"
 				android:paddingBottom="20px"/>
+
+	        <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/time_request"        	
+	        	android:singleLine="true"/>
+			<Button
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/button_settings_tick"
+				android:paddingBottom="20px"/>
 		</LinearLayout>
     </ScrollView>
 

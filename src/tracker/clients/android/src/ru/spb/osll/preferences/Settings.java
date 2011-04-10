@@ -37,6 +37,7 @@ public class Settings {
 		editor.putString(ITrackerSettings.CHANNEL, "Test channel");
 		editor.putString(ITrackerSettings.CHANNEL_KEY, "");
 		editor.putString(ITrackerSettings.SERVER_URL, IRequest.BASE_URL);
+		editor.putInt(ITrackerSettings.TIME_TICK, 5);
 		
 		editor.putBoolean(SETTINGS_STATUS, false);
 		editor.commit();
