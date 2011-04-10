@@ -7,7 +7,6 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ru.spb.osll.services.RequestService;
 import android.util.Log;
 
 public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IApplyMark {

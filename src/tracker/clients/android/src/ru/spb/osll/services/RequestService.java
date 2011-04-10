@@ -95,7 +95,7 @@ public class RequestService extends Service {
 				addUser();
 			}
 		} else {
-			onFail(FAIL_MESS_CONNECTION_TO_SERVER);
+			onFail(TrackerUtil.MESS_FAIL_CONNECTION_TO_SERVER);
 		}
 	}
 	
@@ -119,7 +119,7 @@ public class RequestService extends Service {
 				onFail("add user fail " + statusDescription);
 			}
 		} else {
-			onFail(FAIL_MESS_CONNECTION_TO_SERVER);
+			onFail(TrackerUtil.MESS_FAIL_CONNECTION_TO_SERVER);
 		}
 	}
 
@@ -144,7 +144,7 @@ public class RequestService extends Service {
 				onFail("apply channel fail " + statusDescription);
 			}
 		} else {
-			onFail(FAIL_MESS_CONNECTION_TO_SERVER);
+			onFail(TrackerUtil.MESS_FAIL_CONNECTION_TO_SERVER);
 		}
 	}
 
@@ -205,7 +205,6 @@ public class RequestService extends Service {
 			TrackerUtil.showToast(mess);
 	}
 	
-	private static String FAIL_MESS_CONNECTION_TO_SERVER = "fail connection to server...";
 	private void onFail(String mess){
 		String failMess = "FAIL: " + mess;
 		Log.v(TrackerActivity.LOG, failMess);

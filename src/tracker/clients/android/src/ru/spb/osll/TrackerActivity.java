@@ -6,10 +6,7 @@ import ru.spb.osll.services.LocationService;
 import ru.spb.osll.services.RequestService;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +18,6 @@ public class TrackerActivity extends Activity {
 	public static String LOG = "Tracker";
 	
 	TextView m_logView;
-	Button m_btnService;
 	public static TrackerActivity Instance;
 	
 	@Override
@@ -48,70 +44,54 @@ public class TrackerActivity extends Activity {
 	private void initialization(){
 		Log.v(LOG, "TrackerActivity - initialization");
 		
-		m_btnService = (Button) findViewById(R.id.TestButton);
-		if (RequestService.isActive()){
-			m_btnService.setText("STOP TRACKER");
-		} else {
-			m_btnService.setText("START TRACKER");
-		}
-		
-		m_btnService.setOnClickListener(new View.OnClickListener() {
+		Button btnService = (Button) findViewById(R.id.start_button);
+		btnService.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	startTracker();
             }
         });
 
-		final Button settingsBtn= (Button) findViewById(R.id.settingsButton);
+		final Button jsonBtn= (Button) findViewById(R.id.stop_button);
+		jsonBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				stopTracker();
+			}
+		});
+		
+		final Button settingsBtn= (Button) findViewById(R.id.settings_button);
 		settingsBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
 			}
 		});
-		
-		final Button jsonBtn= (Button) findViewById(R.id.testJsonButton);
-		jsonBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO
-			}
-		});
 	}
 	
 	private void startTracker(){
-		try {
-			if (RequestService.isActive()){
-				TrackerUtil.disnotify(this);
-				m_btnService.setText("START");
-				stopService(new Intent(this, RequestService.class));
-				stopService(new Intent(this, LocationService.class));
-			} else if (isOnline()){
-				TrackerUtil.notify(this);
-				m_btnService.setText("STOP");
-				startService(new Intent(this, RequestService.class));
-				startService(new Intent(this, LocationService.class));
-			}
-		} catch (Exception e){
-			m_logView.append("\n" + e.getMessage());
+		if (RequestService.isActive()){
+			showToast(TrackerUtil.MESS_TRACKER_ALREADY_RUNNING);
+		} else if (TrackerUtil.isOnline(this)){
+			showToast(TrackerUtil.MESS_TRACKER_START);
+			clearLogView();
+			TrackerUtil.notify(this);
+			startService(new Intent(this, RequestService.class));
+			startService(new Intent(this, LocationService.class));
+		} else if (!TrackerUtil.isOnline(this)){
+			showToast(TrackerUtil.MESS_FAIL_CONNECTION);
 		}
 	}
-		
-	// ------------------------------------------------------------------
-	private boolean isOnline() {
-	    ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo nInfo = cm.getActiveNetworkInfo();
-	    if (nInfo != null && nInfo.isConnected()) {
-	    	showToast("ONLINE");
-	    	appendToLogView("ONLINE");
-	    	Log.v(LOG, "ONLINE");
-	        return true;
-	    }
-	    else {
-	    	showToast("OFFLINE");
-	        Log.v(LOG, "OFFLINE");
-	        return false;
-	    }
+	
+	private void stopTracker(){
+		if (RequestService.isActive()){
+			showToast(TrackerUtil.MESS_TRACKER_STOP);
+			TrackerUtil.disnotify(this);
+			stopService(new Intent(this, RequestService.class));
+			stopService(new Intent(this, LocationService.class));
+		}
 	}
+
+	// ------------------------------------------------------------------
 
 	public void showToast(final String mess){
 		runOnUiThread(new Runnable() {

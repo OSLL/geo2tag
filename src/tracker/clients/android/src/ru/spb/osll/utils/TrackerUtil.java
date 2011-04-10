@@ -15,6 +15,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
 
 public class TrackerUtil {
 	private static DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
@@ -53,9 +56,10 @@ public class TrackerUtil {
 	}
 
 	private static int lineCount = 0;
+	private static final int maxLines = 20;
 	public static void appendToLogView(final String mess){
 		if (TrackerActivity.Instance != null){
-			if (lineCount > 10){
+			if (lineCount > maxLines){
 				TrackerActivity.Instance.clearLogView();
 				lineCount = 0;
 			}
@@ -63,9 +67,18 @@ public class TrackerUtil {
 			lineCount++;
 		}
 	}
+
+	public static boolean isOnline(Context c) {
+	    ConnectivityManager cm = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo nInfo = cm.getActiveNetworkInfo();
+	    if (nInfo != null && nInfo.isConnected()) {
+	        return true;
+	    }
+	    else {
+	        return false;
+	    }
+	}
 	
-	
-	//TODO	
 	public class Logger {
 		private PrintWriter m_logger;
 		
@@ -88,4 +101,10 @@ public class TrackerUtil {
 		}
 	}
 
+	// messages
+	public static final String MESS_FAIL_CONNECTION = "Connection fail...";
+	public static final String MESS_FAIL_CONNECTION_TO_SERVER = "Fail connection to server...";
+	public static final String MESS_TRACKER_ALREADY_RUNNING = "Tracker is already running...";
+	public static final String MESS_TRACKER_START = "Tracker is running...";
+	public static final String MESS_TRACKER_STOP = "Tracker stopped...";
 }

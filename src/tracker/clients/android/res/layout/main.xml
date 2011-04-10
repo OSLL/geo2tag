@@ -5,21 +5,21 @@
     android:layout_height="fill_parent"
     >
 
-	<Button android:id="@+id/TestButton"
+	<Button android:id="@+id/start_button"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="test"
+	    android:text="@string/btnStart"
 	/>    
-	<Button android:id="@+id/settingsButton"
+	<Button android:id="@+id/stop_button"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="test"
-	/>   
-	<Button android:id="@+id/testJsonButton"
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    android:text="test"
+	    android:text="@string/btnStop"
 	/> 
+	<Button android:id="@+id/settings_button"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:text="@string/btnSettings"
+	/>   
 	
 	<ScrollView
 		android:layout_width="fill_parent"
@@ -27,7 +27,6 @@
 		<TextView android:id="@+id/TextField"
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
-		    android:text="@string/hello"
 	    />
 	</ScrollView>
 	 

@@ -17,5 +17,8 @@
 <!-- buttons -->
 	<string name="btnOk">Ok</string>
 	<string name="btnCancel">Cancel</string>
+	<string name="btnStart">Start Tracker</string>
+	<string name="btnStop">Stop Tracker</string>
+	<string name="btnSettings">Settings</string>
 	
 </resources>
