@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="ru.spb.osll.preferences.SettingsActivity"/>
+        <activity android:name="ru.spb.osll.preferences.SettingsActivity" android:configChanges="orientation|keyboardHidden"/>
         
         <service android:enabled="true" android:name="ru.spb.osll.services.RequestService"></service>
         <service android:enabled="true" android:name="ru.spb.osll.services.LocationService"></service>

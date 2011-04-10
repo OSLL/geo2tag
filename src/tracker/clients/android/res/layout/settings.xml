@@ -8,11 +8,12 @@
     <ScrollView 
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
+    	android:layout_weight="0.5"
     	>
         
 		<LinearLayout
 			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_height="wrap_content"
 			android:orientation="vertical"
 			>
 	        <TextView 
@@ -76,13 +77,12 @@
 				android:id="@+id/edit_server_address"
 				android:singleLine="true"
 				android:paddingBottom="20px"/>
-
 		</LinearLayout>
     </ScrollView>
 
     <LinearLayout
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
+		android:layout_height="wrap_content"
 		android:orientation="horizontal"
 		android:gravity="bottom">
      	<Button android:id="@+id/button_cancel"
