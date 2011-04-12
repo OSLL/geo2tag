@@ -40,19 +40,9 @@
 #ifndef _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
 #define _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
 
-#include "JsonSerializer.h"
+#include "DefaultResponseJSON.h"
 
-class SetTimeSlotResponseJSON : public JsonSerializer
-{
-        Q_OBJECT;
-public:
-    SetTimeSlotResponseJSON();
-
-    QByteArray getJson() const;
-
-    void parseJson(const QByteArray&);
-
-};
+typedef DefaultResponseJSON SetTimeSlotResponseJSON;
 
 
 #endif // _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_

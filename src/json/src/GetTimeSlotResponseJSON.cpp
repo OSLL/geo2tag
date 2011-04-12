@@ -35,9 +35,10 @@ void GetTimeSlotResponseJSON::parseJson(const QByteArray &data)
     if (!ok)
     {
         qFatal("An error occured during parsing json with channel list");
-    }
+    }    
 
-    QString slot = result["timeSlot"].toString();
+    QString timeSlotString = result["timeSlot"].toString();
+    QDateTime slot = QDateTime::fromString(timeSlotString, "dd MM yyyy HH:mm:ss.zzz");
     QSharedPointer<TimeSlot>  timeSlot(new JsonTimeSlot(slot));
     QSharedPointer<Channel> channel(new JsonChannel("unknown", "unknown"));
     channel->setTimeSlot(timeSlot);

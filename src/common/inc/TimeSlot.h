@@ -44,24 +44,25 @@
 #include <QString>
 #include <QVector>
 #include <QSharedPointer>
+#include <QDateTime>
 
 #include "ConcurrentVector.h"
 
 class TimeSlot: public QObject
 {
     Q_OBJECT
-    QString m_slot; // time slot
+    QDateTime m_slot; // time slot
 
 protected:
 
-    TimeSlot(const QString &slot);
+    TimeSlot(const QDateTime &slot);
 
 public:
 
     virtual qlonglong getId() const = 0;
 
-    const QString& getSlot() const;
-    void setSlot(const QString& slot);
+    const QDateTime& getSlot() const;
+    void setSlot(const QDateTime& slot);
 
     virtual ~TimeSlot();
 

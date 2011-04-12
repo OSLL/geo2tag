@@ -52,10 +52,10 @@ CREATE TABLE subscribe (
                                                        on delete cascade
 );
 
-CREATE SEQUENCE timeSlot_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
+CREATE SEQUENCE timeSlots_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 
 CREATE TABLE timeSlot (
-  id NUMERIC(9,0) NOT NULL DEFAULT nextval('timeSlot_seq'),
+  id NUMERIC(9,0) NOT NULL DEFAULT nextval('timeSlots_seq'),
   slot INTERVAL NOT NULL,  /*interval(?)*/
   constraint timeSlot_pkey primary key (id)
   

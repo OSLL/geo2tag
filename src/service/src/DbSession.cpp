@@ -63,6 +63,9 @@
 #include "GetTimeSlotRequestJSON.h"
 #include "GetTimeSlotResponseJSON.h"
 
+#include "SetTimeSlotRequestJSON.h"
+#include "SetTimeSlotResponseJSON.h"
+
 #include <QtSql>
 #include <QMap>
 #include <QDebug>
@@ -86,6 +89,7 @@ namespace common
         m_processors.insert("addUser", &DbObjectsCollection::processAddUserQuery);
         m_processors.insert("addChannel", &DbObjectsCollection::processAddChannelQuery);
         m_processors.insert("getTimeSlot", &DbObjectsCollection::processGetTimeSlotQuery);
+        m_processors.insert("setTimeSlot", &DbObjectsCollection::processSetTimeSlotQuery);
 
         QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
         database.setHostName("localhost");
@@ -256,7 +260,7 @@ namespace common
         }
         m_updateThread->lockWriting();
         m_tagsContainer->push_back(realTag);
-        m_updateThread->unlockWriting();
+        m_updateThread->unlockWriting(); //!!! m_dataChannelsMap wasn't update
 
         response.setStatus("Ok");
         response.setStatusMessage("Tag has been added");
@@ -508,11 +512,13 @@ namespace common
 
             if(realUser.isNull())
             {
+                DefaultResponseJSON response;
                 response.setStatus("Error");
                 response.setStatusMessage("Wrong authentification key");
                 answer.append(response.getJson());
                 return answer;
             }
+
 
             QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
             QSharedPointer<Channel> realChannel; // Null pointer
@@ -526,16 +532,143 @@ namespace common
             }           
             if(realChannel.isNull())
             {
+                DefaultResponseJSON response;
                 response.setStatus("Error");
                 response.setStatusMessage("Wrong channel's' name!");
                 answer.append(response.getJson());
                 return answer;
             }
 
+            if (realChannel->getTimeSlot().isNull())
+            {
+                DefaultResponseJSON response;
+                response.setStatus("Message");
+                response.setStatusMessage("Time slot isn't set yet!");
+                answer.append(response.getJson());
+                return answer;
+            }
+
+
             response.addChannel(realChannel);
             answer.append(response.getJson());
             syslog(LOG_INFO, "answer: %s", answer.data());
             return answer;
+        }
+
+
+
+        QByteArray DbObjectsCollection::processSetTimeSlotQuery(const QByteArray &data)
+        {
+            syslog(LOG_INFO, "starting SetTimeSlotQuery processing");
+            SetTimeSlotRequestJSON request;
+            syslog(LOG_INFO, " SetTimeSlotRequestJSON created, now create SetTimeSlotResponseJSON ");
+            SetTimeSlotResponseJSON response;
+            QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+            syslog(LOG_INFO, "Starting Json parsing for SetTimeSlotQuery");
+            request.parseJson(data);
+            syslog(LOG_INFO, "Json parsed for SetTimeSlotQuery");
+
+            QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+            QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+            if(realUser.isNull())
+            {                
+                response.setStatus("Error");
+                response.setStatusMessage("Wrong authentification key");
+                answer.append(response.getJson());
+                return answer;
+            }
+
+
+            QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
+            QSharedPointer<Channel> realChannel; // Null pointer
+            QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+            for(int i=0; i<currentChannels.size(); i++)
+            {
+                if(currentChannels.at(i)->getName() == dummyChannel->getName())
+                {
+                    realChannel = currentChannels.at(i);
+                }
+            }
+            if(realChannel.isNull())
+            {                
+                response.setStatus("Error");
+                response.setStatusMessage("Wrong channel's' name!");
+                answer.append(response.getJson());
+                return answer;
+            }
+
+            //TODO! проверить формат ввода time slot
+
+            syslog(LOG_INFO, "Sending sql request for SetTimeSlot");
+
+            QSharedPointer<TimeSlot> dummyTimeSlot = dummyChannel->getTimeSlot();
+            QSharedPointer<TimeSlot> realTimeSlot; // Null pointer
+            QVector<QSharedPointer<TimeSlot> > currentTimeSlots = m_timeSlotsContainer->vector();
+            for(int i=0; i<currentTimeSlots.size(); i++)
+            {
+                if(currentTimeSlots.at(i)->getSlot() == dummyTimeSlot->getSlot())
+                {
+                    realTimeSlot = currentTimeSlots.at(i);
+                }
+            }
+
+            bool realTimeSlotIsNull;
+            QSharedPointer<TimeSlot> addedTimeSlot;
+
+            if (realTimeSlot.isNull())
+            {
+                realTimeSlotIsNull = true;
+                addedTimeSlot = m_queryExecutor->insertNewTimeSlot(dummyTimeSlot);
+                if(!addedTimeSlot)
+                {                    
+                    response.setStatus("Error");
+                    response.setStatusMessage("Internal server error ):");
+                    answer.append(response.getJson());
+                    syslog(LOG_INFO, "answer: %s", answer.data());
+                    return answer;
+                }
+                m_updateThread->lockWriting();
+                m_timeSlotsContainer->push_back(addedTimeSlot);
+                m_updateThread->unlockWriting();
+            }
+
+            bool result;
+            if (realChannel->getTimeSlot().isNull())
+            {                
+                if (realTimeSlotIsNull)
+                    result = m_queryExecutor->insertNewChannelTimeSlot(realChannel, addedTimeSlot);
+                else
+                    result = m_queryExecutor->insertNewChannelTimeSlot(realChannel, realTimeSlot);
+            }
+            else
+            {
+                if (realTimeSlotIsNull)
+                    result = m_queryExecutor->changeChannelTimeSlot(realChannel, addedTimeSlot);
+                else
+                    result = m_queryExecutor->changeChannelTimeSlot(realChannel, realTimeSlot);
+            }
+
+            if(!result)
+            {
+                response.setStatus("Error");
+                response.setStatusMessage("Internal server error ):");
+                answer.append(response.getJson());
+                return answer;
+            }
+            m_updateThread->lockWriting();
+            if (realTimeSlotIsNull)
+                realChannel->setTimeSlot(addedTimeSlot);
+            else
+                realChannel->setTimeSlot(realTimeSlot);
+            m_updateThread->unlockWriting();
+
+            response.setStatus("Ok");
+            response.setStatusMessage("Time slot for channel is set");
+            answer.append(response.getJson());
+            syslog(LOG_INFO, "answer: %s", answer.data());
+            return answer;
+
         }
 } // namespace common
 

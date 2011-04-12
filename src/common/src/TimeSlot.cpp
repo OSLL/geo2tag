@@ -41,16 +41,16 @@
 
 #include "TimeSlot.h"
 
-TimeSlot::TimeSlot(const QString &slot):m_slot(slot)
+TimeSlot::TimeSlot(const QDateTime &slot):m_slot(slot)
 {
 }
 
-const QString& TimeSlot::getSlot() const
+const QDateTime& TimeSlot::getSlot() const
 {
     return m_slot;
 }
 
-void TimeSlot::setSlot(const QString& slot)
+void TimeSlot::setSlot(const QDateTime& slot)
 {
     m_slot = slot;
 }

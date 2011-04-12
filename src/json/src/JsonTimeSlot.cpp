@@ -43,7 +43,7 @@
 
 static qlonglong globalTimeSlotId = 0;
 
-JsonTimeSlot::JsonTimeSlot(const QString &slot):
+JsonTimeSlot::JsonTimeSlot(const QDateTime &slot):
                             TimeSlot(slot),
                             m_id(globalTimeSlotId++)
 {

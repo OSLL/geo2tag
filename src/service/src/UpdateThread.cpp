@@ -138,7 +138,19 @@ void UpdateThread::loadTimeSlots(TimeSlots &container)
             // skip record
             continue;
         }
-        QString slot = query.record().value("slot").toString();
+
+       // QDateTime slot = query.record().value("slot").toDateTime().toTimeSpec(Qt::LocalTime);
+
+        qulonglong slotULong = query.record().value("slot").toULongLong();
+       // bool check = query.record().value("slot").canConvert(QVariant::ULongLong);
+        if (slotULong == 0)
+            syslog(LOG_INFO, "can't convert to qulonglong");
+       // syslog(LOG_INFO, "convert to qulonglong: %i", check);
+       // qulonglong slotULong = query.record().value("slot").toULongLong();
+        QDateTime slot;
+        slot.addMSecs(slotULong);
+        syslog(LOG_INFO, "slot: %s", slot.toString().toStdString().c_str());
+
         DbTimeSlot * newTimeSlot = new DbTimeSlot(id, slot);
         QSharedPointer<DbTimeSlot> pointer(newTimeSlot);
         container.push_back(pointer);

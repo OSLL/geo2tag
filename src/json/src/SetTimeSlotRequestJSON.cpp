@@ -38,9 +38,11 @@ void SetTimeSlotRequestJSON::parseJson(const QByteArray &data)
         return;
     }
 
+
     QString token = result["auth_token"].toString();
     QString channel = result["channel"].toString();
-    QString timeSlot = result["timeSlot"].toString();
+    QString slot = result["timeSlot"].toString();
+    QDateTime timeSlot = QDateTime::fromString(slot, "dd MM yyyy HH:mm:ss.zzz");
 
     m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));    
     m_channelsContainer->push_back(QSharedPointer<Channel> (new JsonChannel(channel, "unknown", "unknown")));

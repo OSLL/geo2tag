@@ -55,8 +55,7 @@ SOURCES += \
            src/GetTimeSlotRequestJSON.cpp \
            src/GetTimeSlotResponseJSON.cpp \
            src/DefaultResponseJSON.cpp \
-           src/SetTimeSlotRequestJSON.cpp \
-           src/SetTimeSlotResponseJSON.cpp
+           src/SetTimeSlotRequestJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 
