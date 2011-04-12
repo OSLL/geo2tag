@@ -2,7 +2,8 @@ package ru.spb.osll.preferences;
 
 import ru.spb.osll.R;
 import ru.spb.osll.gui.RadioButtonDialog;
-import ru.spb.osll.preferences.Settings.ITrackerSettings;
+import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
+import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
 import android.content.Context;
@@ -12,10 +13,11 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class SettingsActivity extends Activity implements ITrackerSettings {
+public class SettingsActivity extends Activity implements ITrackerNetSettings, ITrackerAppSettings {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,9 @@ public class SettingsActivity extends Activity implements ITrackerSettings {
 		initField(CHANNEL, R.id.edit_channel);
 		initField(CHANNEL_KEY, R.id.edit_key);
 		initField(SERVER_URL, R.id.edit_server_address);
+		
+		initCheckBox(IS_HIDE_APP, R.id.checkbox_hide);
+		initCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick);
 	}
 	
 	private void initializeTimeTickBtn(){
@@ -77,6 +82,9 @@ public class SettingsActivity extends Activity implements ITrackerSettings {
 		saveField(SERVER_URL, R.id.edit_server_address, prefEditor);
 		prefEditor.putInt(TIME_TICK, m_timeTick);
 		
+		saveCheckBox(IS_HIDE_APP, R.id.checkbox_hide, prefEditor);
+		saveCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick, prefEditor);
+		
 		prefEditor.commit();
 	}
 	
@@ -93,11 +101,21 @@ public class SettingsActivity extends Activity implements ITrackerSettings {
 		((EditText) findViewById(idField)).setText(str);
 	}
 
+	private void initCheckBox(String key, int id){
+		SharedPreferences settings = new Settings(this).getPreferences();
+		((CheckBox) findViewById(id)).setChecked(settings.getBoolean(key, false));
+	}
+
 	private void saveField(String key, int idField, Editor prefEditor){
 		String str = ((EditText) findViewById(idField)).getText().toString().trim();
 		prefEditor.putString(key, str);
 	}
-	
+
+	private void saveCheckBox(String key, int id, Editor prefEditor){
+		boolean status = ((CheckBox) findViewById(id)).isChecked();
+		prefEditor.putBoolean(key, status);
+	}
+
 
 	String[] args = {"1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "60"};
 	private int getIdx(int val){

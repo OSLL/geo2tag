@@ -25,8 +25,7 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/edit_login"
-				android:singleLine="true"
-				android:paddingBottom="20px"/>
+				android:singleLine="true"/>
 	    
 	        <TextView 
 	        	android:layout_width="fill_parent"
@@ -39,8 +38,7 @@
 				android:layout_height="wrap_content"
 				android:id="@+id/edit_password"
 				android:password="true"
-				android:singleLine="true"
-				android:paddingBottom="20px"/>
+				android:singleLine="true"/>
 				
 	        <TextView 
 	        	android:layout_width="fill_parent"
@@ -51,8 +49,7 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/edit_channel"
-				android:singleLine="true"
-				android:paddingBottom="20px"/>
+				android:singleLine="true"/>
 
 	        <TextView 
 	        	android:layout_width="fill_parent"
@@ -63,8 +60,7 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/edit_key"
-				android:singleLine="true"
-				android:paddingBottom="20px"/>
+				android:singleLine="true"/>
 
 	        <TextView 
 	        	android:layout_width="fill_parent"
@@ -75,8 +71,7 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/edit_server_address"
-				android:singleLine="true"
-				android:paddingBottom="20px"/>
+				android:singleLine="true"/>
 
 	        <TextView 
 	        	android:layout_width="fill_parent"
@@ -86,8 +81,18 @@
 			<Button
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:id="@+id/button_settings_tick"
-				android:paddingBottom="20px"/>
+				android:id="@+id/button_settings_tick"/>
+				
+			<CheckBox
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/checkbox_tick"
+				android:text="@string/checkbox_show_tick_toast"/>
+			<CheckBox
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/checkbox_hide"
+				android:text="@string/checkbox_hide_on_start"/>
 		</LinearLayout>
     </ScrollView>
 

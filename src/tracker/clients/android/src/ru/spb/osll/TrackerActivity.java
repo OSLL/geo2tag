@@ -2,6 +2,7 @@ package ru.spb.osll;
 
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.SettingsActivity;
+import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.services.LocationService;
 import ru.spb.osll.services.RequestService;
 import ru.spb.osll.utils.TrackerUtil;
@@ -51,8 +52,8 @@ public class TrackerActivity extends Activity {
             }
         });
 
-		final Button jsonBtn= (Button) findViewById(R.id.stop_button);
-		jsonBtn.setOnClickListener(new View.OnClickListener() {
+		final Button stopBtn= (Button) findViewById(R.id.stop_button);
+		stopBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				stopTracker();
@@ -70,6 +71,15 @@ public class TrackerActivity extends Activity {
 				}
 			}
 		});
+
+		final Button creenBtn = (Button) findViewById(R.id.screeen_down_button);
+		creenBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+
 	}
 	
 	private void startTracker(){
@@ -81,6 +91,10 @@ public class TrackerActivity extends Activity {
 			TrackerUtil.notify(this);
 			startService(new Intent(this, RequestService.class));
 			startService(new Intent(this, LocationService.class));
+			
+			if (Settings.getPreferences(this).getBoolean(ITrackerAppSettings.IS_HIDE_APP, true)){
+				finish();
+			}
 		} else if (!TrackerUtil.isOnline(this)){
 			showToast(TrackerUtil.MESS_FAIL_CONNECTION);
 		}
@@ -132,4 +146,5 @@ public class TrackerActivity extends Activity {
 			}
 		});
 	}
+	
 }

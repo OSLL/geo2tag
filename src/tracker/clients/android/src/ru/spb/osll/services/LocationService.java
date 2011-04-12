@@ -44,12 +44,12 @@ public class LocationService extends Service {
 	private LocationListener locationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
 			if (location != null){
-				//Log.v(TrackerActivity.LOG, "onLocationChanged  " + location.toString());
+				Log.v(TrackerActivity.LOG, "onLocationChanged  " + location.toString());
 			}
 		}
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
-			//Log.v(TrackerActivity.LOG, "onStatusChanged " + provider + " " + status + " " + extras);
+			Log.v(TrackerActivity.LOG, "onStatusChanged " + provider + " " + status + " " + extras);
 		}
 
 		public void onProviderEnabled(String provider) {

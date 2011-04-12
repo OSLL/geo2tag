@@ -1,11 +1,9 @@
 package ru.spb.osll.preferences;
 
-import ru.spb.osll.TrackerActivity;
 import ru.spb.osll.json.IRequest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
 
 public class Settings {
 	private Context m_context;
@@ -16,7 +14,7 @@ public class Settings {
 	}
 	
 	public SharedPreferences getPreferences(){
-		return m_context.getSharedPreferences(ITrackerSettings.TRACKER_SETTINGS, 0);
+		return m_context.getSharedPreferences(ITrackerNetSettings.TRACKER_SETTINGS, 0);
 	}
 	
 	public Editor getPreferencesEditor(){
@@ -29,21 +27,27 @@ public class Settings {
 	
 	// TODO
 	public void setDefaultSettrings(){
-		Log.v(TrackerActivity.LOG, "setDefaultSettrings()");
-		
 		Editor editor = getPreferencesEditor();
-		editor.putString(ITrackerSettings.LOGIN, "Mark");	
-		editor.putString(ITrackerSettings.PASSWORD, "test");
-		editor.putString(ITrackerSettings.CHANNEL, "Test channel");
-		editor.putString(ITrackerSettings.CHANNEL_KEY, "");
-		editor.putString(ITrackerSettings.SERVER_URL, IRequest.BASE_URL);
-		editor.putInt(ITrackerSettings.TIME_TICK, 5);
+
+		editor.putString(ITrackerNetSettings.LOGIN, "Mark");	
+		editor.putString(ITrackerNetSettings.PASSWORD, "test");
+		editor.putString(ITrackerNetSettings.CHANNEL, "Test channel");
+		editor.putString(ITrackerNetSettings.CHANNEL_KEY, "");
+		editor.putString(ITrackerNetSettings.SERVER_URL, IRequest.BASE_URL);
+		editor.putInt(ITrackerNetSettings.TIME_TICK, 5);
+		
+		editor.putBoolean(ITrackerAppSettings.IS_SHOW_TICKS, false);
+		editor.putBoolean(ITrackerAppSettings.IS_HIDE_APP, true);
 		
 		editor.putBoolean(SETTINGS_STATUS, false);
 		editor.commit();
 	}
 	
-	public interface ITrackerSettings{
+	public static SharedPreferences getPreferences(Context c){
+		return new Settings(c).getPreferences();
+	}
+	
+	public interface ITrackerNetSettings{
 		String TRACKER_SETTINGS = "tracker_settings";
 		
 		String LOGIN = "login";
@@ -54,5 +58,10 @@ public class Settings {
 	   	String TIME_TICK = "time_request";
 		String RADIUS = "radius";
 		String URI = "uri";
+	}
+	
+	public interface ITrackerAppSettings{
+		String IS_SHOW_TICKS = "is_show_ticks";
+		String IS_HIDE_APP = "is_hide_app";
 	}
 }

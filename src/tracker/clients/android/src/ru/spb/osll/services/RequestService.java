@@ -12,7 +12,8 @@ import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.preferences.Settings;
-import ru.spb.osll.preferences.Settings.ITrackerSettings;
+import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
+import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Service;
 import android.content.Intent;
@@ -60,11 +61,11 @@ public class RequestService extends Service {
 
 	private void getSettingsValues(){
 		SharedPreferences settings = new Settings(this).getPreferences();
-		m_login = settings.getString(ITrackerSettings.LOGIN, "");
-		m_password = settings.getString(ITrackerSettings.PASSWORD, "");
-		m_channel = settings.getString(ITrackerSettings.CHANNEL, "");
+		m_login = settings.getString(ITrackerNetSettings.LOGIN, "");
+		m_password = settings.getString(ITrackerNetSettings.PASSWORD, "");
+		m_channel = settings.getString(ITrackerNetSettings.CHANNEL, "");
 		//m_channelKey = settings.getString(ITrackerSettings.CHANNEL_KEY, "");
-		m_serverUrl = settings.getString(ITrackerSettings.SERVER_URL, "");
+		m_serverUrl = settings.getString(ITrackerNetSettings.SERVER_URL, "");
 	}
 	
 	private Runnable loginRunnable = new Runnable() {
@@ -152,7 +153,7 @@ public class RequestService extends Service {
 		@Override
 		public void run() {
 			int delay = new Settings(RequestService.this).
-				getPreferences().getInt(ITrackerSettings.TIME_TICK, 5);
+				getPreferences().getInt(ITrackerNetSettings.TIME_TICK, 5);
 			while (isActive()){
 				try {
 					applyMark();
@@ -191,7 +192,8 @@ public class RequestService extends Service {
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
 			if (status.equals(IResponse.OK_STATUS)){
-				showMess("tick:{" + latitude + "," + longitude + "}", true);
+			 	boolean isShowTick = Settings.getPreferences(this).getBoolean(ITrackerAppSettings.IS_SHOW_TICKS, false); 
+				showMess("tick:{" + latitude + "," + longitude + "}", isShowTick);
 			} else {
 				showMess("apply mark:" + status + "," + statusDescription, false);
 			}
