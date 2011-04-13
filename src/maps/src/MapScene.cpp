@@ -16,6 +16,8 @@
 #include <QList>
 #include <QSharedPointer>
 
+#include "MapsUploadThread.h"
+
 //Move distance for one arrow key press
 #define KEY_MOVE_DIST 10
 
@@ -85,12 +87,11 @@ void MapScene::preFetch()
 
 	int zoom = m_zoom;
 
+	QVector<TilePoint> tiles_for_upload;
+
 	while(zoom <= 18)
 	{
-
 		qDebug() << "Upload tile " << point_top_left << "\t" << point_bottom_right << "\n";
-
-		QVector<TilePoint> tiles_for_upload;
 
 		for(int x = point_top_left.x(); x <= point_bottom_right.x(); x++)
 		{
@@ -99,17 +100,8 @@ void MapScene::preFetch()
 	            TilePoint tp = qMakePair(QPoint(y,x), zoom);
             	if(!m_maps.contains(tp))
             	    tiles_for_upload.push_back(tp);
-
-				if(tiles_for_upload.size() >= 20)
-				{
-	        		emit this->uploadTiles(tiles_for_upload);
-					tiles_for_upload.clear();
-				}
         	}
     	}
-
-		if(!tiles_for_upload.isEmpty())
-	        emit this->uploadTiles(tiles_for_upload);
 
 		zoom++;
 		point_top_left.setX(point_top_left.x()*2);
@@ -119,6 +111,12 @@ void MapScene::preFetch()
 		point_bottom_right.setY(point_bottom_right.y()*2+1);
 	}
 
+	if(tiles_for_upload.isEmpty())
+		return;
+
+	m_map_uploader = new MapsUploadThread(tiles_for_upload, this);
+	m_map_uploader->start();
+	
 }
 
 void MapScene::addMark(qreal latitude, qreal longitude, QVariant data)

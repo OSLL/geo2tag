@@ -38,8 +38,6 @@ private slots:
 public slots:
     void uploadTiles(QVector<TilePoint> tiles_to_upload);
 
-public slots:
-
 };
 
 #endif // MAPSUPLOADER_H

@@ -15,9 +15,11 @@ INCLUDEPATH += . inc ../common/inc ../common/common/inc ../common/thread/inc \
 
 # Input
 HEADERS += inc/MapsUploader.h \
-		   inc/MapScene.h
+		   inc/MapScene.h \
+		   inc/MapsUploadThread.h
 SOURCES += src/MapsUploader.cpp \
-		   src/MapScene.cpp
+		   src/MapScene.cpp \
+		   src/MapsUploadThread.cpp
 
 OBJECTS_DIR = .obj
 

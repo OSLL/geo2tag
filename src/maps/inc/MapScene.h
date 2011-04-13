@@ -8,11 +8,15 @@
 #include <QPoint>
 #include "MapsUploader.h"
 #include "DataChannel.h"
+#include "MapsUploadThread.h"
 
 
 class MapScene : public QGraphicsScene
 {
     Q_OBJECT
+	
+	MapsUploadThread * m_map_uploader;
+
 public:
     explicit MapScene(QObject *parent = 0);
 
