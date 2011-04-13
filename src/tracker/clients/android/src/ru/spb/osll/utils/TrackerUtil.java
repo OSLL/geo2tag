@@ -27,7 +27,6 @@ public class TrackerUtil {
 	public static final int TRACKER_NOTIFY_ID = 1;
 	public static void notify(Context c){
 		NotificationManager nm = (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
-		
 		String title = "Geo2Tag Traker service";
 		String expandedText = "Geo2Tag Traker service is running";
 		Notification notification = new Notification(R.drawable.icon, title, System.currentTimeMillis());
