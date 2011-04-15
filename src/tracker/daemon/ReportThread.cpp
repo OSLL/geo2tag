@@ -11,6 +11,7 @@ ControlThread::ControlThread(QTcpSocket *socket, TrackerDaemon *control, QObject
     m_processors.insert("stop", &ControlThread::processStopQuery);
     m_processors.insert("logs", &ControlThread::processLogsQuery);
     m_processors.insert("status", &ControlThread::processStatusQuery);
+    m_processors.insert("reload", &ControlThread::processReloadQuery);
     connect(m_client,SIGNAL(readyRead()), SLOT(run()));
 }
 
@@ -55,6 +56,9 @@ void ControlThread::processStatusQuery()
     m_device->flush();
 }
 
+void ControlThread::processReloadQuery(){
+	m_daemon->reloadSettings();
+}
 
 void ControlThread::processLogsQuery()
 {

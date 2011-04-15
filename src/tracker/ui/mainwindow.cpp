@@ -57,7 +57,7 @@ MainWindow::MainWindow() : QMainWindow(NULL)
 
 void MainWindow::cleanLocalSettigns()
 {
-  QSettings settings("osll","tracker");
+  QSettings settings(QSettings::SystemScope,"osll","tracker");
   settings.clear();
 
   QMessageBox::information(this,"Info","All local data was destroyed. Restart application to see effect.");
@@ -65,7 +65,7 @@ void MainWindow::cleanLocalSettigns()
 
 void MainWindow::initSettings()
 {
-  QSettings settings("osll","tracker");
+  QSettings settings(QSettings::SystemScope,"osll","tracker");
 
   if( settings.value("magic").toString() == APP_MAGIC )
   {
@@ -80,7 +80,7 @@ void MainWindow::initSettings()
 
 void MainWindow::readSettings()
 {
-  QSettings settings("osll","tracker");
+  QSettings settings(QSettings::SystemScope,"osll","tracker");
   m_settings.channel = settings.value("channel").toString();
   m_settings.key = settings.value("key").toString();
   m_settings.user = settings.value("user").toString();
@@ -110,7 +110,7 @@ void MainWindow::createSettings()
   if (QDialog::Accepted == sd.exec())
   {
     m_settings = sd.getData();
-    QSettings settings("osll","tracker");
+    QSettings settings(QSettings::SystemScope,"osll","tracker");
     settings.setValue("channel",m_settings.channel);
     settings.setValue("key",m_settings.key);
     settings.setValue("user",m_settings.user);

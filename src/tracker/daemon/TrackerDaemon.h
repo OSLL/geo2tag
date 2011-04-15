@@ -46,6 +46,7 @@ public:
 
     virtual void stopTracking();
     virtual void startTracking();
+    virtual void reloadSettings();
     virtual bool isTracking() const;
     const QPointF& getLastCoords() const; 
 

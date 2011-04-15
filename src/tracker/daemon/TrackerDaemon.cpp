@@ -15,7 +15,7 @@
 #define DEFAULT_LONGITUDE 24.95
 #define DAEMON_PORT 34243
 
-TrackerDaemon::TrackerDaemon(): m_settings("osll","tracker"),
+TrackerDaemon::TrackerDaemon():m_settings(QSettings::SystemScope,"osll","tracker"),
             m_loginQuery(NULL),
             m_tagQuery(NULL),
             m_pauseFlag(true),
@@ -76,6 +76,14 @@ void TrackerDaemon::run()
     }*/
 }
 
+
+void TrackerDaemon::reloadSettings(){
+	m_isConnected = false;
+	m_pauseFlag = false;
+	if (m_loginQuery != NULL) delete m_loginQuery;
+	if (m_tagQuery != NULL) delete m_tagQuery;
+	run();
+}
 
 void TrackerDaemon::startTracking()
 {
