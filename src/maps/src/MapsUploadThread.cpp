@@ -68,12 +68,16 @@ void MapsUploadThread::handleNetworkData(QNetworkReply *reply)
 			file.write(bytes);
 			file.flush();
 			file.close();
+			buffer.close();
 			//pixmap.save(file_name, 0, 100);
 		}
     }
 
 	if(m_tiles.isEmpty())
+	{
 		quit();
+		return;
+	}
 
 	this->popNextTile();
 }
@@ -116,6 +120,7 @@ void MapsUploadThread::popNextTile()
 	{
 		qDebug() << "No more tiles!\n";
 		this->quit();
+		return;
 	}
 
 	TilePoint tp = m_tiles.back();
@@ -141,7 +146,7 @@ void MapsUploadThread::run()
 
 	this->m_manager = new QNetworkAccessManager(this);
     this->connect(this->m_manager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(this->handleNetworkData(QNetworkReply*)));
+            this, SLOT(handleNetworkData(QNetworkReply*)));
 
 	this->popNextTile();
 

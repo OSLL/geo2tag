@@ -108,15 +108,24 @@ void MapScene::preFetch()
 		point_top_left.setY(point_top_left.y()*2);
 
 		point_bottom_right.setX(point_bottom_right.x()*2+1);
-		point_bottom_right.setY(point_bottom_right.y()*2+1);
+		point_bottom_right.setY(point_bottom_right.y()*2+1);	
+		
+		if(tiles_for_upload.isEmpty())
+			continue;
+
+		m_map_uploader = new MapsUploadThread(tiles_for_upload, this);
+		m_map_uploader->start();
+		
+		tiles_for_upload.clear();
 	}
 
+/*
 	if(tiles_for_upload.isEmpty())
 		return;
 
 	m_map_uploader = new MapsUploadThread(tiles_for_upload, this);
 	m_map_uploader->start();
-	
+*/	
 }
 
 void MapScene::addMark(qreal latitude, qreal longitude, QVariant data)
