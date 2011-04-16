@@ -44,7 +44,7 @@
 #include "DynamicCastFailure.h"
 #include <syslog.h>
 
-  DbTimeSlot::DbTimeSlot(qlonglong id, const QDateTime &slot):
+  DbTimeSlot::DbTimeSlot(qlonglong id, const qulonglong &slot):
                    TimeSlot(slot), m_id(id)
   {
   }

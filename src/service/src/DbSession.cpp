@@ -182,7 +182,7 @@ namespace common
                 }
                 else
                 {
-                    response.setStatus("Error!");
+                    response.setStatus(error);
                     response.setStatusMessage("Wrong password");
                 }
             }
@@ -190,12 +190,12 @@ namespace common
         answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
         if(realUser.isNull())
         {
-            response.setStatus("Error!");
+            response.setStatus(error);
             response.setStatusMessage("Wrong login or password");
         }
         else
         {
-            response.setStatus("Ok");
+            response.setStatus(ok);
             response.setStatusMessage("Authorization was successful");
             response.addUser(realUser);
         }
@@ -223,7 +223,7 @@ namespace common
 
         if(realUser.isNull())//
         {
-            response.setStatus("Error");
+            response.setStatus(error);
             response.setStatusMessage("Wrong authentification key");
             answer.append(response.getJson());
             return answer;
@@ -242,7 +242,7 @@ namespace common
         }
         if(realChannel.isNull())
         {
-            response.setStatus("Error");
+            response.setStatus(error);
             response.setStatusMessage("Wrong channel's' name");
             answer.append(response.getJson());
             return answer;
@@ -253,7 +253,7 @@ namespace common
         QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);//now
         if(realTag == NULL)
         {
-            response.setStatus("Error");
+            response.setStatus(error);
             response.setStatusMessage("Internal server error ):");
             answer.append(response.getJson());
             return answer;
@@ -262,7 +262,7 @@ namespace common
         m_tagsContainer->push_back(realTag);
         m_updateThread->unlockWriting(); //!!! m_dataChannelsMap wasn't update
 
-        response.setStatus("Ok");
+        response.setStatus(ok);
         response.setStatusMessage("Tag has been added");
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
@@ -284,7 +284,7 @@ namespace common
         if(realUser.isNull())
         {
             RSSFeedResponseJSON response;
-            response.setStatus("Error");
+            response.setStatus(error);
             response.setStatusMessage("Wrong authentification key");
             answer.append(response.getJson());
             return answer;
@@ -307,7 +307,7 @@ namespace common
             }
         }
         RSSFeedResponseJSON response(feed);
-        response.setStatus("Ok");
+        response.setStatus(ok);
         response.setStatusMessage("feed has been generated");
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
@@ -333,7 +333,7 @@ namespace common
 
         if(realUser.isNull())
         {
-            response.setStatus("Error!");
+            response.setStatus(error);
             response.setStatusMessage("Wrong authentification key");
             answer.append(response.getJson());
             return answer;
@@ -351,7 +351,7 @@ namespace common
         }
         if(realChannel.isNull())
         {
-            response.setStatus("Error");
+            response.setStatus(error);
             response.setStatusMessage("Wrong channel's' name");
             answer.append(response.getJson());
             return answer;
@@ -360,7 +360,7 @@ namespace common
         bool result = m_queryExecutor->subscribeChannel(realUser,realChannel);
         if(!result)
         {
-            response.setStatus("Error");
+            response.setStatus(error);
             response.setStatusMessage("Internal server error ):");
             answer.append(response.getJson());
             return answer;
@@ -369,7 +369,7 @@ namespace common
 	realUser->subscribe(dummyChannel);
         m_updateThread->unlockWriting();
 
-        response.setStatus("Ok");
+        response.setStatus(ok);
         response.setStatusMessage("Channel subscribed");
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
@@ -395,7 +395,7 @@ namespace common
         {
             if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
             {
-                    response.setStatus("Error");
+                    response.setStatus(error);
                     response.setStatusMessage("Username already exists!");
         						answer.append(response.getJson());
         						syslog(LOG_INFO, "answer: %s", answer.data());
@@ -407,7 +407,7 @@ namespace common
         QSharedPointer<User> addedUser = m_queryExecutor->insertNewUser(dummyUser);
         if(!addedUser)
         {
-            response.setStatus("Error");
+            response.setStatus(error);
             response.setStatusMessage("Internal server error ):");
             answer.append(response.getJson());
         		syslog(LOG_INFO, "answer: %s", answer.data());
@@ -418,7 +418,7 @@ namespace common
 				m_usersContainer->push_back(addedUser);
         m_updateThread->unlockWriting();
 
-        response.setStatus("Ok");
+        response.setStatus(ok);
         response.setStatusMessage("User added");
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
@@ -445,7 +445,7 @@ namespace common
 
             if(realUser.isNull())
             {
-                response.setStatus("Error");
+                response.setStatus(error);
                 response.setStatusMessage("Wrong authentification key");
                 answer.append(response.getJson());
                 return answer;
@@ -463,7 +463,7 @@ namespace common
             }
             if(!realChannel.isNull())
             {
-                response.setStatus("Error");
+                response.setStatus(error);
                 response.setStatusMessage("Channel exists!");
                 answer.append(response.getJson());
                 return answer;
@@ -472,7 +472,7 @@ namespace common
             QSharedPointer<Channel> addedChannel = m_queryExecutor->insertNewChannel(dummyChannel);
             if(!addedChannel)
             {
-                response.setStatus("Error");
+                response.setStatus(error);
                 response.setStatusMessage("Internal server error ):");
                 answer.append(response.getJson());
                 syslog(LOG_INFO, "answer: %s", answer.data());
@@ -483,7 +483,7 @@ namespace common
             m_channelsContainer->push_back(addedChannel);
             m_updateThread->unlockWriting();
 
-            response.setStatus("Ok");
+            response.setStatus(ok);
             response.setStatusMessage("Channel added");
             answer.append(response.getJson());
             syslog(LOG_INFO, "answer: %s", answer.data());
@@ -513,7 +513,7 @@ namespace common
             if(realUser.isNull())
             {
                 DefaultResponseJSON response;
-                response.setStatus("Error");
+                response.setStatus(error);
                 response.setStatusMessage("Wrong authentification key");
                 answer.append(response.getJson());
                 return answer;
@@ -533,7 +533,7 @@ namespace common
             if(realChannel.isNull())
             {
                 DefaultResponseJSON response;
-                response.setStatus("Error");
+                response.setStatus(error);
                 response.setStatusMessage("Wrong channel's' name!");
                 answer.append(response.getJson());
                 return answer;
@@ -542,7 +542,7 @@ namespace common
             if (realChannel->getTimeSlot().isNull())
             {
                 DefaultResponseJSON response;
-                response.setStatus("Message");
+                response.setStatus(ok);
                 response.setStatusMessage("Time slot isn't set yet!");
                 answer.append(response.getJson());
                 return answer;
@@ -573,7 +573,7 @@ namespace common
 
             if(realUser.isNull())
             {                
-                response.setStatus("Error");
+                response.setStatus(error);
                 response.setStatusMessage("Wrong authentification key");
                 answer.append(response.getJson());
                 return answer;
@@ -590,19 +590,26 @@ namespace common
                     realChannel = currentChannels.at(i);
                 }
             }
+
             if(realChannel.isNull())
             {                
-                response.setStatus("Error");
+                response.setStatus(error);
                 response.setStatusMessage("Wrong channel's' name!");
                 answer.append(response.getJson());
                 return answer;
             }
 
-            //TODO! проверить формат ввода time slot
 
             syslog(LOG_INFO, "Sending sql request for SetTimeSlot");
 
             QSharedPointer<TimeSlot> dummyTimeSlot = dummyChannel->getTimeSlot();
+            if (!dummyTimeSlot->getSlot())
+            {
+                response.setStatus(error);
+                response.setStatusMessage("Time slot can't be a null"); //NOTE: may be more than some value - e.g. 1 min?
+                answer.append(response.getJson());
+                return answer;
+            }
             QSharedPointer<TimeSlot> realTimeSlot; // Null pointer
             QVector<QSharedPointer<TimeSlot> > currentTimeSlots = m_timeSlotsContainer->vector();
             for(int i=0; i<currentTimeSlots.size(); i++)
@@ -651,7 +658,7 @@ namespace common
 
             if(!result)
             {
-                response.setStatus("Error");
+                response.setStatus(error);
                 response.setStatusMessage("Internal server error ):");
                 answer.append(response.getJson());
                 return answer;
@@ -663,7 +670,7 @@ namespace common
                 realChannel->setTimeSlot(realTimeSlot);
             m_updateThread->unlockWriting();
 
-            response.setStatus("Ok");
+            response.setStatus(ok);
             response.setStatusMessage("Time slot for channel is set");
             answer.append(response.getJson());
             syslog(LOG_INFO, "answer: %s", answer.data());

@@ -54,14 +54,13 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 
-RSSFeedResponseJSON::RSSFeedResponseJSON(const DataChannels &hashMap):
-        m_hashMap(hashMap)
+RSSFeedResponseJSON::RSSFeedResponseJSON(const DataChannels &hashMap, QObject *parent):
+        JsonSerializer(parent), m_hashMap(hashMap)
 {
 }
 
-RSSFeedResponseJSON::RSSFeedResponseJSON()
+RSSFeedResponseJSON::RSSFeedResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
-
 }
 
 void RSSFeedResponseJSON::parseJson(const QByteArray &data)

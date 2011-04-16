@@ -144,35 +144,6 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
     return newChannel;
 }
 
-QSharedPointer<TimeSlot> QueryExecutor::insertNewTimeSlot(const QSharedPointer<TimeSlot>& timeSlot)
-{
-    bool result;
-    QSqlQuery newTimeSlotQuery(m_database);
-                qlonglong newId = nextTimeSlotKey();
-                syslog(LOG_INFO,"NewId ready, now preparing sql query for adding new time slot");
-                newTimeSlotQuery.prepare("insert into timeSlot (id,slot) values(:id,:slot);");
-                newTimeSlotQuery.bindValue(":id",newId);
-                newTimeSlotQuery.bindValue(":slot",timeSlot->getSlot().toUTC());
-
-
-    m_database.transaction();
-    result=newTimeSlotQuery.exec();
-    if(!result)
-    {
-      syslog(LOG_INFO,"Rollback for NewTimeSlot sql query");
-      m_database.rollback();
-      return QSharedPointer<TimeSlot>(NULL);
-    } else
-    {
-      syslog(LOG_INFO,"Commit for NewTimeSlot sql query");
-      m_database.commit();
-    }
-    QSharedPointer<DbTimeSlot> newTimeSlot(new DbTimeSlot(newId, timeSlot->getSlot()));
-    return newTimeSlot;
-}
-
-
-
 QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& user)
 {
     bool result;
@@ -231,6 +202,33 @@ bool QueryExecutor::subscribeChannel(const QSharedPointer<User>& user,const QSha
     return result;
 }
 
+QSharedPointer<TimeSlot> QueryExecutor::insertNewTimeSlot(const QSharedPointer<TimeSlot>& timeSlot)
+{
+    bool result;
+    QSqlQuery newTimeSlotQuery(m_database);
+                qlonglong newId = nextTimeSlotKey();
+                syslog(LOG_INFO,"NewId ready, now preparing sql query for adding new time slot");
+                newTimeSlotQuery.prepare("insert into timeSlot (id,slot) values(:id,:slot);");
+                newTimeSlotQuery.bindValue(":id",newId);
+                newTimeSlotQuery.bindValue(":slot",timeSlot->getSlot());
+
+
+    m_database.transaction();
+    result=newTimeSlotQuery.exec();
+    if(!result)
+    {
+      syslog(LOG_INFO,"Rollback for NewTimeSlot sql query");
+      m_database.rollback();
+      return QSharedPointer<TimeSlot>(NULL);
+    } else
+    {
+      syslog(LOG_INFO,"Commit for NewTimeSlot sql query");
+      m_database.commit();
+    }
+    QSharedPointer<DbTimeSlot> newTimeSlot(new DbTimeSlot(newId, timeSlot->getSlot()));
+    return newTimeSlot;
+}
+
 bool QueryExecutor::insertNewChannelTimeSlot(const QSharedPointer<Channel>& channel, const QSharedPointer<TimeSlot>& timeSlot)
 {
     bool result;
@@ -238,8 +236,8 @@ bool QueryExecutor::insertNewChannelTimeSlot(const QSharedPointer<Channel>& chan
     insertNewChannelTimeSlot.prepare("insert into channelTimeSlot (channel_id,timeSlot_id) values(:channel_id,:timeSlot_id);");
     insertNewChannelTimeSlot.bindValue(":channel_id",channel->getId());
     insertNewChannelTimeSlot.bindValue(":timeSlot_id",timeSlot->getId());
-    QString format ="dd.MM.yyyyhh:mm:ss.zzz";
-    syslog(LOG_INFO,"Inserting %s (Id = %lld) for %s (Id = %lld)", timeSlot->getSlot().toString(format).toStdString().c_str(),timeSlot->getId(),
+
+    syslog(LOG_INFO,"Inserting %llu millyseconds(Id = %lld) for %s (Id = %lld)", timeSlot->getSlot(),timeSlot->getId(),
                                 channel->getName().toStdString().c_str(), channel->getId());
 
     m_database.transaction();
@@ -263,8 +261,8 @@ bool QueryExecutor::changeChannelTimeSlot(const QSharedPointer<Channel>& channel
     changeChannelTimeSlot.prepare("update channelTimeSlot set timeslot_id = :timeSlot_id where channel_id = :channel_id;");
     changeChannelTimeSlot.bindValue(":channel_id",channel->getId());
     changeChannelTimeSlot.bindValue(":timeSlot_id",timeSlot->getId());
-    QString format ="dd.MM.yyyyhh:mm:ss.zzz";
-    syslog(LOG_INFO,"Set %s (Id = %lld) for %s (Id = %lld)", timeSlot->getSlot().toString(format).toStdString().c_str(),timeSlot->getId(),
+
+    syslog(LOG_INFO,"Set %llu millyseconds(Id = %lld) for %s (Id = %lld)", timeSlot->getSlot(),timeSlot->getId(),
                                 channel->getName().toStdString().c_str(), channel->getId());
 
     m_database.transaction();

@@ -45,9 +45,10 @@ class RSSFeedRequestJSON: public JsonSerializer
 public:
     RSSFeedRequestJSON(double latitude,
                        double longitude,
-                       double radius);
+                       double radius,
+                       QObject *parent=0);
 
-    RSSFeedRequestJSON();
+    RSSFeedRequestJSON(QObject *parent=0);
 
     double getLatitude() const;
     double getLongitude() const;

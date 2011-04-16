@@ -6,7 +6,7 @@
 class DefaultResponseJSON : public JsonSerializer
 {
 public:
-    DefaultResponseJSON();
+    DefaultResponseJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 

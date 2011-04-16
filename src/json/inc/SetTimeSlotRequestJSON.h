@@ -46,7 +46,7 @@ class SetTimeSlotRequestJSON : public JsonSerializer
 {
         Q_OBJECT;
 public:
-    SetTimeSlotRequestJSON();
+    SetTimeSlotRequestJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 

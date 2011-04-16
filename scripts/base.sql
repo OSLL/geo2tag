@@ -56,9 +56,8 @@ CREATE SEQUENCE timeSlots_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 
 CREATE TABLE timeSlot (
   id NUMERIC(9,0) NOT NULL DEFAULT nextval('timeSlots_seq'),
-  slot INTERVAL NOT NULL,  /*interval(?)*/
-  constraint timeSlot_pkey primary key (id)
-  
+  slot BIGINT NOT NULL,  
+  constraint timeSlot_pkey primary key (id)  
 );
 
 CREATE TABLE channelTimeSlot (
@@ -101,10 +100,10 @@ INSERT into tags (channel_id, tag_id) values (4, 6);
 INSERT into tags (channel_id, tag_id) values (5, 7);
 INSERT into tags (channel_id, tag_id) values (1, 8);
 
-INSERT into timeSlot (slot) values ('P5Y');
-INSERT into timeSlot (slot) values ('P1M');
-INSERT into timeSlot (slot) values ('P1W');
-INSERT into timeSlot (slot) values ('P1DT12H');
+INSERT into timeSlot (slot) values (31536000000);
+INSERT into timeSlot (slot) values (15552000000);
+INSERT into timeSlot (slot) values (604800000);
+INSERT into timeSlot (slot) values (86400000);
 
 INSERT into channelTimeSlot (channel_id, timeSlot_id) values (1, 1);
 INSERT into channelTimeSlot (channel_id, timeSlot_id) values (2, 2);

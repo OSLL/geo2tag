@@ -9,7 +9,7 @@
 #include "JsonTimeSlot.h"
 
 
-SetTimeSlotRequestJSON::SetTimeSlotRequestJSON()
+SetTimeSlotRequestJSON::SetTimeSlotRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
@@ -41,12 +41,11 @@ void SetTimeSlotRequestJSON::parseJson(const QByteArray &data)
 
     QString token = result["auth_token"].toString();
     QString channel = result["channel"].toString();
-    QString slot = result["timeSlot"].toString();
-    QDateTime timeSlot = QDateTime::fromString(slot, "dd MM yyyy HH:mm:ss.zzz");
+    qulonglong timeSlot = result["timeSlot"].toULongLong();
 
     m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));    
     m_channelsContainer->push_back(QSharedPointer<Channel> (new JsonChannel(channel, "unknown", "unknown")));
-    m_channelsContainer->at(0)->setTimeSlot(QSharedPointer<TimeSlot>(new JsonTimeSlot(timeSlot)));
+    m_channelsContainer->operator [](0)->setTimeSlot(QSharedPointer<TimeSlot>(new JsonTimeSlot(timeSlot)));
 }
 
 

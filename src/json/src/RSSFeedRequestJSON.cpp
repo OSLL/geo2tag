@@ -40,12 +40,12 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 
-RSSFeedRequestJSON::RSSFeedRequestJSON(double latitude, double longitude, double radius):
-        m_latitude(latitude), m_longitude(longitude), m_radius(radius)
+RSSFeedRequestJSON::RSSFeedRequestJSON(double latitude, double longitude, double radius, QObject *parent):
+        JsonSerializer(parent), m_latitude(latitude), m_longitude(longitude), m_radius(radius)
 {
 }
 
-RSSFeedRequestJSON::RSSFeedRequestJSON()
+RSSFeedRequestJSON::RSSFeedRequestJSON(QObject *parent) :JsonSerializer(parent)
 {
 }
 

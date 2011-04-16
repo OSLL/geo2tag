@@ -56,6 +56,9 @@
 #include "UpdateThread.h"
 #include "QueryExecutor.h"
 
+const QString error = QString("Error");
+const QString ok = QString("Ok");
+
 namespace common
 {
     /*!

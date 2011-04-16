@@ -17,7 +17,6 @@ protected:
     QSharedPointer<Channels>    m_channelsContainer;
     QSharedPointer<DataMarks>   m_tagsContainer;
     QSharedPointer<Users>       m_usersContainer;
-   // QSharedPointer<TimeSlots>   m_timeSlotsContainer;
 
     QVariantMap m_jsonTree;
 
@@ -30,8 +29,7 @@ public:
 
     void addChannel(const QSharedPointer<Channel>&);
     void addTag(const QSharedPointer<DataMark>&);
-    void addUser(const QSharedPointer<User>&);
-   // void addtimeSlot(const QSharedPointer<TimeSlot>&);
+    void addUser(const QSharedPointer<User>&);   
 
     virtual QByteArray getJson() const = 0;
 
@@ -39,8 +37,7 @@ public:
 
     QSharedPointer<DataMarks> getTags() const;
     QSharedPointer<Users> getUsers() const;
-    QSharedPointer<Channels> getChannels() const;
-   // QSharedPointer<TimeSlots> getTimeSlots() const;
+    QSharedPointer<Channels> getChannels() const;  
 
     const QString& getStatus() const;
     void setStatus(const QString&);

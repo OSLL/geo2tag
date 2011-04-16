@@ -159,8 +159,7 @@ void OptionsWidget::createSettings()
     m_settings.setValue("password", m_passwordEdit->text());
     m_settings.setValue("proxy_type", m_proxyType->itemData(m_proxyType->currentIndex()).value<int>());
     m_settings.setValue("proxy_host", m_proxyHostEdit->text());
-    //setServerUrl(m_serverUrlEdit->text());
-    //BUG#2024 setServerPort(m_serverPortEdit->value());
+    setServerUrl(m_serverUrlEdit->text());
     m_settings.setValue("proxy_port", m_proxyPortEdit->value());
     m_settings.setValue("magic", APP_MAGIC);
 }

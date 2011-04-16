@@ -51,18 +51,18 @@
 class TimeSlot: public QObject
 {
     Q_OBJECT
-    QDateTime m_slot; // time slot
+    qulonglong m_slot; // time slot
 
 protected:
 
-    TimeSlot(const QDateTime &slot);
+    TimeSlot(const qulonglong &slot);
 
 public:
 
     virtual qlonglong getId() const = 0;
 
-    const QDateTime& getSlot() const;
-    void setSlot(const QDateTime& slot);
+    const qulonglong& getSlot() const;
+    void setSlot(const qulonglong& slot);
 
     virtual ~TimeSlot();
 

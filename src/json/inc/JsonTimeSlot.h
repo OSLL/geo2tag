@@ -48,7 +48,7 @@
         qlonglong m_id;
 
     public:
-        JsonTimeSlot(const QDateTime &slot);
+        JsonTimeSlot(const qulonglong &slot);
 
         qlonglong getId() const;
 

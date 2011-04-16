@@ -7,7 +7,7 @@
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 
-GetTimeSlotRequestJSON::GetTimeSlotRequestJSON()
+GetTimeSlotRequestJSON::GetTimeSlotRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 

@@ -137,19 +137,13 @@ void UpdateThread::loadTimeSlots(TimeSlots &container)
         {
             // skip record
             continue;
-        }
+        }       
 
-       // QDateTime slot = query.record().value("slot").toDateTime().toTimeSpec(Qt::LocalTime);
-
-        qulonglong slotULong = query.record().value("slot").toULongLong();
-       // bool check = query.record().value("slot").canConvert(QVariant::ULongLong);
-        if (slotULong == 0)
+        qulonglong slot = query.record().value("slot").toULongLong();
+        if (slot == 0)
             syslog(LOG_INFO, "can't convert to qulonglong");
-       // syslog(LOG_INFO, "convert to qulonglong: %i", check);
-       // qulonglong slotULong = query.record().value("slot").toULongLong();
-        QDateTime slot;
-        slot.addMSecs(slotULong);
-        syslog(LOG_INFO, "slot: %s", slot.toString().toStdString().c_str());
+
+        syslog(LOG_INFO, "slot: %llu milliseconds", slot);
 
         DbTimeSlot * newTimeSlot = new DbTimeSlot(id, slot);
         QSharedPointer<DbTimeSlot> pointer(newTimeSlot);
@@ -170,7 +164,7 @@ void UpdateThread::loadTags(DataMarks &container)
             continue;
         }
         QDateTime time = query.record().value("time").toDateTime().toTimeSpec(Qt::LocalTime);
-//        syslog(LOG_INFO, "loaded tag with time: %s", time.toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str());
+//       // syslog(LOG_INFO, "loaded tag with time: %s milliseconds", time;
         qreal latitude = query.record().value("latitude").toReal();
         qreal longitude = query.record().value("longitude").toReal();
         QString label = query.record().value("label").toString();
