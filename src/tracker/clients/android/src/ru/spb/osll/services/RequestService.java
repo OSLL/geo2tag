@@ -193,7 +193,7 @@ public class RequestService extends Service {
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
 			if (status.equals(IResponse.OK_STATUS)){
 			 	boolean isShowTick = Settings.getPreferences(this).getBoolean(ITrackerAppSettings.IS_SHOW_TICKS, false); 
-				showMess("tick:{" + latitude + "," + longitude + "}", isShowTick);
+				showMess(TrackerUtil.convertLocation(latitude, longitude), isShowTick);
 			} else {
 				showMess("apply mark:" + status + "," + statusDescription, false);
 			}

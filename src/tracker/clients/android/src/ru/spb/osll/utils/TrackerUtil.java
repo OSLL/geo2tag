@@ -15,6 +15,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -64,6 +65,13 @@ public class TrackerUtil {
 			TrackerActivity.Instance.appendToLogView(mess);
 			lineCount++;
 		}
+	}
+	
+	public static String convertLocation(double latitude, double longitude){
+		StringBuffer strBuffer = new StringBuffer();
+		strBuffer.append("lat: ").append(Location.convert(latitude, Location.FORMAT_MINUTES)).
+		append("  lon: ").append(Location.convert(longitude, Location.FORMAT_MINUTES));	
+		return strBuffer.toString();
 	}
 
 	public static boolean isOnline(Context c) {
