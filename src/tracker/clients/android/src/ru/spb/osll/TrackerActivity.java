@@ -7,6 +7,8 @@ import ru.spb.osll.services.LocationService;
 import ru.spb.osll.services.RequestService;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -76,8 +78,11 @@ public class TrackerActivity extends Activity {
 		creenBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//finish();
-				new Settings(TrackerActivity.this).setDefaultSettrings();
+				finish(); // TODO
+				
+//				Intent intent = new Intent("test");
+//				intent.putExtra(TrackerReceiver.TYPE, TrackerReceiver.ID_SHOW_TOAST);
+//				sendBroadcast(intent);
 			}
 		});
 
@@ -109,7 +114,6 @@ public class TrackerActivity extends Activity {
 			stopService(new Intent(this, LocationService.class));
 		}
 	}
-
 	
 	// ------------------------------------------------------------------
 	public void showToast(final String mess){
@@ -148,4 +152,25 @@ public class TrackerActivity extends Activity {
 		});
 	}
 
+	// ------------------------------------------------------------------
+	TrackerReceiver m_trackerReceiver = new TrackerReceiver();
+	private class TrackerReceiver extends BroadcastReceiver{
+		public static final String TYPE = "type";
+		public static final int ID_SHOW_TOAST = 0;
+		public static final int ID_APPEND_TO_LOG = 1;
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int type = intent.getIntExtra(TYPE, ID_APPEND_TO_LOG);
+			switch (type) {
+				case ID_SHOW_TOAST:
+					showToast("1111");
+					break;
+				case ID_APPEND_TO_LOG:
+					appendToLogView("1111");
+					break;
+			}
+		}
+	}
+	
 }
