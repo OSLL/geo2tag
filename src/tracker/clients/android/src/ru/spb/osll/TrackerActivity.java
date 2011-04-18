@@ -1,7 +1,5 @@
 package ru.spb.osll;
 
-import org.xml.sax.InputSource;
-
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.SettingsActivity;
 import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
@@ -79,7 +77,7 @@ public class TrackerActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				//finish();
-				new Settings(TrackerActivity.this).examineXMLFile();
+				new Settings(TrackerActivity.this).setDefaultSettrings();
 			}
 		});
 
