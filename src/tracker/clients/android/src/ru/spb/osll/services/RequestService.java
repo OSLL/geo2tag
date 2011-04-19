@@ -22,7 +22,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class RequestService extends Service {
 	// get in settings
@@ -207,10 +206,6 @@ public class RequestService extends Service {
 		sendMess(TrackerReceiver.ID_APPEND_TO_LOG, mess);
 		if (isShowToast)
 			sendMess(TrackerReceiver.ID_SHOW_TOAST, mess);
-
-//		TrackerUtil.appendToLogView(mess);
-//		if (isShowToast)
-//			TrackerUtil.showToast(mess);
 	}
 	
 	private void onFail(String mess){
