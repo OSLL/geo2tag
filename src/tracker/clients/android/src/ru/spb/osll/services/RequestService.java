@@ -20,6 +20,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -31,18 +32,22 @@ public class RequestService extends Service {
 	private String m_serverUrl;
 	
 	private String m_authToken;
-
+	private boolean isShowTick;
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Log.v(TrackerActivity.LOG, "request service create");
+	 	isShowTick = Settings.getPreferences(this).getBoolean(ITrackerAppSettings.IS_SHOW_TICKS, false); 
 	}
-
+	
+	final int UNPLUGIN_TICK = 60*1000;	// 1 min 
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		Log.v(TrackerActivity.LOG, "request service start");
-
+		new HideToastTimer(UNPLUGIN_TICK, UNPLUGIN_TICK).start();
+		
 		getSettingsValues();
 		setServiceStatus(true);
 		new Thread(loginRunnable).start();
@@ -193,7 +198,6 @@ public class RequestService extends Service {
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
 			if (status.equals(IResponse.OK_STATUS)){
-			 	boolean isShowTick = Settings.getPreferences(this).getBoolean(ITrackerAppSettings.IS_SHOW_TICKS, false); 
 				showMess(TrackerUtil.convertLocation(latitude, longitude), isShowTick);
 			} else {
 				showMess("apply mark:" + status + "," + statusDescription, false);
@@ -230,5 +234,18 @@ public class RequestService extends Service {
 	}
 	public synchronized void setServiceStatus(boolean status){
 		TRAKER_STATUS = status;
+	}
+	
+	private class HideToastTimer extends CountDownTimer{
+		public HideToastTimer(long millisInFuture, long countDownInterval) {
+			super(millisInFuture, countDownInterval);
+		}
+		@Override
+		public void onFinish() {
+			isShowTick = false;
+		}
+		@Override
+		public void onTick(long millisUntilFinished) {
+		}
 	}
 }
