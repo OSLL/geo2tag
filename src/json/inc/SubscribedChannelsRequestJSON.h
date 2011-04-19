@@ -28,37 +28,40 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+
+/* $Id$ */
 /*!
- * \file ChannelListJSON.h
- * \brief header of ChannelListJSON
+ * \file SubscribedChannelsRequestJSON.h
+ * \brief Header of SubscribedChannelsRequestJSON
+ * \todo add comment here
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-
-#ifndef _ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
-#define _ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
+#ifndef _SubscribedChannelsJSON_H_INCLUDED_
+#define _SubscribedChannelsJSON_H_INCLUDED_
 
 #include "JsonSerializer.h"
 
-class ChannelListResponseJSON: public JsonSerializer
+class SubscribedChannelsRequestJSON: public JsonSerializer
 {
 public:
-    ChannelListResponseJSON();
+    SubscribedChannelsRequestJSON(const QSharedPointer<User> &user);
 
-    void setChannels(QSharedPointer<Channels> channels);
+// Three functions below was virtual
+    QByteArray getJson() const;
 
-    virtual QByteArray getJson() const;
+    void parseJson(const QByteArray&);
 
-    virtual void parseJson(const QByteArray&);
+ //   ~SubscribedChannelsRequestJSON();
+		
+    SubscribedChannelsRequestJSON();
 
-    virtual ~ChannelListResponseJSON();
-
-};//class ChannelListJSON
+}; // class SubscribedChannelsJSON
 
 
-#endif //_ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
+#endif //_SubscribedChannelsJSON_H_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

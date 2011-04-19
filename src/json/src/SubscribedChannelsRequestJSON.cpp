@@ -28,37 +28,70 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file ChannelListJSON.h
- * \brief header of ChannelListJSON
+
+/*! ---------------------------------------------------------------
+ * $Id$
+ *
+ * \file SubscribedChannelsJSON.cpp
+ * \brief SubscribedChannelsJSON implementation
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 
-#ifndef _ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
-#define _ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
+#include <QVariant>
+#include <QVariantMap>
 
-#include "JsonSerializer.h"
-
-class ChannelListResponseJSON: public JsonSerializer
+#include "SubscribedChannelsRequestJSON.h"
+#include "JsonChannel.h"
+#include "JsonDataMark.h"
+#include "JsonUser.h"
+#include <syslog.h>
+SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON()
 {
-public:
-    ChannelListResponseJSON();
+	syslog(LOG_INFO,"SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON()");
+}
 
-    void setChannels(QSharedPointer<Channels> channels);
+SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON(const QSharedPointer<User> &user)
+{
+    m_usersContainer->push_back(user);
+}
 
-    virtual QByteArray getJson() const;
+/*SubscribedChannelsRequestJSON::~SubscribedChannelsRequestJSON()
+{
 
-    virtual void parseJson(const QByteArray&);
+}*/
 
-    virtual ~ChannelListResponseJSON();
+void SubscribedChannelsRequestJSON::parseJson(const QByteArray &data)
+{
+    clearContainers();
 
-};//class ChannelListJSON
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
 
+    if (!ok)
+    {
+        qFatal("An error occured during parsing json with SubscribedChannelsReques");
+        return;
+    }
+    QString authToken =    result["auth_token"].toString();
+    QSharedPointer<User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
+    m_usersContainer->push_back(dummyUser);
+}
 
-#endif //_ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
+QByteArray SubscribedChannelsRequestJSON::getJson() const
+{
+    QJson::Serializer serializer;
+    QVariantMap request;
+
+    request.insert("auth_token", m_usersContainer->at(0)->getToken());
+
+    return serializer.serialize(request);
+}
 
 /* ===[ End of file $HeadURL$ ]=== */

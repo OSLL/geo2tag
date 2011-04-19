@@ -56,6 +56,11 @@ ChannelListResponseJSON::~ChannelListResponseJSON()
 
 }
 
+void ChannelListResponseJSON::setChannels(QSharedPointer<Channels> channels)
+{
+	m_channelsContainer=channels;
+}
+
 void ChannelListResponseJSON::parseJson(const QByteArray &data)
 {
     clearContainers();
