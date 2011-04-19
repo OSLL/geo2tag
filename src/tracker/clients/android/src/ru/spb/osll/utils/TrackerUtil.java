@@ -42,38 +42,19 @@ public class TrackerUtil {
 		nm.cancel(TRACKER_NOTIFY_ID);
 	}	
 	
-	public static void showToast(final String mess){
-		if (TrackerActivity.Instance != null){
-			TrackerActivity.Instance.showToast(mess);
-		}
-	}
-
-	public static void showToast(final int mess){
-		if (TrackerActivity.Instance != null){
-			TrackerActivity.Instance.showToast(mess);
-		}
-	}
-
-	private static int lineCount = 0;
-	private static final int maxLines = 20;
-	public static void appendToLogView(final String mess){
-		if (TrackerActivity.Instance != null){
-			if (lineCount > maxLines){
-				TrackerActivity.Instance.clearLogView();
-				lineCount = 0;
-			}
-			TrackerActivity.Instance.appendToLogView(mess);
-			lineCount++;
-		}
-	}
-	
 	public static String convertLocation(double latitude, double longitude){
 		StringBuffer strBuffer = new StringBuffer();
 		strBuffer.append("lat: ").append(Location.convert(latitude, Location.FORMAT_MINUTES)).
 		append("  lon: ").append(Location.convert(longitude, Location.FORMAT_MINUTES));	
 		return strBuffer.toString();
 	}
-
+	
+	public static void hideApplication(Context c){
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		c.startActivity(intent);
+	}
+	
 	public static boolean isOnline(Context c) {
 	    ConnectivityManager cm = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo nInfo = cm.getActiveNetworkInfo();

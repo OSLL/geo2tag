@@ -21,7 +21,10 @@ public abstract class JsonRequest {
 			Log.v(JSON_LOG, e.getMessage());
 		} catch (URISyntaxException e) {
 			Log.v(JSON_LOG, e.getMessage());
+		}	catch (Exception e) {
+			Log.v(JSON_LOG, e.getMessage());
 		}
+		
 		return resultJSON;
 	}	
 

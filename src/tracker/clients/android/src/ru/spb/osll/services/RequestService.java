@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 public class RequestService extends Service {
 	// get in settings
@@ -215,9 +216,9 @@ public class RequestService extends Service {
 	private void onFail(String mess){
 		String failMess = "FAIL: " + mess;
 		Log.v(TrackerActivity.LOG, failMess);
-		TrackerUtil.showToast(failMess);
-		TrackerUtil.appendToLogView(failMess);
+		showMess(failMess, true);
 		TrackerUtil.disnotify(this);
+		stopService(new Intent(this, LocationService.class));
 		setServiceStatus(false);
 	}
 
@@ -227,7 +228,7 @@ public class RequestService extends Service {
 		intent.putExtra(TrackerReceiver.TYPE_MESS, mess);
 		sendBroadcast(intent);
 	}
-	
+		
 	private static boolean TRAKER_STATUS = false;
 	public synchronized static boolean isActive(){
 		return TRAKER_STATUS;

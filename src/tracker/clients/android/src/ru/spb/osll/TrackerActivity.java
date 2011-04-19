@@ -21,17 +21,15 @@ import android.widget.Toast;
 
 public class TrackerActivity extends Activity {
 	public static String LOG = "Tracker";
-	
 	TextView m_logView;
-	public static TrackerActivity Instance;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+		registerReceiver(m_trackerReceiver, new IntentFilter(TrackerReceiver.ACTION_SHOW_MESS));
 		
-		Instance = this;
 		m_logView = (TextView) findViewById(R.id.TextField);
 		initialization();
 		
@@ -82,11 +80,10 @@ public class TrackerActivity extends Activity {
 		creenBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				finish(); // TODO
+				TrackerUtil.hideApplication(TrackerActivity.this);
 			}
 		});
 
-		registerReceiver(m_trackerReceiver, new IntentFilter(TrackerReceiver.ACTION_SHOW_MESS));
 	}
 	
 	private void startTracker(){
@@ -100,7 +97,7 @@ public class TrackerActivity extends Activity {
 			startService(new Intent(this, LocationService.class));
 			
 			if (Settings.getPreferences(this).getBoolean(ITrackerAppSettings.IS_HIDE_APP, true)){
-				finish();
+				TrackerUtil.hideApplication(TrackerActivity.this);
 			}
 		} else if (!TrackerUtil.isOnline(this)){
 			showToast(TrackerUtil.MESS_FAIL_CONNECTION);
@@ -116,7 +113,46 @@ public class TrackerActivity extends Activity {
 		}
 	}
 
-	// ------------------------------------------------------------------
+	private void showToast(final String mess){
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
+			}
+		});
+	}
+
+	private static int lineCount = 0;
+	private static final int maxLines = 20;
+	public void appendToLogView(final String mess){
+		if (lineCount > maxLines){
+			clearLogView();
+			lineCount = 0;
+		}
+		appendToLogViewInternal(mess);
+		lineCount++;
+	}
+	
+	private void appendToLogViewInternal(final String mess){
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				m_logView.append("\n" + mess);
+			}
+		});
+	}
+
+	private void clearLogView(){
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				m_logView.setText("");
+			}
+		});
+	}	
+	
+	private 
+
 	TrackerReceiver m_trackerReceiver = new TrackerReceiver();
 	public class TrackerReceiver extends BroadcastReceiver{
 		public static final String 	ACTION_SHOW_MESS = "show.mess.action";
@@ -135,46 +171,9 @@ public class TrackerActivity extends Activity {
 					appendToLogView(mess);
 					break;
 				case ID_SHOW_TOAST:
-						showToast(mess);
-						break;
+					showToast(mess);
+					break;
 			}
 		}
 	}
-
-	// ------------------------------------------------------------------
-	public void showToast(final String mess){
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
-			}
-		});
-	}
-
-	public void showToast(final int mess){
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				Toast.makeText(TrackerActivity.this, mess, Toast.LENGTH_SHORT).show();				
-			}
-		});
-	}
-
-	public void appendToLogView(final String mess){
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				m_logView.append("\n" + mess);
-			}
-		});
-	}
-
-	public void clearLogView(){
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				m_logView.setText("");
-			}
-		});
-	}	
 }
