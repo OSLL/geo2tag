@@ -5,6 +5,7 @@ import java.util.Date;
 import org.json.JSONObject;
 
 import ru.spb.osll.TrackerActivity;
+import ru.spb.osll.TrackerActivity.TrackerReceiver;
 import ru.spb.osll.json.JsonAddUserRequest;
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonApplyMarkRequest;
@@ -202,9 +203,13 @@ public class RequestService extends Service {
 	
 	private void showMess(String mess, boolean isShowToast){
 		Log.v(TrackerActivity.LOG, mess);
-		TrackerUtil.appendToLogView(mess);
+		sendMess(TrackerReceiver.ID_APPEND_TO_LOG, mess);
 		if (isShowToast)
-			TrackerUtil.showToast(mess);
+			sendMess(TrackerReceiver.ID_SHOW_TOAST, mess);
+
+//		TrackerUtil.appendToLogView(mess);
+//		if (isShowToast)
+//			TrackerUtil.showToast(mess);
 	}
 	
 	private void onFail(String mess){
@@ -214,6 +219,13 @@ public class RequestService extends Service {
 		TrackerUtil.appendToLogView(failMess);
 		TrackerUtil.disnotify(this);
 		setServiceStatus(false);
+	}
+
+	private void sendMess(int operationId, String mess){
+		Intent intent = new Intent(TrackerReceiver.ACTION_SHOW_MESS);
+		intent.putExtra(TrackerReceiver.TYPE_OPEATION, operationId);
+		intent.putExtra(TrackerReceiver.TYPE_MESS, mess);
+		sendBroadcast(intent);
 	}
 	
 	private static boolean TRAKER_STATUS = false;
