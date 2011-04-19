@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -78,13 +79,15 @@ public class TrackerActivity extends Activity {
 		creenBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				finish(); // TODO
+//				//finish(); // TODO
 				
-//				Intent intent = new Intent("test");
-//				intent.putExtra(TrackerReceiver.TYPE, TrackerReceiver.ID_SHOW_TOAST);
-//				sendBroadcast(intent);
+				Intent intent = new Intent(TrackerReceiver.ACTION_TEST);
+				intent.putExtra(TrackerReceiver.TYPE, TrackerReceiver.ID_SHOW_TOAST);
+				sendBroadcast(intent);
 			}
 		});
+		
+		registerReceiver(m_trackerReceiver, new IntentFilter(TrackerReceiver.ACTION_TEST));
 
 	}
 	
@@ -155,6 +158,8 @@ public class TrackerActivity extends Activity {
 	// ------------------------------------------------------------------
 	TrackerReceiver m_trackerReceiver = new TrackerReceiver();
 	private class TrackerReceiver extends BroadcastReceiver{
+		public static final String ACTION_TEST = "test_aption";
+		
 		public static final String TYPE = "type";
 		public static final int ID_SHOW_TOAST = 0;
 		public static final int ID_APPEND_TO_LOG = 1;

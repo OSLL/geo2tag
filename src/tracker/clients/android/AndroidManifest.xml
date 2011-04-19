@@ -19,12 +19,6 @@
         </activity>
         <activity android:name="ru.spb.osll.preferences.SettingsActivity" android:configChanges="orientation|keyboardHidden"/>
 	   
-	   	<receiver android:name=".TrackerReceiver">
-	   		<intent-filter>
-	   			<action android:name="test"/>
-	   		</intent-filter>
-	   </receiver>
-	   
         <service android:enabled="true" android:name="ru.spb.osll.services.RequestService"></service>
         <service android:enabled="true" android:name="ru.spb.osll.services.LocationService"></service>
     </application>
