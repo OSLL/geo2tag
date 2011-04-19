@@ -1,12 +1,12 @@
 TEMPLATE = app
 
 TARGET = wikigps-observer
+CONFIG += linux_profiling
 
 target.path = /usr/bin
 INSTALLS += target
 
 include(../../../config.pri)
-
 
 QT += network
 

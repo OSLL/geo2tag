@@ -22,13 +22,6 @@
 #define KEY_MOVE_DIST 10
 
 
-/*
- * For use Qpoint in QHash
- */
-uint qHash(const QPoint& p)
-{
-    return p.x() * 17 ^ p.y();
-}
 
 
 MapScene::MapScene(QObject *parent) :
@@ -40,12 +33,12 @@ MapScene::MapScene(QObject *parent) :
     m_maps = QHash<TilePoint, QGraphicsPixmapItem * >();
 
     m_uploader = new MapsUploader(this);
-    connect(this, SIGNAL(uploadTiles(QVector<TilePoint>)), m_uploader, SLOT(uploadTiles(QVector<TilePoint>)));
-    connect(m_uploader, SIGNAL(tileUploaded(QPixmap,QPoint,int)), this, SLOT(tileUploaded(QPixmap,QPoint,int)));
+    connect(this, SIGNAL(uploadTiles(QVector<TilePoint> &)), m_uploader, SLOT(uploadTiles(QVector<TilePoint> &)));
+    connect(m_uploader, SIGNAL(tileUploaded(const QPixmap &, const QPoint &, int)), this, SLOT(tileUploaded(const QPixmap &, const QPoint &, int)));
 }
 
 
-void MapScene::tileUploaded(const QPixmap pixmap, const QPoint point, const int zoom)
+void MapScene::tileUploaded(const QPixmap & pixmap, const QPoint & point, const int zoom)
 {
     TilePoint tp = qMakePair(point, zoom);
 
@@ -205,6 +198,10 @@ void MapScene::setMarks(DataChannels marks)
 	//Getting list of all channels, wich marks are in request
     QList<QSharedPointer<DataMark> > marks_to_show;
 
+	for(int i = 0; i < m_marks.size(); i++)
+	{
+		this->removeItem(m_marks.at(i));
+	}
 	m_marks.clear();
 
 	QList<QSharedPointer<Channel> > channels = marks.uniqueKeys();
@@ -287,6 +284,8 @@ void MapScene::add_mark(QPointF pos, QString channel_name)
 
 	pi->setX(posForPicture.x());
 	pi->setY(posForPicture.y());
+
+	m_marks.push_back(pi);
 }
 
 void MapScene::wheelEvent(QGraphicsSceneWheelEvent *event)

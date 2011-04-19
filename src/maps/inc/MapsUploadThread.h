@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QFile>
+#include <QDir>
 #include <QThread>
 
 typedef QPair<QPoint,int> TilePoint;
@@ -18,10 +19,12 @@ class MapsUploadThread : public QThread
 
     QNetworkAccessManager * m_manager;
     QUrl m_url;
+	QDir m_file_store_dir;
     QVector<TilePoint> m_tiles;
 	QVector<QFile *> m_files;
 
 private:
+	void checkHomePath();
 	void popNextTile();
 
 public:

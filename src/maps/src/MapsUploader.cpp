@@ -10,6 +10,15 @@
 #include <QBuffer>
 
 
+/*
+ * For use QPoint in QHash
+ */
+uint qHash(const QPoint & p)
+{
+	return p.x() * pow( 17, p.y() );
+}
+
+
 QPointF tileForCoordinate(qreal lat, qreal lng, int zoom)
 {
     qreal zn = static_cast<qreal>(1 << zoom);
@@ -87,7 +96,7 @@ void MapsUploader::handleNetworkData(QNetworkReply *reply)
 		QString file_name = file_store_path.path() + "/" + QString::number(tp.x()) + "_" + QString::number(tp.y());// + ".png";
 		if(!QFile(file_name).exists())
 		{
-			qDebug() << file_name << "\n";
+			//qDebug() << file_name << "\n";
 			QByteArray bytes;
 			QBuffer buffer(&bytes);
 			buffer.open(QIODevice::WriteOnly);
@@ -113,56 +122,43 @@ void MapsUploader::downloadTile(int lat, int lg, int zoom)
 		file_store_path.mkpath(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
 	file_store_path.cd(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
 	QString file_name = file_store_path.path() + "/" + QString::number(lg) + "_" + QString::number(lat);// + ".png";
-	QFile * pixmap_file = new QFile(file_name);
-	if(pixmap_file->exists())
+	if(QFile::exists(file_name))
 	{
-		qDebug() << file_name << "\n";
-		m_files.push_back(pixmap_file);
-		pixmap_file->open(QFile::ReadOnly);
-		/*
-		uchar * maped = pixmap_file->map(0, pixmap_file->size());
-		qDebug() << maped << "\n";
+		//qDebug() << file_name << "\n";
+
+		QFile pixmap_file(file_name, this);
+		//m_files.push_back(pixmap_file);
+		pixmap_file.open(QFile::ReadOnly);
 		QPixmap pixmap;
-		if(pixmap.loadFromData(maped, pixmap_file->size()))
+		if( pixmap.loadFromData( qUncompress(pixmap_file.readAll()) ) )
 		{
-			qDebug() << "File mapped and uploaded\n";
+			//qDebug() << "File loaded from cache\n";
 			emit this->tileUploaded(pixmap, grab, zoom);
-			return;
 		}
 		else
 		{
 			qDebug() << "Error!\n";
 		}
-		*/
-		QPixmap pixmap;
-		if( pixmap.loadFromData( qUncompress(pixmap_file->readAll()) ) )
-		{
-			qDebug() << "File mapped and uploaded\n";
-			emit this->tileUploaded(pixmap, grab, zoom);
-			return;
-		}
-		else
-		{
-			qDebug() << "Error!\n";
-		}
+		pixmap_file.close();
 	}
-
-
-    QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
-    m_url = QUrl(path.arg(zoom).arg(lg).arg(lat));
-    //qDebug() << m_url << "\n";
-    QNetworkRequest request;
-    request.setUrl(m_url);
-    request.setRawHeader("User-Agent", "OSLL Observer");
-    QList<QVariant> data;
-    data.push_back(QVariant(grab));
-    data.push_back(QVariant(zoom));
-    request.setAttribute(QNetworkRequest::User, QVariant(data));
-    m_manager.get(request);
+	else
+	{
+		QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
+		m_url = QUrl(path.arg(zoom).arg(lg).arg(lat));
+		//qDebug() << m_url << "\n";
+		QNetworkRequest request;
+		request.setUrl(m_url);
+		request.setRawHeader("User-Agent", "OSLL Observer");
+		QList<QVariant> data;
+		data.push_back(QVariant(grab));
+		data.push_back(QVariant(zoom));
+		request.setAttribute(QNetworkRequest::User, QVariant(data));
+		m_manager.get(request);
+	}
 }
 
 
-void MapsUploader::uploadTiles(QVector<TilePoint> tiles_to_upload)
+void MapsUploader::uploadTiles(QVector<TilePoint> & tiles_to_upload)
 {
     for(int i = 0; i < tiles_to_upload.size(); i++)
     {

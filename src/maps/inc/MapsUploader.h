@@ -9,7 +9,12 @@
 #include <QFile>
 
 typedef QPair<QPoint,int> TilePoint;
+typedef QPair<QPointF,int> TilePointF;
 
+/*
+ * For use QPoint in QHash
+ */
+uint qHash(const QPoint & p);
 
 class MapsUploader : public QObject
 {
@@ -28,7 +33,7 @@ public:
 	~MapsUploader();
 
 signals:
-    void tileUploaded(const QPixmap pixmap, const QPoint point, const int zoom);
+    void tileUploaded(const QPixmap & pixmap, const QPoint & point, int zoom);
 
 private slots:
 
@@ -36,7 +41,7 @@ private slots:
     void downloadTile(int lat, int lg, int zoom);
 
 public slots:
-    void uploadTiles(QVector<TilePoint> tiles_to_upload);
+    void uploadTiles(QVector<TilePoint> & tiles_to_upload);
 
 };
 

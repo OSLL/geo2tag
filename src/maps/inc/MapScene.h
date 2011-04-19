@@ -5,6 +5,7 @@
 #include <QGraphicsPixmapItem>
 #include <QBasicTimer>
 #include <QHash>
+#include <QVector>
 #include <QPoint>
 #include "MapsUploader.h"
 #include "DataChannel.h"
@@ -15,7 +16,17 @@ class MapScene : public QGraphicsScene
 {
     Q_OBJECT
 	
+private:
+    QHash<TilePoint, QGraphicsPixmapItem *> m_maps;
+	QVector<QGraphicsPixmapItem *> m_marks;
+    MapsUploader * m_uploader;
 	MapsUploadThread * m_map_uploader;
+
+    int m_zoom;
+    qreal m_latitude;
+    qreal m_longitude;
+
+    QPoint pressed_screen_position;
 
 public:
     explicit MapScene(QObject *parent = 0);
@@ -47,23 +58,12 @@ private:
     qreal tilex2long(qreal x, int z);
     qreal tiley2lat(qreal y, int z);
 
-private:
-
-    QHash<TilePoint, QGraphicsPixmapItem *> m_maps;
-	QHash<TilePoint, QGraphicsPixmapItem *> m_marks;
-    MapsUploader * m_uploader;
-
-    int m_zoom;
-    qreal m_latitude;
-    qreal m_longitude;
-
-    QPoint pressed_screen_position;
 
 signals:
-    void uploadTiles(QVector<TilePoint> tiles_to_upload);
+    void uploadTiles(QVector<TilePoint> & tiles_to_upload);
 
 public slots:
-    void tileUploaded(const QPixmap pixmap, const QPoint point, const int zoom);
+    void tileUploaded(const QPixmap & pixmap, const QPoint & point, int zoom);
 	void preFetch();
 
 };

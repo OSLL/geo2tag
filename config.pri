@@ -1,6 +1,7 @@
 CONFIG += debug
 
 CONFIG += linux
+CONFIG += linux_profiling
 #CONFIG += maemo5
 #CONFIG += symbian
 SOURCE_DIR = $$PWD
@@ -34,6 +35,11 @@ linux: {
                 QMAKE_CXXFLAGS += -fpermissive -Werror -DREDEFINE_QT_SIGNALS
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
+}
+
+linux_profiling: {
+	QMAKE_CXXFLAGS_DEBUG += -pg
+	QMAKE_LFLAGS_DEBUG += -pg
 }
 
 LIBS += -L$$SOURCE_DIR/src/lib
