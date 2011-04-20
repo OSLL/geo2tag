@@ -43,6 +43,7 @@ void TrackerDaemon::run()
     QString login = m_settings.value("user").toString();
     QString password = m_settings.value("password").toString();
     m_channelName = m_settings.value("channel").toString();
+    qDebug() << "read from QSettings " << login << " ,"<< password << " ," <<m_channelName;
     if(login.isEmpty())
         login = "Mark";
     if(password.isEmpty())
@@ -52,6 +53,7 @@ void TrackerDaemon::run()
     connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
     m_loginQuery->doRequest();
     qDebug() << "sended LoginRequest";
+    // NOTE commented due to qt bug linked with threads and network on Maemo
 /*    for(;;)
     {
 	    qDebug() << "going in for loop";
@@ -78,10 +80,10 @@ void TrackerDaemon::run()
 
 
 void TrackerDaemon::reloadSettings(){
+	qDebug() << "Doing reload of auth_token";
+	m_settings.sync();
 	m_isConnected = false;
-	m_pauseFlag = false;
-	if (m_loginQuery != NULL) delete m_loginQuery;
-	if (m_tagQuery != NULL) delete m_tagQuery;
+	m_pauseFlag = true;
 	run();
 }
 
@@ -90,7 +92,7 @@ void TrackerDaemon::startTracking()
     m_pauseFlag = false;
     onTagAdded();
 //    start();
-    run();
+//    run();
 }
 
 void TrackerDaemon::stopTracking()
@@ -119,16 +121,15 @@ void TrackerDaemon::onConnected()
     qDebug() << "Connected";
     if(m_tagQuery == NULL)
     {
-        QSharedPointer<DataMark> mark(
-                new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
+        QSharedPointer<DataMark> mark(new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
                                  common::GpsInfo::getInstance().getLongitude(),
                         //DEFAULT_LATITUDE,DEFAULT_LONGITUDE,
                                  "tracker's tag",
                                  "this tag was generated automaticaly by tracker application",
                                  "unknown",
                                  QDateTime::currentDateTime()));
-		m_lastCoords.setX(common::GpsInfo::getInstance().getLatitude());
-		m_lastCoords.setY(common::GpsInfo::getInstance().getLongitude());
+	m_lastCoords.setX(common::GpsInfo::getInstance().getLatitude());
+	m_lastCoords.setY(common::GpsInfo::getInstance().getLongitude());
         QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
         mark->setChannel(channel);
         mark->setUser(m_loginQuery->getUser());

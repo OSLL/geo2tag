@@ -44,7 +44,7 @@ void MainWindow::changeEvent(QEvent *e)
 }
 
 void MainWindow::doneButtonClicked(){
-//	(*m_device) << "reload ";
+	(*m_device) << "reload ";
 	moveToFirstPage();
 }
 
