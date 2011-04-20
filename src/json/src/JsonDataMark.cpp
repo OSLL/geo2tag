@@ -41,7 +41,7 @@
 
 #include "JsonDataMark.h"
 
-static qlonglong globalTagId = 0;
+qlonglong JsonDataMark::globalTagId = 0;
 
 JsonDataMark::JsonDataMark(double latitude,
                            double longitude,

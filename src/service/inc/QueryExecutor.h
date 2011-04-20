@@ -32,8 +32,7 @@ public:
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
     QSharedPointer<User> insertNewUser(const QSharedPointer<User>&);
     QSharedPointer<Channel> insertNewChannel(const QSharedPointer<Channel>&);
-    QSharedPointer<TimeSlot> insertNewTimeSlot(const QSharedPointer<TimeSlot>&);
-    bool insertNewChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
+    QSharedPointer<TimeSlot> insertNewTimeSlot(const QSharedPointer<TimeSlot>&);   
     bool changeChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
 
 signals:

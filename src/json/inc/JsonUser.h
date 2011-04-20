@@ -47,6 +47,7 @@
    */
   class JsonUser: public User
   {
+    static qlonglong globalUserId;
     qlonglong m_id;
 
   public:

@@ -47,7 +47,6 @@
 #include <QVector>
 #include <QSharedPointer>
 #include <QDateTime>
-//#include "DataChannel.h"
 #include "User.h"
 #include "ConcurrentVector.h"
 

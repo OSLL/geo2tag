@@ -37,7 +37,7 @@
 
 #include "JsonUser.h"
 
-static qlonglong globalUserId = 0;
+qlonglong JsonUser::globalUserId = 0;
 
 JsonUser::JsonUser(const QString &login,
                    const QString& pass,

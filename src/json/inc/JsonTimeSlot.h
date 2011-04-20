@@ -45,6 +45,7 @@
 
     class JsonTimeSlot: public TimeSlot
     {
+        static qlonglong globalTimeSlotId;
         qlonglong m_id;
 
     public:

@@ -68,7 +68,6 @@
 
 #include <QtSql>
 #include <QMap>
-#include <QDebug>
 
 namespace common
 {
@@ -259,8 +258,9 @@ namespace common
             return answer;
         }
         m_updateThread->lockWriting();
-        m_tagsContainer->push_back(realTag);
-        m_updateThread->unlockWriting(); //!!! m_dataChannelsMap wasn't update
+        m_tagsContainer->push_back(realTag);       
+        m_dataChannelsMap->insert(realChannel, realTag);
+        m_updateThread->unlockWriting();
 
         response.setStatus(ok);
         response.setStatusMessage("Tag has been added");
@@ -478,6 +478,11 @@ namespace common
                 syslog(LOG_INFO, "answer: %s", answer.data());
                 return answer;
             }
+
+            syslog(LOG_INFO, "Setting defalt time slot value for channel");
+            QSharedPointer<TimeSlot> defaultTimeSlot = m_timeSlotsContainer->at(0);
+            addedChannel->setTimeSlot(defaultTimeSlot);
+
             m_updateThread->lockWriting();
             // Here will be adding user into user container
             m_channelsContainer->push_back(addedChannel);
@@ -537,17 +542,7 @@ namespace common
                 response.setStatusMessage("Wrong channel's' name!");
                 answer.append(response.getJson());
                 return answer;
-            }
-
-            if (realChannel->getTimeSlot().isNull())
-            {
-                DefaultResponseJSON response;
-                response.setStatus(ok);
-                response.setStatusMessage("Time slot isn't set yet!");
-                answer.append(response.getJson());
-                return answer;
-            }
-
+            }            
 
             response.addChannel(realChannel);
             answer.append(response.getJson());
@@ -606,10 +601,11 @@ namespace common
             if (!dummyTimeSlot->getSlot())
             {
                 response.setStatus(error);
-                response.setStatusMessage("Time slot can't be a null"); //NOTE: may be more than some value - e.g. 1 min?
+                response.setStatusMessage("Time slot can't be a null");
                 answer.append(response.getJson());
                 return answer;
             }
+
             QSharedPointer<TimeSlot> realTimeSlot; // Null pointer
             QVector<QSharedPointer<TimeSlot> > currentTimeSlots = m_timeSlotsContainer->vector();
             for(int i=0; i<currentTimeSlots.size(); i++)
@@ -618,9 +614,10 @@ namespace common
                 {
                     realTimeSlot = currentTimeSlots.at(i);
                 }
-            }
+            }            
 
-            bool realTimeSlotIsNull;
+            bool realTimeSlotIsNull = false;
+            qDebug()<< realTimeSlotIsNull;
             QSharedPointer<TimeSlot> addedTimeSlot;
 
             if (realTimeSlot.isNull())
@@ -638,23 +635,14 @@ namespace common
                 m_updateThread->lockWriting();
                 m_timeSlotsContainer->push_back(addedTimeSlot);
                 m_updateThread->unlockWriting();
-            }
+            }             
 
             bool result;
-            if (realChannel->getTimeSlot().isNull())
-            {                
-                if (realTimeSlotIsNull)
-                    result = m_queryExecutor->insertNewChannelTimeSlot(realChannel, addedTimeSlot);
-                else
-                    result = m_queryExecutor->insertNewChannelTimeSlot(realChannel, realTimeSlot);
-            }
+            qDebug()<< realTimeSlotIsNull;
+            if (realTimeSlotIsNull)            
+                result = m_queryExecutor->changeChannelTimeSlot(realChannel, addedTimeSlot);
             else
-            {
-                if (realTimeSlotIsNull)
-                    result = m_queryExecutor->changeChannelTimeSlot(realChannel, addedTimeSlot);
-                else
-                    result = m_queryExecutor->changeChannelTimeSlot(realChannel, realTimeSlot);
-            }
+                result = m_queryExecutor->changeChannelTimeSlot(realChannel, realTimeSlot);
 
             if(!result)
             {

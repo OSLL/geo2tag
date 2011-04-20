@@ -45,7 +45,7 @@ void SetTimeSlotRequestJSON::parseJson(const QByteArray &data)
 
     m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));    
     m_channelsContainer->push_back(QSharedPointer<Channel> (new JsonChannel(channel, "unknown", "unknown")));
-    m_channelsContainer->operator [](0)->setTimeSlot(QSharedPointer<TimeSlot>(new JsonTimeSlot(timeSlot)));
+    m_channelsContainer->at(0)->setTimeSlot(QSharedPointer<TimeSlot>(new JsonTimeSlot(timeSlot)));
 }
 
 
