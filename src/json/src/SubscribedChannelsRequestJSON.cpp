@@ -61,10 +61,6 @@ SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON(const QSharedPointe
     m_usersContainer->push_back(user);
 }
 
-/*SubscribedChannelsRequestJSON::~SubscribedChannelsRequestJSON()
-{
-
-}*/
 
 void SubscribedChannelsRequestJSON::parseJson(const QByteArray &data)
 {

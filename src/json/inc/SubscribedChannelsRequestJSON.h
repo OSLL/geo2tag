@@ -55,8 +55,6 @@ public:
 
     void parseJson(const QByteArray&);
 
- //   ~SubscribedChannelsRequestJSON();
-		
     SubscribedChannelsRequestJSON();
 
 }; // class SubscribedChannelsJSON
