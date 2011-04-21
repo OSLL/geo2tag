@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget* parent):
   m_menu=menuBar()->addMenu("Options");
   m_menu->addAction(m_settingsAction);
   m_menu->addAction(m_marksSettingsAction);
-  m_map->setCenter( 60, 30);
+  m_map->setCenter( DEFAULT_LAT, DEFAULT_LON);
   m_stackedWidget->addWidget(m_map);
   m_stackedWidget->addWidget(m_optWidget);
   m_stackedWidget->addWidget(m_marksOptWidget);
