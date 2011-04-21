@@ -4,9 +4,9 @@
 #include <QList>
 
 DataThread::DataThread(LightMap* map,QObject *parent) :
-    QThread(parent),  
-		m_settings("osll","observer"), 
-		m_map(map),
+    QThread(parent),
+    m_settings(QSettings::SystemScope,"osll","observer"),
+    m_map(map),
 		m_isConnected(false),
 		m_requestIsSent(false)
 

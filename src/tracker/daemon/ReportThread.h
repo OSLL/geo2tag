@@ -23,6 +23,7 @@ class ControlThread : public QObject
     void processStopQuery();
     void processLogsQuery();
     void processStatusQuery();
+    void processReloadQuery();
 
 private slots:
     void run();

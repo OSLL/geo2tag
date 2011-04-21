@@ -26,6 +26,7 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
 private slots:
     void startButtonClicked();
     void logButtonClicked();
+    void doneButtonClicked();
     void settingsButtonClicked();
 
     void checkDaemon();

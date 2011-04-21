@@ -5,7 +5,7 @@
 
 QString getServerUrl()
 {
-        QSettings settings("osll","libs");
+        QSettings settings(QSettings::SystemScope,"osll","libs");
   //      if (settings.value("server_url").toString().isEmpty()){
   //              settings.setValue("server_url",DEFAULT_SERVER);
     //    }
@@ -17,10 +17,10 @@ QString getServerUrl()
 
 void setServerUrl(QString serverUrl)
 {
-        QSettings settings("osll","libs");
+        QSettings settings(QSettings::SystemScope,"osll","libs");
 //	if (!serverUrl.isEmpty()){
 	        settings.setValue("server_url",serverUrl);
-		settings.sync();
+//		settings.sync();
 //	}else{
 //		settings.setValue("server_url",DEFAULT_SERVER);
 //	}
@@ -30,7 +30,7 @@ void setServerUrl(QString serverUrl)
 
 int getServerPort()
 {
-        QSettings settings("osll","libs");
+        QSettings settings(QSettings::SystemScope,"osll","libs");
   //      if (settings.value("server_port").toInt()==0){
       //          settings.setValue("server_port",DEFAULT_PORT);
     //    }
@@ -41,10 +41,10 @@ int getServerPort()
 
 void setServerPort(int port)
 {
-        QSettings settings("osll","libs");
+        QSettings settings(QSettings::SystemScope,"osll","libs");
 //	if (port!=0){
 	        settings.setValue("server_port",port);
-		settings.sync();
+//		settings.sync();
 //	}else{
 //		settings.setValue("server_port",DEFAULT_PORT);
 //	}

@@ -276,7 +276,7 @@ void LightMap::drawMarks(QPainter& painter)
     QPointF center=tileForCoordinate(m_normalMap->latitude,m_normalMap->longitude,m_normalMap->zoom);
     QPointF pos,posOnMap,winCenter(m_normalMap->width/2,m_normalMap->height/2);
 //Add here time and count filter
-    QSettings settings("osll","libs");
+    QSettings settings(QSettings::SystemScope,"osll","libs");
     int maxAgeOfMark=settings.value("timeLimit").toInt();
     int marksCount=settings.value("marksCount").toInt();
 //Getting list of all channels, wich marks are in request
