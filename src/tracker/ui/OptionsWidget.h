@@ -36,6 +36,7 @@ class OptionsWidget : public QScrollArea
 
     QPushButton *m_doneButton;
     QPushButton *m_cancelButton;
+    QPushButton *m_defaultButton;
 
     QSettings m_settings;
 
@@ -57,6 +58,7 @@ public:
 public slots:
     void onDoneClicked();
     void onCancelClicked();
+    void setDefaultSettings();
     void onProxyTypeChanged(int index);
     void onShowPasswordChecked(bool checked);
 
