@@ -70,8 +70,8 @@ void setServerPort(int port);
 #define DEFAULT_USER_PASSWORD     "test"
 #define DEFAULT_TOKEN             "2154086390Ivan1128557755"
 
-#define DEFUALT_LAT		60
-#define DEFAULT_LON		30
+#define DEFAULT_LATITUDE		60
+#define DEFAULT_LONGITUDE		30
 
 #define TRACKER_MSECS_TIMEOUT 500
 
