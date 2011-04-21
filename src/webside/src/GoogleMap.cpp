@@ -199,7 +199,7 @@ void WGoogleMap::doGmJavaScript(const std::string& jscode, bool sepScope)
 void WGoogleMap::addMarker(const Coordinate& pos, std::string title)
 {
   std::stringstream strm;
-  unsigned int found = title.find(std::string("\n"));
+  size_t found = title.find(std::string("\n"));
   while (found != std::string::npos)
   {
     title.erase(found, 2);

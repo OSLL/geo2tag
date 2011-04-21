@@ -113,6 +113,12 @@ QStringList TrackerDaemon::getLog() const
 void TrackerDaemon::onError(QString message)
 {
     qDebug() << "Error occured: " << message;
+    if (!m_isConnected){
+     	    QEventLoop eventLoop;
+	    QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
+	    qDebug() << "trying to login one more time";
+	    run();
+    }
 }
 
 void TrackerDaemon::onConnected()
