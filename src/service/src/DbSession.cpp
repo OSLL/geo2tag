@@ -57,6 +57,9 @@
 #include "AddChannelRequestJSON.h"
 #include "AddChannelResponseJSON.h"
 
+#include "SubscribedChannelsRequestJSON.h"
+#include "SubscribedChannelsResponseJSON.h"
+
 #include "SubscribeChannelJSON.h"
 #include "SubscribeChannelResponseJSON.h"
 
@@ -82,6 +85,7 @@ namespace common
         m_processors.insert("apply", &DbObjectsCollection::processAddNewMarkQuery);
         m_processors.insert("rss", &DbObjectsCollection::processRssFeedQuery);
         m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
+        m_processors.insert("subscribed", &DbObjectsCollection::processSubscribedChannelsQuery);
         m_processors.insert("addUser", &DbObjectsCollection::processAddUserQuery);
         m_processors.insert("addChannel", &DbObjectsCollection::processAddChannelQuery);
         m_processors.insert("getTimeSlot", &DbObjectsCollection::processGetTimeSlotQuery); //!!!my_change
@@ -168,7 +172,8 @@ namespace common
 
         for(int i=0; i<currentUsers.size(); i++)
         {
-						syslog(LOG_INFO,"Look up in %s and %s",currentUsers.at(i)->getLogin().toStdString().c_str(),currentUsers.at(i)->getPassword().toStdString().c_str());
+	    syslog(LOG_INFO,"Look up in %s and %s",currentUsers.at(i)->getLogin().toStdString().c_str(),
+	    					currentUsers.at(i)->getPassword().toStdString().c_str());
             if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
             {
                 if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
@@ -266,6 +271,31 @@ namespace common
     }
 
 
+    QByteArray DbObjectsCollection::processSubscribedChannelsQuery(const QByteArray &data)
+    {
+        SubscribedChannelsRequestJSON request;
+        SubscribedChannelsResponseJSON response;
+        QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+        request.parseJson(data);
+        QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+        QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+        if(realUser.isNull())
+        {
+            response.setStatus("Error");
+            response.setStatusMessage("Wrong authentification key");
+            answer.append(response.getJson());
+            return answer;
+        }
+
+        QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
+	response.setChannels(channels);
+        response.setStatus("Ok");
+        //response.setStatusMessage("feed has been generated");
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+    }
 
 
 
