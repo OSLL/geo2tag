@@ -81,6 +81,10 @@ namespace common
 
         QueryExecutor *             m_queryExecutor;
 
+        static QSharedPointer<TimeSlot> defaultTimeSlot;
+
+        static const qulonglong A_YEAR_IN_ms;
+
         DbObjectsCollection();
 
         QSharedPointer<User> findUserFromToken(const QSharedPointer<User>&) const;
@@ -95,7 +99,7 @@ namespace common
         QByteArray processGetTimeSlotQuery(const QByteArray&);
         QByteArray processSetTimeSlotQuery(const QByteArray&);
 
-    public:
+    public:        
 
         static DbObjectsCollection& getInstance();
 

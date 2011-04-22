@@ -69,11 +69,18 @@
 #include "SetTimeSlotRequestJSON.h"
 #include "SetTimeSlotResponseJSON.h"
 
+#include "JsonTimeSlot.h"
+
 #include <QtSql>
 #include <QMap>
 
 namespace common
 {
+
+    const qulonglong DbObjectsCollection::A_YEAR_IN_ms = 31536000000;
+
+    QSharedPointer<TimeSlot> DbObjectsCollection::defaultTimeSlot; // Null pointer
+
     DbObjectsCollection::DbObjectsCollection():
             m_channelsContainer(new Channels()),
             m_tagsContainer(new DataMarks()),
@@ -371,7 +378,7 @@ namespace common
         }
 
         QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
-						//BUG#2119
+
         QSharedPointer<Channel> realChannel; // Null pointer
         QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
         for(int i=0; i<currentChannels.size(); i++)
@@ -472,7 +479,7 @@ namespace common
             syslog(LOG_INFO, "Starting Json parsing for AddChannelQuery");
             request.parseJson(data);
             syslog(LOG_INFO, "Json parsed for AddChanenlQuery");
-            QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
+            QSharedPointer<User> dummyUser = request.getUsers()->at(0);
             QSharedPointer<User> realUser = findUserFromToken(dummyUser);
 
             if(realUser.isNull())
@@ -483,8 +490,7 @@ namespace common
                 return answer;
             }
 
-						//BUG#2119
-            QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
+            QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
             QSharedPointer<Channel> realChannel; // Null pointer
             QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
             for(int i=0; i<currentChannels.size(); i++)
@@ -494,6 +500,7 @@ namespace common
                     realChannel = currentChannels.at(i);
                 }
             }
+
             if(!realChannel.isNull())
             {
                 response.setStatus(error);
@@ -501,6 +508,7 @@ namespace common
                 answer.append(response.getJson());
                 return answer;
             }
+
             syslog(LOG_INFO, "Sending sql request for AddChannel");
             QSharedPointer<Channel> addedChannel = m_queryExecutor->insertNewChannel(dummyChannel);
             if(!addedChannel)
@@ -512,10 +520,50 @@ namespace common
                 return answer;
             }
 
-            syslog(LOG_INFO, "Setting defalt time slot value for channel");
-						//BUG#2119
-            QSharedPointer<TimeSlot> defaultTimeSlot = m_timeSlotsContainer->at(0);
-            addedChannel->setTimeSlot(defaultTimeSlot);
+            syslog(LOG_INFO, "Setting default time slot value for channel");
+
+            if (!defaultTimeSlot.isNull())
+                addedChannel->setTimeSlot(defaultTimeSlot);
+            else
+            {
+                QSharedPointer<TimeSlot> timeSlot(new JsonTimeSlot(A_YEAR_IN_ms));
+                QSharedPointer<TimeSlot> realTimeSlot; // Null pointer
+                QVector<QSharedPointer<TimeSlot> > currentTimeSlots = m_timeSlotsContainer->vector();
+                for(int i=0; i<currentTimeSlots.size(); i++)
+                {
+                    if(currentTimeSlots.at(i)->getSlot() == timeSlot->getSlot())
+                    {
+                        realTimeSlot = currentTimeSlots.at(i);
+                    }
+                }
+
+                if (realTimeSlot.isNull())
+                {
+                    QSharedPointer<TimeSlot> addedTimeSlot = m_queryExecutor->insertNewTimeSlot(timeSlot);
+                    if(!addedTimeSlot)
+                    {
+                        response.setStatus("Error");
+                        response.setStatusMessage("Internal server error ):");
+                        answer.append(response.getJson());
+                        syslog(LOG_INFO, "answer: %s", answer.data());
+                        return answer;
+                    }
+                    m_updateThread->lockWriting();
+                    m_timeSlotsContainer->push_back(addedTimeSlot);
+                    defaultTimeSlot = addedTimeSlot;
+                    m_updateThread->unlockWriting();
+
+                    addedChannel->setTimeSlot(addedTimeSlot);
+                }
+                else
+                {
+                    m_updateThread->lockWriting();
+                    defaultTimeSlot = realTimeSlot;
+                    m_updateThread->unlockWriting();
+
+                    addedChannel->setTimeSlot(realTimeSlot);
+                }
+            }
 
             m_updateThread->lockWriting();
             // Here will be adding user into user container
@@ -650,8 +698,7 @@ namespace common
                 }
             }            
 
-            bool realTimeSlotIsNull = false;
-            qDebug()<< realTimeSlotIsNull;
+            bool realTimeSlotIsNull = false;            
             QSharedPointer<TimeSlot> addedTimeSlot;
 
             if (realTimeSlot.isNull())
@@ -672,7 +719,7 @@ namespace common
             }             
 
             bool result;
-            qDebug()<< realTimeSlotIsNull;
+
             if (realTimeSlotIsNull)            
                 result = m_queryExecutor->changeChannelTimeSlot(realChannel, addedTimeSlot);
             else
