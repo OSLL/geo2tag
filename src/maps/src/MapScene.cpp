@@ -97,6 +97,7 @@ void MapScene::preFetch()
     	}
 
 		zoom++;
+
 		point_top_left.setX(point_top_left.x()*2);
 		point_top_left.setY(point_top_left.y()*2);
 
@@ -106,9 +107,11 @@ void MapScene::preFetch()
 		if(tiles_for_upload.isEmpty())
 			continue;
 
-		m_map_uploader = new MapsUploadThread(tiles_for_upload, this);
-		m_map_uploader->start();
-		
+		qDebug() << "Main thread: " << QThread::currentThread();
+		//m_map_uploader = new MapsUploadThread(tiles_for_upload);
+		//m_map_uploader->start();
+		(new MapsUploadThread(tiles_for_upload))->start();
+
 		tiles_for_upload.clear();
 	}
 
@@ -136,7 +139,7 @@ void MapScene::addMark(qreal latitude, qreal longitude, QVariant data)
     painter.end();
 
     QGraphicsItem * mark = this->addPixmap(pixmap);
-    QPointF mark_point = convertCoordinates(latitude, longitude, this->m_zoom);
+    QPointF mark_point = OSMCoordinatesConverter::tileForCoordinate(latitude, longitude, this->m_zoom);
 
     mark_point.setX(mark_point.x()*256.0);
     mark_point.setY(mark_point.y()*256.0);
@@ -152,7 +155,7 @@ void MapScene::addMark(qreal latitude, qreal longitude, QVariant data, QWidget *
     QGraphicsProxyWidget * mark = this->addWidget(widget);
     widget->show();
 
-    QPointF mark_point = convertCoordinates(latitude, longitude, this->m_zoom);
+    QPointF mark_point = OSMCoordinatesConverter::tileForCoordinate(latitude, longitude, this->m_zoom);
     mark_point.setX(mark_point.x()*256.0);
     mark_point.setY(mark_point.y()*256.0);
 
@@ -216,7 +219,7 @@ void MapScene::setMarks(DataChannels marks)
 			qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
 			if(true)//marks_to_show.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark))
 			{
-				pos = convertCoordinates(
+                                pos = OSMCoordinatesConverter::tileForCoordinate(
 										marks_to_show.at(i)->getLatitude(), 
 										marks_to_show.at(i)->getLongitude(),
 										m_zoom);
@@ -321,7 +324,7 @@ void MapScene::set_zoom()
     if(!views().isEmpty())
         this->views()[0]->setSceneRect(zoom_rect);
 
-    QPointF center_point =  convertCoordinates(m_latitude, m_longitude, m_zoom);
+    QPointF center_point =  OSMCoordinatesConverter::tileForCoordinate(m_latitude, m_longitude, m_zoom);
     center_point.setX(center_point.x()*256);
     center_point.setY(center_point.y()*256);
     if(!views().isEmpty())
@@ -360,8 +363,8 @@ void MapScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     cur_pos.setX(cur_pos.x()/256);
     cur_pos.setY(cur_pos.y()/256);
 
-    m_longitude = tilex2long(cur_pos.x(), m_zoom);
-    m_latitude = tiley2lat(cur_pos.y(), m_zoom);
+    m_longitude = OSMCoordinatesConverter::tilex2long(cur_pos.x(), m_zoom);
+    m_latitude = OSMCoordinatesConverter::tiley2lat(cur_pos.y(), m_zoom);
 
     this->update_state();
 }
@@ -452,45 +455,4 @@ void MapScene::update_state()
 
     if(tiles_for_upload.size() != 0)
         emit this->uploadTiles(tiles_for_upload);
-}
-
-QPointF MapScene::convertCoordinates(qreal lat, qreal lng, int zoom)
-{
-    qreal zn = static_cast<qreal>(1 << zoom);
-    qreal tx = (lng + 180.0) / 360.0;
-    qreal ty = (1.0 - log(tan(lat * M_PI / 180.0) +
-                          1.0 / cos(lat * M_PI / 180.0)) / M_PI) / 2.0;
-    return QPointF(tx * zn, ty * zn);
-}
-
-int MapScene::long2tilex(qreal lon, int z)
-{
-        return (int)(floor((lon + 180.0) / 360.0 * pow(2.0, z)));
-}
-
-int MapScene::lat2tiley(qreal lat, int z)
-{
-        return (int)(floor((1.0 - log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI) / 2.0 * pow(2.0, z)));
-}
-
-qreal MapScene::tilex2long(int x, int z)
-{
-        return x / pow(2.0, z) * 360.0 - 180;
-}
-
-qreal MapScene::tiley2lat(int y, int z)
-{
-        qreal n = M_PI - 2.0 * M_PI * y / pow(2.0, z);
-        return 180.0 / M_PI * atan(0.5 * (exp(n) - exp(-n)));
-}
-
-qreal MapScene::tilex2long(qreal x, int z)
-{
-        return x / pow(2.0, z) * 360.0 - 180;
-}
-
-qreal MapScene::tiley2lat(qreal y, int z)
-{
-        qreal n = M_PI - 2.0 * M_PI * y / pow(2.0, z);
-        return 180.0 / M_PI * atan(0.5 * (exp(n) - exp(-n)));
 }

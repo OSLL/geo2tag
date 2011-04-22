@@ -1,20 +1,11 @@
 #ifndef MAPSUPLOADER_H
 #define MAPSUPLOADER_H
 
-#include <QObject>
-#include <QPoint>
 #include <QPixmap>
 #include <QNetworkAccessManager>
 #include <QUrl>
 #include <QFile>
-
-typedef QPair<QPoint,int> TilePoint;
-typedef QPair<QPointF,int> TilePointF;
-
-/*
- * For use QPoint in QHash
- */
-uint qHash(const QPoint & p);
+#include "TranslateCoordinatesOSM.h"
 
 class MapsUploader : public QObject
 {

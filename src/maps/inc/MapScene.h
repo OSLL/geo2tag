@@ -6,7 +6,6 @@
 #include <QBasicTimer>
 #include <QHash>
 #include <QVector>
-#include <QPoint>
 #include "MapsUploader.h"
 #include "DataChannel.h"
 #include "MapsUploadThread.h"
@@ -48,16 +47,6 @@ public:
 private:
     void update_state();
 	void add_mark(QPointF pos, QString channel_name);
-
-    QPointF convertCoordinates(qreal lat, qreal lng, int zoom);
-
-    int long2tilex(qreal lon, int z);
-    int lat2tiley(qreal lat, int z);
-    qreal tilex2long(int x, int z);
-    qreal tiley2lat(int y, int z);
-    qreal tilex2long(qreal x, int z);
-    qreal tiley2lat(qreal y, int z);
-
 
 signals:
     void uploadTiles(QVector<TilePoint> & tiles_to_upload);

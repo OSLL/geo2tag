@@ -10,10 +10,10 @@
 #include <QBuffer>
 
 
-MapsUploadThread::MapsUploadThread(QVector<TilePoint> & tiles , QObject *parent) :
-    QThread(parent), m_tiles(tiles) 
+MapsUploadThread::MapsUploadThread(QVector<TilePoint> & tiles, QObject * parent) :
+    QThread(parent), m_tiles(tiles)
 {
-	qDebug() << "Create thread\n" << QThread::currentThread() << "\n";
+	qDebug() << "Create thread" << this;
 }
 
 void MapsUploadThread::replyError(QNetworkReply::NetworkError code)
@@ -23,7 +23,7 @@ void MapsUploadThread::replyError(QNetworkReply::NetworkError code)
 	this->popNextTile();
 }
 
-void MapsUploadThread::handleNetworkData(QNetworkReply *reply)
+void MapsUploadThread::handleNetworkData(QNetworkReply * reply)
 {
 	//qDebug() << "Got reply\n";
 	if(reply == 0)
@@ -104,6 +104,7 @@ void MapsUploadThread::downloadTile(int lat, int lg, int zoom)
     	data.push_back(QVariant(grab));
     	data.push_back(QVariant(zoom));
     	request.setAttribute(QNetworkRequest::User, QVariant(data));
+		qDebug() << "Request " << QThread::currentThread();
     	m_manager->get(request);
 	}
 }
@@ -146,18 +147,21 @@ void MapsUploadThread::popNextTile()
 
 void MapsUploadThread::run()
 {
-	qDebug() << "Start thread execution\n";
+	qDebug() << "Start thread execution: " <<  QThread::currentThread();
+	qDebug() << "This : " << this << ". Parent: " << this->parent() << ". Thread: " << this->thread();
 
 	/*BUG:
 	* m_manager created in main thread while MapsUploadThread executes in it's own thread
 	*/
-	m_manager = new QNetworkAccessManager();
-    connect(m_manager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(handleNetworkData(QNetworkReply*)));
 
-	checkHomePath();
+	m_manager = new QNetworkAccessManager(0);
+    connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleNetworkData(QNetworkReply*)));
+	m_manager->moveToThread(QThread::currentThread());
+	qDebug() << this->m_manager->thread();
 
-	popNextTile();
+	this->checkHomePath();
+
+	this->popNextTile();
 
 	exec();
 }

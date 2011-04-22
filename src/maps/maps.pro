@@ -14,10 +14,12 @@ INCLUDEPATH += . inc ../common/inc ../common/common/inc ../common/thread/inc \
                ../common/exception/inc
 
 # Input
-HEADERS += inc/MapsUploader.h \
+HEADERS += inc/TranslateCoordinatesOSM.h \
+                   inc/MapsUploader.h \
 		   inc/MapScene.h \
 		   inc/MapsUploadThread.h
-SOURCES += src/MapsUploader.cpp \
+SOURCES += src/TranslateCoordinatesOSM.cpp \
+                   src/MapsUploader.cpp \
 		   src/MapScene.cpp \
 		   src/MapsUploadThread.cpp
 

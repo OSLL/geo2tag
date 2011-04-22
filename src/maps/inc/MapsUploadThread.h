@@ -10,8 +10,7 @@
 #include <QFile>
 #include <QDir>
 #include <QThread>
-
-typedef QPair<QPoint,int> TilePoint;
+#include "TranslateCoordinatesOSM.h"
 
 class MapsUploadThread : public QThread
 {
@@ -28,11 +27,11 @@ private:
 	void popNextTile();
 
 public:
-    explicit MapsUploadThread(QVector<TilePoint> & tiles, QObject *parent = 0);
+    explicit MapsUploadThread(QVector<TilePoint> & tiles, QObject * parent = 0);
 	void run();
 
 private slots:
-    void handleNetworkData(QNetworkReply *reply);
+    void handleNetworkData(QNetworkReply * reply);
 	void replyError(QNetworkReply::NetworkError code);
     void downloadTile(int lat, int lg, int zoom);
 };
