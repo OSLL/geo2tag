@@ -9,7 +9,7 @@
 #include "JsonTimeSlot.h"
 #include "Channel.h"
 
-GetTimeSlotResponseJSON::GetTimeSlotResponseJSON()
+GetTimeSlotResponseJSON::GetTimeSlotResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
@@ -20,7 +20,7 @@ QByteArray GetTimeSlotResponseJSON::getJson() const
 
     QSharedPointer<Channel> channel = m_channelsContainer->at(0);
 
-    obj.insert("timeSlot", channel->getTimeSlot()->getId());
+    obj.insert("timeSlot", channel->getTimeSlot()->getSlot());
     return serializer.serialize(obj);
 }
 
@@ -35,9 +35,9 @@ void GetTimeSlotResponseJSON::parseJson(const QByteArray &data)
     if (!ok)
     {
         qFatal("An error occured during parsing json with channel list");
-    }
+    }    
 
-    QString slot = result["timeSlot"].toString();
+    qulonglong slot = result["timeSlot"].toULongLong();
     QSharedPointer<TimeSlot>  timeSlot(new JsonTimeSlot(slot));
     QSharedPointer<Channel> channel(new JsonChannel("unknown", "unknown"));
     channel->setTimeSlot(timeSlot);

@@ -17,7 +17,6 @@ linux: {
              http_requests \
              service \
              maps \ 
-	     webside \
 	     tracker 
 }
 

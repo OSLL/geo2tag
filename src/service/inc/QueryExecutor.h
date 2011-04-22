@@ -25,12 +25,15 @@ public:
     qlonglong nextUserKey() const;
     qlonglong nextChannelKey() const;
     qlonglong nextTagKey() const;
+    qlonglong nextTimeSlotKey() const;
     const QString generateNewToken(const QString& login,const QString& password) const;
 
     bool subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel);
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
     QSharedPointer<User> insertNewUser(const QSharedPointer<User>&);
     QSharedPointer<Channel> insertNewChannel(const QSharedPointer<Channel>&);
+    QSharedPointer<TimeSlot> insertNewTimeSlot(const QSharedPointer<TimeSlot>&);   
+    bool changeChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
 
 signals:
 

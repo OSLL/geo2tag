@@ -7,6 +7,7 @@
 #include "DataMarks.h"
 #include "Channel.h"
 #include "User.h"
+#include "TimeSlot.h"
 
 
 class JsonSerializer:public QObject
@@ -28,7 +29,7 @@ public:
 
     void addChannel(const QSharedPointer<Channel>&);
     void addTag(const QSharedPointer<DataMark>&);
-    void addUser(const QSharedPointer<User>&);
+    void addUser(const QSharedPointer<User>&);   
 
     virtual QByteArray getJson() const = 0;
 
@@ -36,7 +37,7 @@ public:
 
     QSharedPointer<DataMarks> getTags() const;
     QSharedPointer<Users> getUsers() const;
-    QSharedPointer<Channels> getChannels() const;
+    QSharedPointer<Channels> getChannels() const;  
 
     const QString& getStatus() const;
     void setStatus(const QString&);

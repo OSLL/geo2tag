@@ -11,6 +11,7 @@ LIBS += -lcommon
 QT += network xml
 
 
+
 DEPENDPATH += . \
 
 INCLUDEPATH += . \

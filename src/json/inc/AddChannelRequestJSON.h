@@ -7,7 +7,7 @@ class AddChannelRequestJSON: public JsonSerializer
 {
 	Q_OBJECT;
 public:
-    AddChannelRequestJSON();
+    AddChannelRequestJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 

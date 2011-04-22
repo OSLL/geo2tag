@@ -9,6 +9,7 @@
 #include "DataMarkInternal.h"
 #include "UserInternal.h"
 #include "ChannelInternal.h"
+#include "TimeSlotInternal.h"
 
 QueryExecutor::QueryExecutor(const QSqlDatabase &db, QObject *parent): QObject(parent),
                 m_database(db)
@@ -52,6 +53,12 @@ qlonglong QueryExecutor::nextChannelKey() const
 {
     return nextKey("channels_seq");
 }
+
+qlonglong QueryExecutor::nextTimeSlotKey() const
+{
+    return nextKey("timeSlots_seq");
+}
+
 
 const QString QueryExecutor::generateNewToken(const QString& login,const QString& password) const
 {
@@ -120,22 +127,41 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
 		newChannelQuery.bindValue(":name",channel->getName());
 		newChannelQuery.bindValue(":description",channel->getDescription());
 		newChannelQuery.bindValue(":url",channel->getUrl());
-		
+
+    QSqlQuery putTimeSlotToChannelQuery(m_database);
+    putTimeSlotToChannelQuery.prepare("insert into channeltimeslot (channel_id,timeSlot_id) values(:channel_id,:timeSlot_id);");
+    putTimeSlotToChannelQuery.bindValue(":channel_id", newId);
+    putTimeSlotToChannelQuery.bindValue(":timeSlot_id", 1); //NOTE: First value in table "timeslot" must be 31536000000 millyseconds
+
+    syslog(LOG_INFO,"Inserting default value = 31536000000 millyseconds = 1 year for %s (Id = %lld)", channel->getName().toStdString().c_str(), channel->getId());
+
     m_database.transaction();
+
     result=newChannelQuery.exec();
     if(!result)
     {
       syslog(LOG_INFO,"Rollback for NewChannel sql query");
       m_database.rollback();
-			return QSharedPointer<Channel>(NULL);
-    }else 
+      return QSharedPointer<Channel>(NULL);
+    }else     
+      syslog(LOG_INFO,"Commit for NewChannel sql query - insert in table channel");
+
+    result=putTimeSlotToChannelQuery.exec();
+    if(!result)
     {
-      syslog(LOG_INFO,"Commit for NewChannel sql query");
-      m_database.commit();
-    }
-		QSharedPointer<DbChannel> newChannel(new DbChannel(newId,channel->getName(),channel->getDescription(),channel->getUrl()));
+      syslog(LOG_INFO,"Rollback for NewChannel sql query");
+      m_database.rollback();
+      return QSharedPointer<Channel>(NULL);
+    }else
+      syslog(LOG_INFO,"Commit for NewChannel sql query - - insert in table channeltimeslot");
+
+    m_database.commit();
+
+
+    QSharedPointer<DbChannel> newChannel(new DbChannel(newId,channel->getName(),channel->getDescription(),channel->getUrl()));
     return newChannel;
 }
+
 QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& user)
 {
     bool result;
@@ -177,7 +203,7 @@ bool QueryExecutor::subscribeChannel(const QSharedPointer<User>& user,const QSha
     insertNewSubscribtion.prepare("insert into subscribe (channel_id,user_id) values(:channel_id,:user_id);");
     insertNewSubscribtion.bindValue(":channel_id",channel->getId());
     insertNewSubscribtion.bindValue(":user_id",user->getId());
-		syslog(LOG_INFO,"Subscribing %s (Id = %lld) for %s (Id = %lld)",user->getLogin().toStdString().c_str(),user->getId(),
+    syslog(LOG_INFO,"Subscribing %s (Id = %lld) for %s (Id = %lld)",user->getLogin().toStdString().c_str(),user->getId(),
 				channel->getName().toStdString().c_str(),channel->getId());
 
     m_database.transaction();
@@ -189,6 +215,59 @@ bool QueryExecutor::subscribeChannel(const QSharedPointer<User>& user,const QSha
     }else 
     {
       syslog(LOG_INFO,"Commit for subscribeChannel sql query");
+      m_database.commit();
+    }
+    return result;
+}
+
+QSharedPointer<TimeSlot> QueryExecutor::insertNewTimeSlot(const QSharedPointer<TimeSlot>& timeSlot)
+{
+    bool result;
+    QSqlQuery newTimeSlotQuery(m_database);
+                qlonglong newId = nextTimeSlotKey();
+                syslog(LOG_INFO,"NewId ready, now preparing sql query for adding new time slot");
+                newTimeSlotQuery.prepare("insert into timeSlot (id,slot) values(:id,:slot);");
+                newTimeSlotQuery.bindValue(":id",newId);
+                newTimeSlotQuery.bindValue(":slot",timeSlot->getSlot());
+
+
+    m_database.transaction();
+    result=newTimeSlotQuery.exec();
+    if(!result)
+    {
+      syslog(LOG_INFO,"Rollback for NewTimeSlot sql query");
+      m_database.rollback();
+      return QSharedPointer<TimeSlot>(NULL);
+    } else
+    {
+      syslog(LOG_INFO,"Commit for NewTimeSlot sql query");
+      m_database.commit();
+    }
+    QSharedPointer<DbTimeSlot> newTimeSlot(new DbTimeSlot(newId, timeSlot->getSlot()));
+    return newTimeSlot;
+}
+
+bool QueryExecutor::changeChannelTimeSlot(const QSharedPointer<Channel>& channel, const QSharedPointer<TimeSlot>& timeSlot)
+{
+    syslog(LOG_INFO, "test6");
+    bool result;
+    QSqlQuery changeChannelTimeSlot(m_database);
+    changeChannelTimeSlot.prepare("update channelTimeSlot set timeslot_id = :timeSlot_id where channel_id = :channel_id;");
+    changeChannelTimeSlot.bindValue(":channel_id",channel->getId());
+    changeChannelTimeSlot.bindValue(":timeSlot_id",timeSlot->getId());
+
+    //syslog(LOG_INFO,"Set %llu millyseconds(Id = %lld) for %s (Id = %lld)", timeSlot->getSlot(),timeSlot->getId(),
+                             //   channel->getName().toStdString().c_str(), channel->getId());
+syslog(LOG_INFO, "test7");
+    m_database.transaction();
+    result=changeChannelTimeSlot.exec();
+    if(!result)
+    {
+      syslog(LOG_INFO,"Rollback for changeChannelTimeSlot sql query");
+      m_database.rollback();
+    }else
+    {
+      syslog(LOG_INFO,"Commit for changeChannelTimeSlot sql query");
       m_database.commit();
     }
     return result;

@@ -48,7 +48,7 @@ class DbTimeSlot: public TimeSlot
     qlonglong m_id;
 
 public:
-    DbTimeSlot(qlonglong id, const QString &slot);
+    DbTimeSlot(qlonglong id, const qulonglong &slot);
 
     qlonglong getId() const;
 

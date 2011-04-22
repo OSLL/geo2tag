@@ -29,36 +29,29 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file JsonUser.h
- * \brief Header of JsonUser
+ * \file SetTimeSlotRequestJSON.h
+ * \brief Header of SetTimeSlotRequestJSON
+ *
+ * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#ifndef _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_
+#define _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_
 
-#ifndef _JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
-#define _JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+#include "JsonSerializer.h"
 
-#include <QMutex>
-#include "User.h"
+class SetTimeSlotRequestJSON : public JsonSerializer
+{
+        Q_OBJECT;
+public:
+    SetTimeSlotRequestJSON(QObject *parent=0);
 
- /*!
-   *
-   */
-  class JsonUser: public User
-  {
-    static qlonglong globalUserId;
-    qlonglong m_id;
+    QByteArray getJson() const;
 
-  public:
-    JsonUser(const QString& login, const QString& pass = "unknown", const QString& token = "unknown");
+    void parseJson(const QByteArray&);
+};
 
-    qlonglong getId() const;
-    void setId(qlonglong);
 
-    ~JsonUser();
-  }; // class JsonUser
-
-#endif //_JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
-
-/* ===[ End of file ]=== */
+#endif // _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_

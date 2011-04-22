@@ -45,10 +45,11 @@
 
     class JsonTimeSlot: public TimeSlot
     {
+        static qlonglong globalTimeSlotId;
         qlonglong m_id;
 
     public:
-        JsonTimeSlot(const QString &slot);
+        JsonTimeSlot(const qulonglong &slot);
 
         qlonglong getId() const;
 

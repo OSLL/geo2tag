@@ -46,7 +46,7 @@
 #include "ChannelListJSON.h"
 #include "JsonChannel.h"
 
-ChannelListResponseJSON::ChannelListResponseJSON()
+ChannelListResponseJSON::ChannelListResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 
 }

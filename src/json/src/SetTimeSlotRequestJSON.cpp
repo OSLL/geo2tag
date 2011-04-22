@@ -1,29 +1,32 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#include "GetTimeSlotRequestJSON.h"
+#include "SetTimeSlotRequestJSON.h"
 #include "DataMarks.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
+#include "JsonTimeSlot.h"
 
-GetTimeSlotRequestJSON::GetTimeSlotRequestJSON(QObject *parent) : JsonSerializer(parent)
+
+SetTimeSlotRequestJSON::SetTimeSlotRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
-QByteArray GetTimeSlotRequestJSON::getJson() const
+QByteArray SetTimeSlotRequestJSON::getJson() const
 {
     QJson::Serializer serializer;
     QVariantMap request;
 
     request.insert("auth_token", m_usersContainer->at(0)->getToken());
     request.insert("channel", m_channelsContainer->at(0)->getName());
+    request.insert("timeSlot", m_channelsContainer->at(0)->getTimeSlot()->getSlot());
 
     return serializer.serialize(request);
 }
 
 
-void GetTimeSlotRequestJSON::parseJson(const QByteArray &data)
+void SetTimeSlotRequestJSON::parseJson(const QByteArray &data)
 {
     clearContainers();
     QJson::Parser parser;
@@ -35,11 +38,15 @@ void GetTimeSlotRequestJSON::parseJson(const QByteArray &data)
         return;
     }
 
+
     QString token = result["auth_token"].toString();
     QString channel = result["channel"].toString();
+    qulonglong timeSlot = result["timeSlot"].toULongLong();
 
-    m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));
-    m_channelsContainer->push_back(QSharedPointer<Channel> (new JsonChannel(channel, "unknown")));
+    m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));    
+    m_channelsContainer->push_back(QSharedPointer<Channel> (new JsonChannel(channel, "unknown", "unknown")));
+    m_channelsContainer->at(0)->setTimeSlot(QSharedPointer<TimeSlot>(new JsonTimeSlot(timeSlot)));
 }
+
 
 

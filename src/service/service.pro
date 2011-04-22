@@ -1,6 +1,7 @@
 TEMPLATE = app
 include(../../config.pri)
 TARGET = fcgi_server
+
 DEPENDPATH += . \
               inc \
               src \
@@ -53,6 +54,8 @@ SOURCES += src/main.cpp \
 
 LIBS +=  -lcommon -lfcgi -lwikigpsJson -lpq 
 OBJECTS_DIR = .obj
+
+QMAKE_LFLAGS += -L../lib
 
 QT -= gui
 QT += sql
