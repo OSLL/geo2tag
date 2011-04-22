@@ -340,6 +340,7 @@ namespace common
         }
 
         QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
+						//BUG#2119
         QSharedPointer<Channel> realChannel; // Null pointer
         QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
         for(int i=0; i<currentChannels.size(); i++)
@@ -451,6 +452,7 @@ namespace common
                 return answer;
             }
 
+						//BUG#2119
             QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
             QSharedPointer<Channel> realChannel; // Null pointer
             QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
@@ -480,6 +482,7 @@ namespace common
             }
 
             syslog(LOG_INFO, "Setting defalt time slot value for channel");
+						//BUG#2119
             QSharedPointer<TimeSlot> defaultTimeSlot = m_timeSlotsContainer->at(0);
             addedChannel->setTimeSlot(defaultTimeSlot);
 
