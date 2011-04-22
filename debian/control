@@ -15,7 +15,7 @@ Depends:wikigps-qt, libxml2 (>=2.6)
 Description: Geo2tag libs
 
 Package: wikigps-client
-Architecture: armel 
+Architecture: powerpc 
 Depends: wikigps-libs, libqjson0 [i386],libqjson [armel], libqtm-location (>=1.0) [armel],libqtm-bearer (>=1.0) [armel]
 Description: WikiGPS service client
  Very long description will be here
