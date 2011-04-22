@@ -43,11 +43,16 @@ void TrackerDaemon::run()
     QString login = m_settings.value("user").toString();
     QString password = m_settings.value("password").toString();
     m_channelName = m_settings.value("channel").toString();
+    m_visibleName = m_settings.value("visibleName").toString();
     qDebug() << "read from QSettings " << login << " ,"<< password << " ," <<m_channelName;
+    if(m_visibleName.isEmpty())
+        m_visibleName = "tracker's tag";
     if(login.isEmpty())
-        login = "Mark";
+        login = "tracker";
     if(password.isEmpty())
         password = "test";
+    if(m_channelName.isEmpty())
+       m_channelName = "default";
     m_loginQuery = new LoginQuery(login, password, this);
     connect(m_loginQuery, SIGNAL(connected()), SLOT(onConnected()));
     connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
@@ -130,7 +135,7 @@ void TrackerDaemon::onConnected()
         QSharedPointer<DataMark> mark(new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
                                  common::GpsInfo::getInstance().getLongitude(),
                         //DEFAULT_LATITUDE,DEFAULT_LONGITUDE,
-                                 "tracker's tag",
+                                 m_visibleName,
                                  "this tag was generated automaticaly by tracker application",
                                  "unknown",
                                  QDateTime::currentDateTime()));

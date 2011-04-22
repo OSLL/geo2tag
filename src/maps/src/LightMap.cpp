@@ -277,30 +277,24 @@ void LightMap::drawMarks(QPainter& painter)
     QPointF pos,posOnMap,winCenter(m_normalMap->width/2,m_normalMap->height/2);
 //Add here time and count filter
     QSettings settings(QSettings::SystemScope,"osll","libs");
+    int markAge=0;
     int maxAgeOfMark=settings.value("timeLimit").toInt();
     int marksCount=settings.value("marksCount").toInt();
 //Getting list of all channels, wich marks are in request
     QList<QSharedPointer<DataMark> > marks;
-    //    int numOfMarks;
     QList<QSharedPointer<Channel> > channels=m_marks.uniqueKeys();
     for (int j=0;j<channels.size();j++){
         marks=m_marks.values(channels.at(j));
         qSort(marks.begin(), marks.end(), qGreater<QSharedPointer<DataMark> >());
-        //	    if (numOfMarks>m_marks.sizedd)
         for (int i=0; i < qMin(marksCount, marks.size()) ; i++)
         {
-            //          pos=tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom)*tdim;
-            //Check, that current mark isnt older that maxAgeOfMark minutes
-            qDebug() << "Mark time " << marks.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
-            qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
-            if(marks.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60*maxAgeOfMark))
+	    markAge=marks.at(i)->getTime().toUTC().secsTo(QDateTime::currentDateTime())/60;
+	    qDebug() << "current mark age "<< markAge;
+            if( markAge<maxAgeOfMark)
             {
-                //		           qDebug() << "position translated " << pos.x() << " " << pos.y();
-                //		           qDebug() << i << " mark x = " << winCenter.x()+pos.x()-center.x() << " , y = " << winCenter.y()-pos.y()+center.y();
                 pos=center-tileForCoordinate(marks.at(i)->getLatitude(),marks.at(i)->getLongitude(),m_normalMap->zoom);
                 posOnMap=winCenter-pos*qreal(tdim);
-
-                this->drawMarkIco(painter, posOnMap, channels.at(j)->getName());
+                this->drawMarkIco(painter, posOnMap, marks.at(i),channels.at(j));
             }
 
         }
@@ -308,11 +302,11 @@ void LightMap::drawMarks(QPainter& painter)
 }
 
 
-void LightMap::drawMarkIco(QPainter& painter, QPointF& posOnMap, QString channel_name)
+void LightMap::drawMarkIco(QPainter& painter, QPointF& posOnMap,QSharedPointer<DataMark> mark,QSharedPointer<Channel> channel)
 {
     QPointF posForPicture = QPointF(posOnMap.x()-12.0, posOnMap.y()-12.0);
     QPointF posForText = QPointF(posOnMap.x()-24.0, posOnMap.y()+24.0);
-
+    QString channel_name = channel->getName();
     if(channel_name == "Fuel prices")
     {
         painter.drawImage(posForPicture, QImage(":/img/fuel.png"));
@@ -351,5 +345,10 @@ void LightMap::drawMarkIco(QPainter& painter, QPointF& posOnMap, QString channel
         painter.drawEllipse(posOnMap,10,10);
         painter.setBrush(Qt::black);
         painter.drawEllipse(posOnMap,3,3);
+	if (mark->getLabel()!="tracker's tag")
+	{
+		int mins_ago=(mark->getTime().toUTC().secsTo(QDateTime::currentDateTime()))/60;
+		painter.drawText(posForText,mark->getLabel()+", "+ QString::number(mins_ago)+" min. ago");
+	}
     }
 }

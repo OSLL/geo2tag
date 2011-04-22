@@ -126,12 +126,14 @@ void MainWindow::readData()
 	    m_lastCoord = buf.right(buf.size()-QString("lastCoords_").size());
 //            m_daemonIndicator->setText(QString("Mark placed at ")+coords);o
 	    m_daemonIndicator->setText("Tracker running");
+	    startButton->setIcon(QIcon(":/images/stop-256.png"));
             m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": mark placed at "+m_lastCoord);
             qDebug() << "text now " <<m_daemonIndicator->text();
             m_isServiceStarted = true;
     }
     if (commands.last()=="stoped"){
             m_daemonIndicator->setText("Tracker stopped");
+	    startButton->setIcon(QIcon(":/images/start-256.png"));
             m_isServiceStarted = false;
     }
     m_message.clear();

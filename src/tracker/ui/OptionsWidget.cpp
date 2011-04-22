@@ -34,6 +34,12 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     layout->addWidget(new QLabel("Password:"));
     layout->addWidget(m_passwordEdit = new QLineEdit());
     layout->addWidget(m_passwordCheckBox = new QCheckBox("Show password"));
+    // NOTE if we use this windget in tracker addition field for username will displayed
+    if (m_productName == "tracker")
+    {
+    	layout->addWidget(new QLabel("Name that will be displayed on Observer map:"));
+	layout->addWidget(m_visibleNameEdit = new QLineEdit());
+    }
     layout->addWidget(new QLabel("Channel name:"));
     layout->addWidget(m_channelEdit = new QLineEdit());
 
@@ -150,6 +156,10 @@ void OptionsWidget::initSettings()
 void OptionsWidget::readSettings()
 {
     QSettings settings(QSettings::SystemScope,"osll",m_productName);
+    if (m_productName == "tracker")
+    {
+	    m_visibleNameEdit->setText(m_settings.value("visibleName").toString());
+    }
     m_nameEdit->setText(m_settings.value("user").toString());
     m_passwordEdit->setText(m_settings.value("password").toString());
     m_channelEdit->setText(m_settings.value("channel").toString());
@@ -170,6 +180,10 @@ void OptionsWidget::createSettings()
     setServerUrl(m_serverUrlEdit->text());
     setServerPort(m_serverPortEdit->value());
     m_settings.setValue("proxy_port", m_proxyPortEdit->value());
+    if (m_productName == "tracker")
+    {
+	    m_settings.setValue("visibleName", m_visibleNameEdit->text());
+    }
     m_settings.setValue("magic", APP_MAGIC);
 }
 
@@ -183,4 +197,9 @@ void OptionsWidget::setDefaultSettings()
     m_proxyPortEdit->setValue(0);
     m_serverUrlEdit->setText("http://tracklife.ru/");
     m_serverPortEdit->setValue(80);
+    if (m_productName == "tracker")
+    {
+       m_settings.setValue("visibleName","FRUCT_participant");
+    }
+
 }
