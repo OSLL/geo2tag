@@ -9,6 +9,7 @@
 #include "MapsUploader.h"
 #include "DataChannel.h"
 #include "MapsUploadThread.h"
+#include "Preloading.h"
 
 
 class MapScene : public QGraphicsScene
@@ -18,9 +19,8 @@ class MapScene : public QGraphicsScene
 private:
     QHash<TilePoint, QGraphicsPixmapItem *> m_maps;
     QVector<QGraphicsPixmapItem *> m_marks;
-    QVector<QThread *> m_threads;
     MapsUploader * m_uploader;
-    MapsUploadThread * m_map_uploader;
+    Preloading * m_preloader;
 
     int m_zoom;
     qreal m_latitude;
@@ -30,12 +30,15 @@ private:
 
 public:
     explicit MapScene(QObject *parent = 0);
+    ~MapScene();
 
 public:
     void addMark(qreal x, qreal y, QVariant data);
     void addMark(qreal x, qreal y, QVariant data, QWidget * widget);
     void removeMark(QGraphicsItem * mark);
     void setMarks(DataChannels marks);
+    int maxThreads() const;
+    void setMaxThreads(const int & max_threads);
 
 public:
     virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
@@ -54,7 +57,7 @@ signals:
 
 public slots:
     void tileUploaded(const QPixmap & pixmap, const TilePoint & point);
-    void preFetch();
+    void preload();
 
 };
 

@@ -12,19 +12,13 @@
 MapsUploader::MapsUploader(QObject *parent) :
         QObject(parent),
         m_url("http://tile.openstreetmap.org/%1/%2/%3.png"),
-        m_background_mode(false)
+        m_background_mode(false),
+        m_replies_in_work(0)
 {
-    qDebug() << "MapsUploader thread" << this->thread();
-    m_manager = new QNetworkAccessManager(this);
     this->checkHomePath();
 
-    connect(m_manager, SIGNAL(finished(QNetworkReply*)),
+    connect(&m_manager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(handleNetworkData(QNetworkReply*)));
-}
-
-MapsUploader::~MapsUploader()
-{
-    delete(m_manager);
 }
 
 void MapsUploader::checkHomePath()
@@ -47,18 +41,21 @@ void MapsUploader::popNextTile()
 {
     if(m_tiles.isEmpty())
     {
-        qDebug() << "No more tiles!\n";
+        if(m_replies_in_work == 0)
+            emit this->uploadingFinished();
         return;
     }
 
     TilePoint tp =  m_tiles.back();
     m_tiles.pop_back();
+    //qDebug() << m_tiles.size() << "left in thread" << this->thread();
     this->downloadTile(tp);
 }
 
 
 void MapsUploader::handleNetworkData(QNetworkReply *reply)
 {
+    m_replies_in_work--;
     if(reply == 0)
     {
         qDebug() << "Got EMPTY reply!\n";
@@ -76,7 +73,9 @@ void MapsUploader::handleNetworkData(QNetworkReply *reply)
     }
     else
     {
-        this->downloadTile(qMakePair(tp,zoom));
+        qDebug() << reply->errorString();
+        //this->downloadTile(qMakePair(tp,zoom));
+        this->popNextTile();
         return;
     }
     reply->deleteLater();
@@ -89,7 +88,6 @@ void MapsUploader::handleNetworkData(QNetworkReply *reply)
                             + QString::number(tp.y());
         if(!QFile(file_name).exists())
         {
-            qDebug() << "Saving... (" << file_name << ")";
             QByteArray bytes;
             QBuffer buffer(&bytes);
             buffer.open(QIODevice::ReadWrite);
@@ -100,7 +98,6 @@ void MapsUploader::handleNetworkData(QNetworkReply *reply)
             file.write(bytes);
             file.flush();
             file.close();
-            qDebug() << "Saved! (" << file_name << ")";
         }
 
         if(!m_background_mode)
@@ -132,7 +129,6 @@ void MapsUploader::downloadTile(const TilePoint & point)
                         + QString::number(point.first.x()) + "_"
                         + QString::number(point.first.y());
 
-    //qDebug() << file_name;
     if(QFile::exists(file_name))
     {
         if(!m_background_mode)
@@ -160,7 +156,8 @@ void MapsUploader::downloadTile(const TilePoint & point)
         data.push_back(QVariant(point.first));
         data.push_back(QVariant(point.second));
         request.setAttribute(QNetworkRequest::User, QVariant(data));
-        m_manager->get(request);
+        m_manager.get(request);
+        m_replies_in_work++;
     }
 }
 

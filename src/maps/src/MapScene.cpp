@@ -26,15 +26,23 @@
 
 MapScene::MapScene(QObject *parent) :
         QGraphicsScene(parent),
-        m_zoom(15),
-        m_latitude(59.910000),
-        m_longitude(10.760000)
+        m_zoom(0),
+        m_latitude(0.0),
+        m_longitude(0.0)
 {
     m_maps = QHash<TilePoint, QGraphicsPixmapItem * >();
-
+    m_preloader = new Preloading(3, this);
     m_uploader = new MapsUploader(this);
     connect(this, SIGNAL(uploadTiles(QVector<TilePoint> &)), m_uploader, SLOT(uploadTiles(QVector<TilePoint> &)));
     connect(m_uploader, SIGNAL(tileUploaded(QPixmap,TilePoint)), this, SLOT(tileUploaded(QPixmap,TilePoint)));
+}
+
+MapScene::~MapScene()
+{
+    delete(m_uploader);
+    delete(m_preloader);
+
+    this->~QGraphicsScene();
 }
 
 
@@ -50,7 +58,7 @@ void MapScene::tileUploaded(const QPixmap &pixmap, const TilePoint & point)
     m_maps.value(point)->setVisible(point.second == m_zoom);
 }
 
-void MapScene::preFetch()
+void MapScene::preload()
 {
     if(this->views().isEmpty())
         return;
@@ -67,8 +75,9 @@ void MapScene::preFetch()
     point_bottom_right.setX(point_bottom_right.x()+256);
     point_bottom_right.setY(point_bottom_right.y()+256);
 
-    if(point_bottom_right.x() > this->sceneRect().width()) point_bottom_right.setX(this->sceneRect().width());
-    if(point_bottom_right.y() > this->sceneRect().width()) point_bottom_right.setY(this->sceneRect().width());
+    int max_xy = this->sceneRect().width() - 1;
+    if(point_bottom_right.x() > max_xy) point_bottom_right.setX(max_xy);
+    if(point_bottom_right.y() > max_xy) point_bottom_right.setY(max_xy);
 
     point_top_left.setX(point_top_left.x()/256);
     point_top_left.setY(point_top_left.y()/256);
@@ -76,52 +85,7 @@ void MapScene::preFetch()
     point_bottom_right.setX(point_bottom_right.x()/256);
     point_bottom_right.setY(point_bottom_right.y()/256);
 
-    int zoom = m_zoom;
-
-    QVector<TilePoint> tiles_for_upload;
-
-    while(zoom <= 18)
-    {
-        qDebug() << "Upload tile " << point_top_left << "\t" << point_bottom_right << "\n";
-
-        for(int x = point_top_left.x(); x <= point_bottom_right.x(); x++)
-        {
-            for(int y = point_top_left.y(); y <= point_bottom_right.y(); y++)
-            {
-                TilePoint tp = qMakePair(QPoint(x,y), zoom);
-            	if(!m_maps.contains(tp))
-            	    tiles_for_upload.push_back(tp);
-            }
-    	}
-
-        zoom++;
-
-        point_top_left.setX(point_top_left.x()*2);
-        point_top_left.setY(point_top_left.y()*2);
-
-        point_bottom_right.setX(point_bottom_right.x()*2+1);
-        point_bottom_right.setY(point_bottom_right.y()*2+1);
-
-        if(tiles_for_upload.isEmpty())
-            continue;
-
-        //m_map_uploader = new MapsUploadThread(tiles_for_upload);
-        //m_map_uploader->start();
-
-        QThread * thread = new MapsUploadThread(tiles_for_upload);
-        m_threads.push_back(thread);
-        thread->start();
-
-        tiles_for_upload.clear();
-    }
-
-    /*
-	if(tiles_for_upload.isEmpty())
-		return;
-
-	m_map_uploader = new MapsUploadThread(tiles_for_upload, this);
-	m_map_uploader->start();
-*/	
+    m_preloader->load(point_top_left, point_bottom_right, m_zoom);
 }
 
 void MapScene::addMark(qreal latitude, qreal longitude, QVariant data)
@@ -291,6 +255,16 @@ void MapScene::add_mark(QPointF pos, QString channel_name)
     m_marks.push_back(pi);
 }
 
+int MapScene::maxThreads() const
+{
+    return m_preloader->maxThreads();
+}
+
+void MapScene::setMaxThreads(const int & max_threads)
+{
+    m_preloader->setMaxThreads(max_threads);
+}
+
 void MapScene::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (event->delta()>0 && m_zoom<18)
@@ -377,7 +351,7 @@ void MapScene::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_F)
     {
         qDebug() << "F pressed\n";
-        this->preFetch();
+        this->preload();
     }
     if(event->key() == Qt::Key_Right)
         screen_delta.setX(screen_delta.x() - KEY_MOVE_DIST);
@@ -429,8 +403,9 @@ void MapScene::update_state()
     point_bottom_right.setX(point_bottom_right.x()+256);
     point_bottom_right.setY(point_bottom_right.y()+256);
 
-    if(point_bottom_right.x() > this->sceneRect().width()) point_bottom_right.setX(this->sceneRect().width());
-    if(point_bottom_right.y() > this->sceneRect().width()) point_bottom_right.setY(this->sceneRect().width());
+    int max_xy = this->sceneRect().width() - 1;
+    if(point_bottom_right.x() > max_xy) point_bottom_right.setX(max_xy);
+    if(point_bottom_right.y() > max_xy) point_bottom_right.setY(max_xy);
 
     point_top_left.setX(point_top_left.x()/256);
     point_top_left.setY(point_top_left.y()/256);

@@ -16,16 +16,16 @@ class MapsUploader : public QObject
 {
     Q_OBJECT
 
-    QNetworkAccessManager * m_manager;
+    QNetworkAccessManager m_manager;
     const QString m_url;
     QDir m_file_store_dir;
     QVector<TilePoint> m_loaded;
     QVector<TilePoint> m_tiles;
     bool m_background_mode;
+    int m_replies_in_work;
 
 public:
     explicit MapsUploader(QObject *parent = 0);
-    ~MapsUploader();
 
 private:
     void checkHomePath();

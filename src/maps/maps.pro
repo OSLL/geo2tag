@@ -15,13 +15,15 @@ INCLUDEPATH += . inc ../common/inc ../common/common/inc ../common/thread/inc \
 
 # Input
 HEADERS += inc/OSMCoordinatesConverter.h \
-                   inc/MapsUploader.h \
-		   inc/MapScene.h \
-		   inc/MapsUploadThread.h
+        inc/MapsUploader.h \
+        inc/MapScene.h \
+        inc/MapsUploadThread.h \
+        inc/Preloading.h
 SOURCES += src/OSMCoordinatesConverter.cpp \
-                   src/MapsUploader.cpp \
-		   src/MapScene.cpp \
-		   src/MapsUploadThread.cpp
+        src/MapsUploader.cpp \
+        src/MapScene.cpp \
+        src/MapsUploadThread.cpp \
+        src/Preloading.cpp
 
 OBJECTS_DIR = .obj
 
