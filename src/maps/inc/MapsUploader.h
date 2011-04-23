@@ -1,39 +1,47 @@
 #ifndef MAPSUPLOADER_H
 #define MAPSUPLOADER_H
 
-#include <QPixmap>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QUrl>
+
+#include <QDir>
 #include <QFile>
-#include "TranslateCoordinatesOSM.h"
+
+#include <QPixmap>
+
+#include "OSMCoordinatesConverter.h"
 
 class MapsUploader : public QObject
 {
     Q_OBJECT
 
     QNetworkAccessManager m_manager;
-    QUrl m_url;
+    const QString m_url;
+    QDir m_file_store_dir;
     QVector<TilePoint> m_loaded;
-	QVector<QFile *> m_files;
-
-private:
-	void loadCachedFiles();
+    QVector<TilePoint> m_tiles;
+    bool m_background_mode;
 
 public:
     explicit MapsUploader(QObject *parent = 0);
-	~MapsUploader();
+
+private:
+    void checkHomePath();
+    void popNextTile();
 
 signals:
-    void tileUploaded(const QPixmap & pixmap, const QPoint & point, int zoom);
+    void tileUploaded(const QPixmap & pixmap, const TilePoint & point);
+    void uploadingFinished();
 
 private slots:
-
     void handleNetworkData(QNetworkReply *reply);
-    void downloadTile(int lat, int lg, int zoom);
+    void replyError(QNetworkReply::NetworkError code);
+    void downloadTile(const TilePoint & point);
 
 public slots:
     void uploadTiles(QVector<TilePoint> & tiles_to_upload);
-
+    void uploadTilesBG(QVector<TilePoint> & tiles_to_upload);
 };
 
 #endif // MAPSUPLOADER_H

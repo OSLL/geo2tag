@@ -10,117 +10,153 @@
 
 
 MapsUploader::MapsUploader(QObject *parent) :
-    QObject(parent)
+        QObject(parent),
+        m_url("http://tile.openstreetmap.org/%1/%2/%3.png"),
+        m_background_mode(false)
 {
-//    QNetworkDiskCache *cache = new QNetworkDiskCache;
-//    cache->setCacheDirectory(QDesktopServices::storageLocation
-//                             (QDesktopServices::CacheLocation));
-//    m_manager.setCache(cache);
-
-	this->loadCachedFiles();
+    this->checkHomePath();
 
     connect(&m_manager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(handleNetworkData(QNetworkReply*)));
 }
 
-MapsUploader::~MapsUploader()
+void MapsUploader::checkHomePath()
 {
-//	for(QVectorIterator<QFile *> it = m_files.begin(); it != m_files.end(); ++it)
-//	{
-//		if(*it != 0) it->unmap();
-//	}
+    this->m_file_store_dir = QDir::home();
+
+    if(!this->m_file_store_dir.exists(".geo2tag/uploaded_maps/"))
+        this->m_file_store_dir.mkpath(".geo2tag/uploaded_maps/");
+
+    this->m_file_store_dir.cd(".geo2tag/uploaded_maps/");
+
+    for(int zoom = 0; zoom < 19; zoom++)
+    {
+        if( !this->m_file_store_dir.exists( QString::number(zoom) + "/" ) )
+            this->m_file_store_dir.mkpath( QString::number(zoom) + "/" );
+    }
 }
 
-void MapsUploader::loadCachedFiles()
+void MapsUploader::popNextTile()
 {
-	QDir home_dir = QDir::home();
+    if(m_tiles.isEmpty())
+    {
+        qDebug() << "No more tiles!\n";
+        return;
+    }
 
-	if(!home_dir.exists(".geo2tag/uploaded_maps/"))
-		home_dir.mkpath(".geo2tag/uploaded_maps/");
+    TilePoint tp =  m_tiles.back();
+    m_tiles.pop_back();
+    this->downloadTile(tp);
 }
 
 
 void MapsUploader::handleNetworkData(QNetworkReply *reply)
 {
+    if(reply == 0)
+    {
+        qDebug() << "Got EMPTY reply!\n";
+        return;
+    }
+
     QImage img;
     QList<QVariant> data = reply->request().attribute(QNetworkRequest::User).toList();
     QPoint tp = data.front().toPoint();
     int zoom = data.back().toInt();
-    QUrl url = reply->url();
     if (!reply->error())
+    {
         if (!img.load(reply, 0))
             img = QImage();
+    }
+    else
+    {
+        this->downloadTile(qMakePair(tp,zoom));
+        return;
+    }
     reply->deleteLater();
 
     if(!img.isNull())
     {
         QPixmap pixmap = QPixmap::fromImage(img);
-		QDir file_store_path = QDir().home();
-		if(!file_store_path.exists(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/"))
-			file_store_path.mkpath(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
-		file_store_path.cd(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
-		QString file_name = file_store_path.path() + "/" + QString::number(tp.x()) + "_" + QString::number(tp.y());// + ".png";
-		if(!QFile(file_name).exists())
-		{
-			//qDebug() << file_name << "\n";
-			QByteArray bytes;
-			QBuffer buffer(&bytes);
-			buffer.open(QIODevice::WriteOnly);
-			pixmap.save(&buffer, "PNG"); // writes pixmap into bytes in PNG format
-			bytes = qCompress(bytes,9);
-			QFile file(file_name);
-			file.open(QIODevice::WriteOnly);
-			file.write(bytes);
-			file.flush();
-			file.close();
-			//pixmap.save(file_name, 0, 100);
-		}
-        emit this->tileUploaded(pixmap, tp, zoom);
+        QString file_name = m_file_store_dir.path() + "/"
+                            + QString::number(zoom) + "/"
+                            + QString::number(tp.x()) + "_"
+                            + QString::number(tp.y());
+        if(!QFile(file_name).exists())
+        {
+            qDebug() << "Saving... (" << file_name << ")";
+            QByteArray bytes;
+            QBuffer buffer(&bytes);
+            buffer.open(QIODevice::ReadWrite);
+            pixmap.save(&buffer, "PNG"); // writes pixmap into bytes in PNG format
+            bytes = qCompress(bytes,9);
+            QFile file(file_name);
+            file.open(QIODevice::ReadWrite);
+            file.write(bytes);
+            file.flush();
+            file.close();
+
+            qDebug() << "Saved! (" << file_name << ")";
+        }
+
+        if(!m_background_mode)
+            emit this->tileUploaded(pixmap, qMakePair(tp,zoom));
+        else
+        {
+            if(m_tiles.isEmpty())
+            {
+                emit this->uploadingFinished();
+                return;
+            }
+
+            this->popNextTile();
+        }
     }
 }
 
-void MapsUploader::downloadTile(int lat, int lg, int zoom)
+void MapsUploader::replyError(QNetworkReply::NetworkError code)
 {
-    QPoint grab(lg, lat);
+    qDebug() << "Network error: " << code << "\n";
+    if(m_background_mode)
+        this->popNextTile();
+}
 
-	QDir file_store_path = QDir().home();
-	if(!file_store_path.exists(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/"))
-		file_store_path.mkpath(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
-	file_store_path.cd(".geo2tag/uploaded_maps/" + QString::number(zoom) + "/");
-	QString file_name = file_store_path.path() + "/" + QString::number(lg) + "_" + QString::number(lat);// + ".png";
-	if(QFile::exists(file_name))
-	{
-		//qDebug() << file_name << "\n";
+void MapsUploader::downloadTile(const TilePoint & point)
+{   
+    QString file_name = m_file_store_dir.path() + "/"
+                        + QString::number(point.second) + "/"
+                        + QString::number(point.first.x()) + "_"
+                        + QString::number(point.first.y());
 
-		QFile pixmap_file(file_name, this);
-		//m_files.push_back(pixmap_file);
-		pixmap_file.open(QFile::ReadOnly);
-		QPixmap pixmap;
-		if( pixmap.loadFromData( qUncompress(pixmap_file.readAll()) ) )
-		{
-			//qDebug() << "File loaded from cache\n";
-			emit this->tileUploaded(pixmap, grab, zoom);
-		}
-		else
-		{
-			qDebug() << "Error!\n";
-		}
-		pixmap_file.close();
-	}
-	else
-	{
-		QString path = "http://tile.openstreetmap.org/%1/%2/%3.png";
-		m_url = QUrl(path.arg(zoom).arg(lg).arg(lat));
-		//qDebug() << m_url << "\n";
-		QNetworkRequest request;
-		request.setUrl(m_url);
-		request.setRawHeader("User-Agent", "OSLL Observer");
-		QList<QVariant> data;
-		data.push_back(QVariant(grab));
-		data.push_back(QVariant(zoom));
-		request.setAttribute(QNetworkRequest::User, QVariant(data));
-		m_manager.get(request);
-	}
+    //qDebug() << file_name;
+    if(QFile::exists(file_name))
+    {
+        if(!m_background_mode)
+        {
+            QFile pixmap_file(file_name, this);
+            pixmap_file.open(QFile::ReadOnly);
+            QPixmap pixmap;
+            if( pixmap.loadFromData( qUncompress(pixmap_file.readAll()) ) )
+                emit this->tileUploaded(pixmap, point);
+            else
+                qDebug() << "Error!\n";
+            pixmap_file.close();
+        }
+        else
+            this->popNextTile();
+    }
+    else
+    {
+        QNetworkRequest request;
+        request.setUrl(
+                QUrl( m_url.arg(point.second).arg(point.first.x()).arg(point.first.y()) )
+                );
+        request.setRawHeader("User-Agent", "OSLL Observer");
+        QList<QVariant> data;
+        data.push_back(QVariant(point.first));
+        data.push_back(QVariant(point.second));
+        request.setAttribute(QNetworkRequest::User, QVariant(data));
+        m_manager.get(request);
+    }
 }
 
 
@@ -132,10 +168,15 @@ void MapsUploader::uploadTiles(QVector<TilePoint> & tiles_to_upload)
         if(m_loaded.contains(tp))
             continue;
 
-        QPoint p = tp.first;
-        int zoom = tp.second;
-        this->downloadTile(p.x(), p.y(), zoom);
+        this->downloadTile(tp);
 
         m_loaded.push_back(tp);
     }
+}
+
+void MapsUploader::uploadTilesBG(QVector<TilePoint> & tiles_to_upload)
+{
+    this->m_background_mode = true;
+    this->m_tiles = tiles_to_upload;
+    this->popNextTile();
 }

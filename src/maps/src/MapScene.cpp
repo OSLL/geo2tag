@@ -25,31 +25,29 @@
 
 
 MapScene::MapScene(QObject *parent) :
-    QGraphicsScene(parent),
-    m_zoom(15),
-    m_latitude(59.910000),
-    m_longitude(10.760000)
+        QGraphicsScene(parent),
+        m_zoom(15),
+        m_latitude(59.910000),
+        m_longitude(10.760000)
 {
     m_maps = QHash<TilePoint, QGraphicsPixmapItem * >();
 
     m_uploader = new MapsUploader(this);
     connect(this, SIGNAL(uploadTiles(QVector<TilePoint> &)), m_uploader, SLOT(uploadTiles(QVector<TilePoint> &)));
-    connect(m_uploader, SIGNAL(tileUploaded(const QPixmap &, const QPoint &, int)), this, SLOT(tileUploaded(const QPixmap &, const QPoint &, int)));
+    connect(m_uploader, SIGNAL(tileUploaded(QPixmap,TilePoint)), this, SLOT(tileUploaded(QPixmap,TilePoint)));
 }
 
 
-void MapScene::tileUploaded(const QPixmap & pixmap, const QPoint & point, const int zoom)
-{
-    TilePoint tp = qMakePair(point, zoom);
-
-    if(m_maps.contains(tp))
+void MapScene::tileUploaded(const QPixmap &pixmap, const TilePoint & point)
+{   
+    if(m_maps.contains(point))
         return;
 
     QGraphicsPixmapItem * pm = addPixmap( pixmap );
-    pm->setData(0, zoom);
-    m_maps.insert(tp, pm);
-    m_maps.value(tp)->setPos(point.x()*256.0, point.y()*256.0);
-    m_maps.value(tp)->setVisible(zoom == m_zoom);
+    pm->setData(0, point.second);
+    m_maps.insert(point, pm);
+    m_maps.value(point)->setPos(point.first.x()*256.0, point.first.y()*256.0);
+    m_maps.value(point)->setVisible(point.second == m_zoom);
 }
 
 void MapScene::preFetch()
@@ -78,44 +76,47 @@ void MapScene::preFetch()
     point_bottom_right.setX(point_bottom_right.x()/256);
     point_bottom_right.setY(point_bottom_right.y()/256);
 
-	int zoom = m_zoom;
+    int zoom = m_zoom;
 
-	QVector<TilePoint> tiles_for_upload;
+    QVector<TilePoint> tiles_for_upload;
 
-	while(zoom <= 18)
-	{
-		qDebug() << "Upload tile " << point_top_left << "\t" << point_bottom_right << "\n";
+    while(zoom <= 18)
+    {
+        qDebug() << "Upload tile " << point_top_left << "\t" << point_bottom_right << "\n";
 
-		for(int x = point_top_left.x(); x <= point_bottom_right.x(); x++)
-		{
-			for(int y = point_top_left.y(); y <= point_bottom_right.y(); y++)
-			{
-	            TilePoint tp = qMakePair(QPoint(y,x), zoom);
+        for(int x = point_top_left.x(); x <= point_bottom_right.x(); x++)
+        {
+            for(int y = point_top_left.y(); y <= point_bottom_right.y(); y++)
+            {
+                TilePoint tp = qMakePair(QPoint(x,y), zoom);
             	if(!m_maps.contains(tp))
             	    tiles_for_upload.push_back(tp);
-        	}
+            }
     	}
 
-		zoom++;
+        zoom++;
 
-		point_top_left.setX(point_top_left.x()*2);
-		point_top_left.setY(point_top_left.y()*2);
+        point_top_left.setX(point_top_left.x()*2);
+        point_top_left.setY(point_top_left.y()*2);
 
-		point_bottom_right.setX(point_bottom_right.x()*2+1);
-		point_bottom_right.setY(point_bottom_right.y()*2+1);	
-		
-		if(tiles_for_upload.isEmpty())
-			continue;
+        point_bottom_right.setX(point_bottom_right.x()*2+1);
+        point_bottom_right.setY(point_bottom_right.y()*2+1);
 
-		qDebug() << "Main thread: " << QThread::currentThread();
-		//m_map_uploader = new MapsUploadThread(tiles_for_upload);
-		//m_map_uploader->start();
-		(new MapsUploadThread(tiles_for_upload))->start();
+        if(tiles_for_upload.isEmpty())
+            continue;
 
-		tiles_for_upload.clear();
-	}
+        //m_map_uploader = new MapsUploadThread(tiles_for_upload);
+        //m_map_uploader->start();
 
-/*
+
+        QThread * thread = new MapsUploadThread(tiles_for_upload);
+        m_threads.push_back(thread);
+        thread->start();
+
+        tiles_for_upload.clear();
+    }
+
+    /*
 	if(tiles_for_upload.isEmpty())
 		return;
 
@@ -139,7 +140,7 @@ void MapScene::addMark(qreal latitude, qreal longitude, QVariant data)
     painter.end();
 
     QGraphicsItem * mark = this->addPixmap(pixmap);
-    QPointF mark_point = OSMCoordinatesConverter::tileForCoordinate(latitude, longitude, this->m_zoom);
+    QPointF mark_point = OSMCoordinatesConverter::GeoToTile(latitude, longitude, this->m_zoom);
 
     mark_point.setX(mark_point.x()*256.0);
     mark_point.setY(mark_point.y()*256.0);
@@ -155,7 +156,7 @@ void MapScene::addMark(qreal latitude, qreal longitude, QVariant data, QWidget *
     QGraphicsProxyWidget * mark = this->addWidget(widget);
     widget->show();
 
-    QPointF mark_point = OSMCoordinatesConverter::tileForCoordinate(latitude, longitude, this->m_zoom);
+    QPointF mark_point = OSMCoordinatesConverter::GeoToTile(latitude, longitude, this->m_zoom);
     mark_point.setX(mark_point.x()*256.0);
     mark_point.setY(mark_point.y()*256.0);
 
@@ -190,68 +191,68 @@ void MapScene::removeMark(QGraphicsItem * mark)
 
 void MapScene::setMarks(DataChannels marks)
 {
-	double tdim=256.;
-	QPointF pos;
+    double tdim=256.;
+    QPointF pos;
 
-	//Add here time and count filter
-	QSettings settings("osll","libs");
-	int maxAgeOfMark = settings.value("timeLimit").toInt();
+    //Add here time and count filter
+    QSettings settings("osll","libs");
+    int maxAgeOfMark = settings.value("timeLimit").toInt();
     int marksCount = settings.value("marksCount").toInt();
 
-	//Getting list of all channels, wich marks are in request
+    //Getting list of all channels, wich marks are in request
     QList<QSharedPointer<DataMark> > marks_to_show;
 
-	for(int i = 0; i < m_marks.size(); i++)
-	{
-		this->removeItem(m_marks.at(i));
-	}
-	m_marks.clear();
+    for(int i = 0; i < m_marks.size(); i++)
+    {
+        this->removeItem(m_marks.at(i));
+    }
+    m_marks.clear();
 
-	QList<QSharedPointer<Channel> > channels = marks.uniqueKeys();
-	for (int j = 0; j < channels.size(); j++)
-	{
-		marks_to_show = marks.values(channels.at(j));
-		qSort(marks_to_show.begin(), marks_to_show.end(), qGreater<QSharedPointer<DataMark> >());
-		for (int i = 0; i < qMin( marksCount, marks_to_show.size() ); i++)
-		{
-			//Check, that current mark isnt older that maxAgeOfMark minutes
-			qDebug() << "Mark time " << marks_to_show.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
-			qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
-			if(true)//marks_to_show.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark))
-			{
-                                pos = OSMCoordinatesConverter::tileForCoordinate(
-										marks_to_show.at(i)->getLatitude(), 
-										marks_to_show.at(i)->getLongitude(),
-										m_zoom);
-				pos = pos * qreal(tdim);
-				this->add_mark(pos, channels.at(j)->getName());
-			}
-		}
-	}
+    QList<QSharedPointer<Channel> > channels = marks.uniqueKeys();
+    for (int j = 0; j < channels.size(); j++)
+    {
+        marks_to_show = marks.values(channels.at(j));
+        qSort(marks_to_show.begin(), marks_to_show.end(), qGreater<QSharedPointer<DataMark> >());
+        for (int i = 0; i < qMin( marksCount, marks_to_show.size() ); i++)
+        {
+            //Check, that current mark isnt older that maxAgeOfMark minutes
+            qDebug() << "Mark time " << marks_to_show.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
+            qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
+            if(true)//marks_to_show.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark))
+            {
+                pos = OSMCoordinatesConverter::GeoToTile(
+                        marks_to_show.at(i)->getLatitude(),
+                        marks_to_show.at(i)->getLongitude(),
+                        m_zoom);
+                pos = pos * qreal(tdim);
+                this->add_mark(pos, channels.at(j)->getName());
+            }
+        }
+    }
 }
 
 void MapScene::add_mark(QPointF pos, QString channel_name)
 {
-	QPointF posForPicture = QPointF(pos.x()-12.0, pos.y()-12.0);
-	QPointF posForText = QPointF(pos.x()-24.0, pos.y()+24.0);
-	QGraphicsPixmapItem * pi = 0;
+    QPointF posForPicture = QPointF(pos.x()-12.0, pos.y()-12.0);
+    QPointF posForText = QPointF(pos.x()-24.0, pos.y()+24.0);
+    QGraphicsPixmapItem * pi = 0;
 
-	if(channel_name == "Fuel prices")
-	{
-		pi = addPixmap(QPixmap(":/img/fuel.png"));
-	}
-	else if(channel_name == "Public announcements")
-	{
-		pi = addPixmap(QPixmap(":/img/public.png"));
-	}
+    if(channel_name == "Fuel prices")
+    {
+        pi = addPixmap(QPixmap(":/img/fuel.png"));
+    }
+    else if(channel_name == "Public announcements")
+    {
+        pi = addPixmap(QPixmap(":/img/public.png"));
+    }
     else if(channel_name == "ObsTestChannel")
     {
-		pi = addPixmap(QPixmap(":/img/test.png"));
-		//painter.drawText(posForText, "Test text");
+        pi = addPixmap(QPixmap(":/img/test.png"));
+        //painter.drawText(posForText, "Test text");
     }
     else if(channel_name.startsWith("bus_"))
     {
-		pi = addPixmap(QPixmap(":/img/bus.png"));
+        pi = addPixmap(QPixmap(":/img/bus.png"));
         //painter.drawText(posForText, channel_name.split('_').at(1));
     }
     else if(channel_name.startsWith("tram_"))
@@ -270,11 +271,11 @@ void MapScene::add_mark(QPointF pos, QString channel_name)
     }
     else
     {
-		QPixmap pixmap(24, 24);
-	    pixmap.fill(Qt::transparent);
+        QPixmap pixmap(24, 24);
+        pixmap.fill(Qt::transparent);
     	QPoint center(pixmap.width()/2, pixmap.height()/2);
 
-	    QPainter painter;
+        QPainter painter;
     	painter.begin(&pixmap);
     	painter.setBrush(Qt::blue);
     	painter.drawEllipse(center, pixmap.width()/2, pixmap.height()/2);
@@ -285,10 +286,10 @@ void MapScene::add_mark(QPointF pos, QString channel_name)
     	pi = this->addPixmap(pixmap);
     }
 
-	pi->setX(posForPicture.x());
-	pi->setY(posForPicture.y());
+    pi->setX(posForPicture.x());
+    pi->setY(posForPicture.y());
 
-	m_marks.push_back(pi);
+    m_marks.push_back(pi);
 }
 
 void MapScene::wheelEvent(QGraphicsSceneWheelEvent *event)
@@ -324,13 +325,13 @@ void MapScene::set_zoom()
     if(!views().isEmpty())
         this->views()[0]->setSceneRect(zoom_rect);
 
-    QPointF center_point =  OSMCoordinatesConverter::tileForCoordinate(m_latitude, m_longitude, m_zoom);
+    QPointF center_point =  OSMCoordinatesConverter::GeoToTile(m_latitude, m_longitude, m_zoom);
     center_point.setX(center_point.x()*256);
     center_point.setY(center_point.y()*256);
     if(!views().isEmpty())
         this->views()[0]->centerOn(center_point);
 
-//    qDebug() << center_point.x() << "\t" << center_point.y() << "\n";
+    //    qDebug() << center_point.x() << "\t" << center_point.y() << "\n";
 
     this->update_state();
 }
@@ -363,8 +364,9 @@ void MapScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     cur_pos.setX(cur_pos.x()/256);
     cur_pos.setY(cur_pos.y()/256);
 
-    m_longitude = OSMCoordinatesConverter::tilex2long(cur_pos.x(), m_zoom);
-    m_latitude = OSMCoordinatesConverter::tiley2lat(cur_pos.y(), m_zoom);
+    GeoPoint geo_coord = OSMCoordinatesConverter::TileToGeo(qMakePair(cur_pos, m_zoom));
+    m_longitude = geo_coord.first;
+    m_latitude = geo_coord.second;
 
     this->update_state();
 }
@@ -373,11 +375,11 @@ void MapScene::keyPressEvent(QKeyEvent *event)
 {
     QPoint screen_delta(0,0);
 
-	if(event->key() == Qt::Key_F)
-	{
-		qDebug() << "F pressed\n";
-		this->preFetch();
-	}
+    if(event->key() == Qt::Key_F)
+    {
+        qDebug() << "F pressed\n";
+        this->preFetch();
+    }
     if(event->key() == Qt::Key_Right)
         screen_delta.setX(screen_delta.x() - KEY_MOVE_DIST);
     if(event->key() == Qt::Key_Left)
@@ -401,9 +403,12 @@ void MapScene::keyPressEvent(QKeyEvent *event)
     cur_pos.setX(cur_pos.x()/256);
     cur_pos.setY(cur_pos.y()/256);
 
-    m_longitude = tilex2long(cur_pos.x(), m_zoom);
-    m_latitude = tiley2lat(cur_pos.y(), m_zoom);
+    GeoPoint gp = OSMCoordinatesConverter::TileToGeo(qMakePair(cur_pos, m_zoom));
+
+    m_longitude = gp.first;
+    m_latitude = gp.second;
     */
+
 
     this->update_state();
 }
@@ -412,13 +417,6 @@ void MapScene::update_state()
 {
     if(this->views().isEmpty())
         return;
-
-/*
-	QPointF center_point =  convertCoordinates(m_latitude, m_longitude, m_zoom);
-	center_point.setX(center_point.x()*256);
-	center_point.setY(center_point.y()*256);
-	this->views()[0]->centerOn(center_point);
-*/
 
     QPoint point_top_left = (this->views()[0]->mapToScene(this->views()[0]->frameRect().topLeft())).toPoint();
     QPoint point_bottom_right = (this->views()[0]->mapToScene(this->views()[0]->frameRect().bottomRight())).toPoint();
@@ -447,7 +445,7 @@ void MapScene::update_state()
     {
         for(int y = point_top_left.y(); y <= point_bottom_right.y(); y++)
         {
-            TilePoint tp = qMakePair(QPoint(y,x), m_zoom);
+            TilePoint tp = qMakePair(QPoint(x,y), m_zoom);
             if(!m_maps.contains(tp))
                 tiles_for_upload.push_back(tp);
         }

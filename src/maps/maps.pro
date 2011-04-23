@@ -14,11 +14,11 @@ INCLUDEPATH += . inc ../common/inc ../common/common/inc ../common/thread/inc \
                ../common/exception/inc
 
 # Input
-HEADERS += inc/TranslateCoordinatesOSM.h \
+HEADERS += inc/OSMCoordinatesConverter.h \
                    inc/MapsUploader.h \
 		   inc/MapScene.h \
 		   inc/MapsUploadThread.h
-SOURCES += src/TranslateCoordinatesOSM.cpp \
+SOURCES += src/OSMCoordinatesConverter.cpp \
                    src/MapsUploader.cpp \
 		   src/MapScene.cpp \
 		   src/MapsUploadThread.cpp

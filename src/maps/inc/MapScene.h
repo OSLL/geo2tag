@@ -14,12 +14,13 @@
 class MapScene : public QGraphicsScene
 {
     Q_OBJECT
-	
+
 private:
     QHash<TilePoint, QGraphicsPixmapItem *> m_maps;
-	QVector<QGraphicsPixmapItem *> m_marks;
+    QVector<QGraphicsPixmapItem *> m_marks;
+    QVector<QThread *> m_threads;
     MapsUploader * m_uploader;
-	MapsUploadThread * m_map_uploader;
+    MapsUploadThread * m_map_uploader;
 
     int m_zoom;
     qreal m_latitude;
@@ -34,7 +35,7 @@ public:
     void addMark(qreal x, qreal y, QVariant data);
     void addMark(qreal x, qreal y, QVariant data, QWidget * widget);
     void removeMark(QGraphicsItem * mark);
-	void setMarks(DataChannels marks);
+    void setMarks(DataChannels marks);
 
 public:
     virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
@@ -46,14 +47,14 @@ public:
 
 private:
     void update_state();
-	void add_mark(QPointF pos, QString channel_name);
+    void add_mark(QPointF pos, QString channel_name);
 
 signals:
     void uploadTiles(QVector<TilePoint> & tiles_to_upload);
 
 public slots:
-    void tileUploaded(const QPixmap & pixmap, const QPoint & point, int zoom);
-	void preFetch();
+    void tileUploaded(const QPixmap & pixmap, const TilePoint & point);
+    void preFetch();
 
 };
 
