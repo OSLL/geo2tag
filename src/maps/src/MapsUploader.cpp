@@ -14,10 +14,17 @@ MapsUploader::MapsUploader(QObject *parent) :
         m_url("http://tile.openstreetmap.org/%1/%2/%3.png"),
         m_background_mode(false)
 {
+    qDebug() << "MapsUploader thread" << this->thread();
+    m_manager = new QNetworkAccessManager(this);
     this->checkHomePath();
 
-    connect(&m_manager, SIGNAL(finished(QNetworkReply*)),
+    connect(m_manager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(handleNetworkData(QNetworkReply*)));
+}
+
+MapsUploader::~MapsUploader()
+{
+    delete(m_manager);
 }
 
 void MapsUploader::checkHomePath()
@@ -76,7 +83,6 @@ void MapsUploader::handleNetworkData(QNetworkReply *reply)
 
     if(!img.isNull())
     {
-        QPixmap pixmap = QPixmap::fromImage(img);
         QString file_name = m_file_store_dir.path() + "/"
                             + QString::number(zoom) + "/"
                             + QString::number(tp.x()) + "_"
@@ -87,19 +93,18 @@ void MapsUploader::handleNetworkData(QNetworkReply *reply)
             QByteArray bytes;
             QBuffer buffer(&bytes);
             buffer.open(QIODevice::ReadWrite);
-            pixmap.save(&buffer, "PNG"); // writes pixmap into bytes in PNG format
+            img.save(&buffer, "PNG"); // writes pixmap into bytes in PNG format
             bytes = qCompress(bytes,9);
             QFile file(file_name);
             file.open(QIODevice::ReadWrite);
             file.write(bytes);
             file.flush();
             file.close();
-
             qDebug() << "Saved! (" << file_name << ")";
         }
 
         if(!m_background_mode)
-            emit this->tileUploaded(pixmap, qMakePair(tp,zoom));
+            emit this->tileUploaded(QPixmap::fromImage(img), qMakePair(tp,zoom));
         else
         {
             if(m_tiles.isEmpty())
@@ -155,7 +160,7 @@ void MapsUploader::downloadTile(const TilePoint & point)
         data.push_back(QVariant(point.first));
         data.push_back(QVariant(point.second));
         request.setAttribute(QNetworkRequest::User, QVariant(data));
-        m_manager.get(request);
+        m_manager->get(request);
     }
 }
 

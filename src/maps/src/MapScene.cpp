@@ -108,7 +108,6 @@ void MapScene::preFetch()
         //m_map_uploader = new MapsUploadThread(tiles_for_upload);
         //m_map_uploader->start();
 
-
         QThread * thread = new MapsUploadThread(tiles_for_upload);
         m_threads.push_back(thread);
         thread->start();

@@ -13,7 +13,7 @@
 MapsUploadThread::MapsUploadThread(QVector<TilePoint> & tiles, QObject * parent) :
         QThread(parent), m_tiles(tiles)
 {
-    qDebug() << "Create thread" << this;
+    qDebug() << "Parent thread" << this->thread();
 }
 
 void MapsUploadThread::uploadingFinished()
@@ -25,6 +25,7 @@ void MapsUploadThread::run()
 {
     MapsUploader * uploader = new MapsUploader(0);
     //connect(uploader, SIGNAL(uploadingFinished()), this, SLOT(uploadingFinished()));
+    qDebug() << "Children thread" << uploader->thread();
     uploader->uploadTilesBG(m_tiles);
 
     exec();
