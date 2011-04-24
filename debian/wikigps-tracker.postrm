@@ -1,2 +1,6 @@
-#!/bin/bash
-pkill wikigpsTracker
+#!/bin/sh
+isEmpt=`pgrep wikigpsTracker`;
+if [[ -n "$isEmpt" ]]
+then
+pkill wikigpsTracker;
+fi
