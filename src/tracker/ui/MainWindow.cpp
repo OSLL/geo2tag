@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_logWidget = new LogWidget(this);
     m_stackedWidget->addWidget(m_optionsWidget);
     m_stackedWidget->addWidget(m_logWidget);
-    connect(m_optionsWidget, SIGNAL(done()), SLOT(moveToFirstPage()));
+    connect(m_optionsWidget, SIGNAL(done()), SLOT(doneButtonClicked()));
     connect(m_logWidget, SIGNAL(done()), SLOT(moveToFirstPage()));
     connect(m_optionsWidget, SIGNAL(cancel()), SLOT(moveToFirstPage()));
 //    setStyleSheet( "background-color: rgba( 255, 255, 255, 0% );" );
@@ -43,6 +43,10 @@ void MainWindow::changeEvent(QEvent *e)
     }
 }
 
+void MainWindow::doneButtonClicked(){
+	(*m_device) << "reload ";
+	moveToFirstPage();
+}
 
 void MainWindow::startButtonClicked()
 {

@@ -7,7 +7,7 @@ class LoginResponseJSON : public JsonSerializer
 {
 	Q_OBJECT;
 public:
-    LoginResponseJSON();
+    LoginResponseJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 

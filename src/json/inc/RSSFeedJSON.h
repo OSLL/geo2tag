@@ -56,9 +56,9 @@ class RSSFeedResponseJSON: public JsonSerializer
     DataChannels m_hashMap;
 
 public:
-    RSSFeedResponseJSON(const DataChannels &);
+    RSSFeedResponseJSON(const DataChannels &, QObject *parent=0);
 
-    RSSFeedResponseJSON();
+    RSSFeedResponseJSON(QObject *parent=0);
 
     virtual QByteArray getJson() const;
 

@@ -51,12 +51,12 @@
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 #include <syslog.h>
-SubscribeChannelRequestJSON::SubscribeChannelRequestJSON()
+SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 	syslog(LOG_INFO,"SubscribeChannelRequestJSON::SubscribeChannelRequestJSON()");
 }
 
-SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel, const QSharedPointer<User> &user)
+SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel, const QSharedPointer<User> &user, QObject *parent) : JsonSerializer(parent)
 {
     m_usersContainer->push_back(user);
     m_channelsContainer->push_back(channel);

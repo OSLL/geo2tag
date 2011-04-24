@@ -15,7 +15,7 @@
 #define DEFAULT_LONGITUDE 24.95
 #define DAEMON_PORT 34243
 
-TrackerDaemon::TrackerDaemon(): m_settings("osll","tracker"),
+TrackerDaemon::TrackerDaemon():m_settings(QSettings::SystemScope,"osll","tracker"),
             m_loginQuery(NULL),
             m_tagQuery(NULL),
             m_pauseFlag(true),
@@ -43,6 +43,7 @@ void TrackerDaemon::run()
     QString login = m_settings.value("user").toString();
     QString password = m_settings.value("password").toString();
     m_channelName = m_settings.value("channel").toString();
+    qDebug() << "read from QSettings " << login << " ,"<< password << " ," <<m_channelName;
     if(login.isEmpty())
         login = "Mark";
     if(password.isEmpty())
@@ -52,6 +53,7 @@ void TrackerDaemon::run()
     connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
     m_loginQuery->doRequest();
     qDebug() << "sended LoginRequest";
+    // NOTE commented due to qt bug linked with threads and network on Maemo
 /*    for(;;)
     {
 	    qDebug() << "going in for loop";
@@ -77,12 +79,20 @@ void TrackerDaemon::run()
 }
 
 
+void TrackerDaemon::reloadSettings(){
+	qDebug() << "Doing reload of auth_token";
+	m_settings.sync();
+	m_isConnected = false;
+	m_pauseFlag = true;
+	run();
+}
+
 void TrackerDaemon::startTracking()
 {
     m_pauseFlag = false;
     onTagAdded();
 //    start();
-    run();
+//    run();
 }
 
 void TrackerDaemon::stopTracking()
@@ -103,6 +113,12 @@ QStringList TrackerDaemon::getLog() const
 void TrackerDaemon::onError(QString message)
 {
     qDebug() << "Error occured: " << message;
+    if (!m_isConnected){
+     	    QEventLoop eventLoop;
+	    QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
+	    qDebug() << "trying to login one more time";
+	    run();
+    }
 }
 
 void TrackerDaemon::onConnected()
@@ -111,17 +127,16 @@ void TrackerDaemon::onConnected()
     qDebug() << "Connected";
     if(m_tagQuery == NULL)
     {
-        QSharedPointer<DataMark> mark(
-                new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
+        QSharedPointer<DataMark> mark(new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
                                  common::GpsInfo::getInstance().getLongitude(),
                         //DEFAULT_LATITUDE,DEFAULT_LONGITUDE,
                                  "tracker's tag",
                                  "this tag was generated automaticaly by tracker application",
                                  "unknown",
                                  QDateTime::currentDateTime()));
-		m_lastCoords.setX(common::GpsInfo::getInstance().getLatitude());
-		m_lastCoords.setY(common::GpsInfo::getInstance().getLongitude());
-        QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
+	m_lastCoords.setX(common::GpsInfo::getInstance().getLatitude());
+	m_lastCoords.setY(common::GpsInfo::getInstance().getLongitude());
+                QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
         mark->setChannel(channel);
         mark->setUser(m_loginQuery->getUser());
         m_tagQuery = new AddNewMarkQuery(mark,this);

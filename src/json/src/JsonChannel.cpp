@@ -42,7 +42,7 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 
-static qlonglong globalChannelId = 0;
+qlonglong JsonChannel::globalChannelId = 0;
 
 JsonChannel::JsonChannel(const QString &name,
                          const QString &description,

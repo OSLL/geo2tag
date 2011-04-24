@@ -1,7 +1,0 @@
-*~
-build*
-doc/reference
-doc/examples
-CVS
-.DS_Store
-examples/*/resources

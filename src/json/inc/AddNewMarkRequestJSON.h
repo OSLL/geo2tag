@@ -7,7 +7,7 @@ class AddNewMarkRequestJSON : public JsonSerializer
 {
 public:
 
-    AddNewMarkRequestJSON();
+    AddNewMarkRequestJSON(QObject *parent=0);
 
     virtual QByteArray getJson() const;
 

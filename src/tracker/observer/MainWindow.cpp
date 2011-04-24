@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include <QDebug>
 #include <QMenuBar>
+#include "defines.h"
 
 MainWindow::MainWindow(QWidget* parent):
          QMainWindow(parent)
@@ -23,10 +24,11 @@ MainWindow::MainWindow(QWidget* parent):
   m_menu=menuBar()->addMenu("Options");
   m_menu->addAction(m_settingsAction);
   m_menu->addAction(m_marksSettingsAction);
-//  m_map->setCenter( 55.6635 , 37.48312);
   m_view = new QGraphicsView(this);
   m_view->setScene(m_map);
   m_stackedWidget->addWidget(m_view);
+  //TODO: Implement setCenter for MapScene
+  //m_map->setCenter( DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
   m_stackedWidget->addWidget(m_optWidget);
   m_stackedWidget->addWidget(m_marksOptWidget);
   setCentralWidget(m_stackedWidget);

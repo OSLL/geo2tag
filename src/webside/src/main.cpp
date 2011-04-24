@@ -1,6 +1,5 @@
 #include <Wt/WApplication>
 #include "defines.h"
-#include <fstream>
 #include <syslog.h>
 #include <fstream>
 #include "Webside.h"
@@ -38,6 +37,8 @@ WApplication *createApplication(const WEnvironment& env)
     return app;
 }
 
+    setServerUrl(serverUrl.c_str());
+    setServerPort(serverPort);
 
 int main(int argc, char **argv)
 {

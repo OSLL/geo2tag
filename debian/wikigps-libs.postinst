@@ -1,0 +1,3 @@
+#!/bin/bash
+mkdir -p /etc/xdg/osll
+chmod 777 /etc/xdg/osll

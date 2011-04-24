@@ -50,7 +50,7 @@
                             m_isDisplayed(true)
     {
         m_activeRadius = 5.0; // 5 km
-        m_timeSlot = QSharedPointer<TimeSlot>(NULL);  //!!!my_change
+        m_timeSlot = QSharedPointer<TimeSlot>(NULL);       
     }
 
     const QString& Channel::getDescription() const
@@ -98,12 +98,12 @@
         return m_activeRadius;
     }
 
-    void Channel::setTimeSlot(QSharedPointer<TimeSlot> timeSlot) //!!!my_change
+    void Channel::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
     {
         m_timeSlot = timeSlot;
     }
 
-    QSharedPointer<TimeSlot> Channel::getTimeSlot() const   //!!!my_change
+    QSharedPointer<TimeSlot> Channel::getTimeSlot() const
     {
         return m_timeSlot;
     }

@@ -46,7 +46,9 @@
 class ChannelListResponseJSON: public JsonSerializer
 {
 public:
-    ChannelListResponseJSON();
+    ChannelListResponseJSON(QObject *parent=0);
+
+    void setChannels(QSharedPointer<Channels> channels);
 
     virtual QByteArray getJson() const;
 

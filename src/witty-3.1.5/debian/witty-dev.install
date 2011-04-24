@@ -1,3 +1,0 @@
-usr/include/*
-usr/lib/lib*.so
-usr/share/cmake-2.6/Modules/FindWt.cmake usr/share/cmake-2.6/Modules

@@ -4,7 +4,7 @@
 #include "LoginRequestJSON.h"
 #include "JsonUser.h"
 
-LoginRequestJSON::LoginRequestJSON()
+LoginRequestJSON::LoginRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 

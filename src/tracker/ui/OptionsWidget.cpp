@@ -25,7 +25,7 @@ void OptionsWidget::applyProxySettings()
 }
 
 OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
-        QScrollArea(parent), m_productName(productName), m_settings("osll",m_productName)
+        QScrollArea(parent), m_productName(productName), m_settings(QSettings::SystemScope,"osll",m_productName)
 {   
     m_widg=new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(m_widg);
@@ -64,6 +64,7 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
 
     QHBoxLayout *buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(m_doneButton = new QPushButton("Done"));
+    buttonLayout->addWidget(m_defaultButton = new QPushButton("Default settings"));
     buttonLayout->addWidget(m_cancelButton = new QPushButton("Cancel"));
     layout->addLayout(buttonLayout);
 
@@ -72,10 +73,17 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     this->setWidgetResizable(true);
     connect(m_doneButton, SIGNAL(clicked()), this, SLOT(onDoneClicked()));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
+    connect(m_defaultButton,SIGNAL(clicked()), this, SLOT(setDefaultSettings()));
     connect(m_proxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged(int)));
     connect(m_passwordCheckBox, SIGNAL(clicked(bool)), this, SLOT(onShowPasswordChecked(bool)));
 
     onProxyTypeChanged(m_proxyType->currentIndex());
+
+    if( m_settings.value("magic").toString() != APP_MAGIC )
+    {
+	setDefaultSettings();
+	createSettings();
+    }
 
     initSettings();
     applyProxySettings();
@@ -141,7 +149,7 @@ void OptionsWidget::initSettings()
 
 void OptionsWidget::readSettings()
 {
-    QSettings settings("osll",m_productName);
+    QSettings settings(QSettings::SystemScope,"osll",m_productName);
     m_nameEdit->setText(m_settings.value("user").toString());
     m_passwordEdit->setText(m_settings.value("password").toString());
     m_channelEdit->setText(m_settings.value("channel").toString());
@@ -160,7 +168,19 @@ void OptionsWidget::createSettings()
     m_settings.setValue("proxy_type", m_proxyType->itemData(m_proxyType->currentIndex()).value<int>());
     m_settings.setValue("proxy_host", m_proxyHostEdit->text());
     setServerUrl(m_serverUrlEdit->text());
-    //BUG#2024 setServerPort(m_serverPortEdit->value());
+    setServerPort(m_serverPortEdit->value());
     m_settings.setValue("proxy_port", m_proxyPortEdit->value());
     m_settings.setValue("magic", APP_MAGIC);
+}
+
+void OptionsWidget::setDefaultSettings()
+{
+    m_nameEdit->setText("tracker");
+    m_passwordEdit->setText("test");
+    m_channelEdit->setText("default");
+    m_proxyType->setCurrentIndex(0);
+    m_proxyHostEdit->setText("");
+    m_proxyPortEdit->setValue(0);
+    m_serverUrlEdit->setText("http://tracklife.ru/");
+    m_serverPortEdit->setValue(80);
 }

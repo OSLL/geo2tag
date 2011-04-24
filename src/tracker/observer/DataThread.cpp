@@ -4,11 +4,11 @@
 #include <QList>
 
 DataThread::DataThread(MapScene * map,QObject * parent) :
-    QThread(parent),  
-		m_settings("osll","observer"), 
-		m_map(map),
-		m_isConnected(false),
-		m_requestIsSent(false)
+    QThread(parent),
+    m_settings(QSettings::SystemScope,"osll","observer"),
+    m_map(map),
+    m_isConnected(false),
+    m_requestIsSent(false)
 
 {
         connect(this,SIGNAL(getFeed()),this,SLOT(onGetFeed()));

@@ -52,9 +52,12 @@
 #include "Channel.h"
 #include "DataChannel.h"
 #include "User.h"
-#include "TimeSlot.h" //!!!my_change
+#include "TimeSlot.h"
 #include "UpdateThread.h"
 #include "QueryExecutor.h"
+
+const QString error = QString("Error");
+const QString ok = QString("Ok");
 
 namespace common
 {
@@ -67,7 +70,7 @@ namespace common
         QSharedPointer<Channels>     m_channelsContainer;
         QSharedPointer<DataMarks>    m_tagsContainer;
         QSharedPointer<Users>        m_usersContainer;
-        QSharedPointer<TimeSlots>    m_timeSlotsContainer;//!!!my_change
+        QSharedPointer<TimeSlots>    m_timeSlotsContainer;
         QSharedPointer<DataChannels> m_dataChannelsMap;        
 
         UpdateThread *              m_updateThread;
@@ -83,12 +86,14 @@ namespace common
         QSharedPointer<User> findUserFromToken(const QSharedPointer<User>&) const;
 
         QByteArray processLoginQuery(const QByteArray&);
+        QByteArray processSubscribedChannelsQuery(const QByteArray&);
         QByteArray processAddNewMarkQuery(const QByteArray&);
         QByteArray processRssFeedQuery(const QByteArray&);
         QByteArray processSubscribeQuery(const QByteArray&);
         QByteArray processAddUserQuery(const QByteArray&);
         QByteArray processAddChannelQuery(const QByteArray&);
-        QByteArray processGetTimeSlotQuery(const QByteArray&); //!!!my_change
+        QByteArray processGetTimeSlotQuery(const QByteArray&);
+        QByteArray processSetTimeSlotQuery(const QByteArray&);
 
     public:
 

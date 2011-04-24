@@ -41,9 +41,9 @@
 
 #include "JsonTimeSlot.h"
 
-static qlonglong globalTimeSlotId = 0;
+qlonglong JsonTimeSlot::globalTimeSlotId = 0;
 
-JsonTimeSlot::JsonTimeSlot(const QString &slot):
+JsonTimeSlot::JsonTimeSlot(const qulonglong &slot):
                             TimeSlot(slot),
                             m_id(globalTimeSlotId++)
 {

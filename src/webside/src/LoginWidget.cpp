@@ -24,7 +24,7 @@ LoginWidget::LoginWidget(WContainerWidget *parent)
     usernameEdit = new WLineEdit(this);
     usernameLabel->setBuddy(usernameEdit);
     WLabel *passwordLabel = new WLabel("Password:", this);
-    m_loginQuery=new LoginQuery();
+    //m_loginQuery=new LoginQuery();
     passwordEdit = new WLineEdit(this);
     passwordEdit->setEchoMode(WLineEdit::Password);
     passwordLabel->setBuddy(passwordEdit);
@@ -56,7 +56,7 @@ void LoginWidget::initCons()
 {
 	loginButton->clicked().connect(this,&LoginWidget::loginClicked);
 	syslog(LOG_INFO,"trying create LoginWidgetConnector object");
-	m_connector=new LoginWidgetConnector(m_loginQuery,this,&LoginWidget::userRecieved);
+	m_connector=new LoginWidgetConnector(&m_loginQuery,this,&LoginWidget::userRecieved);
 	syslog(LOG_INFO,"successfull creation");
 }
 
@@ -80,14 +80,14 @@ void LoginWidget::loginClicked()
     QString pass = QString(passwordEdit->text().toUTF8().c_str());
     syslog(LOG_INFO,"LoginWidget::loginClicked(), %s - %s",usernameEdit->text().toUTF8().c_str(),passwordEdit->text().toUTF8().c_str());
     syslog(LOG_INFO,"Server url: %s, server port: %i",getServerUrl().toStdString().c_str(),getServerPort());
-    m_loginQuery->setQuery(name,pass);
-    m_loginQuery->doRequest();
+    m_loginQuery.setQuery(name,pass);
+    m_loginQuery.doRequest();
 	
 }
 
 void LoginWidget::userRecieved(){
 	syslog(LOG_INFO,"LoginWidget::userRecieved()");
-	QSharedPointer<User> us=this->m_loginQuery->getUser();
+	QSharedPointer<User> us=this->m_loginQuery.getUser();
 	loginSuccessful.emit(us);
 
 //loginSuccessful.emit(std::string(DEFAULT_TOKEN));

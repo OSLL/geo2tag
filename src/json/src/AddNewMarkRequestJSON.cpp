@@ -7,7 +7,7 @@
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 
-AddNewMarkRequestJSON::AddNewMarkRequestJSON()
+AddNewMarkRequestJSON::AddNewMarkRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 

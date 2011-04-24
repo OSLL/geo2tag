@@ -11,12 +11,14 @@ sudo -u postgres createuser -s geo2tag
 sudo -u postgres createdb -O geo2tag geo2tag
 sudo -u postgres psql --command="GRANT ALL privileges on database geo2tag to geo2tag;"
 sudo cp /opt/geo2tag/pg_hba.conf `find /etc/postgresql -name pg_hba.conf`
-sudo `find /etc/init.d/ -name "postgres*"` restart
+#sudo `find /etc/init.d/ -name "postgres*"` restart
+sudo /etc/init.d/postgresql restart
 psql geo2tag -U geo2tag < /opt/geo2tag/base.sql
 echo "sudo -u postgres psql --command=\"ALTER USER"
 sudo -u postgres psql --command="ALTER USER geo2tag WITH PASSWORD 'geo2tag';"
-sudo `find /etc/init.d/ -name "postgres*"` restart
-cat /opt/geo2tag/odbc.ini >> /etc/odbc.ini
-cat /opt/geo2tag/odbcinst.ini >> /etc/odbcinst.ini
+#sudo `find /etc/init.d/ -name "postgres*"` restart
+sudo /etc/init.d/postgresql restart
+#cat /opt/geo2tag/odbc.ini >> /etc/odbc.ini
+#cat /opt/geo2tag/odbcinst.ini >> /etc/odbcinst.ini
 sudo /etc/init.d/lighttpd restart;
 

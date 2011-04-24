@@ -46,7 +46,7 @@
 #include "ChannelListJSON.h"
 #include "JsonChannel.h"
 
-ChannelListResponseJSON::ChannelListResponseJSON()
+ChannelListResponseJSON::ChannelListResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 
 }
@@ -54,6 +54,11 @@ ChannelListResponseJSON::ChannelListResponseJSON()
 ChannelListResponseJSON::~ChannelListResponseJSON()
 {
 
+}
+
+void ChannelListResponseJSON::setChannels(QSharedPointer<Channels> channels)
+{
+	if (!channels.isNull()) m_channelsContainer=channels;
 }
 
 void ChannelListResponseJSON::parseJson(const QByteArray &data)

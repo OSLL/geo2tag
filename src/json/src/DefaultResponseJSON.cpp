@@ -3,7 +3,7 @@
 
 #include "DefaultResponseJSON.h"
 
-DefaultResponseJSON::DefaultResponseJSON()
+DefaultResponseJSON::DefaultResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 

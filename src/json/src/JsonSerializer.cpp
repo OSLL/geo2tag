@@ -46,7 +46,7 @@ void JsonSerializer::clearContainers()
 {
     m_usersContainer->clear();
     m_tagsContainer->clear();
-    m_channelsContainer->clear();
+    m_channelsContainer->clear();  
 }
 
 const QString& JsonSerializer::getStatus() const

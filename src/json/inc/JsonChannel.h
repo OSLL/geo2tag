@@ -46,6 +46,7 @@
 
     class JsonChannel: public Channel
     {
+        static qlonglong globalChannelId;
         qlonglong m_id;
 
     public:

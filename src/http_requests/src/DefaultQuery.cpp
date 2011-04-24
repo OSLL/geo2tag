@@ -33,5 +33,6 @@ void DefaultQuery::process(QNetworkReply *reply)
 
 void DefaultQuery::handleError()
 {
+    syslog(LOG_INFO,"Network error occured while sending request");
     Q_EMIT errorOccured("network error occcured");
 }

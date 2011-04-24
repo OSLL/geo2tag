@@ -46,6 +46,7 @@
 class JsonDataMark: public DataMark
 {
 
+    static qlonglong globalTagId;
     qlonglong m_id; //!< Tag's identifier
 
     qlonglong m_userId; //!< Assotiated user's identifier for the tag

@@ -114,7 +114,7 @@ void MapScene::setMarks(DataChannels marks)
     QPointF pos;
 
     //Add here time and count filter
-    QSettings settings("osll","libs");
+    QSettings settings(QSettings::SystemScope, "osll", "libs");
     //int maxAgeOfMark = settings.value("timeLimit").toInt();
     int marksCount = settings.value("marksCount").toInt();
 

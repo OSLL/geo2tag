@@ -1,17 +1,17 @@
 Source: wikigps
-Section: web
+Section: user/other
 Priority: optional
-Maintainer: Pavel Zubarev <zps@osll.spb.ru>
+Maintainer: Open Source and Linux lab <osll@lists.osll.spb.ru>
 Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6)
 
 Package: wikigps-libs
 Architecture: any
-Depends:${shlibs:Depends}, unixodbc [i386], unixodbc-dev [i386], libxml2 (>=2.6),libqt4-core ,libqt4-network ,libqt4-gui
+Depends: ${shlibs:Depends}, libxml2 (>=2.6),libqt4-core ,libqt4-network ,libqt4-gui, libqt4-sql-psql [i386]
 Description: Geo2tag libs
 
 Package: wikigps-libs-standalone
 Architecture: i386
-Depends:wikigps-qt, unixodbc, unixodbc-dev, libxml2 (>=2.6)
+Depends:wikigps-qt, libxml2 (>=2.6)
 Description: Geo2tag libs
 
 Package: wikigps-client
@@ -39,10 +39,10 @@ Description: Geo2tag website
 
 Package: wikigps-service
 Architecture: i386
-Depends: lighttpd, postgresql, unixodbc, odbc-postgresql, wikigps-libs, libpq5, libfcgi0ldbl
+Depends: lighttpd, postgresql, wikigps-libs, libpq5, libfcgi0ldbl
 Description: Geo2tag webservice
 
 Package: wikigps-service-standalone
 Architecture: i386
-Depends: lighttpd, postgresql, unixodbc, odbc-postgresql, wikigps-libs-standalone, libpq5, libfcgi0ldbl
+Depends: lighttpd, postgresql, wikigps-libs-standalone, libpq5, libfcgi0ldbl
 Description: Geo2tag webservice for platform that doesnt support qt 4.7

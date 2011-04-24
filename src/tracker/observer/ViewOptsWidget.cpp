@@ -23,7 +23,7 @@ ViewOptsWidget::ViewOptsWidget(QWidget *parent):QScrollArea(parent)
     connect(m_doneButton, SIGNAL(clicked()), this, SLOT(onDoneClicked()));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
 
-    QSettings settings("osll","libs");
+    QSettings settings(QSettings::SystemScope,"osll","libs");
 /*    if (settings.value("timeLimit").toInt()>60 || settings.value("timeLimit").toInt()<1){
 	    m_timeFilterEdit->setValue(4);
     }else {*/
@@ -42,7 +42,7 @@ ViewOptsWidget::ViewOptsWidget(QWidget *parent):QScrollArea(parent)
 
 
 void ViewOptsWidget::onDoneClicked(){
-	QSettings settings("osll","libs");
+	QSettings settings(QSettings::SystemScope,"osll","libs");
 	settings.setValue("timeLimit",m_timeFilterEdit->value());
 	settings.setValue("marksCount",m_marksCountEdit->value());
 
@@ -53,7 +53,7 @@ void ViewOptsWidget::onDoneClicked(){
 
 int ViewOptsWidget::getTimeLimit() const
 {
-	QSettings settings("osll","libs");
+	QSettings settings(QSettings::SystemScope,"osll","libs");
 	qDebug() << "current timeLimit " << settings.value("timeLimit").toInt();
 	return settings.value("timeLimit").toInt();
 
@@ -66,7 +66,7 @@ void ViewOptsWidget::onCancelClicked()
 
 int ViewOptsWidget::getMarksCount() const
 {
-	QSettings settings("osll","libs");
+	QSettings settings(QSettings::SystemScope,"osll","libs");
         qDebug() << "current marksCount " << settings.value("marksCount").toInt();
 	return settings.value("marksCount").toInt();
 }
