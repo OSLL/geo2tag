@@ -189,9 +189,9 @@ void OptionsWidget::createSettings()
 
 void OptionsWidget::setDefaultSettings()
 {
-    m_nameEdit->setText("tracker");
-    m_passwordEdit->setText("test");
-    m_channelEdit->setText("default");
+    m_nameEdit->setText(DEFAULT_USER_NAME);
+    m_passwordEdit->setText(DEFAULT_USER_PASSWORD);
+    m_channelEdit->setText(DEFAULT_CHANNEL);
     m_proxyType->setCurrentIndex(0);
     m_proxyHostEdit->setText("");
     m_proxyPortEdit->setValue(0);
