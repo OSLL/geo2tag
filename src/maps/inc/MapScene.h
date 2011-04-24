@@ -3,13 +3,15 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
-#include <QBasicTimer>
+
 #include <QHash>
 #include <QVector>
+
 #include "MapsUploader.h"
-#include "DataChannel.h"
 #include "MapsUploadThread.h"
 #include "Preloading.h"
+
+#include "DataChannel.h"
 
 
 class MapScene : public QGraphicsScene
@@ -17,7 +19,7 @@ class MapScene : public QGraphicsScene
     Q_OBJECT
 
 private:
-    QHash<TilePoint, QGraphicsPixmapItem *> m_maps;
+    QHash<TilePoint, QGraphicsPixmapItem *> m_tiles;
     QVector<QGraphicsPixmapItem *> m_marks;
     MapsUploader * m_uploader;
     Preloading * m_preloader;
@@ -26,7 +28,7 @@ private:
     qreal m_latitude;
     qreal m_longitude;
 
-    QPoint pressed_screen_position;
+    QPoint m_pressed_screen_position;
 
 public:
     explicit MapScene(QObject *parent = 0);
@@ -37,6 +39,7 @@ public:
     void addMark(qreal x, qreal y, QVariant data, QWidget * widget);
     void removeMark(QGraphicsItem * mark);
     void setMarks(DataChannels marks);
+
     int maxThreads() const;
     void setMaxThreads(const int & max_threads);
 

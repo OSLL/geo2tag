@@ -24,7 +24,7 @@ void Preloading::loadingCircle()
 {
     QVector<TilePoint> tiles_for_upload;
 
-    while(m_zoom <= 18)
+    while(m_zoom <= 17)
     {
         for(int x = m_x ; x <= m_bottom_right.x(); x++)
         {

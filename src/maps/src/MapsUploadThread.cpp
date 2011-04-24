@@ -21,7 +21,7 @@ void MapsUploadThread::uploadingFinished()
 }
 
 void MapsUploadThread::run()
-{   
+{
     MapsUploader * uploader = new MapsUploader(0);
     connect(uploader, SIGNAL(uploadingFinished()), this, SLOT(uploadingFinished()));
     uploader->uploadTilesBG(m_tiles);

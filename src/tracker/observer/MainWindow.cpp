@@ -33,11 +33,10 @@ MainWindow::MainWindow(QWidget* parent):
 //  layout->addWidget(m_menu);
  //layout->addWidget(m_map);
 //  setLayout(layout);
-/*
- * While profiling
+
   m_thread = new DataThread(m_map); 
   m_thread->start();
-*/
+
   setWindowState(Qt::WindowMaximized);
   //resize(600,300);
 }

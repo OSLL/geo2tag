@@ -30,7 +30,7 @@ MapScene::MapScene(QObject *parent) :
         m_latitude(0.0),
         m_longitude(0.0)
 {
-    m_maps = QHash<TilePoint, QGraphicsPixmapItem * >();
+    m_tiles = QHash<TilePoint, QGraphicsPixmapItem * >();
     m_preloader = new Preloading(3, this);
     m_uploader = new MapsUploader(this);
     connect(this, SIGNAL(uploadTiles(QVector<TilePoint> &)), m_uploader, SLOT(uploadTiles(QVector<TilePoint> &)));
@@ -39,57 +39,28 @@ MapScene::MapScene(QObject *parent) :
 
 MapScene::~MapScene()
 {
-    delete(m_uploader);
-    delete(m_preloader);
-
-    this->~QGraphicsScene();
+    if(m_uploader != 0)
+        delete(m_uploader);
+    if(m_preloader != 0)
+        delete(m_preloader);
 }
 
 
 void MapScene::tileUploaded(const QPixmap &pixmap, const TilePoint & point)
 {   
-    if(m_maps.contains(point))
+    if(m_tiles.contains(point))
         return;
 
     QGraphicsPixmapItem * pm = addPixmap( pixmap );
     pm->setData(0, point.second);
-    m_maps.insert(point, pm);
-    m_maps.value(point)->setPos(point.first.x()*256.0, point.first.y()*256.0);
-    m_maps.value(point)->setVisible(point.second == m_zoom);
-}
-
-void MapScene::preload()
-{
-    if(this->views().isEmpty())
-        return;
-
-    QPoint point_top_left = (this->views()[0]->mapToScene(this->views()[0]->frameRect().topLeft())).toPoint();
-    QPoint point_bottom_right = (this->views()[0]->mapToScene(this->views()[0]->frameRect().bottomRight())).toPoint();
-
-    point_top_left.setX(point_top_left.x()-256);
-    point_top_left.setY(point_top_left.y()-256);
-
-    if(point_top_left.x() < 0) point_top_left.setX(0);
-    if(point_top_left.y() < 0) point_top_left.setY(0);
-
-    point_bottom_right.setX(point_bottom_right.x()+256);
-    point_bottom_right.setY(point_bottom_right.y()+256);
-
-    int max_xy = this->sceneRect().width() - 1;
-    if(point_bottom_right.x() > max_xy) point_bottom_right.setX(max_xy);
-    if(point_bottom_right.y() > max_xy) point_bottom_right.setY(max_xy);
-
-    point_top_left.setX(point_top_left.x()/256);
-    point_top_left.setY(point_top_left.y()/256);
-
-    point_bottom_right.setX(point_bottom_right.x()/256);
-    point_bottom_right.setY(point_bottom_right.y()/256);
-
-    m_preloader->load(point_top_left, point_bottom_right, m_zoom);
+    m_tiles.insert(point, pm);
+    m_tiles.value(point)->setPos(point.first.x()*256.0, point.first.y()*256.0);
+    m_tiles.value(point)->setVisible(point.second == m_zoom);
 }
 
 void MapScene::addMark(qreal latitude, qreal longitude, QVariant data)
-{   
+{
+    //NOTE: Need to be refactored for use with marks
     QPixmap pixmap(20,20);
     pixmap.fill(Qt::transparent);
     QPoint center(pixmap.width()/2, pixmap.height()/2);
@@ -116,6 +87,7 @@ void MapScene::addMark(qreal latitude, qreal longitude, QVariant data)
 
 void MapScene::addMark(qreal latitude, qreal longitude, QVariant data, QWidget * widget)
 {
+    //NOTE: Need to be refactored for use with marks AS WIDGETS!
     QGraphicsProxyWidget * mark = this->addWidget(widget);
     widget->show();
 
@@ -132,24 +104,8 @@ void MapScene::addMark(qreal latitude, qreal longitude, QVariant data, QWidget *
 
 void MapScene::removeMark(QGraphicsItem * mark)
 {
-    mark->update();
-    /*
-    qDebug() << "pan\n";
-    m_slippy_map->pan(QPoint(300,0));
-    m_slippy_map->invalidate();
-    */
-
-    /*
-    QList<QGraphicsItem * > check_items = this->items();
-    for(int i = 0; i < check_items.size(); i++)
-    {
-        if(check_items.at(i)->data(0) == data)
-        {
-            removeItem(check_items.at(i));
-            break;
-        }
-    }
-    */
+    //TODO: Implement removing marks by clicking on them
+    mark->update(); //Excludeing unused variable warning error
 }
 
 void MapScene::setMarks(DataChannels marks)
@@ -159,7 +115,7 @@ void MapScene::setMarks(DataChannels marks)
 
     //Add here time and count filter
     QSettings settings("osll","libs");
-    int maxAgeOfMark = settings.value("timeLimit").toInt();
+    //int maxAgeOfMark = settings.value("timeLimit").toInt();
     int marksCount = settings.value("marksCount").toInt();
 
     //Getting list of all channels, wich marks are in request
@@ -179,8 +135,8 @@ void MapScene::setMarks(DataChannels marks)
         for (int i = 0; i < qMin( marksCount, marks_to_show.size() ); i++)
         {
             //Check, that current mark isnt older that maxAgeOfMark minutes
-            qDebug() << "Mark time " << marks_to_show.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
-            qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
+            //qDebug() << "Mark time " << marks_to_show.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
+            //qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
             if(true)//marks_to_show.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark))
             {
                 pos = OSMCoordinatesConverter::GeoToTile(
@@ -279,12 +235,12 @@ void MapScene::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 void MapScene::set_zoom()
 {
-    foreach(TilePoint tp, m_maps.keys())
+    foreach(TilePoint tp, m_tiles.keys())
     {
         if(tp.second != m_zoom)
-            m_maps.value(tp)->setVisible(false);
+            m_tiles.value(tp)->hide();
         else
-            m_maps.value(tp)->setVisible(true);
+            m_tiles.value(tp)->show();
     }
 
     qreal max_point = (pow(2,m_zoom) - 1)*256 + 256;
@@ -294,7 +250,6 @@ void MapScene::set_zoom()
             QPointF(max_point, max_point)
             );
     this->setSceneRect(zoom_rect);
-    //this->addPolygon(QPolygonF(zoom_rect));
     if(!views().isEmpty())
         this->views()[0]->setSceneRect(zoom_rect);
 
@@ -315,7 +270,7 @@ void MapScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if(event->buttons() != Qt::LeftButton)
         return;
 
-    pressed_screen_position = event->screenPos();
+    m_pressed_screen_position = event->screenPos();
 }
 
 void MapScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -323,8 +278,8 @@ void MapScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (!event->buttons())
         return;
 
-    QPoint screen_delta = event->screenPos() - pressed_screen_position;
-    pressed_screen_position = event->screenPos();
+    QPoint screen_delta = event->screenPos() - m_pressed_screen_position;
+    m_pressed_screen_position = event->screenPos();
 
     this->views()[0]->horizontalScrollBar()->setValue(
             this->views()[0]->horizontalScrollBar()->value()
@@ -350,8 +305,8 @@ void MapScene::keyPressEvent(QKeyEvent *event)
 
     if(event->key() == Qt::Key_F)
     {
-        qDebug() << "F pressed\n";
         this->preload();
+        return;
     }
     if(event->key() == Qt::Key_Right)
         screen_delta.setX(screen_delta.x() - KEY_MOVE_DIST);
@@ -420,11 +375,42 @@ void MapScene::update_state()
         for(int y = point_top_left.y(); y <= point_bottom_right.y(); y++)
         {
             TilePoint tp = qMakePair(QPoint(x,y), m_zoom);
-            if(!m_maps.contains(tp))
+            if(!m_tiles.contains(tp))
                 tiles_for_upload.push_back(tp);
         }
     }
 
     if(tiles_for_upload.size() != 0)
         emit this->uploadTiles(tiles_for_upload);
+}
+
+
+void MapScene::preload()
+{
+    if(this->views().isEmpty())
+        return;
+
+    QPoint point_top_left = (this->views()[0]->mapToScene(this->views()[0]->frameRect().topLeft())).toPoint();
+    QPoint point_bottom_right = (this->views()[0]->mapToScene(this->views()[0]->frameRect().bottomRight())).toPoint();
+
+    point_top_left.setX(point_top_left.x()-256);
+    point_top_left.setY(point_top_left.y()-256);
+
+    if(point_top_left.x() < 0) point_top_left.setX(0);
+    if(point_top_left.y() < 0) point_top_left.setY(0);
+
+    point_bottom_right.setX(point_bottom_right.x()+256);
+    point_bottom_right.setY(point_bottom_right.y()+256);
+
+    int max_xy = this->sceneRect().width() - 1;
+    if(point_bottom_right.x() > max_xy) point_bottom_right.setX(max_xy);
+    if(point_bottom_right.y() > max_xy) point_bottom_right.setY(max_xy);
+
+    point_top_left.setX(point_top_left.x()/256);
+    point_top_left.setY(point_top_left.y()/256);
+
+    point_bottom_right.setX(point_bottom_right.x()/256);
+    point_bottom_right.setY(point_bottom_right.y()/256);
+
+    m_preloader->load(point_top_left, point_bottom_right, m_zoom);
 }
