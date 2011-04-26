@@ -26,14 +26,16 @@ public:
     qlonglong nextChannelKey() const;
     qlonglong nextTagKey() const;
     qlonglong nextTimeSlotKey() const;
+
     const QString generateNewToken(const QString& login,const QString& password) const;
 
-    bool subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel);
+    bool                     subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel);
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
-    QSharedPointer<User> insertNewUser(const QSharedPointer<User>&);
-    QSharedPointer<Channel> insertNewChannel(const QSharedPointer<Channel>&);
-    QSharedPointer<TimeSlot> insertNewTimeSlot(const QSharedPointer<TimeSlot>&);   
-    bool changeChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
+    QSharedPointer<User>     insertNewUser(const QSharedPointer<User>&);
+    QSharedPointer<Channel>  insertNewChannel(const QSharedPointer<Channel>&);
+    QSharedPointer<TimeSlot> insertNewTimeSlot(const QSharedPointer<TimeSlot>&);
+    bool                     insertNewChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
+    bool                     changeChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
 
 signals:
 
