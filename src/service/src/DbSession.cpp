@@ -336,6 +336,7 @@ namespace common
 
         response.setStatus(ok);
         response.setStatusMessage("Tag has been added");
+        response.addTag(realTag);
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;
@@ -522,7 +523,7 @@ namespace common
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;
 
-		}
+            }
 
 
 
