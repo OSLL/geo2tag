@@ -3,6 +3,16 @@
 
 #include "DefaultResponseJSON.h"
 
-typedef DefaultResponseJSON AddNewMarkResponseJSON;
-// ADDNEWMARKRESPONSEJSON_H
-#endif
+#include "JsonSerializer.h"
+
+class AddNewMarkResponseJSON : public JsonSerializer
+{
+        Q_OBJECT;
+public:
+    AddNewMarkResponseJSON(QObject *parent=0);
+
+    QByteArray getJson() const;
+
+    void parseJson(const QByteArray&);
+
+};
