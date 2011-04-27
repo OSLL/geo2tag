@@ -14,6 +14,9 @@
 #include <QMessageBox>
 #include <DaemonManager.h>
 #include <QtNetwork/QNetworkProxy>
+#include <QDir>
+#include <QFileDialog>
+
 #include "tracker.h"
 #include "defines.h"
 
@@ -89,12 +92,12 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     cache_path->addWidget(m_cachePathButton = new QPushButton("Choose dir...", w_cache));
 
     layout_cache->addRow("Cache type", m_cacheType = new QComboBox(w_cache));
-    layout_cache->addWidget(m_cacheOn = new QCheckBox("Enable cache", w_cache));
     layout_cache->addRow("Cache path", cache_path);
 
-    m_cacheType->addItem("None", "None");
-    m_cacheType->addItem("Network cache", "Network");
-    m_cacheType->addItem("Disk cache", "Disk");
+    m_cacheType->addItem("None", 0);
+    m_cacheType->addItem("Network cache", 1);
+    m_cacheType->addItem("Disk cache", 2);
+    m_cacheType->setCurrentIndex(-1);
 
     w_cache->setLayout(layout_cache);
 
@@ -120,6 +123,8 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
     connect(m_defaultButton,SIGNAL(clicked()), this, SLOT(setDefaultSettings()));
     connect(m_proxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged(int)));
+    connect(m_cacheType, SIGNAL(currentIndexChanged(int)), this, SLOT(onCacheTypeChanged(int)));
+    connect(m_cachePathButton, SIGNAL(clicked()), this, SLOT(onCachePathButtonClick()));
     connect(m_passwordCheckBox, SIGNAL(clicked(bool)), this, SLOT(onShowPasswordChecked(bool)));
 
     onProxyTypeChanged(m_proxyType->currentIndex());
@@ -171,12 +176,32 @@ void OptionsWidget::onProxyTypeChanged(int index)
     m_proxyPortEdit->setEnabled(enabled_flag);
 }
 
+void OptionsWidget::onCacheTypeChanged(int index)
+{
+    m_cachePath->setEnabled( m_cacheType->itemData(index).toInt() != 0 );
+    m_cachePathButton->setEnabled( m_cachePath->isEnabled() );
+}
+
 void OptionsWidget::onShowPasswordChecked(bool checked)
 {
     if(checked)
         m_passwordEdit->setEchoMode(QLineEdit::Normal);
     else
         m_passwordEdit->setEchoMode(QLineEdit::Password);
+}
+
+void OptionsWidget::onCachePathButtonClick()
+{
+    qDebug() <<"click";
+    QFileDialog fd(this);
+    fd.setOptions(QFileDialog::ShowDirsOnly);
+    connect(&fd, SIGNAL(fileSelected(QString)), this, SLOT(onCachePathSelected(QString)));
+    fd.exec();
+}
+
+void OptionsWidget::onCachePathSelected(QString path)
+{
+    m_cachePath->setText(path);
 }
 
 void OptionsWidget::initSettings()
@@ -203,6 +228,8 @@ void OptionsWidget::readSettings()
     m_proxyPortEdit->setValue(m_settings.value("proxy_port").toInt());
     m_serverUrlEdit->setText(getServerUrl());
     m_serverPortEdit->setValue(getServerPort());
+    m_cacheType->setCurrentIndex(m_cacheType->findData(m_settings.value("cache_type").toInt()));
+    m_cachePath->setText(m_settings.value("cache_path").toString());
 }
 
 void OptionsWidget::createSettings()
@@ -214,7 +241,11 @@ void OptionsWidget::createSettings()
     m_settings.setValue("proxy_host", m_proxyHostEdit->text());
     setServerUrl(m_serverUrlEdit->text());
     setServerPort(m_serverPortEdit->value());
-    m_settings.setValue("proxy_port", m_proxyPortEdit->value());
+    m_settings.setValue("cache_type", m_cacheType->itemData(m_cacheType->currentIndex()).toInt());
+    if(m_cacheType->itemData(m_cacheType->currentIndex()).toInt() > 0)
+        m_settings.setValue("cache_path", m_cachePath->text());
+    else
+        m_settings.remove("cache_path");
     m_settings.setValue("magic", APP_MAGIC);
 }
 
@@ -228,4 +259,6 @@ void OptionsWidget::setDefaultSettings()
     m_proxyPortEdit->setValue(0);
     m_serverUrlEdit->setText("http://tracklife.ru/");
     m_serverPortEdit->setValue(80);
+    m_cacheType->setCurrentIndex(m_cacheType->findData(0));
+    m_cachePath->setText(QDir::homePath() + "/.geo2tag/uploaded_maps/");
 }

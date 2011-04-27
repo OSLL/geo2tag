@@ -31,7 +31,6 @@ class OptionsWidget : public QScrollArea
     QComboBox *m_proxyType;
 
     QComboBox * m_cacheType;
-    QCheckBox * m_cacheOn;
     QLineEdit * m_cachePath;
 
     QString m_name;
@@ -66,7 +65,10 @@ public slots:
     void onCancelClicked();
     void setDefaultSettings();
     void onProxyTypeChanged(int index);
+    void onCacheTypeChanged(int index);
     void onShowPasswordChecked(bool checked);
+    void onCachePathButtonClick();
+    void onCachePathSelected(QString path);
 
 signals:
     /* is emitted when "ok" button is pressed */
