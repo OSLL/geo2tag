@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget* parent):
          QMainWindow(parent)
 {
   m_stackedWidget = new QStackedWidget(this);
-  m_map = new LightMap(this);
+  m_map = new MapScene(this);//LightMap(this);
 //kkv why?  QVBoxLayout *layout = new QVBoxLayout;
   m_menu = new QMenu(this);
   m_settingsAction = new QAction("Settings...",this);
@@ -24,16 +24,21 @@ MainWindow::MainWindow(QWidget* parent):
   m_menu=menuBar()->addMenu("Options");
   m_menu->addAction(m_settingsAction);
   m_menu->addAction(m_marksSettingsAction);
-  m_map->setCenter( DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
-  m_stackedWidget->addWidget(m_map);
+  m_view = new QGraphicsView(this);
+  m_view->setScene(m_map);
+  m_stackedWidget->addWidget(m_view);
+  //TODO: Implement setCenter for MapScene
+  //m_map->setCenter( DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
   m_stackedWidget->addWidget(m_optWidget);
   m_stackedWidget->addWidget(m_marksOptWidget);
   setCentralWidget(m_stackedWidget);
 //  layout->addWidget(m_menu);
  //layout->addWidget(m_map);
 //  setLayout(layout);
+
   m_thread = new DataThread(m_map); 
   m_thread->start();
+
   setWindowState(Qt::WindowMaximized);
   //resize(600,300);
 }
@@ -52,5 +57,5 @@ void MainWindow::marksSettings()
 
 void MainWindow::settingsDone()
 {
-  m_stackedWidget->setCurrentWidget(m_map);
+  m_stackedWidget->setCurrentWidget(m_view);
 }
