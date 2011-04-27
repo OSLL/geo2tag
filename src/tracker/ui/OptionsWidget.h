@@ -11,6 +11,7 @@
 #include <QComboBox>
 #include <QSettings>
 #include "defines.h"
+
 class OptionsWidget : public QScrollArea
 {
     Q_OBJECT
@@ -29,11 +30,16 @@ class OptionsWidget : public QScrollArea
     QSpinBox *m_proxyPortEdit;
     QComboBox *m_proxyType;
 
+    QComboBox * m_cacheType;
+    QCheckBox * m_cacheOn;
+    QLineEdit * m_cachePath;
+
     QString m_name;
     QString m_password;
     QString m_channel;
     QString m_productName;
 
+    QPushButton * m_cachePathButton;
     QPushButton *m_doneButton;
     QPushButton *m_cancelButton;
     QPushButton *m_defaultButton;

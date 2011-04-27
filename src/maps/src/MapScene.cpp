@@ -17,6 +17,7 @@
 #include <QSharedPointer>
 
 #include "MapsUploadThread.h"
+#include "defines.h"
 
 //Move distance for one arrow key press
 #define KEY_MOVE_DIST 10
@@ -27,8 +28,8 @@
 MapScene::MapScene(QObject *parent) :
         QGraphicsScene(parent),
         m_zoom(0),
-        m_latitude(0.0),
-        m_longitude(0.0)
+        m_latitude(DEFAULT_LATITUDE),
+        m_longitude(DEFAULT_LONGITUDE)
 {
     m_tiles = QHash<TilePoint, QGraphicsPixmapItem * >();
     m_preloader = new Preloading(3, this);

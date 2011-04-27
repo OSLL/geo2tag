@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget* parent):
   m_menu->addAction(m_marksSettingsAction);
   m_view = new QGraphicsView(this);
   m_view->setScene(m_map);
+  m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   m_stackedWidget->addWidget(m_view);
   //TODO: Implement setCenter for MapScene
   //m_map->setCenter( DEFAULT_LATITUDE, DEFAULT_LONGITUDE);

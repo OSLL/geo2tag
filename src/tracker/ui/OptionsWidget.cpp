@@ -1,6 +1,10 @@
 #include "OptionsWidget.h"
 
+#include <QFormLayout>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QGroupBox>
+#include <QToolBox>
 #include <QLabel>
 #include <QFile>
 #include <QtXml/QDomDocument>
@@ -26,28 +30,44 @@ void OptionsWidget::applyProxySettings()
 
 OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
         QScrollArea(parent), m_productName(productName), m_settings(QSettings::SystemScope,"osll",m_productName)
-{   
-    m_widg=new QWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(m_widg);
-    layout->addWidget(new QLabel("Login:"));
-    layout->addWidget(m_nameEdit = new QLineEdit());
-    layout->addWidget(new QLabel("Password:"));
-    layout->addWidget(m_passwordEdit = new QLineEdit());
-    layout->addWidget(m_passwordCheckBox = new QCheckBox("Show password"));
-    layout->addWidget(new QLabel("Channel name:"));
-    layout->addWidget(m_channelEdit = new QLineEdit());
+{
+    m_widg = new QWidget(this);
+    QVBoxLayout * layout = new QVBoxLayout(m_widg);
+    QToolBox * tb = new QToolBox(m_widg);
+
+    QWidget * w_login = new QWidget(tb);
+
+    QFormLayout * layout_login = new QFormLayout(w_login);
+
+    layout_login->addRow("Login", m_nameEdit = new QLineEdit(w_login));
+    layout_login->addRow("Password", m_passwordEdit = new QLineEdit(w_login));
+    layout_login->addWidget(m_passwordCheckBox = new QCheckBox("Show password", w_login));
+    layout_login->addRow("Channel name", m_channelEdit = new QLineEdit(w_login));
 
     m_passwordEdit->setEchoMode(QLineEdit::Password);
     m_passwordCheckBox->setChecked(false);
 
-    layout->addWidget(new QLabel("Proxy type"));
-    layout->addWidget(m_proxyType = new QComboBox());
-    layout->addWidget(new QLabel("Host:"));
-    layout->addWidget(m_proxyHostEdit = new QLineEdit());
-    layout->addWidget(new QLabel("port:"));
-    layout->addWidget(m_proxyPortEdit = new QSpinBox());
-    layout->addWidget(m_serverUrlEdit = new QLineEdit());
-    layout->addWidget(m_serverPortEdit = new QSpinBox());
+    w_login->setLayout(layout_login);
+
+    QWidget * w_server = new QWidget(tb);
+
+    QFormLayout * layout_server = new QFormLayout(w_server);
+
+    layout_server->addRow("Server", m_serverUrlEdit = new QLineEdit(w_server));
+    layout_server->addRow("Port", m_serverPortEdit = new QSpinBox(w_server));
+
+    m_serverPortEdit->setMinimum(0);
+    m_serverPortEdit->setMaximum(65535);
+
+    w_server->setLayout(layout_server);
+
+    QWidget * w_proxy = new QWidget(tb);
+
+    QFormLayout * layout_proxy = new QFormLayout(w_proxy);
+
+    layout_proxy->addRow("Proxy type", m_proxyType = new QComboBox(w_proxy));
+    layout_proxy->addRow("Proxy host", m_proxyHostEdit = new QLineEdit(w_proxy));
+    layout_proxy->addRow("Proxy port", m_proxyPortEdit = new QSpinBox(w_proxy));
 
     m_proxyType->addItem("DefaultProxy", QNetworkProxy::DefaultProxy);
     m_proxyType->addItem("Socks5Proxy", QNetworkProxy::Socks5Proxy);
@@ -57,20 +77,45 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     m_proxyType->addItem("FtpCachingProxy", QNetworkProxy::FtpCachingProxy);
     m_proxyPortEdit->setMinimum(0);
     m_proxyPortEdit->setMaximum(65535);
-    m_serverPortEdit->setMinimum(0);
-    m_serverPortEdit->setMaximum(65535);
 
-    layout->addStretch();
+    w_proxy->setLayout(layout_proxy);
 
-    QHBoxLayout *buttonLayout = new QHBoxLayout();
-    buttonLayout->addWidget(m_doneButton = new QPushButton("Done"));
-    buttonLayout->addWidget(m_defaultButton = new QPushButton("Default settings"));
-    buttonLayout->addWidget(m_cancelButton = new QPushButton("Cancel"));
+    QWidget * w_cache = new QWidget(tb);
+
+    QFormLayout * layout_cache = new QFormLayout(w_cache);
+
+    QHBoxLayout * cache_path = new QHBoxLayout();
+    cache_path->addWidget(m_cachePath = new QLineEdit(w_cache));
+    cache_path->addWidget(m_cachePathButton = new QPushButton("Choose dir...", w_cache));
+
+    layout_cache->addRow("Cache type", m_cacheType = new QComboBox(w_cache));
+    layout_cache->addWidget(m_cacheOn = new QCheckBox("Enable cache", w_cache));
+    layout_cache->addRow("Cache path", cache_path);
+
+    m_cacheType->addItem("None", "None");
+    m_cacheType->addItem("Network cache", "Network");
+    m_cacheType->addItem("Disk cache", "Disk");
+
+    w_cache->setLayout(layout_cache);
+
+    QHBoxLayout * buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(m_doneButton = new QPushButton("Done", m_widg));
+    buttonLayout->addWidget(m_defaultButton = new QPushButton("Default settings", m_widg));
+    buttonLayout->addWidget(m_cancelButton = new QPushButton("Cancel", m_widg));
+
+    tb->addItem(w_login, "Login");
+    tb->addItem(w_server, "Server");
+    tb->addItem(w_proxy, "Proxy server");
+    tb->addItem(w_cache, "Cache");
+
+    layout->addWidget(tb);
     layout->addLayout(buttonLayout);
 
-    m_widg->setLayout(layout);
+    m_widg->setLayout( layout);
     this->setWidget(m_widg);
     this->setWidgetResizable(true);
+    this->adjustSize();
+
     connect(m_doneButton, SIGNAL(clicked()), this, SLOT(onDoneClicked()));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancelClicked()));
     connect(m_defaultButton,SIGNAL(clicked()), this, SLOT(setDefaultSettings()));
