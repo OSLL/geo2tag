@@ -56,8 +56,6 @@
 #include "UpdateThread.h"
 #include "QueryExecutor.h"
 
-const QString error = QString("Error");
-const QString ok = QString("Ok");
 
 namespace common
 {
@@ -81,6 +79,13 @@ namespace common
 
         QueryExecutor *             m_queryExecutor;
 
+        static QSharedPointer<TimeSlot> defaultTimeSlot;
+
+        static const qulonglong A_YEAR_IN_ms;
+
+        static const QString error;
+        static const QString ok;
+
         DbObjectsCollection();
 
         QSharedPointer<User> findUserFromToken(const QSharedPointer<User>&) const;
@@ -95,7 +100,10 @@ namespace common
         QByteArray processGetTimeSlotQuery(const QByteArray&);
         QByteArray processSetTimeSlotQuery(const QByteArray&);
 
-    public:
+        QByteArray setDefaultTimeSlotValueForChannels();
+
+
+    public:        
 
         static DbObjectsCollection& getInstance();
 
