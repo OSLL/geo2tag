@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include <QDebug>
 #include <QMenuBar>
+#include <QShowEvent>
 #include "defines.h"
 
 MainWindow::MainWindow(QWidget* parent):
@@ -60,4 +61,10 @@ void MainWindow::marksSettings()
 void MainWindow::settingsDone()
 {
   m_stackedWidget->setCurrentWidget(m_view);
+}
+
+void MainWindow::showEvent(QShowEvent * e)
+{
+    if(e->type() == QShowEvent::Show) // e must not be unused
+        this->m_map->update_state();
 }

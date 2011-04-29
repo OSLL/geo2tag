@@ -24,8 +24,13 @@ class MainWindow:public QMainWindow
    DataThread * m_thread;
    OptionsWidget * m_optWidget;
    ViewOptsWidget *m_marksOptWidget;
+
 public:
    MainWindow(QWidget *parent = 0);
+
+protected:
+   void showEvent(QShowEvent * e);
+
 private slots:
    void settings();
    void marksSettings();

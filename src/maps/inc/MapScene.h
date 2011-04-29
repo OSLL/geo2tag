@@ -50,9 +50,9 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
 
     void set_zoom();
+    void update_state();
 
 private:
-    void update_state();
     void add_mark(QPointF pos, QString channel_name);
 
 signals:
