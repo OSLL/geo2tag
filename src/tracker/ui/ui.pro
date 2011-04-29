@@ -19,16 +19,18 @@ INCLUDEPATH += . \
 
 # Input
 SOURCES += main.cpp \
+           src/ByteSpinBox.cpp \
            OptionsWidget.cpp \
            LogWidget.cpp \
            MainWindow.cpp ../../common/src/defines.cpp
 
 HEADERS += tracker.h \
+           inc/ByteSpinBox.h \
            Status.h \
            OptionsWidget.h \
            LogWidget.h \
            MainWindow.h \
-	   ../../common/inc/defines.h
+           ../../common/inc/defines.h
 
 RESOURCES += \
     images.qrc

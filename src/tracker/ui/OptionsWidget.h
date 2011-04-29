@@ -12,8 +12,9 @@
 #include <QSettings>
 #include "defines.h"
 
+
 class OptionsWidget : public QScrollArea
-{
+{   
     Q_OBJECT
 
     QLineEdit *m_nameEdit;
@@ -32,6 +33,7 @@ class OptionsWidget : public QScrollArea
 
     QComboBox * m_cacheType;
     QLineEdit * m_cachePath;
+    QSpinBox * m_cacheMaxSize;
 
     QString m_name;
     QString m_password;
@@ -74,7 +76,6 @@ signals:
     /* is emitted when "ok" button is pressed */
     void done();
     void cancel();
-
 };
 
 #endif // OPTIONSWIDGET_H

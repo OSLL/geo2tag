@@ -18,6 +18,7 @@
 #include <QFileDialog>
 
 #include "tracker.h"
+#include "inc/ByteSpinBox.h"
 #include "defines.h"
 
 void OptionsWidget::applyProxySettings()
@@ -93,6 +94,7 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
 
     layout_cache->addRow("Cache type", m_cacheType = new QComboBox(w_cache));
     layout_cache->addRow("Cache path", cache_path);
+    layout_cache->addRow("Max cache size", m_cacheMaxSize = new ByteSpinBox(w_cache));
 
     m_cacheType->addItem("None", 0);
     m_cacheType->addItem("Network cache", 1);
@@ -171,7 +173,8 @@ void OptionsWidget::onCancelClicked()
 
 void OptionsWidget::onProxyTypeChanged(int index)
 {
-    bool enabled_flag = index != 0 && index != 2;
+    QNetworkProxy::ProxyType proxy_type = (QNetworkProxy::ProxyType)m_proxyType->itemData(index).toInt();
+    bool enabled_flag = (proxy_type != QNetworkProxy::DefaultProxy && proxy_type != QNetworkProxy::NoProxy);
     m_proxyHostEdit->setEnabled(enabled_flag);
     m_proxyPortEdit->setEnabled(enabled_flag);
 }
@@ -194,6 +197,7 @@ void OptionsWidget::onCachePathButtonClick()
 {
     qDebug() <<"click";
     QFileDialog fd(this);
+    fd.setFileMode(QFileDialog::DirectoryOnly);
     fd.setOptions(QFileDialog::ShowDirsOnly);
     connect(&fd, SIGNAL(fileSelected(QString)), this, SLOT(onCachePathSelected(QString)));
     fd.exec();
@@ -201,7 +205,7 @@ void OptionsWidget::onCachePathButtonClick()
 
 void OptionsWidget::onCachePathSelected(QString path)
 {
-    m_cachePath->setText(path);
+    m_cachePath->setText(path + "/");
 }
 
 void OptionsWidget::initSettings()
@@ -219,17 +223,19 @@ void OptionsWidget::initSettings()
 
 void OptionsWidget::readSettings()
 {
-    QSettings settings(QSettings::SystemScope,"osll",m_productName);
     m_nameEdit->setText(m_settings.value("user").toString());
     m_passwordEdit->setText(m_settings.value("password").toString());
     m_channelEdit->setText(m_settings.value("channel").toString());
+
     m_proxyType->setCurrentIndex(m_proxyType->findData(m_settings.value("proxy_type").toInt()));
     m_proxyHostEdit->setText(m_settings.value("proxy_host").toString());
     m_proxyPortEdit->setValue(m_settings.value("proxy_port").toInt());
+
     m_serverUrlEdit->setText(getServerUrl());
     m_serverPortEdit->setValue(getServerPort());
-    m_cacheType->setCurrentIndex(m_cacheType->findData(m_settings.value("cache_type").toInt()));
-    m_cachePath->setText(m_settings.value("cache_path").toString());
+
+    m_cacheType->setCurrentIndex(m_cacheType->findData(m_settings.value("cache_type", 0).toInt()));
+    m_cachePath->setText(m_settings.value("cache_path", QDir::homePath() + "/.geo2tag/uploaded_maps/").toString());
 }
 
 void OptionsWidget::createSettings()
@@ -237,10 +243,23 @@ void OptionsWidget::createSettings()
     m_settings.setValue("channel", m_channelEdit->text());
     m_settings.setValue("user", m_nameEdit->text());
     m_settings.setValue("password", m_passwordEdit->text());
-    m_settings.setValue("proxy_type", m_proxyType->itemData(m_proxyType->currentIndex()).value<int>());
-    m_settings.setValue("proxy_host", m_proxyHostEdit->text());
+
+    QNetworkProxy::ProxyType proxy_type = (QNetworkProxy::ProxyType)m_proxyType->itemData(m_proxyType->currentIndex()).toInt();
+    m_settings.setValue("proxy_type", proxy_type);
+    if(proxy_type != QNetworkProxy::DefaultProxy && proxy_type != QNetworkProxy::NoProxy)
+    {
+        m_settings.setValue("proxy_host", m_proxyHostEdit->text());
+        m_settings.setValue("proxy_port", m_proxyPortEdit->value());
+    }
+    else
+    {
+        m_settings.remove("proxy_host");
+        m_settings.remove("proxy_port");
+    }
+
     setServerUrl(m_serverUrlEdit->text());
     setServerPort(m_serverPortEdit->value());
+
     m_settings.setValue("cache_type", m_cacheType->itemData(m_cacheType->currentIndex()).toInt());
     if(m_cacheType->itemData(m_cacheType->currentIndex()).toInt() > 0)
         m_settings.setValue("cache_path", m_cachePath->text());
