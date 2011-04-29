@@ -94,7 +94,7 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
 
     layout_cache->addRow("Cache type", m_cacheType = new QComboBox(w_cache));
     layout_cache->addRow("Cache path", cache_path);
-    layout_cache->addRow("Max cache size", m_cacheMaxSize = new ByteSpinBox(w_cache));
+    layout_cache->addRow("Max cache size", m_cacheMaxSize = new QSpinBox(w_cache));
 
     m_cacheType->addItem("None", 0);
     m_cacheType->addItem("Network cache", 1);
