@@ -22,6 +22,7 @@ class TrackerDaemon : /*public QThread,*/ public Control
 
     QSettings m_settings;
     QString m_channelName;
+    QString m_visibleName;
     QPointF m_lastCoords;
 
     LoginQuery * m_loginQuery; // this field needs because query is asynchronous

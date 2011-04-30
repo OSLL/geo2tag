@@ -47,6 +47,12 @@ OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
     layout_login->addRow("Password", m_passwordEdit = new QLineEdit(w_login));
     layout_login->addWidget(m_passwordCheckBox = new QCheckBox("Show password", w_login));
     layout_login->addRow("Channel name", m_channelEdit = new QLineEdit(w_login));
+    // NOTE if we use this windget in tracker addition field for username will displayed
+    if (m_productName == "tracker")
+    {
+    	layout->addWidget(new QLabel("Name that will be displayed on Observer map:"));
+	layout->addWidget(m_visibleNameEdit = new QLineEdit());
+    }
 
     m_passwordEdit->setEchoMode(QLineEdit::Password);
     m_passwordCheckBox->setChecked(false);
@@ -223,6 +229,10 @@ void OptionsWidget::initSettings()
 
 void OptionsWidget::readSettings()
 {
+    if (m_productName == "tracker")
+    {
+	    m_visibleNameEdit->setText(m_settings.value("visibleName").toString());
+    }
     m_nameEdit->setText(m_settings.value("user").toString());
     m_passwordEdit->setText(m_settings.value("password").toString());
     m_channelEdit->setText(m_settings.value("channel").toString());
@@ -264,15 +274,19 @@ void OptionsWidget::createSettings()
     if(m_cacheType->itemData(m_cacheType->currentIndex()).toInt() > 0)
         m_settings.setValue("cache_path", m_cachePath->text());
     else
+    if (m_productName == "tracker")
+    {
+	    m_settings.setValue("visibleName", m_visibleNameEdit->text());
+    }
         m_settings.remove("cache_path");
     m_settings.setValue("magic", APP_MAGIC);
 }
 
 void OptionsWidget::setDefaultSettings()
 {
-    m_nameEdit->setText("tracker");
-    m_passwordEdit->setText("test");
-    m_channelEdit->setText("default");
+    m_nameEdit->setText(DEFAULT_USER_NAME);
+    m_passwordEdit->setText(DEFAULT_USER_PASSWORD);
+    m_channelEdit->setText(DEFAULT_CHANNEL);
     m_proxyType->setCurrentIndex(0);
     m_proxyHostEdit->setText("");
     m_proxyPortEdit->setValue(0);
@@ -280,4 +294,9 @@ void OptionsWidget::setDefaultSettings()
     m_serverPortEdit->setValue(80);
     m_cacheType->setCurrentIndex(m_cacheType->findData(0));
     m_cachePath->setText(QDir::homePath() + "/.geo2tag/uploaded_maps/");
+    if (m_productName == "tracker")
+    {
+       m_settings.setValue("visibleName","FRUCT_participant");
+    }
+
 }

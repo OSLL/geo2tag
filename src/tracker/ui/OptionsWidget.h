@@ -19,6 +19,7 @@ class OptionsWidget : public QScrollArea
 
     QLineEdit *m_nameEdit;
     QLineEdit *m_passwordEdit;
+    QLineEdit *m_visibleNameEdit;
     QLineEdit *m_channelEdit;
     QLineEdit *m_proxyHostEdit;
     QLineEdit *m_serverUrlEdit;
