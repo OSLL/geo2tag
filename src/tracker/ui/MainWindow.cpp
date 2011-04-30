@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(startButton, SIGNAL(clicked()), SLOT(startButtonClicked()));
     connect(logButton, SIGNAL(clicked()), SLOT(logButtonClicked()));
     connect(settingsButton, SIGNAL(clicked()), SLOT(settingsButtonClicked()));
+    connect(aboutButton, SIGNAL(clicked()), SLOT(aboutButtonClicked()));
     connect(m_daemon,SIGNAL(readyRead()), SLOT(readData()));
 
     QTimer *timer = new QTimer(this);
@@ -23,10 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_optionsWidget = new OptionsWidget("tracker",this);
     m_logWidget = new LogWidget(this);
+    m_aboutWidget = new AboutWidget(this);
     m_stackedWidget->addWidget(m_optionsWidget);
     m_stackedWidget->addWidget(m_logWidget);
+    m_stackedWidget->addWidget(m_aboutWidget);
     connect(m_optionsWidget, SIGNAL(done()), SLOT(doneButtonClicked()));
     connect(m_logWidget, SIGNAL(done()), SLOT(moveToFirstPage()));
+    connect(m_aboutWidget, SIGNAL(done()), SLOT(moveToFirstPage()));
     connect(m_optionsWidget, SIGNAL(cancel()), SLOT(moveToFirstPage()));
 //    setStyleSheet( "background-color: rgba( 255, 255, 255, 0% );" );
 }
@@ -67,6 +71,11 @@ void MainWindow::startButtonClicked()
 void MainWindow::logButtonClicked()
 {
     m_stackedWidget->setCurrentWidget(m_logWidget);
+}
+
+void MainWindow::aboutButtonClicked()
+{
+    m_stackedWidget->setCurrentWidget(m_aboutWidget);
 }
 
 void MainWindow::settingsButtonClicked()

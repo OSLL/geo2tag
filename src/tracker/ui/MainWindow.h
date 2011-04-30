@@ -7,6 +7,7 @@
 #include "ui_MainWindow.h"
 #include "LogWidget.h"
 #include "OptionsWidget.h"
+#include "AboutWidget.h"
 
 class MainWindow : public QMainWindow, private Ui::MainWindow
 {
@@ -20,6 +21,7 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
 
     LogWidget * m_logWidget;
     OptionsWidget *m_optionsWidget;
+    AboutWidget * m_aboutWidget;
 
     void updateState();
 
@@ -28,6 +30,7 @@ private slots:
     void logButtonClicked();
     void doneButtonClicked();
     void settingsButtonClicked();
+    void aboutButtonClicked();
 
     void checkDaemon();
     void readData();
