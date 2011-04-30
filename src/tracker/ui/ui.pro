@@ -22,6 +22,7 @@ SOURCES += main.cpp \
            src/ByteSpinBox.cpp \
            OptionsWidget.cpp \
            LogWidget.cpp \
+	   AboutWidget.cpp \
            MainWindow.cpp ../../common/src/defines.cpp
 
 HEADERS += tracker.h \
@@ -30,6 +31,7 @@ HEADERS += tracker.h \
            OptionsWidget.h \
            LogWidget.h \
            MainWindow.h \
+	   AboutWidget.h \
            ../../common/inc/defines.h
 
 RESOURCES += \

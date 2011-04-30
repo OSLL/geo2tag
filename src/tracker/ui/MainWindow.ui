@@ -199,6 +199,23 @@
               </property>
              </spacer>
             </item>
+            <item>
+             <widget class="QToolButton" name="aboutButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="images.qrc">
+                <normaloff>:/images/information-256.png</normaloff>:/images/information-256.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>128</width>
+                <height>128</height>
+               </size>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -257,7 +274,7 @@
      <x>0</x>
      <y>0</y>
      <width>649</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
