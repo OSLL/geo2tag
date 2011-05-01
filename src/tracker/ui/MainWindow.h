@@ -35,6 +35,7 @@ private slots:
     void checkDaemon();
     void readData();
 
+    void restartDaemon();
     void moveToFirstPage();
 
 public:

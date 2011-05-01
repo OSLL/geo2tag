@@ -2,6 +2,9 @@
 #include <QDateTime>
 #include "MainWindow.h"
 #include <QLabel>
+#include <stdio.h>
+
+#define BUFSIZE 1024
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
@@ -14,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(logButton, SIGNAL(clicked()), SLOT(logButtonClicked()));
     connect(settingsButton, SIGNAL(clicked()), SLOT(settingsButtonClicked()));
     connect(aboutButton, SIGNAL(clicked()), SLOT(aboutButtonClicked()));
+    connect(daemonRestartButton, SIGNAL(clicked()),SLOT(restartDaemon()));
     connect(m_daemon,SIGNAL(readyRead()), SLOT(readData()));
 
     QTimer *timer = new QTimer(this);
@@ -147,6 +151,12 @@ void MainWindow::readData()
     }
     m_message.clear();
 
+}
+
+void MainWindow::restartDaemon()
+{
+	system("pkill  \'wikigpsTracker$\'");
+	system("/usr/bin/wikigpsTracker > /dev/null 2>&1 &");
 }
 
 void MainWindow::checkDaemon()

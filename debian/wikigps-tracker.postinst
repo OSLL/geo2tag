@@ -1,4 +1,4 @@
 #!/bin/sh
-/usr/bin/wikigpsTracker > /dev/null 2>&1 &
+sudo -u user sh -c '/usr/bin/wikigpsTracker > /dev/null 2>&1 &'
 update-rc.d tracker defaults;
 exit 0

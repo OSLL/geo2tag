@@ -21,10 +21,10 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Daemon for tracker application"
 NAME=wikigpsTracker
-DAEMON=/usr/bin/$NAME
+DAEMON=sudo -u user usr/bin/$NAME
 DAEMON_ARGS=""
 PIDFILE=/var/run/$NAME.pid
-SCRIPTNAME=/etc/init.d/$NAME
+SCRIPTNAME=/etc/init.d/tracker
 
 
 # Define LSB log_* functions.
