@@ -97,7 +97,9 @@ class AddUserQuery: public QObject
     AddUserQuery(const AddUserQuery& obj);
     AddUserQuery& operator=(const AddUserQuery& obj);
 
-    };                                                      // class AddUserQuery
-#endif                                                      //_AddUserQuery_H_B7CB9D45_F02D_4617_8C62_B56B0A2AF6A7_INCLUDED_
+    // class AddUserQuery
+};
+//_AddUserQuery_H_B7CB9D45_F02D_4617_8C62_B56B0A2AF6A7_INCLUDED_
+#endif
 
-  /* ===[ End of file $HeadURL$ ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

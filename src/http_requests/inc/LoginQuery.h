@@ -62,7 +62,8 @@ class LoginQuery: public DefaultQuery
     QString m_login;
   QString m_password;
 
-  QSharedPointer<User> m_user;                              //!< full information about user
+  //!< full information about user
+  QSharedPointer<User> m_user;
 
   virtual QString getUrl() const;
   virtual QByteArray getRequestBody() const;
@@ -87,7 +88,9 @@ class LoginQuery: public DefaultQuery
 
     void connected();
 
-    };                                                      // class LoginQuery
-#endif                                                      //_LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
+    // class LoginQuery
+};
+//_LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
+#endif
 
-  /* ===[ End of file $HeadURL$ ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

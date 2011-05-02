@@ -50,7 +50,8 @@
 class TimeSlot: public QObject
 {
   Q_OBJECT
-    qulonglong m_slot;                                      // time slot
+  // time slot
+    qulonglong m_slot;
 
   protected:
 
@@ -65,9 +66,11 @@ class TimeSlot: public QObject
 
     virtual ~TimeSlot();
 
-    };                                                      //class TimeSlot
+    //class TimeSlot
+};
 
-  typedef ConcurrentVector<TimeSlot> TimeSlots;
-#endif                                                      // _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
+typedef ConcurrentVector<TimeSlot> TimeSlots;
+// _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

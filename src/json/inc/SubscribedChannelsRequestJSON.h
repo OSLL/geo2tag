@@ -57,7 +57,9 @@ class SubscribedChannelsRequestJSON: public JsonSerializer
 
     SubscribedChannelsRequestJSON();
 
-    };                                                      // class SubscribedChannelsJSON
-#endif                                                      //_SubscribedChannelsJSON_H_INCLUDED_
+    // class SubscribedChannelsJSON
+};
+//_SubscribedChannelsJSON_H_INCLUDED_
+#endif
 
-  /* ===[ End of file $HeadURL$ ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

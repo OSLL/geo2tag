@@ -62,7 +62,7 @@ namespace maps
         GOOGLE = 0,
         OPEN_STREET,
         UNKNOWN
-        };
+      };
 
       /*!
        * \brief load map as picture
@@ -82,9 +82,14 @@ namespace maps
       void mapUpdated(QByteArray & picture);
       void error(QString error);
 
-      };                                                    // class MapLoader
+      // class MapLoader
+  };
 
-  }                                                         // namespace maps
-#endif                                                      //_MapLoader_H_7DB6BBD9_E4AD_4818_8B45_5B18EC8FC60C_INCLUDED_
+  // namespace maps
+}
+
+
+//_MapLoader_H_7DB6BBD9_E4AD_4818_8B45_5B18EC8FC60C_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

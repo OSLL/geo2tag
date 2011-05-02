@@ -79,9 +79,14 @@ namespace maps
 
       static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
 
-      };                                                    // class GoogleClientLogin
+      // class GoogleClientLogin
+  };
 
-  }                                                         // namespace maps
-#endif                                                      //_GoogleClientLogin_H_E398ED1A_0E83_42CA_BC67_5C3668729B16_INCLUDED_
+  // namespace maps
+}
+
+
+//_GoogleClientLogin_H_E398ED1A_0E83_42CA_BC67_5C3668729B16_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

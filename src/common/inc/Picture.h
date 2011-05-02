@@ -59,7 +59,7 @@ namespace common
       {
         PNG = 0,
         UNKNOWN
-        };
+      };
 
       virtual Type getType() const;
 
@@ -68,9 +68,14 @@ namespace common
     protected:
       Picture(const QVector<char>& data);
 
-      };                                                    // class Picture
+      // class Picture
+  };
 
-  }                                                         // namespace common
-#endif                                                      //_Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
+  // namespace common
+}
+
+
+//_Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

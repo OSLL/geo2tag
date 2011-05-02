@@ -52,19 +52,20 @@
  */
 class CCounted
 {
-  Thread::CAtomicCount m_ref;                               /*!< счетчик ссылок */
+  /*!< счетчик ссылок */
+  Thread::CAtomicCount m_ref;
 
   public:
     CCounted(): m_ref(0)
     {
-      }
+    }
     CCounted(const CCounted&): m_ref(0)
     {
-      }
+    }
     CCounted& operator =(const CCounted&)
     {
       return *this;
-      }
+    }
 
     /*!
      * виртуальный деструктор, для правильной работы
@@ -72,7 +73,7 @@ class CCounted
      */
     virtual ~CCounted()
     {
-      }
+    }
 
     /*!
      * \brief изменение счетчика ссылок.
@@ -83,5 +84,6 @@ class CCounted
      * когда значение счетчика становится <=0 он удаляется
      */
     void ref(int d=1);
-    };
-#endif                                                      // Entry of _POINTER_H_INCLUDED_E3A9A686_4A07_4369_9180_836A66853FC0
+};
+// Entry of _POINTER_H_INCLUDED_E3A9A686_4A07_4369_9180_836A66853FC0
+#endif

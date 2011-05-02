@@ -21,5 +21,6 @@ class Webside : public WContainerWidget
 
     /* slots */
     void onLoginSuccess(QSharedPointer<User> user);
-    };
-#endif                                                      // WEBSIDE_H
+};
+// WEBSIDE_H
+#endif

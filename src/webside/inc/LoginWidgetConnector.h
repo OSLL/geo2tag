@@ -21,5 +21,5 @@ class LoginWidgetConnector:public QObject
 
   public Q_SLOTS:
     void triggered();
-    };
+};
 #endif

@@ -12,5 +12,6 @@ class GetTimeSlotRequestJSON : public JsonSerializer
     QByteArray getJson() const;
 
     void parseJson(const QByteArray&);
-    };
-#endif                                                      // GETTIMESLOTREQUESTJSON_H
+};
+// GETTIMESLOTREQUESTJSON_H
+#endif

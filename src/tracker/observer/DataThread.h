@@ -13,12 +13,15 @@ class DataThread : public QThread
   Q_OBJECT
 
     QSettings m_settings;
-  DataChannels m_marks;                                     // here marks are stored
+  // here marks are stored
+  DataChannels m_marks;
   QSharedPointer<User> m_user;
   MapScene * m_map;
 
-  LoginQuery * m_loginQuery;                                // this field needs because query is asynchronous
-  RSSFeedQuery * m_rssQuery;                                // this field needs because query is asynchronous
+  // this field needs because query is asynchronous
+  LoginQuery * m_loginQuery;
+  // this field needs because query is asynchronous
+  RSSFeedQuery * m_rssQuery;
 
   bool m_isConnected;
   bool m_requestIsSent;
@@ -38,5 +41,6 @@ class DataThread : public QThread
     void getFeed();
   public slots:
 
-    };
-#endif                                                      // DATATHREAD_H
+};
+// DATATHREAD_H
+#endif

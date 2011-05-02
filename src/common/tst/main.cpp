@@ -49,5 +49,7 @@ int main(int c, char **v)
   Test::User_Test test;
   QTest::qExec(&test);
   return 0;
-  }
+}
+
+
 /* ===[ End of file $HeadURL$ ]=== */

@@ -56,7 +56,8 @@ class JsonTimeSlot: public TimeSlot
     void setId(qlonglong id);
 
     ~JsonTimeSlot();
-    };
-#endif                                                      // _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
+};
+// _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

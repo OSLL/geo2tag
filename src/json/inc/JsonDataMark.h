@@ -46,9 +46,11 @@ class JsonDataMark: public DataMark
 {
 
   static qlonglong globalTagId;
-  qlonglong m_id;                                           //!< Tag's identifier
+  //!< Tag's identifier
+  qlonglong m_id;
 
-  qlonglong m_userId;                                       //!< Assotiated user's identifier for the tag
+  //!< Assotiated user's identifier for the tag
+  qlonglong m_userId;
 
   public:
     JsonDataMark(double latitude, double longitude,
@@ -61,7 +63,8 @@ class JsonDataMark: public DataMark
     void setId(qlonglong id);
 
     virtual ~JsonDataMark();
-    };
-#endif                                                      //_JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+};
+//_JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

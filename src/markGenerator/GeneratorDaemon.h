@@ -42,5 +42,5 @@ class GeneratorDaemon: public QThread
     void onTagAdded();
     void onConnected();
     void onError(QString error);
-    };
+};
 #endif

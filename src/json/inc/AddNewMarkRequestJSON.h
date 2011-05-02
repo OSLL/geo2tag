@@ -12,5 +12,6 @@ class AddNewMarkRequestJSON : public JsonSerializer
     virtual QByteArray getJson() const;
 
     virtual void parseJson(const QByteArray&);
-    };
-#endif                                                      // ADDNEWMARKREQUESTJSON_H
+};
+// ADDNEWMARKREQUESTJSON_H
+#endif

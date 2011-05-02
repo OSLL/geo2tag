@@ -61,5 +61,6 @@ class MapScene : public QGraphicsScene
     void tileUploaded(const QPixmap & pixmap, const TilePoint & point);
     void preload();
 
-    };
-#endif                                                      // MAPSCENE_H
+};
+// MAPSCENE_H
+#endif

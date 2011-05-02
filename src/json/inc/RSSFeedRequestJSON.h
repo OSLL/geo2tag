@@ -65,5 +65,7 @@ class RSSFeedRequestJSON: public JsonSerializer
 
     ~RSSFeedRequestJSON();
 
-    };                                                      //class RSSFeedRequestJSON
-#endif                                                      // RSSFEEDREQUESTJSON_H
+    //class RSSFeedRequestJSON
+};
+// RSSFEEDREQUESTJSON_H
+#endif

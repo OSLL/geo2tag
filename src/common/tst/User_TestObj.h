@@ -14,15 +14,18 @@ namespace Test
       UserTestImpl(const QString& login, const QString& passw) : User(login,passw)
       {
 
-        }
+      }
 
       virtual qlonglong getId() const
       {
         return 0;
-        }
+      }
 
       friend class User_Test;
-      };
+  };
 
-  }
-#endif                                                      // USER_TESTOBJ_H
+}
+
+
+// USER_TESTOBJ_H
+#endif

@@ -37,5 +37,6 @@ class LoginWidget : public WContainerWidget
     /* slots */
     void loginClicked();
     void userRecieved();
-    };
-#endif                                                      // LOGINWIDGET_H
+};
+// LOGINWIDGET_H
+#endif

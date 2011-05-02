@@ -76,5 +76,6 @@ class OptionsWidget : public QScrollArea
     /* is emitted when "ok" button is pressed */
     void done();
     void cancel();
-    };
-#endif                                                      // OPTIONSWIDGET_H
+};
+// OPTIONSWIDGET_H
+#endif

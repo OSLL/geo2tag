@@ -16,5 +16,5 @@ class AboutWidget : public QWidget
     void onOkClicked();
     signals:
     void done();
-    };
+};
 #endif

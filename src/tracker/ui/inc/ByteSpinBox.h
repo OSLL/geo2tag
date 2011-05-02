@@ -23,5 +23,6 @@ class ByteSpinBox : public QSpinBox
 
   public slots:
 
-    };
-#endif                                                      // BYTESPINBOX_H
+};
+// BYTESPINBOX_H
+#endif

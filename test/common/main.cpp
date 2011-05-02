@@ -15,9 +15,9 @@ int main()
     CHandlePtr<DataMark> mark = DataMark::createMark(60.0, 30.0, "test label", "petroleum");
     (*channels)[2]->addData(mark);
     DbSession::getInstance().saveData();
-    }
+  }
   catch(ODBC::CException &x)
   {
-    }
-  return 0;
   }
+  return 0;
+}

@@ -32,5 +32,5 @@ class ViewOptsWidget : public QScrollArea
     void cancel();
     void done();
 
-    };
+};
 #endif

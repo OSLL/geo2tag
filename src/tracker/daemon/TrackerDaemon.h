@@ -25,8 +25,10 @@ class TrackerDaemon : /*public QThread,*/ public Control
   QString m_visibleName;
   QPointF m_lastCoords;
 
-  LoginQuery * m_loginQuery;                                // this field needs because query is asynchronous
-  AddNewMarkQuery * m_tagQuery;                             // this field needs because query is asynchronous
+  // this field needs because query is asynchronous
+  LoginQuery * m_loginQuery;
+  // this field needs because query is asynchronous
+  AddNewMarkQuery * m_tagQuery;
 
   bool m_pauseFlag;
   bool m_isConnected;
@@ -36,7 +38,8 @@ class TrackerDaemon : /*public QThread,*/ public Control
     void run();
   private slots:
 
-    void onConnected();                                     //calls when login/pass were accepted
+    //calls when login/pass were accepted
+    void onConnected();
     void onTagAdded();
     void onError(QString);
 
@@ -57,5 +60,6 @@ class TrackerDaemon : /*public QThread,*/ public Control
 
   public slots:
 
-    };
-#endif                                                      // TRACKERDAEMON_H
+};
+// TRACKERDAEMON_H
+#endif

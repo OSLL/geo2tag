@@ -41,13 +41,14 @@ namespace GUI
   class ListView : public QTableView
   {
     Q_OBJECT;
-    QTimer *timer;                                          // auto-updating timer
+    // auto-updating timer
+    QTimer *timer;
     public:
       ListView(QWidget *parent);
 
       virtual ~ListView()
       {
-        }
+      }
 
     public slots:
       void updateModel();
@@ -57,6 +58,10 @@ namespace GUI
       ListView& operator=(const ListView& obj);
       QStandardItemModel *m_model;
 
-      };                                                    // class ListView
-  }
-#endif                                                      // LISTVIEW_H
+      // class ListView
+  };
+}
+
+
+// LISTVIEW_H
+#endif

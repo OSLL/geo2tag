@@ -28,5 +28,6 @@ class AddNewMarkQuery: public DefaultQuery
     Q_SIGNALS:
 
     void tagAdded();
-    };
-#endif                                                      // ADDNEWMARKQUERY_H
+};
+// ADDNEWMARKQUERY_H
+#endif

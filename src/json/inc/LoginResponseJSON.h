@@ -12,5 +12,6 @@ class LoginResponseJSON : public JsonSerializer
     QByteArray getJson() const;
 
     void parseJson(const QByteArray&);
-    };
-#endif                                                      // LOGINRESPONSEJSON_H
+};
+// LOGINRESPONSEJSON_H
+#endif

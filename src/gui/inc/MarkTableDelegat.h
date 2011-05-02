@@ -78,9 +78,14 @@ namespace GUI
       virtual ~MarkTableDelegat();
 
       int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const;
-      };                                                    // class MarkTableDelegat
+      // class MarkTableDelegat
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_MarkTableDelegat_H_C595B6B3_EF48_4F54_879C_E662D3876A5C_INCLUDED_
+  // namespace GUI
+}
+
+
+//_MarkTableDelegat_H_C595B6B3_EF48_4F54_879C_E662D3876A5C_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

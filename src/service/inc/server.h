@@ -23,5 +23,5 @@ class Server: private QThread
     void serve();
 
     ~Server();
-    };
+};
 #endif

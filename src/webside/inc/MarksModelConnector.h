@@ -19,5 +19,5 @@ class MarksModelConnector:public QObject
   public Q_SLOTS:
     void triggered();
 
-    };
+};
 #endif

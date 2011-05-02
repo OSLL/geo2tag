@@ -44,5 +44,6 @@ class RequestReceiver : public QObject
 
     /* is emitted when gui have requested a status */
     void status();
-    };
-#endif                                                      // REQUESTRECEIVER_H
+};
+// REQUESTRECEIVER_H
+#endif

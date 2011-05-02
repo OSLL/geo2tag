@@ -60,5 +60,6 @@ class LightMap: public QWidget
   public slots:
     void toggleNightMode();
 
-    };
-#endif                                                      // LIGHTMAP_H
+};
+// LIGHTMAP_H
+#endif

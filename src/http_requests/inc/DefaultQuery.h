@@ -31,5 +31,6 @@ class DefaultQuery : public QObject
     void responseReceived();
 
     void errorOccured(QString);
-    };
-#endif                                                      // DEFAULTQUERY_H
+};
+// DEFAULTQUERY_H
+#endif

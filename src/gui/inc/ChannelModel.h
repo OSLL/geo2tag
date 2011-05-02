@@ -83,9 +83,14 @@ namespace GUI
       ChannelModel(const ChannelModel& obj);
       ChannelModel& operator=(const ChannelModel& obj);
 
-      };                                                    // class ChannelModel
+      // class ChannelModel
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_ChannelModel_H_DB57EF03_D76B_419E_A6AF_056745B0F2EA_INCLUDED_
+  // namespace GUI
+}
+
+
+//_ChannelModel_H_DB57EF03_D76B_419E_A6AF_056745B0F2EA_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

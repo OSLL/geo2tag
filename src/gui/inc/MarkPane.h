@@ -66,7 +66,7 @@ namespace GUI
 
       virtual ~MarkPane()
       {
-        }
+      }
 
     public slots:
 
@@ -81,9 +81,14 @@ namespace GUI
       MarkPane(const MarkPane& obj);
       MarkPane& operator=(const MarkPane& obj);
 
-      };                                                    // class MarkPane
+      // class MarkPane
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_MarkPane_H_D511DD50_5236_4D1D_84DB_72BE3E938E3E_INCLUDED_
+  // namespace GUI
+}
+
+
+//_MarkPane_H_D511DD50_5236_4D1D_84DB_72BE3E938E3E_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

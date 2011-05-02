@@ -79,10 +79,16 @@ namespace common
       virtual double getLatitude() const;
 
       ~GpsModeller();
-      };                                                    // class GpsModeller
+      // class GpsModeller
+  };
 
-  }                                                         // namespace common
-#endif                                                      // SIMULATE_GPS
-#endif                                                      //_GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
+  // namespace common
+}
+
+
+// SIMULATE_GPS
+#endif
+//_GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

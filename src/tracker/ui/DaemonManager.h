@@ -22,5 +22,6 @@ class DaemonManager
     void stop();
     Status getStatus();
     QDateTime lastStatusModification();
-    };
-#endif                                                      // DAEMONMANAGER_H
+};
+// DAEMONMANAGER_H
+#endif

@@ -56,7 +56,9 @@ class DbUser: public User
     void setId(qlonglong);
 
     ~DbUser();
-    };                                                      // class UserInternal
-#endif                                                      //_UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+    // class UserInternal
+};
+//_UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

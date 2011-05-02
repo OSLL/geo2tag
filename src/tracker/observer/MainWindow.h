@@ -35,5 +35,5 @@ class MainWindow:public QMainWindow
     void settings();
     void marksSettings();
     void settingsDone();
-    };
+};
 #endif

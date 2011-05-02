@@ -57,5 +57,6 @@ class MainWindow : public QMainWindow
     void onApplyMarkResponse(QString);
     void positionUpdated(QGeoPositionInfo gpsPos);
 
-    };
-#endif                                                      // MAINWINDOW_H
+};
+// MAINWINDOW_H
+#endif

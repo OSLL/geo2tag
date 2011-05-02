@@ -73,7 +73,7 @@ namespace GUI
 
       virtual ~CentralWidget()
       {
-        }
+      }
 
     public slots:
       void switchMap();
@@ -88,9 +88,14 @@ namespace GUI
       CentralWidget(const CentralWidget& obj);
       CentralWidget& operator=(const CentralWidget& obj);
 
-      };                                                    // class CentralWidget
+      // class CentralWidget
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_CentralWidget_H_044270F5_8D38_4F61_9F05_96359B3BD122_INCLUDED_
+  // namespace GUI
+}
+
+
+//_CentralWidget_H_044270F5_8D38_4F61_9F05_96359B3BD122_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

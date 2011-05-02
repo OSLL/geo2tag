@@ -55,7 +55,9 @@ class ChannelListResponseJSON: public JsonSerializer
 
     virtual ~ChannelListResponseJSON();
 
-    };                                                      //class ChannelListJSON
-#endif                                                      //_ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
+    //class ChannelListJSON
+};
+//_ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
+#endif
 
-  /* ===[ End of file $HeadURL$ ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

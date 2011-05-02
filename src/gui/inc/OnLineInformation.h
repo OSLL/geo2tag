@@ -135,9 +135,14 @@ namespace GUI
       OnLineInformation(const OnLineInformation& obj);
       OnLineInformation& operator=(const OnLineInformation& obj);
 
-      };                                                    // class OnLineInformation
+      // class OnLineInformation
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_OnLineInformation_H_91CA39C8_1612_4CBC_B6C2_8ED74E337584_INCLUDED_
+  // namespace GUI
+}
+
+
+//_OnLineInformation_H_91CA39C8_1612_4CBC_B6C2_8ED74E337584_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

@@ -11,12 +11,12 @@ int main(int c, char **v)
   {
     GeneratorDaemon * daemon=new GeneratorDaemon(v[1]);
     daemon->start();
-    }
+  }
   else
   {
     qDebug() <<  "no filename specified";
     return 0;
-    }
+  }
   //  QObject::connect(&app,SIGNAL(aboutToQuit()),&daemon,SLOT(stop()));
   return app.exec();
-  }
+}

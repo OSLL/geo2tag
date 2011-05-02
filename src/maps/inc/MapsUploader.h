@@ -43,5 +43,6 @@ class MapsUploader : public QObject
   public slots:
     void uploadTiles(QVector<TilePoint> & tiles_to_upload);
     void uploadTilesBG(QVector<TilePoint> & tiles_to_upload);
-    };
-#endif                                                      // MAPSUPLOADER_H
+};
+// MAPSUPLOADER_H
+#endif

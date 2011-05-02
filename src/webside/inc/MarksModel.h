@@ -30,7 +30,7 @@ class MarksModel : public WAbstractTableModel
     {
       ALL_MARKS,
       THE_LATEST_FROM_EACH_MEMBER
-      };
+    };
 
     Type   m_type;
     MarksModel(QSharedPointer<User> user, WObject *parent = 0);
@@ -47,5 +47,6 @@ class MarksModel : public WAbstractTableModel
     const QList<QSharedPointer<DataMark> >& getMarks() const;
     void marksRecieved();
     void update();
-    };
-#endif                                                      /* OPTIONSMODEL_H */
+};
+/* OPTIONSMODEL_H */
+#endif

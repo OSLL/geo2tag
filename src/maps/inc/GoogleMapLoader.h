@@ -88,9 +88,14 @@ namespace maps
       GoogleMapLoader(const GoogleMapLoader& obj);
       GoogleMapLoader& operator=(const GoogleMapLoader& obj);
 
-      };                                                    // class GoogleMapLoader
+      // class GoogleMapLoader
+  };
 
-  }                                                         // namespace maps
-#endif                                                      //_GoogleMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
+  // namespace maps
+}
+
+
+//_GoogleMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

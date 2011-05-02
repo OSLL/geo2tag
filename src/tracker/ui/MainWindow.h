@@ -17,7 +17,8 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
   QTcpSocket *m_daemon;
   QTextStream *m_device;
   QString m_lastCoord;
-  QString m_message;                                        // contain data, recieved from daemon
+  // contain data, recieved from daemon
+  QString m_message;
 
   LogWidget * m_logWidget;
   OptionsWidget *m_optionsWidget;
@@ -42,5 +43,6 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
 
   protected:
     void changeEvent(QEvent *e);
-    };
-#endif                                                      // MAINWINDOW_H
+};
+// MAINWINDOW_H
+#endif

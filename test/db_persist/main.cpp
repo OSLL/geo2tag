@@ -11,4 +11,4 @@ int main(void)
   h[0]->setLabel(h[0]->getLabel() + ".");
   h.save();
   return 0;
-  }
+}

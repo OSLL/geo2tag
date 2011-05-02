@@ -99,7 +99,9 @@ class RSSFeedQuery : public DefaultQuery
 
     void rssFeedReceived();
 
-    };                                                      // class RSSFeedQuery
-#endif                                                      //_RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
+    // class RSSFeedQuery
+};
+//_RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
+#endif
 
-  /* ===[ End of file $HeadURL$ ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

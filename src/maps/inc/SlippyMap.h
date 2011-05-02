@@ -66,5 +66,6 @@ class SlippyMap: public QObject
   protected:
     QRect tileRect(const QPoint &tp);
 
-    };
-#endif                                                      // SLIPPYMAP_H
+};
+// SLIPPYMAP_H
+#endif

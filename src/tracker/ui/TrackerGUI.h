@@ -50,5 +50,6 @@ class TrackerGUI : public QMainWindow
     void updateStatus();
   private slots:
     void displayError(QAbstractSocket::SocketError socketError);
-    };
-#endif                                                      // TRACKERGUI_H
+};
+// TRACKERGUI_H
+#endif

@@ -52,7 +52,8 @@ class User: public QObject
 
   QString m_result;
   QString m_token;
-  QSharedPointer<Channels> m_channels;                      // list of subscribed channels
+  // list of subscribed channels
+  QSharedPointer<Channels> m_channels;
 
   protected:
     User(const QString& name, const QString& passw);
@@ -75,9 +76,11 @@ class User: public QObject
     void setPassword(const QString password);
 
     virtual ~User();
-    };                                                      // class User
+    // class User
+};
 
-  typedef ConcurrentVector<User> Users;
-#endif                                                      //_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
+typedef ConcurrentVector<User> Users;
+//_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

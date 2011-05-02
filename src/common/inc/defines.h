@@ -49,7 +49,8 @@ void setServerPort(int port);
 #define DEFAULT_SERVER "http://localhost/"
 #define DEFAULT_PORT 80
 
-#define DATABASE_NAME "geo2tag"                             // "demo"
+// "demo"
+#define DATABASE_NAME "geo2tag"
 
 #define SUBSCRIBE_HTTP_URL        getServerUrl()+QString("service?query=subscribe")
 #define UNSUBSCRIBE_HTTP_URL      getServerUrl()+QString("service?query=unsubscribe")
@@ -76,6 +77,7 @@ void setServerPort(int port);
 #define DEFAULT_LONGITUDE   30
 
 #define TRACKER_MSECS_TIMEOUT 500
-#endif                                                      //_defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
+//_defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

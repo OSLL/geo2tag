@@ -47,13 +47,13 @@ namespace common
       virtual double getLongitude() const=0;
 
       virtual double getLatitude() const=0;
-      };
-    /*!
-     * Class description. May use HTML formatting
-     *
-     */
-    class GpsInfo
-    {
+  };
+  /*!
+   * Class description. May use HTML formatting
+   *
+   */
+  class GpsInfo
+  {
     public:
 
       ~GpsInfo();
@@ -63,9 +63,14 @@ namespace common
     private:
       GpsInfo();
 
-      };                                                    // class GpsInfo
+      // class GpsInfo
+  };
 
-  }                                                         // namespace common
-#endif                                                      //_GpsInfo_H_D901B2BD_45DB_41D6_A4E2_08407E34EDCD_INCLUDED_
+  // namespace common
+}
+
+
+//_GpsInfo_H_D901B2BD_45DB_41D6_A4E2_08407E34EDCD_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

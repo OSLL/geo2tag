@@ -13,5 +13,6 @@ class GetTimeSlotResponseJSON : public JsonSerializer
 
     void parseJson(const QByteArray&);
 
-    };
-#endif                                                      // GETTIMESLOTRESPONSEJSON_H
+};
+// GETTIMESLOTRESPONSEJSON_H
+#endif

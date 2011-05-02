@@ -56,9 +56,14 @@ namespace common
 
       ~PngPicture();
 
-      };                                                    // class PngPicture
+      // class PngPicture
+  };
 
-  }                                                         // namespace common
-#endif                                                      //_PngPicture_H_1CCDBE7F_2B80_4842_AB19_85D628100633_INCLUDED_
+  // namespace common
+}
+
+
+//_PngPicture_H_1CCDBE7F_2B80_4842_AB19_85D628100633_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

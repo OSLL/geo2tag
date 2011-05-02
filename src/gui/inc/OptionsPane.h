@@ -86,9 +86,14 @@ namespace GUI
       //OptionsPane(const OptionsPane& obj);
       //OptionsPane& operator=(const OptionsPane& obj);
 
-      };                                                    // class OptionsPane
+      // class OptionsPane
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_OptionsPane_H_92651A52_B5F8_41C4_96AC_484BA7C02996_INCLUDED_
+  // namespace GUI
+}
+
+
+//_OptionsPane_H_92651A52_B5F8_41C4_96AC_484BA7C02996_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

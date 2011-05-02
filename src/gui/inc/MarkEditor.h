@@ -66,7 +66,7 @@ namespace GUI
       MarkEditor(QWidget *parent);
       virtual ~MarkEditor()
       {
-        }
+      }
 
     public slots:
       void update();
@@ -80,9 +80,14 @@ namespace GUI
       MarkEditor(const MarkEditor& obj);
       MarkEditor& operator=(const MarkEditor& obj);
 
-      };                                                    // class MarkEditor
+      // class MarkEditor
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_MarkEditor_H_8C1685C8_8471_494E_A858_6FB0BC6AD16C_INCLUDED_
+  // namespace GUI
+}
+
+
+//_MarkEditor_H_8C1685C8_8471_494E_A858_6FB0BC6AD16C_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

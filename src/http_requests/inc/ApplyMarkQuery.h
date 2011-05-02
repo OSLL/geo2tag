@@ -92,7 +92,9 @@ class ApplyMarkQuery : public QObject
     ApplyMarkQuery(const ApplyMarkQuery& obj);
     ApplyMarkQuery& operator=(const ApplyMarkQuery& obj);
 
-    };                                                      // class ApplyMarkQuery
-#endif                                                      //_ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
+    // class ApplyMarkQuery
+};
+//_ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
+#endif
 
-  /* ===[ End of file $HeadURL$ ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

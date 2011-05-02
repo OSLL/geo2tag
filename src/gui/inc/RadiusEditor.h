@@ -45,6 +45,9 @@ namespace GUI
       RadiusEditor(QWidget *parent, QSharedPointer<Channel> channel);
     public slots:
       virtual void accept();
-      };
-  }
-#endif                                                      // RADIUSEDITOR_H
+  };
+}
+
+
+// RADIUSEDITOR_H
+#endif

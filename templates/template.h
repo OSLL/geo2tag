@@ -54,26 +54,31 @@ namespace ${PACKAGE}
       ${NAME}
       ()
       {
-        }
+      }
 
       ~${NAME}
       ()
       {
-        }
+      }
 
     private:
       ${NAME}
       (const $
       {
         NAME
-        }& obj);
+      }& obj);
       ${NAME}
       & operator=(const $
       {
         NAME
-        }& obj);
+      }& obj);
 
-      };                                                    // class ${NAME}
+      // class ${NAME}
+  };
 
-  }                                                         // namespace ${PACKAGE}
-#endif                                                      //_${NAME}_H_${UUID}_INCLUDED_
+  // namespace ${PACKAGE}
+}
+
+
+//_${NAME}_H_${UUID}_INCLUDED_
+#endif

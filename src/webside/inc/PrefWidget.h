@@ -24,5 +24,6 @@ class PrefWidget : public WContainerWidget
     /* slots */
     void onChangeClicked();
 
-    };
-#endif                                                      /* PREFWIDGET_H */
+};
+/* PREFWIDGET_H */
+#endif

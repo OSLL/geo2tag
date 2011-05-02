@@ -51,5 +51,6 @@ class Sketch : public WContainerWidget
   public:
     Sketch(QSharedPointer<User> user, WContainerWidget *parent = 0);
 
-    };
-#endif                                                      /* SKETCH_H */
+};
+/* SKETCH_H */
+#endif

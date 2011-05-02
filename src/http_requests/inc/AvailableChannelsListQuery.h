@@ -104,9 +104,14 @@ namespace GUI
       AvailableChannelsListQuery(const AvailableChannelsListQuery& obj);
       AvailableChannelsListQuery& operator=(const AvailableChannelsListQuery& obj);
 
-      };                                                    // class AvailableChannelsListQuery
+      // class AvailableChannelsListQuery
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_AvailableChannelsListQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
+  // namespace GUI
+}
+
+
+//_AvailableChannelsListQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

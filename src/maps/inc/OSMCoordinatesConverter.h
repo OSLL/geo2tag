@@ -7,9 +7,12 @@
 #include <QPair>
 #include <QDebug>
 
-typedef QPair<QPoint, int> TilePoint;                       // x,y,zoom - OSM tile coordinate
-typedef QPair<QPointF, int> TilePointF;                     // x,y,zoom - OSM point on tile coordinate
-typedef QPair<qreal, qreal> GeoPoint;                       // longitude, latitude - geographics coordinates
+// x,y,zoom - OSM tile coordinate
+typedef QPair<QPoint, int> TilePoint;
+// x,y,zoom - OSM point on tile coordinate
+typedef QPair<QPointF, int> TilePointF;
+// longitude, latitude - geographics coordinates
+typedef QPair<qreal, qreal> GeoPoint;
 
 /*
  * For use QPoint in QHash
@@ -32,5 +35,6 @@ class OSMCoordinatesConverter
 
     /* Convert TilePointF to geographics coordinates*/
     static GeoPoint TileToGeo(const TilePointF & point);
-    };
-#endif                                                      // OSMCOORDINATESCONBERTER_H
+};
+// OSMCOORDINATESCONBERTER_H
+#endif

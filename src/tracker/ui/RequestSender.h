@@ -39,5 +39,6 @@ class RequestSender : public QObject
   private slots:
     void readyRead();
 
-    };
-#endif                                                      // REQUESTSENDER_H
+};
+// REQUESTSENDER_H
+#endif

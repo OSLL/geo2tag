@@ -18,5 +18,6 @@ class OptionsWidget : public WContainerWidget
   public:
     OptionsWidget(WContainerWidget *parent = 0);
 
-    };
-#endif                                                      /* OPTIONSWIDGET_H */
+};
+/* OPTIONSWIDGET_H */
+#endif

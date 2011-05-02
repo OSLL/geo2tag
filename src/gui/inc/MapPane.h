@@ -61,7 +61,7 @@ namespace GUI
 
       virtual ~MapPane()
       {
-        }
+      }
 
       void setPosition(const QPointF& pos);
       MapWidget* getMapWidget();
@@ -74,9 +74,14 @@ namespace GUI
       MapPane(const MapPane& obj);
       MapPane& operator=(const MapPane& obj);
 
-      };                                                    // class MapPane
+      // class MapPane
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_MapPane_H_974943CF_0D73_468D_AD1A_AE6CDCE44E04_INCLUDED_
+  // namespace GUI
+}
+
+
+//_MapPane_H_974943CF_0D73_468D_AD1A_AE6CDCE44E04_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

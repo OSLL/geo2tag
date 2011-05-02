@@ -44,5 +44,5 @@ class ChannelsModel : public WAbstractTableModel
 
     /* signals */
     Wt::Signal<> channelsUpdated;
-    };
+};
 #endif

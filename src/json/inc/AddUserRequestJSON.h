@@ -4,4 +4,5 @@
 #include "LoginRequestJSON.h"
 
 typedef LoginRequestJSON AddUserRequestJSON;
-#endif                                                      // ADDUSERREQUESTJSON_H
+// ADDUSERREQUESTJSON_H
+#endif

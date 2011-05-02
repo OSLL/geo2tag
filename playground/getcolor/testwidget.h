@@ -14,5 +14,6 @@ class TestWidget : public QWidget
 
   public slots:
 
-    };
-#endif                                                      // TESTWIDGET_H
+};
+// TESTWIDGET_H
+#endif

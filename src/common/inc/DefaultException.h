@@ -59,9 +59,14 @@ namespace exception
       DefaultException(const DefaultException& obj);
       DefaultException& operator=(const DefaultException& obj);
 
-      };                                                    // class DefaultException
+      // class DefaultException
+  };
 
-  }                                                         // namespace exception
-#endif                                                      //_DefaultException_H_B503B3CC_1500_4544_8732_F56CD8A9F61B_INCLUDED_
+  // namespace exception
+}
+
+
+//_DefaultException_H_B503B3CC_1500_4544_8732_F56CD8A9F61B_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

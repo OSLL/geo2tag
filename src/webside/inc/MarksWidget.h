@@ -22,5 +22,6 @@ class MarksWidget : public WTabWidget
     void updateModel();
     void updateMap();
 
-    };
-#endif                                                      /* MARKSWIDGET_H */
+};
+/* MARKSWIDGET_H */
+#endif

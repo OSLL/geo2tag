@@ -41,5 +41,6 @@ class QueryExecutor : public QObject
 
   public slots:
 
-    };
-#endif                                                      // QUERYEXECUTOR_H
+};
+// QUERYEXECUTOR_H
+#endif

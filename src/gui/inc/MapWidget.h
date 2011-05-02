@@ -87,7 +87,7 @@ namespace GUI
 
       virtual ~MapWidget()
       {
-        }
+      }
 
       void setB(double b);
       void setL(double l);
@@ -110,9 +110,14 @@ namespace GUI
     private:
       MapWidget(const MapWidget& obj);
       MapWidget& operator=(const MapWidget& obj);
-      };                                                    // class MapWidget
+      // class MapWidget
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_MapWidget_H_065385CA_5A72_4063_8F11_A6EB4798CB6D_INCLUDED_
+  // namespace GUI
+}
+
+
+//_MapWidget_H_065385CA_5A72_4063_8F11_A6EB4798CB6D_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

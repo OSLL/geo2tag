@@ -8,4 +8,4 @@ int main(int c, char **v)
   MainWindow main;
   main.show();
   return app.exec();
-  }
+}

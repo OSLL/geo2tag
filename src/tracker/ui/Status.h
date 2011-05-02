@@ -10,5 +10,6 @@ struct Status
   QString status;
   QString description;
   bool valid;
-  };
-#endif                                                      /* STATUS_H */
+};
+/* STATUS_H */
+#endif

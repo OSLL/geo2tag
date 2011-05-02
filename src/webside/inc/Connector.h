@@ -10,7 +10,7 @@ enum sign
 {
   LoginQueryConnected,
   RssFeedReceived
-  };
+};
 
 template<class wClass>
 class Connector: public QObject
@@ -32,24 +32,24 @@ class Connector: public QObject
         {
           QObject::connect(this->m_obj,Q_SIGNAL(connected()),this,Q_SLOT(trigerred()));
           break;
-          }
+        }
         case RssFeedReceived:
         {
           //				connect(m_obj,Q_SIGNAL(rssFeedReceived()),this,Q_SLOT(trigerred()));
           break;
-          }
+        }
         default:
         {
           break;
-          }
         }
       }
+    }
   public Q_SLOTS:
 
     void triggered()
     {
       //		dynamic_cast<wClass>(this->m_wt)->*m_Function();
       this->m_wt->*m_Function();
-      }
-    };
+    }
+};
 #endif

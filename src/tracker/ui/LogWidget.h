@@ -24,5 +24,6 @@ class LogWidget : public QWidget
     signals:
     void done();
 
-    };
-#endif                                                      // LOGWIDGET_H
+};
+// LOGWIDGET_H
+#endif

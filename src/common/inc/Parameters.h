@@ -17,7 +17,11 @@ namespace common
       void setDefaultRadius(int newRadius);
       void updateFile();
 
-      };
+  };
 
-  }                                                         // namespace common
-#endif                                                      // PARAMETERS_H
+  // namespace common
+}
+
+
+// PARAMETERS_H
+#endif

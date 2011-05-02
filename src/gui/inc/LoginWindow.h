@@ -24,6 +24,6 @@ namespace  GUI
 
       signals:
       void onSucsess(QString authToken);
-      };
-  }
+  };
+}
 #endif

@@ -47,9 +47,11 @@
 class DbDataMark: public DataMark
 {
 
-  qlonglong m_id;                                           //!< Tag's identifier
+  //!< Tag's identifier
+  qlonglong m_id;
 
-  qlonglong m_userId;                                       //!< Assotiated user's identifier for the tag
+  //!< Assotiated user's identifier for the tag
+  qlonglong m_userId;
 
   public:
     DbDataMark(qlonglong id, double latitude, double longitude,
@@ -63,7 +65,8 @@ class DbDataMark: public DataMark
     void setId(qlonglong id);
 
     virtual ~DbDataMark();
-    };
-#endif                                                      //_DataMarkInternal_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+};
+//_DataMarkInternal_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

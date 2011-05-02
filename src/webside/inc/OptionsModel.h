@@ -22,5 +22,6 @@ class OptionsModel : public WAbstractTableModel
     virtual bool setData(const WModelIndex &index, const boost::any &value, int role = EditRole);
     WFlags<ItemFlag> flags(const WModelIndex &index) const;
 
-    };
-#endif                                                      /* OPTIONSMODEL_H */
+};
+/* OPTIONSMODEL_H */
+#endif

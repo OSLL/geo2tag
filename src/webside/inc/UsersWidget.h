@@ -42,5 +42,6 @@ class UsersWidget : public WContainerWidget
     void addUserClicked();
     void cancelUserClicked();
 
-    };
-#endif                                                      // USERSWIDGET_H
+};
+// USERSWIDGET_H
+#endif

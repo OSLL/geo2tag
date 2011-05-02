@@ -35,7 +35,8 @@ WApplication *createApplication(const WEnvironment& env)
   Webside * webside;
   webside = new Webside(app->root());
   return app;
-  }
+}
+
 
 setServerUrl(serverUrl.c_str());
 setServerPort(serverPort);
@@ -54,4 +55,4 @@ int main(int argc, char **argv)
    * object.
    */
   return WRun(argc, argv, &createApplication);
-  }
+}

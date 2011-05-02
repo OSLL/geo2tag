@@ -50,12 +50,17 @@
 class Channel: public QObject
 {
   Q_OBJECT
-    QString m_name;                                         //!< channel name
-  QString m_description;                                    //!< Description for channel
-  QString m_url;                                            //!< URL for mark
-  double m_activeRadius;                                    //< Radius for visible marks
+  //!< channel name
+    QString m_name;
+  //!< Description for channel
+  QString m_description;
+  //!< URL for mark
+  QString m_url;
+  //< Radius for visible marks
+  double m_activeRadius;
 
-  bool m_isDisplayed;                                       //!< Displayed on the UI
+  //!< Displayed on the UI
+  bool m_isDisplayed;
 
   QSharedPointer<TimeSlot> m_timeSlot;
 
@@ -86,9 +91,11 @@ class Channel: public QObject
     QSharedPointer<TimeSlot> getTimeSlot() const;
 
     virtual ~Channel();
-    };                                                      // class Channel
+    // class Channel
+};
 
-  typedef ConcurrentVector<Channel> Channels;
-#endif                                                      //_Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
+typedef ConcurrentVector<Channel> Channels;
+//_Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

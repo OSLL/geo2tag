@@ -30,5 +30,6 @@ class Preloading : public QObject
 
   public slots:
     void threadFinished();
-    };
-#endif                                                      // PRELOADING_H
+};
+// PRELOADING_H
+#endif

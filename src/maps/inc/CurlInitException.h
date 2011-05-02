@@ -57,9 +57,14 @@ namespace exception
 
       virtual ~CurlInitException();
 
-      };                                                    // class CurlInitException
+      // class CurlInitException
+  };
 
-  }                                                         // namespace exception
-#endif                                                      //_CurlInitException_H_9F2740EC_D8F2_46E4_809B_F48BFDC4638B_INCLUDED_
+  // namespace exception
+}
+
+
+//_CurlInitException_H_9F2740EC_D8F2_46E4_809B_F48BFDC4638B_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

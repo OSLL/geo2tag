@@ -38,7 +38,8 @@ int main(int c, char **v)
 {
   QApplication  app(c,v);
 
-  common::GpsInfo::getInstance();                           //starting daemon and other stuff;
+  //starting daemon and other stuff;
+  common::GpsInfo::getInstance();
   GUI::MainWindow window;
 
   //  GUI::LoginWindow loginWin;
@@ -54,4 +55,4 @@ int main(int c, char **v)
   app.exec();
   return 0;
 
-  }
+}

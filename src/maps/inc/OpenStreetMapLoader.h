@@ -87,9 +87,14 @@ namespace maps
       OpenStreetMapLoader(const OpenStreetMapLoader& obj);
       OpenStreetMapLoader& operator=(const OpenStreetMapLoader& obj);
 
-      };                                                    // class OpenStreetMapLoader
+      // class OpenStreetMapLoader
+  };
 
-  }                                                         // namespace maps
-#endif                                                      //_OpenStreetMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
+  // namespace maps
+}
+
+
+//_OpenStreetMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

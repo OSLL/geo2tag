@@ -87,9 +87,14 @@ namespace GUI
 
       void responseReceived();
 
-      };                                                    // class SubscribedChannelsListQuery
+      // class SubscribedChannelsListQuery
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_SubscribedChannelsListQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
+  // namespace GUI
+}
+
+
+//_SubscribedChannelsListQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

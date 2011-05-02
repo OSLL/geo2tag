@@ -45,5 +45,6 @@ class JsonSerializer:public QObject
     void setStatusMessage(const QString&);
 
     ~JsonSerializer();
-    };
-#endif                                                      // JSONSERIALIZER_H
+};
+// JSONSERIALIZER_H
+#endif

@@ -41,6 +41,9 @@ namespace GUI
 
     public:
       MarkDetailsDialog(QWidget *parent, QSharedPointer<DataMark> mark);
-      };
-  }
-#endif                                                      // MARKDETAILSDIALOG_H
+  };
+}
+
+
+// MARKDETAILSDIALOG_H
+#endif

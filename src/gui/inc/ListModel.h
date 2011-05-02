@@ -61,7 +61,10 @@ namespace GUI
     public slots:
       void marksUp(QSharedPointer<DataMarks> m_marks=QSharedPointer<DataMarks>());
       void layoutUpdate(QSharedPointer<Channel> channel = QSharedPointer<Channel>());
-      };
+  };
 
-  }
-#endif                                                      // LISTMODEL_H
+}
+
+
+// LISTMODEL_H
+#endif

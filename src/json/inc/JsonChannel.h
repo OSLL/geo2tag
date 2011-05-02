@@ -58,7 +58,8 @@ class JsonChannel: public Channel
     void setId(qlonglong id);
 
     virtual ~JsonChannel();
-    };
-#endif                                                      //_JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
+};
+//_JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

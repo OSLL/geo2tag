@@ -96,8 +96,12 @@ namespace GUI
       ApplyChannelQuery(const ApplyChannelQuery& obj);
       ApplyChannelQuery& operator=(const ApplyChannelQuery& obj);
 
-      };                                                    // class ApplyMarkQuery
-  }
-#endif                                                      //_ApplyChannelQuery_H_A2EBB6AB_07D4_4326_AB6A_39441A3DD564_INCLUDED_
+      // class ApplyMarkQuery
+  };
+}
+
+
+//_ApplyChannelQuery_H_A2EBB6AB_07D4_4326_AB6A_39441A3DD564_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

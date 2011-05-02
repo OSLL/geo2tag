@@ -19,4 +19,4 @@ int main(int argc, char ** argv)
   s.serve();
 
   return app.exec();
-  }
+}

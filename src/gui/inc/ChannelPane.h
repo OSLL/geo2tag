@@ -53,7 +53,8 @@ namespace GUI
    * Class description. May use HTML formatting
    *
    */
-  class ChannelPane : public QWidget                        //public QListView
+  //public QListView
+  class ChannelPane : public QWidget
   {
     Q_OBJECT;
 
@@ -72,7 +73,7 @@ namespace GUI
 
       virtual ~ChannelPane()
       {
-        }
+      }
 
     public slots:
       void onChannelsUpdated();
@@ -82,9 +83,14 @@ namespace GUI
       ChannelPane(const ChannelPane& obj);
       ChannelPane& operator=(const ChannelPane& obj);
 
-      };                                                    // class ChannelPane
+      // class ChannelPane
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_ChannelPane_H_A4534852_66A8_4982_975D_0D67B6F33B44_INCLUDED_
+  // namespace GUI
+}
+
+
+//_ChannelPane_H_A4534852_66A8_4982_975D_0D67B6F33B44_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

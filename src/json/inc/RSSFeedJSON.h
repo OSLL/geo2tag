@@ -67,7 +67,9 @@ class RSSFeedResponseJSON: public JsonSerializer
 
     ~RSSFeedResponseJSON();
 
-    };                                                      //class RSSFeedJSON
-#endif                                                      //_RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+    //class RSSFeedJSON
+};
+//_RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+#endif
 
-  /* ===[ End of file $HeadURL$ ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

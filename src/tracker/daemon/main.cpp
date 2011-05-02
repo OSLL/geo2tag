@@ -12,4 +12,4 @@ int main(int c, char **v)
   daemon.run();
   //  QObject::connect(&app,SIGNAL(aboutToQuit()),&daemon,SLOT(stop()));
   return app.exec();
-  }
+}

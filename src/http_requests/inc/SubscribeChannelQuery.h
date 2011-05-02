@@ -87,8 +87,13 @@ namespace GUI
       Q_SIGNALS:
       void responseReceived();
 
-      };                                                    // class SubscribeChannelQuery
-  }                                                         // namespace GUI
-#endif                                                      //_SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
+      // class SubscribeChannelQuery
+  };
+  // namespace GUI
+}
+
+
+//_SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

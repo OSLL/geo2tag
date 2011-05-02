@@ -112,9 +112,14 @@ namespace common
       DbObjectsCollection(const DbObjectsCollection& obj);
       DbObjectsCollection& operator=(const DbObjectsCollection& obj);
 
-      };                                                    // class DbSession
+      // class DbSession
+  };
 
-  }                                                         // namespace common
-#endif                                                      //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+  // namespace common
+}
+
+
+//_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

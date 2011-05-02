@@ -49,6 +49,7 @@ namespace Test
   {
     Q_OBJECT;
 
+    // test object
     JsonUser *m_object;
 
     public:
@@ -56,21 +57,21 @@ namespace Test
       JsonUser_Test()
       {
         m_object = new JsonUser("kkv");
-        }
+      }
 
       ~JsonUser_Test()
       {
         delete m_object;
         m_object = NULL;
-        }
+      }
 
     private slots:
 
       void testId()
       {
         QCOMPARE(m_object->getId(),qlonglong(0));
-        }
+      }
 
-      };                                                    // class JsonUser_Test
+  };                                    // class JsonUser_Test
 
-  }                                                         // end of namespace Test
+}                                       // end of namespace Test

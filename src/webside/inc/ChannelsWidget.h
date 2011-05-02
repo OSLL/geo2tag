@@ -33,5 +33,6 @@ class ChannelsWidget : public WContainerWidget
     /* slots */
     void onModelUpdated();
 
-    };
-#endif                                                      /* CHANNELSWIDGET_H */
+};
+/* CHANNELSWIDGET_H */
+#endif

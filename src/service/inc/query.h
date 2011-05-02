@@ -45,9 +45,12 @@
 
 enum QueryType
 {
-  SUBSCRIBE,                                                //! Query subscribe to the channel
-  AVAILABLE_LIST,                                           //! The list with available channels
-  SUBSCRIBED_LIST,                                          //! The list with subscribed by user channels
+  //! Query subscribe to the channel
+  SUBSCRIBE,
+  //! The list with available channels
+  AVAILABLE_LIST,
+  //! The list with subscribed by user channels
+  SUBSCRIBED_LIST,
   APPLYMARK,
   APPLYCHANNEL,
   APPLYUSER,
@@ -55,13 +58,14 @@ enum QueryType
   UNSUBSCRIBE,
   LOGIN,
   UNKNOWN
-  };
+};
 
 class Query
 {
   QMap<QString, QString> m_params;
 
-  QStringstream m_query;                                    //! query's data
+  //! query's data
+  QStringstream m_query;
 
   QueryType m_type;
 
@@ -80,7 +84,9 @@ class Query
      * \brief Routine return content of request
      */
     const QStringstream& getStream() const;
-    };                                                      //class Query
-#endif                                                      //_QUERY_H_
+    //class Query
+};
+//_QUERY_H_
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

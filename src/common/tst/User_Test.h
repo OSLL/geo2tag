@@ -46,7 +46,8 @@ namespace
 {
   const QString LOGIN("name of user");
   const QString PASSWD("parol");
-  }
+}
+
 
 namespace Test
 {
@@ -61,13 +62,13 @@ namespace Test
       User_Test()
       {
         m_object = new Test::UserTestImpl(LOGIN,PASSWD);
-        }
+      }
 
       ~User_Test()
       {
         delete m_object;
         m_object = NULL;
-        }
+      }
 
     private slots:
 
@@ -75,7 +76,8 @@ namespace Test
       {
         QCOMPARE(m_object->getLogin(), LOGIN);
         QCOMPARE(m_object->getPassword(), PASSWD);
-        }
+      }
 
-      };                                                    // class User_Test
-  }
+      // class User_Test
+  };
+}

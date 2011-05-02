@@ -35,5 +35,6 @@ class ControlThread : public QObject
 
   public slots:
 
-    };
-#endif                                                      // REPORTTHREAD_H
+};
+// REPORTTHREAD_H
+#endif

@@ -73,7 +73,7 @@ namespace GUI
 
       virtual ~MainWindow()
       {
-        }
+      }
 
     protected:
 
@@ -89,9 +89,14 @@ namespace GUI
       MainWindow(const MainWindow& obj);
       MainWindow& operator=(const MainWindow& obj);
 
-      };                                                    // class MainWindow
+      // class MainWindow
+  };
 
-  }                                                         // namespace GUI
-#endif                                                      //_MainWindow_H_06DCEED3_97B7_44E8_8292_AE47AA4C29BD_INCLUDED_
+  // namespace GUI
+}
+
+
+//_MainWindow_H_06DCEED3_97B7_44E8_8292_AE47AA4C29BD_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

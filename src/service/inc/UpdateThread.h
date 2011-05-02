@@ -23,7 +23,8 @@ class UpdateThread: public QThread
 
   QSqlDatabase m_database;
 
-  QReadWriteLock m_updateLock;                              //will be locked when containers is being updated
+  //will be locked when containers is being updated
+  QReadWriteLock m_updateLock;
 
   void loadUsers(Users &);
   void loadTags(DataMarks &);
@@ -51,5 +52,6 @@ class UpdateThread: public QThread
 
   public slots:
 
-    };
-#endif                                                      // UPDATETHREAD_H
+};
+// UPDATETHREAD_H
+#endif

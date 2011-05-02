@@ -24,5 +24,6 @@ class MapsUploadThread : public QThread
 
   private slots:
     void uploadingFinished();
-    };
-#endif                                                      // MAPSUPLOADTHREAD_H
+};
+// MAPSUPLOADTHREAD_H
+#endif

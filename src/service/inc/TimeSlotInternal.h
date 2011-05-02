@@ -55,7 +55,8 @@ class DbTimeSlot: public TimeSlot
     void setId(qlonglong id);
 
     virtual ~DbTimeSlot();
-    };
-#endif                                                      // _TIMESLOTINTERNAL_H_016577f1_6eeb_46b7_b170_f9b0865da811_INCLUDED
+};
+// _TIMESLOTINTERNAL_H_016577f1_6eeb_46b7_b170_f9b0865da811_INCLUDED
+#endif
 
-  /* ===[ End of file ]=== */
+/* ===[ End of file ]=== */

@@ -101,11 +101,12 @@ class DataMark: public QObject
     static double getDistance(double lat1, double lon1, double lat2, double lon2);
 
     virtual ~DataMark();
-    };
+};
 
-  bool operator<(const QSharedPointer<DataMark> &a, const QSharedPointer<DataMark> &b);
+bool operator<(const QSharedPointer<DataMark> &a, const QSharedPointer<DataMark> &b);
 
-  typedef ConcurrentVector<DataMark> DataMarks;
-#endif                                                      //_DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
+typedef ConcurrentVector<DataMark> DataMarks;
+//_DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
+#endif
 
-  /* ===[ End of file  ]=== */
+/* ===[ End of file  ]=== */

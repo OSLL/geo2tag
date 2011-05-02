@@ -80,9 +80,14 @@ namespace common
       MobilityGps(const MobilityGps& obj);
       MobilityGps& operator=(const MobilityGps& obj);
 
-      };                                                    // class MobilityGps
+      // class MobilityGps
+  };
 
-  }                                                         // namespace common
-#endif                                                      //_MobilityGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
+  // namespace common
+}
+
+
+//_MobilityGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */
