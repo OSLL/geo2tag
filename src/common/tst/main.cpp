@@ -39,16 +39,16 @@
 #include <QtTest/QtTest>
 #include <QtCore/QtCore>
 #include <QApplication>
-//#include "Class_Test.h"
+
+#include "User_Test.h"
 
 
 int main(int c, char **v)
 {
   QApplication app(c,v);
 
-//  Class_Test test1;
-//	QTest::qExec(&test1);
-
-	return 0; 
+  User_Test test;
+  QTest::qExec(&test);
+  return 0;
 }
 /* ===[ End of file $HeadURL$ ]=== */

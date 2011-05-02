@@ -1,7 +1,7 @@
 
 
 SOURCES += main.cpp 
-HEADERS += Test_User.h
+HEADERS += User_Test.h
 
 CONFIG   += qtestlib
 

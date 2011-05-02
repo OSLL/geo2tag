@@ -42,7 +42,7 @@
 #include <QSignalSpy>
 
 //include Application class
-#include "../inc/${CLASS}.h"
+//#include "../inc/${CLASS}.h"
 
 class ${CLASS}_Test : public QObject
 {
@@ -50,7 +50,7 @@ class ${CLASS}_Test : public QObject
 
 public:
   
-	${CLASS}_Test()
+  ${CLASS}_Test()
   {
 	  // initialization here
   }
@@ -59,12 +59,12 @@ private slots:
 
   void test1()
   {
-	  // see docs: http://doc.qt.nokia.com/4.7/qtest.html
+   // see docs: http://doc.qt.nokia.com/4.7/qtest.html
 
-		//QCOMPARE();
-		//QWARN();
-		//QVERIFY();
-		//QTEST();
+   //QCOMPARE();
+   //QWARN();
+   //QVERIFY();
+   //QTEST();
   }
 
 }; // class ${CLASS}_Test

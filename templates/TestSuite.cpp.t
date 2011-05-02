@@ -39,7 +39,10 @@
 #include <QtTest/QtTest>
 #include <QtCore/QtCore>
 #include <QApplication>
-//#include "Class_Test.h"
+
+
+// Test headers
+#include "${CLASS}_Test.h"
 
 
 int main(int c, char **v)

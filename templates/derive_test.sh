@@ -13,8 +13,8 @@ EMAIL=`git config --get user.email`
 YEAR=`date +%Y`
 
 FSUITE="main.cpp"
-FTESTCPP="Test_"$CLASS".cpp"
-FTEST="Test_"$CLASS".h"
+FTESTCPP=$CLASS"_Test.cpp"
+FTEST=$CLASS"_Test.h"
 
 A="cat <<EOF
 `cat TestSuite.cpp.t`

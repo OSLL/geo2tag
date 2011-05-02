@@ -46,25 +46,25 @@
 
 class User_Test : public QObject
 {
-  Q_OBJECT;
+    Q_OBJECT;
 
 public:
-  
-	User_Test()
-  {
-	  // initialization here
-  }
+
+    User_Test()
+    {
+        // initialization here
+    }
 
 private slots:
 
-  void test1()
-  {
-	  // see docs: http://doc.qt.nokia.com/4.7/qtest.html
+    void test1()
+    {
+        // see docs: http://doc.qt.nokia.com/4.7/qtest.html
 
-		//QCOMPARE();
-		//QWARN();
-		//QVERIFY();
-		//QTEST();
-  }
+        //QCOMPARE();
+        //QWARN();
+        //QVERIFY();
+        //QTEST();
+    }
 
 }; // class User_Test
