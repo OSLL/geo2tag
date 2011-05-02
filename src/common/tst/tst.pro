@@ -14,4 +14,4 @@ TEMPLATE = app
 
 QT += testlib
 
-TARGET = tests
+TARGET = test.suite

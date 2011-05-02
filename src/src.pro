@@ -16,7 +16,7 @@ maemo5: {
 
 linux: {
   SUBDIRS += \
-             json \
+             json json/tst \
              http_requests \
              maps \ 
 	           tracker\ 

@@ -1,5 +1,5 @@
 /*
- * Copyright ${YEAR}  ${AUTHOR}  ${EMAIL}
+ * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -30,47 +30,28 @@
  */
 
 /*!
- * \file ${FTEST}
- * \brief Test suite for ${CLASS} class
+ * \file main.cpp
+ * \brief Test suite for json
  *
  * PROJ: OSLL/geo2tag
- * ----------------------------------------------------------- */
+ * ------------------------------------------------------------------------ */
 
-
-#include <QObject>
 #include <QtTest/QtTest>
-#include <QSignalSpy>
-
-//include Application class
-//#include "../inc/${CLASS}.h"
+#include <QtCore/QtCore>
+#include <QApplication>
 
 
+// Test headers
+#include "JsonUser_Test.h"
 
-namespace Test
+
+int main(int c, char **v)
 {
-  class ${CLASS}_Test : public QObject
-  {
-    Q_OBJECT;
-  
-  public:
-    
-    ${CLASS}_Test()
-    {
-  	  // initialization here
-    }
-  
-  private slots:
-  
-    void test1()
-    {
-     // see docs: http://doc.qt.nokia.com/4.7/qtest.html
-  
-     //QCOMPARE();
-     //QWARN();
-     //QVERIFY();
-     //QTEST();
-    }
-  
-  }; // class ${CLASS}_Test
+  QApplication app(c,v);
 
-} // end of namespace Test
+  Test::JsonUser_Test test;
+  QTest::qExec(&test);
+
+	return 0; 
+}
+/* ===[ End of file $HeadURL$ ]=== */

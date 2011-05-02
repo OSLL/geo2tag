@@ -49,8 +49,8 @@ int main(int c, char **v)
 {
   QApplication app(c,v);
 
-//  Class_Test test1;
-//	QTest::qExec(&test1);
+  Test::Class_Test test;
+	QTest::qExec(&test);
 
 	return 0; 
 }
