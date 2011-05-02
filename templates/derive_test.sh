@@ -8,6 +8,9 @@ if [ -z "$2" ]; then echo 'Class name:'; read CLASS; else CLASS=$2; fi;
 UUID=`uuidgen | tr 'abcdef-' 'ABCDEF_'`
 NAME=TEST_${CLASS}_H
 GUID=_${NAME}_${UUID}_INCLUDED_
+AUTHOR=`git config --get user.name`
+EMAIL=`git config --get user.email`
+YEAR=`date +%Y`
 
 FSUITE="TestSuite.h"
 FTESTCPP="Test_"$CLASS".cpp"

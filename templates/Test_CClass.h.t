@@ -41,7 +41,8 @@
 #include <QtTest/QtTest>
 #include <QSignalSpy>
 
-#include "../app/summator.h"
+//include Application class
+#include "../inc/${CLASS}.h"
 
 class ${CLASS}_Test : public QObject
 {
