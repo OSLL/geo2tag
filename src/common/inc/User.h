@@ -62,7 +62,7 @@ protected:
 
 public:
 
-//    virtual qlonglong getId() const = 0;
+    virtual qlonglong getId() const = 0;
 
     void subscribe(const QSharedPointer<Channel>& channel);
 
@@ -76,10 +76,6 @@ public:
     void setPassword(const QString password);
 
     virtual ~User();
-
-
-    friend class User_Test;
-
 }; // class User
 
 typedef ConcurrentVector<User> Users;

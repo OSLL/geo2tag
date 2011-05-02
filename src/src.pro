@@ -3,7 +3,7 @@ include(../config.pri)
 
 
 CONFIG += ordered
-SUBDIRS = common
+SUBDIRS = common common/tst
 
 
 maemo5: {

@@ -41,42 +41,43 @@
 #include <QtTest/QtTest>
 #include <QSignalSpy>
 
-#include "../inc/User.h"
+#include "User_TestObj.h"
 
 namespace
 {
-   const QString LOGIN("name of user");
-   const QString PASSWD("parol");
+const QString LOGIN("name of user");
+const QString PASSWD("parol");
 }
 
-class User_Test : public QObject
+namespace Test
 {
-    Q_OBJECT;
-
-    User *m_object;
-
-
-
-public:
-
-    User_Test()
+    class User_Test : public QObject
     {
-        m_object = new User(LOGIN,PASSWD);
-    }
+        Q_OBJECT;
 
-    ~User_Test()
-    {
-        delete m_object;
-        m_object = NULL;
-    }
+        Test::UserTestImpl *m_object;
 
-private slots:
+    public:
 
-    void test1() const
-    {
-        QCOMPARE(m_object->getLogin(), LOGIN);
-        QCOMPARE(m_object->getPassword(), PASSWD);
-    }
+        User_Test()
+        {
+            m_object = new Test::UserTestImpl(LOGIN,PASSWD);
+        }
+
+        ~User_Test()
+        {
+            delete m_object;
+            m_object = NULL;
+        }
+
+    private slots:
+
+        void test1() const
+        {
+            QCOMPARE(m_object->getLogin(), LOGIN);
+            QCOMPARE(m_object->getPassword(), PASSWD);
+        }
 
 
-}; // class User_Test
+    }; // class User_Test
+}

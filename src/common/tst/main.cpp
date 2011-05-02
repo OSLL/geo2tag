@@ -47,7 +47,7 @@ int main(int c, char **v)
 {
   QApplication app(c,v);
 
-  User_Test test;
+  Test::User_Test test;
   QTest::qExec(&test);
   return 0;
 }
