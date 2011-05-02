@@ -40,7 +40,6 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _OnLineInformation_H_91CA39C8_1612_4CBC_B6C2_8ED74E337584_INCLUDED_
 #define _OnLineInformation_H_91CA39C8_1612_4CBC_B6C2_8ED74E337584_INCLUDED_
 
@@ -60,86 +59,85 @@
 
 namespace GUI
 {
-    /*!
-     * Object of this class contains up to date information about
-     * marks and available and subscribed channels.
-     * Users of this class can request to update the information
-     * and get new information through signals.
-     *
-     *
-     */
-    class OnLineInformation : public QObject
-    {
-        Q_OBJECT
+  /*!
+   * Object of this class contains up to date information about
+   * marks and available and subscribed channels.
+   * Users of this class can request to update the information
+   * and get new information through signals.
+   *
+   *
+   */
+  class OnLineInformation : public QObject
+  {
+    Q_OBJECT
 
-        QSharedPointer<DataMarks> m_marks;
-        QSharedPointer<Channels>  m_availableChannels;
-        QSharedPointer<Channels>  m_subscribedChannels;
-        QSharedPointer<Users > m_users;
+      QSharedPointer<DataMarks> m_marks;
+    QSharedPointer<Channels>  m_availableChannels;
+    QSharedPointer<Channels>  m_subscribedChannels;
+    QSharedPointer<Users > m_users;
 
-        /* We need something that represents user */
-        QSharedPointer<User> m_user;
-        QString m_userName;
-        QString m_userPassword;
-        QString m_auth_token;
-        
-        QTimer                      * m_updateTimer;
-        ApplyMarkQuery              * applyMarkQuery;
-        AvailableChannelsListQuery  * availableChannelsListQuery;
-        RSSFeedQuery                * rssFeedQuery;
-        SubscribeChannelQuery       * subscribeChannelQuery;
-        UnsubscribeChannelQuery     * unsubscribeChannelQuery;
-        SubscribedChannelsListQuery * subscribedChannelsListQuery;
-        LoginQuery                  * loginQuery;
+    /* We need something that represents user */
+    QSharedPointer<User> m_user;
+    QString m_userName;
+    QString m_userPassword;
+    QString m_auth_token;
 
-        OnLineInformation();
+    QTimer                      * m_updateTimer;
+    ApplyMarkQuery              * applyMarkQuery;
+    AvailableChannelsListQuery  * availableChannelsListQuery;
+    RSSFeedQuery                * rssFeedQuery;
+    SubscribeChannelQuery       * subscribeChannelQuery;
+    UnsubscribeChannelQuery     * unsubscribeChannelQuery;
+    SubscribedChannelsListQuery * subscribedChannelsListQuery;
+    LoginQuery                  * loginQuery;
+
+    OnLineInformation();
     public:
-        
-        ~OnLineInformation();
-        static OnLineInformation& getInstance();
 
-        QSharedPointer<DataMarks> getMarks() const;
-        QSharedPointer<Channels> getAvailableChannels() const;
-        QSharedPointer<Channels> getSubscribedChannels() const;
-        QSharedPointer<User> getUser() const;
-        QSharedPointer<Users> getUsers() const;
-        QSharedPointer<Channel> findChannel(const QString& channel) const;
+      ~OnLineInformation();
+      static OnLineInformation& getInstance();
+
+      QSharedPointer<DataMarks> getMarks() const;
+      QSharedPointer<Channels> getAvailableChannels() const;
+      QSharedPointer<Channels> getSubscribedChannels() const;
+      QSharedPointer<User> getUser() const;
+      QSharedPointer<Users> getUsers() const;
+      QSharedPointer<Channel> findChannel(const QString& channel) const;
 
     public slots:
-        void updateMarks();
-        void updateAvailableChannels();
-        void updateSubscribedChannels();
-        void subscribeChannel(QString channel);
-        void unsubscribeChannel(QString channel);
-        void applyMark(QString channel, QString title, QString link,
-                       QString description);
-        void setAuthToken(QString token);
+      void updateMarks();
+      void updateAvailableChannels();
+      void updateSubscribedChannels();
+      void subscribeChannel(QString channel);
+      void unsubscribeChannel(QString channel);
+      void applyMark(QString channel, QString title, QString link,
+        QString description);
+      void setAuthToken(QString token);
 
-    signals:
-        void marksUpdated(QSharedPointer<DataMarks> );
-        void availableChannelsUpdated(QSharedPointer<Channels> );
-        void subscribedChannelsUpdated(QSharedPointer<Channels> );
-        void subscribedChannel();
-        void unsubscribedChannel();
-        void markApplied(int status);
+      signals:
+      void marksUpdated(QSharedPointer<DataMarks> );
+      void availableChannelsUpdated(QSharedPointer<Channels> );
+      void subscribedChannelsUpdated(QSharedPointer<Channels> );
+      void subscribedChannel();
+      void unsubscribedChannel();
+      void markApplied(int status);
 
     private slots:
-        void onApplyMarkQueryResponseReceived(QString status,QString status_description);
-        void onAvailableChannelsListQueryResponseReceived(QSharedPointer<Channels>& channels);
-        void onRSSFeedQueryResponseReceived(QSharedPointer<DataMarks>& marks);
-        void onSubscribeChannelQueryResponseReceived(QString status,QString status_description);
-        void onUnsubscribeChannelQueryResponseReceived(QString status,QString status_description);
-        void onSubscribedChannelsListQueryResponseReceived(QSharedPointer<Channels>& channels);
-        void onLoginQueryResponseReceived(QString status, QString auth_token,QString status_description);
+      void onApplyMarkQueryResponseReceived(QString status,QString status_description);
+      void onAvailableChannelsListQueryResponseReceived(QSharedPointer<Channels>& channels);
+      void onRSSFeedQueryResponseReceived(QSharedPointer<DataMarks>& marks);
+      void onSubscribeChannelQueryResponseReceived(QString status,QString status_description);
+      void onUnsubscribeChannelQueryResponseReceived(QString status,QString status_description);
+      void onSubscribedChannelsListQueryResponseReceived(QSharedPointer<Channels>& channels);
+      void onLoginQueryResponseReceived(QString status, QString auth_token,QString status_description);
 
     private:
-        OnLineInformation(const OnLineInformation& obj);
-        OnLineInformation& operator=(const OnLineInformation& obj);
+      OnLineInformation(const OnLineInformation& obj);
+      OnLineInformation& operator=(const OnLineInformation& obj);
 
-    }; // class OnLineInformation
+      };                                                    // class OnLineInformation
 
-} // namespace GUI
-
-#endif //_OnLineInformation_H_91CA39C8_1612_4CBC_B6C2_8ED74E337584_INCLUDED_
+  }                                                         // namespace GUI
+#endif                                                      //_OnLineInformation_H_91CA39C8_1612_4CBC_B6C2_8ED74E337584_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

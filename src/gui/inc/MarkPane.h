@@ -38,7 +38,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _MarkPane_H_D511DD50_5236_4D1D_84DB_72BE3E938E3E_INCLUDED_
 #define _MarkPane_H_D511DD50_5236_4D1D_84DB_72BE3E938E3E_INCLUDED_
 
@@ -51,7 +50,7 @@
 
 namespace GUI
 {
-/*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
@@ -59,33 +58,32 @@ namespace GUI
   {
     Q_OBJECT
 
-    ListView *m_list;
+      ListView *m_list;
 
-  public:
+    public:
 
-    MarkPane(QWidget * parent);
+      MarkPane(QWidget * parent);
 
-    virtual ~MarkPane()
-    {
-    }
-  
-  public slots:
+      virtual ~MarkPane()
+      {
+        }
 
-    void refresh(QSharedPointer<Channel> channel);
-    
-    void updateCurrentChannelRadius();
+    public slots:
 
-    void showUrl(const QModelIndex &index);
+      void refresh(QSharedPointer<Channel> channel);
 
-  private:  
+      void updateCurrentChannelRadius();
 
-    MarkPane(const MarkPane& obj);
-    MarkPane& operator=(const MarkPane& obj);
+      void showUrl(const QModelIndex &index);
 
-  }; // class MarkPane
-  
-} // namespace GUI
+    private:
 
-#endif //_MarkPane_H_D511DD50_5236_4D1D_84DB_72BE3E938E3E_INCLUDED_
+      MarkPane(const MarkPane& obj);
+      MarkPane& operator=(const MarkPane& obj);
+
+      };                                                    // class MarkPane
+
+  }                                                         // namespace GUI
+#endif                                                      //_MarkPane_H_D511DD50_5236_4D1D_84DB_72BE3E938E3E_INCLUDED_
 
 /* ===[ End of file ]=== */

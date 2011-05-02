@@ -4,5 +4,4 @@
 #include "DefaultResponseJSON.h"
 
 typedef DefaultResponseJSON UnsubscribeChannelResponseJSON;
-
-#endif // UNSUBSCRIBERESPONSEJSON_H
+#endif                                                      // UNSUBSCRIBERESPONSEJSON_H

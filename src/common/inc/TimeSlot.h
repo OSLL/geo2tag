@@ -37,7 +37,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
 #define _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
 
@@ -50,14 +49,14 @@
 
 class TimeSlot: public QObject
 {
-    Q_OBJECT
-    qulonglong m_slot; // time slot
+  Q_OBJECT
+    qulonglong m_slot;                                      // time slot
 
-protected:
+  protected:
 
     TimeSlot(const qulonglong &slot);
 
-public:
+  public:
 
     virtual qlonglong getId() const = 0;
 
@@ -66,10 +65,9 @@ public:
 
     virtual ~TimeSlot();
 
-}; //class TimeSlot
+    };                                                      //class TimeSlot
 
-typedef ConcurrentVector<TimeSlot> TimeSlots;
+  typedef ConcurrentVector<TimeSlot> TimeSlots;
+#endif                                                      // _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
 
-#endif // _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
-
-/* ===[ End of file ]=== */
+  /* ===[ End of file ]=== */

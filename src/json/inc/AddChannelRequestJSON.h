@@ -5,12 +5,12 @@
 
 class AddChannelRequestJSON: public JsonSerializer
 {
-	Q_OBJECT;
-public:
+  Q_OBJECT;
+  public:
     AddChannelRequestJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 
     void parseJson(const QByteArray&);
-};
+    };
 #endif

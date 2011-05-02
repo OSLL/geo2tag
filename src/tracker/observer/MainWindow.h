@@ -13,29 +13,27 @@
 #include "ViewOptsWidget.h"
 class MainWindow:public QMainWindow
 {
-   Q_OBJECT
+  Q_OBJECT
 
-   MapScene * m_map;
-   QGraphicsView * m_view;
-   QMenu * m_menu;
-   QAction * m_settingsAction;
-   QAction * m_marksSettingsAction;
-   QStackedWidget * m_stackedWidget;
-   DataThread * m_thread;
-   OptionsWidget * m_optWidget;
-   ViewOptsWidget *m_marksOptWidget;
+    MapScene * m_map;
+  QGraphicsView * m_view;
+  QMenu * m_menu;
+  QAction * m_settingsAction;
+  QAction * m_marksSettingsAction;
+  QStackedWidget * m_stackedWidget;
+  DataThread * m_thread;
+  OptionsWidget * m_optWidget;
+  ViewOptsWidget *m_marksOptWidget;
 
-public:
-   MainWindow(QWidget *parent = 0);
+  public:
+    MainWindow(QWidget *parent = 0);
 
-protected:
-   void showEvent(QShowEvent * e);
+  protected:
+    void showEvent(QShowEvent * e);
 
-private slots:
-   void settings();
-   void marksSettings();
-   void settingsDone();
-};
-
+  private slots:
+    void settings();
+    void marksSettings();
+    void settingsDone();
+    };
 #endif
-

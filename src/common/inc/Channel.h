@@ -37,7 +37,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
 #define _Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
 
@@ -50,20 +49,20 @@
 
 class Channel: public QObject
 {
-    Q_OBJECT
-    QString m_name; //!< channel name
-    QString m_description; //!< Description for channel
-    QString m_url; //!< URL for mark
-    double m_activeRadius; //< Radius for visible marks
+  Q_OBJECT
+    QString m_name;                                         //!< channel name
+  QString m_description;                                    //!< Description for channel
+  QString m_url;                                            //!< URL for mark
+  double m_activeRadius;                                    //< Radius for visible marks
 
-    bool m_isDisplayed; //!< Displayed on the UI
+  bool m_isDisplayed;                                       //!< Displayed on the UI
 
-    QSharedPointer<TimeSlot> m_timeSlot;
+  QSharedPointer<TimeSlot> m_timeSlot;
 
-protected:
+  protected:
     Channel(const QString &name, const QString &description, const QString& url="");
 
-public:
+  public:
 
     virtual qlonglong getId() const = 0;
 
@@ -87,10 +86,9 @@ public:
     QSharedPointer<TimeSlot> getTimeSlot() const;
 
     virtual ~Channel();
-}; // class Channel
+    };                                                      // class Channel
 
-typedef ConcurrentVector<Channel> Channels;
+  typedef ConcurrentVector<Channel> Channels;
+#endif                                                      //_Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
 
-#endif //_Channel_H_480D4E41_537B_41D1_A67C_326A700DDC2D_INCLUDED_
-
-/* ===[ End of file ]=== */
+  /* ===[ End of file ]=== */

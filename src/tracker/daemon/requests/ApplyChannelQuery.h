@@ -40,7 +40,6 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _ApplyChannelQuery_H_A2EBB6AB_07D4_4326_AB6A_39441A3DD564_INCLUDED_
 #define _ApplyChannelQuery_H_A2EBB6AB_07D4_4326_AB6A_39441A3DD564_INCLUDED_
 
@@ -49,57 +48,56 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-
 /*!
-   * Class description. May use HTML formatting
-   *
-   */
-namespace GUI{
-class ApplyChannelQuery : public QObject
+ * Class description. May use HTML formatting
+ *
+ */
+namespace GUI
 {
+  class ApplyChannelQuery : public QObject
+  {
     Q_OBJECT
 
-private:
-    QNetworkAccessManager *manager;
+      private:
+      QNetworkAccessManager *manager;
 
-    /* Url of th request */
-    QString m_httpQuery;
+      /* Url of th request */
+      QString m_httpQuery;
 
-    /* Body of the request */
-    QString m_jsonQuery;
+      /* Body of the request */
+      QString m_jsonQuery;
 
-public:
-    ApplyChannelQuery(QObject *parent = 0);
+    public:
+      ApplyChannelQuery(QObject *parent = 0);
 
-    ApplyChannelQuery(QString auth_token, QString name, QString description,
-                      QString url, qreal activeRadius, QObject *parent = 0);
+      ApplyChannelQuery(QString auth_token, QString name, QString description,
+        QString url, qreal activeRadius, QObject *parent = 0);
 
-    void setQuery(QString auth_token, QString name, QString description,
-                  QString url, qreal activeRadius);
+      void setQuery(QString auth_token, QString name, QString description,
+        QString url, qreal activeRadius);
 
-    ~ApplyChannelQuery();
+      ~ApplyChannelQuery();
 
-    const QString& getHttpQuery();
-    const QString& getJsonQuery();
+      const QString& getHttpQuery();
+      const QString& getJsonQuery();
 
-    void doRequest();
+      void doRequest();
 
-signals:
-    void responseReceived(QString status,QString status_description);
+      signals:
+      void responseReceived(QString status,QString status_description);
 
-private slots:
-    void onManagerFinished(QNetworkReply *reply);
-    void onReplyError(QNetworkReply::NetworkError);
-    void onManagerSslErrors();
+    private slots:
+      void onManagerFinished(QNetworkReply *reply);
+      void onReplyError(QNetworkReply::NetworkError);
+      void onManagerSslErrors();
 
-private:
-    /* \todo Do we need next constructor and overloaded operator? */
-    ApplyChannelQuery(const ApplyChannelQuery& obj);
-    ApplyChannelQuery& operator=(const ApplyChannelQuery& obj);
+    private:
+      /* \todo Do we need next constructor and overloaded operator? */
+      ApplyChannelQuery(const ApplyChannelQuery& obj);
+      ApplyChannelQuery& operator=(const ApplyChannelQuery& obj);
 
-}; // class ApplyMarkQuery
-}
-
-#endif //_ApplyChannelQuery_H_A2EBB6AB_07D4_4326_AB6A_39441A3DD564_INCLUDED_
+      };                                                    // class ApplyMarkQuery
+  }
+#endif                                                      //_ApplyChannelQuery_H_A2EBB6AB_07D4_4326_AB6A_39441A3DD564_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

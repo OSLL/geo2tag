@@ -42,7 +42,6 @@
 
 #include "User_Test.h"
 
-
 int main(int c, char **v)
 {
   QApplication app(c,v);
@@ -50,5 +49,5 @@ int main(int c, char **v)
   Test::User_Test test;
   QTest::qExec(&test);
   return 0;
-}
+  }
 /* ===[ End of file $HeadURL$ ]=== */

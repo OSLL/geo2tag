@@ -3,8 +3,7 @@
 
 class CDynamicCastFailure
 {
-public:
-        CDynamicCastFailure(unsigned short errorcode, unsigned char package_id);
-};
-
+  public:
+    CDynamicCastFailure(unsigned short errorcode, unsigned char package_id);
+    };
 #endif

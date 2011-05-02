@@ -36,9 +36,8 @@
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
-
 
 #ifndef _MarkTableDelegat_H_C595B6B3_EF48_4F54_879C_E662D3876A5C_INCLUDED_
 #define _MarkTableDelegat_H_C595B6B3_EF48_4F54_879C_E662D3876A5C_INCLUDED_
@@ -66,23 +65,22 @@
 namespace GUI
 {
 
- /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
   class MarkTableDelegat : public QItemDelegate
   {
-     Q_OBJECT;
-  public:
-    MarkTableDelegat(QWidget *parent =NULL);
+    Q_OBJECT;
+    public:
+      MarkTableDelegat(QWidget *parent =NULL);
 
-    virtual ~MarkTableDelegat();
+      virtual ~MarkTableDelegat();
 
-    int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const;
-  }; // class MarkTableDelegat
-   
-} // namespace GUI
+      int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const;
+      };                                                    // class MarkTableDelegat
 
-#endif //_MarkTableDelegat_H_C595B6B3_EF48_4F54_879C_E662D3876A5C_INCLUDED_
+  }                                                         // namespace GUI
+#endif                                                      //_MarkTableDelegat_H_C595B6B3_EF48_4F54_879C_E662D3876A5C_INCLUDED_
 
 /* ===[ End of file  ]=== */

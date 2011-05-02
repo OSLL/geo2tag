@@ -38,7 +38,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _MapPane_H_974943CF_0D73_468D_AD1A_AE6CDCE44E04_INCLUDED_
 #define _MapPane_H_974943CF_0D73_468D_AD1A_AE6CDCE44E04_INCLUDED_
 
@@ -46,7 +45,7 @@
 
 namespace GUI
 {
- /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
@@ -57,28 +56,27 @@ namespace GUI
     MapWidget *m_picture;
     QSlider   *m_slider;
 
-  public:
-    MapPane(QWidget * parent);
+    public:
+      MapPane(QWidget * parent);
 
-    virtual ~MapPane()
-    {
-    }
+      virtual ~MapPane()
+      {
+        }
 
-    void setPosition(const QPointF& pos);
-    MapWidget* getMapWidget();
+      void setPosition(const QPointF& pos);
+      MapWidget* getMapWidget();
 
     public slots:
-    
-    void updateMap();
-    
-  private:    
-    MapPane(const MapPane& obj);
-    MapPane& operator=(const MapPane& obj);
 
-  }; // class MapPane
-  
-} // namespace GUI
+      void updateMap();
 
-#endif //_MapPane_H_974943CF_0D73_468D_AD1A_AE6CDCE44E04_INCLUDED_
+    private:
+      MapPane(const MapPane& obj);
+      MapPane& operator=(const MapPane& obj);
+
+      };                                                    // class MapPane
+
+  }                                                         // namespace GUI
+#endif                                                      //_MapPane_H_974943CF_0D73_468D_AD1A_AE6CDCE44E04_INCLUDED_
 
 /* ===[ End of file ]=== */

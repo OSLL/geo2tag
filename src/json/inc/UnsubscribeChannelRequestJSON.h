@@ -4,5 +4,4 @@
 #include "SubscribeChannelJSON.h"
 
 typedef SubscribeChannelRequestJSON UnsubscribeChannelRequestJSON;
-
-#endif // UNSUBSCRIBEREQUESTJSON_H
+#endif                                                      // UNSUBSCRIBEREQUESTJSON_H

@@ -38,15 +38,15 @@
 
 class RSSFeedRequestJSON: public JsonSerializer
 {
-    double m_latitude;
-    double m_longitude;
-    double m_radius;
+  double m_latitude;
+  double m_longitude;
+  double m_radius;
 
-public:
+  public:
     RSSFeedRequestJSON(double latitude,
-                       double longitude,
-                       double radius,
-                       QObject *parent=0);
+      double longitude,
+      double radius,
+      QObject *parent=0);
 
     RSSFeedRequestJSON(QObject *parent=0);
 
@@ -54,7 +54,6 @@ public:
     double getLongitude() const;
     double getRadius() const;
     QString getAuthToken() const;
-
 
     void setLatitude(double latitude);
     void setLongitude(double longitude);
@@ -66,6 +65,5 @@ public:
 
     ~RSSFeedRequestJSON();
 
-};//class RSSFeedRequestJSON
-
-#endif // RSSFEEDREQUESTJSON_H
+    };                                                      //class RSSFeedRequestJSON
+#endif                                                      // RSSFEEDREQUESTJSON_H

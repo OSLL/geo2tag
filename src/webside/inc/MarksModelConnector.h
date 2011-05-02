@@ -9,15 +9,15 @@ class MarksModel;
 
 class MarksModelConnector:public QObject
 {
-	Q_OBJECT;
-	QObject * m_obj;
-	MarksModel * m_marksModel;
-        void (MarksModel::*m_function)(void);
-public:
-	MarksModelConnector(QObject * obj,MarksModel * wt,void (MarksModel::*function)(void),QObject * parent=0);
+  Q_OBJECT;
+  QObject * m_obj;
+  MarksModel * m_marksModel;
+  void (MarksModel::*m_function)(void);
+  public:
+    MarksModelConnector(QObject * obj,MarksModel * wt,void (MarksModel::*function)(void),QObject * parent=0);
 
-public Q_SLOTS:
-	void triggered();
+  public Q_SLOTS:
+    void triggered();
 
-};
+    };
 #endif

@@ -10,37 +10,37 @@
 #include <QFile>
 class GeneratorDaemon: public QThread
 {
-	Q_OBJECT;
+  Q_OBJECT;
 
-	// User gotten after auth
-	QSharedPointer<User> m_user;
+  // User gotten after auth
+  QSharedPointer<User> m_user;
 
-	// Track channelname
-	QString m_channelName;
+  // Track channelname
+  QString m_channelName;
 
-	// List, where marks are stored
-	QList<QPointF> m_marks;
+  // List, where marks are stored
+  QList<QPointF> m_marks;
 
-	// Read all marks from file, specified in constructor, to m_marks
-	void readMarks();
+  // Read all marks from file, specified in constructor, to m_marks
+  void readMarks();
 
-	// This function will run thread
-	void run();
+  // This function will run thread
+  void run();
 
-	// Query needed to recieve auth_token
-	LoginQuery * m_loginQuery;
+  // Query needed to recieve auth_token
+  LoginQuery * m_loginQuery;
 
-	// Query needed to send marks
-	AddNewMarkQuery * m_tagQuery;
+  // Query needed to send marks
+  AddNewMarkQuery * m_tagQuery;
 
-	bool m_isConnected;
-public:
-	GeneratorDaemon();
-	GeneratorDaemon(const QString& channelName);
-	~GeneratorDaemon();
-private slots:
-	void onTagAdded();
-	void onConnected();
-	void onError(QString error);
-};
+  bool m_isConnected;
+  public:
+    GeneratorDaemon();
+    GeneratorDaemon(const QString& channelName);
+    ~GeneratorDaemon();
+  private slots:
+    void onTagAdded();
+    void onConnected();
+    void onError(QString error);
+    };
 #endif

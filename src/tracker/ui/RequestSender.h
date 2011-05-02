@@ -6,11 +6,11 @@
 
 class RequestSender : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
     Status m_status;
-    QTcpSocket *m_socket;
+  QTcpSocket *m_socket;
 
-public:
+  public:
 
     RequestSender(QTcpSocket *socket, QObject *parent = 0);
 
@@ -36,9 +36,8 @@ public:
     /* get status of the daemon */
     struct Status status();
 
-private slots:
+  private slots:
     void readyRead();
 
-};
-
-#endif // REQUESTSENDER_H
+    };
+#endif                                                      // REQUESTSENDER_H

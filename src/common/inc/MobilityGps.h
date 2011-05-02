@@ -37,11 +37,8 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _MobilityGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
 #define _MobilityGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
-
-
 
 #include "GpsInfo.h"
 #include <QObject>
@@ -60,33 +57,32 @@ namespace common
    * Class description. May use HTML formatting
    *
    */
-    class MobilityGps: public QObject, public Gps
-    {
-        Q_OBJECT
+  class MobilityGps: public QObject, public Gps
+  {
+    Q_OBJECT
 
-        static double m_longitude;
-        static double m_latitude;
+      static double m_longitude;
+    static double m_latitude;
 
     public:
-        MobilityGps(QObject *parent = 0);
+      MobilityGps(QObject *parent = 0);
 
-        virtual double getLongitude() const;
+      virtual double getLongitude() const;
 
-        virtual double getLatitude() const;
+      virtual double getLatitude() const;
 
-        virtual ~MobilityGps();
+      virtual ~MobilityGps();
 
     private slots:
-        void positionUpdated(QGeoPositionInfo info);
+      void positionUpdated(QGeoPositionInfo info);
 
     private:
-        MobilityGps(const MobilityGps& obj);
-        MobilityGps& operator=(const MobilityGps& obj);
+      MobilityGps(const MobilityGps& obj);
+      MobilityGps& operator=(const MobilityGps& obj);
 
-    }; // class MobilityGps
+      };                                                    // class MobilityGps
 
-} // namespace common
-
-#endif //_MobilityGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
+  }                                                         // namespace common
+#endif                                                      //_MobilityGps_H_21C729E1_9D6C_4EE5_87CC_A3579FDA1E3C_INCLUDED_
 
 /* ===[ End of file ]=== */

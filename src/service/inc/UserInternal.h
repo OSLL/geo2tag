@@ -35,7 +35,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 #define _UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 
@@ -43,12 +42,12 @@
 #include "User.h"
 #include "ChannelInternal.h"
 
- /*!
-   *
-   */
-  class DbUser: public User
-  {
-    qlonglong m_id;
+/*!
+ *
+ */
+class DbUser: public User
+{
+  qlonglong m_id;
 
   public:
     DbUser(const QString& login, const QString& pass, qlonglong id, const QString& token);
@@ -57,8 +56,7 @@
     void setId(qlonglong);
 
     ~DbUser();
-  }; // class UserInternal
+    };                                                      // class UserInternal
+#endif                                                      //_UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 
-#endif //_UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
-
-/* ===[ End of file ]=== */
+  /* ===[ End of file ]=== */

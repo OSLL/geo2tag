@@ -40,10 +40,8 @@
 #include <QtCore/QtCore>
 #include <QApplication>
 
-
 // Test headers
 #include "JsonUser_Test.h"
-
 
 int main(int c, char **v)
 {
@@ -52,6 +50,6 @@ int main(int c, char **v)
   Test::JsonUser_Test test;
   QTest::qExec(&test);
 
-	return 0; 
-}
+  return 0;
+  }
 /* ===[ End of file $HeadURL$ ]=== */

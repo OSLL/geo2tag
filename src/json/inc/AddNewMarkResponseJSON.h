@@ -4,5 +4,4 @@
 #include "DefaultResponseJSON.h"
 
 typedef DefaultResponseJSON AddNewMarkResponseJSON;
-
-#endif // ADDNEWMARKRESPONSEJSON_H
+#endif                                                      // ADDNEWMARKRESPONSEJSON_H

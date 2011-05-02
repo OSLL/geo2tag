@@ -4,5 +4,4 @@
 #include "DefaultResponseJSON.h"
 
 typedef DefaultResponseJSON AddChannelResponseJSON;
-
-#endif // ADDCHANNELRESPONSEJSON_H
+#endif                                                      // ADDCHANNELRESPONSEJSON_H

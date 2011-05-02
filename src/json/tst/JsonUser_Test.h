@@ -36,7 +36,6 @@
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-
 #include <QObject>
 #include <QtTest/QtTest>
 #include <QDebug>
@@ -44,38 +43,34 @@
 //include Application class
 #include "../inc/JsonUser.h"
 
-
-
 namespace Test
 {
   class JsonUser_Test : public QObject
   {
     Q_OBJECT;
 
-      JsonUser *m_object;
+    JsonUser *m_object;
 
-  
-  public:
-    
-    JsonUser_Test()
-    {
-          m_object = new JsonUser("kkv");
-    }
+    public:
 
-    ~JsonUser_Test()
-    {
+      JsonUser_Test()
+      {
+        m_object = new JsonUser("kkv");
+        }
+
+      ~JsonUser_Test()
+      {
         delete m_object;
         m_object = NULL;
-    }
+        }
 
+    private slots:
 
-  private slots:
-  
-    void testId()
-    {
-       QCOMPARE(m_object->getId(),qlonglong(0));
-    }
-  
-  }; // class JsonUser_Test
+      void testId()
+      {
+        QCOMPARE(m_object->getId(),qlonglong(0));
+        }
 
-} // end of namespace Test
+      };                                                    // class JsonUser_Test
+
+  }                                                         // end of namespace Test

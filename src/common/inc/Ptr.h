@@ -41,134 +41,133 @@ class CPtr
 {
   T *m_p;
 
-protected:
-  void setPtr(T* p)
-  {
-    m_p=p;
-  }
+  protected:
+    void setPtr(T* p)
+    {
+      m_p=p;
+      }
 
-public:
-  typedef T Type;
+  public:
+    typedef T Type;
 
-  CPtr(T *p=NULL): m_p(p)
-  {
-  }
+    CPtr(T *p=NULL): m_p(p)
+    {
+      }
 
-  operator T*() const
-  {
-    return m_p;
-  }
+    operator T*() const
+    {
+      return m_p;
+      }
 
-  T* operator ->() const
-  {
-//    if(m_p==NULL)
-//      throw null-pointer-exception
-    return m_p;
-  }
+    T* operator ->() const
+    {
+      //    if(m_p==NULL)
+      //      throw null-pointer-exception
+      return m_p;
+      }
 
-  template<typename NewType>
-  NewType dynamicCast() const
-  {
-    return dynamic_cast<NewType>(m_p);
-  }
+    template<typename NewType>
+      NewType dynamicCast() const
+    {
+      return dynamic_cast<NewType>(m_p);
+      }
 
-  template<typename NewType>
-  NewType staticCast() const
-  {
-    return static_cast<NewType>(m_p);
-  }
-};
-
-/*!
- * \brief шаблонный класс указателя с подсчетом ссылок.
- *
- * каждый экземпляр CCntPtr держит одну ссылку на указуемый
- * объект. класс T должен иметь public-функцию ref(long)
- * для изменения счетчика ссылок. реализация не зависит от
- * способа, которым создан указуемый объект:
- *
- * T x;
- * CCntPtr<T> pT=&x;
- *
- * вполне корректно, если объект x знает как вести себя при
- * изменении счетчика ссылок.
- */
-template<class T>
-class CCntPtr: public CPtr<T>
-{
-  void init(T *p)
-  {
-    setPtr(p);
-    if(p!=NULL)
-      p->ref(1);
-  }
-
-public:
-  CCntPtr()
-  {
-  }
-
-  CCntPtr(T *p)
-  {
-    init(p);
-  }
-
-  CCntPtr(const CCntPtr& p): CPtr<T>()
-  {
-    init(p);
-  }
-
-  ~CCntPtr()
-  {
-    release();
-  }
-
-  template<typename Y>
-  operator CCntPtr<Y>() const
-  {
-    return CCntPtr<Y>((Y*)(*this));
-  }
+    template<typename NewType>
+      NewType staticCast() const
+    {
+      return static_cast<NewType>(m_p);
+      }
+    };
 
   /*!
-   * \brief оператор присваивания.
+   * \brief шаблонный класс указателя с подсчетом ссылок.
    *
-   * освобождает предыдущий объект.
+   * каждый экземпляр CCntPtr держит одну ссылку на указуемый
+   * объект. класс T должен иметь public-функцию ref(long)
+   * для изменения счетчика ссылок. реализация не зависит от
+   * способа, которым создан указуемый объект:
+   *
+   * T x;
+   * CCntPtr<T> pT=&x;
+   *
+   * вполне корректно, если объект x знает как вести себя при
+   * изменении счетчика ссылок.
    */
-  CCntPtr& operator=(CCntPtr a)
+  template<class T>
+  class CCntPtr: public CPtr<T>
   {
-    T* p=*this;
-    setPtr(a);
-    a.setPtr(p);
-    return *this;
-  }
+    void init(T *p)
+    {
+      setPtr(p);
+      if(p!=NULL)
+        p->ref(1);
+      }
 
-  /*!
-   * \brief освобождение объекта на который мы указываем
-   */
-  void release()
+  public:
+    CCntPtr()
+    {
+      }
+
+    CCntPtr(T *p)
+    {
+      init(p);
+      }
+
+    CCntPtr(const CCntPtr& p): CPtr<T>()
+    {
+      init(p);
+      }
+
+    ~CCntPtr()
+    {
+      release();
+      }
+
+    template<typename Y>
+      operator CCntPtr<Y>() const
+    {
+      return CCntPtr<Y>((Y*)(*this));
+      }
+
+    /*!
+     * \brief оператор присваивания.
+     *
+     * освобождает предыдущий объект.
+     */
+    CCntPtr& operator=(CCntPtr a)
+    {
+      T* p=*this;
+      setPtr(a);
+      a.setPtr(p);
+      return *this;
+      }
+
+    /*!
+     * \brief освобождение объекта на который мы указываем
+     */
+    void release()
+    {
+      if(*this!=NULL)
+        (*this)->ref(-1);
+      this->setPtr(NULL);
+      }
+    };
+
+  template<class T>
+  CCntPtr<T> makeCntPtr(T *p)
   {
-    if(*this!=NULL)
-      (*this)->ref(-1);
-    this->setPtr(NULL);
-  }
-};
+    return CCntPtr<T>(p);
+    }
 
-template<class T>
-CCntPtr<T> makeCntPtr(T *p)
-{
-  return CCntPtr<T>(p);
-}
+  template<typename NewType,typename T>
+  NewType staticCast(const CPtr<T>& p)
+  {
+    return p.template staticCast<NewType>();
+    }
 
-template<typename NewType,typename T>
-NewType staticCast(const CPtr<T>& p)
-{
-  return p.template staticCast<NewType>();
-}
-
-template<typename NewType,typename T>
-NewType dynamicCast(const CPtr<T>& p)
-{
-  return p.template dynamicCast<NewType>();
-}
-
-#endif // PTR_H
+  template<typename NewType,typename T>
+  NewType dynamicCast(const CPtr<T>& p)
+  {
+    return p.template dynamicCast<NewType>();
+    }
+#endif                                                      // PTR_H

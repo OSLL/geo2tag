@@ -4,12 +4,11 @@
 
 class LoginRequestJSON: public JsonSerializer
 {
-public:
+  public:
     LoginRequestJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 
     void parseJson(const QByteArray&);
-};
-
-#endif // LOGINREQUESTJSON_H
+    };
+#endif                                                      // LOGINREQUESTJSON_H

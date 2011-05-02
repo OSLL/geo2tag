@@ -38,29 +38,27 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 #define _JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 
 #include "Channel.h"
 
-    class JsonChannel: public Channel
-    {
-        static qlonglong globalChannelId;
-        qlonglong m_id;
+class JsonChannel: public Channel
+{
+  static qlonglong globalChannelId;
+  qlonglong m_id;
 
-    public:
-        JsonChannel(const QString &name,
-                const QString &description,
-                const QString &url="");
+  public:
+    JsonChannel(const QString &name,
+      const QString &description,
+      const QString &url="");
 
-        qlonglong getId() const;
+    qlonglong getId() const;
 
-        void setId(qlonglong id);
+    void setId(qlonglong id);
 
-        virtual ~JsonChannel();
+    virtual ~JsonChannel();
     };
+#endif                                                      //_JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 
-#endif //_JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
-
-/* ===[ End of file ]=== */
+  /* ===[ End of file ]=== */

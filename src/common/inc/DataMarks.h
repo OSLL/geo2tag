@@ -39,7 +39,6 @@
  *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
 #define _DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
 
@@ -52,29 +51,29 @@
 
 class DataMark: public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
     double m_latitude;
-    double m_longitude;
+  double m_longitude;
 
-    QString m_label;
-    QString m_description;
-    QString m_url;
-    QDateTime m_time;
+  QString m_label;
+  QString m_description;
+  QString m_url;
+  QDateTime m_time;
 
-    QSharedPointer<User> m_user;
+  QSharedPointer<User> m_user;
 
-    QSharedPointer<Channel> m_channel;
+  QSharedPointer<Channel> m_channel;
 
-public:
+  public:
 
     DataMark(double latitude, double longitude, QString label,
-             QString description, QString url, QDateTime time);
+      QString description, QString url, QDateTime time);
 
     void setUser(QSharedPointer<User> user);
 
     void setChannel(QSharedPointer<Channel> channel);
 
-public:
+  public:
 
     virtual qlonglong getId() const = 0;
 
@@ -102,12 +101,11 @@ public:
     static double getDistance(double lat1, double lon1, double lat2, double lon2);
 
     virtual ~DataMark();
-};
+    };
 
-bool operator<(const QSharedPointer<DataMark> &a, const QSharedPointer<DataMark> &b);
+  bool operator<(const QSharedPointer<DataMark> &a, const QSharedPointer<DataMark> &b);
 
-typedef ConcurrentVector<DataMark> DataMarks;
+  typedef ConcurrentVector<DataMark> DataMarks;
+#endif                                                      //_DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
 
-#endif //_DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
-
-/* ===[ End of file  ]=== */
+  /* ===[ End of file  ]=== */

@@ -38,7 +38,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _MarkEditor_H_8C1685C8_8471_494E_A858_6FB0BC6AD16C_INCLUDED_
 #define _MarkEditor_H_8C1685C8_8471_494E_A858_6FB0BC6AD16C_INCLUDED_
 
@@ -50,42 +49,40 @@
 
 namespace GUI
 {
-    /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
-    class MarkEditor : public QWidget
-    {
-        Q_OBJECT
+  class MarkEditor : public QWidget
+  {
+    Q_OBJECT
 
-        QPushButton  *m_ok;
-        QComboBox    *m_combo;
-        QTextEdit    *m_text;
+      QPushButton  *m_ok;
+    QComboBox    *m_combo;
+    QTextEdit    *m_text;
 
     public:
 
-        MarkEditor(QWidget *parent);
-        virtual ~MarkEditor()
-        {
+      MarkEditor(QWidget *parent);
+      virtual ~MarkEditor()
+      {
         }
 
-
     public slots:
-        void update();
+      void update();
 
     private slots:
-        void applyMark();
-        void onSubscribedChannelsUpdated(QSharedPointer<Channels> channels);
-        void onMarkApplied(int status);
+      void applyMark();
+      void onSubscribedChannelsUpdated(QSharedPointer<Channels> channels);
+      void onMarkApplied(int status);
 
     private:
-        MarkEditor(const MarkEditor& obj);
-        MarkEditor& operator=(const MarkEditor& obj);
+      MarkEditor(const MarkEditor& obj);
+      MarkEditor& operator=(const MarkEditor& obj);
 
-    }; // class MarkEditor
+      };                                                    // class MarkEditor
 
-} // namespace GUI
-
-#endif //_MarkEditor_H_8C1685C8_8471_494E_A858_6FB0BC6AD16C_INCLUDED_
+  }                                                         // namespace GUI
+#endif                                                      //_MarkEditor_H_8C1685C8_8471_494E_A858_6FB0BC6AD16C_INCLUDED_
 
 /* ===[ End of file ]=== */

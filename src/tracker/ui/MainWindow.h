@@ -11,21 +11,21 @@
 
 class MainWindow : public QMainWindow, private Ui::MainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
     bool m_isServiceStarted;
-    QTcpSocket *m_daemon;
-    QTextStream *m_device;
-    QString m_lastCoord;
-    QString m_message; // contain data, recieved from daemon
+  QTcpSocket *m_daemon;
+  QTextStream *m_device;
+  QString m_lastCoord;
+  QString m_message;                                        // contain data, recieved from daemon
 
-    LogWidget * m_logWidget;
-    OptionsWidget *m_optionsWidget;
-    AboutWidget * m_aboutWidget;
+  LogWidget * m_logWidget;
+  OptionsWidget *m_optionsWidget;
+  AboutWidget * m_aboutWidget;
 
-    void updateState();
+  void updateState();
 
-private slots:
+  private slots:
     void startButtonClicked();
     void logButtonClicked();
     void doneButtonClicked();
@@ -37,11 +37,10 @@ private slots:
 
     void moveToFirstPage();
 
-public:
+  public:
     explicit MainWindow(QWidget *parent = 0);
 
-protected:
+  protected:
     void changeEvent(QEvent *e);
-};
-
-#endif // MAINWINDOW_H
+    };
+#endif                                                      // MAINWINDOW_H

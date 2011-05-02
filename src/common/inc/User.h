@@ -35,7 +35,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 #define _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 
@@ -47,20 +46,20 @@
 
 class User: public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
     QString m_login;
-    QString m_password;
+  QString m_password;
 
-    QString m_result;
-    QString m_token;
-    QSharedPointer<Channels> m_channels; // list of subscribed channels
+  QString m_result;
+  QString m_token;
+  QSharedPointer<Channels> m_channels;                      // list of subscribed channels
 
-protected:
+  protected:
     User(const QString& name, const QString& passw);
 
     void setToken(const QString&);
 
-public:
+  public:
 
     virtual qlonglong getId() const = 0;
 
@@ -76,10 +75,9 @@ public:
     void setPassword(const QString password);
 
     virtual ~User();
-}; // class User
+    };                                                      // class User
 
-typedef ConcurrentVector<User> Users;
+  typedef ConcurrentVector<User> Users;
+#endif                                                      //_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 
-#endif //_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
-
-/* ===[ End of file ]=== */
+  /* ===[ End of file ]=== */

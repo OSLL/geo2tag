@@ -34,30 +34,29 @@
 namespace GUI
 {
 
-/*!
-  * Class description. May use HTML formatting
-  *
-  */
- class ListView : public QTableView
- {
-   Q_OBJECT;
-   QTimer *timer; // auto-updating timer
- public:
-   ListView(QWidget *parent);
+  /*!
+   * Class description. May use HTML formatting
+   *
+   */
+  class ListView : public QTableView
+  {
+    Q_OBJECT;
+    QTimer *timer;                                          // auto-updating timer
+    public:
+      ListView(QWidget *parent);
 
-   virtual ~ListView()
-   {
-   }
+      virtual ~ListView()
+      {
+        }
 
-public slots:
-   void updateModel();
+    public slots:
+      void updateModel();
 
- private:
-   ListView(const ListView& obj);
-   ListView& operator=(const ListView& obj);
-   QStandardItemModel *m_model;
+    private:
+      ListView(const ListView& obj);
+      ListView& operator=(const ListView& obj);
+      QStandardItemModel *m_model;
 
-
- }; // class ListView
-}
-#endif // LISTVIEW_H
+      };                                                    // class ListView
+  }
+#endif                                                      // LISTVIEW_H

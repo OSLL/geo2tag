@@ -5,13 +5,12 @@
 
 class AddNewMarkRequestJSON : public JsonSerializer
 {
-public:
+  public:
 
     AddNewMarkRequestJSON(QObject *parent=0);
 
     virtual QByteArray getJson() const;
 
     virtual void parseJson(const QByteArray&);
-};
-
-#endif // ADDNEWMARKREQUESTJSON_H
+    };
+#endif                                                      // ADDNEWMARKREQUESTJSON_H

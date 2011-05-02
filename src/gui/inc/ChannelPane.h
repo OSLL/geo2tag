@@ -38,7 +38,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _ChannelPane_H_A4534852_66A8_4982_975D_0D67B6F33B44_INCLUDED_
 #define _ChannelPane_H_A4534852_66A8_4982_975D_0D67B6F33B44_INCLUDED_
 
@@ -50,12 +49,12 @@
 
 namespace GUI
 {
- /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
-  class ChannelPane : public QWidget //public QListView
-  {  
+  class ChannelPane : public QWidget                        //public QListView
+  {
     Q_OBJECT;
 
     QAbstractItemModel *m_model;
@@ -64,33 +63,28 @@ namespace GUI
     QPushButton *subscribeButton;
     QPushButton *tagsButton;
 
+    public:
+      ChannelPane(QWidget *parent);
+      QListView* getListView();
+      QPushButton* getTagsButton();
 
-  public:
-    ChannelPane(QWidget *parent);
-    QListView* getListView();
-    QPushButton* getTagsButton();
+      void update();
 
+      virtual ~ChannelPane()
+      {
+        }
 
-    void update();
+    public slots:
+      void onChannelsUpdated();
+      void onSubscribeButtonClicked();
 
-    
-    virtual ~ChannelPane()
-    {
-    }
+    private:
+      ChannelPane(const ChannelPane& obj);
+      ChannelPane& operator=(const ChannelPane& obj);
 
-public slots:
-    void onChannelsUpdated();
-    void onSubscribeButtonClicked();
+      };                                                    // class ChannelPane
 
-
-  private:    
-    ChannelPane(const ChannelPane& obj);
-    ChannelPane& operator=(const ChannelPane& obj);
-
-  }; // class ChannelPane
-  
-} // namespace GUI
-
-#endif //_ChannelPane_H_A4534852_66A8_4982_975D_0D67B6F33B44_INCLUDED_
+  }                                                         // namespace GUI
+#endif                                                      //_ChannelPane_H_A4534852_66A8_4982_975D_0D67B6F33B44_INCLUDED_
 
 /* ===[ End of file ]=== */

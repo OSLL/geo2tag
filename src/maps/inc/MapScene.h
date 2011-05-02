@@ -13,12 +13,11 @@
 
 #include "DataChannel.h"
 
-
 class MapScene : public QGraphicsScene
 {
-    Q_OBJECT
+  Q_OBJECT
 
-private:
+    private:
     QHash<TilePoint, QGraphicsPixmapItem *> m_tiles;
     QVector<QGraphicsPixmapItem *> m_marks;
     MapsUploader * m_uploader;
@@ -30,11 +29,11 @@ private:
 
     QPoint m_pressed_screen_position;
 
-public:
+  public:
     explicit MapScene(QObject *parent = 0);
     ~MapScene();
 
-public:
+  public:
     void addMark(qreal x, qreal y, QVariant data);
     void addMark(qreal x, qreal y, QVariant data, QWidget * widget);
     void removeMark(QGraphicsItem * mark);
@@ -43,7 +42,7 @@ public:
     int maxThreads() const;
     void setMaxThreads(const int & max_threads);
 
-public:
+  public:
     virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -52,16 +51,15 @@ public:
     void set_zoom();
     void update_state();
 
-private:
+  private:
     void add_mark(QPointF pos, QString channel_name);
 
-signals:
+    signals:
     void uploadTiles(QVector<TilePoint> & tiles_to_upload);
 
-public slots:
+  public slots:
     void tileUploaded(const QPixmap & pixmap, const TilePoint & point);
     void preload();
 
-};
-
-#endif // MAPSCENE_H
+    };
+#endif                                                      // MAPSCENE_H

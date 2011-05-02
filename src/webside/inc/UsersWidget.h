@@ -12,25 +12,26 @@ using namespace Wt;
 
 class UsersWidget : public WContainerWidget
 {
-    WSelectionBox *usersBox;
-    WPushButton *addButton;
-    WPushButton *removeButton;
-    WStackedWidget *actionWidget; /* contains widget for concrete action
-                                     with usersBox, for example widget
-                                     for input inforamtion about new
-                                     user */
+  WSelectionBox *usersBox;
+  WPushButton *addButton;
+  WPushButton *removeButton;
+  WStackedWidget *actionWidget;
+  /* contains widget for concrete action
+                                       with usersBox, for example widget
+                                       for input inforamtion about new
+                                       user */
 
-    /* User information widget */
-    WTable *addUserWidget;
-    WLineEdit *login;
-    WLineEdit *password;
-    WLineEdit *password2;
-    WPushButton *addUserButton;
-    WPushButton *cancelUserButton;
-    WText *message;
+  /* User information widget */
+  WTable *addUserWidget;
+  WLineEdit *login;
+  WLineEdit *password;
+  WLineEdit *password2;
+  WPushButton *addUserButton;
+  WPushButton *cancelUserButton;
+  WText *message;
 
-    std::string m_token;
-public:
+  std::string m_token;
+  public:
     UsersWidget(const std::string &token,WContainerWidget *parent = 0);
 
     void updateUsersBox();
@@ -41,6 +42,5 @@ public:
     void addUserClicked();
     void cancelUserClicked();
 
-};
-
-#endif // USERSWIDGET_H
+    };
+#endif                                                      // USERSWIDGET_H

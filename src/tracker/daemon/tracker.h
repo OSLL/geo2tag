@@ -5,9 +5,10 @@
 
 namespace
 {
-  static const QString APP_MAGIC("ebe2a955-14fa-4acf-899e-9f9d51b38476"); // global app guid
-  static const int UPDATE_INTERVAL = (1000 * 57); // 57 sec
-}
+                                                            // global app guid
+  static const QString APP_MAGIC("ebe2a955-14fa-4acf-899e-9f9d51b38476");
+  static const int UPDATE_INTERVAL = (1000 * 57);           // 57 sec
+  }
 
 struct Settings
 {
@@ -19,6 +20,5 @@ struct Settings
   QString auth_token;
 
   Settings() : initialized(false){}
-};
-
-#endif // TRACKER_H
+  };
+#endif                                                      // TRACKER_H

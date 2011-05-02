@@ -4,21 +4,20 @@
 namespace common
 {
 
-class Parameters
-{
+  class Parameters
+  {
     int m_defaultRadius;
 
-public:
-    Parameters();
+    public:
+      Parameters();
 
-    static Parameters& getInstance();
+      static Parameters& getInstance();
 
-    int getDefaultRadius();
-    void setDefaultRadius(int newRadius);
-    void updateFile();
+      int getDefaultRadius();
+      void setDefaultRadius(int newRadius);
+      void updateFile();
 
-};
+      };
 
-} // namespace common
-
-#endif // PARAMETERS_H
+  }                                                         // namespace common
+#endif                                                      // PARAMETERS_H

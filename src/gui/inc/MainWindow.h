@@ -37,7 +37,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _MainWindow_H_06DCEED3_97B7_44E8_8292_AE47AA4C29BD_INCLUDED_
 #define _MainWindow_H_06DCEED3_97B7_44E8_8292_AE47AA4C29BD_INCLUDED_
 
@@ -49,11 +48,11 @@
 
 namespace GUI
 {
- /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
-  class MainWindow : public QMainWindow 
+  class MainWindow : public QMainWindow
   {
     Q_OBJECT;
 
@@ -69,31 +68,30 @@ namespace GUI
     QAction *m_actionViewOptions;
     QAction *m_logout;
 
-  public:
-    MainWindow();
+    public:
+      MainWindow();
 
-    virtual ~MainWindow()
-    {
-    }
+      virtual ~MainWindow()
+      {
+        }
 
-  protected:
+    protected:
 
-    void createMenu();
-    void createActions();
+      void createMenu();
+      void createActions();
 
-  public slots:
-    void onActivate(QString auth_token);
-    void onDeactivate();
-    void addContent();
+    public slots:
+      void onActivate(QString auth_token);
+      void onDeactivate();
+      void addContent();
 
-  private:    
-    MainWindow(const MainWindow& obj);
-    MainWindow& operator=(const MainWindow& obj);
+    private:
+      MainWindow(const MainWindow& obj);
+      MainWindow& operator=(const MainWindow& obj);
 
-  }; // class MainWindow
-  
-} // namespace GUI
+      };                                                    // class MainWindow
 
-#endif //_MainWindow_H_06DCEED3_97B7_44E8_8292_AE47AA4C29BD_INCLUDED_
+  }                                                         // namespace GUI
+#endif                                                      //_MainWindow_H_06DCEED3_97B7_44E8_8292_AE47AA4C29BD_INCLUDED_
 
 /* ===[ End of file ]=== */

@@ -21,37 +21,35 @@ using namespace Wt;
  */
 class Sketch : public WContainerWidget
 {
-    QSharedPointer<User> m_user;	
+  QSharedPointer<User> m_user;
 
-    WPushButton *prefButton;
-    WPushButton *channelsButton;
-    WPushButton *marksButton;
-    WPushButton *optionsButton;
-    WPushButton *adminButton;
+  WPushButton *prefButton;
+  WPushButton *channelsButton;
+  WPushButton *marksButton;
+  WPushButton *optionsButton;
+  WPushButton *adminButton;
 
-    WContainerWidget *mainContainer;
-    WContainerWidget *menuContainer;
-    WStackedWidget *stackedWidget;
+  WContainerWidget *mainContainer;
+  WContainerWidget *menuContainer;
+  WStackedWidget *stackedWidget;
 
-/* temporary removed to provide only tracker functionality  */
-//    PrefWidget *prefWidget;
-//    ChannelsWidget *channelsWidget;
-    MarksWidget *marksWidget;
-/* temporary removed to provide only tracker functionality  */
-///    OptionsWidget *optionsWidget;
-//    UsersWidget *usersWidget;
+  /* temporary removed to provide only tracker functionality  */
+  //    PrefWidget *prefWidget;
+  //    ChannelsWidget *channelsWidget;
+  MarksWidget *marksWidget;
+  /* temporary removed to provide only tracker functionality  */
+  ///    OptionsWidget *optionsWidget;
+  //    UsersWidget *usersWidget;
 
-    /* slots */
-//    void onPrefClicked();
-//    void onChannelsClicked();
-    void onMarksClicked();
-//    void onOptionsClicked();
- //   void onAdminClicked();
+  /* slots */
+  //    void onPrefClicked();
+  //    void onChannelsClicked();
+  void onMarksClicked();
+  //    void onOptionsClicked();
+  //   void onAdminClicked();
 
-public:
+  public:
     Sketch(QSharedPointer<User> user, WContainerWidget *parent = 0);
 
-
-};
-
-#endif /* SKETCH_H */
+    };
+#endif                                                      /* SKETCH_H */

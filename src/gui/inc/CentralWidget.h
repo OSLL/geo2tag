@@ -38,7 +38,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _CentralWidget_H_044270F5_8D38_4F61_9F05_96359B3BD122_INCLUDED_
 #define _CentralWidget_H_044270F5_8D38_4F61_9F05_96359B3BD122_INCLUDED_
 
@@ -53,7 +52,7 @@
 
 namespace GUI
 {
- /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
@@ -69,31 +68,29 @@ namespace GUI
     QPalette       *m_palette;
     OptionsPane    *m_options;
 
+    public:
+      CentralWidget(QWidget *parent);
 
-  public:
-    CentralWidget(QWidget *parent);
-    
-    virtual ~CentralWidget()
-    {
-    }
+      virtual ~CentralWidget()
+      {
+        }
 
-  public slots:
-    void switchMap();
-    void switchFeed(const QModelIndex& index);
-    void switchChannel();
-    void switchEditor();
-    void setRadius();
-    void switchOptions();
-    void onViewTagsButtonClicked();
-    
-  private:    
-    CentralWidget(const CentralWidget& obj);
-    CentralWidget& operator=(const CentralWidget& obj);
+    public slots:
+      void switchMap();
+      void switchFeed(const QModelIndex& index);
+      void switchChannel();
+      void switchEditor();
+      void setRadius();
+      void switchOptions();
+      void onViewTagsButtonClicked();
 
-  }; // class CentralWidget
-  
-} // namespace GUI
+    private:
+      CentralWidget(const CentralWidget& obj);
+      CentralWidget& operator=(const CentralWidget& obj);
 
-#endif //_CentralWidget_H_044270F5_8D38_4F61_9F05_96359B3BD122_INCLUDED_
+      };                                                    // class CentralWidget
+
+  }                                                         // namespace GUI
+#endif                                                      //_CentralWidget_H_044270F5_8D38_4F61_9F05_96359B3BD122_INCLUDED_
 
 /* ===[ End of file ]=== */

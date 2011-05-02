@@ -36,7 +36,6 @@
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-
 #include <QObject>
 #include <QtTest/QtTest>
 #include <QSignalSpy>
@@ -45,39 +44,38 @@
 
 namespace
 {
-const QString LOGIN("name of user");
-const QString PASSWD("parol");
-}
+  const QString LOGIN("name of user");
+  const QString PASSWD("parol");
+  }
 
 namespace Test
 {
-    class User_Test : public QObject
-    {
-        Q_OBJECT;
+  class User_Test : public QObject
+  {
+    Q_OBJECT;
 
-        Test::UserTestImpl *m_object;
+    Test::UserTestImpl *m_object;
 
     public:
 
-        User_Test()
-        {
-            m_object = new Test::UserTestImpl(LOGIN,PASSWD);
+      User_Test()
+      {
+        m_object = new Test::UserTestImpl(LOGIN,PASSWD);
         }
 
-        ~User_Test()
-        {
-            delete m_object;
-            m_object = NULL;
+      ~User_Test()
+      {
+        delete m_object;
+        m_object = NULL;
         }
 
     private slots:
 
-        void test1() const
-        {
-            QCOMPARE(m_object->getLogin(), LOGIN);
-            QCOMPARE(m_object->getPassword(), PASSWD);
+      void test1() const
+      {
+        QCOMPARE(m_object->getLogin(), LOGIN);
+        QCOMPARE(m_object->getPassword(), PASSWD);
         }
 
-
-    }; // class User_Test
-}
+      };                                                    // class User_Test
+  }

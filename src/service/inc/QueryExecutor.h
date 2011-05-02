@@ -10,12 +10,12 @@
 
 class QueryExecutor : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
     QSqlDatabase m_database;
 
-    qlonglong nextKey(const QString& sequence) const;
+  qlonglong nextKey(const QString& sequence) const;
 
-public:
+  public:
 
     QueryExecutor(const QSqlDatabase &db, QObject *parent = 0);
 
@@ -37,10 +37,9 @@ public:
     bool                     insertNewChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
     bool                     changeChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
 
-signals:
+    signals:
 
-public slots:
+  public slots:
 
-};
-
-#endif // QUERYEXECUTOR_H
+    };
+#endif                                                      // QUERYEXECUTOR_H

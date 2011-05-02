@@ -7,14 +7,14 @@
 
 class AboutWidget : public QWidget
 {
-	Q_OBJECT
-	QLabel *m_label;
-	QPushButton *m_okButton;
-public:
-	AboutWidget(QWidget *parent = 0);
-public slots:
-	void onOkClicked();
-signals:
-	void done();
-};
+  Q_OBJECT
+    QLabel *m_label;
+  QPushButton *m_okButton;
+  public:
+    AboutWidget(QWidget *parent = 0);
+  public slots:
+    void onOkClicked();
+    signals:
+    void done();
+    };
 #endif

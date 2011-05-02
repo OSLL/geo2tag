@@ -10,4 +10,4 @@ int main(int c, char **v)
   MainWindow window;
   window.show();
   return app.exec();
-}
+  }

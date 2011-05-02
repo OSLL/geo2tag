@@ -36,7 +36,6 @@
  *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
 #define _GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
 
@@ -49,13 +48,12 @@
 #include "GpsInfo.h"
 #include "defines.h"
 
-
 // This file maybe used only if SIMULATE_GPS is turned on
 #ifdef SIMULATE_GPS
 
 namespace common
 {
- /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
@@ -73,20 +71,18 @@ namespace common
 
     void run();
 
-  public:
-    GpsModeller(const QString &gpxFile=GPS_MODELLER_FILE);
+    public:
+      GpsModeller(const QString &gpxFile=GPS_MODELLER_FILE);
 
-    virtual double getLongitude() const;
+      virtual double getLongitude() const;
 
-    virtual double getLatitude() const;
+      virtual double getLatitude() const;
 
-   ~GpsModeller();
-  }; // class GpsModeller
+      ~GpsModeller();
+      };                                                    // class GpsModeller
 
-} // namespace common
-
-#endif // SIMULATE_GPS
-
-#endif //_GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
+  }                                                         // namespace common
+#endif                                                      // SIMULATE_GPS
+#endif                                                      //_GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
 
 /* ===[ End of file  ]=== */

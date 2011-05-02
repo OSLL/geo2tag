@@ -40,7 +40,6 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
 #define _ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
 
@@ -51,9 +50,9 @@
 
 class ApplyMarkQuery : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
-private:
+    private:
     QNetworkAccessManager *manager;
 
     /* Url of th request */
@@ -62,16 +61,16 @@ private:
     /* Body of the request */
     QString jsonQuery;
 
-public:
+  public:
     ApplyMarkQuery(QObject *parent = 0);
 
     ApplyMarkQuery(QString auth_token, QString channel, QString title, QString link,
-                   QString description, qreal latitude, qreal longitude,
-                   QString time, QObject *parent = 0);
+      QString description, qreal latitude, qreal longitude,
+      QString time, QObject *parent = 0);
 
     void setQuery(QString auth_token, QString channel, QString title, QString link,
-                  QString description, qreal latitude, qreal longitude,
-                  QString time);
+      QString description, qreal latitude, qreal longitude,
+      QString time);
 
     ~ApplyMarkQuery();
 
@@ -80,22 +79,20 @@ public:
 
     void doRequest();
 
-Q_SIGNALS:
+    Q_SIGNALS:
     void responseReceived(QString status,QString status_description);
     void replyError(QNetworkReply::NetworkError);
     void managerSslErrors();
 
-private Q_SLOTS:
+  private Q_SLOTS:
     void onManagerFinished(QNetworkReply *reply);
 
-private:
+  private:
     /* \todo Do we need next constructor and overloaded operator? */
     ApplyMarkQuery(const ApplyMarkQuery& obj);
     ApplyMarkQuery& operator=(const ApplyMarkQuery& obj);
 
-}; // class ApplyMarkQuery
+    };                                                      // class ApplyMarkQuery
+#endif                                                      //_ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
 
-
-#endif //_ApplyMarkQuery_H_1A6D8239_F949_4747_82A3_1A80DC24BDC1_INCLUDED_
-
-/* ===[ End of file $HeadURL$ ]=== */
+  /* ===[ End of file $HeadURL$ ]=== */

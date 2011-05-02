@@ -7,23 +7,21 @@
 
 class ByteSpinBox : public QSpinBox
 {
-    Q_OBJECT
+  Q_OBJECT
 
     const uint m_max;
-    QHash<int, QString> m_suffix;
-    QHash<int, uint> m_border;
+  QHash<int, QString> m_suffix;
+  QHash<int, uint> m_border;
 
-public:
+  public:
     explicit ByteSpinBox(QWidget *parent = 0);
 
     QString textFromValue(int val) const;
     int valueFromText(const QString &text) const;
 
+    signals:
 
-signals:
+  public slots:
 
-public slots:
-
-};
-
-#endif // BYTESPINBOX_H
+    };
+#endif                                                      // BYTESPINBOX_H

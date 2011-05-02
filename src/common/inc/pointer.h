@@ -34,7 +34,7 @@
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ------------------------------------------------------------------------ */
 
 #ifndef _POINTER_H_INCLUDED_E3A9A686_4A07_4369_9180_836A66853FC0
@@ -52,40 +52,36 @@
  */
 class CCounted
 {
-  Thread::CAtomicCount m_ref;/*!< счетчик ссылок */
+  Thread::CAtomicCount m_ref;                               /*!< счетчик ссылок */
 
-public:
-  CCounted(): m_ref(0)
-  {
-  }
-  CCounted(const CCounted&): m_ref(0)
-  {
-  }
-  CCounted& operator =(const CCounted&)
-  {
-    return *this;
-  }
-  
-  /*!
-   * виртуальный деструктор, для правильной работы
-   * delete this в void ref(long)
-   */
-  virtual ~CCounted()
-  {
-  }
-  
-  /*!
-   * \brief изменение счетчика ссылок.
-   * \param d: [in] на сколько изменить (+/-)
-   * 
-   * начальное значение счетчика -- 0.
-   * на объект нужно сослаться хотя бы один раз.
-   * когда значение счетчика становится <=0 он удаляется
-   */
-  void ref(int d=1);
-};
+  public:
+    CCounted(): m_ref(0)
+    {
+      }
+    CCounted(const CCounted&): m_ref(0)
+    {
+      }
+    CCounted& operator =(const CCounted&)
+    {
+      return *this;
+      }
 
+    /*!
+     * виртуальный деструктор, для правильной работы
+     * delete this в void ref(long)
+     */
+    virtual ~CCounted()
+    {
+      }
 
-
-#endif // Entry of _POINTER_H_INCLUDED_E3A9A686_4A07_4369_9180_836A66853FC0
-
+    /*!
+     * \brief изменение счетчика ссылок.
+     * \param d: [in] на сколько изменить (+/-)
+     *
+     * начальное значение счетчика -- 0.
+     * на объект нужно сослаться хотя бы один раз.
+     * когда значение счетчика становится <=0 он удаляется
+     */
+    void ref(int d=1);
+    };
+#endif                                                      // Entry of _POINTER_H_INCLUDED_E3A9A686_4A07_4369_9180_836A66853FC0

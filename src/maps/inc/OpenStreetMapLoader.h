@@ -33,9 +33,8 @@
  * \file OpenStreetMapLoader.h
  * \brief Header of OpenStreetMapLoader
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
-
 
 #ifndef _OpenStreetMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
 #define _OpenStreetMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
@@ -48,51 +47,49 @@
 
 namespace maps
 {
-    /*!
-   * 
+  /*!
+   *
    */
-    class OpenStreetMapLoader: public MapLoader
-    {
+  class OpenStreetMapLoader: public MapLoader
+  {
 
-        Q_OBJECT
+    Q_OBJECT
 
-        QNetworkAccessManager *manager;
-        std::vector<char> m_data;
-        QByteArray byteArray;
+      QNetworkAccessManager *manager;
+    std::vector<char> m_data;
+    QByteArray byteArray;
 
     public:
-        OpenStreetMapLoader();
+      OpenStreetMapLoader();
 
-        virtual common::Picture getMap(double latitude, double longitude, short size, int width, int height);
+      virtual common::Picture getMap(double latitude, double longitude, short size, int width, int height);
 
-        virtual common::Picture getMapWithMarks(double latitude, double longitude, short size, int width, int height, const DataMarks& marks);
+      virtual common::Picture getMapWithMarks(double latitude, double longitude, short size, int width, int height, const DataMarks& marks);
 
-        QByteArray& getMapByteArray();
+      QByteArray& getMapByteArray();
 
-        virtual ~OpenStreetMapLoader();
+      virtual ~OpenStreetMapLoader();
 
     public slots:
 
-        void onManagerFinished(QNetworkReply*);
-        void onManagerSslErrors(/*QNetworkReply*, QList<QSslError>*/);
-        void onReplyError(QNetworkReply::NetworkError);
+      void onManagerFinished(QNetworkReply*);
+      void onManagerSslErrors(/*QNetworkReply*, QList<QSslError>*/);
+      void onReplyError(QNetworkReply::NetworkError);
 
     private:
 
-        std::string preprocessQuery(double latitude, double longitude, short size, int width, int height, const DataMarks& marks = DataMarks());
-        /*!
-     * \brief routine for writing data from stream
-     */
-        static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
+      std::string preprocessQuery(double latitude, double longitude, short size, int width, int height, const DataMarks& marks = DataMarks());
+      /*!
+       * \brief routine for writing data from stream
+       */
+      static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
 
-        OpenStreetMapLoader(const OpenStreetMapLoader& obj);
-        OpenStreetMapLoader& operator=(const OpenStreetMapLoader& obj);
+      OpenStreetMapLoader(const OpenStreetMapLoader& obj);
+      OpenStreetMapLoader& operator=(const OpenStreetMapLoader& obj);
 
+      };                                                    // class OpenStreetMapLoader
 
-    }; // class OpenStreetMapLoader
-
-} // namespace maps
-
-#endif //_OpenStreetMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
+  }                                                         // namespace maps
+#endif                                                      //_OpenStreetMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
 
 /* ===[ End of file  ]=== */

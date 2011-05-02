@@ -40,7 +40,6 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _OptionsPane_H_92651A52_B5F8_41C4_96AC_484BA7C02996_INCLUDED_
 #define _OptionsPane_H_92651A52_B5F8_41C4_96AC_484BA7C02996_INCLUDED_
 
@@ -51,48 +50,45 @@
 #include <QLineEdit>
 #include <QScrollArea>
 
-
 #include "MapLoader.h"
 
 namespace GUI
 {
-    /*!
-     * Class description. May use HTML formatting
-     *
-     */
-    class OptionsPane : public QScrollArea
-    {
-        Q_OBJECT
+  /*!
+   * Class description. May use HTML formatting
+   *
+   */
+  class OptionsPane : public QScrollArea
+  {
+    Q_OBJECT
 
-        QGroupBox *m_sourceTypeBox;
-        QRadioButton *m_googleButton;
-        QRadioButton *m_openStreetButton;
+      QGroupBox *m_sourceTypeBox;
+    QRadioButton *m_googleButton;
+    QRadioButton *m_openStreetButton;
 
-        QGroupBox *m_proxyBox;
-        QLineEdit *m_hostProxyEdit;
-        QLineEdit *m_portProxyEdit;
-
+    QGroupBox *m_proxyBox;
+    QLineEdit *m_hostProxyEdit;
+    QLineEdit *m_portProxyEdit;
 
     public:
-        OptionsPane(QWidget *parent = 0);
-        ~OptionsPane();
+      OptionsPane(QWidget *parent = 0);
+      ~OptionsPane();
 
-    signals:
-        void sourceTypeUpdated(maps::MapLoader::SourceType sourceType);
+      signals:
+      void sourceTypeUpdated(maps::MapLoader::SourceType sourceType);
 
     private slots:
-        void onGoogleButtonClicked();
-        void onOpenStreeButtonClicked();
-        void onProxyBoxClicked();
+      void onGoogleButtonClicked();
+      void onOpenStreeButtonClicked();
+      void onProxyBoxClicked();
 
     private:
-        //OptionsPane(const OptionsPane& obj);
-        //OptionsPane& operator=(const OptionsPane& obj);
+      //OptionsPane(const OptionsPane& obj);
+      //OptionsPane& operator=(const OptionsPane& obj);
 
-    }; // class OptionsPane
+      };                                                    // class OptionsPane
 
-} // namespace GUI
-
-#endif //_OptionsPane_H_92651A52_B5F8_41C4_96AC_484BA7C02996_INCLUDED_
+  }                                                         // namespace GUI
+#endif                                                      //_OptionsPane_H_92651A52_B5F8_41C4_96AC_484BA7C02996_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

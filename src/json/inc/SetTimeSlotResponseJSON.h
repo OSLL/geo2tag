@@ -43,6 +43,4 @@
 #include "DefaultResponseJSON.h"
 
 typedef DefaultResponseJSON SetTimeSlotResponseJSON;
-
-
-#endif // _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
+#endif                                                      // _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_

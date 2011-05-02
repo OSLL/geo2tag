@@ -40,7 +40,6 @@
  * PROJ: OSLL/fedexday
  * ---------------------------------------------------------------- */
 
-
 #ifndef _AddUserQuery_H_B7CB9D45_F02D_4617_8C62_B56B0A2AF6A7_INCLUDED_
 #define _AddUserQuery_H_B7CB9D45_F02D_4617_8C62_B56B0A2AF6A7_INCLUDED_
 
@@ -49,18 +48,18 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-    /*!
-     * AddUserQuery class definition.
-     *
-     * The object of this class represents http query to server.
-     * This query sends user name and password and gets auth_token.
-     *
-     */
+/*!
+ * AddUserQuery class definition.
+ *
+ * The object of this class represents http query to server.
+ * This query sends user name and password and gets auth_token.
+ *
+ */
 class AddUserQuery: public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
-private:
+    private:
     QNetworkAccessManager *manager;
 
     /* Url of th request */
@@ -69,7 +68,7 @@ private:
     /* Body of the request */
     QString jsonQuery;
 
-public:
+  public:
 
     AddUserQuery(QObject *parent = 0);
 
@@ -84,22 +83,21 @@ public:
 
     void doRequest();
 
-signals:
+    signals:
     void responseReceived(QString status, QString auth_token);
     void errorReceived();
 
-private slots:
+  private slots:
     void onManagerFinished(QNetworkReply *reply);
     void onReplyError(QNetworkReply::NetworkError);
     void onManagerSslErrors();
 
-private:
+  private:
     /* \todo Do we need next constructor and overloaded operator? */
     AddUserQuery(const AddUserQuery& obj);
     AddUserQuery& operator=(const AddUserQuery& obj);
 
-}; // class AddUserQuery
+    };                                                      // class AddUserQuery
+#endif                                                      //_AddUserQuery_H_B7CB9D45_F02D_4617_8C62_B56B0A2AF6A7_INCLUDED_
 
-#endif //_AddUserQuery_H_B7CB9D45_F02D_4617_8C62_B56B0A2AF6A7_INCLUDED_
-
-/* ===[ End of file $HeadURL$ ]=== */
+  /* ===[ End of file $HeadURL$ ]=== */

@@ -11,14 +11,12 @@ using namespace Wt;
 
 class OptionsWidget : public WContainerWidget
 {
-    WText *optionsText;
-    WTableView *optionsTable;
-    OptionsModel *optionsModel;
+  WText *optionsText;
+  WTableView *optionsTable;
+  OptionsModel *optionsModel;
 
-public:
+  public:
     OptionsWidget(WContainerWidget *parent = 0);
 
-};
-
-
-#endif /* OPTIONSWIDGET_H */
+    };
+#endif                                                      /* OPTIONSWIDGET_H */

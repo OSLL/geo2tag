@@ -14,16 +14,16 @@ using namespace Wt;
 
 class ChannelsWidget : public WContainerWidget
 {
-	QSharedPointer<User> m_user;
-//    std::string m_token;
-    WText *channelsText;
-    WTableView *channelsTable;
-    ChannelsModel *channelsModel;
+  QSharedPointer<User> m_user;
+  //    std::string m_token;
+  WText *channelsText;
+  WTableView *channelsTable;
+  ChannelsModel *channelsModel;
 
-//    QSharedPointer<Channels> m_subscribedChannels;
-//    QSharedPointer<Channels> m_availableChannels;
+  //    QSharedPointer<Channels> m_subscribedChannels;
+  //    QSharedPointer<Channels> m_availableChannels;
 
-public:
+  public:
     ChannelsWidget(const QSharedPointer<User> user, WContainerWidget *parent = 0);
     void updateChannelsModel();
 
@@ -33,7 +33,5 @@ public:
     /* slots */
     void onModelUpdated();
 
-};
-
-
-#endif /* CHANNELSWIDGET_H */
+    };
+#endif                                                      /* CHANNELSWIDGET_H */

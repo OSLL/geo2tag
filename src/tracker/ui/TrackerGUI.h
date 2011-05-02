@@ -14,31 +14,31 @@
 
 class TrackerGUI : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
     RequestSender *m_requestSender;
 
-    QStackedWidget *m_stackedWidget;
-    QWidget *m_titleWidget;
-    QPushButton *m_status;
-    QPushButton *m_startButton;
-    QPushButton *m_stopButton;
-    QPushButton *m_optionsButton;
-    QPushButton *m_logButton;
-    OptionsWidget *m_optionsWidget;
-    LogWidget *m_logWidget;
+  QStackedWidget *m_stackedWidget;
+  QWidget *m_titleWidget;
+  QPushButton *m_status;
+  QPushButton *m_startButton;
+  QPushButton *m_stopButton;
+  QPushButton *m_optionsButton;
+  QPushButton *m_logButton;
+  OptionsWidget *m_optionsWidget;
+  LogWidget *m_logWidget;
 
-    QAction *m_startAction;
-    QAction *m_stopAction;
-    QAction *m_optionsAction;
-    QAction *m_logAction;
+  QAction *m_startAction;
+  QAction *m_stopAction;
+  QAction *m_optionsAction;
+  QAction *m_logAction;
 
-    QTimer *m_statusTimer;
+  QTimer *m_statusTimer;
 
-public:
+  public:
     TrackerGUI(QWidget *parent = 0);
 
-public slots:
+  public slots:
     void onStartTriggered();
     void onStopTriggered();
     void switchTitle();
@@ -48,8 +48,7 @@ public slots:
     void onLogWidgetDone();
     void connected();
     void updateStatus();
-private slots:
+  private slots:
     void displayError(QAbstractSocket::SocketError socketError);
-};
-
-#endif // TRACKERGUI_H
+    };
+#endif                                                      // TRACKERGUI_H

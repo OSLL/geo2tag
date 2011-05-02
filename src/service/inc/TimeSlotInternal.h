@@ -45,9 +45,9 @@
 
 class DbTimeSlot: public TimeSlot
 {
-    qlonglong m_id;
+  qlonglong m_id;
 
-public:
+  public:
     DbTimeSlot(qlonglong id, const qulonglong &slot);
 
     qlonglong getId() const;
@@ -55,8 +55,7 @@ public:
     void setId(qlonglong id);
 
     virtual ~DbTimeSlot();
-};
+    };
+#endif                                                      // _TIMESLOTINTERNAL_H_016577f1_6eeb_46b7_b170_f9b0865da811_INCLUDED
 
-#endif // _TIMESLOTINTERNAL_H_016577f1_6eeb_46b7_b170_f9b0865da811_INCLUDED
-
-/* ===[ End of file ]=== */
+  /* ===[ End of file ]=== */

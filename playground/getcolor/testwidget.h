@@ -5,15 +5,14 @@
 
 class TestWidget : public QWidget
 {
-    Q_OBJECT
-public:
+  Q_OBJECT
+    public:
     explicit TestWidget(QWidget *parent = 0);
     virtual void paintEvent(QPaintEvent *pe);
 
-signals:
+    signals:
 
-public slots:
+  public slots:
 
-};
-
-#endif // TESTWIDGET_H
+    };
+#endif                                                      // TESTWIDGET_H

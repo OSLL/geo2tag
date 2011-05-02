@@ -36,7 +36,6 @@
  *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
 #define _Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
 
@@ -48,30 +47,30 @@ namespace common
   /*!
    * common picture. binary data + some meta information
    */
-    class Picture : public QImage
+  class Picture : public QImage
   {
     QVector<char> m_data;
-  public:
+    public:
 
-    Picture(const Picture&);
-    Picture(const QImage&);
+      Picture(const Picture&);
+      Picture(const QImage&);
 
-    enum Type {
-      PNG = 0,
-      UNKNOWN
-    };
+      enum Type
+      {
+        PNG = 0,
+        UNKNOWN
+        };
 
-    virtual Type getType() const;
+      virtual Type getType() const;
 
-    virtual ~Picture();
+      virtual ~Picture();
 
-  protected:
-    Picture(const QVector<char>& data);
+    protected:
+      Picture(const QVector<char>& data);
 
-  }; // class Picture
+      };                                                    // class Picture
 
-} // namespace common
-
-#endif //_Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
+  }                                                         // namespace common
+#endif                                                      //_Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
 
 /* ===[ End of file  ]=== */

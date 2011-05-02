@@ -40,7 +40,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 #define _RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 
@@ -52,10 +51,10 @@
 
 class RSSFeedResponseJSON: public JsonSerializer
 {
-    // map will contain channels and marks which should be serialized to JSON
-    DataChannels m_hashMap;
+  // map will contain channels and marks which should be serialized to JSON
+  DataChannels m_hashMap;
 
-public:
+  public:
     RSSFeedResponseJSON(const DataChannels &, QObject *parent=0);
 
     RSSFeedResponseJSON(QObject *parent=0);
@@ -68,8 +67,7 @@ public:
 
     ~RSSFeedResponseJSON();
 
-};//class RSSFeedJSON
+    };                                                      //class RSSFeedJSON
+#endif                                                      //_RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 
-#endif //_RSSFeedJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
-
-/* ===[ End of file $HeadURL$ ]=== */
+  /* ===[ End of file $HeadURL$ ]=== */

@@ -14,35 +14,34 @@
 
 class MapsUploader : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QNetworkAccessManager m_manager;
-    const QString m_url;
-    QDir m_file_store_dir;
-    QVector<TilePoint> m_loaded;
-    QVector<TilePoint> m_tiles;
-    bool m_background_mode;
-    int m_replies_in_work;
+  const QString m_url;
+  QDir m_file_store_dir;
+  QVector<TilePoint> m_loaded;
+  QVector<TilePoint> m_tiles;
+  bool m_background_mode;
+  int m_replies_in_work;
 
-public:
+  public:
     explicit MapsUploader(QObject *parent = 0);
 
-private:
+  private:
     void checkHomePath();
     void popNextTile();
 
-signals:
+    signals:
     void tileUploaded(const QPixmap & pixmap, const TilePoint & point);
     void uploadingFinished();
 
-private slots:
+  private slots:
     void handleNetworkData(QNetworkReply *reply);
     void replyError(QNetworkReply::NetworkError code);
     void downloadTile(const TilePoint & point);
 
-public slots:
+  public slots:
     void uploadTiles(QVector<TilePoint> & tiles_to_upload);
     void uploadTilesBG(QVector<TilePoint> & tiles_to_upload);
-};
-
-#endif // MAPSUPLOADER_H
+    };
+#endif                                                      // MAPSUPLOADER_H

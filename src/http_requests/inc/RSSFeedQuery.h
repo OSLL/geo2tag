@@ -40,7 +40,6 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
 #define _RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
 
@@ -54,54 +53,53 @@
 #include "DataChannel.h"
 
 /*!
-     * RSSFeedQuery class definition.
-     *
-     * The object of this class represents http query to server.
-     * This query includes json request to get RSS feed.
-     */
+ * RSSFeedQuery class definition.
+ *
+ * The object of this class represents http query to server.
+ * This query includes json request to get RSS feed.
+ */
 class RSSFeedQuery : public DefaultQuery
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QSharedPointer<User> m_user;
-    double m_latitude;
-    double m_longitude;
-    double m_radius;
+  double m_latitude;
+  double m_longitude;
+  double m_radius;
 
-    DataChannels m_hashMap;
+  DataChannels m_hashMap;
 
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
 
-private Q_SLOTS:
+  private Q_SLOTS:
 
     virtual void processReply(QNetworkReply *reply);
 
-public:
+  public:
 
     RSSFeedQuery(QSharedPointer<User> &user,
-                 double latitude,
-                 double longitude,
-                 double radius,
-                 QObject *parent = 0);
+      double latitude,
+      double longitude,
+      double radius,
+      QObject *parent = 0);
 
     RSSFeedQuery(QObject *parent = 0);
 
     void setQuery(QSharedPointer<User> &user,
-                 double latitude,
-                 double longitude,
-                 double radius);
+      double latitude,
+      double longitude,
+      double radius);
 
     ~RSSFeedQuery();
 
-     const DataChannels& getRSSFeed() const;
+    const DataChannels& getRSSFeed() const;
 
-Q_SIGNALS:
+    Q_SIGNALS:
 
-     void rssFeedReceived();
+    void rssFeedReceived();
 
-}; // class RSSFeedQuery
+    };                                                      // class RSSFeedQuery
+#endif                                                      //_RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
 
-#endif //_RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
-
-/* ===[ End of file $HeadURL$ ]=== */
+  /* ===[ End of file $HeadURL$ ]=== */

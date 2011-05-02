@@ -12,46 +12,45 @@
 #include <QSettings>
 #include "defines.h"
 
-
 class OptionsWidget : public QScrollArea
-{   
-    Q_OBJECT
+{
+  Q_OBJECT
 
     QLineEdit *m_nameEdit;
-    QLineEdit *m_passwordEdit;
-    QLineEdit *m_visibleNameEdit;
-    QLineEdit *m_channelEdit;
-    QLineEdit *m_proxyHostEdit;
-    QLineEdit *m_serverUrlEdit;
-    QSpinBox *m_serverPortEdit;
+  QLineEdit *m_passwordEdit;
+  QLineEdit *m_visibleNameEdit;
+  QLineEdit *m_channelEdit;
+  QLineEdit *m_proxyHostEdit;
+  QLineEdit *m_serverUrlEdit;
+  QSpinBox *m_serverPortEdit;
 
-    QWidget *m_widg;
+  QWidget *m_widg;
 
-    QCheckBox *m_passwordCheckBox;
+  QCheckBox *m_passwordCheckBox;
 
-    QSpinBox *m_proxyPortEdit;
-    QComboBox *m_proxyType;
+  QSpinBox *m_proxyPortEdit;
+  QComboBox *m_proxyType;
 
-    QComboBox * m_cacheType;
-    QLineEdit * m_cachePath;
-    QSpinBox * m_cacheMaxSize;
+  QComboBox * m_cacheType;
+  QLineEdit * m_cachePath;
+  QSpinBox * m_cacheMaxSize;
 
-    QString m_name;
-    QString m_password;
-    QString m_channel;
-    QString m_productName;
+  QString m_name;
+  QString m_password;
+  QString m_channel;
+  QString m_productName;
 
-    QPushButton * m_cachePathButton;
-    QPushButton *m_doneButton;
-    QPushButton *m_cancelButton;
-    QPushButton *m_defaultButton;
+  QPushButton * m_cachePathButton;
+  QPushButton *m_doneButton;
+  QPushButton *m_cancelButton;
+  QPushButton *m_defaultButton;
 
-    QSettings m_settings;
+  QSettings m_settings;
 
-private:
+  private:
     void applyProxySettings();
 
-public:
+  public:
     OptionsWidget(QString productName,QWidget *parent = 0);
 
     QString name();
@@ -63,7 +62,7 @@ public:
     void createSettings();
     void updateWidgets();
 
-public slots:
+  public slots:
     void onDoneClicked();
     void onCancelClicked();
     void setDefaultSettings();
@@ -73,10 +72,9 @@ public slots:
     void onCachePathButtonClick();
     void onCachePathSelected(QString path);
 
-signals:
+    signals:
     /* is emitted when "ok" button is pressed */
     void done();
     void cancel();
-};
-
-#endif // OPTIONSWIDGET_H
+    };
+#endif                                                      // OPTIONSWIDGET_H

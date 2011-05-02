@@ -33,9 +33,8 @@
  * \file GoogleClientLogin.h
  * \brief Header of GoogleClientLogin
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
-
 
 #ifndef _GoogleClientLogin_H_E398ED1A_0E83_42CA_BC67_5C3668729B16_INCLUDED_
 #define _GoogleClientLogin_H_E398ED1A_0E83_42CA_BC67_5C3668729B16_INCLUDED_
@@ -47,44 +46,42 @@
 
 namespace maps
 {
-    /*!
+  /*!
    * Google client auth
    */
-    class GoogleClientLogin : public QObject
-    {
-        Q_OBJECT
+  class GoogleClientLogin : public QObject
+  {
+    Q_OBJECT
 
-        QNetworkAccessManager *manager;
-        std::string m_email;
-        std::string m_password;
-        std::string m_authToken;
+      QNetworkAccessManager *manager;
+    std::string m_email;
+    std::string m_password;
+    std::string m_authToken;
 
     public:
-        GoogleClientLogin(std::string email, std::string password);
+      GoogleClientLogin(std::string email, std::string password);
 
-        void login();
+      void login();
 
-        std::string getAuthToken() const;
+      std::string getAuthToken() const;
 
-        ~GoogleClientLogin();
+      ~GoogleClientLogin();
 
     public slots:
 
-        void onManagerFinished(QNetworkReply*);
-        void onManagerSslErrors(/*QNetworkReply*, QList<QSslError>*/);
-        void onReplyError(QNetworkReply::NetworkError);
-
+      void onManagerFinished(QNetworkReply*);
+      void onManagerSslErrors(/*QNetworkReply*, QList<QSslError>*/);
+      void onReplyError(QNetworkReply::NetworkError);
 
     private:
-        GoogleClientLogin(const GoogleClientLogin& obj);
-        GoogleClientLogin& operator=(const GoogleClientLogin& obj);
+      GoogleClientLogin(const GoogleClientLogin& obj);
+      GoogleClientLogin& operator=(const GoogleClientLogin& obj);
 
-        static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
+      static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
 
-    }; // class GoogleClientLogin
-  
-} // namespace maps
+      };                                                    // class GoogleClientLogin
 
-#endif //_GoogleClientLogin_H_E398ED1A_0E83_42CA_BC67_5C3668729B16_INCLUDED_
+  }                                                         // namespace maps
+#endif                                                      //_GoogleClientLogin_H_E398ED1A_0E83_42CA_BC67_5C3668729B16_INCLUDED_
 
 /* ===[ End of file  ]=== */

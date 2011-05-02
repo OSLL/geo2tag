@@ -13,25 +13,24 @@
 #include "defines.h"
 class ViewOptsWidget : public QScrollArea
 {
-    Q_OBJECT
+  Q_OBJECT
     QSpinBox * m_marksCountEdit;
-    QSpinBox * m_timeFilterEdit;
-    QWidget * m_widg;
-    QPushButton * m_doneButton;
-    QPushButton * m_cancelButton ;
-    //void initSettings();
+  QSpinBox * m_timeFilterEdit;
+  QWidget * m_widg;
+  QPushButton * m_doneButton;
+  QPushButton * m_cancelButton ;
+  //void initSettings();
 
+  public:
+    ViewOptsWidget(QWidget *parent = 0);
+    int getTimeLimit() const;
+    int getMarksCount() const;
+  public slots:
+    void onDoneClicked();
+    void onCancelClicked();
+    signals:
+    void cancel();
+    void done();
 
-public:
-	ViewOptsWidget(QWidget *parent = 0);
-	int getTimeLimit() const; 
-	int getMarksCount() const;
-public slots:
-	void onDoneClicked();
-	void onCancelClicked();
-signals:
-	void cancel();
-	void done();
-
-};
+    };
 #endif

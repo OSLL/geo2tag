@@ -12,8 +12,5 @@
 //#define Q_SIGNALS   protected
 #define Q_SLOT(a)     "1"#a
 #define Q_SIGNAL(a)   "2"#a
-
-#endif // REDEFINE_QT_SIGNALS
-
-
-#endif // QT_SIGNALS_FIX_H
+#endif                                                      // REDEFINE_QT_SIGNALS
+#endif                                                      // QT_SIGNALS_FIX_H
