@@ -1,5 +1,5 @@
 /*
- * Copyright <year>  <name of author> <e-mail>
+ * Copyright ${YEAR}  ${AUTHOR}  ${EMAIL}
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,15 +29,14 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/* \$Id$ */
-/*!
+/*! ---------------------------------------------------------------
  * \file ${NAMEH}
  * \brief Header of ${NAME}
  * \todo add comment here
  *
  * File description
  *
- * PROJ: OSLL/
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 
@@ -71,4 +70,3 @@ namespace ${PACKAGE}
 
 #endif //_${NAME}_H_${UUID}_INCLUDED_
 
-/* ===[ End of file \$HeadURL$ ]=== */
