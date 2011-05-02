@@ -12,7 +12,7 @@ AUTHOR=`git config --get user.name`
 EMAIL=`git config --get user.email`
 YEAR=`date +%Y`
 
-FSUITE="TestSuite.h"
+FSUITE="main.cpp"
 FTESTCPP="Test_"$CLASS".cpp"
 FTEST="Test_"$CLASS".h"
 
