@@ -56,13 +56,13 @@ class User: public QObject
     QSharedPointer<Channels> m_channels; // list of subscribed channels
 
 protected:
-    User(const QString&, const QString&);
+    User(const QString& name, const QString& passw);
 
     void setToken(const QString&);
 
 public:
 
-    virtual qlonglong getId() const = 0;
+//    virtual qlonglong getId() const = 0;
 
     void subscribe(const QSharedPointer<Channel>& channel);
 
@@ -76,6 +76,10 @@ public:
     void setPassword(const QString password);
 
     virtual ~User();
+
+
+    friend class User_Test;
+
 }; // class User
 
 typedef ConcurrentVector<User> Users;

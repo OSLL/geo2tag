@@ -41,30 +41,42 @@
 #include <QtTest/QtTest>
 #include <QSignalSpy>
 
-//include Application class
 #include "../inc/User.h"
+
+namespace
+{
+   const QString LOGIN("name of user");
+   const QString PASSWD("parol");
+}
 
 class User_Test : public QObject
 {
     Q_OBJECT;
 
+    User *m_object;
+
+
+
 public:
 
     User_Test()
     {
-        // initialization here
+        m_object = new User(LOGIN,PASSWD);
+    }
+
+    ~User_Test()
+    {
+        delete m_object;
+        m_object = NULL;
     }
 
 private slots:
 
-    void test1()
+    void test1() const
     {
-        // see docs: http://doc.qt.nokia.com/4.7/qtest.html
-
-        //QCOMPARE();
-        //QWARN();
-        //QVERIFY();
-        //QTEST();
+        QCOMPARE(m_object->getLogin(), LOGIN);
+        QCOMPARE(m_object->getPassword(), PASSWD);
     }
+
 
 }; // class User_Test
