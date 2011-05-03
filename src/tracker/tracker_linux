@@ -24,7 +24,7 @@ NAME=wikigpsTracker
 DAEMON=/usr/bin/$NAME
 DAEMON_ARGS=""
 PIDFILE=/var/run/$NAME.pid
-SCRIPTNAME=/etc/init.d/$NAME
+SCRIPTNAME=/etc/init.d/tracker
 
 . /lib/init/vars.sh
 

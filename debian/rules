@@ -57,12 +57,11 @@ install: build
 	dh_clean -k
 	dh_installdirs
 	$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; 
-	install -d $(CURDIR)/debian/tmp/etc/init.d; 
+	install -d $(CURDIR)/debian/tmp/etc/event.d; 
 	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
 	install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
 	if [ "$(DEB_BUILD_ARCH)" = "armel" ] ; then \
 		echo "armel arch instalation"; \
-	        cp $(BUILDDIR)tracker/tracker_maemo $(CURDIR)/debian/tmp/etc/init.d/tracker; \
 	else \
 		install -d $(CURDIR)/debian/tmp/opt/geo2tag; \
 		install -d $(CURDIR)/debian/tmp/var/www; \
@@ -73,11 +72,11 @@ install: build
                 cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
-        	cp $(BUILDDIR)tracker/tracker_linux $(CURDIR)/debian/tmp/etc/init.d/tracker; \
 		cp -r $(BUILDDIR)/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
 		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 	fi;
+	cp $(BUILDDIR)tracker/wikigpsTracker $(CURDIR)/debian/tmp/etc/event.d; \
 #	cp -l $(BUILDDIR)/lib/lib* $(CURDIR)/debian/tmp/usr/lib; 
 #	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps;
 	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/wikigpsTracker-ui.png; 
