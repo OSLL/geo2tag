@@ -21,7 +21,7 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Daemon for tracker application"
 NAME=wikigpsTracker
-DAEMON=sudo -u user usr/bin/$NAME
+DAEMON=su -c "$NAME > /dev/null 2>&1 &" user
 DAEMON_ARGS=""
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/tracker
