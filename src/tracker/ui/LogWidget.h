@@ -7,24 +7,23 @@
 
 class LogWidget : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QTextEdit *m_log;
-    QPushButton *m_okButton;
+  QPushButton *m_okButton;
 
-public:
+  public:
     LogWidget(QWidget *parent = 0);
     QString getLog();
     void setLog(QString log);
     void addToLog(QString string);
 
-public slots:
+  public slots:
     void onOkClicked();
 
-signals:
+    signals:
     void done();
 
-
 };
-
-#endif // LOGWIDGET_H
+// LOGWIDGET_H
+#endif

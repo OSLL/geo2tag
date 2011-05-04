@@ -4,5 +4,5 @@
 #include "ChannelListJSON.h"
 
 typedef ChannelListResponseJSON SubscribedChannelsResponseJSON;
-
-#endif // SUBSCRIBEDCHANNELSRESPONSEJSON_H
+// SUBSCRIBEDCHANNELSRESPONSEJSON_H
+#endif

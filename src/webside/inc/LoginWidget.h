@@ -15,28 +15,28 @@ using namespace Wt;
 
 class LoginWidget : public WContainerWidget
 {
-   WLineEdit * usernameEdit;
-   WLineEdit * passwordEdit;
-   WPushButton * loginButton;
-   WGoogleMap * map;
-   //   Connector<LoginWidget> * m_con;
-   LoginWidgetConnector * m_connector;
-   QSharedPointer<User> m_user;
-   LoginQuery  m_loginQuery;
-//   std::string m_token;
-   void initCons();
- 
-public:
+  WLineEdit * usernameEdit;
+  WLineEdit * passwordEdit;
+  WPushButton * loginButton;
+  WGoogleMap * map;
+  //   Connector<LoginWidget> * m_con;
+  LoginWidgetConnector * m_connector;
+  QSharedPointer<User> m_user;
+  LoginQuery  m_loginQuery;
+  //   std::string m_token;
+  void initCons();
+
+  public:
     LoginWidget(WContainerWidget *parent = 0);
     void fillMap();
 
     /* signals */
-//    Wt::Signal<std::string> loginSuccessful;
+    //    Wt::Signal<std::string> loginSuccessful;
 
     Wt::Signal<QSharedPointer<User> > loginSuccessful;
     /* slots */
     void loginClicked();
     void userRecieved();
 };
-
-#endif // LOGINWIDGET_H
+// LOGINWIDGET_H
+#endif

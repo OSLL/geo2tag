@@ -35,34 +35,36 @@
 #include <QString>
 namespace GUI
 {
-static QString m_currentChannelName;
-class ListModel : public QStandardItemModel
-{
+  static QString m_currentChannelName;
+  class ListModel : public QStandardItemModel
+  {
     Q_OBJECT;
 
     QSharedPointer<DataMarks> m_data;
     QSharedPointer<Channel> m_currentChannel;
 
     size_t m_size;
-public:
-    ListModel(QObject* parent) ;
+    public:
+      ListModel(QObject* parent) ;
 
-    virtual ~ListModel() {}
+      virtual ~ListModel() {}
 
-    int rowCount(const QModelIndex &/*parent = QModelIndex()*/)const;
-    int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const;
+      int rowCount(const QModelIndex &/*parent = QModelIndex()*/)const;
+      int columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const;
 
-    QSharedPointer<Channel> getCurrentChannel() const;
+      QSharedPointer<Channel> getCurrentChannel() const;
 
-    void setDescription(int row, const std::string& data);
+      void setDescription(int row, const std::string& data);
 
-    QVariant data(const QModelIndex &index, int role) const;
+      QVariant data(const QModelIndex &index, int role) const;
 
- public slots:
-    void marksUp(QSharedPointer<DataMarks> m_marks=QSharedPointer<DataMarks>());
-    void layoutUpdate(QSharedPointer<Channel> channel = QSharedPointer<Channel>());
-};
+    public slots:
+      void marksUp(QSharedPointer<DataMarks> m_marks=QSharedPointer<DataMarks>());
+      void layoutUpdate(QSharedPointer<Channel> channel = QSharedPointer<Channel>());
+  };
 
 }
 
-#endif // LISTMODEL_H
+
+// LISTMODEL_H
+#endif

@@ -47,19 +47,19 @@
 
 class SubscribedChannelsRequestJSON: public JsonSerializer
 {
-public:
+  public:
     SubscribedChannelsRequestJSON(const QSharedPointer<User> &user);
 
-// Three functions below was virtual
+    // Three functions below was virtual
     QByteArray getJson() const;
 
     void parseJson(const QByteArray&);
 
     SubscribedChannelsRequestJSON();
 
-}; // class SubscribedChannelsJSON
-
-
-#endif //_SubscribedChannelsJSON_H_INCLUDED_
+    // class SubscribedChannelsJSON
+};
+//_SubscribedChannelsJSON_H_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

@@ -3,14 +3,13 @@
 
 #include <QStringList>
 
-
 class Control: public QObject
 {
-public:
+  public:
     virtual void startTracking() = 0;
     virtual void stopTracking() = 0;
     virtual QStringList getLog() const = 0;
     virtual bool isTracking() const = 0;
 };
-
-#endif // CONTROL_H
+// CONTROL_H
+#endif

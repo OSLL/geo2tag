@@ -40,7 +40,6 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _AvailableChannelsListQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
 #define _AvailableChannelsListQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
 
@@ -53,62 +52,66 @@
 
 namespace GUI
 {
-    /*!
-     * AvailableChannelsListQuery class definition.
-     *
-     * The object of this class represents http query to server.
-     * This query includes json request for list of available channels.
-     *
-     */
-    class AvailableChannelsListQuery : public QObject
-    {
-        Q_OBJECT
+  /*!
+   * AvailableChannelsListQuery class definition.
+   *
+   * The object of this class represents http query to server.
+   * This query includes json request for list of available channels.
+   *
+   */
+  class AvailableChannelsListQuery : public QObject
+  {
+    Q_OBJECT
 
-    private:
-        QNetworkAccessManager *manager;
+      private:
+      QNetworkAccessManager *manager;
 
-        /* Url of th request */
-        QString httpQuery;
+      /* Url of th request */
+      QString httpQuery;
 
-        /* Body of the request */
-        QString jsonQuery;
+      /* Body of the request */
+      QString jsonQuery;
 
     public:
 
-        AvailableChannelsListQuery(QObject *parent = 0);
+      AvailableChannelsListQuery(QObject *parent = 0);
 
-        AvailableChannelsListQuery(QString auth_token, qreal latitude,
-                                   qreal longitude, qreal radius,
-                                   QObject *parent = 0);
+      AvailableChannelsListQuery(QString auth_token, qreal latitude,
+        qreal longitude, qreal radius,
+        QObject *parent = 0);
 
-        void setQuery(QString auth_token, qreal latitude,
-                      qreal longitude, qreal radius);
+      void setQuery(QString auth_token, qreal latitude,
+        qreal longitude, qreal radius);
 
-        ~AvailableChannelsListQuery();
+      ~AvailableChannelsListQuery();
 
-        const QString& getHttpQuery();
-        const QString& getJsonQuery();
+      const QString& getHttpQuery();
+      const QString& getJsonQuery();
 
-        void doRequest();
+      void doRequest();
 
-    Q_SIGNALS:
-        void responseReceived(QSharedPointer<Channels>& channels);
+      Q_SIGNALS:
+      void responseReceived(QSharedPointer<Channels>& channels);
 
     private Q_SLOTS:
-        void onManagerFinished(QNetworkReply *reply);
-        void onReplyError(QNetworkReply::NetworkError);
-        void onManagerSslErrors();
+      void onManagerFinished(QNetworkReply *reply);
+      void onReplyError(QNetworkReply::NetworkError);
+      void onManagerSslErrors();
 
     private:
 
-        /* \todo Do we need next constructor and overloaded operator? */
-        AvailableChannelsListQuery(const AvailableChannelsListQuery& obj);
-        AvailableChannelsListQuery& operator=(const AvailableChannelsListQuery& obj);
+      /* \todo Do we need next constructor and overloaded operator? */
+      AvailableChannelsListQuery(const AvailableChannelsListQuery& obj);
+      AvailableChannelsListQuery& operator=(const AvailableChannelsListQuery& obj);
 
-    }; // class AvailableChannelsListQuery
+      // class AvailableChannelsListQuery
+  };
 
-} // namespace GUI
+  // namespace GUI
+}
 
-#endif //_AvailableChannelsListQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
+
+//_AvailableChannelsListQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

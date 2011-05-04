@@ -36,32 +36,35 @@
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
-
 
 #ifndef _CurlInitException_H_9F2740EC_D8F2_46E4_809B_F48BFDC4638B_INCLUDED_
 #define _CurlInitException_H_9F2740EC_D8F2_46E4_809B_F48BFDC4638B_INCLUDED_
 
 namespace exception
 {
- /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
   class CurlInitException
   {
-  public:
-    CurlInitException();
-    
-    virtual std::string getDescription() const;
+    public:
+      CurlInitException();
 
-    virtual ~CurlInitException();
-    
-  }; // class CurlInitException
-  
-} // namespace exception
+      virtual std::string getDescription() const;
 
-#endif //_CurlInitException_H_9F2740EC_D8F2_46E4_809B_F48BFDC4638B_INCLUDED_
+      virtual ~CurlInitException();
+
+      // class CurlInitException
+  };
+
+  // namespace exception
+}
+
+
+//_CurlInitException_H_9F2740EC_D8F2_46E4_809B_F48BFDC4638B_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

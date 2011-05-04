@@ -19,26 +19,29 @@
 
 class TrackerDaemon : /*public QThread,*/ public Control
 {
-    Q_OBJECT;
+  Q_OBJECT;
 
-    QSettings m_settings;
-    QString m_channelName;
-    QString m_visibleName;
-    QPointF m_lastCoords;
-    QNetworkConfigurationManager m_netManager;
+  QSettings m_settings;
+  QString m_channelName;
+  QString m_visibleName;
+  QPointF m_lastCoords;
+  QNetworkConfigurationManager m_netManager;
 
-    LoginQuery * m_loginQuery; // this field needs because query is asynchronous
-    AddNewMarkQuery * m_tagQuery; // this field needs because query is asynchronous
+  // this field needs because query is asynchronous
+  LoginQuery * m_loginQuery;
+  // this field needs because query is asynchronous
+  AddNewMarkQuery * m_tagQuery;
 
-    bool m_pauseFlag;
-    bool m_isConnected;
+  bool m_pauseFlag;
+  bool m_isConnected;
 
-    QTcpServer * m_controlServer;
-public:
+  QTcpServer * m_controlServer;
+  public:
     void run();
-private slots:
+  private slots:
 
-    void onConnected(); //calls when login/pass were accepted
+    //calls when login/pass were accepted
+    void onConnected();
     void onTagAdded();
     void onError(QString);
 
@@ -46,22 +49,21 @@ private slots:
     
     void newControlConnection();
 
-public:
+  public:
     TrackerDaemon();
 
     virtual void stopTracking();
     virtual void startTracking();
     virtual void reloadSettings();
     virtual bool isTracking() const;
-    const QPointF& getLastCoords() const; 
+    const QPointF& getLastCoords() const;
 
     QStringList getLog() const;
 
     ~TrackerDaemon();
 
-public slots:
-
+  public slots:
 
 };
-
-#endif // TRACKERDAEMON_H
+// TRACKERDAEMON_H
+#endif

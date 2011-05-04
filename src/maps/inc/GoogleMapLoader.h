@@ -33,9 +33,8 @@
  * \file GoogleMapLoader.h
  * \brief Header of GoogleMapLoader
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
-
 
 #ifndef _GoogleMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
 #define _GoogleMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
@@ -49,51 +48,54 @@
 
 namespace maps
 {
-    /*!
-   * 
+  /*!
+   *
    */
-    class GoogleMapLoader: public MapLoader
-    {
+  class GoogleMapLoader: public MapLoader
+  {
 
-        Q_OBJECT
+    Q_OBJECT
 
-        QNetworkAccessManager *manager;
-        std::vector<char> m_data;
-        QByteArray byteArray;
+      QNetworkAccessManager *manager;
+    std::vector<char> m_data;
+    QByteArray byteArray;
 
     public:
-        GoogleMapLoader();
+      GoogleMapLoader();
 
-        virtual common::Picture getMap(double latitude, double longitude, short size, int width, int height);
+      virtual common::Picture getMap(double latitude, double longitude, short size, int width, int height);
 
-        virtual common::Picture getMapWithMarks(double latitude, double longitude, short size, int width, int height, const DataMarks& marks);
+      virtual common::Picture getMapWithMarks(double latitude, double longitude, short size, int width, int height, const DataMarks& marks);
 
-        QByteArray& getMapByteArray();
+      QByteArray& getMapByteArray();
 
-        virtual ~GoogleMapLoader();
+      virtual ~GoogleMapLoader();
 
     public slots:
 
-        void onManagerFinished(QNetworkReply*);
-        void onManagerSslErrors(/*QNetworkReply*, QList<QSslError>*/);
-        void onReplyError(QNetworkReply::NetworkError);
+      void onManagerFinished(QNetworkReply*);
+      void onManagerSslErrors(/*QNetworkReply*, QList<QSslError>*/);
+      void onReplyError(QNetworkReply::NetworkError);
 
     private:
 
-        std::string preprocessQuery(double latitude, double longitude, short size, int width, int height, const DataMarks &marks = DataMarks());
-        /*!
-     * \brief routine for writing data from stream
-     */
-        static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
+      std::string preprocessQuery(double latitude, double longitude, short size, int width, int height, const DataMarks &marks = DataMarks());
+      /*!
+       * \brief routine for writing data from stream
+       */
+      static size_t write(void *buffer, size_t size, size_t nmemb, void *stream);
 
-        GoogleMapLoader(const GoogleMapLoader& obj);
-        GoogleMapLoader& operator=(const GoogleMapLoader& obj);
+      GoogleMapLoader(const GoogleMapLoader& obj);
+      GoogleMapLoader& operator=(const GoogleMapLoader& obj);
+
+      // class GoogleMapLoader
+  };
+
+  // namespace maps
+}
 
 
-    }; // class GoogleMapLoader
-
-} // namespace maps
-
-#endif //_GoogleMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
+//_GoogleMapLoader_H_44AC0505_AE92_49A7_8B34_0D34CE52104E_INCLUDED_
+#endif
 
 /* ===[ End of file  ]=== */

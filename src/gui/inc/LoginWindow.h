@@ -1,7 +1,6 @@
 #ifndef _LoginWindow_h_Included
 #define _LoginWindow_h_Included
 
-
 #include <QMainWindow>
 
 #include "LoginQuery.h"
@@ -15,17 +14,16 @@ namespace  GUI
     Ui::LoginForm m_form;
     LoginQuery m_query;
 
-  public:
-    LoginWindow(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    public:
+      LoginWindow(QWidget * parent = 0, Qt::WindowFlags f = 0);
 
-  private slots:
-    void okPressed();
-    void responseReceived(QString status, QString auth_token,QString status_description);
-    void errorReceived();
+    private slots:
+      void okPressed();
+      void responseReceived(QString status, QString auth_token,QString status_description);
+      void errorReceived();
 
-  signals:
-    void onSucsess(QString authToken);
+      signals:
+      void onSucsess(QString authToken);
   };
 }
-
 #endif

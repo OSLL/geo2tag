@@ -12,17 +12,16 @@ using namespace Wt;
 
 class MarksWidget : public WTabWidget
 {
-    QSharedPointer<User> m_user;
-    WGoogleMap *marksMapWidget;
-    WTableView *marksTable;
-    MarksModel *marksModel;
+  QSharedPointer<User> m_user;
+  WGoogleMap *marksMapWidget;
+  WTableView *marksTable;
+  MarksModel *marksModel;
 
-public:
+  public:
     MarksWidget(QSharedPointer<User> user, WContainerWidget *parent = 0);
     void updateModel();
     void updateMap();
 
 };
-
-
-#endif /* MARKSWIDGET_H */
+/* MARKSWIDGET_H */
+#endif

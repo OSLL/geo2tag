@@ -38,7 +38,6 @@
  * PROJ: OSLL/wikigps
  * ---------------------------------------------------------------- */
 
-
 #ifndef _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #define _defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #include <QString>
@@ -50,7 +49,8 @@ void setServerPort(int port);
 #define DEFAULT_SERVER "http://localhost/"
 #define DEFAULT_PORT 80
 
-#define DATABASE_NAME "geo2tag" // "demo"
+// "demo"
+#define DATABASE_NAME "geo2tag"
 
 #define SUBSCRIBE_HTTP_URL        getServerUrl()+QString("service?query=subscribe")
 #define UNSUBSCRIBE_HTTP_URL      getServerUrl()+QString("service?query=unsubscribe")
@@ -68,16 +68,16 @@ void setServerPort(int port);
 #define DEFAULT_RADIUS            30
 #define DEFAULT_USER_NAME         "tracker"
 #define DEFAULT_USER_PASSWORD     "test"
-#define DEFAULT_CHANNEL 	  "default"
+#define DEFAULT_CHANNEL     "default"
 #define DEFAULT_TOKEN             "2154086390Ivan1128557755"
 
-#define TRACKER_TAG_LABEL	  "tracker's tag"
+#define TRACKER_TAG_LABEL   "tracker's tag"
 
-#define DEFAULT_LATITUDE		60
-#define DEFAULT_LONGITUDE		30
+#define DEFAULT_LATITUDE    60
+#define DEFAULT_LONGITUDE   30
 
 #define TRACKER_MSECS_TIMEOUT 500
-
-#endif //_defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
+//_defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

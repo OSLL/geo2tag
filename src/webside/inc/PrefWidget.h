@@ -10,13 +10,13 @@ using namespace Wt;
 
 class PrefWidget : public WContainerWidget
 {
-    std::string m_token;
-    WPushButton *changeButton;
-    WLineEdit *password1;
-    WLineEdit *password2;
-    WText *errorText;
+  std::string m_token;
+  WPushButton *changeButton;
+  WLineEdit *password1;
+  WLineEdit *password2;
+  WText *errorText;
 
-public:
+  public:
     PrefWidget(const std::string token, WContainerWidget *parent = 0);
 
     /* signals */
@@ -25,6 +25,5 @@ public:
     void onChangeClicked();
 
 };
-
-
-#endif /* PREFWIDGET_H */
+/* PREFWIDGET_H */
+#endif

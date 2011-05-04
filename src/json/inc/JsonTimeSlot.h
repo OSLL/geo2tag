@@ -43,21 +43,21 @@
 
 #include "TimeSlot.h"
 
-    class JsonTimeSlot: public TimeSlot
-    {
-        static qlonglong globalTimeSlotId;
-        qlonglong m_id;
+class JsonTimeSlot: public TimeSlot
+{
+  static qlonglong globalTimeSlotId;
+  qlonglong m_id;
 
-    public:
-        JsonTimeSlot(const qulonglong &slot);
+  public:
+    JsonTimeSlot(const qulonglong &slot);
 
-        qlonglong getId() const;
+    qlonglong getId() const;
 
-        void setId(qlonglong id);
+    void setId(qlonglong id);
 
-        ~JsonTimeSlot();
-    };
-
-#endif // _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
+    ~JsonTimeSlot();
+};
+// _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
+#endif
 
 /* ===[ End of file ]=== */

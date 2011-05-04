@@ -7,30 +7,29 @@
 
 class Preloading : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QVector<QThread *> m_threads;
-    QPoint m_top_left;
-    QPoint m_bottom_right;
-    int m_x, m_y, m_zoom, m_max_threads, m_max_tiles_for_thread;
+  QPoint m_top_left;
+  QPoint m_bottom_right;
+  int m_x, m_y, m_zoom, m_max_threads, m_max_tiles_for_thread;
 
-
-public:
+  public:
     explicit Preloading(int max_threads = 3, QObject *parent = 0);
     ~Preloading();
 
-private:
+  private:
     void loadingCircle();
 
-public:
+  public:
     int maxThreads() const;
     void setMaxThreads(const int & max_threads);
     void load(const QPoint &  top_left, const QPoint & bottom_right, const int & zoom);
 
-signals:
+    signals:
 
-public slots:
+  public slots:
     void threadFinished();
 };
-
-#endif // PRELOADING_H
+// PRELOADING_H
+#endif

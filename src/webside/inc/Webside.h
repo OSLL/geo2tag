@@ -12,15 +12,15 @@ using namespace Wt;
 
 class Webside : public WContainerWidget
 {
-    WStackedWidget *stackedWidget;
-    LoginWidget *loginWidget;
-    Sketch *mainWidget;
+  WStackedWidget *stackedWidget;
+  LoginWidget *loginWidget;
+  Sketch *mainWidget;
 
-public:
+  public:
     Webside(WContainerWidget *parent = 0);
 
     /* slots */
     void onLoginSuccess(QSharedPointer<User> user);
 };
-
-#endif // WEBSIDE_H
+// WEBSIDE_H
+#endif

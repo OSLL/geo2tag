@@ -29,30 +29,30 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 #include <QApplication>
-#include "MainWindow.h" 
+#include "MainWindow.h"
 #include "GpsInfo.h"
 #include "LoginWindow.h"
 #include "OnLineInformation.h"
 
 int main(int c, char **v)
 {
-  QApplication 	app(c,v);
+  QApplication  app(c,v);
 
-  common::GpsInfo::getInstance(); //starting daemon and other stuff;
+  //starting daemon and other stuff;
+  common::GpsInfo::getInstance();
   GUI::MainWindow window;
-  
-//  GUI::LoginWindow loginWin;
-//  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)),&window,SLOT(onActivate(QString)));
-//  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)), &GUI::OnLineInformation::getInstance(), SLOT(setAuthToken(QString)));
 
-//#ifdef DESKTOP_STYLE
-//  loginWin.show();
-//#else
-//  loginWin.showMaximized();
-//#endif
-  
+  //  GUI::LoginWindow loginWin;
+  //  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)),&window,SLOT(onActivate(QString)));
+  //  QObject::connect(&loginWin,SIGNAL(onSucsess(QString)), &GUI::OnLineInformation::getInstance(), SLOT(setAuthToken(QString)));
+
+  //#ifdef DESKTOP_STYLE
+  //  loginWin.show();
+  //#else
+  //  loginWin.showMaximized();
+  //#endif
+
   app.exec();
   return 0;
 
 }
-

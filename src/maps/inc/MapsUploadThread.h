@@ -14,16 +14,16 @@
 
 class MapsUploadThread : public QThread
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QVector<TilePoint> m_tiles;
 
-public:
+  public:
     explicit MapsUploadThread(QVector<TilePoint> & tiles, QObject * parent = 0);
     void run();
 
-private slots:
+  private slots:
     void uploadingFinished();
 };
-
-#endif // MAPSUPLOADTHREAD_H
+// MAPSUPLOADTHREAD_H
+#endif

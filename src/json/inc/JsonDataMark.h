@@ -37,7 +37,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
 #define _JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
 
@@ -46,14 +45,16 @@
 class JsonDataMark: public DataMark
 {
 
-    static qlonglong globalTagId;
-    qlonglong m_id; //!< Tag's identifier
+  static qlonglong globalTagId;
+  //!< Tag's identifier
+  qlonglong m_id;
 
-    qlonglong m_userId; //!< Assotiated user's identifier for the tag
+  //!< Assotiated user's identifier for the tag
+  qlonglong m_userId;
 
-public:
+  public:
     JsonDataMark(double latitude, double longitude,
-                 QString label, QString description, const QString& url, const QDateTime& time);
+      QString label, QString description, const QString& url, const QDateTime& time);
 
     qlonglong getId() const;
 
@@ -63,7 +64,7 @@ public:
 
     virtual ~JsonDataMark();
 };
-
-#endif //_JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+//_JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

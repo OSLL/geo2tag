@@ -9,15 +9,15 @@
 
 class AddNewMarkQuery: public DefaultQuery
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QSharedPointer<DataMark> m_tag;
 
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
-    virtual void processReply(QNetworkReply *reply);
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
+  virtual void processReply(QNetworkReply *reply);
 
-public:
+  public:
     AddNewMarkQuery(const QSharedPointer<DataMark> &tag, QObject *parent = 0);
 
     ~AddNewMarkQuery();
@@ -25,9 +25,9 @@ public:
     QSharedPointer<DataMark> getTag();
     const QSharedPointer<DataMark>& getTag() const;
 
-Q_SIGNALS:
+    Q_SIGNALS:
 
     void tagAdded();
 };
-
-#endif // ADDNEWMARKQUERY_H
+// ADDNEWMARKQUERY_H
+#endif

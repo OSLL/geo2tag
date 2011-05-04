@@ -11,10 +11,10 @@
 
 class DaemonManager
 {
-    QObject object;
-    QFile *m_log;
+  QObject object;
+  QFile *m_log;
 
-public:
+  public:
     DaemonManager();
 
     static DaemonManager& getInstance();
@@ -23,5 +23,5 @@ public:
     Status getStatus();
     QDateTime lastStatusModification();
 };
-
-#endif // DAEMONMANAGER_H
+// DAEMONMANAGER_H
+#endif

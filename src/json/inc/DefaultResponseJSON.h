@@ -5,12 +5,12 @@
 
 class DefaultResponseJSON : public JsonSerializer
 {
-public:
+  public:
     DefaultResponseJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 
     void parseJson(const QByteArray&);
 };
-
-#endif // DEFAULTRESPONSEJSON_H
+// DEFAULTRESPONSEJSON_H
+#endif

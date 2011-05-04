@@ -35,20 +35,19 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 #define _JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 
 #include <QMutex>
 #include "User.h"
 
- /*!
-   *
-   */
-  class JsonUser: public User
-  {
-    static qlonglong globalUserId;
-    qlonglong m_id;
+/*!
+ *
+ */
+class JsonUser: public User
+{
+  static qlonglong globalUserId;
+  qlonglong m_id;
 
   public:
     JsonUser(const QString& login, const QString& pass = "unknown", const QString& token = "unknown");
@@ -57,8 +56,9 @@
     void setId(qlonglong);
 
     ~JsonUser();
-  }; // class JsonUser
-
-#endif //_JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+    // class JsonUser
+};
+//_JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

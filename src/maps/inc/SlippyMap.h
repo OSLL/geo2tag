@@ -30,16 +30,16 @@ qreal latitudeFromTile(qreal ty, int zoom);
  */
 class SlippyMap: public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QPoint m_offset;
-    QRect m_tilesRect;
-    QPixmap m_emptyTile;
-    QHash<QPoint, QPixmap> m_tilePixmaps;
-    QNetworkAccessManager m_manager;
-    QUrl m_url;
+  QRect m_tilesRect;
+  QPixmap m_emptyTile;
+  QHash<QPoint, QPixmap> m_tilePixmaps;
+  QNetworkAccessManager m_manager;
+  QUrl m_url;
 
-public:
+  public:
     int width;
     int height;
     int zoom;
@@ -54,19 +54,18 @@ public:
 
     void pan(const QPoint &delta);
 
-private slots:
+  private slots:
 
     void handleNetworkData(QNetworkReply *reply);
 
     void download();
 
-signals:
+    signals:
     void updated(const QRect &rect);
 
-protected:
+  protected:
     QRect tileRect(const QPoint &tp);
 
 };
-
-
-#endif // SLIPPYMAP_H
+// SLIPPYMAP_H
+#endif

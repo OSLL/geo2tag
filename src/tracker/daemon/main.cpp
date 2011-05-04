@@ -32,8 +32,8 @@ int main(int c, char **v)
   qInstallMsgHandler(myMessageHandler);
   qDebug() << "Application is started";
   TrackerDaemon daemon;
-//  daemon.start();
+  //  daemon.start();
   daemon.run();
-//  QObject::connect(&app,SIGNAL(aboutToQuit()),&daemon,SLOT(stop()));
+  //  QObject::connect(&app,SIGNAL(aboutToQuit()),&daemon,SLOT(stop()));
   return app.exec();
 }

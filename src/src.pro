@@ -3,7 +3,7 @@ include(../config.pri)
 
 
 CONFIG += ordered
-SUBDIRS = common
+SUBDIRS = common common/tst
 
 
 maemo5: {
@@ -16,7 +16,7 @@ maemo5: {
 
 linux: {
   SUBDIRS += \
-             json \
+             json json/tst \
              http_requests \
              maps \ 
 	           tracker\ 
