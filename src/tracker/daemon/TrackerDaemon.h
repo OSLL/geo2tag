@@ -15,6 +15,7 @@
 #include <QTimer>
 #include "Control.h"
 #include <QPointF>
+#include <QNetworkConfigurationManager>
 
 class TrackerDaemon : /*public QThread,*/ public Control
 {
@@ -24,6 +25,7 @@ class TrackerDaemon : /*public QThread,*/ public Control
     QString m_channelName;
     QString m_visibleName;
     QPointF m_lastCoords;
+    QNetworkConfigurationManager m_netManager;
 
     LoginQuery * m_loginQuery; // this field needs because query is asynchronous
     AddNewMarkQuery * m_tagQuery; // this field needs because query is asynchronous

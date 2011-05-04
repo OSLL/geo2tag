@@ -19,7 +19,8 @@ TrackerDaemon::TrackerDaemon():m_settings(QSettings::SystemScope,"osll","tracker
             m_loginQuery(NULL),
             m_tagQuery(NULL),
             m_pauseFlag(true),
-            m_isConnected(false)
+            m_isConnected(false),
+	    m_netManager(this)
 {
 //    moveToThread(this);
     m_controlServer = new QTcpServer(NULL);
@@ -56,9 +57,12 @@ void TrackerDaemon::run()
     m_loginQuery = new LoginQuery(login, password, this);
     connect(m_loginQuery, SIGNAL(connected()), SLOT(onConnected()));
     connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
+//    while(!m_netManager.isOnline())
+//	    QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
     m_loginQuery->doRequest();
     qDebug() << "sended LoginRequest";
     // NOTE commented due to qt bug linked with threads and network on Maemo
+    // NOTE bug - http://bugreports.qt.nokia.com/browse/QTBUG-15004
 /*    for(;;)
     {
 	    qDebug() << "going in for loop";
@@ -122,7 +126,7 @@ void TrackerDaemon::onError(QString message)
      	    QEventLoop eventLoop;
 	    QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
 	    qDebug() << "trying to login one more time";
-	    run();
+	    if (m_netManager.isOnline()) run();
     }
 }
 
