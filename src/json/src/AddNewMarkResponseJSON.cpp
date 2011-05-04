@@ -15,12 +15,10 @@ QByteArray AddNewMarkResponseJSON::getJson() const
 {
     QJson::Serializer serializer;
     QVariantMap obj;
-
-    QSharedPointer<DataMark> mark = m_tagsContainer->at(0);
-
+    if (m_tagsContainer->size() > 0)
+        obj.insert("mark_id", m_tagsContainer->at(0)->getId());
     obj.insert("status", m_status);
-    obj.insert("status_description", m_statusMessage);
-    obj.insert("mark_id", mark->getId());
+    obj.insert("status_description", m_statusMessage);    
     return serializer.serialize(obj);
 }
 
@@ -40,7 +38,7 @@ void AddNewMarkResponseJSON::parseJson(const QByteArray &data)
     m_status = result["status"].toString();
     m_statusMessage = result["status_description"].toString();
 
-    qlonglong markId = result["timeSlot"].toLongLong();
+    qlonglong markId = result["mark_id"].toLongLong();
     JsonDataMark* jsonMark = new JsonDataMark(0,0,"unknown", "unknown", "unknown", QDateTime());
     jsonMark->setId(markId);
     QSharedPointer<DataMark> mark(jsonMark);
