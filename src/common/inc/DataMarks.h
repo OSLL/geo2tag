@@ -49,6 +49,7 @@
 #include <QDateTime>
 #include "User.h"
 #include "ConcurrentVector.h"
+#include "Channel.h"
 
 class DataMark: public QObject
 {
@@ -64,6 +65,8 @@ class DataMark: public QObject
     QSharedPointer<User> m_user;
 
     QSharedPointer<Channel> m_channel;
+
+    QSharedPointer<TimeSlot> m_timeSlot;
 
 public:
 
@@ -100,6 +103,10 @@ public:
 
     QSharedPointer<Channel> getChannel() const;
     static double getDistance(double lat1, double lon1, double lat2, double lon2);
+
+    void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
+    QSharedPointer<TimeSlot> getTimeSlot() const;
+    bool timeSlotIsNull() const;
 
     virtual ~DataMark();
 };

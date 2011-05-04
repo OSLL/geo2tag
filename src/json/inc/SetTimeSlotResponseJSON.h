@@ -29,8 +29,8 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file SetTimeSlotRequestJSON.h
- * \brief Header of SetTimeSlotRequestJSON
+ * \file SetTimeSlotResponseJSON.h
+ * \brief Header of SetTimeSlotResponseJSON
  *
  * File description
  *

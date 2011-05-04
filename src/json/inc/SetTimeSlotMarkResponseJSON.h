@@ -29,25 +29,17 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file GetTimeSlotMarkRequestJSON.h
- * \brief Header of GetTimeSlotMarkRequestJSON
+ * \file SetTimeSlotMarkResponseJSON.h
+ * \brief Header of SetTimeSlotMarkResponseJSON
+ *
  *
  * ---------------------------------------------------------------- */
 
-#ifndef _GETTIMESLOTMARKRESPONSEJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_
-#define _GETTIMESLOTMARKRESPONSEJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_
+#ifndef _SETTIMESLOTMARKRESPONSEJSON_H_08bd1e75_406f_45dd_ad7b_0fd184fa1a71_
+#define _SETTIMESLOTMARKRESPONSEJSON_H_08bd1e75_406f_45dd_ad7b_0fd184fa1a71_
 
-#include "JsonSerializer.h"
+#include "DefaultResponseJSON.h"
 
-class GetTimeSlotMarkResponseJSON : public JsonSerializer
-{
-        Q_OBJECT;
-public:
-    GetTimeSlotMarkResponseJSON(QObject *parent=0);
+typedef DefaultResponseJSON SetTimeSlotMarkResponseJSON;
 
-    QByteArray getJson() const;
-
-    void parseJson(const QByteArray&);
-};
-
-#endif // _GETTIMESLOTMARKRESPONSEJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_
+#endif // _SETTIMESLOTMARKRESPONSEJSON_H_08bd1e75_406f_45dd_ad7b_0fd184fa1a71_

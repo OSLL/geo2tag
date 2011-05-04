@@ -1,30 +1,31 @@
-
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#include "GetTimeSlotMarkRequestJSON.h"
+#include "SetTimeSlotMarkRequestJSON.h"
 #include "DataMarks.h"
-#include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
+#include "JsonTimeSlot.h"
 
-GetTimeSlotMarkRequestJSON::GetTimeSlotMarkRequestJSON(QObject *parent) : JsonSerializer(parent)
+
+SetTimeSlotMarkRequestJSON::SetTimeSlotMarkRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
-QByteArray GetTimeSlotMarkRequestJSON::getJson() const
+QByteArray SetTimeSlotMarkRequestJSON::getJson() const
 {
     QJson::Serializer serializer;
     QVariantMap request;
 
     request.insert("auth_token", m_usersContainer->at(0)->getToken());
     request.insert("mark_id", m_tagsContainer->at(0)->getId());
+    request.insert("timeSlot", m_tagsContainer->at(0)->getTimeSlot()->getSlot());
 
     return serializer.serialize(request);
 }
 
 
-void GetTimeSlotMarkRequestJSON::parseJson(const QByteArray &data)
+void SetTimeSlotMarkRequestJSON::parseJson(const QByteArray &data)
 {
     clearContainers();
     QJson::Parser parser;
@@ -36,13 +37,20 @@ void GetTimeSlotMarkRequestJSON::parseJson(const QByteArray &data)
         return;
     }
 
+
     QString token = result["auth_token"].toString();
     qlonglong markId = result["mark_id"].toLongLong();
+    qulonglong timeSlot = result["timeSlot"].toULongLong();
 
     m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));
+
     JsonDataMark* jsonMark = new JsonDataMark(0,0,"unknown", "unknown", "unknown", QDateTime());
-    jsonMark->setId(markId);   
+    jsonMark->setId(markId);
     m_tagsContainer->push_back(QSharedPointer<DataMark> (jsonMark));
+
+    m_tagsContainer->at(0)->setTimeSlot(QSharedPointer<TimeSlot>(new JsonTimeSlot(timeSlot)));
 }
+
+
 
 

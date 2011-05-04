@@ -99,6 +99,8 @@ namespace common
         QByteArray processAddChannelQuery(const QByteArray&);
         QByteArray processGetTimeSlotQuery(const QByteArray&);
         QByteArray processSetTimeSlotQuery(const QByteArray&);
+        QByteArray processGetTimeSlotMarkQuery(const QByteArray&);
+        QByteArray processSetTimeSlotMarkQuery(const QByteArray&);
 
         QByteArray setDefaultTimeSlotValueForChannels();
 
