@@ -36,6 +36,8 @@ class QueryExecutor : public QObject
     QSharedPointer<TimeSlot> insertNewTimeSlot(const QSharedPointer<TimeSlot>&);
     bool                     insertNewChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
     bool                     changeChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
+    bool                     insertNewMarkTimeSlot(const QSharedPointer<DataMark>&, const QSharedPointer<TimeSlot>&);
+    bool                     changeMarkTimeSlot(const QSharedPointer<DataMark>&, const QSharedPointer<TimeSlot>&);
 
     signals:
 

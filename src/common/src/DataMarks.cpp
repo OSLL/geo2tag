@@ -67,6 +67,8 @@
         m_channel = QSharedPointer<Channel>(NULL);
         if (m_label.isEmpty())
             m_label = "New mark";
+
+        m_timeSlot = QSharedPointer<TimeSlot>(NULL);
     }
 
     void DataMark::setUser(QSharedPointer<User> user)
@@ -142,6 +144,25 @@
     QSharedPointer<Channel> DataMark::getChannel() const
     {
         return m_channel;
+    }
+
+    void DataMark::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
+    {
+        m_timeSlot = timeSlot;
+    }
+
+    QSharedPointer<TimeSlot> DataMark::getTimeSlot() const
+    {
+        if (m_timeSlot.isNull())
+            return m_channel->getTimeSlot();
+        return m_timeSlot;
+    }
+
+    bool DataMark::timeSlotIsNull() const
+    {
+        if (m_timeSlot.isNull())
+            return true;
+        return false;
     }
 
 

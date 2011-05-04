@@ -280,3 +280,57 @@ bool QueryExecutor::changeChannelTimeSlot(const QSharedPointer<Channel>& channel
     }
     return result;
 }
+
+
+
+bool QueryExecutor::insertNewMarkTimeSlot(const QSharedPointer<DataMark>& tag, const QSharedPointer<TimeSlot>& timeSlot)
+{
+    bool result;
+    QSqlQuery insertNewMarkTimeSlot(m_database);
+    insertNewMarkTimeSlot.prepare("insert into tagTimeSlot (tag_id,timeSlot_id) values(:tag_id,:timeSlot_id);");
+    insertNewMarkTimeSlot.bindValue(":tag_id",tag->getId());
+    insertNewMarkTimeSlot.bindValue(":timeSlot_id",timeSlot->getId());
+
+    syslog(LOG_INFO,"Inserting %llu millyseconds(Id = %lld) for tag (Id = %lld)", timeSlot->getSlot(),timeSlot->getId(),
+    tag->getId());
+
+    m_database.transaction();
+    result=insertNewMarkTimeSlot.exec();
+    if(!result)
+    {
+        syslog(LOG_INFO,"Rollback for insertNewMarkTimeSlot sql query");
+        m_database.rollback();
+    }
+    else
+    {
+        syslog(LOG_INFO,"Commit for insertNewMarkTimeSlot sql query");
+        m_database.commit();
+    }
+    return result;
+}
+
+
+bool QueryExecutor::changeMarkTimeSlot(const QSharedPointer<DataMark>& tag, const QSharedPointer<TimeSlot>& timeSlot)
+{
+    bool result;
+    QSqlQuery changeMarkTimeSlot(m_database);
+    changeMarkTimeSlot.prepare("update tagTimeSlot set timeslot_id = :timeSlot_id where tag_id = :tag_id;");
+    changeMarkTimeSlot.bindValue(":tag_id",tag->getId());
+    changeMarkTimeSlot.bindValue(":timeSlot_id",timeSlot->getId());
+
+    syslog(LOG_INFO,"Set %llu millyseconds(Id = %lld) for tag (Id = %lld)", timeSlot->getSlot(),timeSlot->getId(), tag->getId());
+
+    m_database.transaction();
+    result=changeMarkTimeSlot.exec();
+    if(!result)
+    {
+      syslog(LOG_INFO,"Rollback for changeMarkTimeSlot sql query");
+      m_database.rollback();
+    }else
+    {
+      syslog(LOG_INFO,"Commit for changeMarkTimeSlot sql query");
+      m_database.commit();
+    }
+    return result;
+}
+
