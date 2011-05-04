@@ -42,6 +42,8 @@ private slots:
     void onTagAdded();
     void onError(QString);
 
+    void onOnlineChanged(bool state);
+    
     void newControlConnection();
 
 public:
