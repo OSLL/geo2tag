@@ -188,6 +188,11 @@ void TrackerDaemon::onTagAdded()
             qDebug() << "Setting and adding new tag";
            if(m_tagQuery)
            {
+		while (common::GpsInfo::getInstance().getLatitude()==0. || common::GpsInfo::getInstance().getLongitude()==0. || !m_netManager.isOnline())
+		{
+			qDebug() << "Position source doesnt ready or there is no internet connection, waiting";
+			QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
+		}	
                 m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());
                 m_tagQuery->getTag()->setLatitude(common::GpsInfo::getInstance().getLatitude());
                 m_tagQuery->getTag()->setLongitude(common::GpsInfo::getInstance().getLongitude());
