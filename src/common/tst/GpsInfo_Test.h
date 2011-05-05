@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
+ * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,29 +30,48 @@
  */
 
 /*!
- * \file main.cpp
- * \brief Test suite for common
+ * \file GpsInfo_Test.h
+ * \brief Test suite for GpsInfo class
  *
  * PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * ----------------------------------------------------------- */
 
+
+#include <QObject>
 #include <QtTest/QtTest>
-#include <QtCore/QtCore>
-#include <QApplication>
+#include <QSignalSpy>
 
-#include "User_Test.h"
-#include "GpsInfo_Test.h"
+//include Application class
+#include "../inc/GpsInfo.h"
 
-int main(int c, char **v)
+namespace Test
 {
-  QApplication app(c,v);
+  class GpsInfo_Test : public QObject
+  {
+    Q_OBJECT;
+  
+  public:
+    
+    GpsInfo_Test()
+    {
+  	  // initialization here
+    }
+  
+  private slots:
+  
+    void test1()
+    {
+     // see docs: http://doc.qt.nokia.com/4.7/qtest.html
+  
+     //QCOMPARE();
+     //QWARN();
+     //QVERIFY();
+     //QTEST();
+     QCOMPARE(common::GpsInfo::getInstance().isReady(),false);
+     QCOMPARE(common::GpsInfo::getInstance().getLatitude(),0.);
+     QCOMPARE(common::GpsInfo::getInstance().getLongitude(),0.);
+    }
+  
+  }; // class GpsInfo_Test
 
-  Test::User_Test test1;
-  QTest::qExec(&test1);
-  Test::GpsInfo_Test test2;
-  QTest::qExec(&test2);
-  return 0;
-}
-
-
-/* ===[ End of file $HeadURL$ ]=== */
+} // end of namespace Test

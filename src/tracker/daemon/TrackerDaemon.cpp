@@ -188,7 +188,7 @@ void TrackerDaemon::onTagAdded()
             qDebug() << "Setting and adding new tag";
            if(m_tagQuery)
            {
-		while (common::GpsInfo::getInstance().getLatitude()==0. || common::GpsInfo::getInstance().getLongitude()==0. || !m_netManager.isOnline())
+		while (!common::GpsInfo::getInstance().isReady() || !m_netManager.isOnline())
 		{
 			qDebug() << "Position source doesnt ready or there is no internet connection, waiting";
 			QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();

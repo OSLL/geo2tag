@@ -48,6 +48,7 @@ namespace common
 
   MobilityGps::MobilityGps(QObject *parent) : QObject(parent)
   {
+      setReady(false);
       QGeoPositionInfoSource *source = QGeoPositionInfoSource::createDefaultSource(this);
       if (source) {
           connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)),
@@ -58,6 +59,7 @@ namespace common
 
   void MobilityGps::positionUpdated(QGeoPositionInfo info)
   {
+      if (!isReady()) setReady(true);
       m_longitude = info.coordinate().longitude();
       m_latitude = info.coordinate().latitude();
   }
@@ -71,7 +73,7 @@ namespace common
   {
     return m_latitude;
   }
-
+  
   MobilityGps::~MobilityGps()
   {
 

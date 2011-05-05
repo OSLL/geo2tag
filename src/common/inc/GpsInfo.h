@@ -43,10 +43,20 @@ namespace common
 {
   class Gps
   {
+	  bool m_ready;
     public:
       virtual double getLongitude() const=0;
 
       virtual double getLatitude() const=0;
+      
+      bool isReady() const
+      {
+	      return m_ready;
+      }
+
+      void setReady(bool state){
+	      m_ready=state;
+      }
   };
   /*!
    * Class description. May use HTML formatting
