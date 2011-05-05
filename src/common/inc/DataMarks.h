@@ -107,6 +107,10 @@ class DataMark: public QObject
     QSharedPointer<TimeSlot> getTimeSlot() const;
     bool timeSlotIsNull() const;
 
+    void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
+    QSharedPointer<TimeSlot> getTimeSlot() const;
+    bool timeSlotIsNull() const;
+
     virtual ~DataMark();
 };
 
