@@ -65,7 +65,7 @@ class DataMark: public QObject
 
   QSharedPointer<Channel> m_channel;
 
-    QSharedPointer<TimeSlot> m_timeSlot;
+  QSharedPointer<TimeSlot> m_timeSlot;
 
   public:
 
@@ -102,10 +102,6 @@ class DataMark: public QObject
 
     QSharedPointer<Channel> getChannel() const;
     static double getDistance(double lat1, double lon1, double lat2, double lon2);
-
-    void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
-    QSharedPointer<TimeSlot> getTimeSlot() const;
-    bool timeSlotIsNull() const;
 
     void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
     QSharedPointer<TimeSlot> getTimeSlot() const;

@@ -42,28 +42,12 @@
 
 class GetTimeSlotMarkRequestJSON : public JsonSerializer
 {
-        Q_OBJECT;
-public:
+  Q_OBJECT;
+  public:
     GetTimeSlotMarkRequestJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 
     void parseJson(const QByteArray&);
 };
-
-#endif // _GETTIMESLOTMARKREQUESTJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif                                  // _GETTIMESLOTMARKREQUESTJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_

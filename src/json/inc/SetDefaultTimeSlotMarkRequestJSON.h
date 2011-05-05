@@ -42,13 +42,12 @@
 
 class SetDefaultTimeSlotMarkRequestJSON : public JsonSerializer
 {
-        Q_OBJECT;
-public:
+  Q_OBJECT;
+  public:
     SetDefaultTimeSlotMarkRequestJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 
     void parseJson(const QByteArray&);
 };
-
-#endif // _SETDEFAULTTIMESLOTMARKREQUESTJSON_H_404ac795_44af_4d40_8b15_f652438d71f2_
+#endif                                  // _SETDEFAULTTIMESLOTMARKREQUESTJSON_H_404ac795_44af_4d40_8b15_f652438d71f2_

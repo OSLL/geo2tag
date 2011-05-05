@@ -41,83 +41,95 @@
 #include "JsonDataMark.h"
 
 RSSFeedRequestJSON::RSSFeedRequestJSON(double latitude, double longitude, double radius, QObject *parent):
-        JsonSerializer(parent), m_latitude(latitude), m_longitude(longitude), m_radius(radius)
+JsonSerializer(parent), m_latitude(latitude), m_longitude(longitude), m_radius(radius)
 {
 }
+
 
 RSSFeedRequestJSON::RSSFeedRequestJSON(QObject *parent) :JsonSerializer(parent)
 {
 }
 
+
 void RSSFeedRequestJSON::parseJson(const QByteArray &data)
 {
-    clearContainers();
+  clearContainers();
 
-    QJson::Parser parser;
-    bool ok;
-    QVariantMap result = parser.parse(data, &ok).toMap();
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
 
-    if (!ok)
-    {
-        qFatal("An error occured during parsing json with rss request");
-        return;
-    }
+  if (!ok)
+  {
+    qFatal("An error occured during parsing json with rss request");
+    return;
+  }
 
-    QString authToken = result["auth_token"].toString();
-    m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("dummyUser[RSSFeedRequest]","dummyPassword",authToken)));
-    m_latitude = result["latitude"].toDouble();
-    m_longitude = result["longitude"].toDouble();
-    m_radius = result["radius"].toDouble();
+  QString authToken = result["auth_token"].toString();
+  m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("dummyUser[RSSFeedRequest]","dummyPassword",authToken)));
+  m_latitude = result["latitude"].toDouble();
+  m_longitude = result["longitude"].toDouble();
+  m_radius = result["radius"].toDouble();
 }
+
 
 QByteArray RSSFeedRequestJSON::getJson() const
 {
-    QJson::Serializer serializer;
-    QVariantMap obj;
-    obj.insert("auth_token", getAuthToken());
-    obj.insert("latitude", getLatitude());
-    obj.insert("longitude", getLongitude());
-    obj.insert("radius", getRadius());
-    return serializer.serialize(obj);
+  QJson::Serializer serializer;
+  QVariantMap obj;
+  obj.insert("auth_token", getAuthToken());
+  obj.insert("latitude", getLatitude());
+  obj.insert("longitude", getLongitude());
+  obj.insert("radius", getRadius());
+  return serializer.serialize(obj);
 }
+
 
 QString RSSFeedRequestJSON::getAuthToken() const
 {
-    return m_usersContainer->at(0)->getToken();
+  return m_usersContainer->at(0)->getToken();
 }
+
 
 double RSSFeedRequestJSON::getLatitude() const
 {
-    return m_latitude;
+  return m_latitude;
 }
+
 
 double RSSFeedRequestJSON::getLongitude() const
 {
-    return m_longitude;
+  return m_longitude;
 }
+
 
 double RSSFeedRequestJSON::getRadius() const
 {
-    return m_radius;
+  return m_radius;
 }
+
 
 void RSSFeedRequestJSON::setLatitude(double latitude)
 {
-    m_latitude = latitude;
+  m_latitude = latitude;
 }
+
 
 void RSSFeedRequestJSON::setLongitude(double longitude)
 {
-    m_longitude = longitude;
+  m_longitude = longitude;
 }
+
 
 void RSSFeedRequestJSON::setRadius(double radius)
 {
-    m_radius = radius;
+  m_radius = radius;
 }
+
 
 RSSFeedRequestJSON::~RSSFeedRequestJSON()
 {
 }
+
 
 /* ===[ End of file $HeadURL$ ]=== */

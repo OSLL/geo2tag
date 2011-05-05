@@ -41,5 +41,4 @@
 #include "DefaultResponseJSON.h"
 
 typedef DefaultResponseJSON SetDefaultTimeSlotMarkResponseJSON;
-
-#endif // _SETDEFAULTTIMESLOTMARKRESPONSEJSON_H_971784c3_f691_4676_bc64_bdfc317142c6_
+#endif                                  // _SETDEFAULTTIMESLOTMARKRESPONSEJSON_H_971784c3_f691_4676_bc64_bdfc317142c6_

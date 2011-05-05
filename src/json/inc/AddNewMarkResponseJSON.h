@@ -7,8 +7,8 @@
 
 class AddNewMarkResponseJSON : public JsonSerializer
 {
-        Q_OBJECT;
-public:
+  Q_OBJECT;
+  public:
     AddNewMarkResponseJSON(QObject *parent=0);
 
     QByteArray getJson() const;
@@ -16,15 +16,4 @@ public:
     void parseJson(const QByteArray&);
 
 };
-
-class AddNewMarkResponseJSON : public JsonSerializer
-{
-        Q_OBJECT;
-public:
-    AddNewMarkResponseJSON(QObject *parent=0);
-
-    QByteArray getJson() const;
-
-    void parseJson(const QByteArray&);
-
-};
+#endif

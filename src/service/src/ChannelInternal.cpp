@@ -45,26 +45,30 @@
 #include "DynamicCastFailure.h"
 #include <syslog.h>
 
-  DbChannel::DbChannel(qlonglong id,
-                   const QString &name,
-                   const QString &description,
-                   const QString &url):
-                   Channel(name, description, url), m_id(id)
-  {
-  }
+DbChannel::DbChannel(qlonglong id,
+const QString &name,
+const QString &description,
+const QString &url):
+Channel(name, description, url), m_id(id)
+{
+}
 
-  qlonglong DbChannel::getId() const
-  {
-    return m_id;
-  }
 
-  void DbChannel::setId(qlonglong id)
-  {
-    m_id=id;
-  }
+qlonglong DbChannel::getId() const
+{
+  return m_id;
+}
 
-  DbChannel::~DbChannel()
-  {
-  }
+
+void DbChannel::setId(qlonglong id)
+{
+  m_id=id;
+}
+
+
+DbChannel::~DbChannel()
+{
+}
+
 
 /* ===[ End of file ]=== */

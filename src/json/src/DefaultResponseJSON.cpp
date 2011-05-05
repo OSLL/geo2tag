@@ -7,28 +7,30 @@ DefaultResponseJSON::DefaultResponseJSON(QObject *parent) : JsonSerializer(paren
 {
 }
 
+
 QByteArray DefaultResponseJSON::getJson() const
 {
-    QJson::Serializer serializer;
-    QVariantMap obj;
-    obj.insert("status", m_status);
-    obj.insert("status_description", m_statusMessage);
-    return serializer.serialize(obj);
+  QJson::Serializer serializer;
+  QVariantMap obj;
+  obj.insert("status", m_status);
+  obj.insert("status_description", m_statusMessage);
+  return serializer.serialize(obj);
 }
+
 
 void DefaultResponseJSON::parseJson(const QByteArray &data)
 {
-    clearContainers();
+  clearContainers();
 
-    QJson::Parser parser;
-    bool ok;
+  QJson::Parser parser;
+  bool ok;
 
-    QVariantMap result = parser.parse(data, &ok).toMap();
-    if (!ok)
-    {
-        qFatal("An error occured during parsing json with channel list");
-    }
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok)
+  {
+    qFatal("An error occured during parsing json with channel list");
+  }
 
-    m_status = result["status"].toString();
-    m_statusMessage = result["status_description"].toString();
+  m_status = result["status"].toString();
+  m_statusMessage = result["status_description"].toString();
 }

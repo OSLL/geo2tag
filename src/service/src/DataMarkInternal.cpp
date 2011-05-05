@@ -41,37 +41,42 @@
 
 #include "DataMarkInternal.h"
 
-    DbDataMark::DbDataMark(qlonglong id,
-                       double latitude,
-                       double longitude,
-                       QString label,
-                       QString description,
-                       const QString &url,
-                       const QDateTime &time,
-                       qlonglong userId):
-                DataMark(latitude, longitude, label, description, url, time),
-                m_id(id),
-                m_userId(userId)
-    {
-    }
+DbDataMark::DbDataMark(qlonglong id,
+double latitude,
+double longitude,
+QString label,
+QString description,
+const QString &url,
+const QDateTime &time,
+qlonglong userId):
+DataMark(latitude, longitude, label, description, url, time),
+m_id(id),
+m_userId(userId)
+{
+}
 
-    qlonglong DbDataMark::getId() const
-    {
-        return m_id;
-    }
 
-    qlonglong DbDataMark::getUserId() const
-    {
-        return m_userId;
-    }
+qlonglong DbDataMark::getId() const
+{
+  return m_id;
+}
 
-    void DbDataMark::setId(qlonglong id)
-    {
-        m_id=id;
-    }
 
-    DbDataMark::~DbDataMark()
-    {
-    }
+qlonglong DbDataMark::getUserId() const
+{
+  return m_userId;
+}
+
+
+void DbDataMark::setId(qlonglong id)
+{
+  m_id=id;
+}
+
+
+DbDataMark::~DbDataMark()
+{
+}
+
 
 /* ===[ End of file ]=== */
