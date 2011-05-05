@@ -3,7 +3,7 @@ include(../config.pri)
 
 
 CONFIG += ordered
-SUBDIRS = common common/tst
+SUBDIRS = common
 
 
 maemo5: {
@@ -21,6 +21,7 @@ linux: {
              maps \ 
 	     tracker \
              service \
+	     common/tst
 }
 
 symbian: {
