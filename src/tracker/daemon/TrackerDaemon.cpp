@@ -154,15 +154,14 @@ void TrackerDaemon::onConnected()
     qDebug() << "Auth_token recieved - " << m_loginQuery->getUser()->getToken() ;
     if(m_tagQuery == NULL)
     {
-        QSharedPointer<DataMark> mark(new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
-                                 common::GpsInfo::getInstance().getLongitude(),
+        QSharedPointer<DataMark> mark(new JsonDataMark(0.,0.,
                         //DEFAULT_LATITUDE,DEFAULT_LONGITUDE,
                                  m_visibleName,
                                  "this tag was generated automaticaly by tracker application",
                                  "unknown",
                                  QDateTime::currentDateTime()));
-	m_lastCoords.setX(common::GpsInfo::getInstance().getLatitude());
-	m_lastCoords.setY(common::GpsInfo::getInstance().getLongitude());
+	m_lastCoords.setX(0.);
+	m_lastCoords.setY(0.);
 	QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
         mark->setChannel(channel);
         mark->setUser(m_loginQuery->getUser());
