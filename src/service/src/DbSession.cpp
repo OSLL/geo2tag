@@ -75,6 +75,9 @@
 #include "SetTimeSlotMarkRequestJSON.h"
 #include "SetTimeSlotMarkResponseJSON.h"
 
+#include "SetDefaultTimeSlotMarkRequestJSON.h"
+#include "SetDefaultTimeSlotMarkResponseJSON.h"
+
 #include "JsonTimeSlot.h"
 
 #include <QtSql>
@@ -952,6 +955,95 @@ namespace common
 
             response.setStatus(ok);
             response.setStatusMessage("Time slot for tag is set");
+            answer.append(response.getJson());
+            syslog(LOG_INFO, "answer: %s", answer.data());
+            return answer;
+
+        }
+
+
+        QByteArray DbObjectsCollection::processSetDefaultTimeSlotMarkQuery(const QByteArray& data)
+        {
+            syslog(LOG_INFO, "starting SetDefaultTimeSlotMarkQuery processing");
+            SetDefaultTimeSlotMarkRequestJSON request;
+            syslog(LOG_INFO, " SetDefaultTimeSlotMarkRequestJSON created, now create SetDefaultTimeSlotMarkResponseJSON ");
+            SetDefaultTimeSlotMarkResponseJSON response;
+            QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+            syslog(LOG_INFO, "Starting Json parsing for SetDefaultTimeSlotMarkQuery");
+            request.parseJson(data);
+            syslog(LOG_INFO, "Json parsed for SetDefaultTimeSlotMarkQuery");
+
+            QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+            QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+            if(realUser.isNull())
+            {
+                response.setStatus(error);
+                response.setStatusMessage("Wrong authentification key");
+                answer.append(response.getJson());
+                return answer;
+            }
+
+            QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
+            QSharedPointer<DataMark> realTag; // Null pointer
+            QVector<QSharedPointer<DataMark> > currentTags = m_tagsContainer->vector();
+            for(int i=0; i<currentTags.size(); i++)
+            {
+                if(currentTags.at(i)->getId() == dummyTag->getId())
+                {
+                    realTag = currentTags.at(i);
+                }
+            }
+
+            if(realTag.isNull())
+            {
+                response.setStatus(error);
+                response.setStatusMessage("Wrong mark id!");
+                answer.append(response.getJson());
+                return answer;
+            }
+
+
+            syslog(LOG_INFO, "Sending sql request for SetDefaultTimeSlotMark");
+
+            if (realTag->timeSlotIsNull())
+            {
+                response.setStatus(ok);
+                response.setStatusMessage("The tag already has default time slot value");
+                answer.append(response.getJson());
+                return answer;
+            }
+
+            bool result = m_queryExecutor->deleteMarkTimeSlot(realTag);
+
+            if(!result)
+            {
+                response.setStatus(error);
+                response.setStatusMessage("Internal server error ):");
+                answer.append(response.getJson());
+                return answer;
+            }
+
+//            QSharedPointer<TimeSlot> realTimeSlot;
+//            QSharedPointer<TimeSlot> markTimeSlot = realTag->getTimeSlot();
+//            QVector<QSharedPointer<TimeSlot> > currentTimeSlots = m_timeSlotsContainer->vector();
+//            for(int i=0; i<currentTimeSlots.size(); i++)
+//            {
+//                if(currentTimeSlots.at(i)->getSlot() == markTimeSlot->getSlot())
+//                {
+//                    realTimeSlot = currentTimeSlots.at(i);
+//                }
+//            }
+
+            //TODO: to delete time slot from table timeSlot
+
+
+            m_updateThread->lockWriting();
+            realTag->setTimeSlot(QSharedPointer<TimeSlot>(NULL));
+            m_updateThread->unlockWriting();
+
+            response.setStatus(ok);
+            response.setStatusMessage("Now the tag has default time slot value");
             answer.append(response.getJson());
             syslog(LOG_INFO, "answer: %s", answer.data());
             return answer;

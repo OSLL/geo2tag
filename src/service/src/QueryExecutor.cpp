@@ -334,3 +334,30 @@ bool QueryExecutor::changeMarkTimeSlot(const QSharedPointer<DataMark>& tag, cons
     return result;
 }
 
+
+
+
+bool QueryExecutor::deleteMarkTimeSlot(const QSharedPointer<DataMark>& tag)
+{
+    bool result;
+    QSqlQuery deleteMarkTimeSlot(m_database);
+    deleteMarkTimeSlot.prepare("delete from tagTimeSlot where tag_id = :tag_id;");
+    deleteMarkTimeSlot.bindValue(":tag_id",tag->getId());
+
+    syslog(LOG_INFO,"Deleting tag (Id = %lld)", tag->getId());
+
+    m_database.transaction();
+    result=deleteMarkTimeSlot.exec();
+    if(!result)
+    {
+        syslog(LOG_INFO,"Rollback for deleteMarkTimeSlot sql query");
+        m_database.rollback();
+    }
+    else
+    {
+        syslog(LOG_INFO,"Commit for deleteMarkTimeSlot sql query");
+        m_database.commit();
+    }
+    return result;
+}
+
