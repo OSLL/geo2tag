@@ -36,6 +36,7 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
     void checkDaemon();
     void readData();
 
+    void restartDaemon();
     void moveToFirstPage();
 
   public:

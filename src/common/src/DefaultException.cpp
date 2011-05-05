@@ -29,12 +29,12 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file DefaultException.cpp
  * \brief DefaultException implementation
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 #include "DefaultException.h"
@@ -48,6 +48,7 @@ namespace exception
   DefaultException::~DefaultException()
   {
   }
-} // namespace exception
+}                                       // namespace exception
+
 
 /* ===[ End of file  ]=== */

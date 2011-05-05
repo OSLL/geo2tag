@@ -44,132 +44,177 @@
 
 #include "DataMarks.h"
 
-    void DataMark::setDescription(const QString& s)
-    {
-        m_description = s;
-    }
-
-    const QString& DataMark::getDescription() const
-    {
-        return m_description;
-    }
-
-    DataMark::DataMark(double latitude, double longitude, QString label,
-                       QString description, QString url, QDateTime time):
-                                            m_latitude(latitude),
-                                            m_longitude(longitude),
-                                            m_label(label),
-                                            m_description(description),
-                                            m_url(url),
-                                            m_time(time)
-    {
-        m_user = QSharedPointer<User>(NULL);
-        m_channel = QSharedPointer<Channel>(NULL);
-        if (m_label.isEmpty())
-            m_label = "New mark";
-    }
-
-    void DataMark::setUser(QSharedPointer<User> user)
-    {
-        m_user=user;
-    }
-
-    void DataMark::setChannel(QSharedPointer<Channel> channel)
-    {
-        m_channel=channel;
-    }
-
-    DataMark::~DataMark()
-    {
-
-    }
-
-    double DataMark::getLatitude() const
-    {
-        return m_latitude;
-    }
-
-    void DataMark::setLatitude(const double& lat)
-    {
-        m_latitude = lat;
-    }
-
-    double DataMark::getLongitude() const
-    {
-        return m_longitude;
-    }
-
-    void DataMark::setLongitude(const double &lon)
-    {
-        m_longitude = lon;
-    }
-
-    const QString& DataMark::getLabel() const
-    {
-        return m_label;
-    }
-
-    void DataMark::setLabel(const QString& label)
-    {
-        m_label = label;
-    }
-
-    const QString& DataMark::getUrl() const
-    {
-        return m_url;
-    }
-
-    void DataMark::setUrl(const QString& url)
-    {
-        m_url = url;
-    }
-
-    const QDateTime& DataMark::getTime() const
-    {
-        return m_time;
-    }
-
-    void DataMark::setTime(const QDateTime& time)
-    {
-        m_time = time;
-    }
-
-    QSharedPointer<User> DataMark::getUser() const
-    {
-        return m_user;
-    }
-
-    QSharedPointer<Channel> DataMark::getChannel() const
-    {
-        return m_channel;
-    }
+void DataMark::setDescription(const QString& s)
+{
+  m_description = s;
+}
 
 
-    double deg2rad(double deg)
-    {
-        return (deg * M_PI / 180);
-    }
-
-    double rad2deg(double rad)
-    {
-        return (rad * 180 / M_PI);
-    }
-    double DataMark::getDistance(double lat1, double lon1, double lat2, double lon2)
-    {
-        double theta, dist;
-        theta = lon1 - lon2;
-        dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta));
-        dist = acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515; // in miles
-        dist = dist * 1.609344; // in kilometers
-        return (dist);
-    }
+const QString& DataMark::getDescription() const
+{
+  return m_description;
+}
 
 
-    bool operator<(const QSharedPointer<DataMark> &a, const QSharedPointer<DataMark> &b)
-    {
-        return a->getTime() < b->getTime();
-    }
+DataMark::DataMark(double latitude, double longitude, QString label,
+QString description, QString url, QDateTime time):
+m_latitude(latitude),
+m_longitude(longitude),
+m_label(label),
+m_description(description),
+m_url(url),
+m_time(time)
+{
+  m_user = QSharedPointer<User>(NULL);
+  m_channel = QSharedPointer<Channel>(NULL);
+  if (m_label.isEmpty())
+    m_label = "New mark";
+
+  m_timeSlot = QSharedPointer<TimeSlot>(NULL);
+}
+
+
+void DataMark::setUser(QSharedPointer<User> user)
+{
+  m_user=user;
+}
+
+
+void DataMark::setChannel(QSharedPointer<Channel> channel)
+{
+  m_channel=channel;
+}
+
+
+DataMark::~DataMark()
+{
+
+}
+
+
+double DataMark::getLatitude() const
+{
+  return m_latitude;
+}
+
+
+void DataMark::setLatitude(const double& lat)
+{
+  m_latitude = lat;
+}
+
+
+double DataMark::getLongitude() const
+{
+  return m_longitude;
+}
+
+
+void DataMark::setLongitude(const double &lon)
+{
+  m_longitude = lon;
+}
+
+
+const QString& DataMark::getLabel() const
+{
+  return m_label;
+}
+
+
+void DataMark::setLabel(const QString& label)
+{
+  m_label = label;
+}
+
+
+const QString& DataMark::getUrl() const
+{
+  return m_url;
+}
+
+
+void DataMark::setUrl(const QString& url)
+{
+  m_url = url;
+}
+
+
+const QDateTime& DataMark::getTime() const
+{
+  return m_time;
+}
+
+
+void DataMark::setTime(const QDateTime& time)
+{
+  m_time = time;
+}
+
+
+QSharedPointer<User> DataMark::getUser() const
+{
+  return m_user;
+}
+
+
+QSharedPointer<Channel> DataMark::getChannel() const
+{
+  return m_channel;
+}
+
+
+void DataMark::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
+{
+  m_timeSlot = timeSlot;
+}
+
+
+QSharedPointer<TimeSlot> DataMark::getTimeSlot() const
+{
+  if (m_timeSlot.isNull())
+    return m_channel->getTimeSlot();
+  return m_timeSlot;
+}
+
+
+bool DataMark::timeSlotIsNull() const
+{
+  if (m_timeSlot.isNull())
+    return true;
+  return false;
+}
+
+
+double deg2rad(double deg)
+{
+  return (deg * M_PI / 180);
+}
+
+
+double rad2deg(double rad)
+{
+  return (rad * 180 / M_PI);
+}
+
+
+double DataMark::getDistance(double lat1, double lon1, double lat2, double lon2)
+{
+  double theta, dist;
+  theta = lon1 - lon2;
+  dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta));
+  dist = acos(dist);
+  dist = rad2deg(dist);
+  dist = dist * 60 * 1.1515;            // in miles
+  dist = dist * 1.609344;               // in kilometers
+  return (dist);
+}
+
+
+bool operator<(const QSharedPointer<DataMark> &a, const QSharedPointer<DataMark> &b)
+{
+  return a->getTime() < b->getTime();
+}
+
 
 /* ===[ End of file  ]=== */

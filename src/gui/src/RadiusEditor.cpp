@@ -32,32 +32,32 @@
 
 namespace GUI
 {
-    RadiusEditor::RadiusEditor(QWidget *parent, QSharedPointer<Channel> channel):QDialog(parent), m_channel(channel)
-    {
-      setWindowTitle(QString("Editing radius for channel: ") + QString(channel->getName()));
-      QVBoxLayout *vbox = new QVBoxLayout();
-      m_value = new QSpinBox();
-      m_value->setMinimum(200);
-      m_value->setMaximum(15000);
-      m_value->setValue(m_channel->getRadius()*1000);
-      m_value->setSingleStep(200);
-      QHBoxLayout *hbox = new QHBoxLayout();
-      QLabel *label = new QLabel("Radius: ");
-      QLabel *met = new QLabel(" metres");
-      hbox->addWidget(label);
-      hbox->addWidget(m_value);
-      hbox->addWidget(met);
-      hbox->addStretch();
-      QDialogButtonBox *bbox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-      vbox->addLayout(hbox);
-      vbox->addWidget(bbox);
-      setLayout(vbox);
-      connect(bbox, SIGNAL(accepted()), this, SLOT(accept()));
-      connect(bbox, SIGNAL(rejected()), this, SLOT(reject()));
-    }
-    void RadiusEditor::accept()
-          {
-            m_channel->setRadius(m_value->value()/1000.);
-            QDialog::accept();
-          }
+  RadiusEditor::RadiusEditor(QWidget *parent, QSharedPointer<Channel> channel):QDialog(parent), m_channel(channel)
+  {
+    setWindowTitle(QString("Editing radius for channel: ") + QString(channel->getName()));
+    QVBoxLayout *vbox = new QVBoxLayout();
+    m_value = new QSpinBox();
+    m_value->setMinimum(200);
+    m_value->setMaximum(15000);
+    m_value->setValue(m_channel->getRadius()*1000);
+    m_value->setSingleStep(200);
+    QHBoxLayout *hbox = new QHBoxLayout();
+    QLabel *label = new QLabel("Radius: ");
+    QLabel *met = new QLabel(" metres");
+    hbox->addWidget(label);
+    hbox->addWidget(m_value);
+    hbox->addWidget(met);
+    hbox->addStretch();
+    QDialogButtonBox *bbox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    vbox->addLayout(hbox);
+    vbox->addWidget(bbox);
+    setLayout(vbox);
+    connect(bbox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(bbox, SIGNAL(rejected()), this, SLOT(reject()));
+  }
+  void RadiusEditor::accept()
+  {
+    m_channel->setRadius(m_value->value()/1000.);
+    QDialog::accept();
+  }
 }

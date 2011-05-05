@@ -5,11 +5,11 @@
 #include "defines.h"
 
 MainWindow::MainWindow(QWidget* parent):
-         QMainWindow(parent)
+QMainWindow(parent)
 {
   m_stackedWidget = new QStackedWidget(this);
-  m_map = new MapScene(this);//LightMap(this);
-//kkv why?  QVBoxLayout *layout = new QVBoxLayout;
+  m_map = new MapScene(this);           //LightMap(this);
+  //kkv why?  QVBoxLayout *layout = new QVBoxLayout;
   m_menu = new QMenu(this);
   m_settingsAction = new QAction("Settings...",this);
   m_marksSettingsAction = new QAction("Marks view settings",this);
@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget* parent):
   connect(m_optWidget,SIGNAL(cancel()),this,SLOT(settingsDone()));
   connect(m_marksOptWidget,SIGNAL(cancel()),this,SLOT(settingsDone()));
   connect(m_marksOptWidget,SIGNAL(done()),this,SLOT(settingsDone()));
-//init menu, add Optwidget into it
+  //init menu, add Optwidget into it
   m_menu=menuBar()->addMenu("Options");
   m_menu->addAction(m_settingsAction);
   m_menu->addAction(m_marksSettingsAction);
@@ -35,16 +35,17 @@ MainWindow::MainWindow(QWidget* parent):
   m_stackedWidget->addWidget(m_optWidget);
   m_stackedWidget->addWidget(m_marksOptWidget);
   setCentralWidget(m_stackedWidget);
-//  layout->addWidget(m_menu);
- //layout->addWidget(m_map);
-//  setLayout(layout);
+  //  layout->addWidget(m_menu);
+  //layout->addWidget(m_map);
+  //  setLayout(layout);
 
-  m_thread = new DataThread(m_map); 
+  m_thread = new DataThread(m_map);
   m_thread->start();
 
   setWindowState(Qt::WindowMaximized);
   //resize(600,300);
 }
+
 
 void MainWindow::settings()
 {
@@ -52,19 +53,22 @@ void MainWindow::settings()
   m_stackedWidget->setCurrentWidget(m_optWidget);
 }
 
+
 void MainWindow::marksSettings()
 {
-	  qDebug() << "MainWindow::marksSettings()";
-	    m_stackedWidget->setCurrentWidget(m_marksOptWidget);
+  qDebug() << "MainWindow::marksSettings()";
+  m_stackedWidget->setCurrentWidget(m_marksOptWidget);
 }
+
 
 void MainWindow::settingsDone()
 {
   m_stackedWidget->setCurrentWidget(m_view);
 }
 
+
 void MainWindow::showEvent(QShowEvent * e)
 {
-    if(e->type() == QShowEvent::Show) // e must not be unused
-        this->m_map->update_state();
+  if(e->type() == QShowEvent::Show)     // e must not be unused
+    this->m_map->update_state();
 }
