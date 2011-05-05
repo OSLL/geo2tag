@@ -341,6 +341,7 @@ void LightMap::drawMarkIco(QPainter& painter, QPointF& posOnMap,QSharedPointer<D
     }
     else
     {
+	qDebug() << "drawing blue mark";
         painter.setBrush(Qt::blue);
         painter.drawEllipse(posOnMap,10,10);
         painter.setBrush(Qt::black);

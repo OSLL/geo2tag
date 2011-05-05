@@ -21,7 +21,7 @@ Description: Geo2tag libs
 # Very long description will be here
 #
 Package: wikigps-tracker
-Architecture: any
+Architecture: armel
 Depends: ${shlibs:Depends},wikigps-libs (>=0.1.2)
 Description: WikiGPS tracker
  has very tiny interface. alfa version.

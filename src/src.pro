@@ -19,7 +19,7 @@ linux: {
              json json/tst \
              http_requests \
              maps \ 
-	           tracker\ 
+	     tracker \
              service \
 }
 
