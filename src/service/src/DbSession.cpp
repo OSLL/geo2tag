@@ -1024,20 +1024,6 @@ namespace common
                 return answer;
             }
 
-//            QSharedPointer<TimeSlot> realTimeSlot;
-//            QSharedPointer<TimeSlot> markTimeSlot = realTag->getTimeSlot();
-//            QVector<QSharedPointer<TimeSlot> > currentTimeSlots = m_timeSlotsContainer->vector();
-//            for(int i=0; i<currentTimeSlots.size(); i++)
-//            {
-//                if(currentTimeSlots.at(i)->getSlot() == markTimeSlot->getSlot())
-//                {
-//                    realTimeSlot = currentTimeSlots.at(i);
-//                }
-//            }
-
-            //TODO: to delete time slot from table timeSlot
-
-
             m_updateThread->lockWriting();
             realTag->setTimeSlot(QSharedPointer<TimeSlot>(NULL));
             m_updateThread->unlockWriting();
