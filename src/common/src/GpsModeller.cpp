@@ -62,8 +62,9 @@ namespace common
 {
   GpsModeller::GpsModeller(const QString &gpxFile)
   {
-    m_longitude = DEFAULT_LONGITUDE;
-    m_latitude = DEFAULT_LATITUDE;
+    setReady(false);
+    m_longitude = 0;
+    m_latitude = 0;
     m_doc = xmlReadFile(gpxFile.toStdString().c_str(), NULL, 0);
     start();
   }
@@ -108,6 +109,7 @@ namespace common
           begin=currentModellerTime;
         std::stringstream s;
         s << (const char *)lon << " " << (const char *) lat;
+        setReady(true);
         s >> m_longitude >> m_latitude;
         QThread::msleep(begin.msecsTo(currentModellerTime));
         begin=currentModellerTime;
