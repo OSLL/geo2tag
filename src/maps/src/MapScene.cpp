@@ -158,7 +158,6 @@ void MapScene::setMarks(DataChannels marks)
 void MapScene::add_mark(QPointF pos, QSharedPointer<DataMark> mark,QSharedPointer<Channel> channel)
 {
     QPointF posForPicture = QPointF(pos.x()-12.0, pos.y()-12.0);
-    QPointF posForText = QPointF(pos.x()-24.0, pos.y()+24.0);
     QGraphicsPixmapItem * pi = 0;
     QString channel_name = channel->getName();
     if(channel_name == "Fuel prices")
@@ -195,21 +194,22 @@ void MapScene::add_mark(QPointF pos, QSharedPointer<DataMark> mark,QSharedPointe
     }
     else
     {
-        QPixmap pixmap(24, 24);
+        QPixmap pixmap(50,50);
         pixmap.fill(Qt::transparent);
-    	QPoint center(pixmap.width()/2, pixmap.height()/2);
-
+    	QPoint center(pixmap.width()/2, pixmap.height()/4);
+    	QPoint posForText = QPoint(0, pixmap.height()/2+8);
         QPainter painter;
     	painter.begin(&pixmap);
+	QFont font=painter.font();
+	font.setPointSize(7);
+	painter.setFont(font);
     	painter.setBrush(Qt::blue);
-    	painter.drawEllipse(center, pixmap.width()/2, pixmap.height()/2);
+    	painter.drawEllipse(center, pixmap.width()/4, pixmap.height()/4);
     	painter.setBrush(Qt::black);
     	painter.drawEllipse(center, pixmap.width()/10, pixmap.height()/10);
-	if (mark->getLabel()!="tracker's tag")
-	{
-		int mins_ago=(mark->getTime().toUTC().secsTo(QDateTime::currentDateTime()))/60;
-		painter.drawText(posForText,mark->getLabel()+", "+ QString::number(mins_ago)+" min. ago");
-	}
+	int mins_ago=(mark->getTime().toUTC().secsTo(QDateTime::currentDateTime()))/60;
+	qDebug() << "Text for mark: " << mark->getLabel()+", "+ QString::number(mins_ago)+" min. ago" ;
+	painter.drawText(posForText,QString::number(mins_ago)+" min ago");
     	painter.end();
 
     	pi = this->addPixmap(pixmap);
