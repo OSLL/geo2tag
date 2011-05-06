@@ -44,24 +44,27 @@
 qlonglong JsonTimeSlot::globalTimeSlotId = 0;
 
 JsonTimeSlot::JsonTimeSlot(const qulonglong &slot):
-                            TimeSlot(slot),
-                            m_id(globalTimeSlotId++)
+TimeSlot(slot),
+m_id(globalTimeSlotId++)
 {
 }
+
 
 qlonglong JsonTimeSlot::getId() const
 {
-    return m_id;
+  return m_id;
 }
+
 
 void JsonTimeSlot::setId(qlonglong id)
 {
-    m_id=id;
+  m_id=id;
 }
+
 
 JsonTimeSlot::~JsonTimeSlot()
 {
 }
 
-/* ===[ End of file ]=== */
 
+/* ===[ End of file ]=== */

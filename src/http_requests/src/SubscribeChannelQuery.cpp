@@ -30,7 +30,7 @@
  */
 
 /*! ---------------------------------------------------------------
- * $Id$ 
+ * $Id$
  *
  * \file SubscribeChannelQuery.cpp
  * \brief SubscribeChannelQuery implementation
@@ -47,59 +47,62 @@
 
 namespace GUI
 {
-    SubscribeChannelQuery::SubscribeChannelQuery(QObject *parent)
-        : DefaultQuery(parent)
-    {
-    }
+  SubscribeChannelQuery::SubscribeChannelQuery(QObject *parent)
+    : DefaultQuery(parent)
+  {
+  }
 
-    SubscribeChannelQuery::SubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent)
-                : DefaultQuery(parent),m_user(user),m_channel(channel)
-    {
-    }
+  SubscribeChannelQuery::SubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent)
+    : DefaultQuery(parent),m_user(user),m_channel(channel)
+  {
+  }
 
-    void SubscribeChannelQuery::setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel)
-    {
-	m_user=user;
-	m_channel=channel;
-    }
+  void SubscribeChannelQuery::setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel)
+  {
+    m_user=user;
+    m_channel=channel;
+  }
 
-    SubscribeChannelQuery::~SubscribeChannelQuery()
-    {
-    }
+  SubscribeChannelQuery::~SubscribeChannelQuery()
+  {
+  }
 
-    QString SubscribeChannelQuery::getUrl() const
-    {
-	return SUBSCRIBE_HTTP_URL;
-    }
+  QString SubscribeChannelQuery::getUrl() const
+  {
+    return SUBSCRIBE_HTTP_URL;
+  }
 
-    QByteArray SubscribeChannelQuery::getRequestBody() const
-    {
-        SubscribeChannelRequestJSON request(m_channel,m_user);
-	return request.getJson();
-    }
+  QByteArray SubscribeChannelQuery::getRequestBody() const
+  {
+    SubscribeChannelRequestJSON request(m_channel,m_user);
+    return request.getJson();
+  }
 
-    const QString& SubscribeChannelQuery::getStatus() const
-    {
-	return m_status;
-    }
+  const QString& SubscribeChannelQuery::getStatus() const
+  {
+    return m_status;
+  }
 
-    void SubscribeChannelQuery::processReply(QNetworkReply *reply)
+  void SubscribeChannelQuery::processReply(QNetworkReply *reply)
+  {
+    DefaultResponseJSON response;
+    response.parseJson(reply->readAll());
+    if(response.getStatus() == "Ok")
     {
-	DefaultResponseJSON response;
-	response.parseJson(reply->readAll());
-	if(response.getStatus() == "Ok"){
-		m_status="Ok";
-		Q_EMIT responseReceived();
-	}
-	else {
-		Q_EMIT errorOccured(response.getStatusMessage());
-	}
+      m_status="Ok";
+      Q_EMIT responseReceived();
     }
-
-    SubscribeChannelQuery::~SubscribeChannelQuery()
+    else
     {
+      Q_EMIT errorOccured(response.getStatusMessage());
     }
+  }
 
-} // namespace GUI
+  SubscribeChannelQuery::~SubscribeChannelQuery()
+  {
+  }
+
+}                                       // namespace GUI
+
 
 /* ===[ End of file $HeadURL$ ]=== */

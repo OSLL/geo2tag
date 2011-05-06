@@ -53,14 +53,16 @@
 #include <syslog.h>
 SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
-	syslog(LOG_INFO,"SubscribeChannelRequestJSON::SubscribeChannelRequestJSON()");
+  syslog(LOG_INFO,"SubscribeChannelRequestJSON::SubscribeChannelRequestJSON()");
 }
+
 
 SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel, const QSharedPointer<User> &user, QObject *parent) : JsonSerializer(parent)
 {
-    m_usersContainer->push_back(user);
-    m_channelsContainer->push_back(channel);
+  m_usersContainer->push_back(user);
+  m_channelsContainer->push_back(channel);
 }
+
 
 /*SubscribeChannelRequestJSON::~SubscribeChannelRequestJSON()
 {
@@ -69,35 +71,37 @@ SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Ch
 
 void SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
 {
-    clearContainers();
+  clearContainers();
 
-    QJson::Parser parser;
-    bool ok;
-    QVariantMap result = parser.parse(data, &ok).toMap();
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
 
-    if (!ok)
-    {
-        qFatal("An error occured during parsing json with rss feed");
-        return;
-    }
-    QString channelLabel = result["channel"].toString();
-    QString authToken =    result["auth_token"].toString();
+  if (!ok)
+  {
+    qFatal("An error occured during parsing json with rss feed");
+    return;
+  }
+  QString channelLabel = result["channel"].toString();
+  QString authToken =    result["auth_token"].toString();
 
-    QSharedPointer<Channel> dummyChannel(new JsonChannel(channelLabel, "from SubscribeChannelReques"));
-    m_channelsContainer->push_back(dummyChannel);
-    QSharedPointer<User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
-    m_usersContainer->push_back(dummyUser);
+  QSharedPointer<Channel> dummyChannel(new JsonChannel(channelLabel, "from SubscribeChannelReques"));
+  m_channelsContainer->push_back(dummyChannel);
+  QSharedPointer<User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
+  m_usersContainer->push_back(dummyUser);
 }
+
 
 QByteArray SubscribeChannelRequestJSON::getJson() const
 {
-    QJson::Serializer serializer;
-    QVariantMap request;
+  QJson::Serializer serializer;
+  QVariantMap request;
 
-    request.insert("auth_token", m_usersContainer->at(0)->getToken());
-    request.insert("channel", m_channelsContainer->at(0)->getName());
+  request.insert("auth_token", m_usersContainer->at(0)->getToken());
+  request.insert("channel", m_channelsContainer->at(0)->getName());
 
-    return serializer.serialize(request);
+  return serializer.serialize(request);
 }
+
 
 /* ===[ End of file $HeadURL$ ]=== */

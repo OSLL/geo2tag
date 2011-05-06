@@ -55,13 +55,14 @@ namespace common
 
   Gps& GpsInfo::getInstance()
   {
-#ifdef SIMULATE_GPS
+    #ifdef SIMULATE_GPS
     static GpsModeller gps;
-#else
+    #else
     static MobilityGps gps;
-#endif
+    #endif
     return gps;
   }
-} // namespace common
+}                                       // namespace common
+
 
 /* ===[ End of file  ]=== */

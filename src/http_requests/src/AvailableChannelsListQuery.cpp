@@ -30,7 +30,7 @@
  */
 
 /*! ---------------------------------------------------------------
- * $Id$ 
+ * $Id$
  *
  * \file AvailableChannelsListQuery.cpp
  * \brief AvailableChannelsListQuery implementation
@@ -47,103 +47,104 @@
 
 namespace GUI
 {
-    AvailableChannelsListQuery::AvailableChannelsListQuery(QObject *parent)
-        : QObject(parent)
-    {
-        jsonQuery = "";
-        httpQuery = "";
-        manager = new QNetworkAccessManager(this);
+  AvailableChannelsListQuery::AvailableChannelsListQuery(QObject *parent)
+    : QObject(parent)
+  {
+    jsonQuery = "";
+    httpQuery = "";
+    manager = new QNetworkAccessManager(this);
 
-        qDebug() << "Free AvailableChannelsListQuery created";
+    qDebug() << "Free AvailableChannelsListQuery created";
+  }
+
+  AvailableChannelsListQuery::AvailableChannelsListQuery
+    (QString auth_token, qreal latitude, qreal longitude, qreal radius, QObject *parent)
+    : QObject(parent)
+  {
+    manager = new QNetworkAccessManager(this);
+    setQuery(auth_token,latitude,longitude,radius);
+    qDebug() << "AvailableChannelsListQuery created:\n"
+      << httpQuery << jsonQuery;
+  }
+
+  void AvailableChannelsListQuery::setQuery(QString auth_token, qreal latitude,
+    qreal longitude, qreal radius)
+  {
+    jsonQuery = "{\"auth_token\":\"" + auth_token +
+      "\", \"latitude\":" + QString::number(latitude) +
+      ", \"longitude\":" + QString::number(longitude) +
+      ", \"radius\":" + QString::number(radius) +
+      "}";
+    httpQuery = AVAILABLE_LIST_HTTP_URL;
+  }
+
+  AvailableChannelsListQuery::~AvailableChannelsListQuery()
+  {
+
+  }
+
+  const QString& AvailableChannelsListQuery::getHttpQuery()
+  {
+    return httpQuery;
+  }
+
+  const QString& AvailableChannelsListQuery::getJsonQuery()
+  {
+    return jsonQuery;
+  }
+
+  void AvailableChannelsListQuery::doRequest()
+  {
+    if (httpQuery == "" || jsonQuery == "")
+    {
+      qDebug() << "AvailableChannelsListQuery: can't do request cause query isn't set";
+      return;
     }
 
-    AvailableChannelsListQuery::AvailableChannelsListQuery
-            (QString auth_token, qreal latitude, qreal longitude, qreal radius, QObject *parent)
-                : QObject(parent)
+    QNetworkRequest request;
+    request.setUrl(QUrl(httpQuery));
+
+    QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
+
+    QNetworkReply *reply = manager->post(request, data);
+
+    connect(manager, SIGNAL(finished(QNetworkReply*)),
+      this, SLOT(onManagerFinished(QNetworkReply*)));
+    connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
+      this, SLOT(onManagerSslErrors()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+      this, SLOT(onReplyError(QNetworkReply::NetworkError)));
+
+    qDebug() << "AvailableChannelsListQuery did request:\n"
+      << httpQuery << jsonQuery;
+  }
+
+  void AvailableChannelsListQuery::onManagerFinished(QNetworkReply *reply)
+  {
+    QByteArray jsonResponseByteArray = reply->readAll();
+
+    if (jsonResponseByteArray.size() > 0)
     {
-        manager = new QNetworkAccessManager(this);
-        setQuery(auth_token,latitude,longitude,radius);
-        qDebug() << "AvailableChannelsListQuery created:\n"
-                 << httpQuery << jsonQuery;
+      QString jsonResponse(jsonResponseByteArray);
+      qDebug() << "Gotten response (json): " << jsonResponse;
+      std::stringstream jsonStream(jsonResponse.toStdString());
+      ChannelListResponseJSON channelList(jsonStream);
+      QSharedPointer<Channels> channels = channelList.getChannels();
+      Q_EMIT responseReceived(channels);
     }
+  }
 
-    void AvailableChannelsListQuery::setQuery(QString auth_token, qreal latitude,
-                                              qreal longitude, qreal radius)
-    {
-        jsonQuery = "{\"auth_token\":\"" + auth_token +
-                    "\", \"latitude\":" + QString::number(latitude) +
-                    ", \"longitude\":" + QString::number(longitude) +
-                    ", \"radius\":" + QString::number(radius) +
-                    "}";
-        httpQuery = AVAILABLE_LIST_HTTP_URL;
-    }
+  void AvailableChannelsListQuery::onReplyError(QNetworkReply::NetworkError error)
+  {
+    qDebug("Network error: %d \n", error);
+  }
 
-    AvailableChannelsListQuery::~AvailableChannelsListQuery()
-    {
+  void AvailableChannelsListQuery::onManagerSslErrors()
+  {
+    qDebug("ssl error \n");
+  }
 
-    }
+}                                       // namespace GUI
 
-    const QString& AvailableChannelsListQuery::getHttpQuery()
-    {
-        return httpQuery;
-    }
-
-    const QString& AvailableChannelsListQuery::getJsonQuery()
-    {
-        return jsonQuery;
-    }
-
-    void AvailableChannelsListQuery::doRequest()
-    {
-        if (httpQuery == "" || jsonQuery == "")
-        {
-            qDebug() << "AvailableChannelsListQuery: can't do request cause query isn't set";
-            return;
-        }
-
-        QNetworkRequest request;
-        request.setUrl(QUrl(httpQuery));
-
-        QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
-
-        QNetworkReply *reply = manager->post(request, data);
-
-        connect(manager, SIGNAL(finished(QNetworkReply*)),
-                this, SLOT(onManagerFinished(QNetworkReply*)));
-        connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-                this, SLOT(onManagerSslErrors()));
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(onReplyError(QNetworkReply::NetworkError)));
-
-        qDebug() << "AvailableChannelsListQuery did request:\n"
-                 << httpQuery << jsonQuery;
-    }
-
-    void AvailableChannelsListQuery::onManagerFinished(QNetworkReply *reply)
-    {
-        QByteArray jsonResponseByteArray = reply->readAll();
-
-        if (jsonResponseByteArray.size() > 0)
-        {
-            QString jsonResponse(jsonResponseByteArray);
-            qDebug() << "Gotten response (json): " << jsonResponse;
-            std::stringstream jsonStream(jsonResponse.toStdString());
-            ChannelListResponseJSON channelList(jsonStream);
-            QSharedPointer<Channels> channels = channelList.getChannels();
-            Q_EMIT responseReceived(channels);
-        }
-    }
-
-    void AvailableChannelsListQuery::onReplyError(QNetworkReply::NetworkError error)
-    {
-        qDebug("Network error: %d \n", error);
-    }
-
-    void AvailableChannelsListQuery::onManagerSslErrors()
-    {
-        qDebug("ssl error \n");
-    }
-
-} // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

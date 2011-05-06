@@ -40,23 +40,28 @@
 qlonglong JsonUser::globalUserId = 0;
 
 JsonUser::JsonUser(const QString &login,
-                   const QString& pass,
-                   const QString& token): User(login,pass), m_id(globalUserId++)
+const QString& pass,
+const QString& token): User(login,pass), m_id(globalUserId++)
 {
-    setToken(token);
+  setToken(token);
 }
+
 
 qlonglong JsonUser::getId() const
 {
-    return m_id;
+  return m_id;
 }
+
 
 void JsonUser::setId(qlonglong id)
 {
-    m_id = id;
+  m_id = id;
 }
+
 
 JsonUser::~JsonUser()
 {
 }
+
+
 /* ===[ End of file ]=== */

@@ -48,31 +48,32 @@ namespace common
 
   MobilityGps::MobilityGps(QObject *parent) : QObject(parent)
   {
-      setReady(false);
-      m_lastUpdateTime = QDateTime::currentDateTime();
-      QGeoPositionInfoSource *source = QGeoPositionInfoSource::createDefaultSource(this);
-      if (source) {
-          connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)),
-                  this, SLOT(positionUpdated(QGeoPositionInfo)));
-          source->startUpdates();
-      }
+    setReady(false);
+    m_lastUpdateTime = QDateTime::currentDateTime();
+    QGeoPositionInfoSource *source = QGeoPositionInfoSource::createDefaultSource(this);
+    if (source)
+    {
+      connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)),
+        this, SLOT(positionUpdated(QGeoPositionInfo)));
+      source->startUpdates();
+    }
   }
 
   bool MobilityGps::isReady()
   {
-	  int ageOfLastCoords = m_lastUpdateTime.toUTC().secsTo(QDateTime::currentDateTime());
-	  qDebug() << "Age of last recieved coordinates " << ageOfLastCoords << " secs";
-	  if (ageOfLastCoords > 60) setReady(false);
-	  return Gps::isReady();
+    int ageOfLastCoords = m_lastUpdateTime.toUTC().secsTo(QDateTime::currentDateTime());
+    qDebug() << "Age of last recieved coordinates " << ageOfLastCoords << " secs";
+    if (ageOfLastCoords > 60) setReady(false);
+    return Gps::isReady();
   }
-  
+
   void MobilityGps::positionUpdated(QGeoPositionInfo info)
   {
-      if (!isReady()) setReady(true);
-      qDebug() << "Position updated " << info.coordinate().longitude() << " " <<info.coordinate().latitude() ;
-      m_longitude = info.coordinate().longitude();
-      m_latitude = info.coordinate().latitude();
-      m_lastUpdateTime = QDateTime::currentDateTime();
+    if (!isReady()) setReady(true);
+    qDebug() << "Position updated " << info.coordinate().longitude() << " " <<info.coordinate().latitude() ;
+    m_longitude = info.coordinate().longitude();
+    m_latitude = info.coordinate().latitude();
+    m_lastUpdateTime = QDateTime::currentDateTime();
   }
 
   double MobilityGps::getLongitude() const
@@ -84,12 +85,13 @@ namespace common
   {
     return m_latitude;
   }
-  
+
   MobilityGps::~MobilityGps()
   {
 
   }
 
-} // namespace common
+}                                       // namespace common
+
 
 /* ===[ End of file ]=== */

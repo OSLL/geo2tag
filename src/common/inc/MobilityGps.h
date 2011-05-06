@@ -62,7 +62,7 @@ namespace common
   {
     Q_OBJECT
 
-    static double m_longitude;
+      static double m_longitude;
     static double m_latitude;
 
     QDateTime m_lastUpdateTime;
@@ -74,7 +74,7 @@ namespace common
       virtual double getLatitude() const;
 
       virtual bool isReady();
-      
+
       virtual ~MobilityGps();
 
     private slots:

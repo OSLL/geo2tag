@@ -30,7 +30,7 @@
  */
 
 /*! ---------------------------------------------------------------
- * $Id$ 
+ * $Id$
  *
  * \file SubscribedChannelsListQuery.cpp
  * \brief SubscribedChannelsListQuery implementation
@@ -47,54 +47,57 @@
 
 namespace GUI
 {
-    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QObject *parent)
-        : QObject(parent)
-    {
-    }
+  SubscribedChannelsListQuery::SubscribedChannelsListQuery(QObject *parent)
+    : QObject(parent)
+  {
+  }
 
-    SubscribedChannelsListQuery::SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent)
-                : DefaultQuery(parent),m_user(user)
-    {
-    }
+  SubscribedChannelsListQuery::SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent)
+    : DefaultQuery(parent),m_user(user)
+  {
+  }
 
-    void SubscribedChannelsListQuery::setQuery(QSharedPointer<User> user)
-    {
-	m_user=user;
-    }
+  void SubscribedChannelsListQuery::setQuery(QSharedPointer<User> user)
+  {
+    m_user=user;
+  }
 
-    SubscribedChannelsListQuery::~SubscribedChannelsListQuery()
-    {
+  SubscribedChannelsListQuery::~SubscribedChannelsListQuery()
+  {
 
-    }
+  }
 
-    QString& SubscribedChannelsListQuery::getUrl() const
-    {
-        return SUBSCRIBED_LIST_HTTP_URL;
-    }
+  QString& SubscribedChannelsListQuery::getUrl() const
+  {
+    return SUBSCRIBED_LIST_HTTP_URL;
+  }
 
-    QByteArray SubscribedChannelsListQuery::getRequestBody() const
-    {
-        SubscribedChannelsRequestJSON request(m_user);
-	return request.getJson();
-    }
+  QByteArray SubscribedChannelsListQuery::getRequestBody() const
+  {
+    SubscribedChannelsRequestJSON request(m_user);
+    return request.getJson();
+  }
 
-    const QSharedPointer<Channels>& SubscribedChannelsQuery::getChannels() const
-    {
-	return m_channels;
-    }
+  const QSharedPointer<Channels>& SubscribedChannelsQuery::getChannels() const
+  {
+    return m_channels;
+  }
 
-    void SubscribedChannelsQuery::processReply(QNetworkReply *reply)
+  void SubscribedChannelsQuery::processReply(QNetworkReply *reply)
+  {
+    ChannelListJSON response;
+    response.parseJson(reply->readAll());
+    if(response.getStatus() == "Ok")
     {
-	ChannelListJSON response;
-	response.parseJson(reply->readAll());
-	if(response.getStatus() == "Ok"){
-		m_channels=response.getChannels();
-		Q_EMIT responseReceived();
-	}
-	else {
-		Q_EMIT errorOccured(response.getStatusMessage());
-	}
+      m_channels=response.getChannels();
+      Q_EMIT responseReceived();
     }
-} // namespace GUI
+    else
+    {
+      Q_EMIT errorOccured(response.getStatusMessage());
+    }
+  }
+}                                       // namespace GUI
+
 
 /* ===[ End of file $HeadURL$ ]=== */

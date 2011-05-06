@@ -51,59 +51,64 @@ ChannelListResponseJSON::ChannelListResponseJSON(QObject *parent) : JsonSerializ
 
 }
 
+
 ChannelListResponseJSON::~ChannelListResponseJSON()
 {
 
 }
 
+
 void ChannelListResponseJSON::setChannels(QSharedPointer<Channels> channels)
 {
-	if (!channels.isNull()) m_channelsContainer=channels;
+  if (!channels.isNull()) m_channelsContainer=channels;
 }
+
 
 void ChannelListResponseJSON::parseJson(const QByteArray &data)
 {
-    clearContainers();
-    QJson::Parser parser;
-    bool ok;
-    QVariantMap result = parser.parse(data, &ok).toMap();
-    if (!ok)
-    {
-        qFatal("An error occured during parsing json with channel list");
-        return;
-    }
+  clearContainers();
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok)
+  {
+    qFatal("An error occured during parsing json with channel list");
+    return;
+  }
 
-    QVariantList channels = result["channels"].toList();
-    int size = channels.size();
-    for (int i = 0; i < size; i++)
-    {
-        QVariantMap channelVariant = channels.at(i).toMap();
-        QString name = channelVariant["name"].toString();
-        QString description = channelVariant["description"].toString();
-        QSharedPointer<Channel> channel(new JsonChannel(name, description));
-        m_channelsContainer->push_back(channel);
-    }
+  QVariantList channels = result["channels"].toList();
+  int size = channels.size();
+  for (int i = 0; i < size; i++)
+  {
+    QVariantMap channelVariant = channels.at(i).toMap();
+    QString name = channelVariant["name"].toString();
+    QString description = channelVariant["description"].toString();
+    QSharedPointer<Channel> channel(new JsonChannel(name, description));
+    m_channelsContainer->push_back(channel);
+  }
 
 }
+
 
 QByteArray ChannelListResponseJSON::getJson() const
 {
-    QJson::Serializer serializer;
-    QVariantList channelsList;
-    for (int i=0; i<m_channelsContainer->size(); i++)
-    {
-        QSharedPointer<Channel> ch=m_channelsContainer->at(i);
-        QVariantMap channelMap;
-        channelMap.insert("name", ch->getName());
-        channelMap.insert("description", ch->getDescription());
-        QVariantList tagsList;
-        channelMap.insert("tags", tagsList);
-        channelsList.append(channelMap);
-    }
+  QJson::Serializer serializer;
+  QVariantList channelsList;
+  for (int i=0; i<m_channelsContainer->size(); i++)
+  {
+    QSharedPointer<Channel> ch=m_channelsContainer->at(i);
+    QVariantMap channelMap;
+    channelMap.insert("name", ch->getName());
+    channelMap.insert("description", ch->getDescription());
+    QVariantList tagsList;
+    channelMap.insert("tags", tagsList);
+    channelsList.append(channelMap);
+  }
 
-    QVariantMap channelsMap;
-    channelsMap.insert("channels", channelsList);
-    return serializer.serialize(channelsMap);
+  QVariantMap channelsMap;
+  channelsMap.insert("channels", channelsList);
+  return serializer.serialize(channelsMap);
 }
+
 
 /* ===[ End of file $HeadURL$ ]=== */

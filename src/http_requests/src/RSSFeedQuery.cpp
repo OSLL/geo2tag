@@ -49,68 +49,76 @@
 #include "JsonUser.h"
 
 RSSFeedQuery::RSSFeedQuery(QSharedPointer<User> &user,
-                           double latitude,
-                           double longitude,
-                           double radius,
-                           QObject *parent): DefaultQuery(parent),
-                           m_user(user),
-                           m_latitude(latitude),
-                           m_longitude(longitude),
-                           m_radius(radius)
+double latitude,
+double longitude,
+double radius,
+QObject *parent): DefaultQuery(parent),
+m_user(user),
+m_latitude(latitude),
+m_longitude(longitude),
+m_radius(radius)
 {
 }
+
 
 RSSFeedQuery::RSSFeedQuery(QObject *parent): DefaultQuery(parent)
 {
 }
 
+
 void RSSFeedQuery::setQuery(QSharedPointer<User> &user,
-                 double latitude,
-                 double longitude,
-                 double radius)
+double latitude,
+double longitude,
+double radius)
 {
-     m_user=user;
-     m_latitude=latitude;
-     m_longitude=longitude;
-     m_radius=radius;
+  m_user=user;
+  m_latitude=latitude;
+  m_longitude=longitude;
+  m_radius=radius;
 }
+
 
 QString RSSFeedQuery::getUrl() const
 {
-    return FEED_HTTP_URL;
+  return FEED_HTTP_URL;
 }
+
 
 QByteArray RSSFeedQuery::getRequestBody() const
 {
-    RSSFeedRequestJSON request(m_latitude, m_longitude, m_radius);
-    request.addUser(m_user);
-    return request.getJson();
+  RSSFeedRequestJSON request(m_latitude, m_longitude, m_radius);
+  request.addUser(m_user);
+  return request.getJson();
 }
+
 
 void RSSFeedQuery::processReply(QNetworkReply *reply)
 {
-    RSSFeedResponseJSON response;
-    response.parseJson(reply->readAll());
-    if(response.getStatus() == "Ok")
-    {
-        m_hashMap = response.getRSSFeed();
+  RSSFeedResponseJSON response;
+  response.parseJson(reply->readAll());
+  if(response.getStatus() == "Ok")
+  {
+    m_hashMap = response.getRSSFeed();
 
-        Q_EMIT rssFeedReceived();
-    }
-    else
-    {
-        Q_EMIT errorOccured(response.getStatusMessage());
-    }
+    Q_EMIT rssFeedReceived();
+  }
+  else
+  {
+    Q_EMIT errorOccured(response.getStatusMessage());
+  }
 }
+
 
 const DataChannels& RSSFeedQuery::getRSSFeed() const
 {
-    return m_hashMap;
+  return m_hashMap;
 }
+
 
 RSSFeedQuery::~RSSFeedQuery()
 {
 
 }
+
 
 /* ===[ End of file $HeadURL$ ]=== */

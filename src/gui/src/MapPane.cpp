@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file MapPane.cpp
  * \brief MapPane implementation
@@ -44,41 +44,42 @@
 
 namespace GUI
 {
-    MapPane::MapPane(QWidget * parent) : QWidget(parent)
-    {
-        m_picture = new MapWidget(this);
-        m_slider = new QSlider(Qt::Vertical,this);
-        m_slider->setMinimum(SCALE_MIN*SCALE_RATIO);
-        m_slider->setMaximum(SCALE_MAX*SCALE_RATIO);
-        m_slider->setValue(SCALE_DEFAULT*SCALE_RATIO);
-        m_slider->setTracking(false);
+  MapPane::MapPane(QWidget * parent) : QWidget(parent)
+  {
+    m_picture = new MapWidget(this);
+    m_slider = new QSlider(Qt::Vertical,this);
+    m_slider->setMinimum(SCALE_MIN*SCALE_RATIO);
+    m_slider->setMaximum(SCALE_MAX*SCALE_RATIO);
+    m_slider->setValue(SCALE_DEFAULT*SCALE_RATIO);
+    m_slider->setTracking(false);
 
-        connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(updateMap()));
+    connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(updateMap()));
 
-        QHBoxLayout *vbl = new QHBoxLayout(this);
-        vbl->addWidget(m_picture);
-        vbl->addWidget(m_slider);
-        setLayout(vbl);
-    }
+    QHBoxLayout *vbl = new QHBoxLayout(this);
+    vbl->addWidget(m_picture);
+    vbl->addWidget(m_slider);
+    setLayout(vbl);
+  }
 
-    void MapPane::setPosition(const QPointF& pos)
-    {
-        m_picture->setB(pos.x());
-        m_picture->setL(pos.y());
-        m_picture->updateMap();
-    }
+  void MapPane::setPosition(const QPointF& pos)
+  {
+    m_picture->setB(pos.x());
+    m_picture->setL(pos.y());
+    m_picture->updateMap();
+  }
 
-    void MapPane::updateMap()
-    {
-        m_picture->setScale(m_slider->value()/SCALE_RATIO);
-        m_picture->updateMap();
-    }
+  void MapPane::updateMap()
+  {
+    m_picture->setScale(m_slider->value()/SCALE_RATIO);
+    m_picture->updateMap();
+  }
 
-    MapWidget* MapPane::getMapWidget()
-    {
-        return m_picture;
-    }
+  MapWidget* MapPane::getMapWidget()
+  {
+    return m_picture;
+  }
 
-} // namespace GUI
+}                                       // namespace GUI
+
 
 /* ===[ End of file ]=== */
