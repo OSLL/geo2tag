@@ -48,20 +48,21 @@ namespace common
 
   MobilityGps::MobilityGps(QObject *parent) : QObject(parent)
   {
-      setReady(false);
-      QGeoPositionInfoSource *source = QGeoPositionInfoSource::createDefaultSource(this);
-      if (source) {
-          connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)),
-                  this, SLOT(positionUpdated(QGeoPositionInfo)));
-          source->startUpdates();
-      }
+    setReady(false);
+    QGeoPositionInfoSource *source = QGeoPositionInfoSource::createDefaultSource(this);
+    if (source)
+    {
+      connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)),
+        this, SLOT(positionUpdated(QGeoPositionInfo)));
+      source->startUpdates();
+    }
   }
 
   void MobilityGps::positionUpdated(QGeoPositionInfo info)
   {
-      if (!isReady()) setReady(true);
-      m_longitude = info.coordinate().longitude();
-      m_latitude = info.coordinate().latitude();
+    if (!isReady()) setReady(true);
+    m_longitude = info.coordinate().longitude();
+    m_latitude = info.coordinate().latitude();
   }
 
   double MobilityGps::getLongitude() const
@@ -73,12 +74,13 @@ namespace common
   {
     return m_latitude;
   }
-  
+
   MobilityGps::~MobilityGps()
   {
 
   }
 
-} // namespace common
+}                                       // namespace common
+
 
 /* ===[ End of file ]=== */

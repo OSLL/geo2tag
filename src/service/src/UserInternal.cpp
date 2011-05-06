@@ -37,25 +37,30 @@
 
 #include "UserInternal.h"
 
-  DbUser::DbUser(const QString &login,
-             const QString& pass,
-             qlonglong id,
-             const QString& token): User(login,pass), m_id(id)
-  {
-      setToken(token);
-  }
+DbUser::DbUser(const QString &login,
+const QString& pass,
+qlonglong id,
+const QString& token): User(login,pass), m_id(id)
+{
+  setToken(token);
+}
 
-  qlonglong DbUser::getId() const
-  {
-    return m_id;
-  }
 
-  void DbUser::setId(qlonglong id)
-  {
-    m_id = id;
-  }
+qlonglong DbUser::getId() const
+{
+  return m_id;
+}
 
-  DbUser::~DbUser()
-  {
-  }
+
+void DbUser::setId(qlonglong id)
+{
+  m_id = id;
+}
+
+
+DbUser::~DbUser()
+{
+}
+
+
 /* ===[ End of file ]=== */

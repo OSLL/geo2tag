@@ -29,12 +29,12 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file PngPicture.cpp
  * \brief PngPicture implementation
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 #include "PngPicture.h"
@@ -54,6 +54,7 @@ namespace common
   {
 
   }
-} // namespace common
+}                                       // namespace common
+
 
 /* ===[ End of file  ]=== */

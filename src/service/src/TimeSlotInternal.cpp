@@ -44,23 +44,27 @@
 #include "DynamicCastFailure.h"
 #include <syslog.h>
 
-  DbTimeSlot::DbTimeSlot(qlonglong id, const qulonglong &slot):
-                   TimeSlot(slot), m_id(id)
-  {
-  }
+DbTimeSlot::DbTimeSlot(qlonglong id, const qulonglong &slot):
+TimeSlot(slot), m_id(id)
+{
+}
 
-  qlonglong DbTimeSlot::getId() const
-  {
-    return m_id;
-  }
 
-  void DbTimeSlot::setId(qlonglong id)
-  {
-    m_id=id;
-  }
+qlonglong DbTimeSlot::getId() const
+{
+  return m_id;
+}
 
-  DbTimeSlot::~DbTimeSlot()
-  {
-  }
+
+void DbTimeSlot::setId(qlonglong id)
+{
+  m_id=id;
+}
+
+
+DbTimeSlot::~DbTimeSlot()
+{
+}
+
 
 /* ===[ End of file ]=== */

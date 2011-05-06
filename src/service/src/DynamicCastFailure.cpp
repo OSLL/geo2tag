@@ -3,6 +3,3 @@ CDynamicCastFailure::CDynamicCastFailure(unsigned short /*errorcode*/,unsigned c
 {
 
 }
-
-
-

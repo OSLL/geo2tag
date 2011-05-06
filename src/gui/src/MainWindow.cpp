@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file MainWindow.cpp
  * \brief MainWindow implementation
@@ -46,35 +46,35 @@
 namespace GUI
 {
 
-    //TODO, kkv play with flags to get better appearence
-    MainWindow::MainWindow() : QMainWindow(NULL /*, Qt::Desktop*/)
-    {
-        loginWindow = new LoginWindow(this);
-        QObject::connect(loginWindow,SIGNAL(onSucsess(QString)),this,SLOT(onActivate(QString)));
-        QObject::connect(loginWindow,SIGNAL(onSucsess(QString)), &GUI::OnLineInformation::getInstance(), SLOT(setAuthToken(QString)));
-#ifdef DESKTOP_STYLE
-        loginWindow->show();
-#else
-        loginWindow->showMaximized();
-#endif
+  //TODO, kkv play with flags to get better appearence
+  MainWindow::MainWindow() : QMainWindow(NULL /*, Qt::Desktop*/)
+  {
+    loginWindow = new LoginWindow(this);
+    QObject::connect(loginWindow,SIGNAL(onSucsess(QString)),this,SLOT(onActivate(QString)));
+    QObject::connect(loginWindow,SIGNAL(onSucsess(QString)), &GUI::OnLineInformation::getInstance(), SLOT(setAuthToken(QString)));
+    #ifdef DESKTOP_STYLE
+    loginWindow->show();
+    #else
+    loginWindow->showMaximized();
+    #endif
 
-        setWindowTitle("wikigps");
-        setCentralWidget(new CentralWidget(this));
-        createMenu();
-        qDebug() << "centralWidget";
-        setHidden(true);
-    }
+    setWindowTitle("wikigps");
+    setCentralWidget(new CentralWidget(this));
+    createMenu();
+    qDebug() << "centralWidget";
+    setHidden(true);
+  }
 
   void MainWindow::createMenu()
   {
     createActions();
 
     menuBar()->addAction(m_actionViewMap);
-   // menuBar()->addAction(m_actionViewFeed);
+    // menuBar()->addAction(m_actionViewFeed);
     menuBar()->addAction(m_actionSelectChannels);
     menuBar()->addAction(m_actionAddContent);
-   // menuBar()->addAction(m_actionEditRadius);
-  //  menuBar()->addAction(m_actionShowDescription);
+    // menuBar()->addAction(m_actionEditRadius);
+    //  menuBar()->addAction(m_actionShowDescription);
     menuBar()->addAction(m_actionViewOptions);
     menuBar()->addAction(m_logout);
 
@@ -83,13 +83,12 @@ namespace GUI
     connect(m_actionSelectChannels, SIGNAL(triggered()), centralWidget(), SLOT(switchChannel()));
     connect(m_actionAddContent,     SIGNAL(triggered()), centralWidget(), SLOT(switchEditor()));
     connect(m_actionEditRadius,     SIGNAL(triggered()), centralWidget(), SLOT(setRadius()));
-//    connect(m_actionShowDescription,SIGNAL(triggered()), centralWidget(), SLOT(showChannelInfo()));
+    //    connect(m_actionShowDescription,SIGNAL(triggered()), centralWidget(), SLOT(showChannelInfo()));
     connect(m_actionQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(m_actionViewOptions, SIGNAL(triggered()), centralWidget(), SLOT(switchOptions()));
     connect(m_logout, SIGNAL(triggered()), this, SLOT(onDeactivate()));
-    
-  }
 
+  }
 
   void MainWindow::createActions()
   {
@@ -109,20 +108,20 @@ namespace GUI
     qDebug() << "add";
   }
 
-
   void MainWindow::onActivate(QString)
   {
-      loginWindow->setHidden(true);
-      setHidden(false);
+    loginWindow->setHidden(true);
+    setHidden(false);
   }
 
   void MainWindow::onDeactivate()
   {
-      loginWindow->setHidden(false);
-      setHidden(true);
-      OnLineInformation::getInstance().setAuthToken(QString(""));
+    loginWindow->setHidden(false);
+    setHidden(true);
+    OnLineInformation::getInstance().setAuthToken(QString(""));
   }
-  
-} // namespace GUI
+
+}                                       // namespace GUI
+
 
 /* ===[ End of file ]=== */

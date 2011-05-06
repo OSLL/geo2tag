@@ -61,7 +61,7 @@ namespace common
   {
     Q_OBJECT
 
-    static double m_longitude;
+      static double m_longitude;
     static double m_latitude;
 
     public:
@@ -70,7 +70,7 @@ namespace common
       virtual double getLongitude() const;
 
       virtual double getLatitude() const;
-      
+
       virtual ~MobilityGps();
 
     private slots:

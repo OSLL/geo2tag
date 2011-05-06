@@ -29,12 +29,12 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file MapLoaderFactory.cpp
  * \brief MapLoaderFactory implementation
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 #include "MapLoaderFactory.h"
@@ -55,7 +55,7 @@ namespace maps
      */
 
     /*!
-     * \TODO use std::map for instance selecting 
+     * \TODO use std::map for instance selecting
      */
     static GoogleMapLoader gMap;
     static OpenStreetMapLoader openStreetMap;
@@ -64,11 +64,12 @@ namespace maps
       return &gMap;
 
     if(type == MapLoader::OPEN_STREET)
-        return &openStreetMap;
+      return &openStreetMap;
 
     return NULL;
   }
 
-} // namespace maps
+}                                       // namespace maps
+
 
 /* ===[ End of file  ]=== */

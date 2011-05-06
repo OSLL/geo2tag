@@ -36,7 +36,6 @@
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-
 #include <QObject>
 #include <QtTest/QtTest>
 #include <QSignalSpy>
@@ -49,29 +48,29 @@ namespace Test
   class GpsInfo_Test : public QObject
   {
     Q_OBJECT;
-  
-  public:
-    
-    GpsInfo_Test()
-    {
-  	  // initialization here
-    }
-  
-  private slots:
-  
-    void test1()
-    {
-     // see docs: http://doc.qt.nokia.com/4.7/qtest.html
-  
-     //QCOMPARE();
-     //QWARN();
-     //QVERIFY();
-     //QTEST();
-     QCOMPARE(common::GpsInfo::getInstance().isReady(),false);
-     QCOMPARE(common::GpsInfo::getInstance().getLatitude(),0.);
-     QCOMPARE(common::GpsInfo::getInstance().getLongitude(),0.);
-    }
-  
-  }; // class GpsInfo_Test
 
-} // end of namespace Test
+    public:
+
+      GpsInfo_Test()
+      {
+        // initialization here
+      }
+
+    private slots:
+
+      void test1()
+      {
+        // see docs: http://doc.qt.nokia.com/4.7/qtest.html
+
+        //QCOMPARE();
+        //QWARN();
+        //QVERIFY();
+        //QTEST();
+        QCOMPARE(common::GpsInfo::getInstance().isReady(),false);
+        QCOMPARE(common::GpsInfo::getInstance().getLatitude(),0.);
+        QCOMPARE(common::GpsInfo::getInstance().getLongitude(),0.);
+      }
+
+  };                                    // class GpsInfo_Test
+
+}                                       // end of namespace Test

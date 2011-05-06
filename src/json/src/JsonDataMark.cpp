@@ -44,33 +44,38 @@
 qlonglong JsonDataMark::globalTagId = 0;
 
 JsonDataMark::JsonDataMark(double latitude,
-                           double longitude,
-                           QString label,
-                           QString description,
-                           const QString &url,
-                           const QDateTime &time):
-                DataMark(latitude, longitude, label, description, url, time),
-                m_id(globalTagId++)
+double longitude,
+QString label,
+QString description,
+const QString &url,
+const QDateTime &time):
+DataMark(latitude, longitude, label, description, url, time),
+m_id(globalTagId++)
 {
 }
+
 
 qlonglong JsonDataMark::getId() const
 {
-    return m_id;
+  return m_id;
 }
+
 
 qlonglong JsonDataMark::getUserId() const
 {
-    return m_userId;
+  return m_userId;
 }
+
 
 void JsonDataMark::setId(qlonglong id)
 {
-    m_id=id;
+  m_id=id;
 }
+
 
 JsonDataMark::~JsonDataMark()
 {
 }
+
 
 /* ===[ End of file ]=== */
