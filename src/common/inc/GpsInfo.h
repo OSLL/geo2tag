@@ -49,7 +49,7 @@ namespace common
 
       virtual double getLatitude() const=0;
       
-      bool isReady() const
+      virtual bool isReady() 
       {
 	      return m_ready;
       }

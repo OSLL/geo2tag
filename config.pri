@@ -1,8 +1,8 @@
 CONFIG += debug
 
-CONFIG += linux
+#CONFIG += linux
 #CONFIG += linux_profiling
-#CONFIG += maemo5
+CONFIG += maemo5
 #CONFIG += symbian
 SOURCE_DIR = $$PWD
 

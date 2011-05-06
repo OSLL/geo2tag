@@ -190,6 +190,8 @@ void TrackerDaemon::onTagAdded()
 		while (!common::GpsInfo::getInstance().isReady() || !m_netManager.isOnline())
 		{
 			qDebug() << "Position source doesnt ready or there is no internet connection, waiting";
+			qDebug() << "Position source ready " << common::GpsInfo::getInstance().isReady();
+		        eventLoop.processEvents(QEventLoop::ExcludeUserInputEvents, 1000);	
 			QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
 		}	
                 m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());
