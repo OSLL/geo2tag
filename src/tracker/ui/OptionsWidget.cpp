@@ -36,41 +36,41 @@ void OptionsWidget::applyProxySettings()
 OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
 QScrollArea(parent), m_productName(productName), m_settings(QSettings::SystemScope,"osll",m_productName)
 {
-    m_widget = new QWidget(this);
+  m_widget = new QWidget(this);
 
-    QVBoxLayout * layout = new QVBoxLayout(m_widget);
+  QVBoxLayout * layout = new QVBoxLayout(m_widget);
 
-    layout->addWidget(new QLabel("Login", m_widget));
-    layout->addWidget(m_nameEdit = new QLineEdit(m_widget));
-    layout->addWidget(new QLabel("Password", m_widget));
-    layout->addWidget(m_passwordEdit = new QLineEdit(m_widget));
-    layout->addWidget(m_passwordCheckBox = new QCheckBox("Show password", m_widget));
-    layout->addWidget(new QLabel("Channel name", m_widget));
-    layout->addWidget(m_channelEdit = new QLineEdit(m_widget));
-    // NOTE if we use m_widget windget in tracker addition field for username will displayed
+  layout->addWidget(new QLabel("Login", m_widget));
+  layout->addWidget(m_nameEdit = new QLineEdit(m_widget));
+  layout->addWidget(new QLabel("Password", m_widget));
+  layout->addWidget(m_passwordEdit = new QLineEdit(m_widget));
+  layout->addWidget(m_passwordCheckBox = new QCheckBox("Show password", m_widget));
+  layout->addWidget(new QLabel("Channel name", m_widget));
+  layout->addWidget(m_channelEdit = new QLineEdit(m_widget));
+  // NOTE if we use m_widget windget in tracker addition field for username will displayed
   if (m_productName == "tracker")
   {
-        layout->addWidget(new QLabel("Name that will be displayed\non Observer map:", m_widget));
+    layout->addWidget(new QLabel("Name that will be displayed\non Observer map:", m_widget));
     layout->addWidget(m_visibleNameEdit = new QLineEdit());
   }
 
   m_passwordEdit->setEchoMode(QLineEdit::Password);
   m_passwordCheckBox->setChecked(false);
 
-    layout->addWidget(new QLabel("Server", m_widget));
-    layout->addWidget(m_serverUrlEdit = new QLineEdit(m_widget));
-    layout->addWidget(new QLabel("Port", m_widget));
-    layout->addWidget(m_serverPortEdit = new QSpinBox(m_widget));
+  layout->addWidget(new QLabel("Server", m_widget));
+  layout->addWidget(m_serverUrlEdit = new QLineEdit(m_widget));
+  layout->addWidget(new QLabel("Port", m_widget));
+  layout->addWidget(m_serverPortEdit = new QSpinBox(m_widget));
 
   m_serverPortEdit->setMinimum(0);
   m_serverPortEdit->setMaximum(65535);
 
-    layout->addWidget(new QLabel("Proxy type", m_widget));
-    layout->addWidget(m_proxyType = new QComboBox(m_widget));
-    layout->addWidget(new QLabel("Proxy host", m_widget));
-    layout->addWidget(m_proxyHostEdit = new QLineEdit(m_widget));
-    layout->addWidget(new QLabel("Proxy port", m_widget));
-    layout->addWidget(m_proxyPortEdit = new QSpinBox(m_widget));
+  layout->addWidget(new QLabel("Proxy type", m_widget));
+  layout->addWidget(m_proxyType = new QComboBox(m_widget));
+  layout->addWidget(new QLabel("Proxy host", m_widget));
+  layout->addWidget(m_proxyHostEdit = new QLineEdit(m_widget));
+  layout->addWidget(new QLabel("Proxy port", m_widget));
+  layout->addWidget(m_proxyPortEdit = new QSpinBox(m_widget));
 
   m_proxyType->addItem("DefaultProxy", QNetworkProxy::DefaultProxy);
   m_proxyType->addItem("Socks5Proxy", QNetworkProxy::Socks5Proxy);
@@ -81,25 +81,25 @@ QScrollArea(parent), m_productName(productName), m_settings(QSettings::SystemSco
   m_proxyPortEdit->setMinimum(0);
   m_proxyPortEdit->setMaximum(65535);
 
-    layout->addWidget(new QLabel("Cache type", m_widget));
-    layout->addWidget(m_cacheType = new QComboBox(m_widget));
-    layout->addWidget(new QLabel("Cache path", m_widget));
-    layout->addWidget(m_cachePath = new QLineEdit(m_widget));
-    layout->addWidget(m_cachePathButton = new QPushButton("Choose dir...", m_widget));
-    layout->addWidget(new QLabel("Max cache size", m_widget));
-    layout->addWidget(m_cacheMaxSize = new QSpinBox(m_widget));
+  layout->addWidget(new QLabel("Cache type", m_widget));
+  layout->addWidget(m_cacheType = new QComboBox(m_widget));
+  layout->addWidget(new QLabel("Cache path", m_widget));
+  layout->addWidget(m_cachePath = new QLineEdit(m_widget));
+  layout->addWidget(m_cachePathButton = new QPushButton("Choose dir...", m_widget));
+  layout->addWidget(new QLabel("Max cache size", m_widget));
+  layout->addWidget(m_cacheMaxSize = new QSpinBox(m_widget));
 
   m_cacheType->addItem("None", 0);
   m_cacheType->addItem("Network cache", 1);
   m_cacheType->addItem("Disk cache", 2);
   m_cacheType->setCurrentIndex(-1);
 
-    layout->addWidget(m_doneButton = new QPushButton("Done", m_widget));
-    layout->addWidget(m_defaultButton = new QPushButton("Default settings", m_widget));
-    layout->addWidget(m_cancelButton = new QPushButton("Cancel", m_widget));
+  layout->addWidget(m_doneButton = new QPushButton("Done", m_widget));
+  layout->addWidget(m_defaultButton = new QPushButton("Default settings", m_widget));
+  layout->addWidget(m_cancelButton = new QPushButton("Cancel", m_widget));
 
-    m_widget->setLayout(layout);
-    this->setWidget(m_widget);
+  m_widget->setLayout(layout);
+  this->setWidget(m_widget);
   this->setWidgetResizable(true);
 
   connect(m_doneButton, SIGNAL(clicked()), this, SLOT(onDoneClicked()));
