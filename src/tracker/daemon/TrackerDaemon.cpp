@@ -151,7 +151,7 @@ void TrackerDaemon::onError(QString message)
     {
       qDebug() << "Current network state is Online, runing loginRequest again";
       run();
-  }
+    }
     else
     {
       qDebug() << "Current network state is Offline, wait for connection";
