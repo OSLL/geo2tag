@@ -230,7 +230,7 @@ void UpdateThread::updateReflections(DataMarks &tags, Users &users, Channels &ch
     query.exec("select channel_id, timeslot_id from channeltimeslot;");
     while (query.next())
     {
-      qulonglong timeslot_id = query.record().value("timeslot_id").toULongLong();
+      qlonglong timeslot_id = query.record().value("timeslot_id").toLongLong();
       qlonglong channel_id = query.record().value("channel_id").toLongLong();
 
       QSharedPointer<Channel> channel = channels.item(channel_id);

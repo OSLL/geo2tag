@@ -42,6 +42,7 @@
 
 #include "GpsInfo.h"
 #include <QObject>
+#include <QDateTime>
 
 // QtMobility API headers
 // Location
@@ -63,13 +64,17 @@ namespace common
 
       static double m_longitude;
     static double m_latitude;
+    QDateTime m_lastUpdate;
 
+    QGeoPositionInfoSource * m_source;
     public:
       MobilityGps(QObject *parent = 0);
 
       virtual double getLongitude() const;
 
       virtual double getLatitude() const;
+
+      virtual bool isReady();
 
       virtual ~MobilityGps();
 

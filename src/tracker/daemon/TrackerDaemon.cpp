@@ -141,7 +141,7 @@ QStringList TrackerDaemon::getLog() const
 
 void TrackerDaemon::onError(QString message)
 {
-  qDebug() << "Nework error occured: " << message;
+  qDebug() << "Network error occured: " << message;
   if (!m_isConnected)
   {
     QEventLoop eventLoop;
@@ -156,6 +156,11 @@ void TrackerDaemon::onError(QString message)
     {
       qDebug() << "Current network state is Offline, wait for connection";
     }
+  }
+  else if (!m_pauseFlag)
+  {
+    qDebug() << "Doing another try for add tag";
+    onTagAdded();
   }
 }
 
@@ -178,10 +183,6 @@ void TrackerDaemon::onConnected()
     mark->setChannel(channel);
     mark->setUser(m_loginQuery->getUser());
     m_tagQuery = new AddNewMarkQuery(mark,this);
-    qDebug() << "Sending the first tag";
-    qDebug() << "Tag parameters: time " <<  m_tagQuery->getTag()->getTime().toString("dd.MM.yyyy hh:mm:ss.zzz")
-      << ", latitude " << m_tagQuery->getTag()->getLatitude()
-      << ", longitude " << m_tagQuery->getTag()->getLongitude();
     connect(m_tagQuery, SIGNAL(tagAdded()), SLOT(onTagAdded()));
     connect(m_tagQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
     onTagAdded();
@@ -203,6 +204,10 @@ void TrackerDaemon::onTagAdded()
       while (!common::GpsInfo::getInstance().isReady() || !m_netManager.isOnline())
       {
         qDebug() << "Position source doesnt ready or there is no internet connection, waiting";
+        qDebug() << "Position source ready " << common::GpsInfo::getInstance().isReady();
+        m_lastCoords.setX(0);
+        m_lastCoords.setY(0);
+        eventLoop.processEvents(QEventLoop::ExcludeUserInputEvents, 1000);
         QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
       }
       m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());

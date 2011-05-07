@@ -63,8 +63,8 @@ namespace common
   GpsModeller::GpsModeller(const QString &gpxFile)
   {
     setReady(false);
-    m_longitude = 0;
-    m_latitude = 0;
+    m_longitude = 0.;
+    m_latitude = 0.;
     m_doc = xmlReadFile(gpxFile.toStdString().c_str(), NULL, 0);
     start();
   }
