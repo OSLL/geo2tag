@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2010  OSLL osll@osll.spb.ru
  *
@@ -29,19 +30,24 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file SetTimeSlotResponseJSON.h
- * \brief Header of SetTimeSlotResponseJSON
+ * \file GetTimeSlotMarkRequestJSON.h
+ * \brief Header of GetTimeSlotMarkRequestJSON
  *
- * File description
- *
- * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
-#define _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
+#ifndef _GETTIMESLOTMARKREQUESTJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_
+#define _GETTIMESLOTMARKREQUESTJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_
 
-#include "DefaultResponseJSON.h"
+#include "JsonSerializer.h"
 
-typedef DefaultResponseJSON SetTimeSlotResponseJSON;
-// _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
-#endif
+class GetTimeSlotMarkRequestJSON : public JsonSerializer
+{
+  Q_OBJECT;
+  public:
+    GetTimeSlotMarkRequestJSON(QObject *parent=0);
+
+    QByteArray getJson() const;
+
+    void parseJson(const QByteArray&);
+};
+#endif                                  // _GETTIMESLOTMARKREQUESTJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_

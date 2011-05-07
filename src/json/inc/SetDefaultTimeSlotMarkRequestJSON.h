@@ -29,19 +29,25 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file SetTimeSlotResponseJSON.h
- * \brief Header of SetTimeSlotResponseJSON
+ * \file SetDefaultTimeSlotMarkRequestJSON.h
+ * \brief Header of SetDefaultTimeSlotMarkRequestJSON
  *
- * File description
  *
- * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
-#define _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
+#ifndef _SETDEFAULTTIMESLOTMARKREQUESTJSON_H_404ac795_44af_4d40_8b15_f652438d71f2_
+#define _SETDEFAULTTIMESLOTMARKREQUESTJSON_H_404ac795_44af_4d40_8b15_f652438d71f2_
 
-#include "DefaultResponseJSON.h"
+#include "JsonSerializer.h"
 
-typedef DefaultResponseJSON SetTimeSlotResponseJSON;
-// _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
-#endif
+class SetDefaultTimeSlotMarkRequestJSON : public JsonSerializer
+{
+  Q_OBJECT;
+  public:
+    SetDefaultTimeSlotMarkRequestJSON(QObject *parent=0);
+
+    QByteArray getJson() const;
+
+    void parseJson(const QByteArray&);
+};
+#endif                                  // _SETDEFAULTTIMESLOTMARKREQUESTJSON_H_404ac795_44af_4d40_8b15_f652438d71f2_

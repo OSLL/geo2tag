@@ -1,6 +1,6 @@
+include(../../../config.pri)
 
-
-INCLUDEPATH = ../inc/
+INCLUDEPATH += ../inc/
 
 SOURCES += main.cpp \ 
     ../src/User.cpp \ 

@@ -16,15 +16,15 @@ class OptionsWidget : public QScrollArea
 {
   Q_OBJECT
 
-    QLineEdit *m_nameEdit;
+    QWidget * m_widget;
+
+  QLineEdit *m_nameEdit;
   QLineEdit *m_passwordEdit;
   QLineEdit *m_visibleNameEdit;
   QLineEdit *m_channelEdit;
   QLineEdit *m_proxyHostEdit;
   QLineEdit *m_serverUrlEdit;
   QSpinBox *m_serverPortEdit;
-
-  QWidget *m_widg;
 
   QCheckBox *m_passwordCheckBox;
 

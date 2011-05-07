@@ -29,19 +29,16 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file SetTimeSlotResponseJSON.h
- * \brief Header of SetTimeSlotResponseJSON
+ * \file SetTimeSlotMarkResponseJSON.h
+ * \brief Header of SetTimeSlotMarkResponseJSON
  *
- * File description
  *
- * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
-#define _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
+#ifndef _SETTIMESLOTMARKRESPONSEJSON_H_08bd1e75_406f_45dd_ad7b_0fd184fa1a71_
+#define _SETTIMESLOTMARKRESPONSEJSON_H_08bd1e75_406f_45dd_ad7b_0fd184fa1a71_
 
 #include "DefaultResponseJSON.h"
 
-typedef DefaultResponseJSON SetTimeSlotResponseJSON;
-// _SETTIMESLOTRESPONSEJSON_Hfd934dc6_4536_49d3_8bbd_67be2329026b_INCLUDED_
-#endif
+typedef DefaultResponseJSON SetTimeSlotMarkResponseJSON;
+#endif                                  // _SETTIMESLOTMARKRESPONSEJSON_H_08bd1e75_406f_45dd_ad7b_0fd184fa1a71_
