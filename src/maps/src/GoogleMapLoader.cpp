@@ -102,7 +102,7 @@ namespace maps
       if(mark->getDescription()!=""
         /*&&
                        (mark->getChannel()->getRadius()*100) >  DataMark::getDistance(clatitude, clongitude,mark->getLatitude(), mark->getLongitude())*/
-        )                               
+        )
         s << "&markers=color:"<< getColor(marks[i]->getLabel()[0]) <<"|label:" <<
           marks[i]->getLabel()[0] << "|" << marks[i]->getLatitude() << "," << marks[i]->getLongitude();
     }

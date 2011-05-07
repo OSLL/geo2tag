@@ -159,8 +159,8 @@ void TrackerDaemon::onError(QString message)
   }
   else if (!m_pauseFlag)
   {
-      qDebug() << "Doing another try for add tag";
-      onTagAdded();
+    qDebug() << "Doing another try for add tag";
+    onTagAdded();
   }
 }
 
@@ -205,8 +205,8 @@ void TrackerDaemon::onTagAdded()
       {
         qDebug() << "Position source doesnt ready or there is no internet connection, waiting";
         qDebug() << "Position source ready " << common::GpsInfo::getInstance().isReady();
-	m_lastCoords.setX(0);
-	m_lastCoords.setY(0);
+        m_lastCoords.setX(0);
+        m_lastCoords.setY(0);
         eventLoop.processEvents(QEventLoop::ExcludeUserInputEvents, 1000);
         QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
       }
