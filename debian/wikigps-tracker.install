@@ -1,5 +1,6 @@
 debian/tmp/usr/bin/wikigpsTracker
 debian/tmp/usr/bin/wikigpsTracker-ui
 debian/tmp/etc/event.d/wikigpsTracker
+debian/tmp/etc/logrotate.d/wikigpsTracker-logrotate
 debian/tmp/usr/share/applications/hildon/tracker.desktop
 debian/tmp/usr/share/icons/hicolor/48x48/apps/wikigpsTracker-ui.png

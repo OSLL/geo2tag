@@ -1,3 +1,4 @@
 #!/bin/sh
 su -c '/usr/bin/wikigpsTracker > /dev/null 2>&1 &' user
+logrotate -v -f /etc/logrotate.d/wikigpsTracker-logrotate
 exit 0

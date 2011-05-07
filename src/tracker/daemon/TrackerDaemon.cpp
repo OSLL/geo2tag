@@ -16,11 +16,11 @@
 #define DAEMON_PORT 34243
 
 TrackerDaemon::TrackerDaemon():m_settings(QSettings::SystemScope,"osll","tracker"),
+m_netManager(this),
 m_loginQuery(NULL),
 m_tagQuery(NULL),
 m_pauseFlag(true),
-m_isConnected(false),
-m_netManager(this)
+m_isConnected(false)
 {
   //    moveToThread(this);
   m_controlServer = new QTcpServer(NULL);

@@ -9,6 +9,8 @@ SOURCE_DIR = $$PWD
 #contains(QT_CONFIG, reduce_exports):CONFIG+=hide_symbols
 
 contains(TEMPLATE,.*lib):DEFINES += QT_SHARED
+    
+QMAKE_CXXFLAGS += -Werror
 
 maemo5: {
     DEFINES+= Q_WS_MAEMO_5
