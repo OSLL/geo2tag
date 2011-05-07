@@ -75,11 +75,7 @@ namespace common
 
     QMap<QString, ProcessMethod> m_processors;
 
-    QueryExecutor *             m_queryExecutor;
-
-    static QSharedPointer<TimeSlot> defaultTimeSlot;
-
-    static const qulonglong A_YEAR_IN_ms;
+    QueryExecutor *             m_queryExecutor;   
 
     static const QString error;
     static const QString ok;
@@ -99,9 +95,9 @@ namespace common
     QByteArray processSetTimeSlotQuery(const QByteArray&);
     QByteArray processGetTimeSlotMarkQuery(const QByteArray&);
     QByteArray processSetTimeSlotMarkQuery(const QByteArray&);
+    QByteArray processSetDefaultTimeSlotQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotMarkQuery(const QByteArray&);
 
-    QByteArray setDefaultTimeSlotValueForChannels();
 
     public:
 
