@@ -67,10 +67,6 @@ void DataThread::onMarksGotten()
   m_map->setMarks(m_marks);
   QList<QSharedPointer<DataMark> > marks = m_marks.values();
   qDebug() << "RssFeed gotten!!!!! " <<  m_marks.count() << "marks recieved";
-  /*    for (int i=0;i<marks.size();i++)
-      {
-              qDebug() << "mark at " << marks.at(i)->getLatitude()  << " " << marks.at(i)->getLongitude();
-      }*/
   m_requestIsSent=false;
   //and now redraw canvas
 }

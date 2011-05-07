@@ -20,7 +20,7 @@ HEADERS += \
            inc/JsonUser.h \
            inc/JsonDataMark.h \
            inc/JsonChannel.h \
-	   			 inc/JsonTimeSlot.h \
+           inc/JsonTimeSlot.h \
 	         inc/JsonSerializer.h \
 	         inc/LoginRequestJSON.h \
 	         inc/LoginResponseJSON.h \
@@ -34,11 +34,17 @@ HEADERS += \
 	         inc/SubscribedChannelsResponseJSON.h \
 	         inc/AddChannelRequestJSON.h \
 	         inc/AddChannelResponseJSON.h \
-           inc/GetTimeSlotRequestJSON.h \
-           inc/GetTimeSlotResponseJSON.h \
+                 inc/GetTimeSlotRequestJSON.h \
+                 inc/GetTimeSlotResponseJSON.h \
 	         inc/DefaultResponseJSON.h \
-           inc/SetTimeSlotRequestJSON.h \
-           inc/SetTimeSlotResponseJSON.h
+                 inc/SetTimeSlotRequestJSON.h \
+                 inc/SetTimeSlotResponseJSON.h \
+                 inc/GetTimeSlotMarkRequestJSON.h \
+                 inc/GetTimeSlotMarkResponseJSON.h \
+                 inc/SetTimeSlotMarkRequestJSON.h \
+                 inc/SetTimeSlotMarkResponseJSON.h \
+                 inc/SetDefaultTimeSlotMarkRequestJSON.h \
+                 inc/SetDefaultTimeSlotMarkResponseJSON.h
 
 SOURCES += \
            src/ChannelListJSON.cpp \
@@ -47,18 +53,23 @@ SOURCES += \
            src/SubscribeChannelJSON.cpp \
            src/JsonUser.cpp \
            src/JsonChannel.cpp \
-	         src/SubscribedChannelsRequestJSON.cpp \
-	         src/JsonTimeSlot.cpp \
+           src/SubscribedChannelsRequestJSON.cpp \
+           src/JsonTimeSlot.cpp \
            src/JsonDataMark.cpp \
            src/JsonSerializer.cpp \
            src/LoginRequestJSON.cpp \
            src/LoginResponseJSON.cpp \
            src/AddNewMarkRequestJSON.cpp \
-	         src/AddChannelRequestJSON.cpp \
+           src/AddChannelRequestJSON.cpp \
            src/GetTimeSlotRequestJSON.cpp \
            src/GetTimeSlotResponseJSON.cpp \
            src/DefaultResponseJSON.cpp \
-           src/SetTimeSlotRequestJSON.cpp
+           src/SetTimeSlotRequestJSON.cpp \
+           src/GetTimeSlotMarkRequestJSON.cpp \
+           src/AddNewMarkResponseJSON.cpp \
+           src/GetTimeSlotMarkResponseJSON.cpp \
+           src/SetTimeSlotMarkRequestJSON.cpp \
+           src/SetTimeDefaultSlotMarkRequestJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 
