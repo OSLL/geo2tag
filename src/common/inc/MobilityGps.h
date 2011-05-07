@@ -64,8 +64,9 @@ namespace common
 
       static double m_longitude;
     static double m_latitude;
+    QDateTime m_lastUpdate;
 
-    QDateTime m_lastUpdateTime;
+    QGeoPositionInfoSource * m_source;
     public:
       MobilityGps(QObject *parent = 0);
 

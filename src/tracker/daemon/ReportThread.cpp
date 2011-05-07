@@ -23,7 +23,6 @@ void ControlThread::run()
   QStringList commands=query.split(" ",QString::SkipEmptyParts);
   for (int i=0;i<commands.size();i++)
   {
-    qDebug() << "processing " << i << " command = " << commands.at(i);
     if(!commands.at(i).isEmpty() && m_processors.contains(commands.at(i)))
     {
       ProcessMethod method = m_processors.value(commands.at(i));
