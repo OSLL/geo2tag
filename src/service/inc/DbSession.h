@@ -75,7 +75,7 @@ namespace common
 
     QMap<QString, ProcessMethod> m_processors;
 
-    QueryExecutor *             m_queryExecutor;   
+    QueryExecutor *             m_queryExecutor;
 
     static const QString error;
     static const QString ok;
@@ -97,7 +97,6 @@ namespace common
     QByteArray processSetTimeSlotMarkQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotMarkQuery(const QByteArray&);
-
 
     public:
 
