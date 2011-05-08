@@ -120,7 +120,8 @@ void MapScene::setMarks(DataChannels marks)
   QSettings settings(QSettings::SystemScope, "osll", "libs");
   //int maxAgeOfMark = settings.value("timeLimit").toInt();
   int marksCount = settings.value("marksCount").toInt();
-
+  int markAge=0;
+  int maxAgeOfMark=settings.value("timeLimit").toInt();
   //Getting list of all channels, wich marks are in request
   QList<QSharedPointer<DataMark> > marks_to_show;
 
@@ -140,26 +141,29 @@ void MapScene::setMarks(DataChannels marks)
       //Check, that current mark isnt older that maxAgeOfMark minutes
       //qDebug() << "Mark time " << marks_to_show.at(i)->getTime().toString("dd.MM.yyyy hh:mm:ss");
       //qDebug() << "CurrTime-4min  " << QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark).toString("dd.MM.yyyy hh:mm:ss");
-      if(true)                          //marks_to_show.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark))
+      markAge=marks_to_show.at(i)->getTime().toUTC().secsTo(QDateTime::currentDateTime())/60;
+      qDebug() << "Mark "<< marks_to_show.at(i)->getLatitude()<<" "<< marks_to_show.at(i)->getLongitude()  <<" age in mins " << markAge
+        << " from channel " << channels.at(j)->getName();
+      if(markAge<maxAgeOfMark)          //marks_to_show.at(i)->getTime().toUTC()>QDateTime::currentDateTime().addSecs(-60 * maxAgeOfMark))
       {
         pos = OSMCoordinatesConverter::GeoToTile(
           marks_to_show.at(i)->getLatitude(),
           marks_to_show.at(i)->getLongitude(),
           m_zoom);
         pos = pos * qreal(tdim);
-        this->add_mark(pos, channels.at(j)->getName());
+        this->add_mark(pos,marks_to_show.at(i),channels.at(j));
       }
     }
   }
 }
 
 
-void MapScene::add_mark(QPointF pos, QString channel_name)
+void MapScene::add_mark(QPointF pos, QSharedPointer<DataMark> mark,QSharedPointer<Channel> channel)
 {
   QPointF posForPicture = QPointF(pos.x()-12.0, pos.y()-12.0);
   QPointF posForText = QPointF(pos.x()-24.0, pos.y()+24.0);
   QGraphicsPixmapItem * pi = 0;
-
+  QString channel_name = channel->getName();
   if(channel_name == "Fuel prices")
   {
     pi = addPixmap(QPixmap(":/img/fuel.png"));
@@ -194,16 +198,22 @@ void MapScene::add_mark(QPointF pos, QString channel_name)
   }
   else
   {
-    QPixmap pixmap(24, 24);
+    QPixmap pixmap(50,50);
     pixmap.fill(Qt::transparent);
-    QPoint center(pixmap.width()/2, pixmap.height()/2);
-
+    QPoint center(pixmap.width()/2, pixmap.height()/4);
+    QPoint posForText = QPoint(0, pixmap.height()/2+8);
     QPainter painter;
     painter.begin(&pixmap);
+    QFont font=painter.font();
+    font.setPointSize(7);
+    painter.setFont(font);
     painter.setBrush(Qt::blue);
-    painter.drawEllipse(center, pixmap.width()/2, pixmap.height()/2);
+    painter.drawEllipse(center, pixmap.width()/4, pixmap.height()/4);
     painter.setBrush(Qt::black);
     painter.drawEllipse(center, pixmap.width()/10, pixmap.height()/10);
+    int mins_ago=(mark->getTime().toUTC().secsTo(QDateTime::currentDateTime()))/60;
+    qDebug() << "Text for mark: " << mark->getLabel()+", "+ QString::number(mins_ago)+" min. ago" ;
+    painter.drawText(posForText,QString::number(mins_ago)+" min ago");
     painter.end();
 
     pi = this->addPixmap(pixmap);

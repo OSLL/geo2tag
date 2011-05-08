@@ -50,16 +50,14 @@
 class TimeSlot: public QObject
 {
   Q_OBJECT
-  // time slot
-    qulonglong m_slot;
 
-  protected:
-
-    TimeSlot(const qulonglong &slot);
+  qulonglong m_slot;   // time slot
 
   public:
 
-    virtual qlonglong getId() const = 0;
+    TimeSlot(const qulonglong &slot);
+
+    virtual qlonglong getId() const;
 
     const qulonglong& getSlot() const;
     void setSlot(const qulonglong& slot);
@@ -70,6 +68,7 @@ class TimeSlot: public QObject
 };
 
 typedef ConcurrentVector<TimeSlot> TimeSlots;
+
 // _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
 #endif
 

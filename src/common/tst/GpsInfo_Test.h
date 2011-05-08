@@ -1,5 +1,5 @@
 /*
- * Copyright ${YEAR}  ${AUTHOR}  ${EMAIL}
+ * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -29,44 +29,42 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/*! ---------------------------------------------------------------
- * \file ${NAMEH}
- * \brief Header of ${NAME}
- * \todo add comment here
- *
- * File description
+/*!
+ * \file GpsInfo_Test.h
+ * \brief Test suite for GpsInfo class
  *
  * PROJ: OSLL/geo2tag
- * ---------------------------------------------------------------- */
+ * ----------------------------------------------------------- */
 
+#include <QObject>
+#include <QtTest/QtTest>
+#include <QSignalSpy>
 
-#ifndef _${NAME}_H_${UUID}_INCLUDED_
-#define _${NAME}_H_${UUID}_INCLUDED_
+//include Application class
+#include "../inc/GpsInfo.h"
 
-namespace ${PACKAGE}
+namespace Test
 {
- /*!
-   * Class description. May use HTML formatting
-   *
-   */
-  class ${NAME}
+  class GpsInfo_Test : public QObject
   {
-  public:
-    ${NAME}()
-    {
-    }
+    Q_OBJECT;
 
-    ~${NAME}()
-    {
-    }
-    
-  private:    
-    ${NAME}(const ${NAME}& obj);
-    ${NAME}& operator=(const ${NAME}& obj);
+    public:
 
-  }; // class ${NAME}
-  
-} // namespace ${PACKAGE}
+      GpsInfo_Test(QObject *parent = NULL) : QObject(parent)
+      {
+        // initialization here
+      }
 
-#endif //_${NAME}_H_${UUID}_INCLUDED_
+    private slots:
 
+      void test1()
+      {
+        QCOMPARE(common::GpsInfo::getInstance().isReady(),false);
+        QCOMPARE(common::GpsInfo::getInstance().getLatitude(),0.);
+        QCOMPARE(common::GpsInfo::getInstance().getLongitude(),0.);
+      }
+
+  };                                    // class GpsInfo_Test
+
+}                                       // end of namespace Test

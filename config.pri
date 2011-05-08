@@ -9,6 +9,8 @@ SOURCE_DIR = $$PWD
 #contains(QT_CONFIG, reduce_exports):CONFIG+=hide_symbols
 
 contains(TEMPLATE,.*lib):DEFINES += QT_SHARED
+    
+QMAKE_CXXFLAGS += -Werror
 
 maemo5: {
     DEFINES+= Q_WS_MAEMO_5
@@ -33,6 +35,7 @@ linux: {
     QMAKE_CXX = g++-4.5
     QMAKE_LINK = g++-4.5
     QMAKE_CXXFLAGS += -fpermissive -g3 -Werror -DREDEFINE_QT_SIGNALS
+		INCLUDEPATH += /usr/include/libxml2/
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }

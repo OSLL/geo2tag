@@ -12,13 +12,16 @@ rm -rf ./test.log
 
 for test in ${TESTS}; 
 do
-	${test} | tee --append "./test.log" 
+	${test} | tee --append "./test.log"  
 done;
 
-echo ""
-echo "============================================================="
-echo "===                   END OF RUNNING   -> ${COUNT} "
-echo "============================================================="
-echo ""
 
-cat ./test.log | grep "FAIL!" 
+FAIL=`cat test.log | grep "FAIL" | wc -l`
+PASS=`cat test.log | grep "PASS" | wc -l`
+
+echo ""
+echo "See 'test.log' for results"
+echo "================================================================="
+echo "===  TESTING RESULTS Suites:${COUNT}   PASS/FAIL: ${PASS}/${FAIL}"
+echo "================================================================="
+

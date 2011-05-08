@@ -104,7 +104,7 @@ namespace maps
       if(mark->getDescription()!=""
         /*&&
                        (mark->getChannel()->getRadius()*100) >  DataMark::getDistance(clatitude, clongitude,mark->getLatitude(), mark->getLongitude())*/
-        )                               
+        )
         s << marks[i]->getLongitude() << "," << marks[i]->getLatitude() << ",pointImagePattern:"<< getColor(marks[i]->getLabel()[0]) << marks[i]->getLabel()[0] << ";";
     }
 

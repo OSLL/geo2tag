@@ -36,7 +36,7 @@
  *
  * File description
  *
- * PROJ: OSLL/geoblog
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 #include "ChannelInternal.h"
@@ -46,15 +46,13 @@
 #include "JsonTimeSlot.h"
 #include <syslog.h>
 
-const qulonglong DbChannel::DEFAULT_TIME_SLOT_VALUE_ms = 31536000000;
-
 DbChannel::DbChannel(qlonglong id,
 const QString &name,
 const QString &description,
 const QString &url):
 Channel(name, description, url), m_id(id)
 {
-    this->setTimeSlot(QSharedPointer<TimeSlot> (new JsonTimeSlot(DEFAULT_TIME_SLOT_VALUE_ms)));
+    this->setTimeSlot(QSharedPointer<TimeSlot> (new JsonTimeSlot(Channel::DEFAULT_TIME_SLOT_VALUE_MS)));
 }
 
 
@@ -65,7 +63,7 @@ qlonglong DbChannel::getId() const
 
 qulonglong DbChannel::getDefTimeSlotValue()
 {
-    return DEFAULT_TIME_SLOT_VALUE_ms;
+    return Channel::DEFAULT_TIME_SLOT_VALUE_MS;
 }
 
 

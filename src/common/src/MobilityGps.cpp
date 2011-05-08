@@ -40,7 +40,7 @@
  * ---------------------------------------------------------------- */
 
 #include "MobilityGps.h"
-
+#include <QDebug>
 namespace common
 {
   double MobilityGps::m_longitude = 0;
@@ -48,19 +48,32 @@ namespace common
 
   MobilityGps::MobilityGps(QObject *parent) : QObject(parent)
   {
-    QGeoPositionInfoSource *source = QGeoPositionInfoSource::createDefaultSource(this);
-    if (source)
+    setReady(false);
+    m_lastUpdate = QDateTime::currentDateTime();
+    QGeoPositionInfoSource *m_source = QGeoPositionInfoSource::createDefaultSource(this);
+    if (m_source)
     {
-      connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)),
+      connect(m_source, SIGNAL(positionUpdated(QGeoPositionInfo)),
         this, SLOT(positionUpdated(QGeoPositionInfo)));
-      source->startUpdates();
+      m_source->startUpdates();
     }
+  }
+
+  bool MobilityGps::isReady()
+  {
+    int ageOfLastCoords = m_lastUpdate.toUTC().secsTo(QDateTime::currentDateTime());
+    //    qDebug() << "Age of last recieved coordinates " << ageOfLastCoords << " secs";
+    if (ageOfLastCoords > 60) setReady(false);
+    return Gps::isReady();
   }
 
   void MobilityGps::positionUpdated(QGeoPositionInfo info)
   {
+    if (!isReady()) setReady(true);
+    //  qDebug() << "Position updated " << info.coordinate().longitude() << " " <<info.coordinate().latitude() ;
     m_longitude = info.coordinate().longitude();
     m_latitude = info.coordinate().latitude();
+    m_lastUpdate = QDateTime::currentDateTime();
   }
 
   double MobilityGps::getLongitude() const

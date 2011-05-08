@@ -52,7 +52,7 @@ class MapScene : public QGraphicsScene
     void update_state();
 
   private:
-    void add_mark(QPointF pos, QString channel_name);
+    void add_mark(QPointF pos,QSharedPointer<DataMark> mark,QSharedPointer<Channel> channel);
 
     signals:
     void uploadTiles(QVector<TilePoint> & tiles_to_upload);

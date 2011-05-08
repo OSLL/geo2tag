@@ -58,6 +58,7 @@ install: build
 	dh_installdirs
 	$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; 
 	install -d $(CURDIR)/debian/tmp/etc/event.d; 
+	install -d $(CURDIR)/debian/tmp/etc/logrotate.d; 
 	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
 	install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
 	if [ "$(DEB_BUILD_ARCH)" = "armel" ] ; then \
@@ -76,7 +77,8 @@ install: build
 		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 	fi;
-	cp $(BUILDDIR)tracker/wikigpsTracker $(CURDIR)/debian/tmp/etc/event.d; \
+	cp $(BUILDDIR)tracker/wikigpsTracker $(CURDIR)/debian/tmp/etc/event.d; 
+	cp $(BUILDDIR)tracker/wikigpsTracker-logrotate $(CURDIR)/debian/tmp/etc/logrotate.d; 
 #	cp -l $(BUILDDIR)/lib/lib* $(CURDIR)/debian/tmp/usr/lib; 
 #	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps;
 	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/wikigpsTracker-ui.png; 
