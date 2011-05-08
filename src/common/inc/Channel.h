@@ -64,6 +64,8 @@ class Channel: public QObject
 
   QSharedPointer<TimeSlot> m_timeSlot;
 
+  bool m_timeSlotIsDefault;
+
   protected:
     Channel(const QString &name, const QString &description, const QString& url="");
 
@@ -89,6 +91,9 @@ class Channel: public QObject
 
     void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
     QSharedPointer<TimeSlot> getTimeSlot() const;
+
+    bool timeSlotIsDefault() const;
+    void setDefaultTimeSlot(bool);
 
     virtual ~Channel();
     // class Channel

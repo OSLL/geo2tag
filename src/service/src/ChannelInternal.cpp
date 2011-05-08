@@ -43,7 +43,10 @@
 #include "DataMarkInternal.h"
 #include "DbSession.h"
 #include "DynamicCastFailure.h"
+#include "JsonTimeSlot.h"
 #include <syslog.h>
+
+const qulonglong DbChannel::DEFAULT_TIME_SLOT_VALUE_ms = 31536000000;
 
 DbChannel::DbChannel(qlonglong id,
 const QString &name,
@@ -51,12 +54,18 @@ const QString &description,
 const QString &url):
 Channel(name, description, url), m_id(id)
 {
+    this->setTimeSlot(QSharedPointer<TimeSlot> (new JsonTimeSlot(DEFAULT_TIME_SLOT_VALUE_ms)));
 }
 
 
 qlonglong DbChannel::getId() const
 {
   return m_id;
+}
+
+qulonglong DbChannel::getDefTimeSlotValue()
+{
+    return DEFAULT_TIME_SLOT_VALUE_ms;
 }
 
 
