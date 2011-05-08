@@ -44,4 +44,5 @@
 namespace ${PACKAGE}
 {
 
-}                                       // namespace ${PACKAGE}
+} // namespace ${PACKAGE}
+
