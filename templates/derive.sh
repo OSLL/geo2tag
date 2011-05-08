@@ -19,13 +19,13 @@ PROJECT=
 PROJECT_NAMESPACE=
 
 A="cat <<EOF
-`cat template.h`
+`cat template.h.t`
 EOF"
 
 eval "$A" >$NAMEH
 
 A="cat <<EOF
-`cat template.cpp`
+`cat template.cpp.t`
 EOF"
 
 eval "$A" >$NAMECPP
