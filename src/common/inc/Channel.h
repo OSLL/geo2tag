@@ -49,25 +49,23 @@
 
 class Channel: public QObject
 {
-  Q_OBJECT
-  //!< channel name
-    QString m_name;
-  //!< Description for channel
-  QString m_description;
-  //!< URL for mark
-  QString m_url;
-  //< Radius for visible marks
-  double m_activeRadius;
-
-  //!< Displayed on the UI
+  Q_OBJECT  //!< channel name
+  QString m_name;  //!< Description for channel
+  QString m_description;  //!< URL for mark
+  QString m_url;  //< Radius for visible marks
+  double m_activeRadius;  //!< Displayed on the UI
   bool m_isDisplayed;
-
   QSharedPointer<TimeSlot> m_timeSlot;
+  bool m_timeSlotIsDefault;
+
+
 
   protected:
     Channel(const QString &name, const QString &description, const QString& url="");
 
   public:
+
+    static const qulonglong DEFAULT_TIME_SLOT_VALUE_MS;
 
     virtual qlonglong getId() const = 0;
 
@@ -89,6 +87,9 @@ class Channel: public QObject
 
     void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
     QSharedPointer<TimeSlot> getTimeSlot() const;
+
+    bool timeSlotIsDefault() const;
+    void setDefaultTimeSlot(bool);
 
     virtual ~Channel();
     // class Channel

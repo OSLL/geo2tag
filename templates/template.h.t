@@ -39,46 +39,34 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+
 #ifndef _${NAME}_H_${UUID}_INCLUDED_
 #define _${NAME}_H_${UUID}_INCLUDED_
 
 namespace ${PACKAGE}
 {
-  /*!
+ /*!
    * Class description. May use HTML formatting
    *
    */
   class ${NAME}
   {
-    public:
-      ${NAME}
-      ()
-      {
-      }
+  public:
+    ${NAME}()
+    {
+    }
 
-      ~${NAME}
-      ()
-      {
-      }
+    ~${NAME}()
+    {
+    }
+    
+  private:    
+    ${NAME}(const ${NAME}& obj);
+    ${NAME}& operator=(const ${NAME}& obj);
 
-    private:
-      ${NAME}
-      (const $
-      {
-        NAME
-      }& obj);
-      ${NAME}
-      & operator=(const $
-      {
-        NAME
-      }& obj);
+  }; // class ${NAME}
+  
+} // namespace ${PACKAGE}
 
-      // class ${NAME}
-  };
+#endif //_${NAME}_H_${UUID}_INCLUDED_
 
-  // namespace ${PACKAGE}
-}
-
-
-//_${NAME}_H_${UUID}_INCLUDED_
-#endif

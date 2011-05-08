@@ -237,6 +237,7 @@ void UpdateThread::updateReflections(DataMarks &tags, Users &users, Channels &ch
       QSharedPointer<TimeSlot> timeslot = timeSlots.item(timeslot_id);
 
       channel->setTimeSlot(timeslot);
+      channel->setDefaultTimeSlot(false);
     }
   }
 

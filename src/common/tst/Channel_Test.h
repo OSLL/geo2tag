@@ -30,38 +30,49 @@
  */
 
 /*!
- * \file main.cpp
- * \brief Test suite for common
+ * \file Channel_Test.h
+ * \brief Test suite for Channel class
  *
  * PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * ----------------------------------------------------------- */
 
+
+#include <QObject>
 #include <QtTest/QtTest>
-#include <QtCore/QtCore>
-#include <QApplication>
+#include <QSignalSpy>
 
-#include "User_Test.h"
-#include "GpsInfo_Test.h"
-#include "Channel_Test.h"
+#include "Channel_TestObj.h"
 
-int main(int c, char **v)
+namespace Test
 {
-  QApplication app(c,v);
-
-  QObject* tests[]=
+  class Channel_Test : public QObject
   {
-    new Test::User_Test(&app),
-    new Test::GpsInfo_Test(&app),
-    new Test::Channel_Test(&app),
-  };
+    Q_OBJECT;
 
-  for(size_t i = 0; i<sizeof(tests)/sizeof(QObject*); ++i)
-  {
-    QTest::qExec(tests[i]);
-  }
+    Channel_TestObj *m_tstObject;
+  
+  public:
+    
+    Channel_Test(QObject *parent = NULL) : QObject(parent)
+    {
+      m_tstObject = new Channel_TestObj;
+    }
 
-  return 0;
-}
+    ~Channel_Test()
+    {
+      delete m_tstObject;
+      m_tstObject = NULL;
+    }
 
+  private slots:
+  
+    void defaultTimeSlot()
+    {
+      QVERIFY( m_tstObject->timeSlotIsDefault() );
 
-/* ===[ End of file $HeadURL$ ]=== */
+      QCOMPARE( m_tstObject->getTimeSlot()->getSlot(), Channel::DEFAULT_TIME_SLOT_VALUE_MS );
+    }
+
+  }; // class Channel_Test
+
+} // end of namespace Test

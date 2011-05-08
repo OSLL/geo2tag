@@ -55,6 +55,8 @@ class DbChannel: public Channel
 
     qlonglong getId() const;
 
+    static qulonglong getDefTimeSlotValue();
+
     void setId(qlonglong id);
 
     virtual ~DbChannel();

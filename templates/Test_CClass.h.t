@@ -51,12 +51,22 @@ namespace Test
   class ${CLASS}_Test : public QObject
   {
     Q_OBJECT;
+
+		// ${CLASS}*  m_tstObject; // Object for testing
   
   public:
     
-    ${CLASS}_Test()
+    ${CLASS}_Test(QObject *parent =NULL) : QObject(parent)
     {
   	  // initialization here
+			// m_tstObject = new ${CLASS};
+    }
+    
+		~${CLASS}_Test(QObject *parent =NULL)
+    {
+  	  // destroying  here
+			// delete m_tstObject;
+			// m_tstObject = NULL;
     }
   
   private slots:

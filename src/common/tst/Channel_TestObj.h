@@ -1,5 +1,5 @@
 /*
- * Copyright ${YEAR}  ${AUTHOR}  ${EMAIL}
+ * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -30,18 +30,49 @@
  */
 
 /*! ---------------------------------------------------------------
- *
- * \file ${NAMECPP}
- * \brief ${NAME} implementation
+ * \file Channel_TestObj.h
+ * \brief Header of Channel_TestObj
+ * \todo add comment here
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "${NAMEH}"
 
-namespace ${PACKAGE}
+#ifndef _Channel_TestObj_H_B71618F1_0BCC_4B0D_99EE_4503CECA7B83_INCLUDED_
+#define _Channel_TestObj_H_B71618F1_0BCC_4B0D_99EE_4503CECA7B83_INCLUDED_
+
+#include "../inc/Channel.h"
+
+namespace Test
 {
+ /*!
+   * Class description. May use HTML formatting
+   *
+   */
+  class Channel_TestObj : public Channel
+  {
 
-}                                       // namespace ${PACKAGE}
+    Q_OBJECT
+
+  public:
+    Channel_TestObj() : Channel("test","description")
+    {
+    }
+
+    ~Channel_TestObj()
+    {
+    }
+
+    virtual qlonglong getId() const;
+    
+  private:    
+    Channel_TestObj(const Channel_TestObj& obj);
+    Channel_TestObj& operator=(const Channel_TestObj& obj);
+
+  }; // class Channel_TestObj
+  
+} // namespace Test
+
+#endif //_Channel_TestObj_H_B71618F1_0BCC_4B0D_99EE_4503CECA7B83_INCLUDED_

@@ -29,39 +29,24 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/*!
- * \file main.cpp
- * \brief Test suite for common
+/*! ---------------------------------------------------------------
+ *
+ * \file Channel_TestObj.cpp
+ * \brief Channel_TestObj implementation
+ *
+ * File description
  *
  * PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * ---------------------------------------------------------------- */
 
-#include <QtTest/QtTest>
-#include <QtCore/QtCore>
-#include <QApplication>
+#include "Channel_TestObj.h"
 
-#include "User_Test.h"
-#include "GpsInfo_Test.h"
-#include "Channel_Test.h"
-
-int main(int c, char **v)
+namespace Test
 {
-  QApplication app(c,v);
 
-  QObject* tests[]=
-  {
-    new Test::User_Test(&app),
-    new Test::GpsInfo_Test(&app),
-    new Test::Channel_Test(&app),
-  };
-
-  for(size_t i = 0; i<sizeof(tests)/sizeof(QObject*); ++i)
-  {
-    QTest::qExec(tests[i]);
-  }
-
+qlonglong Channel_TestObj::getId() const
+{
   return 0;
 }
 
-
-/* ===[ End of file $HeadURL$ ]=== */
+} // namespace Test
