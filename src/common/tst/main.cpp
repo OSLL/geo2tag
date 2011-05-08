@@ -50,8 +50,8 @@ int main(int c, char **v)
 
   QObject* tests[]=
   {
-    //new Test::User_Test(&app),
-    //new Test::GpsInfo_Test(&app),
+    new Test::User_Test(&app),
+    new Test::GpsInfo_Test(&app),
     new Test::Channel_Test(&app),
   };
 
