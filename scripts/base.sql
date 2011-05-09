@@ -69,6 +69,16 @@ CREATE TABLE channelTimeSlot (
                                                        on delete cascade
 );
 
+CREATE TABLE tagTimeSlot (
+  tag_id NUMERIC(9,0) NOT NULL,
+  timeSlot_id NUMERIC(9,0) NOT NULL,
+  constraint fk_timeSlot foreign key (timeSlot_id) references timeSlot(id)
+                                                       on delete cascade,
+  constraint fk_tags foreign key (tag_id) references tag(id)
+                                                       on delete cascade
+);
+
+
 
 
 INSERT into channel (name, description, url) values ('Tourist information', 'This is free read-only tourist information channel. You can get information about buildings, sights around your location', '');
@@ -110,3 +120,6 @@ INSERT into channelTimeSlot (channel_id, timeSlot_id) values (2, 2);
 INSERT into channelTimeSlot (channel_id, timeSlot_id) values (3, 3);
 INSERT into channelTimeSlot (channel_id, timeSlot_id) values (4, 3);
 INSERT into channelTimeSlot (channel_id, timeSlot_id) values (5, 2);
+
+INSERT into tagTimeSlot (tag_id, timeSlot_id) values (5, 2);
+INSERT into tagTimeSlot (tag_id, timeSlot_id) values (6, 1);
