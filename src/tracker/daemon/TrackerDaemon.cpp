@@ -32,7 +32,11 @@ m_netManager(this)
 
 void TrackerDaemon::onOnlineChanged(bool state)
 {
-  if (state ) qDebug() << "Online now";
+  if (state )
+  {
+    qDebug() << "Online now";
+    if ( m_pauseFlag ) onTagAdded();
+  }
   else qDebug() << "Offline now";
 }
 
