@@ -8,7 +8,8 @@ INSTALLS += target
 include(../../config.pri)
 
 
-SUBDIRS = ui observer
+SUBDIRS = ui observer daemon/tst
+
 
 maemo5 {
 	SUBDIRS += daemon

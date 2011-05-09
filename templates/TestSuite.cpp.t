@@ -49,7 +49,7 @@ int main(int c, char **v)
 {
   QApplication app(c,v);
 
-  Test::Class_Test test;
+  Test::${CLASS}_Test test;
 	QTest::qExec(&test);
 
 	return 0; 
