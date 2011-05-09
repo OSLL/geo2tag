@@ -27,6 +27,6 @@ int getServerPort()
 
 void setServerPort(int port)
 {
-    QSettings settings(QSettings::SystemScope,"osll","libs");
+  QSettings settings(QSettings::SystemScope,"osll","libs");
   settings.setValue("server_port",port);
 }
