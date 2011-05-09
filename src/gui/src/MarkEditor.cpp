@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file MarkEditor.cpp
  * \brief MarkEditor implementation
@@ -50,81 +50,80 @@
 
 namespace GUI
 {
-    MarkEditor::MarkEditor(QWidget *parent) : QWidget(parent)
+  MarkEditor::MarkEditor(QWidget *parent) : QWidget(parent)
+  {
+    m_ok = new QPushButton("Add tag", this);
+    m_combo = new QComboBox(this);
+    m_text = new QTextEdit("Enter new tag",this);
+    m_text->selectAll();
+
+    connect(m_ok, SIGNAL(pressed()), this, SLOT(applyMark()));
+    connect(&OnLineInformation::getInstance(),
+      SIGNAL(subscribedChannelsUpdated(QSharedPointer<Channels>)),
+      this,
+      SLOT(onSubscribedChannelsUpdated(QSharedPointer<Channels>)));
+    connect(&OnLineInformation::getInstance(), SIGNAL(markApplied(int)),
+      this, SLOT(onMarkApplied(int)));
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->addWidget(m_combo);
+    layout->addWidget(m_text);
+    layout->addWidget(m_ok);
+    setLayout(layout);
+
+    update();
+  }
+
+  void MarkEditor::update()
+  {
+    OnLineInformation::getInstance().updateSubscribedChannels();
+  }                                     /* Request done. If response received: */
+
+  void MarkEditor::onSubscribedChannelsUpdated(QSharedPointer<Channels> channels)
+  {
+    m_combo->clear();
+    int i = 0;
+    for(; i<channels->size(); i++)
     {
-        m_ok = new QPushButton("Add tag", this);
-        m_combo = new QComboBox(this);
-        m_text = new QTextEdit("Enter new tag",this);
-        m_text->selectAll();
-
-        connect(m_ok, SIGNAL(pressed()), this, SLOT(applyMark()));
-        connect(&OnLineInformation::getInstance(),
-                SIGNAL(subscribedChannelsUpdated(QSharedPointer<Channels>)),
-                this,
-                SLOT(onSubscribedChannelsUpdated(QSharedPointer<Channels>)));
-        connect(&OnLineInformation::getInstance(), SIGNAL(markApplied(int)),
-                this, SLOT(onMarkApplied(int)));
-
-        QVBoxLayout *layout = new QVBoxLayout(this);
-        layout->addWidget(m_combo);
-        layout->addWidget(m_text);
-        layout->addWidget(m_ok);
-        setLayout(layout);
-
-        update();
+      m_combo->insertItem(i,QObject::tr(channels->at(i)->getName().toStdString().c_str()));
     }
+  }
 
+  static std::string genearateNextLabel()
+  {
+    size_t size = OnLineInformation::getInstance().getMarks()->size();
+    // \ToDo look at me
+    char label = (int)'A' + (size + 1) % 23;
+    std::ostringstream s;
+    s << label;
+    return s.str();
+  }
 
-    void MarkEditor::update()
+  void MarkEditor::applyMark()
+  {
+    /* New mark sending */
+    QString text = m_text->toPlainText();
+    qDebug() << "sending new mark " << text;
+    qDebug() << "channel " << m_combo->currentText();
+    OnLineInformation::getInstance().applyMark(m_combo->currentText(),
+      QString(genearateNextLabel().c_str()),
+      QString("http://www.unf.edu/groups/volctr/images/question-mark.jpg") /* unknown/undefined url*/,
+      text);
+  }                                     /* Request done. If response received: */
+
+  void MarkEditor::onMarkApplied(int status)
+  {
+    if (status)
     {
-        OnLineInformation::getInstance().updateSubscribedChannels();
-    }/* Request done. If response received: */
-
-    void MarkEditor::onSubscribedChannelsUpdated(QSharedPointer<Channels> channels)
-    {
-        m_combo->clear();
-        int i = 0;
-        for(; i<channels->size(); i++)
-        {
-            m_combo->insertItem(i,QObject::tr(channels->at(i)->getName().toStdString().c_str()));
-        }
+      QMessageBox::information(this, QObject::tr("Information"), QObject::tr("Your tag saved"));
     }
-
-
-    static std::string genearateNextLabel()
+    else
     {
-        size_t size = OnLineInformation::getInstance().getMarks()->size();
-        // \ToDo look at me
-        char label = (int)'A' + (size + 1) % 23;
-        std::ostringstream s;
-        s << label;
-        return s.str();
+      QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Error during save your tag."));
     }
+  }
 
-    void MarkEditor::applyMark()
-    {
-        /* New mark sending */
-        QString text = m_text->toPlainText();
-        qDebug() << "sending new mark " << text;
-        qDebug() << "channel " << m_combo->currentText();
-        OnLineInformation::getInstance().applyMark(m_combo->currentText(),
-                                                   QString(genearateNextLabel().c_str()),
-                                                   QString("http://www.unf.edu/groups/volctr/images/question-mark.jpg") /* unknown/undefined url*/,
-                                                   text);
-    } /* Request done. If response received: */
+}                                       // namespace GUI
 
-    void MarkEditor::onMarkApplied(int status)
-    {
-        if (status)
-        {
-            QMessageBox::information(this, QObject::tr("Information"), QObject::tr("Your tag saved"));
-        }
-        else
-        {
-            QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Error during save your tag."));
-        }
-    }
-
-} // namespace GUI
 
 /* ===[ End of file ]=== */

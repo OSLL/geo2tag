@@ -30,7 +30,7 @@
  */
 
 /*! ---------------------------------------------------------------
- * $Id$ 
+ * $Id$
  *
  * \file ApplyChannelQuery.cpp
  * \brief ApplyChannelQuery implementation
@@ -48,38 +48,37 @@
 #include "QVariant"
 #include "QVariantMap"
 
-
 ///Task #1113
 #ifndef APPLY_CHANNEL_HTTP_URL
 #define APPLY_CHANNEL_HTTP_URL "http://zps.spb.su/service?query=addChannel"
 #endif
 
-
-namespace GUI{
-
-ApplyChannelQuery::ApplyChannelQuery(QObject *parent)
-    : QObject(parent)
+namespace GUI
 {
+
+  ApplyChannelQuery::ApplyChannelQuery(QObject *parent)
+    : QObject(parent)
+  {
     m_jsonQuery = "";
     m_httpQuery = "";
     manager = new QNetworkAccessManager(this);
 
     qDebug() << "Free ApplyChannelQuery created";
-}
+  }
 
-ApplyChannelQuery::ApplyChannelQuery(QString auth_token, QString name, QString description,
-                                     QString url, qreal activeRadius, QObject *parent)
-            : QObject(parent)
-{
+  ApplyChannelQuery::ApplyChannelQuery(QString auth_token, QString name, QString description,
+    QString url, qreal activeRadius, QObject *parent)
+    : QObject(parent)
+  {
     manager = new QNetworkAccessManager(this);
     setQuery(auth_token, name, description, url, activeRadius);
     qDebug() << "ApplyChannelQuery created:\n"
-             << m_httpQuery << m_jsonQuery;
-}
+      << m_httpQuery << m_jsonQuery;
+  }
 
-void ApplyChannelQuery::setQuery(QString auth_token, QString name, QString description,
-                                 QString url, qreal activeRadius)
-{
+  void ApplyChannelQuery::setQuery(QString auth_token, QString name, QString description,
+    QString url, qreal activeRadius)
+  {
     QVariantMap request;
     request.insert("auth_token", auth_token);
     request.insert("name", name);
@@ -90,29 +89,29 @@ void ApplyChannelQuery::setQuery(QString auth_token, QString name, QString descr
     m_jsonQuery = serializer.serialize(request);
 
     m_httpQuery = APPLY_CHANNEL_HTTP_URL;
-}
+  }
 
-ApplyChannelQuery::~ApplyChannelQuery()
-{
+  ApplyChannelQuery::~ApplyChannelQuery()
+  {
 
-}
+  }
 
-const QString& ApplyChannelQuery::getHttpQuery()
-{
+  const QString& ApplyChannelQuery::getHttpQuery()
+  {
     return m_httpQuery;
-}
+  }
 
-const QString& ApplyChannelQuery::getJsonQuery()
-{
+  const QString& ApplyChannelQuery::getJsonQuery()
+  {
     return m_jsonQuery;
-}
+  }
 
-void ApplyChannelQuery::doRequest()
-{
+  void ApplyChannelQuery::doRequest()
+  {
     if (m_httpQuery == "" || m_jsonQuery == "")
     {
-        qDebug() << "ApplyChannelQuery: can't do request because query isn't set";
-        return;
+      qDebug() << "ApplyChannelQuery: can't do request because query isn't set";
+      return;
     }
 
     QNetworkRequest request;
@@ -123,53 +122,54 @@ void ApplyChannelQuery::doRequest()
     QNetworkReply *reply = manager->post(request, data);
 
     connect(manager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(onManagerFinished(QNetworkReply*)));
+      this, SLOT(onManagerFinished(QNetworkReply*)));
     connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-            this, SLOT(onManagerSslErrors()));
+      this, SLOT(onManagerSslErrors()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(onReplyError(QNetworkReply::NetworkError)));
+      this, SLOT(onReplyError(QNetworkReply::NetworkError)));
 
     qDebug() << "ApplyChannelQuery did request:\n"
-             << m_httpQuery << m_jsonQuery;
-}
+      << m_httpQuery << m_jsonQuery;
+  }
 
-void ApplyChannelQuery::onManagerFinished(QNetworkReply *reply)
-{
+  void ApplyChannelQuery::onManagerFinished(QNetworkReply *reply)
+  {
     QByteArray jsonResponseByteArray = reply->readAll();
 
     if (jsonResponseByteArray.size() > 0)
     {
-        QString jsonResponse(jsonResponseByteArray);
-        qDebug() << "Gotten response (json): " << jsonResponse;
-        QJson::Parser parser;
-        bool ok;
-        QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
-        QString status("");
-        QString status_description("");
-        if (!ok)
-        {
-            qFatal("An error occured during parsing json with response to apply mark");
-        }
-        else
-        {
-            status = result["status"].toString();
-            status_description = result["status_description"].toString(); 
-        }
+      QString jsonResponse(jsonResponseByteArray);
+      qDebug() << "Gotten response (json): " << jsonResponse;
+      QJson::Parser parser;
+      bool ok;
+      QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
+      QString status("");
+      QString status_description("");
+      if (!ok)
+      {
+        qFatal("An error occured during parsing json with response to apply mark");
+      }
+      else
+      {
+        status = result["status"].toString();
+        status_description = result["status_description"].toString();
+      }
 
-        emit responseReceived(status,status_description);
+      emit responseReceived(status,status_description);
     }
-}
+  }
 
-void ApplyChannelQuery::onReplyError(QNetworkReply::NetworkError error)
-{
+  void ApplyChannelQuery::onReplyError(QNetworkReply::NetworkError error)
+  {
     qDebug("Network error: %d \n", error);
-}
+  }
 
-void ApplyChannelQuery::onManagerSslErrors()
-{
+  void ApplyChannelQuery::onManagerSslErrors()
+  {
     qDebug("ssl error \n");
-}
+  }
 
 }
+
 
 //* ===[ End of file $HeadURL$ ]=== */

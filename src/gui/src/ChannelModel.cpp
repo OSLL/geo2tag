@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file ChannelModel.cpp
  * \brief ChannelModel implementation
@@ -43,87 +43,87 @@
 
 namespace GUI
 {
-    ChannelModel::ChannelModel(QSharedPointer<Channels> availableChannels,
-                               QSharedPointer<Channels> subscribedChannels,
-                               QObject* parent) : QStandardItemModel(availableChannels->size(),1,parent)
+  ChannelModel::ChannelModel(QSharedPointer<Channels> availableChannels,
+    QSharedPointer<Channels> subscribedChannels,
+    QObject* parent) : QStandardItemModel(availableChannels->size(),1,parent)
+  {
+    m_availableChannels = availableChannels;
+    m_subscribedChannels = subscribedChannels;
+  }
+
+  QString ChannelModel::getChannelName(int index) const
+  {
+    return (*m_availableChannels)[index]->getName();
+  }
+
+  QString ChannelModel::getChannelDescription(int index) const
+  {
+    return (*m_availableChannels)[index]->getDescription();
+  }
+
+  bool ChannelModel::IsSelected(int index) const
+  {
+    return (*m_availableChannels)[index]->isDisplayed();
+  }
+
+  void ChannelModel::setSelection(int index, bool value)
+  {
+    (*m_availableChannels)[index]->setDisplayed(value);
+  }
+
+  int ChannelModel::rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
+  {
+    return m_availableChannels->size();
+  }
+
+  int ChannelModel::columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const
+  {
+    return 1;
+  }
+
+  QVariant ChannelModel::data(const QModelIndex &index, int role) const
+  {
+    QString value = "?";
+    if ( Qt::DisplayRole == role && index.column() == 0 )
     {
-      m_availableChannels = availableChannels;
-      m_subscribedChannels = subscribedChannels;
+      value = getChannelName(index.row());
+
+      /* search in subscribed */
+      int found = 0;
+      found = isSubscribed(index);
+      if (found)
+      {
+        return (value + " (subscribed)");
+      }
+      else
+      {
+        return (value + " (not subscribed)");
+      }
+
+      //return returnString.c_str();
+
     }
 
-    QString ChannelModel::getChannelName(int index) const
+    return QVariant();
+  }
+
+  Qt::ItemFlags ChannelModel::flags(const QModelIndex& index) const
+  {
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+  }
+
+  int ChannelModel::isSubscribed(const QModelIndex &index) const
+  {
+    int returnValue = 0;
+    if (m_subscribedChannels != 0)
     {
-      return (*m_availableChannels)[index]->getName();
+      for (int i = 0; i < m_subscribedChannels->size(); i++)
+        if (m_availableChannels->at(index.row())->getName() == m_subscribedChannels->at(i)->getName())
+          returnValue = 1;
     }
+    return returnValue;
+  }
+}                                       // namespace GUI
 
-    QString ChannelModel::getChannelDescription(int index) const
-    {
-      return (*m_availableChannels)[index]->getDescription();
-    }
-
-    bool ChannelModel::IsSelected(int index) const
-    {
-      return (*m_availableChannels)[index]->isDisplayed();
-    }
-
-    void ChannelModel::setSelection(int index, bool value)
-    {
-      (*m_availableChannels)[index]->setDisplayed(value);
-    }
-
-    int ChannelModel::rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
-    {
-        return m_availableChannels->size();
-    }
-      
-    int ChannelModel::columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const
-    {
-        return 1;
-    }
-    
-    QVariant ChannelModel::data(const QModelIndex &index, int role) const
-    {
-        QString value = "?";
-   	if ( Qt::DisplayRole == role && index.column() == 0 )
-        {
-            value = getChannelName(index.row());
-
-            /* search in subscribed */
-            int found = 0;
-            found = isSubscribed(index);
-            if (found)
-            {
-                return (value + " (subscribed)");
-            }
-            else
-            {
-                return (value + " (not subscribed)");
-            }
-
-            //return returnString.c_str();
-
-
-   	}
-
-   	return QVariant();
-    }
-
-    Qt::ItemFlags ChannelModel::flags(const QModelIndex& index) const
-    {
-      return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
-    }
-
-    int ChannelModel::isSubscribed(const QModelIndex &index) const
-    {
-        int returnValue = 0;
-        if (m_subscribedChannels != 0)
-        {
-            for (int i = 0; i < m_subscribedChannels->size(); i++)
-                if (m_availableChannels->at(index.row())->getName() == m_subscribedChannels->at(i)->getName())
-                    returnValue = 1;
-        }
-        return returnValue;
-    }
-} // namespace GUI
 
 /* ===[ End of file ]=== */

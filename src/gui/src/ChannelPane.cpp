@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file ChannelPane.cpp
  * \brief ChannelPane implementation
@@ -56,101 +56,102 @@
 namespace GUI
 {
   ChannelPane::ChannelPane(QWidget* parent) : QWidget(parent)
-  {    
-      listView = new QListView(this);
-      subscribeButton = new QPushButton(tr("Subscribe/unsubscribe"), this);
-      tagsButton = new QPushButton(tr("Channel's tags"), this);
+  {
+    listView = new QListView(this);
+    subscribeButton = new QPushButton(tr("Subscribe/unsubscribe"), this);
+    tagsButton = new QPushButton(tr("Channel's tags"), this);
 
-      connect(&OnLineInformation::getInstance(), SIGNAL(availableChannelsUpdated(QSharedPointer<Channels>)),
-              this, SLOT(onChannelsUpdated()));
-      connect(&OnLineInformation::getInstance(), SIGNAL(subscribedChannelsUpdated(QSharedPointer<Channels>)),
-              this, SLOT(onChannelsUpdated()));
-      connect(subscribeButton, SIGNAL(clicked()), this, SLOT(onSubscribeButtonClicked()));
+    connect(&OnLineInformation::getInstance(), SIGNAL(availableChannelsUpdated(QSharedPointer<Channels>)),
+      this, SLOT(onChannelsUpdated()));
+    connect(&OnLineInformation::getInstance(), SIGNAL(subscribedChannelsUpdated(QSharedPointer<Channels>)),
+      this, SLOT(onChannelsUpdated()));
+    connect(subscribeButton, SIGNAL(clicked()), this, SLOT(onSubscribeButtonClicked()));
 
-      QVBoxLayout *layout = new QVBoxLayout(this);
-      QHBoxLayout *buttonsLayout = new QHBoxLayout();
-      buttonsLayout->addWidget(subscribeButton);
-      buttonsLayout->addWidget(tagsButton);
-      layout->addWidget(listView);
-      layout->addLayout(buttonsLayout);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    QHBoxLayout *buttonsLayout = new QHBoxLayout();
+    buttonsLayout->addWidget(subscribeButton);
+    buttonsLayout->addWidget(tagsButton);
+    layout->addWidget(listView);
+    layout->addLayout(buttonsLayout);
 
-      update();
+    update();
   }
 
   QListView* ChannelPane::getListView()
   {
-      return listView;
+    return listView;
   }
 
   QPushButton* ChannelPane::getTagsButton()
   {
-      return tagsButton;
+    return tagsButton;
   }
 
   void ChannelPane::update()
   {
-      OnLineInformation::getInstance().updateAvailableChannels();
+    OnLineInformation::getInstance().updateAvailableChannels();
 
   }
   void ChannelPane::onChannelsUpdated()
   {
-      if (OnLineInformation::getInstance().getAvailableChannels() != 0)
+    if (OnLineInformation::getInstance().getAvailableChannels() != 0)
+    {
+
+      if((listView->model() != 0) && (listView->currentIndex().isValid()))
       {
-
-          if((listView->model() != 0) && (listView->currentIndex().isValid()))
-          {
-              selectedChannel = dynamic_cast<GUI::ChannelModel*>(listView->model())->getChannelName(listView->currentIndex().row());
-              qDebug() << " ------> selected " << selectedChannel;
-          }
-          else
-          {
-              selectedChannel = QString("");
-              qDebug() << " ------> selected " << selectedChannel;
-          }
-
-          ChannelModel *model = new ChannelModel(OnLineInformation::getInstance().getAvailableChannels(),
-                                                 OnLineInformation::getInstance().getSubscribedChannels(),
-                                                 this);
-
-          int selected = -1;
-          for (int i = 0; i < model->rowCount(); i++)
-          {
-              qDebug() << " ------> " << i << " "
-                       << dynamic_cast<GUI::ChannelModel*>(model)->getChannelName(i);
-              if (dynamic_cast<GUI::ChannelModel*>(model)->getChannelName(i) == selectedChannel)
-              {
-                  selected = i;
-                  break;
-              }
-          }
-
-          listView->setModel(model);
-          listView->setCurrentIndex(model->index(selected, 0, QModelIndex()));
-
-          if((listView->model() != 0) && (listView->currentIndex().isValid()))
-          {
-              qDebug() << " ------> valid " << selectedChannel;
-          }
+        selectedChannel = dynamic_cast<GUI::ChannelModel*>(listView->model())->getChannelName(listView->currentIndex().row());
+        qDebug() << " ------> selected " << selectedChannel;
       }
+      else
+      {
+        selectedChannel = QString("");
+        qDebug() << " ------> selected " << selectedChannel;
+      }
+
+      ChannelModel *model = new ChannelModel(OnLineInformation::getInstance().getAvailableChannels(),
+        OnLineInformation::getInstance().getSubscribedChannels(),
+        this);
+
+      int selected = -1;
+      for (int i = 0; i < model->rowCount(); i++)
+      {
+        qDebug() << " ------> " << i << " "
+          << dynamic_cast<GUI::ChannelModel*>(model)->getChannelName(i);
+        if (dynamic_cast<GUI::ChannelModel*>(model)->getChannelName(i) == selectedChannel)
+        {
+          selected = i;
+          break;
+        }
+      }
+
+      listView->setModel(model);
+      listView->setCurrentIndex(model->index(selected, 0, QModelIndex()));
+
+      if((listView->model() != 0) && (listView->currentIndex().isValid()))
+      {
+        qDebug() << " ------> valid " << selectedChannel;
+      }
+    }
   }
 
   void ChannelPane::onSubscribeButtonClicked()
   {
-      if((listView->model() != 0) && (listView->currentIndex().isValid()))
+    if((listView->model() != 0) && (listView->currentIndex().isValid()))
+    {
+      QString channelName = dynamic_cast<GUI::ChannelModel*>(listView->model())->getChannelName(listView->currentIndex().row());
+      if (!dynamic_cast<GUI::ChannelModel*>(listView->model())->isSubscribed(listView->currentIndex()))
       {
-          QString channelName = dynamic_cast<GUI::ChannelModel*>(listView->model())->getChannelName(listView->currentIndex().row());
-          if (!dynamic_cast<GUI::ChannelModel*>(listView->model())->isSubscribed(listView->currentIndex()))
-          {      
-              qDebug() << "subscribing to channel " << channelName;
-              OnLineInformation::getInstance().subscribeChannel(channelName);
-          }
-          else
-          {
-              qDebug() << "unsubscribing from channel " << channelName;
-              OnLineInformation::getInstance().unsubscribeChannel(channelName);
-          }
+        qDebug() << "subscribing to channel " << channelName;
+        OnLineInformation::getInstance().subscribeChannel(channelName);
       }
+      else
+      {
+        qDebug() << "unsubscribing from channel " << channelName;
+        OnLineInformation::getInstance().unsubscribeChannel(channelName);
+      }
+    }
   }
-} // namespace GUI
+}                                       // namespace GUI
+
 
 /* ===[ End of file ]=== */

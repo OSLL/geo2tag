@@ -34,26 +34,26 @@
 
 namespace GUI
 {
-    ListView::ListView(QWidget *parent) : QTableView(parent)
-    {
-        m_model = new ListModel(this);
-        setModel(m_model);
-        m_model->setHeaderData(0, Qt::Horizontal, tr("Map"));
-        m_model->setHeaderData(1, Qt::Horizontal, tr("Tag text"));
-        m_model->setHeaderData(2, Qt::Horizontal, tr("Author"));
+  ListView::ListView(QWidget *parent) : QTableView(parent)
+  {
+    m_model = new ListModel(this);
+    setModel(m_model);
+    m_model->setHeaderData(0, Qt::Horizontal, tr("Map"));
+    m_model->setHeaderData(1, Qt::Horizontal, tr("Tag text"));
+    m_model->setHeaderData(2, Qt::Horizontal, tr("Author"));
 
-        connect(&OnLineInformation::getInstance(), SIGNAL(marksUpdated(QSharedPointer<DataMarks>)),
-                (ListModel*)m_model, SLOT(marksUp(QSharedPointer<DataMarks>)));
+    connect(&OnLineInformation::getInstance(), SIGNAL(marksUpdated(QSharedPointer<DataMarks>)),
+      (ListModel*)m_model, SLOT(marksUp(QSharedPointer<DataMarks>)));
 
-        setItemDelegate(new MarkTableDelegat(this));
-        horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
-        verticalHeader()->hide();
-    }
+    setItemDelegate(new MarkTableDelegat(this));
+    horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+    verticalHeader()->hide();
+  }
 
-    void ListView::updateModel()
-    {
-        qDebug() << "update Model";
-        //m_model->layoutUpdate();
-        //qobject_cast<ListModel*>(m_model)->layoutUpdate();
-    }
+  void ListView::updateModel()
+  {
+    qDebug() << "update Model";
+    //m_model->layoutUpdate();
+    //qobject_cast<ListModel*>(m_model)->layoutUpdate();
+  }
 }

@@ -40,7 +40,6 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _UnsubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
 #define _UnsubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
 
@@ -53,47 +52,50 @@
 
 namespace GUI
 {
-    /*!
-     * UnsubscribeChannelQuery class definition.
-     *
-     * The object of this class represents http query to server.
-     * This query includes json request to Unsubscribe channel.
-     *
-     */
-    class UnsubscribeChannelQuery: public QObject
-    {
-        Q_OBJECT
+  /*!
+   * UnsubscribeChannelQuery class definition.
+   *
+   * The object of this class represents http query to server.
+   * This query includes json request to Unsubscribe channel.
+   *
+   */
+  class UnsubscribeChannelQuery: public QObject
+  {
+    Q_OBJECT
 
-    QSharedPointer<User> m_user;
+      QSharedPointer<User> m_user;
     QSharedPointer<Channel> m_channel;
     QString m_status;
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
 
-private Q_SLOTS:
-   
-    virtual void processReply(QNetworkReply *reply);
+    private Q_SLOTS:
 
-public:
+      virtual void processReply(QNetworkReply *reply);
 
-        UnsubscribeChannelQuery(QObject *parent = 0);
+    public:
 
-        UnsubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
-   
-        void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
-        
-        ~UnsubscribeChannelQuery();
-       
-        const QString& getStatus() const;
-    
-    Q_SIGNALS:    
-        void responseReceived();
-    
-    
-    }; // class UnsubscribeChannelQuery
+      UnsubscribeChannelQuery(QObject *parent = 0);
 
-} // namespace GUI
+      UnsubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
 
-#endif //_UnsubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
+      void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
+
+      ~UnsubscribeChannelQuery();
+
+      const QString& getStatus() const;
+
+      Q_SIGNALS:
+      void responseReceived();
+
+      // class UnsubscribeChannelQuery
+  };
+
+  // namespace GUI
+}
+
+
+//_UnsubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

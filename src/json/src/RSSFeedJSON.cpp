@@ -55,118 +55,123 @@
 #include "JsonDataMark.h"
 
 RSSFeedResponseJSON::RSSFeedResponseJSON(const DataChannels &hashMap, QObject *parent):
-        JsonSerializer(parent), m_hashMap(hashMap)
+JsonSerializer(parent), m_hashMap(hashMap)
 {
 }
+
 
 RSSFeedResponseJSON::RSSFeedResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
+
 void RSSFeedResponseJSON::parseJson(const QByteArray &data)
 {
-    clearContainers();
+  clearContainers();
 
-    QJson::Parser parser;
-    bool ok;
-    QVariantMap result = parser.parse(data, &ok).toMap();
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
 
-    if (!ok)
+  if (!ok)
+  {
+    qFatal("An error occured during parsing json with rss feed");
+    return;
+  }
+  setStatus(result["status"].toString());
+  setStatusMessage(result["status_description"].toString());
+  QVariantMap rss = result["rss"].toMap();
+  QVariantMap channelVariant = rss["channels"].toMap();
+  QVariantList channelsList = channelVariant["items"].toList();
+  int size = channelsList.size();
+
+  for (int i = 0; i < size; i++)
+  {
+    QVariantMap channelDesc = channelsList.at(i).toMap();
+    QVariantList markList = channelDesc["items"].toList();
+    QString channelName = channelDesc["name"].toString();
+
+    QSharedPointer<Channel> channel(new JsonChannel(channelName,"dummy channel[RSSFeedResponse]"));
+
+    for(int j=0; j<markList.size(); j++)
     {
-        qFatal("An error occured during parsing json with rss feed");
-        return;
+      QVariantMap markMap = markList.at(j).toMap();
+
+      QString title = markMap["title"].toString();
+      QString link = markMap["link"].toString();
+      QString description = markMap["description"].toString();
+      double latitude = markMap["latitude"].toString().toDouble();
+      double longitude = markMap["longitude"].toString().toDouble();
+      QString userName = markMap["user"].toString();
+      QString timeStr =  markMap["pubDate"].toString();
+      QDateTime time = QDateTime::fromString(timeStr, "dd MM yyyy HH:mm:ss.zzz");
+
+      QVector<QSharedPointer<User> > v = m_usersContainer->vector();
+      QSharedPointer<User> user(new JsonUser(userName));
+      m_usersContainer->push_back(user);
+
+      QSharedPointer<JsonDataMark> newMark(new JsonDataMark(latitude,
+        longitude,
+        title,
+        description,
+        link,
+        time));
+      newMark->setUser(user);
+      m_hashMap.insert(channel, newMark);
     }
-    setStatus(result["status"].toString());
-    setStatusMessage(result["status_description"].toString());
-    QVariantMap rss = result["rss"].toMap();
-    QVariantMap channelVariant = rss["channels"].toMap();
-    QVariantList channelsList = channelVariant["items"].toList();
-    int size = channelsList.size();
-
-    for (int i = 0; i < size; i++)
-    {
-        QVariantMap channelDesc = channelsList.at(i).toMap();
-        QVariantList markList = channelDesc["items"].toList();
-        QString channelName = channelDesc["name"].toString();
-
-        QSharedPointer<Channel> channel(new JsonChannel(channelName,"dummy channel[RSSFeedResponse]"));
-
-        for(int j=0; j<markList.size(); j++)
-        {
-            QVariantMap markMap = markList.at(j).toMap();
-
-            QString title = markMap["title"].toString();
-            QString link = markMap["link"].toString();
-            QString description = markMap["description"].toString();
-            double latitude = markMap["latitude"].toString().toDouble();
-            double longitude = markMap["longitude"].toString().toDouble();
-            QString userName = markMap["user"].toString();
-            QString timeStr =  markMap["pubDate"].toString();
-            QDateTime time = QDateTime::fromString(timeStr, "dd MM yyyy HH:mm:ss.zzz");
-
-
-            QVector<QSharedPointer<User> > v = m_usersContainer->vector();
-            QSharedPointer<User> user(new JsonUser(userName));
-            m_usersContainer->push_back(user);
-
-            QSharedPointer<JsonDataMark> newMark(new JsonDataMark(latitude,
-                                                                  longitude,
-                                                                  title,
-                                                                  description,
-                                                                  link,
-                                                                  time));
-            newMark->setUser(user);
-            m_hashMap.insert(channel, newMark);
-        }
-    }
+  }
 }
+
 
 QByteArray RSSFeedResponseJSON::getJson() const
 {
-    QJson::Serializer serializer;
-    QVariantMap obj, rss, jchannel;
+  QJson::Serializer serializer;
+  QVariantMap obj, rss, jchannel;
 
-    QList<QSharedPointer<Channel> > hashKeys = m_hashMap.uniqueKeys();
-    QVariantList jchannels;
+  QList<QSharedPointer<Channel> > hashKeys = m_hashMap.uniqueKeys();
+  QVariantList jchannels;
 
-    for(int i=0; i<hashKeys.size(); i++)
+  for(int i=0; i<hashKeys.size(); i++)
+  {
+    QList<QSharedPointer<DataMark> > tags = m_hashMap.values(hashKeys.at(i));
+    QVariantList jtags;
+    QVariantMap channel;
+
+    for(int j=0; j<tags.size(); j++)
     {
-        QList<QSharedPointer<DataMark> > tags = m_hashMap.values(hashKeys.at(i));
-        QVariantList jtags;
-        QVariantMap channel;
-
-        for(int j=0; j<tags.size(); j++)
-        {
-            QSharedPointer<DataMark> tag = tags.at(j);
-            QVariantMap jtag;
-            jtag["title"] = tag->getLabel();
-            jtag["link"] = tag->getUrl();
-            jtag["description"] = tag->getDescription();
-            jtag["latitude"] = tag->getLatitude();
-            jtag["longitude"] = tag->getLongitude();
-            jtag["user"] = tag->getUser()->getLogin();
-            jtag["pubDate"] = tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz");
-            jtags.append(jtag);
-        }
-        channel["items"] = jtags;
-        channel["name"] = hashKeys.at(i)->getName();
-        jchannels.append(channel);
+      QSharedPointer<DataMark> tag = tags.at(j);
+      QVariantMap jtag;
+      jtag["title"] = tag->getLabel();
+      jtag["link"] = tag->getUrl();
+      jtag["description"] = tag->getDescription();
+      jtag["latitude"] = tag->getLatitude();
+      jtag["longitude"] = tag->getLongitude();
+      jtag["user"] = tag->getUser()->getLogin();
+      jtag["pubDate"] = tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz");
+      jtags.append(jtag);
     }
-    jchannel["items"] = jchannels;
-    rss["channels"] = jchannel;
-    obj["rss"] = rss;
-    obj["status"]=getStatus();
-    obj["status_description"]=getStatusMessage();
-    return serializer.serialize(obj);
+    channel["items"] = jtags;
+    channel["name"] = hashKeys.at(i)->getName();
+    jchannels.append(channel);
+  }
+  jchannel["items"] = jchannels;
+  rss["channels"] = jchannel;
+  obj["rss"] = rss;
+  obj["status"]=getStatus();
+  obj["status_description"]=getStatusMessage();
+  return serializer.serialize(obj);
 }
+
 
 const DataChannels& RSSFeedResponseJSON::getRSSFeed() const
 {
-    return m_hashMap;
+  return m_hashMap;
 }
+
 
 RSSFeedResponseJSON::~RSSFeedResponseJSON()
 {
 }
+
 
 /* ===[ End of file $HeadURL$ ]=== */

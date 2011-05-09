@@ -15,16 +15,16 @@ using namespace Wt;
 class MarksModel : public WAbstractTableModel
 {
 
-    QSharedPointer<User> m_user;
-    double m_latitude;
-    double m_longitude;
-    double m_radius;
-    MarksModelConnector * m_connector;
-    RSSFeedQuery  m_rss;
-    QList<QSharedPointer<DataMark> > m_marks;
+  QSharedPointer<User> m_user;
+  double m_latitude;
+  double m_longitude;
+  double m_radius;
+  MarksModelConnector * m_connector;
+  RSSFeedQuery  m_rss;
+  QList<QSharedPointer<DataMark> > m_marks;
 
-    void init();
-public:
+  void init();
+  public:
 
     enum Type
     {
@@ -34,20 +34,19 @@ public:
 
     Type   m_type;
     MarksModel(QSharedPointer<User> user, WObject *parent = 0);
-    
+
     virtual int columnCount(const WModelIndex & parent = WModelIndex()) const;
     virtual int rowCount(const WModelIndex & parent = WModelIndex()) const;
     virtual boost::any data(const WModelIndex & index,
-                            int role = DisplayRole) const;
+      int role = DisplayRole) const;
     virtual boost::any headerData(int section,
-                                  Orientation orientation = Horizontal,
-                                  int role = DisplayRole) const;
+      Orientation orientation = Horizontal,
+      int role = DisplayRole) const;
     WFlags<ItemFlag> flags(const WModelIndex &index) const;
 
     const QList<QSharedPointer<DataMark> >& getMarks() const;
     void marksRecieved();
     void update();
 };
-
-
-#endif /* OPTIONSMODEL_H */
+/* OPTIONSMODEL_H */
+#endif

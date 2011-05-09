@@ -40,7 +40,6 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _SubscribedChannelsListQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
 #define _SubscribedChannelsListQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
 
@@ -53,45 +52,49 @@
 
 namespace GUI
 {
-    /*!
-     * SubscribedChannelsListQuery class definition.
-     *
-     * The object of this class represents http query to server.
-     * This query includes json request for list of subscribed channels.
-     *
-     */
+  /*!
+   * SubscribedChannelsListQuery class definition.
+   *
+   * The object of this class represents http query to server.
+   * This query includes json request for list of subscribed channels.
+   *
+   */
   class SubscribedChannelsListQuery : public DefaultQuery
   {
-	Q_OBJECT
+    Q_OBJECT
 
-	QSharedPointer<User> m_user;
-	QSharedPointer<Channels> m_channels;
+      QSharedPointer<User> m_user;
+    QSharedPointer<Channels> m_channels;
 
-	virtual QString getUrl() const;
-	virtual QByteArray getRequestBody() const;
+    virtual QString getUrl() const;
+    virtual QByteArray getRequestBody() const;
 
-private Q_SLOTS:
+    private Q_SLOTS:
 
-	virtual void processReply(QNetworkReply *reply);
+      virtual void processReply(QNetworkReply *reply);
 
-public:
+    public:
 
-	SubscribedChannelsListQuery(QObject *parent = 0);
+      SubscribedChannelsListQuery(QObject *parent = 0);
 
-	SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent = 0);
-	
-        ~SubscribedChannelsListQuery();
+      SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent = 0);
 
-	const QSharedPointer<Channels>& getChannels() const;
+      ~SubscribedChannelsListQuery();
 
-Q_SIGNALS:
+      const QSharedPointer<Channels>& getChannels() const;
 
-        void responseReceived();
+      Q_SIGNALS:
 
-  }; // class SubscribedChannelsListQuery
+      void responseReceived();
 
-} // namespace GUI
+      // class SubscribedChannelsListQuery
+  };
 
-#endif //_SubscribedChannelsListQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
+  // namespace GUI
+}
+
+
+//_SubscribedChannelsListQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

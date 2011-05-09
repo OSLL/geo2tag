@@ -26,7 +26,7 @@ MainWindow::MainWindow() : QMainWindow(NULL)
   QMenu *menu = new QMenu("&Settings",this);
   menu->addAction(clean);
   menu->addAction(quit);
-  
+
   //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
   menuBar()->addMenu(menu);
@@ -49,11 +49,12 @@ MainWindow::MainWindow() : QMainWindow(NULL)
 
   startGps();
   QTimer::singleShot(0, this, SLOT(setupBearer()));
-    
+
   initSettings();
 
-  startTimer(100); // first update should be fast
+  startTimer(100);                      // first update should be fast
 }
+
 
 void MainWindow::cleanLocalSettigns()
 {
@@ -62,6 +63,7 @@ void MainWindow::cleanLocalSettigns()
 
   QMessageBox::information(this,"Info","All local data was destroyed. Restart application to see effect.");
 }
+
 
 void MainWindow::initSettings()
 {
@@ -78,6 +80,7 @@ void MainWindow::initSettings()
   }
 }
 
+
 void MainWindow::readSettings()
 {
   QSettings settings(QSettings::SystemScope,"osll","tracker");
@@ -89,22 +92,23 @@ void MainWindow::readSettings()
   m_settings.initialized = true;
 }
 
+
 void MainWindow::createSettings()
 {
-	int p;
-	LoginDialog ld(this);
-	if (QDialog::Accepted == ld.exec())
-	{
-        //p = QMessageBox::question(this,
-        //                        "Question","Attach existing channel? (otherwise new one will be created)",//"Create new channel or attach existing?",
-        //                        "No", "Yes"); //"Create new", "Attach existing");
-        p = 0;
-	}
-	else
-	{
-	    p = 1;
-	}
-	
+  int p;
+  LoginDialog ld(this);
+  if (QDialog::Accepted == ld.exec())
+  {
+    //p = QMessageBox::question(this,
+    //                        "Question","Attach existing channel? (otherwise new one will be created)",//"Create new channel or attach existing?",
+    //                        "No", "Yes"); //"Create new", "Attach existing");
+    p = 0;
+  }
+  else
+  {
+    p = 1;
+  }
+
   SettingsDialog sd(p, this);
 
   if (QDialog::Accepted == sd.exec())
@@ -124,43 +128,48 @@ void MainWindow::createSettings()
   }
 }
 
+
 void MainWindow::startGps()
 {
-    if (!m_positionSource) {
-        m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
-	m_positionSource -> setPreferredPositioningMethods(QGeoPositionInfoSource::AllPositioningMethods);
-        QObject::connect(m_positionSource, SIGNAL(positionUpdated(QGeoPositionInfo)),
-        this, SLOT(positionUpdated(QGeoPositionInfo)));
-    }
-    m_positionSource->startUpdates();
+  if (!m_positionSource)
+  {
+    m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
+    m_positionSource -> setPreferredPositioningMethods(QGeoPositionInfoSource::AllPositioningMethods);
+    QObject::connect(m_positionSource, SIGNAL(positionUpdated(QGeoPositionInfo)),
+      this, SLOT(positionUpdated(QGeoPositionInfo)));
+  }
+  m_positionSource->startUpdates();
 }
+
 
 void MainWindow::positionUpdated(QGeoPositionInfo gpsPos)
 {
-    m_positionInfo = gpsPos;
+  m_positionInfo = gpsPos;
 }
 
+
 void MainWindow::setupBearer()
-{  /*
-    // Set Internet Access Point
-    QNetworkConfigurationManager manager;
-    const bool canStartIAP = (manager.capabilities()
-        & QNetworkConfigurationManager::CanStartAndStopInterfaces);
-    // Is there default access point, use it
-    QNetworkConfiguration cfg = manager.defaultConfiguration();
-    if (!cfg.isValid() || !canStartIAP) {
-        return;
-    }
-    m_session = new QNetworkSession(cfg);
-    m_session->open();
-    m_session->waitForOpened();
-    */
+{
+  /*
+      // Set Internet Access Point
+      QNetworkConfigurationManager manager;
+      const bool canStartIAP = (manager.capabilities()
+          & QNetworkConfigurationManager::CanStartAndStopInterfaces);
+      // Is there default access point, use it
+      QNetworkConfiguration cfg = manager.defaultConfiguration();
+      if (!cfg.isValid() || !canStartIAP) {
+          return;
+      }
+      m_session = new QNetworkSession(cfg);
+      m_session->open();
+      m_session->waitForOpened();
+      */
 }
+
 
 void MainWindow::timerEvent(QTimerEvent *te)
 {
   killTimer(te->timerId());
-
 
   if( m_settings.initialized )
   {
@@ -171,52 +180,54 @@ void MainWindow::timerEvent(QTimerEvent *te)
   startTimer(UPDATE_INTERVAL);
 }
 
+
 bool MainWindow::setMark()
 {
-    qreal latitude = DEFAULT_LATITUDE;
-    qreal longitude = DEFAULT_LONGITUDE;
-    
-    if (m_positionInfo.coordinate().isValid()) {
-        latitude = m_positionInfo.coordinate().latitude();
-        longitude = m_positionInfo.coordinate().longitude();
-        
-        GUI::ApplyMarkQuery *applyMarkQuery = new GUI::ApplyMarkQuery
-                                                  (m_settings.auth_token,
-                                                   m_settings.channel,
-                                                   QString("title"),
-                                                   QString("url"),
-                                                   QString("description"),
-                                                   latitude,
-                                                   longitude,
-                                                   QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
-            connect(applyMarkQuery, SIGNAL(responseReceived(QString)), this, SLOT(onApplyMarkResponse(QString)));
-            applyMarkQuery->doRequest();
-    }
-    else {
-        qDebug() << "Using wrong coordinates.";
-    }
+  qreal latitude = DEFAULT_LATITUDE;
+  qreal longitude = DEFAULT_LONGITUDE;
 
-    
+  if (m_positionInfo.coordinate().isValid())
+  {
+    latitude = m_positionInfo.coordinate().latitude();
+    longitude = m_positionInfo.coordinate().longitude();
 
-    return true;
+    GUI::ApplyMarkQuery *applyMarkQuery = new GUI::ApplyMarkQuery
+      (m_settings.auth_token,
+      m_settings.channel,
+      QString("title"),
+      QString("url"),
+      QString("description"),
+      latitude,
+      longitude,
+      QLocale("english").toString(QDateTime::currentDateTime(),"dd MMM yyyy hh:mm:ss"));
+    connect(applyMarkQuery, SIGNAL(responseReceived(QString)), this, SLOT(onApplyMarkResponse(QString)));
+    applyMarkQuery->doRequest();
+  }
+  else
+  {
+    qDebug() << "Using wrong coordinates.";
+  }
+
+  return true;
 }
+
 
 void MainWindow::onApplyMarkResponse(QString status)
 {
-    QDateTime now = QDateTime::currentDateTime();
-    qDebug() << "mark timer " << now;
+  QDateTime now = QDateTime::currentDateTime();
+  qDebug() << "mark timer " << now;
 
-    if (status == QString("ok"))
-    {
-        m_status->setText(QString("Last attempt:"));
-        m_status2->setText(QString("%1").arg(now.toString()));
-        m_status3->setText(QString("was %2").arg(" successfull"));
-    }
-    else
-    {
-        m_status->setText(QString("Last attempt:"));
-        m_status2->setText(QString("%1").arg(now.toString()));
-        m_status3->setText(QString("was %2").arg(" failed"));
-    }
+  if (status == QString("ok"))
+  {
+    m_status->setText(QString("Last attempt:"));
+    m_status2->setText(QString("%1").arg(now.toString()));
+    m_status3->setText(QString("was %2").arg(" successfull"));
+  }
+  else
+  {
+    m_status->setText(QString("Last attempt:"));
+    m_status2->setText(QString("%1").arg(now.toString()));
+    m_status3->setText(QString("was %2").arg(" failed"));
+  }
 
 }

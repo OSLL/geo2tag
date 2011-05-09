@@ -9,32 +9,32 @@
 
 class ControlThread : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QTcpSocket *m_client;
-    QTextStream *m_device;
-    TrackerDaemon *m_daemon;
+  QTextStream *m_device;
+  TrackerDaemon *m_daemon;
 
-    typedef void (ControlThread::*ProcessMethod)(void);
+  typedef void (ControlThread::*ProcessMethod)(void);
 
-    QMap<QString, ProcessMethod> m_processors;
+  QMap<QString, ProcessMethod> m_processors;
 
-    void processStartQuery();
-    void processStopQuery();
-    void processLogsQuery();
-    void processStatusQuery();
-    void processReloadQuery();
+  void processStartQuery();
+  void processStopQuery();
+  void processLogsQuery();
+  void processStatusQuery();
+  void processReloadQuery();
 
-private slots:
+  private slots:
     void run();
 
-public:
+  public:
     ControlThread(QTcpSocket * socket, TrackerDaemon *control, QObject *parent = 0);
 
-signals:
+    signals:
 
-public slots:
+  public slots:
 
 };
-
-#endif // REPORTTHREAD_H
+// REPORTTHREAD_H
+#endif

@@ -18,7 +18,6 @@
 // QtMobility namespace
 QTM_USE_NAMESPACE
 
-
 class MainWindow : public QMainWindow
 {
   Q_OBJECT;
@@ -36,29 +35,28 @@ class MainWindow : public QMainWindow
   // for bearer management
   // QNetworkSession* m_session;
 
+  public:
+    MainWindow();
 
-public:
-  MainWindow();
+    void timerEvent(QTimerEvent *te);
 
-  void timerEvent(QTimerEvent *te);
+  protected:
+    void initSettings();
+    bool setMark();
 
-protected:
-  void initSettings();
-  bool setMark();
-
-private:
+  private:
     void startGps();
 
-public slots:
+  public slots:
 
-  void cleanLocalSettigns();
-  void readSettings();
-  void createSettings();
+    void cleanLocalSettigns();
+    void readSettings();
+    void createSettings();
 
-  void setupBearer();
-  void onApplyMarkResponse(QString);
-  void positionUpdated(QGeoPositionInfo gpsPos);
+    void setupBearer();
+    void onApplyMarkResponse(QString);
+    void positionUpdated(QGeoPositionInfo gpsPos);
 
 };
-
-#endif // MAINWINDOW_H
+// MAINWINDOW_H
+#endif

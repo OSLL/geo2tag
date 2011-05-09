@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file MarkPane.cpp
  * \brief MarkPane implementation
@@ -61,52 +61,51 @@
 namespace GUI
 {
 
+  MarkPane::MarkPane(QWidget * parent) : QWidget(parent)
+  {
+    m_list = new ListView(this);
 
-    MarkPane::MarkPane(QWidget * parent) : QWidget(parent)
+    connect(m_list, SIGNAL(clicked(const QModelIndex&)), this, SLOT(showUrl(const QModelIndex&)));
+
+    QHBoxLayout *vbl = new QHBoxLayout(this);
+    vbl->addWidget(m_list);
+    setLayout(vbl);
+  }
+
+  void MarkPane::showUrl(const QModelIndex &index)
+  {
+    //TODO:: here's image dialog, please
+    // QMessageBox::information(this,"MarkImage","IIMAGE DBG IMAGE DBG IMAGE DBG IMAGE DBG MAGE DBG ");
+    // We are looking for real index of selected mark ( we store all marks and show only for current channel)
+    QSharedPointer<DataMarks> marks = OnLineInformation::getInstance().getMarks();
+    size_t c=0,i=0;
+    for(; i<marks->size(); i++)
     {
-        m_list = new ListView(this);
-
-        connect(m_list, SIGNAL(clicked(const QModelIndex&)), this, SLOT(showUrl(const QModelIndex&)));
-
-        QHBoxLayout *vbl = new QHBoxLayout(this);
-        vbl->addWidget(m_list);
-        setLayout(vbl);
+      if((*marks)[i]->getChannel() == dynamic_cast<GUI::ListModel*>(m_list->model())->getCurrentChannel())
+        c++;
+      if((c-1)==index.row())
+        break;
     }
-    
-    void MarkPane::showUrl(const QModelIndex &index)
-    {
-        //TODO:: here's image dialog, please
-        // QMessageBox::information(this,"MarkImage","IIMAGE DBG IMAGE DBG IMAGE DBG IMAGE DBG MAGE DBG ");
-        // We are looking for real index of selected mark ( we store all marks and show only for current channel)
-        QSharedPointer<DataMarks> marks = OnLineInformation::getInstance().getMarks();
-        size_t c=0,i=0;
-        for(; i<marks->size(); i++)
-        {
-            if((*marks)[i]->getChannel() == dynamic_cast<GUI::ListModel*>(m_list->model())->getCurrentChannel())
-                c++;
-            if((c-1)==index.row())
-                break;
-        }
-        // now "i" is a real mark index
-        // We should draw dialog with our mark.
-        MarkDetailsDialog dialog(this, (*marks)[i]);
-        dialog.exec();
-    }
+    // now "i" is a real mark index
+    // We should draw dialog with our mark.
+    MarkDetailsDialog dialog(this, (*marks)[i]);
+    dialog.exec();
+  }
 
+  void MarkPane::refresh(QSharedPointer<Channel> channel)
+  {
+    qDebug() << "refresh marks view";
+    qobject_cast<ListModel*>((m_list)->model())->layoutUpdate(channel);
+  }
 
-    void MarkPane::refresh(QSharedPointer<Channel> channel)
-    {
-      qDebug() << "refresh marks view";
-      qobject_cast<ListModel*>((m_list)->model())->layoutUpdate(channel);
-    }
-    
-    void MarkPane::updateCurrentChannelRadius()
-    {
-        RadiusEditor dialog(this, dynamic_cast<GUI::ListModel*>(m_list->model())->getCurrentChannel());
-        dialog.exec();   
-        refresh(dynamic_cast<GUI::ListModel*>(m_list->model())->getCurrentChannel());
-    }
+  void MarkPane::updateCurrentChannelRadius()
+  {
+    RadiusEditor dialog(this, dynamic_cast<GUI::ListModel*>(m_list->model())->getCurrentChannel());
+    dialog.exec();
+    refresh(dynamic_cast<GUI::ListModel*>(m_list->model())->getCurrentChannel());
+  }
 
-} // namespace GUI
+}                                       // namespace GUI
+
 
 /* ===[ End of file ]=== */

@@ -1,0 +1,5 @@
+start on started hildon-desktop
+script
+	touch /tmp/wikigps-tracker
+	start-stop-daemon --start --oknodo --quiet --background --chuid user --exec /usr/bin/wikigpsTracker
+end script

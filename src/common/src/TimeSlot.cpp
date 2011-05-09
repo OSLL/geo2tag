@@ -45,18 +45,22 @@ TimeSlot::TimeSlot(const qulonglong &slot):m_slot(slot)
 {
 }
 
+
 const qulonglong& TimeSlot::getSlot() const
 {
-    return m_slot;
+  return m_slot;
 }
+
 
 void TimeSlot::setSlot(const qulonglong& slot)
 {
-    m_slot = slot;
+  m_slot = slot;
 }
+
 
 TimeSlot::~TimeSlot()
 {
 }
+
 
 /* ===[ End of file ]=== */

@@ -30,7 +30,7 @@
  */
 
 /*! ---------------------------------------------------------------
- * $Id$ 
+ * $Id$
  *
  * \file OptionsPane.cpp
  * \brief OptionsPane implementation
@@ -55,121 +55,121 @@
 
 namespace GUI
 {
-    OptionsPane::OptionsPane(QWidget *parent) : QScrollArea(parent)
+  OptionsPane::OptionsPane(QWidget *parent) : QScrollArea(parent)
+  {
+    QWidget *mainWidget = new QWidget(this);
+    QPalette *m_palette = new QPalette(Qt::black);
+    //setPalette(*m_palette);
+    //this->setForegroundRole(QPalette::WindowText);
+
+    /* Add maps source type options */
+
+    m_sourceTypeBox = new QGroupBox(tr("Source of maps:"), mainWidget);
+    m_googleButton = new QRadioButton(tr("Google maps"), m_sourceTypeBox);
+    m_openStreetButton = new QRadioButton(tr("Open street map"), m_sourceTypeBox);
+
+    if (maps::MapLoader::GOOGLE == maps::MapLoader::DEFAULT_SOURCE_TYPE)
+      m_googleButton->setChecked(true);
+    if (maps::MapLoader::OPEN_STREET == maps::MapLoader::DEFAULT_SOURCE_TYPE)
+      m_openStreetButton->setChecked(true);
+
+    connect(m_googleButton, SIGNAL(clicked()), this, SLOT(onGoogleButtonClicked()));
+    connect(m_openStreetButton, SIGNAL(clicked()), this, SLOT(onOpenStreeButtonClicked()));
+
+    //        QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::HttpProxy,
+    //                                                         "192.168.0.251",
+    //                                                         3128));
+
+    QVBoxLayout *sourceTypeBoxLayout = new QVBoxLayout(m_sourceTypeBox);
+    sourceTypeBoxLayout->addWidget(new QLabel(QString(" "), m_sourceTypeBox));
+    sourceTypeBoxLayout->addWidget(m_googleButton);
+    sourceTypeBoxLayout->addWidget(m_openStreetButton);
+    sourceTypeBoxLayout->addStretch();
+    m_sourceTypeBox->setLayout(sourceTypeBoxLayout);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+    mainWidget->setLayout(mainLayout);
+    mainLayout->addWidget(m_sourceTypeBox);
+
+    /* Add proxy options */
+    m_proxyBox = new QGroupBox(tr("Use proxy server"), mainWidget);
+    m_hostProxyEdit = new QLineEdit(mainWidget);
+    m_portProxyEdit = new QLineEdit(mainWidget);
+    QPalette pal = m_hostProxyEdit->palette();
+    pal.setColor(m_hostProxyEdit->backgroundRole(), Qt::transparent);
+    m_hostProxyEdit->setPalette(pal);
+    pal.setColor(m_hostProxyEdit->backgroundRole(), Qt::black);
+    m_portProxyEdit->setPalette(pal);
+
+    //        m_hostProxyEdit->setBackgroundRole(QPalette::Dark);
+    //        m_portProxyEdit->setForegroundRole(m_palette->Background);
+    QRegExpValidator* ValIPAddr;
+    // match the Bytes can be from 0-199 or 200-249 or 250-255 but not a number with one 0 at the beginning like 001 or 020
+    QString Byte = "(?!0[0-9])(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])";
+    QRegExp rxip;
+    rxip.setPattern("^" + Byte + "\\." + Byte + "\\." + Byte + "\\." + Byte + "$");
+    ValIPAddr = new QRegExpValidator(rxip, this);
+    m_hostProxyEdit->setValidator(ValIPAddr);
+    m_portProxyEdit->setValidator(new QIntValidator(0, 65536, this));
+    m_proxyBox->setCheckable(true);
+    m_proxyBox->setChecked(false);
+
+    connect(m_proxyBox, SIGNAL(clicked()), this, SLOT(onProxyBoxClicked()));
+    connect(m_hostProxyEdit, SIGNAL(editingFinished()), this, SLOT(onProxyBoxClicked()));
+    connect(m_portProxyEdit, SIGNAL(editingFinished()), this, SLOT(onProxyBoxClicked()));
+
+    QVBoxLayout *proxyLayout = new QVBoxLayout(m_proxyBox);
+    proxyLayout->addWidget(new QLabel(QString(" "), mainWidget));
+    proxyLayout->addWidget(m_hostProxyEdit);
+    proxyLayout->addWidget(m_portProxyEdit);
+    proxyLayout->addStretch();
+    m_proxyBox->setLayout(proxyLayout);
+
+    mainLayout->addWidget(m_proxyBox);
+    //mainWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    this->setWidget(mainWidget);
+
+  }
+
+  OptionsPane::~OptionsPane()
+  {
+
+  }
+
+  void OptionsPane::onGoogleButtonClicked()
+  {
+    if (m_googleButton->isChecked())
     {
-        QWidget *mainWidget = new QWidget(this);
-        QPalette *m_palette = new QPalette(Qt::black);
-        //setPalette(*m_palette);
-        //this->setForegroundRole(QPalette::WindowText);
+      emit sourceTypeUpdated(maps::MapLoader::GOOGLE);
+    }
+  }
 
-        /* Add maps source type options */
+  void OptionsPane::onOpenStreeButtonClicked()
+  {
+    if (m_openStreetButton->isChecked())
+    {
+      emit sourceTypeUpdated(maps::MapLoader::OPEN_STREET);
+    }
+  }
 
-        m_sourceTypeBox = new QGroupBox(tr("Source of maps:"), mainWidget);
-        m_googleButton = new QRadioButton(tr("Google maps"), m_sourceTypeBox);
-        m_openStreetButton = new QRadioButton(tr("Open street map"), m_sourceTypeBox);
-
-        if (maps::MapLoader::GOOGLE == maps::MapLoader::DEFAULT_SOURCE_TYPE)
-            m_googleButton->setChecked(true);
-        if (maps::MapLoader::OPEN_STREET == maps::MapLoader::DEFAULT_SOURCE_TYPE)
-            m_openStreetButton->setChecked(true);
-
-        connect(m_googleButton, SIGNAL(clicked()), this, SLOT(onGoogleButtonClicked()));
-        connect(m_openStreetButton, SIGNAL(clicked()), this, SLOT(onOpenStreeButtonClicked()));
-
-//        QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::HttpProxy,
-//                                                         "192.168.0.251",
-//                                                         3128));
-
-        QVBoxLayout *sourceTypeBoxLayout = new QVBoxLayout(m_sourceTypeBox);
-        sourceTypeBoxLayout->addWidget(new QLabel(QString(" "), m_sourceTypeBox));
-        sourceTypeBoxLayout->addWidget(m_googleButton);
-        sourceTypeBoxLayout->addWidget(m_openStreetButton);
-        sourceTypeBoxLayout->addStretch();
-        m_sourceTypeBox->setLayout(sourceTypeBoxLayout);
-
-        QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
-        mainWidget->setLayout(mainLayout);
-        mainLayout->addWidget(m_sourceTypeBox);
-
-
-        /* Add proxy options */
-        m_proxyBox = new QGroupBox(tr("Use proxy server"), mainWidget);
-        m_hostProxyEdit = new QLineEdit(mainWidget);
-        m_portProxyEdit = new QLineEdit(mainWidget);
-                QPalette pal = m_hostProxyEdit->palette();
-                pal.setColor(m_hostProxyEdit->backgroundRole(), Qt::transparent);
-                m_hostProxyEdit->setPalette(pal);
-                pal.setColor(m_hostProxyEdit->backgroundRole(), Qt::black);
-                m_portProxyEdit->setPalette(pal);
-
-//        m_hostProxyEdit->setBackgroundRole(QPalette::Dark);
-//        m_portProxyEdit->setForegroundRole(m_palette->Background);
-        QRegExpValidator* ValIPAddr;
-        // match the Bytes can be from 0-199 or 200-249 or 250-255 but not a number with one 0 at the beginning like 001 or 020
-        QString Byte = "(?!0[0-9])(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])";
-        QRegExp rxip;
-        rxip.setPattern("^" + Byte + "\\." + Byte + "\\." + Byte + "\\." + Byte + "$");
-        ValIPAddr = new QRegExpValidator(rxip, this);
-        m_hostProxyEdit->setValidator(ValIPAddr);
-        m_portProxyEdit->setValidator(new QIntValidator(0, 65536, this));
-        m_proxyBox->setCheckable(true);
-        m_proxyBox->setChecked(false);
-
-        connect(m_proxyBox, SIGNAL(clicked()), this, SLOT(onProxyBoxClicked()));
-        connect(m_hostProxyEdit, SIGNAL(editingFinished()), this, SLOT(onProxyBoxClicked()));
-        connect(m_portProxyEdit, SIGNAL(editingFinished()), this, SLOT(onProxyBoxClicked()));
-
-        QVBoxLayout *proxyLayout = new QVBoxLayout(m_proxyBox);
-        proxyLayout->addWidget(new QLabel(QString(" "), mainWidget));
-        proxyLayout->addWidget(m_hostProxyEdit);
-        proxyLayout->addWidget(m_portProxyEdit);
-        proxyLayout->addStretch();
-        m_proxyBox->setLayout(proxyLayout);
-
-        mainLayout->addWidget(m_proxyBox);
-        //mainWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-        this->setWidget(mainWidget);
-
+  void OptionsPane::onProxyBoxClicked()
+  {
+    if (m_proxyBox->isChecked())
+    {
+      QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::HttpProxy,
+        m_hostProxyEdit->text(),
+        m_portProxyEdit->text().toInt()));
+      qDebug() << "proxy " <<  m_hostProxyEdit->text() << ":"
+        <<  m_portProxyEdit->text().toInt() << "set";
+    }
+    else
+    {
+      QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::NoProxy));
+      qDebug() << "no proxy";
     }
 
-    OptionsPane::~OptionsPane()
-    {
+  }
+}                                       // namespace GUI
 
-    }
-
-    void OptionsPane::onGoogleButtonClicked()
-    {
-        if (m_googleButton->isChecked())
-        {
-            emit sourceTypeUpdated(maps::MapLoader::GOOGLE);
-        }
-    }
-
-    void OptionsPane::onOpenStreeButtonClicked()
-    {
-        if (m_openStreetButton->isChecked())
-        {
-            emit sourceTypeUpdated(maps::MapLoader::OPEN_STREET);
-        }
-    }
-
-    void OptionsPane::onProxyBoxClicked()
-    {
-        if (m_proxyBox->isChecked())
-        {
-            QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::HttpProxy,
-                                                             m_hostProxyEdit->text(),
-                                                             m_portProxyEdit->text().toInt()));
-            qDebug() << "proxy " <<  m_hostProxyEdit->text() << ":"
-                    <<  m_portProxyEdit->text().toInt() << "set";
-        }
-        else
-        {
-            QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::NoProxy));
-            qDebug() << "no proxy";
-        }
-
-    }
-} // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

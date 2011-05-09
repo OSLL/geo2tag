@@ -35,96 +35,96 @@
 
 namespace GUI
 {
-    ListModel::ListModel(QObject* parent) :
-            QStandardItemModel(OnLineInformation::getInstance().getMarks()->size(), 3, parent),
-            m_data(OnLineInformation::getInstance().getMarks())
-{
-  m_size = 0;
-}
-
-int ListModel::rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
-{
-  return m_size;
-}
-
-int ListModel::columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const
-{
-  return 3;
-}
-
-QSharedPointer<Channel> ListModel::getCurrentChannel() const
-{
-  return m_currentChannel;
-}
-
-void ListModel::setDescription(int row, const std::string& data)
-{
-  size_t c=0,i=0;
-  for(; i<m_data->size(); i++)
+  ListModel::ListModel(QObject* parent) :
+  QStandardItemModel(OnLineInformation::getInstance().getMarks()->size(), 3, parent),
+    m_data(OnLineInformation::getInstance().getMarks())
   {
-    if((*m_data)[i]->getChannel() == m_currentChannel)
-      c++;
-    if((c-1)==row)
-      break;
+    m_size = 0;
   }
 
-  (*m_data)[i]->setDescription(QString(data.c_str()));
-}
-
-QVariant ListModel::data(const QModelIndex &index, int role) const
-{
-  if ( Qt::DisplayRole == role )
+  int ListModel::rowCount(const QModelIndex &/*parent = QModelIndex()*/) const
   {
-    QString value="?";
+    return m_size;
+  }
+
+  int ListModel::columnCount ( const QModelIndex & /*parent = QModelIndex()*/ ) const
+  {
+    return 3;
+  }
+
+  QSharedPointer<Channel> ListModel::getCurrentChannel() const
+  {
+    return m_currentChannel;
+  }
+
+  void ListModel::setDescription(int row, const std::string& data)
+  {
     size_t c=0,i=0;
     for(; i<m_data->size(); i++)
     {
       if((*m_data)[i]->getChannel() == m_currentChannel)
         c++;
-      if((c-1)==index.row())
+      if((c-1)==row)
         break;
     }
 
-    switch(index.column())
-    {
-    case 0:
-     value = (*m_data)[i]->getLabel();
-     break;
-
-    case 1:
-      value = (*m_data)[i]->getDescription();
-      break;
-
-    case 2:
-      value = (*m_data)[i]->getUser()->getLogin();
-      break;
-
-    default:
-      break;
-    }
-
-          return value;
+    (*m_data)[i]->setDescription(QString(data.c_str()));
   }
-  return QVariant();
-}
 
-void ListModel::layoutUpdate(QSharedPointer<Channel> channel)
-{
+  QVariant ListModel::data(const QModelIndex &index, int role) const
+  {
+    if ( Qt::DisplayRole == role )
+    {
+      QString value="?";
+      size_t c=0,i=0;
+      for(; i<m_data->size(); i++)
+      {
+        if((*m_data)[i]->getChannel() == m_currentChannel)
+          c++;
+        if((c-1)==index.row())
+          break;
+      }
+
+      switch(index.column())
+      {
+        case 0:
+          value = (*m_data)[i]->getLabel();
+          break;
+
+        case 1:
+          value = (*m_data)[i]->getDescription();
+          break;
+
+        case 2:
+          value = (*m_data)[i]->getUser()->getLogin();
+          break;
+
+        default:
+          break;
+      }
+
+      return value;
+    }
+    return QVariant();
+  }
+
+  void ListModel::layoutUpdate(QSharedPointer<Channel> channel)
+  {
     qDebug() << "current channel = " << m_currentChannelName;
     if(channel!=0)
     {
-        m_currentChannel=channel;
-        m_currentChannelName = (*channel).getName();
-//        qDebug() << m_currentChannelName;
+      m_currentChannel=channel;
+      m_currentChannelName = (*channel).getName();
+      //        qDebug() << m_currentChannelName;
     }
     else if (m_currentChannelName != "")
     {
-        QSharedPointer<Channel> newChannelPtr = OnLineInformation::getInstance().findChannel(m_currentChannelName);
-        if (newChannelPtr != 0)
-        {
-            m_currentChannel = newChannelPtr;
-        }
-    } 
+      QSharedPointer<Channel> newChannelPtr = OnLineInformation::getInstance().findChannel(m_currentChannelName);
+      if (newChannelPtr != 0)
+      {
+        m_currentChannel = newChannelPtr;
+      }
+    }
 
     double longitude = common::GpsInfo::getInstance().getLongitude();
     double latitude = common::GpsInfo::getInstance().getLatitude();
@@ -132,23 +132,23 @@ void ListModel::layoutUpdate(QSharedPointer<Channel> channel)
     //m_data = OnLineInformation::getInstance().getMarks();
     for(size_t i=0; i<m_data->size(); i++)
     {
-        QSharedPointer<DataMark> mark = (*m_data)[i];
-        qDebug() << "radius = " << mark->getChannel()->getRadius() 
-                 << "disctance=" << DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude());
-        if(mark->getChannel()              == m_currentChannel &&
-       mark->getChannel()->getRadius()*100 >  DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude()))
-            size++;
+      QSharedPointer<DataMark> mark = (*m_data)[i];
+      qDebug() << "radius = " << mark->getChannel()->getRadius()
+        << "disctance=" << DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude());
+      if(mark->getChannel()              == m_currentChannel &&
+        mark->getChannel()->getRadius()*100 >  DataMark::getDistance(latitude, longitude,mark->getLatitude(), mark->getLongitude()))
+        size++;
     }
     m_size = size;
     qDebug() << "m_size=" << m_size << " from " << m_data->size();
     setRowCount(size);
     emit layoutChanged();
-}
-void ListModel::marksUp(QSharedPointer<DataMarks> m_marks)
-{
+  }
+  void ListModel::marksUp(QSharedPointer<DataMarks> m_marks)
+  {
     qDebug() << "marksUp got new marks set";
     m_data=m_marks;
     layoutUpdate();
-}
+  }
 
 }

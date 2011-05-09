@@ -30,7 +30,7 @@
  */
 
 /*! ---------------------------------------------------------------
- * $Id$ 
+ * $Id$
  *
  * \file AddUserQuery.cpp
  * \brief AddUserQuery implementation
@@ -48,120 +48,129 @@
 #include "QVariant"
 #include "QVariantMap"
 
-
 //Task #1113
 #ifndef ADD_USER_HTTP_URL
 #define ADD_USER_HTTP_URL "http://zps.spb.su/service?query=addUser"
 #endif
 
 AddUserQuery::AddUserQuery(QObject *parent)
-    : QObject(parent)
+: QObject(parent)
 {
-    jsonQuery = "";
-    httpQuery = "";
-    manager = new QNetworkAccessManager(this);
+  jsonQuery = "";
+  httpQuery = "";
+  manager = new QNetworkAccessManager(this);
 
-    qDebug() << "Free AddUserQuery created";
+  qDebug() << "Free AddUserQuery created";
 }
+
 
 AddUserQuery::AddUserQuery(QString login, QString password, QObject *parent)
-            : QObject(parent)
+: QObject(parent)
 {
-    manager = new QNetworkAccessManager(this);
-    setQuery(login, password);
-    qDebug() << "AddUserQuery created:\n"
-             << httpQuery << jsonQuery;
+  manager = new QNetworkAccessManager(this);
+  setQuery(login, password);
+  qDebug() << "AddUserQuery created:\n"
+    << httpQuery << jsonQuery;
 }
+
 
 void AddUserQuery::setQuery(QString login, QString password)
 {
-    QVariantMap request;
-    request.insert("login", login);
-    request.insert("password", password);
+  QVariantMap request;
+  request.insert("login", login);
+  request.insert("password", password);
 
-    QJson::Serializer serializer;
-    QString json(serializer.serialize(request));
+  QJson::Serializer serializer;
+  QString json(serializer.serialize(request));
 
-    jsonQuery = json;
-    httpQuery = ADD_USER_HTTP_URL;
+  jsonQuery = json;
+  httpQuery = ADD_USER_HTTP_URL;
 }
+
 
 AddUserQuery::~AddUserQuery()
 {
 
 }
 
+
 const QString& AddUserQuery::getHttpQuery()
 {
-    return httpQuery;
+  return httpQuery;
 }
+
 
 const QString& AddUserQuery::getJsonQuery()
 {
-    return jsonQuery;
+  return jsonQuery;
 }
+
 
 void AddUserQuery::doRequest()
 {
-    if (httpQuery == "" || jsonQuery == "")
-    {
-        qDebug() << "AddUserQuery: can't do request because query isn't set";
-        return;
-    }
+  if (httpQuery == "" || jsonQuery == "")
+  {
+    qDebug() << "AddUserQuery: can't do request because query isn't set";
+    return;
+  }
 
-    QNetworkRequest request;
-    request.setUrl(QUrl(httpQuery));
+  QNetworkRequest request;
+  request.setUrl(QUrl(httpQuery));
 
-    QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
+  QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
 
-    QNetworkReply *reply = manager->post(request, data);
+  QNetworkReply *reply = manager->post(request, data);
 
-    connect(manager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(onManagerFinished(QNetworkReply*)));
-    connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-            this, SLOT(onManagerSslErrors()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(onReplyError(QNetworkReply::NetworkError)));
+  connect(manager, SIGNAL(finished(QNetworkReply*)),
+    this, SLOT(onManagerFinished(QNetworkReply*)));
+  connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
+    this, SLOT(onManagerSslErrors()));
+  connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+    this, SLOT(onReplyError(QNetworkReply::NetworkError)));
 
-    qDebug() << "AddUserQuery did request:\n"
-             << httpQuery << jsonQuery;
+  qDebug() << "AddUserQuery did request:\n"
+    << httpQuery << jsonQuery;
 }
+
 
 void AddUserQuery::onManagerFinished(QNetworkReply *reply)
 {
-    QByteArray jsonResponseByteArray = reply->readAll();
+  QByteArray jsonResponseByteArray = reply->readAll();
 
-    if (jsonResponseByteArray.size() > 0)
+  if (jsonResponseByteArray.size() > 0)
+  {
+    QString jsonResponse(jsonResponseByteArray);
+    qDebug() << "Gotten response (json): " << jsonResponse;
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
+    QString status("Error");
+    QString auth_token("");
+    if (!ok)
     {
-        QString jsonResponse(jsonResponseByteArray);
-        qDebug() << "Gotten response (json): " << jsonResponse;
-        QJson::Parser parser;
-        bool ok;
-        QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
-        QString status("Error");
-        QString auth_token("");
-        if (!ok)
-        {
-            qFatal("An error occured during parsing json with user name and password");
-        }
-        else
-        {
-            status = result["status"].toString();
-            auth_token = result["auth_token"].toString();
-        }
-
-        emit responseReceived(status, auth_token);
+      qFatal("An error occured during parsing json with user name and password");
     }
+    else
+    {
+      status = result["status"].toString();
+      auth_token = result["auth_token"].toString();
+    }
+
+    emit responseReceived(status, auth_token);
+  }
 }
+
 
 void AddUserQuery::onReplyError(QNetworkReply::NetworkError error)
 {
-    qDebug("Network error: %d \n", error);
+  qDebug("Network error: %d \n", error);
 }
+
 
 void AddUserQuery::onManagerSslErrors()
 {
-    qDebug("ssl error \n");
+  qDebug("ssl error \n");
 }
+
 
 /* ===[ End of file $HeadURL$ ]=== */

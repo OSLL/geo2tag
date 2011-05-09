@@ -41,42 +41,42 @@ class CPtr
 {
   T *m_p;
 
-protected:
-  void setPtr(T* p)
-  {
-    m_p=p;
-  }
+  protected:
+    void setPtr(T* p)
+    {
+      m_p=p;
+    }
 
-public:
-  typedef T Type;
+  public:
+    typedef T Type;
 
-  CPtr(T *p=NULL): m_p(p)
-  {
-  }
+    CPtr(T *p=NULL): m_p(p)
+    {
+    }
 
-  operator T*() const
-  {
-    return m_p;
-  }
+    operator T*() const
+    {
+      return m_p;
+    }
 
-  T* operator ->() const
-  {
-//    if(m_p==NULL)
-//      throw null-pointer-exception
-    return m_p;
-  }
+    T* operator ->() const
+    {
+      //    if(m_p==NULL)
+      //      throw null-pointer-exception
+      return m_p;
+    }
 
-  template<typename NewType>
-  NewType dynamicCast() const
-  {
-    return dynamic_cast<NewType>(m_p);
-  }
+    template<typename NewType>
+      NewType dynamicCast() const
+    {
+      return dynamic_cast<NewType>(m_p);
+    }
 
-  template<typename NewType>
-  NewType staticCast() const
-  {
-    return static_cast<NewType>(m_p);
-  }
+    template<typename NewType>
+      NewType staticCast() const
+    {
+      return static_cast<NewType>(m_p);
+    }
 };
 
 /*!
@@ -103,54 +103,54 @@ class CCntPtr: public CPtr<T>
       p->ref(1);
   }
 
-public:
-  CCntPtr()
-  {
-  }
+  public:
+    CCntPtr()
+    {
+    }
 
-  CCntPtr(T *p)
-  {
-    init(p);
-  }
+    CCntPtr(T *p)
+    {
+      init(p);
+    }
 
-  CCntPtr(const CCntPtr& p): CPtr<T>()
-  {
-    init(p);
-  }
+    CCntPtr(const CCntPtr& p): CPtr<T>()
+    {
+      init(p);
+    }
 
-  ~CCntPtr()
-  {
-    release();
-  }
+    ~CCntPtr()
+    {
+      release();
+    }
 
-  template<typename Y>
-  operator CCntPtr<Y>() const
-  {
-    return CCntPtr<Y>((Y*)(*this));
-  }
+    template<typename Y>
+      operator CCntPtr<Y>() const
+    {
+      return CCntPtr<Y>((Y*)(*this));
+    }
 
-  /*!
-   * \brief оператор присваивания.
-   *
-   * освобождает предыдущий объект.
-   */
-  CCntPtr& operator=(CCntPtr a)
-  {
-    T* p=*this;
-    setPtr(a);
-    a.setPtr(p);
-    return *this;
-  }
+    /*!
+     * \brief оператор присваивания.
+     *
+     * освобождает предыдущий объект.
+     */
+    CCntPtr& operator=(CCntPtr a)
+    {
+      T* p=*this;
+      setPtr(a);
+      a.setPtr(p);
+      return *this;
+    }
 
-  /*!
-   * \brief освобождение объекта на который мы указываем
-   */
-  void release()
-  {
-    if(*this!=NULL)
-      (*this)->ref(-1);
-    this->setPtr(NULL);
-  }
+    /*!
+     * \brief освобождение объекта на который мы указываем
+     */
+    void release()
+    {
+      if(*this!=NULL)
+        (*this)->ref(-1);
+      this->setPtr(NULL);
+    }
 };
 
 template<class T>
@@ -159,11 +159,13 @@ CCntPtr<T> makeCntPtr(T *p)
   return CCntPtr<T>(p);
 }
 
+
 template<typename NewType,typename T>
 NewType staticCast(const CPtr<T>& p)
 {
   return p.template staticCast<NewType>();
 }
+
 
 template<typename NewType,typename T>
 NewType dynamicCast(const CPtr<T>& p)
@@ -171,4 +173,6 @@ NewType dynamicCast(const CPtr<T>& p)
   return p.template dynamicCast<NewType>();
 }
 
-#endif // PTR_H
+
+// PTR_H
+#endif

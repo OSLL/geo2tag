@@ -6,10 +6,10 @@
 
 struct Status
 {
-    QDateTime datetime;
-    QString status;
-    QString description;
-    bool valid;
+  QDateTime datetime;
+  QString status;
+  QString description;
+  bool valid;
 };
-
-#endif /* STATUS_H */
+/* STATUS_H */
+#endif

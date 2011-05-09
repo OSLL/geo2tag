@@ -13,44 +13,45 @@
 
 class UpdateThread: public QThread
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QSharedPointer<Channels>     m_channelsContainer;
-    QSharedPointer<DataMarks>    m_tagsContainer;
-    QSharedPointer<Users>        m_usersContainer;
-    QSharedPointer<TimeSlots>    m_timeSlotsContainer;
-    QSharedPointer<DataChannels> m_dataChannelsMap;
+  QSharedPointer<DataMarks>    m_tagsContainer;
+  QSharedPointer<Users>        m_usersContainer;
+  QSharedPointer<TimeSlots>    m_timeSlotsContainer;
+  QSharedPointer<DataChannels> m_dataChannelsMap;
 
-    QSqlDatabase m_database;
+  QSqlDatabase m_database;
 
-    QReadWriteLock m_updateLock; //will be locked when containers is being updated
+  //will be locked when containers is being updated
+  QReadWriteLock m_updateLock;
 
-    void loadUsers(Users &);
-    void loadTags(DataMarks &);
-    void loadChannels(Channels &);
-    void loadTimeSlots(TimeSlots &);
-    void updateReflections(DataMarks&, Users&, Channels&, TimeSlots&);
+  void loadUsers(Users &);
+  void loadTags(DataMarks &);
+  void loadChannels(Channels &);
+  void loadTimeSlots(TimeSlots &);
+  void updateReflections(DataMarks&, Users&, Channels&, TimeSlots&);
 
-    void run();
+  void run();
 
-public:
+  public:
     UpdateThread(
-            const QSqlDatabase &db,
-            const QSharedPointer<DataMarks>& tags,
-            const QSharedPointer<Users>& users,
-            const QSharedPointer<Channels>& channels,
-            const QSharedPointer<TimeSlots>& timeSlots,
-            const QSharedPointer<DataChannels>& dataChannelsMap,
-            QObject *parent = 0);
+      const QSqlDatabase &db,
+      const QSharedPointer<DataMarks>& tags,
+      const QSharedPointer<Users>& users,
+      const QSharedPointer<Channels>& channels,
+      const QSharedPointer<TimeSlots>& timeSlots,
+      const QSharedPointer<DataChannels>& dataChannelsMap,
+      QObject *parent = 0);
 
     void lockWriting();
 
     void unlockWriting();
 
-signals:
+    signals:
 
-public slots:
+  public slots:
 
 };
-
-#endif // UPDATETHREAD_H
+// UPDATETHREAD_H
+#endif

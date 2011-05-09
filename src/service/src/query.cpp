@@ -98,20 +98,26 @@ Query::Query(const QString &s/*,Stream& stm*/)
 //    else  m_type=UNKNOWN;
 }
 
+
 const QString& Query::getParam(const QString& param) const
 {
   static QString nothing("");
   if(m_params.count(param))
     return m_params.find(param)->second;
- return nothing;
+  return nothing;
 }
 
-QueryType Query::getType() const{
+
+QueryType Query::getType() const
+{
   return m_type;
 }
 
 
-const QStringstream& Query::getStream() const{
+const QStringstream& Query::getStream() const
+{
   return m_query;
 }
+
+
 /* ===[ End of file  ]=== */

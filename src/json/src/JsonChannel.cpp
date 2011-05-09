@@ -45,24 +45,28 @@
 qlonglong JsonChannel::globalChannelId = 0;
 
 JsonChannel::JsonChannel(const QString &name,
-                         const QString &description,
-                         const QString &url):
+const QString &description,
+const QString &url):
 Channel(name, description, url), m_id(globalChannelId++)
 {
 }
 
+
 qlonglong JsonChannel::getId() const
 {
-    return m_id;
+  return m_id;
 }
+
 
 void JsonChannel::setId(qlonglong id)
 {
-    m_id=id;
+  m_id=id;
 }
+
 
 JsonChannel::~JsonChannel()
 {
 }
+
 
 /* ===[ End of file ]=== */

@@ -1,0 +1,8 @@
+/tmp/wikigpsTracker.log {
+	compress
+	rotate 3
+	daily
+	size 10M
+	missingok
+	create 777 user users
+}

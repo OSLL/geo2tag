@@ -29,14 +29,14 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file Picture.cpp
  * \brief Picture implementation
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 #include "Picture.h"
@@ -55,7 +55,6 @@ namespace common
   {
   }
 
-
   Picture::Type Picture::getType() const
   {
     return UNKNOWN;
@@ -65,6 +64,7 @@ namespace common
   {
 
   }
-} // namespace common
+}                                       // namespace common
+
 
 /* ===[ End of file  ]=== */

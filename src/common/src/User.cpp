@@ -43,55 +43,65 @@
 #include <algorithm>
 
 User::User(const QString& name, const QString& pass):
-        m_login(name),
-        m_password(pass),
-        m_channels(new Channels())
+m_login(name),
+m_password(pass),
+m_channels(new Channels())
 {
 }
+
 
 void User::subscribe(const QSharedPointer<Channel>& channel)
 {
-    if(!m_channels->exist(channel->getId()))
-        m_channels->push_back(channel);
+  if(!m_channels->exist(channel->getId()))
+    m_channels->push_back(channel);
 }
+
 
 void User::unsubscribe(const QSharedPointer<Channel>& channel)
 {
-    m_channels->erase(channel);
+  m_channels->erase(channel);
 }
+
 
 const QString& User::getLogin() const
 {
-    return m_login;
+  return m_login;
 }
+
 
 const QString& User::getToken() const
 {
-    return m_token;
+  return m_token;
 }
+
 
 const QString& User::getPassword() const
 {
-    return m_password;
+  return m_password;
 }
+
 
 const QSharedPointer<Channels> User::getSubscribedChannels() const
 {
-    return m_channels;
+  return m_channels;
 }
+
 
 void User::setPassword(QString password)
 {
-    m_password = password;
+  m_password = password;
 }
+
 
 void User::setToken(const QString &token)
 {
-    m_token = token;
+  m_token = token;
 }
+
 
 User::~User()
 {
 }
+
 
 /* ===[ End of file ]=== */

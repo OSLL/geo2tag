@@ -38,29 +38,28 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _ChannelInternal_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 #define _ChannelInternal_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 
 #include "Channel.h"
 
-    class DbChannel: public Channel
-    {
-        qlonglong m_id;
+class DbChannel: public Channel
+{
+  qlonglong m_id;
 
-    public:
-        DbChannel(qlonglong id,
-                const QString &name,
-                const QString &description,
-                const QString &url="");
+  public:
+    DbChannel(qlonglong id,
+      const QString &name,
+      const QString &description,
+      const QString &url="");
 
-        qlonglong getId() const;
+    qlonglong getId() const;
 
-        void setId(qlonglong id);
+    void setId(qlonglong id);
 
-        virtual ~DbChannel();
-    };
-
-#endif //_ChannelInternal_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
+    virtual ~DbChannel();
+};
+//_ChannelInternal_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

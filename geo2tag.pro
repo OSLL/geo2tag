@@ -4,7 +4,7 @@ include(config.pri)
 
 SUBDIRS = src  
 
-CONFIG += mobility
+CONFIG += mobility ordered
 MOBILITY = location
 
 QMAKE_CFLAGS_DEBUG += "-g3 -Werror"

@@ -1,7 +1,10 @@
 TEMPLATE = subdirs
 include(../config.pri)
 
+
+CONFIG += ordered
 SUBDIRS = common
+
 
 maemo5: {
   SUBDIRS += maps \
@@ -13,11 +16,12 @@ maemo5: {
 
 linux: {
   SUBDIRS += \
-             json \
+             json json/tst \
              http_requests \
-             service \
              maps \ 
-	     tracker 
+	     tracker \
+             service \
+	     common/tst
 }
 
 symbian: {

@@ -41,76 +41,88 @@
 #include <QDebug>
 #include "Channel.h"
 
-    Channel::Channel(const QString &name,
-                     const QString &description,
-                     const QString &url):
-                            m_name(name),
-                            m_description(description),
-                            m_url(url),
-                            m_isDisplayed(true)
-    {
-        m_activeRadius = 5.0; // 5 km
-        m_timeSlot = QSharedPointer<TimeSlot>(NULL);       
-    }
+Channel::Channel(const QString &name,
+const QString &description,
+const QString &url):
+m_name(name),
+m_description(description),
+m_url(url),
+m_isDisplayed(true)
+{
+  m_activeRadius = 5.0;                 // 5 km
+  m_timeSlot = QSharedPointer<TimeSlot>(NULL);
+}
 
-    const QString& Channel::getDescription() const
-    {
-        return m_description;
-    }
 
-    const QString& Channel::getName() const
-    {
-        return m_name;
-    }
+const QString& Channel::getDescription() const
+{
+  return m_description;
+}
 
-    void Channel::setDescription(const QString& description)
-    {
-        m_description = description;
-    }
 
-    const QString& Channel::getUrl() const
-    {
-        return m_url;
-    }
+const QString& Channel::getName() const
+{
+  return m_name;
+}
 
-    void Channel::setUrl(const QString& url)
-    {
-        m_url = url;
-    }
 
-    bool Channel::isDisplayed() const
-    {
-        return m_isDisplayed;
-    }
+void Channel::setDescription(const QString& description)
+{
+  m_description = description;
+}
 
-    void Channel::setDisplayed(bool fl)
-    {
-        m_isDisplayed = fl;
-    }
 
-    void Channel::setRadius(const double& radius)
-    {
-        m_activeRadius = radius;
-    }
+const QString& Channel::getUrl() const
+{
+  return m_url;
+}
 
-    double Channel::getRadius() const
-    {
-        return m_activeRadius;
-    }
 
-    void Channel::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
-    {
-        m_timeSlot = timeSlot;
-    }
+void Channel::setUrl(const QString& url)
+{
+  m_url = url;
+}
 
-    QSharedPointer<TimeSlot> Channel::getTimeSlot() const
-    {
-        return m_timeSlot;
-    }
 
-    Channel::~Channel()
-    {
-    }
+bool Channel::isDisplayed() const
+{
+  return m_isDisplayed;
+}
+
+
+void Channel::setDisplayed(bool fl)
+{
+  m_isDisplayed = fl;
+}
+
+
+void Channel::setRadius(const double& radius)
+{
+  m_activeRadius = radius;
+}
+
+
+double Channel::getRadius() const
+{
+  return m_activeRadius;
+}
+
+
+void Channel::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
+{
+  m_timeSlot = timeSlot;
+}
+
+
+QSharedPointer<TimeSlot> Channel::getTimeSlot() const
+{
+  return m_timeSlot;
+}
+
+
+Channel::~Channel()
+{
+}
 
 
 /* ===[ End of file ]=== */

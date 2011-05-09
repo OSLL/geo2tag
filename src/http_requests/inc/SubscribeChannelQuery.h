@@ -40,7 +40,6 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
 #define _SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
 
@@ -52,45 +51,49 @@
 
 namespace GUI
 {
-    /*!
-     * SubscribeChannelQuery class definition.
-     *
-     * The object of this class represents http query to server.
-     * This query includes json request to subscribe channel.
-     *
-     */
-    class SubscribeChannelQuery: public DefaultQuery
-    {
+  /*!
+   * SubscribeChannelQuery class definition.
+   *
+   * The object of this class represents http query to server.
+   * This query includes json request to subscribe channel.
+   *
+   */
+  class SubscribeChannelQuery: public DefaultQuery
+  {
     Q_OBJECT
 
-    QSharedPointer<User> m_user;
+      QSharedPointer<User> m_user;
     QSharedPointer<Channel> m_channel;
     QString m_status;
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
 
-private Q_SLOTS:
+    private Q_SLOTS:
 
-    virtual void processReply(QNetworkReply *reply);
+      virtual void processReply(QNetworkReply *reply);
 
-public:
+    public:
 
-        SubscribeChannelQuery(QObject *parent = 0);
+      SubscribeChannelQuery(QObject *parent = 0);
 
-        SubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
+      SubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
 
-        void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
+      void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
 
-        ~SubscribeChannelQuery();
+      ~SubscribeChannelQuery();
 
-	const QString& getStatus() const;
+      const QString& getStatus() const;
 
-    Q_SIGNALS:
-        void responseReceived();
+      Q_SIGNALS:
+      void responseReceived();
 
-    }; // class SubscribeChannelQuery
-} // namespace GUI
+      // class SubscribeChannelQuery
+  };
+  // namespace GUI
+}
 
-#endif //_SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
+
+//_SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

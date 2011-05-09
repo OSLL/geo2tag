@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file CentralWidget.cpp
  * \brief CentralWidget implementation
@@ -45,84 +45,82 @@
 
 namespace GUI
 {
-    CentralWidget::CentralWidget(QWidget *parent) : QWidget(parent)
+  CentralWidget::CentralWidget(QWidget *parent) : QWidget(parent)
+  {
+    m_palette = new QPalette(Qt::black);
+    setPalette(*m_palette);
+    m_layout = new QStackedLayout(this);
+
+    m_options = new OptionsPane(this);
+    m_mapView  = new MapPane(this);
+    m_feedView = new MarkPane(this);
+    m_channelView = new ChannelPane(this);
+    m_editor = new MarkEditor(this);
+
+    m_layout->addWidget(m_mapView);
+    m_layout->addWidget(m_feedView);
+    m_layout->addWidget(m_channelView);
+    m_layout->addWidget(m_editor);
+    m_layout->addWidget(m_options);
+
+    switchMap();
+
+    connect(m_channelView->getTagsButton(), SIGNAL(clicked()), this, SLOT(onViewTagsButtonClicked()));
+    connect(m_options, SIGNAL(sourceTypeUpdated(maps::MapLoader::SourceType)),
+      m_mapView->getMapWidget(), SLOT(setSourceType(maps::MapLoader::SourceType)));
+
+    setLayout(m_layout);
+  }
+
+  void CentralWidget::switchMap()
+  {
+    m_layout->setCurrentWidget(m_mapView);
+  }
+
+  void CentralWidget::switchFeed(const QModelIndex& index)
+  {
+    m_feedView->refresh((*OnLineInformation::getInstance().getAvailableChannels())[index.row()]);
+    QMessageBox::information(this,"Channel information",(*OnLineInformation::getInstance().getAvailableChannels())[index.row()]->getDescription());
+    m_layout->setCurrentWidget(m_feedView);
+  }
+
+  void CentralWidget::switchChannel()
+  {
+    m_layout->setCurrentWidget(m_channelView);
+  }
+
+  void CentralWidget::switchEditor()
+  {
+    m_layout->setCurrentWidget(m_editor);
+  }
+
+  void CentralWidget::setRadius()
+  {
+    //TODO: ask real raduis
+    if(m_layout->currentWidget()!=m_feedView)
     {
-      m_palette = new QPalette(Qt::black);
-      setPalette(*m_palette);
-      m_layout = new QStackedLayout(this);
-
-      m_options = new OptionsPane(this);
-      m_mapView  = new MapPane(this);
-      m_feedView = new MarkPane(this);
-      m_channelView = new ChannelPane(this);
-      m_editor = new MarkEditor(this);
-
-      
-      m_layout->addWidget(m_mapView);
-      m_layout->addWidget(m_feedView);
-      m_layout->addWidget(m_channelView);
-      m_layout->addWidget(m_editor);
-      m_layout->addWidget(m_options);
-      
-      switchMap();
-
-      connect(m_channelView->getTagsButton(), SIGNAL(clicked()), this, SLOT(onViewTagsButtonClicked()));
-      connect(m_options, SIGNAL(sourceTypeUpdated(maps::MapLoader::SourceType)),
-              m_mapView->getMapWidget(), SLOT(setSourceType(maps::MapLoader::SourceType)));
-
-      setLayout(m_layout);
+      QMessageBox::information(this,"Set channel raduis","You cannot change radius for this channel. You should select channel before.");
     }
-
-    void CentralWidget::switchMap()
+    else
     {
-      m_layout->setCurrentWidget(m_mapView); 
+      m_feedView->updateCurrentChannelRadius();
     }
+  }
 
-    void CentralWidget::switchFeed(const QModelIndex& index)
+  void CentralWidget::switchOptions()
+  {
+    m_layout->setCurrentWidget(m_options);
+  }
+
+  void CentralWidget::onViewTagsButtonClicked()
+  {
+    if (m_channelView->getListView()->currentIndex().isValid())
     {
-      m_feedView->refresh((*OnLineInformation::getInstance().getAvailableChannels())[index.row()]);
-      QMessageBox::information(this,"Channel information",(*OnLineInformation::getInstance().getAvailableChannels())[index.row()]->getDescription());
-      m_layout->setCurrentWidget(m_feedView); 
+      switchFeed(m_channelView->getListView()->currentIndex());
     }
+  }
 
-    void CentralWidget::switchChannel()
-    {
-      m_layout->setCurrentWidget(m_channelView); 
-    }
+}                                       // namespace GUI
 
-    void CentralWidget::switchEditor()
-    {
-      m_layout->setCurrentWidget(m_editor); 
-    }
-
-    void CentralWidget::setRadius()
-    {
-      //TODO: ask real raduis
-      if(m_layout->currentWidget()!=m_feedView)
-      {
-        QMessageBox::information(this,"Set channel raduis","You cannot change radius for this channel. You should select channel before.");
-      }
-      else
-      {
-        m_feedView->updateCurrentChannelRadius();
-      }
-    }
-
-    void CentralWidget::switchOptions()
-    {
-        m_layout->setCurrentWidget(m_options);
-    }
-
-    void CentralWidget::onViewTagsButtonClicked()
-    {
-        if (m_channelView->getListView()->currentIndex().isValid())
-        {
-            switchFeed(m_channelView->getListView()->currentIndex());
-        }
-    }
-
-
-
-} // namespace GUI
 
 /* ===[ End of file ]=== */

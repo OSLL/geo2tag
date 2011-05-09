@@ -14,10 +14,10 @@ int main(int argc, char **argv)
   m.m_description = "Hello";
   marks.push_back(m);
   common::Picture p = maps::MapLoaderFactory::getInstance(maps::MapLoader::GOOGLE)->getMapWithMarks(60.,30.,12,800,480,marks);
-//  maps::GoogleClientLogin query("geoblog.hackday2@gmail.com", "geo@blog");
-//  query.login();
-//  std::cerr << query.getAuthToken();
-  
+  //  maps::GoogleClientLogin query("geoblog.hackday2@gmail.com", "geo@blog");
+  //  query.login();
+  //  std::cerr << query.getAuthToken();
+
   curl_global_cleanup();
   return 0;
 }

@@ -40,7 +40,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
 #define _LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
 
@@ -50,29 +49,30 @@
 #include "User.h"
 
 /*!
-     * LoginQuery class definition.
-     *
-     * The object of this class represents http query to server.
-     * This query sends user name and password and gets auth_token.
-     *
-     */
+ * LoginQuery class definition.
+ *
+ * The object of this class represents http query to server.
+ * This query sends user name and password and gets auth_token.
+ *
+ */
 class LoginQuery: public DefaultQuery
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QString m_login;
-    QString m_password;
+  QString m_password;
 
-    QSharedPointer<User> m_user; //!< full information about user
+  //!< full information about user
+  QSharedPointer<User> m_user;
 
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
 
-private Q_SLOTS:
+  private Q_SLOTS:
 
     virtual void processReply(QNetworkReply *reply);
 
-public:
+  public:
 
     LoginQuery(const QString& login, const QString& password, QObject *parent = 0);
 
@@ -84,12 +84,13 @@ public:
 
     ~LoginQuery();
 
-Q_SIGNALS:
+    Q_SIGNALS:
 
     void connected();
 
-}; // class LoginQuery
-
-#endif //_LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
+    // class LoginQuery
+};
+//_LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
+#endif
 
 /* ===[ End of file $HeadURL$ ]=== */

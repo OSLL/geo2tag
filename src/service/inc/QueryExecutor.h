@@ -10,12 +10,12 @@
 
 class QueryExecutor : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
     QSqlDatabase m_database;
 
-    qlonglong nextKey(const QString& sequence) const;
+  qlonglong nextKey(const QString& sequence) const;
 
-public:
+  public:
 
     QueryExecutor(const QSqlDatabase &db, QObject *parent = 0);
 
@@ -26,19 +26,21 @@ public:
     qlonglong nextChannelKey() const;
     qlonglong nextTagKey() const;
     qlonglong nextTimeSlotKey() const;
+
     const QString generateNewToken(const QString& login,const QString& password) const;
 
-    bool subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel);
+    bool                     subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel);
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
-    QSharedPointer<User> insertNewUser(const QSharedPointer<User>&);
-    QSharedPointer<Channel> insertNewChannel(const QSharedPointer<Channel>&);
-    QSharedPointer<TimeSlot> insertNewTimeSlot(const QSharedPointer<TimeSlot>&);   
-    bool changeChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
+    QSharedPointer<User>     insertNewUser(const QSharedPointer<User>&);
+    QSharedPointer<Channel>  insertNewChannel(const QSharedPointer<Channel>&);
+    QSharedPointer<TimeSlot> insertNewTimeSlot(const QSharedPointer<TimeSlot>&);
+    bool                     insertNewChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
+    bool                     changeChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);
 
-signals:
+    signals:
 
-public slots:
+  public slots:
 
 };
-
-#endif // QUERYEXECUTOR_H
+// QUERYEXECUTOR_H
+#endif

@@ -51,59 +51,68 @@
 #include <syslog.h>
 
 LoginQuery::LoginQuery(const QString &login, const QString &password, QObject *parent):
-        DefaultQuery(parent), m_login(login), m_password(password)
+DefaultQuery(parent), m_login(login), m_password(password)
 {
 }
 
+
 LoginQuery::LoginQuery(QObject *parent):
-        DefaultQuery(parent)
+DefaultQuery(parent)
 {
 }
+
 
 QString LoginQuery::getUrl() const
 {
-    return LOGIN_HTTP_URL;
+  return LOGIN_HTTP_URL;
 }
+
 
 QByteArray LoginQuery::getRequestBody() const
 {
-    QSharedPointer<User> dummyUser(new JsonUser(m_login,m_password));
-    LoginRequestJSON request;
-    request.addUser(dummyUser);
-    return request.getJson();
+  QSharedPointer<User> dummyUser(new JsonUser(m_login,m_password));
+  LoginRequestJSON request;
+  request.addUser(dummyUser);
+  return request.getJson();
 }
+
 
 void LoginQuery::processReply(QNetworkReply *reply)
 {
-    LoginResponseJSON response;
-    response.parseJson(reply->readAll());
-    if(response.getStatus() == "Ok")
-    {
-        QSharedPointer<User> user = response.getUsers()->at(0);
-        m_user = QSharedPointer<User>(new JsonUser(m_login, m_password, user->getToken()));
-	syslog(LOG_INFO,"!!connected!"); 
-        Q_EMIT connected();
-    }
-    else
-    {
-        Q_EMIT errorOccured(response.getStatusMessage());
-    }
+  LoginResponseJSON response;
+  response.parseJson(reply->readAll());
+  if(response.getStatus() == "Ok")
+  {
+    QSharedPointer<User> user = response.getUsers()->at(0);
+    m_user = QSharedPointer<User>(new JsonUser(m_login, m_password, user->getToken()));
+    syslog(LOG_INFO,"!!connected!");
+    Q_EMIT connected();
+  }
+  else
+  {
+    Q_EMIT errorOccured(response.getStatusMessage());
+  }
 
 }
 
-void LoginQuery::setQuery(const QString& login, const QString& password){
-	m_login=login;
-	m_password=password;
+
+void LoginQuery::setQuery(const QString& login, const QString& password)
+{
+  m_login=login;
+  m_password=password;
 }
+
 
 QSharedPointer<User> LoginQuery::getUser() const
 {
-    return m_user;
+  return m_user;
 }
+
 
 LoginQuery::~LoginQuery()
 {
 
 }
+
 
 /* ===[ End of file $HeadURL$ ]=== */

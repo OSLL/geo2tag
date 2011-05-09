@@ -38,7 +38,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
 #define _DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
 
@@ -56,62 +55,71 @@
 #include "UpdateThread.h"
 #include "QueryExecutor.h"
 
-const QString error = QString("Error");
-const QString ok = QString("Ok");
-
 namespace common
 {
-    /*!
+  /*!
    * \brief session with database
    */
-    class DbObjectsCollection
-    {
+  class DbObjectsCollection
+  {
 
-        QSharedPointer<Channels>     m_channelsContainer;
-        QSharedPointer<DataMarks>    m_tagsContainer;
-        QSharedPointer<Users>        m_usersContainer;
-        QSharedPointer<TimeSlots>    m_timeSlotsContainer;
-        QSharedPointer<DataChannels> m_dataChannelsMap;        
+    QSharedPointer<Channels>     m_channelsContainer;
+    QSharedPointer<DataMarks>    m_tagsContainer;
+    QSharedPointer<Users>        m_usersContainer;
+    QSharedPointer<TimeSlots>    m_timeSlotsContainer;
+    QSharedPointer<DataChannels> m_dataChannelsMap;
 
-        UpdateThread *              m_updateThread;
+    UpdateThread *              m_updateThread;
 
-        typedef QByteArray (DbObjectsCollection::*ProcessMethod)(const QByteArray&);
+    typedef QByteArray (DbObjectsCollection::*ProcessMethod)(const QByteArray&);
 
-        QMap<QString, ProcessMethod> m_processors;
+    QMap<QString, ProcessMethod> m_processors;
 
-        QueryExecutor *             m_queryExecutor;
+    QueryExecutor *             m_queryExecutor;
 
-        DbObjectsCollection();
+    static QSharedPointer<TimeSlot> defaultTimeSlot;
 
-        QSharedPointer<User> findUserFromToken(const QSharedPointer<User>&) const;
+    static const qulonglong A_YEAR_IN_ms;
 
-        QByteArray processLoginQuery(const QByteArray&);
-        QByteArray processSubscribedChannelsQuery(const QByteArray&);
-        QByteArray processAddNewMarkQuery(const QByteArray&);
-        QByteArray processRssFeedQuery(const QByteArray&);
-        QByteArray processSubscribeQuery(const QByteArray&);
-        QByteArray processAddUserQuery(const QByteArray&);
-        QByteArray processAddChannelQuery(const QByteArray&);
-        QByteArray processGetTimeSlotQuery(const QByteArray&);
-        QByteArray processSetTimeSlotQuery(const QByteArray&);
+    static const QString error;
+    static const QString ok;
+
+    DbObjectsCollection();
+
+    QSharedPointer<User> findUserFromToken(const QSharedPointer<User>&) const;
+
+    QByteArray processLoginQuery(const QByteArray&);
+    QByteArray processSubscribedChannelsQuery(const QByteArray&);
+    QByteArray processAddNewMarkQuery(const QByteArray&);
+    QByteArray processRssFeedQuery(const QByteArray&);
+    QByteArray processSubscribeQuery(const QByteArray&);
+    QByteArray processAddUserQuery(const QByteArray&);
+    QByteArray processAddChannelQuery(const QByteArray&);
+    QByteArray processGetTimeSlotQuery(const QByteArray&);
+    QByteArray processSetTimeSlotQuery(const QByteArray&);
+
+    QByteArray setDefaultTimeSlotValueForChannels();
 
     public:
 
-        static DbObjectsCollection& getInstance();
+      static DbObjectsCollection& getInstance();
 
-        QByteArray process(const QString& queryType, const QByteArray& body);
+      QByteArray process(const QString& queryType, const QByteArray& body);
 
-        ~DbObjectsCollection();
-
+      ~DbObjectsCollection();
 
     private:
-        DbObjectsCollection(const DbObjectsCollection& obj);
-        DbObjectsCollection& operator=(const DbObjectsCollection& obj);
+      DbObjectsCollection(const DbObjectsCollection& obj);
+      DbObjectsCollection& operator=(const DbObjectsCollection& obj);
 
-    }; // class DbSession
+      // class DbSession
+  };
 
-} // namespace common
+  // namespace common
+}
 
-#endif //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+
+//_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+#endif
 
 /* ===[ End of file ]=== */

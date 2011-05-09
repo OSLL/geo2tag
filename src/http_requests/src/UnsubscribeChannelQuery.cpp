@@ -30,7 +30,7 @@
  */
 
 /*! ---------------------------------------------------------------
- * $Id$ 
+ * $Id$
  *
  * \file UnsubscribeChannelQuery.cpp
  * \brief UnsubscribeChannelQuery implementation
@@ -48,59 +48,62 @@
 namespace GUI
 {
 
-    UnsubscribeChannelQuery::UnsubscribeChannelQuery(QObject *parent)
-        : DefaultQuery(parent)
-    {
-    }
+  UnsubscribeChannelQuery::UnsubscribeChannelQuery(QObject *parent)
+    : DefaultQuery(parent)
+  {
+  }
 
-    UnsubscribeChannelQuery::UnsubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent)
-                : DefaultQuery(parent),m_user(user),m_channel(channel)
-    {
-    }
+  UnsubscribeChannelQuery::UnsubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent)
+    : DefaultQuery(parent),m_user(user),m_channel(channel)
+  {
+  }
 
-    void UnsubscribeChannelQuery::setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel)
-    {
-	m_user=user;
-	m_channel=channel;
-    }
+  void UnsubscribeChannelQuery::setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel)
+  {
+    m_user=user;
+    m_channel=channel;
+  }
 
-    UnsubscribeChannelQuery::~UnsubscribeChannelQuery()
-    {
-    }
+  UnsubscribeChannelQuery::~UnsubscribeChannelQuery()
+  {
+  }
 
-    QString UnsubscribeChannelQuery::getUrl() const
-    {
-	return UNSUBSCRIBE_HTTP_URL;
-    }
+  QString UnsubscribeChannelQuery::getUrl() const
+  {
+    return UNSUBSCRIBE_HTTP_URL;
+  }
 
-    QByteArray UnsubscribeChannelQuery::getRequestBody() const
-    {
-        SubscribeChannelRequestJSON request(m_channel,m_user);
-	return request.getJson();
-    }
+  QByteArray UnsubscribeChannelQuery::getRequestBody() const
+  {
+    SubscribeChannelRequestJSON request(m_channel,m_user);
+    return request.getJson();
+  }
 
-    const QString& UnsubscribeChannelQuery::getStatus() const
-    {
-	return m_status;
-    }
+  const QString& UnsubscribeChannelQuery::getStatus() const
+  {
+    return m_status;
+  }
 
-    void UnsubscribeChannelQuery::processReply(QNetworkReply *reply)
+  void UnsubscribeChannelQuery::processReply(QNetworkReply *reply)
+  {
+    DefaultResponseJSON response;
+    response.parseJson(reply->readAll());
+    if(response.getStatus() == "Ok")
     {
-	DefaultResponseJSON response;
-	response.parseJson(reply->readAll());
-	if(response.getStatus() == "Ok"){
-		m_status="Ok";
-		Q_EMIT responseReceived();
-	}
-	else {
-		Q_EMIT errorOccured(response.getStatusMessage());
-	}
+      m_status="Ok";
+      Q_EMIT responseReceived();
     }
-
-    UnsubscribeChannelQuery::~UnsubscribeChannelQuery()
+    else
     {
+      Q_EMIT errorOccured(response.getStatusMessage());
     }
+  }
 
-} // namespace GUI
+  UnsubscribeChannelQuery::~UnsubscribeChannelQuery()
+  {
+  }
+
+}                                       // namespace GUI
+
 
 /* ===[ End of file $HeadURL$ ]=== */

@@ -36,16 +36,18 @@
 #include <QSpinBox>
 namespace GUI
 {
-    class RadiusEditor: public QDialog
-    {
-      Q_OBJECT;
-      QSharedPointer<Channel> m_channel;
-      QSpinBox *m_value;
+  class RadiusEditor: public QDialog
+  {
+    Q_OBJECT;
+    QSharedPointer<Channel> m_channel;
+    QSpinBox *m_value;
     public:
       RadiusEditor(QWidget *parent, QSharedPointer<Channel> channel);
     public slots:
       virtual void accept();
-    };
+  };
 }
 
-#endif // RADIUSEDITOR_H
+
+// RADIUSEDITOR_H
+#endif

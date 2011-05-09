@@ -29,14 +29,14 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! ---------------------------------------------------------------
- *  
+ *
  *
  * \file CurlInitException.cpp
  * \brief CurlInitException implementation
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag 
+ *  PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 #include <string>
@@ -58,6 +58,7 @@ namespace exception
   {
     return "CURL init Failed";
   }
-} // namespace exception
+}                                       // namespace exception
+
 
 /* ===[ End of file  ]=== */
