@@ -36,7 +36,6 @@
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-
 #include <QObject>
 #include <QtTest/QtTest>
 #include <QSignalSpy>
@@ -50,29 +49,29 @@ namespace Test
     Q_OBJECT;
 
     Channel_TestObj *m_tstObject;
-  
-  public:
-    
-    Channel_Test(QObject *parent = NULL) : QObject(parent)
-    {
-      m_tstObject = new Channel_TestObj;
-    }
 
-    ~Channel_Test()
-    {
-      delete m_tstObject;
-      m_tstObject = NULL;
-    }
+    public:
 
-  private slots:
-  
-    void defaultTimeSlot()
-    {
-      QVERIFY( m_tstObject->timeSlotIsDefault() );
+      Channel_Test(QObject *parent = NULL) : QObject(parent)
+      {
+        m_tstObject = new Channel_TestObj;
+      }
 
-      QCOMPARE( m_tstObject->getTimeSlot()->getSlot(), Channel::DEFAULT_TIME_SLOT_VALUE_MS );
-    }
+      ~Channel_Test()
+      {
+        delete m_tstObject;
+        m_tstObject = NULL;
+      }
 
-  }; // class Channel_Test
+    private slots:
 
-} // end of namespace Test
+      void defaultTimeSlot()
+      {
+        QVERIFY( m_tstObject->timeSlotIsDefault() );
+
+        QCOMPARE( m_tstObject->getTimeSlot()->getSlot(), Channel::DEFAULT_TIME_SLOT_VALUE_MS );
+      }
+
+  };                                    // class Channel_Test
+
+}                                       // end of namespace Test

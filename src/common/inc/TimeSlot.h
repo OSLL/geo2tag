@@ -51,7 +51,7 @@ class TimeSlot: public QObject
 {
   Q_OBJECT
 
-  qulonglong m_slot;   // time slot
+    qulonglong m_slot;                  // time slot
 
   public:
 

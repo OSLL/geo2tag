@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _Channel_TestObj_H_B71618F1_0BCC_4B0D_99EE_4503CECA7B83_INCLUDED_
 #define _Channel_TestObj_H_B71618F1_0BCC_4B0D_99EE_4503CECA7B83_INCLUDED_
 
@@ -47,7 +46,7 @@
 
 namespace Test
 {
- /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
@@ -56,23 +55,22 @@ namespace Test
 
     Q_OBJECT
 
-  public:
-    Channel_TestObj() : Channel("test","description")
-    {
-    }
+      public:
+      Channel_TestObj() : Channel("test","description")
+      {
+      }
 
-    ~Channel_TestObj()
-    {
-    }
+      ~Channel_TestObj()
+      {
+      }
 
-    virtual qlonglong getId() const;
-    
-  private:    
-    Channel_TestObj(const Channel_TestObj& obj);
-    Channel_TestObj& operator=(const Channel_TestObj& obj);
+      virtual qlonglong getId() const;
 
-  }; // class Channel_TestObj
-  
-} // namespace Test
+    private:
+      Channel_TestObj(const Channel_TestObj& obj);
+      Channel_TestObj& operator=(const Channel_TestObj& obj);
 
-#endif //_Channel_TestObj_H_B71618F1_0BCC_4B0D_99EE_4503CECA7B83_INCLUDED_
+  };                                    // class Channel_TestObj
+
+}                                       // namespace Test
+#endif                                  //_Channel_TestObj_H_B71618F1_0BCC_4B0D_99EE_4503CECA7B83_INCLUDED_
