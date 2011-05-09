@@ -197,12 +197,14 @@ void TrackerDaemon::onConnected()
 
 void TrackerDaemon::onTagAdded()
 {
-  qDebug() << "Mark added successfuly";
+  qDebug() << "TrackerDaemon::onTagAdded";
   QEventLoop eventLoop;
   QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
+
   if(!m_pauseFlag && m_isConnected)
   {
     qDebug() << "Setting and adding new tag";
+
     if(m_tagQuery)
     {
       while (!common::GpsInfo::getInstance().isReady() || !m_netManager.isOnline())
@@ -214,6 +216,7 @@ void TrackerDaemon::onTagAdded()
         eventLoop.processEvents(QEventLoop::ExcludeUserInputEvents, 1000);
         QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
       }
+
       m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());
       m_tagQuery->getTag()->setLatitude(common::GpsInfo::getInstance().getLatitude());
       m_tagQuery->getTag()->setLongitude(common::GpsInfo::getInstance().getLongitude());
@@ -224,6 +227,10 @@ void TrackerDaemon::onTagAdded()
         << ", longitude " << m_tagQuery->getTag()->getLongitude();
       m_tagQuery->doRequest();
     }
+  }
+  else
+  {
+     qDebug() << "Nothing to do: m_pauseFlag ==" << m_pauseFlag << ", m_isConnected ==" << m_isConnected;
   }
 }
 

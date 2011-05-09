@@ -36,15 +36,12 @@
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-
 #include <QObject>
 #include <QtTest/QtTest>
 #include <QSignalSpy>
 
 //include Application class
 #include "../TrackerDaemon.h"
-
-
 
 namespace Test
 {
@@ -53,28 +50,28 @@ namespace Test
     Q_OBJECT;
 
     TrackerDaemon *m_tstObject;
-  
-  public:
-    
-    TrackerDaemon_Test()
-    {
-      m_tstObject = new TrackerDaemon();
-    }
 
-    ~TrackerDaemon_Test()
-    {
-      delete m_tstObject;
-      m_tstObject = NULL;
-    }
+    public:
 
-  private slots:
-  
-    void test1()
-    {
+      TrackerDaemon_Test()
+      {
+        m_tstObject = new TrackerDaemon();
+      }
 
-      m_tstObject->startTracking();
-    }
-  
-  }; // class TrackerDaemon_Test
+      ~TrackerDaemon_Test()
+      {
+        delete m_tstObject;
+        m_tstObject = NULL;
+      }
 
-} // end of namespace Test
+    private slots:
+
+      void test1()
+      {
+
+        m_tstObject->startTracking();
+      }
+
+  };                                    // class TrackerDaemon_Test
+
+}                                       // end of namespace Test
