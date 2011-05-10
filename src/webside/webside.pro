@@ -15,6 +15,12 @@ CONFIG += no_keywords
 INCLUDEPATH += /usr/include/Wt
 LIBS += -lwt -lwtfcgi -lcommon -lwikigpsHttp -lwikigpsJson -lboost_signals 
 
+target.path = /opt/geo2tag/
+
+lighttpd_conf.files = webside.conf
+lighttpd_conf.path = /etc/lighttpd/conf-enabled
+
+INSTALLS += target lighttpd
 
 # Common library
 INCLUDEPATH += ../common/inc \
