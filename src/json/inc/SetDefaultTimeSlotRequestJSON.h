@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLLf osll@osllff.spb.ru
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,57 +28,17 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
+/*!
+ * \file SetDefaultTimeSlotRequestJSON.h
+ * \brief Header of SetDefaultTimeSlotRequestJSON
  *
  *
- * \file ChannelInternal.cpp
- * \brief ChannelInternal implementation
- *
- * File description
- *
- * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "ChannelInternal.h"
-#include "DataMarkInternal.h"
-#include "DbSession.h"
-#include "DynamicCastFailure.h"
-#include "JsonTimeSlot.h"
-#include <syslog.h>
+#ifndef _SETDEFAULTTIMESLOTREQUESTJSON_H_3cbedb45_048b_4a77_9468_45a42ba5a392_
+#define _SETDEFAULTTIMESLOTREQUESTJSON_H_3cbedb45_048b_4a77_9468_45a42ba5a392_
 
-const qulonglong DbChannel::DEFAULT_TIME_SLOT_VALUE_ms = 31536000000;
+#include "GetTimeSlotRequestJSON.h"
 
-DbChannel::DbChannel(qlonglong id,
-const QString &name,
-const QString &description,
-const QString &url):
-Channel(name, description, url), m_id(id)
-{
-  this->setTimeSlot(QSharedPointer<TimeSlot> (new JsonTimeSlot(Channel::DEFAULT_TIME_SLOT_VALUE_MS)));
-}
-
-
-qlonglong DbChannel::getId() const
-{
-  return m_id;
-}
-
-
-qulonglong DbChannel::getDefTimeSlotValue()
-{
-  return Channel::DEFAULT_TIME_SLOT_VALUE_MS;
-}
-
-
-void DbChannel::setId(qlonglong id)
-{
-  m_id=id;
-}
-
-
-DbChannel::~DbChannel()
-{
-}
-
-
-/* ===[ End of file ]=== */
+typedef GetTimeSlotRequestJSON SetDefaultTimeSlotRequestJSON;
+#endif                                  // _SETDEFAULTTIMESLOTREQUESTJSON_H_3cbedb45_048b_4a77_9468_45a42ba5a392_

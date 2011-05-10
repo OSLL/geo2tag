@@ -75,6 +75,9 @@
 #include "SetTimeSlotMarkRequestJSON.h"
 #include "SetTimeSlotMarkResponseJSON.h"
 
+#include "SetDefaultTimeSlotRequestJSON.h"
+#include "SetDefaultTimeSlotResponseJSON.h"
+
 #include "SetDefaultTimeSlotMarkRequestJSON.h"
 #include "SetDefaultTimeSlotMarkResponseJSON.h"
 
@@ -110,6 +113,8 @@ namespace common
     m_processors.insert("setTimeSlot", &DbObjectsCollection::processSetTimeSlotQuery);
     m_processors.insert("getTimeSlotMark", &DbObjectsCollection::processGetTimeSlotMarkQuery);
     m_processors.insert("setTimeSlotMark", &DbObjectsCollection::processSetTimeSlotMarkQuery);
+    m_processors.insert("setDefaultTimeSlot", &DbObjectsCollection::processSetDefaultTimeSlotQuery);
+    m_processors.insert("setDefaultTimeSlotMark", &DbObjectsCollection::processSetDefaultTimeSlotMarkQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -508,10 +513,6 @@ namespace common
       return answer;
     }
 
-    //    syslog(LOG_INFO, "Setting default time slot value for the channel");
-    //    if (!defaultTimeSlot.isNull())
-    //      addedChannel->setTimeSlot(defaultTimeSlot);
-
     m_updateThread->lockWriting();
     // Here will be adding user into user container
     m_channelsContainer->push_back(addedChannel);
@@ -677,8 +678,7 @@ namespace common
         result = m_queryExecutor->changeChannelTimeSlot(realChannel, addedTimeSlot);
       else if ( (dummyTimeSlot->getSlot() == DbChannel::getDefTimeSlotValue()) ||
         (realTimeSlot->getSlot() == DbChannel::getDefTimeSlotValue()) )
-                                        //TODO: will be implement later
-        processSetDefaultTimeSlotQuery(data);
+        return processSetDefaultTimeSlotQuery(data);
       else if (realTimeSlot->getSlot() != DbChannel::getDefTimeSlotValue())
         result = m_queryExecutor->changeChannelTimeSlot(realChannel, realTimeSlot);
     }
@@ -882,9 +882,76 @@ namespace common
     return answer;
   }
 
-  QByteArray DbObjectsCollection::processSetDefaultTimeSlotQuery(const QByteArray&)
+  QByteArray DbObjectsCollection::processSetDefaultTimeSlotQuery(const QByteArray& data)
   {
-    return 0;
+    syslog(LOG_INFO, "starting SetDefaultTimeSlotQuery processing");
+    SetDefaultTimeSlotRequestJSON request;
+    syslog(LOG_INFO, " SetDefaultTimeSlotRequestJSON created, now create SetDefaultTimeSlotResponseJSON ");
+    SetDefaultTimeSlotResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    syslog(LOG_INFO, "Starting Json parsing for SetDefaultTimeSlotQuery");
+    request.parseJson(data);
+    syslog(LOG_INFO, "Json parsed for SetDefaultTimeSlotQuery");
+
+    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+    if(realUser.isNull())
+    {
+      response.setStatus(error);
+      response.setStatusMessage("Wrong authentification key");
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
+    QSharedPointer<Channel> realChannel;// Null pointer
+    QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+    for(int i=0; i<currentChannels.size(); i++)
+    {
+      if(currentChannels.at(i)->getName() == dummyChannel->getName())
+      {
+        realChannel = currentChannels.at(i);
+      }
+    }
+    if(realChannel.isNull())
+    {
+      response.setStatus(error);
+      response.setStatusMessage("Wrong channel's' name!");
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    syslog(LOG_INFO, "Sending sql request for SetDefaultTimeSlotQuery");
+
+    if (realChannel->timeSlotIsDefault())
+    {
+      response.setStatus(ok);
+      response.setStatusMessage("The channel already has default time slot value");
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    bool result = m_queryExecutor->deleteChannelTimeSlot(realChannel);
+
+    if(!result)
+    {
+      response.setStatus(error);
+      response.setStatusMessage("Internal server error ):");
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    m_updateThread->lockWriting();
+    realChannel->setTimeSlot(QSharedPointer<TimeSlot> (new JsonTimeSlot(DbChannel::getDefTimeSlotValue())));
+    realChannel->setDefaultTimeSlot(true);
+    m_updateThread->unlockWriting();
+
+    response.setStatus(ok);
+    response.setStatusMessage("Now the channel has default time slot value");
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
   }
 
   QByteArray DbObjectsCollection::processSetDefaultTimeSlotMarkQuery(const QByteArray& data)

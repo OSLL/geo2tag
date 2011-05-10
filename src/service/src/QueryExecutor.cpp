@@ -343,6 +343,31 @@ bool QueryExecutor::changeMarkTimeSlot(const QSharedPointer<DataMark>& tag, cons
 }
 
 
+bool QueryExecutor::deleteChannelTimeSlot(const QSharedPointer<Channel>& channel)
+{
+  bool result;
+  QSqlQuery deleteChannelTimeSlot(m_database);
+  deleteChannelTimeSlot.prepare("delete from channelTimeSlot where channel_id = :channel_id;");
+  deleteChannelTimeSlot.bindValue(":channel_id",channel->getId());
+
+  syslog(LOG_INFO,"Deleting channel %s (Id = %lld)", channel->getName().toStdString().c_str(), channel->getId());
+
+  m_database.transaction();
+  result=deleteChannelTimeSlot.exec();
+  if(!result)
+  {
+    syslog(LOG_INFO,"Rollback for deleteChannelTimeSlot sql query");
+    m_database.rollback();
+  }
+  else
+  {
+    syslog(LOG_INFO,"Commit for deleteChannelTimeSlot sql query");
+    m_database.commit();
+  }
+  return result;
+}
+
+
 bool QueryExecutor::deleteMarkTimeSlot(const QSharedPointer<DataMark>& tag)
 {
   bool result;
