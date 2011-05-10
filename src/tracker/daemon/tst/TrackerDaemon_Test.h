@@ -66,7 +66,7 @@ namespace Test
 
     private slots:
 
-      void test1()
+      void testPause()
       {
         m_tstObject->run();
       }

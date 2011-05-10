@@ -34,7 +34,7 @@ TrackerDaemon::TrackerDaemon():
 
 void TrackerDaemon::onOnlineChanged(bool state)
 {
-  if (state )
+  if( state )
   {
     qDebug() << "Online now";
     if ( !m_pauseFlag )
@@ -164,6 +164,7 @@ void TrackerDaemon::onError(QString message)
 void TrackerDaemon::onConnected()
 {
   m_isConnected = true;
+
   qDebug() << "Auth_token recieved - " << m_loginQuery->getUser()->getToken() ;
   if(m_tagQuery == NULL)
   {
@@ -183,7 +184,6 @@ void TrackerDaemon::onConnected()
     connect(m_tagQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
     onTagAdded();
   }
-
 }
 
 
@@ -209,7 +209,8 @@ void TrackerDaemon::onTagAdded()
         m_lastCoords.setY(0);
 
         eventLoop.processEvents(QEventLoop::ExcludeUserInputEvents, 1000);
-        QTimer::singleShot(5000, &eventLoop, SLOT(quit())); eventLoop.exec();
+        QTimer::singleShot(5000, &eventLoop, SLOT(quit()));
+        eventLoop.exec();
       }
 
       m_tagQuery->getTag()->setTime(QDateTime::currentDateTime());

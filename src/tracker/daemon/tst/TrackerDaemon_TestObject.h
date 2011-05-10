@@ -64,7 +64,7 @@ namespace Test
     {
     }
 
-  private slots:
+  public slots:
 
     void onTagAdded();
     void run();
