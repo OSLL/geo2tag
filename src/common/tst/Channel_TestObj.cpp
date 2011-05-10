@@ -44,9 +44,9 @@
 namespace Test
 {
 
-qlonglong Channel_TestObj::getId() const
-{
-  return 0;
-}
+  qlonglong Channel_TestObj::getId() const
+  {
+    return 0;
+  }
 
-} // namespace Test
+}                                       // namespace Test

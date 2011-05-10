@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,46 +28,30 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
+
+/*!
+ * \file main.cpp
+ * \brief Test suite for tracker/daemon
  *
- *
- * \file TimeSlot.cpp
- * \brief TimeSlot implementation
- *
- * File description
- *
- *  PROJ: OSLL/geo2tag
- * ---------------------------------------------------------------- */
+ * PROJ: OSLL/geo2tag
+ * ------------------------------------------------------------------------ */
 
-#include "TimeSlot.h"
+#include <QtTest/QtTest>
+#include <QtCore/QtCore>
+#include <QApplication>
 
-TimeSlot::TimeSlot(const qulonglong &slot):m_slot(slot)
+// Test headers
+#include "TrackerDaemon_Test.h"
+
+int main(int c, char **v)
 {
-}
+  QApplication app(c,v);
 
+  Test::TrackerDaemon_Test test;
+  QTest::qExec(&test);
 
-const qulonglong& TimeSlot::getSlot() const
-{
-  return m_slot;
-}
-
-
-void TimeSlot::setSlot(const qulonglong& slot)
-{
-  m_slot = slot;
-}
-
-
-TimeSlot::~TimeSlot()
-{
-}
-
-
-qlonglong TimeSlot::getId() const
-{
-  // Database is not contain 0 in sequences, see scripts/base.sql
   return 0;
 }
 
 
-/* ===[ End of file ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

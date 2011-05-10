@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,46 +28,49 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
+
+/*!
+ * \file TrackerDaemon_Test.h
+ * \brief Test suite for TrackerDaemon class
  *
- *
- * \file TimeSlot.cpp
- * \brief TimeSlot implementation
- *
- * File description
- *
- *  PROJ: OSLL/geo2tag
- * ---------------------------------------------------------------- */
+ * PROJ: OSLL/geo2tag
+ * ----------------------------------------------------------- */
 
-#include "TimeSlot.h"
+#include <QObject>
+#include <QtTest/QtTest>
+#include <QSignalSpy>
 
-TimeSlot::TimeSlot(const qulonglong &slot):m_slot(slot)
+//include Application class
+#include "TrackerDaemon_TestObject.h"
+
+namespace Test
 {
-}
+  class TrackerDaemon_Test : public QObject
+  {
+    Q_OBJECT;
 
+    TrackerDaemon_TestObject *m_tstObject;
 
-const qulonglong& TimeSlot::getSlot() const
-{
-  return m_slot;
-}
+    public:
 
+      TrackerDaemon_Test()
+      {
+        m_tstObject = new TrackerDaemon_TestObject();
+      }
 
-void TimeSlot::setSlot(const qulonglong& slot)
-{
-  m_slot = slot;
-}
+      ~TrackerDaemon_Test()
+      {
+        delete m_tstObject;
+        m_tstObject = NULL;
+      }
 
+    private slots:
 
-TimeSlot::~TimeSlot()
-{
-}
+      void testPause()
+      {
+        m_tstObject->run();
+      }
 
+  };                                    // class TrackerDaemon_Test
 
-qlonglong TimeSlot::getId() const
-{
-  // Database is not contain 0 in sequences, see scripts/base.sql
-  return 0;
-}
-
-
-/* ===[ End of file ]=== */
+}                                       // end of namespace Test

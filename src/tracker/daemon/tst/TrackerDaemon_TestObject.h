@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,46 +28,51 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+
 /*! ---------------------------------------------------------------
- *
- *
- * \file TimeSlot.cpp
- * \brief TimeSlot implementation
+ * \file TrackerDaemon_TestObject.h
+ * \brief Header of TrackerDaemon_TestObject
+ * \todo add comment here
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "TimeSlot.h"
+#ifndef _TrackerDaemon_TestObject_H_46EA22F6_4980_4A50_9E21_6A80DD92A5F8_INCLUDED_
+#define _TrackerDaemon_TestObject_H_46EA22F6_4980_4A50_9E21_6A80DD92A5F8_INCLUDED_
 
-TimeSlot::TimeSlot(const qulonglong &slot):m_slot(slot)
+#include "../TrackerDaemon.h"
+
+namespace Test
 {
-}
+  /*!
+   * Class description. May use HTML formatting
+   *
+   */
+  class TrackerDaemon_TestObject : public TrackerDaemon
+  {
+    Q_OBJECT
 
+      public:
+      TrackerDaemon_TestObject()
+      {
+      }
 
-const qulonglong& TimeSlot::getSlot() const
-{
-  return m_slot;
-}
+      ~TrackerDaemon_TestObject()
+      {
+      }
 
+    public slots:
 
-void TimeSlot::setSlot(const qulonglong& slot)
-{
-  m_slot = slot;
-}
+      void onTagAdded();
+      void run();
 
+    private:
+      TrackerDaemon_TestObject(const TrackerDaemon_TestObject& obj);
+      TrackerDaemon_TestObject& operator=(const TrackerDaemon_TestObject& obj);
 
-TimeSlot::~TimeSlot()
-{
-}
+  };                                    // class TrackerDaemon_TestObject
 
-
-qlonglong TimeSlot::getId() const
-{
-  // Database is not contain 0 in sequences, see scripts/base.sql
-  return 0;
-}
-
-
-/* ===[ End of file ]=== */
+}                                       // namespace Test
+#endif                                  //_TrackerDaemon_TestObject_H_46EA22F6_4980_4A50_9E21_6A80DD92A5F8_INCLUDED_

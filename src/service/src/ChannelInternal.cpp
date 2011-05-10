@@ -52,7 +52,7 @@ const QString &description,
 const QString &url):
 Channel(name, description, url), m_id(id)
 {
-    this->setTimeSlot(QSharedPointer<TimeSlot> (new JsonTimeSlot(Channel::DEFAULT_TIME_SLOT_VALUE_MS)));
+  this->setTimeSlot(QSharedPointer<TimeSlot> (new JsonTimeSlot(Channel::DEFAULT_TIME_SLOT_VALUE_MS)));
 }
 
 
@@ -61,9 +61,10 @@ qlonglong DbChannel::getId() const
   return m_id;
 }
 
+
 qulonglong DbChannel::getDefTimeSlotValue()
 {
-    return Channel::DEFAULT_TIME_SLOT_VALUE_MS;
+  return Channel::DEFAULT_TIME_SLOT_VALUE_MS;
 }
 
 

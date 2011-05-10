@@ -13,6 +13,7 @@ m_daemon(new QTcpSocket(this)),
 m_device(new QTextStream(m_daemon))
 {
   setupUi(this);
+
   connect(startButton, SIGNAL(clicked()), SLOT(startButtonClicked()));
   connect(logButton, SIGNAL(clicked()), SLOT(logButtonClicked()));
   connect(settingsButton, SIGNAL(clicked()), SLOT(settingsButtonClicked()));
@@ -118,6 +119,7 @@ void MainWindow::readData()
   m_message += m_device->readAll();
   QRegExp statusExp("<status>(\\S)</status>");
   QRegExp logExp("<status>(\\S)</status>");
+
   //    int pos = 0;
   // split recieved message for many parts, process last and clean
   QStringList commands=m_message.split(" ",QString::SkipEmptyParts);
