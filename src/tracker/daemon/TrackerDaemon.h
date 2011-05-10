@@ -47,6 +47,7 @@ class TrackerDaemon : /*public QThread,*/ public Control
 
     void onOnlineChanged(bool state);
 
+    //TODO:
     void newControlConnection();
 
   public:

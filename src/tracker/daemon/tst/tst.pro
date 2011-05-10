@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     ../../../json/src/AddChannelRequestJSON.cpp \
     ../../../json/src/JsonUser.cpp \
     ../../../common/src/MobilityGps.cpp \
-    ../../../common/src/defines.cpp
+    ../../../common/src/defines.cpp \
+    TrackerDaemon_TestObject.cpp
 HEADERS += \ 
     TrackerDaemon_Test.h \
     ../TrackerDaemon.h \
@@ -51,7 +52,8 @@ HEADERS += \
     ../../../json/inc/AddChannelRequestJSON.h \
     ../../../common/inc/defines.h \
     ../../../json/inc/LoginResponseJSON.h \
-    ../../../common/inc/MobilityGps.h
+    ../../../common/inc/MobilityGps.h \
+    TrackerDaemon_TestObject.h
 
 CONFIG   += qtestlib mobility
 

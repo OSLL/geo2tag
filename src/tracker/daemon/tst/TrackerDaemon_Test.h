@@ -41,7 +41,7 @@
 #include <QSignalSpy>
 
 //include Application class
-#include "../TrackerDaemon.h"
+#include "TrackerDaemon_TestObject.h"
 
 namespace Test
 {
@@ -49,13 +49,13 @@ namespace Test
   {
     Q_OBJECT;
 
-    TrackerDaemon *m_tstObject;
+    TrackerDaemon_TestObject *m_tstObject;
 
     public:
 
       TrackerDaemon_Test()
       {
-        m_tstObject = new TrackerDaemon();
+        m_tstObject = new TrackerDaemon_TestObject();
       }
 
       ~TrackerDaemon_Test()
@@ -68,8 +68,7 @@ namespace Test
 
       void test1()
       {
-
-        m_tstObject->startTracking();
+        m_tstObject->run();
       }
 
   };                                    // class TrackerDaemon_Test

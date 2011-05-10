@@ -1,5 +1,5 @@
 /*
- * Copyright ${YEAR}  ${AUTHOR}  ${EMAIL}
+ * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -30,18 +30,51 @@
  */
 
 /*! ---------------------------------------------------------------
- *
- * \file ${NAMECPP}
- * \brief ${NAME} implementation
+ * \file TrackerDaemon_TestObject.h
+ * \brief Header of TrackerDaemon_TestObject
+ * \todo add comment here
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "${NAMEH}"
 
-namespace ${PACKAGE}
+#ifndef _TrackerDaemon_TestObject_H_46EA22F6_4980_4A50_9E21_6A80DD92A5F8_INCLUDED_
+#define _TrackerDaemon_TestObject_H_46EA22F6_4980_4A50_9E21_6A80DD92A5F8_INCLUDED_
+
+#include "../TrackerDaemon.h"
+
+namespace Test
 {
+ /*!
+   * Class description. May use HTML formatting
+   *
+   */
+  class TrackerDaemon_TestObject : public TrackerDaemon
+  {
+    Q_OBJECT
 
-}                                       // namespace ${PACKAGE}
+  public:
+    TrackerDaemon_TestObject()
+    {
+    }
+
+    ~TrackerDaemon_TestObject()
+    {
+    }
+
+  private slots:
+
+    void onTagAdded();
+    void run();
+    
+  private:    
+    TrackerDaemon_TestObject(const TrackerDaemon_TestObject& obj);
+    TrackerDaemon_TestObject& operator=(const TrackerDaemon_TestObject& obj);
+
+  }; // class TrackerDaemon_TestObject
+  
+} // namespace Test
+
+#endif //_TrackerDaemon_TestObject_H_46EA22F6_4980_4A50_9E21_6A80DD92A5F8_INCLUDED_

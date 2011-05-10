@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
 {
   Q_OBJECT
 
-    bool m_isServiceStarted;
+  bool m_isServiceStarted;
   QTcpSocket *m_daemon;
   QTextStream *m_device;
   QString m_lastCoord;
@@ -26,24 +26,24 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
 
   void updateState();
 
-  private slots:
-    void startButtonClicked();
-    void logButtonClicked();
-    void doneButtonClicked();
-    void settingsButtonClicked();
-    void aboutButtonClicked();
+private slots:
+  void startButtonClicked();
+  void logButtonClicked();
+  void doneButtonClicked();
+  void settingsButtonClicked();
+  void aboutButtonClicked();
 
-    void checkDaemon();
-    void readData();
+  void checkDaemon();
+  void readData();
 
-    void restartDaemon();
-    void moveToFirstPage();
+  void restartDaemon();
+  void moveToFirstPage();
 
-  public:
-    explicit MainWindow(QWidget *parent = 0);
+public:
+  explicit MainWindow(QWidget *parent = 0);
 
-  protected:
-    void changeEvent(QEvent *e);
+protected:
+  void changeEvent(QEvent *e);
 };
 // MAINWINDOW_H
 #endif
