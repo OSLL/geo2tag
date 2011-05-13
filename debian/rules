@@ -29,6 +29,7 @@ build-stamp:
 	dh_clean
 	cp -r ./src $(BUILDDIR)
 	cp -r ./data $(BUILDDIR)
+	cp -r ./scripts $(BUILDDIR)
 	cp -r ./debian/config.pri $(BUILDDIR)
 	echo "Current diRRR"
 	echo $(CURDIR)
@@ -57,33 +58,30 @@ install: build
 	dh_clean -k
 	dh_installdirs
 	$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; 
-	install -d $(CURDIR)/debian/tmp/etc/event.d; 
-	install -d $(CURDIR)/debian/tmp/etc/logrotate.d; 
-	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; \
-	install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; \
-	if [ "$(DEB_BUILD_ARCH)" = "armel" ] ; then \
+#	install -d $(CURDIR)/debian/tmp/etc/event.d; 
+#	install -d $(CURDIR)/debian/tmp/etc/logrotate.d; 
+#	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; 
+#	install -d $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps; 
+#	if [ "$(DEB_BUILD_ARCH)" = "armel" ] ; then \
 		echo "armel arch instalation"; \
 	else \
-		install -d $(CURDIR)/debian/tmp/opt/geo2tag; \
-		install -d $(CURDIR)/debian/tmp/var/www; \
-		install -d $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+		install -d $(CURDIR)/debian/tmp/opt/geo2tag; 
+		install -d $(CURDIR)/debian/tmp/var/www; 
+#		install -d $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp $(BUILDDIR)/service/wikigps-service.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp $(BUILDDIR)/service/pg_hba.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
-                cp $(BUILDDIR)/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
-                cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
-                cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
-                cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp -r $(BUILDDIR)/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
-		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
-	fi;
-	cp $(BUILDDIR)tracker/wikigpsTracker $(CURDIR)/debian/tmp/etc/event.d; 
-	cp $(BUILDDIR)tracker/wikigpsTracker-logrotate $(CURDIR)/debian/tmp/etc/logrotate.d; 
-#	cp -l $(BUILDDIR)/lib/lib* $(CURDIR)/debian/tmp/usr/lib; 
-#	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps;
-	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/wikigpsTracker-ui.png; 
-#	cp $(BUILDDIR)data/wikigps.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon
-	cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop
+		cp $(BUILDDIR)/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; 
+		cp -r $(BUILDDIR)/webside/www-data/* $(CURDIR)/debian/tmp/var/www; 
+#		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
+#		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
+#	fi;
+#	cp $(BUILDDIR)tracker/wikigpsTracker $(CURDIR)/debian/tmp/etc/event.d; 
+#	cp $(BUILDDIR)tracker/wikigpsTracker-logrotate $(CURDIR)/debian/tmp/etc/logrotate.d; 
+#	cp $(BUILDDIR)data/wikigps.png $(CURDIR)/debian/tmp/usr/share/icons/hicolor/48x48/apps/wikigpsTracker-ui.png; 
+#	cp $(BUILDDIR)data/tracker.desktop $(CURDIR)/debian/tmp/usr/share/applications/hildon/tracker.desktop
 
 	dh_install -s
 	

@@ -46,7 +46,7 @@ QString getServerUrl();
 void setServerUrl(QString serverUrl);
 int getServerPort();
 void setServerPort(int port);
-#define DEFAULT_SERVER "http://localhost/"
+#define DEFAULT_SERVER "http://tracklife.ru/"
 #define DEFAULT_PORT 80
 
 // "demo"

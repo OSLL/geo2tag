@@ -41,13 +41,16 @@
 #include <QDebug>
 #include "Channel.h"
 
+const unsigned long long int Channel::DEFAULT_TIME_SLOT_VALUE_MS = 31536000000LL;
+
 Channel::Channel(const QString &name,
 const QString &description,
 const QString &url):
 m_name(name),
 m_description(description),
 m_url(url),
-m_isDisplayed(true)
+m_isDisplayed(true),
+m_timeSlotIsDefault(true)
 {
   m_activeRadius = 5.0;                 // 5 km
   m_timeSlot = QSharedPointer<TimeSlot>(NULL);
@@ -116,8 +119,28 @@ void Channel::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
 
 QSharedPointer<TimeSlot> Channel::getTimeSlot() const
 {
+  static QSharedPointer<TimeSlot>
+    defaultSlot(new TimeSlot(DEFAULT_TIME_SLOT_VALUE_MS));
+
+  if( NULL == m_timeSlot)
+  {
+    return defaultSlot;
+  }
   return m_timeSlot;
 }
+
+
+bool Channel::timeSlotIsDefault() const
+{
+  return m_timeSlotIsDefault;
+}
+
+
+void Channel::setDefaultTimeSlot(bool fl)
+{
+  m_timeSlotIsDefault = fl;
+}
+
 
 
 Channel::~Channel()
