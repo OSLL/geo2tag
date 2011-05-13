@@ -1,5 +1,5 @@
 /*
- * Copyright ${YEAR}  ${AUTHOR}  ${EMAIL}
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,57 +28,16 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-
-/*! ---------------------------------------------------------------
- * \file ${NAMEH}
- * \brief Header of ${NAME}
- * \todo add comment here
+/*!
+ * \file SetDefaultTimeSlotResponseJSON.h
+ * \brief Header of SetDefaultTimeSlotResponseJSON
  *
- * File description
- *
- * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _${NAME}_H_${UUID}_INCLUDED_
-#define _${NAME}_H_${UUID}_INCLUDED_
+#ifndef _SETDEFAULTTIMESLOTRESPONSEJSON_H_3d4dc66e_e09a_49cc_bfe5_b8437d28dac9_
+#define _SETDEFAULTTIMESLOTRESPONSEJSON_H_3d4dc66e_e09a_49cc_bfe5_b8437d28dac9_
 
-namespace ${PACKAGE}
-{
-  /*!
-   * Class description. May use HTML formatting
-   *
-   */
-  class ${NAME}
-  {
-    public:
-      ${NAME}
-      ()
-      {
-      }
+#include "DefaultResponseJSON.h"
 
-      ~${NAME}
-      ()
-      {
-      }
-
-    private:
-      ${NAME}
-      (const $
-      {
-        NAME
-      }& obj);
-      ${NAME}
-      & operator=(const $
-      {
-        NAME
-      }& obj);
-
-      // class ${NAME}
-  };
-
-  // namespace ${PACKAGE}
-}
-
-
-//_${NAME}_H_${UUID}_INCLUDED_
-#endif
+typedef DefaultResponseJSON SetDefaultTimeSlotResponseJSON;
+#endif                                  // _SETDEFAULTTIMESLOTRESPONSEJSON_H_3d4dc66e_e09a_49cc_bfe5_b8437d28dac9_
