@@ -3,7 +3,7 @@
 
 #include <QTcpSocket>
 #include <QTextStream>
-#ifndef maemo5_ui
+#ifndef MAEMO5_UI
 #include "ui_MainWindow.h"
 #else
 #include "ui_MainWindow_maemo.h"

@@ -42,7 +42,7 @@ RESOURCES += \
 		}
 
 maemo5 {
-	DEFINES += maemo5_ui
+	DEFINES += MAEMO5_UI
 	FORMS += MainWindow_maemo.ui
 }
 
