@@ -63,8 +63,8 @@ class Channel: public QObject
 
   public:
 
-    static const qulonglong DEFAULT_TIME_SLOT_VALUE_MS;
-
+		static const unsigned long long int DEFAULT_TIME_SLOT_VALUE_MS;
+		
     virtual qlonglong getId() const = 0;
 
     const QString& getDescription() const;

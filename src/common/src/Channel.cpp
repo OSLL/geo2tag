@@ -41,7 +41,7 @@
 #include <QDebug>
 #include "Channel.h"
 
-const qulonglong Channel::DEFAULT_TIME_SLOT_VALUE_MS = 31536000000;
+const unsigned long long int Channel::DEFAULT_TIME_SLOT_VALUE_MS = 31536000000LL;
 
 Channel::Channel(const QString &name,
 const QString &description,
