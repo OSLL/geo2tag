@@ -47,8 +47,6 @@ class DbChannel: public Channel
 {
   qlonglong m_id;
 
-  static const qulonglong DEFAULT_TIME_SLOT_VALUE_ms;
-
   public:
     DbChannel(qlonglong id,
       const QString &name,
@@ -56,8 +54,6 @@ class DbChannel: public Channel
       const QString &url="");
 
     qlonglong getId() const;
-
-    static qulonglong getDefTimeSlotValue();
 
     void setId(qlonglong id);
 

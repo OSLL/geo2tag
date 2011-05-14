@@ -637,7 +637,7 @@ namespace common
     bool realTimeSlotIsNull = false;
     QSharedPointer<TimeSlot> addedTimeSlot;
 
-    if ((realTimeSlot.isNull()) && (dummyTimeSlot->getSlot() != DbChannel::getDefTimeSlotValue()) )
+    if ((realTimeSlot.isNull()) && (dummyTimeSlot->getSlot() != Channel::DEFAULT_TIME_SLOT_VALUE_MIN) )
     {
       realTimeSlotIsNull = true;
       addedTimeSlot = m_queryExecutor->insertNewTimeSlot(dummyTimeSlot);
@@ -661,25 +661,25 @@ namespace common
       channelTimeSlotIsDefault = true;
       if (realTimeSlotIsNull)
         result = m_queryExecutor->insertNewChannelTimeSlot(realChannel, addedTimeSlot);
-      else if ( (dummyTimeSlot->getSlot() == DbChannel::getDefTimeSlotValue()) ||
-        (realTimeSlot->getSlot() == DbChannel::getDefTimeSlotValue()) )
+      else if ( (dummyTimeSlot->getSlot() == Channel::DEFAULT_TIME_SLOT_VALUE_MIN) ||
+        (realTimeSlot->getSlot() == Channel::DEFAULT_TIME_SLOT_VALUE_MIN) )
       {
         response.setStatus(ok);
         response.setStatusMessage("Time slot for channel is set");
         answer.append(response.getJson());
         return answer;
       }
-      else if (realTimeSlot->getSlot() != DbChannel::getDefTimeSlotValue())
+      else if (realTimeSlot->getSlot() != Channel::DEFAULT_TIME_SLOT_VALUE_MIN)
         result = m_queryExecutor->insertNewChannelTimeSlot(realChannel, realTimeSlot);
     }
     else
     {
       if (realTimeSlotIsNull)
         result = m_queryExecutor->changeChannelTimeSlot(realChannel, addedTimeSlot);
-      else if ( (dummyTimeSlot->getSlot() == DbChannel::getDefTimeSlotValue()) ||
-        (realTimeSlot->getSlot() == DbChannel::getDefTimeSlotValue()) )
+      else if ( (dummyTimeSlot->getSlot() == Channel::DEFAULT_TIME_SLOT_VALUE_MIN) ||
+        (realTimeSlot->getSlot() == Channel::DEFAULT_TIME_SLOT_VALUE_MIN) )
         return processSetDefaultTimeSlotQuery(data);
-      else if (realTimeSlot->getSlot() != DbChannel::getDefTimeSlotValue())
+      else if (realTimeSlot->getSlot() != Channel::DEFAULT_TIME_SLOT_VALUE_MIN)
         result = m_queryExecutor->changeChannelTimeSlot(realChannel, realTimeSlot);
     }
 
@@ -943,7 +943,7 @@ namespace common
     }
 
     m_updateThread->lockWriting();
-    realChannel->setTimeSlot(QSharedPointer<TimeSlot> (new JsonTimeSlot(DbChannel::getDefTimeSlotValue())));
+    realChannel->setTimeSlot(QSharedPointer<TimeSlot> (new TimeSlot(Channel::DEFAULT_TIME_SLOT_VALUE_MIN)));
     realChannel->setDefaultTimeSlot(true);
     m_updateThread->unlockWriting();
 

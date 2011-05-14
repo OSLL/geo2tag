@@ -41,7 +41,7 @@
 #include <QDebug>
 #include "Channel.h"
 
-const unsigned long long int Channel::DEFAULT_TIME_SLOT_VALUE_MS = 31536000000LL;
+const qulonglong Channel::DEFAULT_TIME_SLOT_VALUE_MIN = 525600;
 
 Channel::Channel(const QString &name,
 const QString &description,
@@ -53,7 +53,14 @@ m_isDisplayed(true),
 m_timeSlotIsDefault(true)
 {
   m_activeRadius = 5.0;                 // 5 km
-  m_timeSlot = QSharedPointer<TimeSlot>(NULL);
+  m_timeSlot = QSharedPointer<TimeSlot>(new TimeSlot(DEFAULT_TIME_SLOT_VALUE_MIN));
+}
+
+
+qlonglong Channel::getId() const
+{
+  // Database doesn't contain 0 in sequences, see scripts/base.sql
+  return 0;
 }
 
 
@@ -119,13 +126,6 @@ void Channel::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
 
 QSharedPointer<TimeSlot> Channel::getTimeSlot() const
 {
-  static QSharedPointer<TimeSlot>
-    defaultSlot(new TimeSlot(DEFAULT_TIME_SLOT_VALUE_MS));
-
-  if( NULL == m_timeSlot)
-  {
-    return defaultSlot;
-  }
   return m_timeSlot;
 }
 
@@ -140,7 +140,6 @@ void Channel::setDefaultTimeSlot(bool fl)
 {
   m_timeSlotIsDefault = fl;
 }
-
 
 
 Channel::~Channel()

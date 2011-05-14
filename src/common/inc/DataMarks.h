@@ -78,7 +78,7 @@ class DataMark: public QObject
 
   public:
 
-    virtual qlonglong getId() const = 0;
+    virtual qlonglong getId() const;
 
     void setDescription(const QString&);
     const QString& getDescription() const;
