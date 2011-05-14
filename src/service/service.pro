@@ -2,6 +2,22 @@ TEMPLATE = app
 include(../../config.pri)
 TARGET = fcgi_server
 
+INSTALLS += target conf_lighttpd postgre_conf db_init_file odbc_configs
+
+target.path = /opt/geo2tag/
+
+conf_lighttpd.files = wikigps-service.conf
+conf_lighttpd.path = /etc/lighttpd/conf-enabled
+
+postgre_conf.files = pg_hba.conf
+postgre_conf.path = /opt/geo2tag/
+
+db_init_file.files = ../scripts/base.sql
+db_init_file.path = /opt/geo2tag/
+
+odbc_configs.files = ../scripts/odbc.ini ../scripts/odbcinst.ini
+odbc_configs.path = /opt/geo2tag/
+
 DEPENDPATH += . \
               inc \
               src \

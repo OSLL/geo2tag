@@ -38,9 +38,6 @@ WApplication *createApplication(const WEnvironment& env)
 }
 
 
-setServerUrl(serverUrl.c_str());
-setServerPort(serverPort);
-
 int main(int argc, char **argv)
 {
   /*

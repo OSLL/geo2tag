@@ -110,10 +110,9 @@ INSERT into tags (channel_id, tag_id) values (4, 6);
 INSERT into tags (channel_id, tag_id) values (5, 7);
 INSERT into tags (channel_id, tag_id) values (1, 8);
 
-INSERT into timeSlot (slot) values (31536000000);
-INSERT into timeSlot (slot) values (15552000000);
-INSERT into timeSlot (slot) values (604800000);
-INSERT into timeSlot (slot) values (86400000);
+INSERT into timeSlot (slot) values (259200);
+INSERT into timeSlot (slot) values (10080);
+INSERT into timeSlot (slot) values (1440);
 
 INSERT into channelTimeSlot (channel_id, timeSlot_id) values (1, 1);
 INSERT into channelTimeSlot (channel_id, timeSlot_id) values (2, 2);

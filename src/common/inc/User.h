@@ -56,13 +56,14 @@ class User: public QObject
   QSharedPointer<Channels> m_channels;
 
   protected:
-    User(const QString& name, const QString& passw);
 
     void setToken(const QString&);
 
   public:
 
-    virtual qlonglong getId() const = 0;
+    User(const QString& name, const QString& passw);
+
+    virtual qlonglong getId() const;
 
     void subscribe(const QSharedPointer<Channel>& channel);
 

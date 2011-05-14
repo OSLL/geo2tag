@@ -59,7 +59,7 @@ namespace Test
 
     public:
 
-      User_Test()
+      User_Test(QObject *parent = NULL) : QObject(parent)
       {
         m_object = new Test::UserTestImpl(LOGIN,PASSWD);
       }
@@ -72,7 +72,7 @@ namespace Test
 
     private slots:
 
-      void test1() const
+      void testInit() const
       {
         QCOMPARE(m_object->getLogin(), LOGIN);
         QCOMPARE(m_object->getPassword(), PASSWD);
