@@ -78,7 +78,55 @@ CREATE TABLE tagTimeSlot (
                                                        on delete cascade
 );
 
+CREATE SEQUENCE actions_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 
+CREATE TABLE action (
+id NUMERIC(9,0) NOT NULL DEFAULT nextval('actions_seq'),
+mask SERIAL NOT NULL,
+name VARCHAR(300) NOT NULL,
+CONSTRAINT id_pk PRIMARY KEY(id),
+unique (mask, name)
+);
+
+CREATE SEQUENCE channel_actions_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
+
+CREATE TABLE channel_action (
+id NUMERIC(9,0) NOT NULL DEFAULT nextval('channel_actions_seq'),
+user_id NUMERIC(9,0) NOT NULL,
+channel_id NUMERIC(9,0) NOT NULL,
+action SERIAL,
+CONSTRAINT channel_action_pkey primary key (id),
+CONSTRAINT user_id_channel_action_fk foreign key (user_id) references users(id) on delete cascade,
+CONSTRAINT channel_id_fk foreign key (channel_id) references channel(id) on delete cascade,
+unique (user_id, channel_id, action)
+);
+
+CREATE SEQUENCE tag_actions_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
+
+CREATE TABLE tag_action (
+id NUMERIC(9,0) NOT NULL DEFAULT nextval ('tag_actions_seq'),
+user_id NUMERIC(9,0) NOT NULL,
+tag_id NUMERIC(9,0) NOT NULL,
+action SERIAL,
+CONSTRAINT tag_action_pkey primary key (id),
+CONSTRAINT user_id_fk foreign key (user_id) references users(id) on delete cascade,
+CONSTRAINT tag_id_fk foreign key (tag_id) references tag(id) on delete cascade,
+unique (user_id, tag_id, action)
+);
+
+INSERT into channel_action (user_id, channel_id, action) values (5, 3, 3);
+INSERT into channel_action (user_id, channel_id, action) values (2, 5, 5);
+INSERT into channel_action (user_id, channel_id, action) values (3, 4, 3);
+
+INSERT into action (mask, name) values (1,  'subscribe');
+INSERT into action (mask, name) values (2,  'unsubscribe');
+INSERT into action (mask, name) values (4,  'write');
+INSERT into action (mask, name) values (8,  'read');
+INSERT into action (mask, name) values (16, 'create');
+INSERT into action (mask, name) values (32, 'remove');
+
+INSERT into tag_action (user_id, tag_id, action) values (1, 1, 3);
+INSERT into tag_action (user_id, tag_id, action) values (2, 1, 3);
 
 
 INSERT into channel (name, description, url) values ('Tourist information', 'This is free read-only tourist information channel. You can get information about buildings, sights around your location', '');
