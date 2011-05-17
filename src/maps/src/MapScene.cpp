@@ -49,7 +49,7 @@ void MapScene::tileUploaded(const QPixmap &pixmap, const TilePoint & point)
 {
   if(m_tiles.contains(point))
     return;
-
+  qDebug() << point;
   QGraphicsPixmapItem * pm = addPixmap( pixmap );
   pm->setData(0, point.second);
   m_tiles.insert(point, pm);
@@ -360,11 +360,10 @@ void MapScene::keyPressEvent(QKeyEvent *event)
   this->update_state();
 }
 
-
-void MapScene::update_state()
+QPair<QPoint, QPoint> MapScene::getBorders()
 {
   if(this->views().isEmpty())
-    return;
+    return qMakePair(QPoint(-1,-1), QPoint(-1,-1));
 
   QPoint point_top_left = (this->views()[0]->mapToScene(this->views()[0]->frameRect().topLeft())).toPoint();
   QPoint point_bottom_right = (this->views()[0]->mapToScene(this->views()[0]->frameRect().bottomRight())).toPoint();
@@ -388,16 +387,85 @@ void MapScene::update_state()
   point_bottom_right.setX(point_bottom_right.x()/256);
   point_bottom_right.setY(point_bottom_right.y()/256);
 
+  return qMakePair(point_top_left, point_bottom_right);
+}
+
+void MapScene::update_state()
+{
+  QPair<QPoint, QPoint> borders = this->getBorders();
+  QPoint point_top_left = borders.first;
+  QPoint point_bottom_right = borders.second;
+
+  if(point_top_left.x() < 0 || point_bottom_right.x() < 0)
+    return;
+
   QVector<TilePoint> tiles_for_upload;
 
-  for(int x = point_top_left.x(); x <= point_bottom_right.x(); x++)
+  int width = point_bottom_right.x() - point_top_left.x() + 1;
+  int height = point_bottom_right.y() - point_top_left.y() + 1;
+
+  while(width > 2 || height > 2)
   {
-    for(int y = point_top_left.y(); y <= point_bottom_right.y(); y++)
+  	point_top_left = point_top_left + QPoint(1,1);
+	point_bottom_right = point_bottom_right - QPoint(1,1);
+    width = point_bottom_right.x() - point_top_left.x() + 1;
+    height = point_bottom_right.y() - point_top_left.y() + 1;
+  }
+
+  int x = 0;
+  int y = 0;
+  for(x = point_top_left.x() ; x <= point_bottom_right.x(); x++)
+  {
+    for(y = point_top_left.y() ; y <= point_bottom_right.y(); y++)
     {
       TilePoint tp = qMakePair(QPoint(x,y), m_zoom);
       if(!m_tiles.contains(tp))
         tiles_for_upload.push_back(tp);
     }
+  }
+
+  if(tiles_for_upload.size() != 0)
+  {
+    emit this->uploadTiles(tiles_for_upload);
+	tiles_for_upload.clear();
+  }
+
+
+  QPoint snake(x-1, y-1);
+  QPoint move(0,1);
+  while(snake != borders.second)
+  {
+    snake += move;
+
+    TilePoint tp = qMakePair(snake, m_zoom);
+    if(!m_tiles.contains(tp))
+      tiles_for_upload.push_back(tp);
+
+	if(snake.x() < point_top_left.x())
+	{
+	  move.setX(0);
+	  move.setY(-1);
+	  point_top_left.setX(point_top_left.x() - 1);
+	}
+	else if(snake.x() > point_bottom_right.x())
+	{
+      move.setX(0);
+	  move.setY(1);
+	  point_bottom_right.setX(point_bottom_right.x() + 1);
+	}
+
+	if(snake.y() < point_top_left.y())
+	{
+      move.setY(0);
+	  move.setX(1);
+      point_top_left.setY(point_top_left.y() - 1);
+	}
+	else if(snake.y() > point_bottom_right.y())
+	{
+      move.setY(0);
+	  move.setX(-1);
+      point_bottom_right.setY(point_bottom_right.y() + 1);
+	}
   }
 
   if(tiles_for_upload.size() != 0)

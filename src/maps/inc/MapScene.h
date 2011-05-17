@@ -53,6 +53,7 @@ class MapScene : public QGraphicsScene
 
   private:
     void add_mark(QPointF pos,QSharedPointer<DataMark> mark,QSharedPointer<Channel> channel);
+    QPair<QPoint, QPoint> getBorders();
 
     signals:
     void uploadTiles(QVector<TilePoint> & tiles_to_upload);
