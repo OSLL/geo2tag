@@ -25,6 +25,10 @@ linux: {
 }
 
 symbian: {
+  SUBDIRS += maps \
+             json \
+	           http_requests \ 
+             tracker
 }
 
 

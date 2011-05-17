@@ -15,15 +15,36 @@ QT += network xml
 DEPENDPATH += . \
 
 INCLUDEPATH += . \
-               ../../common/inc
+               ../../common/inc \
+							 ../daemon/
+
+
+maemo5 {
+SOURCES += MaemoDaemon.cpp
+HEADERS += MaemoDaemon.h
+}
+
+linux {
+SOURCES += MaemoDaemon.cpp
+HEADERS += MaemoDaemon.h
+}
+
+symbian {
+SOURCES += SymbianDaemon.cpp \
+					 ../daemon/TrackerDaemon.cpp \
+HEADERS += SymbianDaemon.h \
+           ../daemon/TrackerDaemon.h \
+}
 
 # Input
 SOURCES += main.cpp \
            src/ByteSpinBox.cpp \
            OptionsWidget.cpp \
            LogWidget.cpp \
-	   AboutWidget.cpp \
-           MainWindow.cpp ../../common/src/defines.cpp
+				   AboutWidget.cpp \
+           MainWindow.cpp \
+					 DaemonManager.cpp \
+					 ../../common/src/defines.cpp
 
 HEADERS += tracker.h \
            inc/ByteSpinBox.h \
@@ -31,7 +52,8 @@ HEADERS += tracker.h \
            OptionsWidget.h \
            LogWidget.h \
            MainWindow.h \
-	   AboutWidget.h \
+				   AboutWidget.h \
+					 DaemonManager.h \
            ../../common/inc/defines.h
 
 RESOURCES += \

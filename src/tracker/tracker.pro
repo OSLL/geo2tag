@@ -7,10 +7,14 @@ INSTALLS += target
 
 include(../../config.pri)
 
+linux {
+	SUBDIRS = ui observer 
+}
 
-SUBDIRS = ui observer 
-
+symbian {
+	SUBDIRS = ui
+}
 
 maemo5 {
-	SUBDIRS += daemon
+	SUBDIRS = ui daemon
 }
