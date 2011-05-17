@@ -49,7 +49,7 @@ void MapScene::tileUploaded(const QPixmap &pixmap, const TilePoint & point)
 {
   if(m_tiles.contains(point))
     return;
-  qDebug() << point;
+
   QGraphicsPixmapItem * pm = addPixmap( pixmap );
   pm->setData(0, point.second);
   m_tiles.insert(point, pm);
@@ -240,9 +240,9 @@ void MapScene::setMaxThreads(const int & max_threads)
 
 void MapScene::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-  if (event->delta()>0 && m_zoom<18)
+  if (event->delta() > 0 && m_zoom < 18)
     m_zoom++;
-  else if (event->delta()<0 && m_zoom>0)
+  else if (event->delta() < 0 && m_zoom > 0)
     m_zoom--;
   else
     return;
@@ -346,18 +346,18 @@ void MapScene::keyPressEvent(QKeyEvent *event)
     this->views()[0]->verticalScrollBar()->value()
     - screen_delta.y());
 
-  /*
-  QPointF cur_pos = event->scenePos();
-  cur_pos.setX(cur_pos.x()/256);
-  cur_pos.setY(cur_pos.y()/256);
-
-  GeoPoint gp = OSMCoordinatesConverter::TileToGeo(qMakePair(cur_pos, m_zoom));
-
-  m_longitude = gp.first;
-  m_latitude = gp.second;
-  */
-
-  this->update_state();
+  if(event->key() == Qt::Key_Plus && m_zoom < 18)
+  {
+  	m_zoom++;
+	this->set_zoom();
+  }
+  if(event->key() == Qt::Key_Minus && m_zoom > 0)
+  {
+  	m_zoom--;
+	this->set_zoom();
+  }
+  else
+    this->update_state();
 }
 
 QPair<QPoint, QPoint> MapScene::getBorders()
@@ -404,7 +404,7 @@ void MapScene::update_state()
   int width = point_bottom_right.x() - point_top_left.x() + 1;
   int height = point_bottom_right.y() - point_top_left.y() + 1;
 
-  while(width > 2 || height > 2)
+  while(width > 2 && height > 2)
   {
   	point_top_left = point_top_left + QPoint(1,1);
 	point_bottom_right = point_bottom_right - QPoint(1,1);
@@ -424,12 +424,13 @@ void MapScene::update_state()
     }
   }
 
+/*
   if(tiles_for_upload.size() != 0)
   {
     emit this->uploadTiles(tiles_for_upload);
 	tiles_for_upload.clear();
   }
-
+*/
 
   QPoint snake(x-1, y-1);
   QPoint move(0,1);
@@ -475,30 +476,10 @@ void MapScene::update_state()
 
 void MapScene::preload()
 {
-  if(this->views().isEmpty())
+  QPair<QPoint, QPoint> borders = this->getBorders();
+
+  if(borders.first.x() < 0 || borders.second.x() < 0)
     return;
 
-  QPoint point_top_left = (this->views()[0]->mapToScene(this->views()[0]->frameRect().topLeft())).toPoint();
-  QPoint point_bottom_right = (this->views()[0]->mapToScene(this->views()[0]->frameRect().bottomRight())).toPoint();
-
-  point_top_left.setX(point_top_left.x()-256);
-  point_top_left.setY(point_top_left.y()-256);
-
-  if(point_top_left.x() < 0) point_top_left.setX(0);
-  if(point_top_left.y() < 0) point_top_left.setY(0);
-
-  point_bottom_right.setX(point_bottom_right.x()+256);
-  point_bottom_right.setY(point_bottom_right.y()+256);
-
-  int max_xy = this->sceneRect().width() - 1;
-  if(point_bottom_right.x() > max_xy) point_bottom_right.setX(max_xy);
-  if(point_bottom_right.y() > max_xy) point_bottom_right.setY(max_xy);
-
-  point_top_left.setX(point_top_left.x()/256);
-  point_top_left.setY(point_top_left.y()/256);
-
-  point_bottom_right.setX(point_bottom_right.x()/256);
-  point_bottom_right.setY(point_bottom_right.y()/256);
-
-  m_preloader->load(point_top_left, point_bottom_right, m_zoom);
+  m_preloader->load(borders.first, borders.second, m_zoom);
 }
