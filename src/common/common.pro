@@ -20,7 +20,6 @@ HEADERS += \
     inc/Channel.h \
     inc/User.h \
     inc/DataMarks.h \
-    inc/DefaultException.h \
     inc/GpsInfo.h \
     inc/defines.h \
     inc/ConcurrentVector.h \
@@ -31,7 +30,6 @@ SOURCES += \
     src/User.cpp \
     src/Channel.cpp \
     src/DataMarks.cpp \
-    src/DefaultException.cpp \
     src/GpsInfo.cpp \ 
     src/defines.cpp \
     src/TimeSlot.cpp
