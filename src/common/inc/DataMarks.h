@@ -42,7 +42,7 @@
 #ifndef _DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
 #define _DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
 
-#include <QString>
+//#include <QString>
 #include <QVector>
 #include <QSharedPointer>
 #include <QDateTime>

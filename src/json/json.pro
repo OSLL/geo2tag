@@ -21,32 +21,32 @@ HEADERS += \
            inc/JsonDataMark.h \
            inc/JsonChannel.h \
            inc/JsonTimeSlot.h \
-	         inc/JsonSerializer.h \
-	         inc/LoginRequestJSON.h \
-	         inc/LoginResponseJSON.h \
-	         inc/AddUserRequestJSON.h \
-	         inc/AddUserResponseJSON.h \
-	         inc/AddNewMarkRequestJSON.h \
-	         inc/AddNewMarkResponseJSON.h \
-	         inc/SubscribeChannelResponseJSON.h \
-	         inc/UnsubscribeChannelResponse.h \
-	         inc/SubscribedChannelsRequestJSON.h \
-	         inc/SubscribedChannelsResponseJSON.h \
-	         inc/AddChannelRequestJSON.h \
-	         inc/AddChannelResponseJSON.h \
-                 inc/GetTimeSlotRequestJSON.h \
-                 inc/GetTimeSlotResponseJSON.h \
-	         inc/DefaultResponseJSON.h \
-                 inc/SetTimeSlotRequestJSON.h \
-                 inc/SetTimeSlotResponseJSON.h \
-                 inc/GetTimeSlotMarkRequestJSON.h \
-                 inc/GetTimeSlotMarkResponseJSON.h \
-                 inc/SetTimeSlotMarkRequestJSON.h \
-                 inc/SetTimeSlotMarkResponseJSON.h \
-                 inc/SetDefaultTimeSlotMarkRequestJSON.h \
-                 inc/SetDefaultTimeSlotMarkResponseJSON.h \
-                 inc/SetDefaultTimeSlotRequestJSON.h \
-                 inc/SetDefaultTimeSlotResponseJSON.h
+           inc/JsonSerializer.h \
+           inc/LoginRequestJSON.h \
+           inc/LoginResponseJSON.h \
+           inc/AddUserRequestJSON.h \
+           inc/AddUserResponseJSON.h \
+           inc/AddNewMarkRequestJSON.h \
+           inc/AddNewMarkResponseJSON.h \
+           inc/SubscribeChannelResponseJSON.h \
+           inc/UnsubscribeChannelResponse.h \
+           inc/SubscribedChannelsRequestJSON.h \
+           inc/SubscribedChannelsResponseJSON.h \
+           inc/AddChannelRequestJSON.h \
+           inc/AddChannelResponseJSON.h \
+           inc/GetTimeSlotRequestJSON.h \
+           inc/GetTimeSlotResponseJSON.h \
+           inc/DefaultResponseJSON.h \
+           inc/SetTimeSlotRequestJSON.h \
+           inc/SetTimeSlotResponseJSON.h \
+           inc/GetTimeSlotMarkRequestJSON.h \
+           inc/GetTimeSlotMarkResponseJSON.h \
+           inc/SetTimeSlotMarkRequestJSON.h \
+           inc/SetTimeSlotMarkResponseJSON.h \
+           inc/SetDefaultTimeSlotMarkRequestJSON.h \
+           inc/SetDefaultTimeSlotMarkResponseJSON.h \
+           inc/SetDefaultTimeSlotRequestJSON.h \
+           inc/SetDefaultTimeSlotResponseJSON.h
 
 SOURCES += \
            src/ChannelListJSON.cpp \

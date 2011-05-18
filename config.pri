@@ -10,7 +10,7 @@ SOURCE_DIR = $$PWD
 
 contains(TEMPLATE,.*lib):DEFINES += QT_SHARED
     
-QMAKE_CXXFLAGS += -Werror
+#QMAKE_CXXFLAGS += -Werror
 
 maemo5: {
     DEFINES+= Q_WS_MAEMO_5
@@ -21,6 +21,7 @@ maemo5: {
                       -I/usr/lib/dbus-1.0/include
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
+    QMAKE_CXXFLAGS += -Werror
 }
 
 symbian: {

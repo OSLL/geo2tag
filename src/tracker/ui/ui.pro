@@ -16,7 +16,7 @@ DEPENDPATH += . \
 
 INCLUDEPATH += . \
                ../../common/inc \
-							 ../daemon/
+               ../daemon/
 
 
 maemo5 {
@@ -30,10 +30,24 @@ HEADERS += MaemoDaemon.h
 }
 
 symbian {
+
+TARGET.CAPABILITY = NetworkServices \
+                    Location \
+                    ReadUserData \
+                    WriteUserData \
+                    LocalServices \
+                    UserEnvironment \
+                    ReadDeviceData \
+                    WriteDeviceData
+
+LIBS += -lqjson -lwikigpsHttp -lwikigpsJson
+DEFINES += NO_DAEMON
 SOURCES += SymbianDaemon.cpp \
-					 ../daemon/TrackerDaemon.cpp \
+           ../daemon/TrackerDaemon.cpp
 HEADERS += SymbianDaemon.h \
-           ../daemon/TrackerDaemon.h \
+           ../daemon/TrackerDaemon.h
+#TARGET.UID3 = 0xA000C606
+
 }
 
 # Input
@@ -41,10 +55,10 @@ SOURCES += main.cpp \
            src/ByteSpinBox.cpp \
            OptionsWidget.cpp \
            LogWidget.cpp \
-				   AboutWidget.cpp \
+           AboutWidget.cpp \
            MainWindow.cpp \
-					 DaemonManager.cpp \
-					 ../../common/src/defines.cpp
+           DaemonManager.cpp \
+           ../../common/src/defines.cpp
 
 HEADERS += tracker.h \
            inc/ByteSpinBox.h \
@@ -52,8 +66,8 @@ HEADERS += tracker.h \
            OptionsWidget.h \
            LogWidget.h \
            MainWindow.h \
-				   AboutWidget.h \
-					 DaemonManager.h \
+           AboutWidget.h \
+           DaemonManager.h \
            ../../common/inc/defines.h
 
 RESOURCES += \

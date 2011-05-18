@@ -13,27 +13,27 @@ DEPENDPATH += . \
 
 INCLUDEPATH += . \
     inc \
-    /usr/include/libxml2
+
 
 # Input
 HEADERS += \
+    inc/Channel.h \
+    inc/User.h \
     inc/DataMarks.h \
     inc/DefaultException.h \
     inc/GpsInfo.h \
-    inc/User.h \
-    inc/Channel.h \
     inc/defines.h \
     inc/ConcurrentVector.h \
     inc/DataChannel.h \
     inc/TimeSlot.h
 
 SOURCES += \
+    src/User.cpp \
+    src/Channel.cpp \
     src/DataMarks.cpp \
     src/DefaultException.cpp \
-    src/GpsInfo.cpp \
-    src/Channel.cpp \
+    src/GpsInfo.cpp \ 
     src/defines.cpp \
-    src/User.cpp \
     src/TimeSlot.cpp
 
 linux: {
@@ -47,6 +47,8 @@ linux: {
     LIBS += -lxml2
 
     DEFINES += SIMULATE_GPS
+
+    INCLUDEPATH += /usr/include/libxml2
 }
 
 maemo5: {
@@ -64,6 +66,15 @@ maemo5: {
 }
 
 symbian: {
+    CONFIG += mobility
+    MOBILITY = location
+    LIBS += -lQtLocation
+    HEADERS +=  \
+               inc/MobilityGps.h
+
+    SOURCES +=  \
+               src/MobilityGps.cpp
+    DEFINES += NO_GPS SIMULATE_GPS
 }
 
 webside: {

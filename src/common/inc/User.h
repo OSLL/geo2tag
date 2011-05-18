@@ -40,6 +40,7 @@
 
 #include <QString>
 #include <QSharedPointer>
+//#include <typeinfo>
 #include "Channel.h"
 
 #include "ConcurrentVector.h"
@@ -47,7 +48,7 @@
 class User: public QObject
 {
   Q_OBJECT
-    QString m_login;
+  QString m_login;
   QString m_password;
 
   QString m_result;
