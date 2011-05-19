@@ -26,7 +26,8 @@ HEADERS += \
     inc/ConcurrentVector.h \
     inc/DataChannel.h \
     inc/TimeSlot.h \
-    inc/ChannelAction.h
+    inc/ChannelAction.h \
+    inc/Session.h
 
 SOURCES += \
     src/DataMarks.cpp \
@@ -36,7 +37,8 @@ SOURCES += \
     src/defines.cpp \
     src/User.cpp \
     src/TimeSlot.cpp \
-    src/ChannelAction.cpp
+    src/ChannelAction.cpp \
+    src/Session.cpp
 
 linux: {
     HEADERS +=  \

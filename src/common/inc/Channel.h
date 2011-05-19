@@ -61,7 +61,7 @@ class Channel: public QObject
   public:
 
     static const qulonglong DEFAULT_TIME_SLOT_VALUE_MIN;
-		
+
     Channel(const QString &name, const QString &description, const QString& url="");
 
     virtual qlonglong getId() const;

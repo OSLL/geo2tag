@@ -46,7 +46,13 @@ HEADERS += \
                  inc/SetDefaultTimeSlotMarkRequestJSON.h \
                  inc/SetDefaultTimeSlotMarkResponseJSON.h \
                  inc/SetDefaultTimeSlotRequestJSON.h \
-                 inc/SetDefaultTimeSlotResponseJSON.h
+                 inc/SetDefaultTimeSlotResponseJSON.h \
+    inc/GetSessionPointRequestJSON.h \
+    inc/GetSessionPointResponseJSON.h \
+    inc/SetSessionPointRequestJSON.h \
+    inc/SetSessionPointResponseJSON.h \
+    inc/SetDefaultSessionPointRequestJSON.h \
+    inc/SetDefaultSessionPointResponseJSON.h
 
 SOURCES += \
            src/ChannelListJSON.cpp \
@@ -70,7 +76,10 @@ SOURCES += \
            src/GetTimeSlotMarkRequestJSON.cpp \
            src/AddNewMarkResponseJSON.cpp \
            src/GetTimeSlotMarkResponseJSON.cpp \
-           src/SetTimeSlotMarkRequestJSON.cpp
+           src/SetTimeSlotMarkRequestJSON.cpp \
+    src/GetSessionPointRequestJSON.cpp \
+    src/GetSessionPointResponseJSON.cpp \
+    src/SetSessionPointRequestJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 

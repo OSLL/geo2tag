@@ -81,6 +81,15 @@
 #include "SetDefaultTimeSlotMarkRequestJSON.h"
 #include "SetDefaultTimeSlotMarkResponseJSON.h"
 
+#include "GetSessionPointRequestJSON.h"
+#include "GetSessionPointResponseJSON.h"
+
+#include "SetSessionPointRequestJSON.h"
+#include "SetSessionPointResponseJSON.h"
+
+#include "SetDefaultSessionPointRequestJSON.h"
+#include "SetDefaultSessionPointResponseJSON.h"
+
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
 
@@ -115,6 +124,9 @@ namespace common
     m_processors.insert("setTimeSlotMark", &DbObjectsCollection::processSetTimeSlotMarkQuery);
     m_processors.insert("setDefaultTimeSlot", &DbObjectsCollection::processSetDefaultTimeSlotQuery);
     m_processors.insert("setDefaultTimeSlotMark", &DbObjectsCollection::processSetDefaultTimeSlotMarkQuery);
+    m_processors.insert("setSessionPoint", &DbObjectsCollection::processSetSessionPointQuery);
+    m_processors.insert("getSessionPoint", &DbObjectsCollection::processGetSessionPointQuery);
+    m_processors.insert("setDefaultSessionPoint", &DbObjectsCollection::processSetDefaultSessionPointQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -1024,7 +1036,111 @@ namespace common
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
+  }
 
+  QByteArray DbObjectsCollection::processGetSessionPointQuery(const QByteArray& data)
+  {
+    syslog(LOG_INFO, "starting GetSessionPointQuery processing");
+    GetSessionPointRequestJSON request;
+    syslog(LOG_INFO, " GetSessionPointRequestJSON created, now create GetSessionPointResponseJSON ");
+    GetSessionPointResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    syslog(LOG_INFO, "Starting Json parsing for GetSessionPointQuery");
+    request.parseJson(data);
+    syslog(LOG_INFO, "Json parsed for GetSessionPointQuery");
+
+    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+    if(realUser.isNull())
+    {
+      DefaultResponseJSON response;
+      response.setStatus(error);
+      response.setStatusMessage("Wrong authentification key");
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    response.addUser(realUser);;
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
+  QByteArray DbObjectsCollection::processSetSessionPointQuery(const QByteArray& data)
+  {
+    syslog(LOG_INFO, "starting SetSessionPointQuery processing");
+    SetSessionPointRequestJSON request;
+    syslog(LOG_INFO, " SetSessionPointRequestJSON created, now create SetSessionPointResponseJSON ");
+    SetSessionPointResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    syslog(LOG_INFO, "Starting Json parsing for SetSessionPointQuery");
+    request.parseJson(data);
+    syslog(LOG_INFO, "Json parsed for GetSessionPointQuery");
+
+    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+    if(realUser.isNull())
+    {
+      DefaultResponseJSON response;
+      response.setStatus(error);
+      response.setStatusMessage("Wrong authentification key");
+      answer.append(response.getJson());
+      return answer;
+    }                                                         
+
+    m_updateThread->lockWriting();    
+    realUser->getSession()->setLatitude(request.getLatitude());
+    realUser->getSession()->setLongitude(request.getLongitude());
+    realUser->getSession()->setRadius(request.getRadius());
+    realUser->getSession()->setTimeSlot(request.getTimeSlot());
+    realUser->getSession()->setIsTimeCurrent(request.getIsTimeCurrent());
+    if (!(request.getIsTimeCurrent()))
+      realUser->getSession()->setTime(request.getTime());
+    m_updateThread->unlockWriting();
+
+    response.setStatus(ok);
+    response.setStatusMessage("Data for session is set");
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
+  QByteArray DbObjectsCollection::processSetDefaultSessionPointQuery(const QByteArray& data)
+  {
+    syslog(LOG_INFO, "starting SetDefaultSessionPointQuery processing");
+    SetDefaultSessionPointRequestJSON request;
+    syslog(LOG_INFO, " SetDefaultSessionPointRequestJSON created, now create SetDefaultSessionPointResponseJSON");
+    SetDefaultSessionPointResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    syslog(LOG_INFO, "Starting Json parsing for SetDefaultSessionPointQuery");
+    request.parseJson(data);
+    syslog(LOG_INFO, "Json parsed for GetDefaultSessionPointQuery");
+
+    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+    if(realUser.isNull())
+    {
+      DefaultResponseJSON response;
+      response.setStatus(error);
+      response.setStatusMessage("Wrong authentification key");
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    QSharedPointer<Session> session = QSharedPointer<Session>(new Session());
+
+    m_updateThread->lockWriting();
+    realUser->setSession(session);
+    m_updateThread->unlockWriting();
+
+    response.setStatus(ok);
+    response.setStatusMessage("Now data for session have default values");
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
   }
 
 }                                       // namespace common

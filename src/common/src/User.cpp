@@ -45,7 +45,8 @@
 User::User(const QString& name, const QString& pass):
 m_login(name),
 m_password(pass),
-m_channels(new Channels())
+m_channels(new Channels()),
+m_session(new Sessions())
 {
 }
 
@@ -103,6 +104,18 @@ void User::setPassword(QString password)
 void User::setToken(const QString &token)
 {
   m_token = token;
+}
+
+
+QSharedPointer<Session> User::getSession() const
+{
+  return m_session;
+}
+
+
+void User::setSession(QSharedPointer<Session> session)
+{
+  m_session = session;
 }
 
 

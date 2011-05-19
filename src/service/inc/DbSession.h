@@ -97,6 +97,9 @@ namespace common
     QByteArray processSetTimeSlotMarkQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotMarkQuery(const QByteArray&);
+    QByteArray processGetSessionPointQuery(const QByteArray&);
+    QByteArray processSetSessionPointQuery(const QByteArray&);
+    QByteArray processSetDefaultSessionPointQuery(const QByteArray&);
 
     public:
 

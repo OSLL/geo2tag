@@ -41,6 +41,7 @@
 #include <QString>
 #include <QSharedPointer>
 #include "Channel.h"
+#include "Session.h"
 
 #include "ConcurrentVector.h"
 
@@ -52,8 +53,9 @@ class User: public QObject
 
   QString m_result;
   QString m_token;
-  // list of subscribed channels
-  QSharedPointer<Channels> m_channels;
+
+  QSharedPointer<Channels> m_channels;  // list of subscribed channels
+  QSharedPointer<Session> m_session;
 
   protected:
 
@@ -75,6 +77,9 @@ class User: public QObject
     const QSharedPointer<Channels> getSubscribedChannels() const;
 
     void setPassword(const QString password);
+
+    QSharedPointer<Session> getSession() const;
+    void setSession(QSharedPointer<Session> session);
 
     virtual ~User();
     // class User
