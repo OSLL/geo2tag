@@ -19,8 +19,8 @@ m_isServiceStarted(false),
   connect(daemonRestartButton, SIGNAL(clicked()),SLOT(restartDaemon()));
 
   QTimer *timer = new QTimer(this);
-	connect(timer,SIGNAL(timeout()), SLOT(checkDaemon()));
-	timer->start(5000);
+  connect(timer,SIGNAL(timeout()), SLOT(checkDaemon()));
+  timer->start(5000);
 
   m_optionsWidget = new OptionsWidget("tracker",this);
   m_logWidget = new LogWidget(this);
@@ -52,7 +52,7 @@ void MainWindow::changeEvent(QEvent *e)
 
 void MainWindow::doneButtonClicked()
 {
-	DaemonManager::getInstance().reload();
+  DaemonManager::getInstance().reload();
   moveToFirstPage();
 }
 
@@ -63,12 +63,12 @@ void MainWindow::startButtonClicked()
   if(!m_isServiceStarted)
   {
     startButton->setIcon(QIcon(":/images/start-256.png"));
-		DaemonManager::getInstance().stop();
+    DaemonManager::getInstance().stop();
   }
   else
   {
     startButton->setIcon(QIcon(":/images/stop-256.png"));
-		DaemonManager::getInstance().start();
+    DaemonManager::getInstance().start();
   }
 
 }
@@ -103,7 +103,7 @@ void MainWindow::readData()
 
   if (DaemonManager::getInstance().isStarted())
   {
-		QPointF lastCoords=DaemonManager::getInstance().getLastCoordinates();
+    QPointF lastCoords=DaemonManager::getInstance().getLastCoordinates();
     QString buf=QString::number(lastCoords.x())+","+QString::number(lastCoords.y());
     m_daemonIndicator->setText("Tracker running");
     startButton->setIcon(QIcon(":/images/stop-256.png"));
@@ -123,15 +123,15 @@ void MainWindow::readData()
 
 void MainWindow::restartDaemon()
 {
-	DaemonManager::getInstance().restart()
+  DaemonManager::getInstance().restart()
 }
 
 
 void MainWindow::checkDaemon()
 {
   if(DaemonManager::getInstance().isConnected())
-	{
-		updateData();
-	}
-	else m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");
+  {
+    updateData();
+  }
+  else m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");
 }

@@ -44,7 +44,7 @@
 #include <QVector>
 #include <QSharedPointer>
 
-#include "ConcurrentVector.h"
+//#include "ConcurrentVector.h"
 #include "TimeSlot.h"
 
 class Channel: public QObject

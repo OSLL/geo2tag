@@ -11,11 +11,10 @@ DaemonManager::DaemonManager()
 
 Daemon& DaemonManager::getInstance()
 {
-#ifdef NO_DAEMON
+  #ifdef NO_DAEMON
   static SymbianDaemon daemon;
-#else
+  #else
   static MaemoDaemon daemon;
-#endif
+  #endif
   return daemon;
 }
-

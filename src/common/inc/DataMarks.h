@@ -53,7 +53,7 @@
 class DataMark: public QObject
 {
   Q_OBJECT
-  double m_latitude;
+    double m_latitude;
   double m_longitude;
 
   QString m_label;

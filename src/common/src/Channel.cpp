@@ -142,7 +142,6 @@ void Channel::setDefaultTimeSlot(bool fl)
 }
 
 
-
 Channel::~Channel()
 {
 }

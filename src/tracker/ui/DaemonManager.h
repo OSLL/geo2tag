@@ -5,7 +5,7 @@
 
 class Daemon
 {
-public:
+  public:
     virtual QPointF getLastCoordinates() const=0;
     virtual bool isConnected() const=0;
     virtual bool isStarted() const=0;

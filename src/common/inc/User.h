@@ -35,20 +35,20 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
-#define _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
+#ifndef _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
+#define _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
 
 #include <QString>
 #include <QSharedPointer>
-//#include <typeinfo>
+#include <typeinfo>
 #include "Channel.h"
 
-#include "ConcurrentVector.h"
+//#include "ConcurrentVector.h"
 
 class User: public QObject
 {
   Q_OBJECT
-  QString m_login;
+    QString m_login;
   QString m_password;
 
   QString m_result;

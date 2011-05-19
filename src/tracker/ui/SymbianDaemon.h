@@ -6,14 +6,13 @@
 class SymbianDaemon : public Daemon
 {
 
-public:
+  public:
     virtual QPointF getLastCoordinates() const;
     virtual bool isConnected() const;
     virtual bool isStarted() const;
     virtual void start();
     virtual void stop();
     virtual void reload();
-		virtual void restart();
+    virtual void restart();
 };
-
 #endif
