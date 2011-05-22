@@ -19,12 +19,14 @@ linux: {
              json json/tst \
              http_requests \
              maps \ 
-	     tracker \
              service \
 	     common/tst
 }
 
 symbian: {
+  SUBDIRS += json \
+             http_requests \
+             tracker
 }
 
 

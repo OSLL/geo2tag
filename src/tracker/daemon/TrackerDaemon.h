@@ -34,8 +34,9 @@ class TrackerDaemon : /*public QThread,*/ public Control
 
   bool m_pauseFlag;
   bool m_isConnected;
-
+  #ifndef NO_DAEMON
   QTcpServer * m_controlServer;
+  #endif
   public:
     void run();
   private slots:
@@ -46,9 +47,9 @@ class TrackerDaemon : /*public QThread,*/ public Control
     void onError(QString);
 
     void onOnlineChanged(bool state);
-
+  #ifndef NO_DAEMON
     void newControlConnection();
-
+  #endif
   public:
     TrackerDaemon();
 

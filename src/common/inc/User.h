@@ -35,14 +35,15 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
-#define _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
+#ifndef _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
+#define _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
 
 #include <QString>
 #include <QSharedPointer>
+#include <typeinfo>
 #include "Channel.h"
 
-#include "ConcurrentVector.h"
+//#include "ConcurrentVector.h"
 
 class User: public QObject
 {
@@ -56,13 +57,14 @@ class User: public QObject
   QSharedPointer<Channels> m_channels;
 
   protected:
-    User(const QString& name, const QString& passw);
 
     void setToken(const QString&);
 
   public:
 
-    virtual qlonglong getId() const = 0;
+    User(const QString& name, const QString& passw);
+
+    virtual qlonglong getId() const;
 
     void subscribe(const QSharedPointer<Channel>& channel);
 

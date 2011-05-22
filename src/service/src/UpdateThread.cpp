@@ -237,6 +237,22 @@ void UpdateThread::updateReflections(DataMarks &tags, Users &users, Channels &ch
       QSharedPointer<TimeSlot> timeslot = timeSlots.item(timeslot_id);
 
       channel->setTimeSlot(timeslot);
+      channel->setDefaultTimeSlot(false);
+    }
+  }
+
+  {
+    QSqlQuery query(m_database);
+    query.exec("select tag_id, timeslot_id from tagtimeslot;");
+    while (query.next())
+    {
+      qulonglong timeslot_id = query.record().value("timeslot_id").toULongLong();
+      qlonglong tag_id = query.record().value("tag_id").toLongLong();
+
+      QSharedPointer<DataMark> tag = tags.item(tag_id);
+      QSharedPointer<TimeSlot> timeslot = timeSlots.item(timeslot_id);
+
+      tag->setTimeSlot(timeslot);
     }
   }
 
