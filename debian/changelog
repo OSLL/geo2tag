@@ -1,3 +1,9 @@
+wikigps (0.1.6) unstable; urgency=low
+
+  * lots of fixies
+
+ -- Open Source and Linux lab <osll@lists.osll.spb.ru>  Fri, 13 May 2011 22:17:30 +0400
+
 wikigps (0.1.5k) unstable; urgency=low
 
   * fix for daemon fail
