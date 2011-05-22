@@ -1,15 +1,24 @@
 TEMPLATE = subdirs
 
-TARGET = daemon/wikigpsTracker ui/wikigpsTracker-ui observer/wikigps-observer
 
-target.path = /usr/bin
-INSTALLS += target
 
 include(../../config.pri)
 
+linux {
+       SUBDIRS = ui observer
+       TARGET =  ui/wikigpsTracker-ui observer/wikigps-observer
 
-SUBDIRS = ui observer
+
+}
+
+symbian {
+	SUBDIRS = ui
+}
 
 maemo5 {
-	SUBDIRS += daemon
+	SUBDIRS = ui daemon
+        TARGET =  ui/wikigpsTracker-ui daemon/wikigpsTracker
 }
+
+target.path = /usr/bin
+INSTALLS += target

@@ -40,6 +40,8 @@
  * ---------------------------------------------------------------- */
 #include <QDateTime>
 #include <QThread>
+#include <QFile>
+#include <QDebug>
 
 #include <iostream>
 #include <sstream>
@@ -65,8 +67,16 @@ namespace common
     setReady(false);
     m_longitude = 0.;
     m_latitude = 0.;
-    m_doc = xmlReadFile(gpxFile.toStdString().c_str(), NULL, 0);
-    start();
+
+    if( !QFile::exists(gpxFile) )
+    {
+      qDebug() << "File `"<<gpxFile<<"' does not exists";
+    }
+    else
+    {
+      m_doc = xmlReadFile(gpxFile.toStdString().c_str(), NULL, 0);
+      start();
+    }
   }
 
   struct tm getTm(const char* string)

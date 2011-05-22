@@ -42,15 +42,24 @@
 
 #include "User_Test.h"
 #include "GpsInfo_Test.h"
+#include "Channel_Test.h"
 
 int main(int c, char **v)
 {
   QApplication app(c,v);
 
-  Test::User_Test test1;
-  QTest::qExec(&test1);
-  Test::GpsInfo_Test test2;
-  QTest::qExec(&test2);
+  QObject* tests[]=
+  {
+    new Test::User_Test(&app),
+    new Test::GpsInfo_Test(&app),
+    new Test::Channel_Test(&app),
+  };
+
+  for(size_t i = 0; i<sizeof(tests)/sizeof(QObject*); ++i)
+  {
+    QTest::qExec(tests[i]);
+  }
+
   return 0;
 }
 
