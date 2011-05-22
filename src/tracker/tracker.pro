@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 
-TARGET = daemon/wikigpsTracker ui/wikigpsTracker-ui observer/wikigps-observer
+TARGET = ui/wikigpsTracker-ui observer/wikigps-observer
 
 INSTALLS += target 
 
@@ -19,7 +19,7 @@ symbian {
 
 maemo5 {
 	SUBDIRS = ui daemon
-        TARGET =  ui/wikigpsTracker-ui daemon/wikigpsTracker
+	TARGET += daemon/wikigpsTracker 
 	eventd_script.files = wikigpsTracker
 	eventd_script.path = /etc/event.d
 
