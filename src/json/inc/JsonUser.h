@@ -44,7 +44,7 @@
 /*!
  *
  */
-class JsonUser: public User
+class JsonUser: public common::User
 {
   static qlonglong globalUserId;
   qlonglong m_id;

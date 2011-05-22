@@ -42,10 +42,13 @@
 #include "User.h"
 #include <algorithm>
 
+namespace common
+{
+
 User::User(const QString& name, const QString& pass):
 m_login(name),
-m_password(pass),
-m_channels(new Channels())
+  m_password(pass),
+  m_channels(new Channels())
 {
 }
 
@@ -110,5 +113,6 @@ User::~User()
 {
 }
 
+} // namespace common
 
 /* ===[ End of file ]=== */

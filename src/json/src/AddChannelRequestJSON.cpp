@@ -1,9 +1,17 @@
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
+
 
 #include "AddChannelRequestJSON.h"
 #include "JsonUser.h"
 #include "JsonChannel.h"
+
+#ifndef Q_OS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
+
 
 AddChannelRequestJSON::AddChannelRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
@@ -37,6 +45,6 @@ void AddChannelRequestJSON::parseJson(const QByteArray&data)
   QString name = result["name"].toString();
   QString description = result["description"].toString();
   QString url = result["url"].toString();
-  m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown",auth_token)));
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("unknown","unknown",auth_token)));
   m_channelsContainer->push_back(QSharedPointer<Channel>(new JsonChannel(name,description,url)));
 }

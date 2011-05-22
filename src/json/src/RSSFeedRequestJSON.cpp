@@ -29,8 +29,9 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
+
+
+
 
 #include <QVariant>
 #include <QDebug>
@@ -39,6 +40,15 @@
 #include "JsonUser.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
+
+#ifndef Q_OS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
+
 
 RSSFeedRequestJSON::RSSFeedRequestJSON(double latitude, double longitude, double radius, QObject *parent):
 JsonSerializer(parent), m_latitude(latitude), m_longitude(longitude), m_radius(radius)
@@ -66,7 +76,7 @@ void RSSFeedRequestJSON::parseJson(const QByteArray &data)
   }
 
   QString authToken = result["auth_token"].toString();
-  m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("dummyUser[RSSFeedRequest]","dummyPassword",authToken)));
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("dummyUser[RSSFeedRequest]","dummyPassword",authToken)));
   m_latitude = result["latitude"].toDouble();
   m_longitude = result["longitude"].toDouble();
   m_radius = result["radius"].toDouble();

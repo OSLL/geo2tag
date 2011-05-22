@@ -48,7 +48,12 @@
 #include "JsonUser.h"
 #include "LoginRequestJSON.h"
 #include "LoginResponseJSON.h"
+
+#ifndef Q_OS_SYMBIAN
 #include <syslog.h>
+#else
+#include "symbian.h"
+#endif
 
 LoginQuery::LoginQuery(const QString &login, const QString &password, QObject *parent):
 DefaultQuery(parent), m_login(login), m_password(password)
@@ -70,7 +75,7 @@ QString LoginQuery::getUrl() const
 
 QByteArray LoginQuery::getRequestBody() const
 {
-  QSharedPointer<User> dummyUser(new JsonUser(m_login,m_password));
+  QSharedPointer<common::User> dummyUser(new JsonUser(m_login,m_password));
   LoginRequestJSON request;
   request.addUser(dummyUser);
   return request.getJson();
@@ -79,12 +84,13 @@ QByteArray LoginQuery::getRequestBody() const
 
 void LoginQuery::processReply(QNetworkReply *reply)
 {
+#ifndef Q_OS_SYMBIAN
   LoginResponseJSON response;
   response.parseJson(reply->readAll());
   if(response.getStatus() == "Ok")
   {
-    QSharedPointer<User> user = response.getUsers()->at(0);
-    m_user = QSharedPointer<User>(new JsonUser(m_login, m_password, user->getToken()));
+    QSharedPointer<common::User> user = response.getUsers()->at(0);
+    m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, user->getToken()));
     syslog(LOG_INFO,"!!connected!");
     Q_EMIT connected();
   }
@@ -92,7 +98,7 @@ void LoginQuery::processReply(QNetworkReply *reply)
   {
     Q_EMIT errorOccured(response.getStatusMessage());
   }
-
+#endif
 }
 
 
@@ -103,7 +109,7 @@ void LoginQuery::setQuery(const QString& login, const QString& password)
 }
 
 
-QSharedPointer<User> LoginQuery::getUser() const
+QSharedPointer<common::User> LoginQuery::getUser() const
 {
   return m_user;
 }

@@ -5,7 +5,7 @@
 
 namespace Test
 {
-  class UserTestImpl : public User
+  class UserTestImpl : public common::User
   {
     Q_OBJECT;
 

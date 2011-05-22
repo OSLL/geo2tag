@@ -1,11 +1,18 @@
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
 
 #include "AddNewMarkRequestJSON.h"
 #include "DataMarks.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
+
+#ifndef Q_OS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
+
 
 AddNewMarkRequestJSON::AddNewMarkRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
@@ -33,7 +40,7 @@ void AddNewMarkRequestJSON::parseJson(const QByteArray &data)
   double latitude = result["latitude"].toDouble();
   QDateTime time = QDateTime::fromString(result["time"].toString(), "dd MM yyyy HH:mm:ss.zzz");
 
-  QSharedPointer<User>  user(new JsonUser("unknown", "unknown", token));
+  QSharedPointer<common::User>  user(new JsonUser("unknown", "unknown", token));
   QSharedPointer<Channel> channel(new JsonChannel(channel_name, "unknown"));
   QSharedPointer<DataMark> tag(new JsonDataMark(latitude, longitude, title, description, link, time));
   tag->setChannel(channel);

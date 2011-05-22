@@ -1,11 +1,19 @@
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
+
 
 #include <QDebug>
 
 #include "AddNewMarkResponseJSON.h"
 #include "JsonDataMark.h"
 #include "DataMarks.h"
+
+#ifndef Q_OS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
+
 
 AddNewMarkResponseJSON::AddNewMarkResponseJSON(QObject *parent) : JsonSerializer(parent)
 {

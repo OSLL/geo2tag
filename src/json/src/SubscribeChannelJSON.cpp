@@ -57,7 +57,8 @@ SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(QObject *parent) : Json
 }
 
 
-SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel, const QSharedPointer<User> &user, QObject *parent) : JsonSerializer(parent)
+SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel, 
+const QSharedPointer<common::User> &user, QObject *parent) : JsonSerializer(parent)
 {
   m_usersContainer->push_back(user);
   m_channelsContainer->push_back(channel);
@@ -87,7 +88,7 @@ void SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
 
   QSharedPointer<Channel> dummyChannel(new JsonChannel(channelLabel, "from SubscribeChannelReques"));
   m_channelsContainer->push_back(dummyChannel);
-  QSharedPointer<User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
+  QSharedPointer<common::User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
   m_usersContainer->push_back(dummyUser);
 }
 

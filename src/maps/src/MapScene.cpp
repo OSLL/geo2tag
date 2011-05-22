@@ -24,8 +24,8 @@
 
 MapScene::MapScene(QObject *parent) :
 QGraphicsScene(parent),
-m_zoom(0),
-m_latitude(DEFAULT_LATITUDE),
+m_zoom(2),
+m_latitude(0/*DEFAULT_LATITUDE*/),
 m_longitude(DEFAULT_LONGITUDE)
 {
   m_tiles = QHash<TilePoint, QGraphicsPixmapItem * >();
@@ -261,7 +261,7 @@ void MapScene::set_zoom()
       m_tiles.value(tp)->show();
   }
 
-  qreal max_point = (pow(2,m_zoom) - 1)*256 + 256;
+  double max_point = double((pow(2.,double(m_zoom)) - 1)*256 + 256);
 
   QRectF zoom_rect = QRectF(
     QPointF(0.0, 0.0),
@@ -336,6 +336,23 @@ void MapScene::keyPressEvent(QKeyEvent *event)
     screen_delta.setY(screen_delta.y() - KEY_MOVE_DIST);
   if(event->key() == Qt::Key_Up)
     screen_delta.setY(screen_delta.y() + KEY_MOVE_DIST);
+
+  switch(event->key())
+  {
+  case Qt::Key_Plus:
+    m_zoom ++;
+    break;
+
+  case Qt::Key_Minus:
+    m_zoom--;
+  break;
+
+  default:
+    break;
+  }
+  set_zoom();
+  emit update();
+
 
   qDebug() << "Pressed key: " << event->key() << "\n";
 

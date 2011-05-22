@@ -48,48 +48,50 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "DefaultQuery.h"
+#include "User.h"
+#include <QSharedPointer>
 
 namespace GUI
 {
-  /*!
+/*!
    * SubscribeChannelQuery class definition.
    *
    * The object of this class represents http query to server.
    * This query includes json request to subscribe channel.
    *
    */
-  class SubscribeChannelQuery: public DefaultQuery
-  {
-    Q_OBJECT
+class SubscribeChannelQuery: public DefaultQuery
+{
+  Q_OBJECT
 
-      QSharedPointer<User> m_user;
-    QSharedPointer<Channel> m_channel;
-    QString m_status;
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
+  QSharedPointer<User> m_user;
+  QSharedPointer<Channel> m_channel;
+  QString m_status;
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-      virtual void processReply(QNetworkReply *reply);
+  virtual void processReply(QNetworkReply *reply);
 
-    public:
+public:
 
-      SubscribeChannelQuery(QObject *parent = 0);
+  SubscribeChannelQuery(QObject *parent = 0);
 
-      SubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
+  SubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
 
-      void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
+  void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
 
-      ~SubscribeChannelQuery();
+  ~SubscribeChannelQuery();
 
-      const QString& getStatus() const;
+  const QString& getStatus() const;
 
-      Q_SIGNALS:
-      void responseReceived();
+Q_SIGNALS:
+  void responseReceived();
 
-      // class SubscribeChannelQuery
-  };
-  // namespace GUI
+  // class SubscribeChannelQuery
+};
+// namespace GUI
 }
 
 

@@ -40,16 +40,22 @@
  * PROJ: OSLL/fedexday
  * ---------------------------------------------------------------- */
 
-#include "ApplyMarkQuery.h"
+
 #include "defines.h"
 #include <QDebug>
+#ifndef Q_OS_SYMBIAN
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 #include "QVariant"
 #include "QVariantMap"
+#include "ApplyMarkQuery.h"
 
-namespace GUI
-{
+//kkv namespace GUI
+//kkv {
   ApplyMarkQuery::ApplyMarkQuery(QObject *parent)
     : QObject(parent)
   {
@@ -169,7 +175,7 @@ namespace GUI
       {
           qDebug("ssl error \n");
       }*/
-}                                       // namespace GUI
+//kkv}                                       // namespace GUI
 
 
 /* ===[ End of file $HeadURL$ ]=== */

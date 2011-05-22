@@ -152,7 +152,7 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
 }
 
 
-QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& user)
+QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<common::User>& user)
 {
   bool result;
   QSqlQuery newUserQuery(m_database);
@@ -176,7 +176,7 @@ QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& us
   {
     syslog(LOG_INFO,"Rollback for NewUser sql query");
     m_database.rollback();
-    return QSharedPointer<User>(NULL);
+    return QSharedPointer<common::User>(NULL);
   }else
   {
     syslog(LOG_INFO,"Commit for NewUser sql query");
@@ -187,7 +187,7 @@ QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& us
 }
 
 
-bool QueryExecutor::subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel)
+bool QueryExecutor::subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel)
 {
   bool result;
   QSqlQuery insertNewSubscribtion(m_database);

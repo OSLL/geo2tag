@@ -2,7 +2,11 @@
 #define SYMBIANDAEMON_H_
 
 #include "DaemonManager.h"
+
+#ifndef Q_OS_SYMBIAN
 #include "TrackerDaemon.h"
+#endif
+
 class SymbianDaemon : public Daemon
 {
 

@@ -15,6 +15,10 @@ INCLUDEPATH += . \
     inc \
 
 
+CONFIG += mobility
+MOBILITY = location
+
+
 # Input
 HEADERS += \
     inc/ConcurrentVector.h \
@@ -34,8 +38,9 @@ SOURCES += \
     src/Channel.cpp \
     src/User.cpp \
     src/ChannelAction.cpp \
-    src/defines.cpp \
-		src/DataMarks.cpp
+    src/DataMarks.cpp \
+    src/GpsInfo.cpp \ 
+    src/defines.cpp
 
 linux: {
     HEADERS += inc/GpsModeller.h
@@ -52,12 +57,12 @@ linux: {
 
 maemo5: {
 
-    CONFIG += mobility
-    MOBILITY = location
+    HEADERS +=  \
+               inc/MobilityGps.h
 
-    HEADERS += inc/MobilityGps.h
+    SOURCES +=  \
+               src/MobilityGps.cpp
     SOURCES += src/MobilityGps.cpp
-
     LIBS += -lQtLocation
 }
 

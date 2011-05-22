@@ -45,6 +45,9 @@
 
 //#include "ConcurrentVector.h"
 
+namespace common
+{
+
 class User: public QObject
 {
   Q_OBJECT
@@ -82,6 +85,9 @@ class User: public QObject
 };
 
 typedef ConcurrentVector<User> Users;
+
+} //namespace common
+
 //_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 #endif
 

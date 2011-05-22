@@ -17,6 +17,8 @@
 #include <QPointF>
 #include <QNetworkConfigurationManager>
 
+#ifndef Q_OS_SYMBIAN
+
 class TrackerDaemon : /*public QThread,*/ public Control
 {
   Q_OBJECT;
@@ -66,5 +68,8 @@ class TrackerDaemon : /*public QThread,*/ public Control
   public slots:
 
 };
+
+#endif
+
 // TRACKERDAEMON_H
 #endif

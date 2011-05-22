@@ -57,7 +57,7 @@ SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON()
 }
 
 
-SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON(const QSharedPointer<User> &user)
+SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON(const QSharedPointer<common::User> &user)
 {
   m_usersContainer->push_back(user);
 }
@@ -77,7 +77,7 @@ void SubscribedChannelsRequestJSON::parseJson(const QByteArray &data)
     return;
   }
   QString authToken =    result["auth_token"].toString();
-  QSharedPointer<User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
+  QSharedPointer<common::User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
   m_usersContainer->push_back(dummyUser);
 }
 

@@ -29,9 +29,9 @@ class QueryExecutor : public QObject
 
     const QString generateNewToken(const QString& login,const QString& password) const;
 
-    bool                     subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel);
+    bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
-    QSharedPointer<User>     insertNewUser(const QSharedPointer<User>&);
+    QSharedPointer<common::User>    insertNewUser(const QSharedPointer<common::User>&);
     QSharedPointer<Channel>  insertNewChannel(const QSharedPointer<Channel>&);
     QSharedPointer<TimeSlot> insertNewTimeSlot(const QSharedPointer<TimeSlot>&);
     bool                     insertNewChannelTimeSlot(const QSharedPointer<Channel>&, const QSharedPointer<TimeSlot>&);

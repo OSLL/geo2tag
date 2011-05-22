@@ -61,7 +61,7 @@ class DataMark: public QObject
   QString m_url;
   QDateTime m_time;
 
-  QSharedPointer<User> m_user;
+  QSharedPointer<common::User> m_user;
 
   QSharedPointer<Channel> m_channel;
 
@@ -72,7 +72,7 @@ class DataMark: public QObject
     DataMark(double latitude, double longitude, QString label,
       QString description, QString url, QDateTime time);
 
-    void setUser(QSharedPointer<User> user);
+    void setUser(QSharedPointer<common::User> user);
 
     void setChannel(QSharedPointer<Channel> channel);
 
@@ -98,7 +98,7 @@ class DataMark: public QObject
     const QDateTime& getTime() const;
     void setTime(const QDateTime& time=QDateTime::currentDateTime().toUTC());
 
-    QSharedPointer<User> getUser() const;
+    QSharedPointer<common::User> getUser() const;
 
     QSharedPointer<Channel> getChannel() const;
     static double getDistance(double lat1, double lon1, double lat2, double lon2);
