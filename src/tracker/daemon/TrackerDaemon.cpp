@@ -23,12 +23,13 @@ m_tagQuery(NULL),
 m_pauseFlag(true),
 m_isConnected(false)
 {
+  #ifndef NO_DAEMON
   m_controlServer = new QTcpServer(NULL);
-
   connect(m_controlServer, SIGNAL(newConnection()),SLOT(newControlConnection()));
+  m_controlServer->listen(QHostAddress::LocalHost, 31234);
+  #endif
   connect(&m_netManager,SIGNAL(onlineStateChanged(bool)),SLOT(onOnlineChanged(bool)));
 
-  m_controlServer->listen(QHostAddress::LocalHost, 31234);
 }
 
 
@@ -46,6 +47,7 @@ void TrackerDaemon::onOnlineChanged(bool state)
 }
 
 
+#ifndef NO_DAEMON
 void TrackerDaemon::newControlConnection()
 {
   qDebug() << "GUI connected to the control socket";
@@ -54,7 +56,7 @@ void TrackerDaemon::newControlConnection()
     new ControlThread(m_controlServer->nextPendingConnection(),this,this);
   }
 }
-
+#endif
 
 void TrackerDaemon::run()
 {

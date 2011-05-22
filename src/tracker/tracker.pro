@@ -2,17 +2,23 @@ TEMPLATE = subdirs
 
 TARGET = ui/wikigpsTracker-ui observer/wikigps-observer
 
-target.path = /usr/bin
 INSTALLS += target 
 
 include(../../config.pri)
 
+linux {
+       SUBDIRS = ui observer
+       TARGET =  ui/wikigpsTracker-ui observer/wikigps-observer
 
-SUBDIRS = ui observer 
 
+}
+
+symbian {
+	SUBDIRS = ui
+}
 
 maemo5 {
-	SUBDIRS += daemon
+	SUBDIRS = ui daemon
 	TARGET += daemon/wikigpsTracker 
 	eventd_script.files = wikigpsTracker
 	eventd_script.path = /etc/event.d
@@ -28,3 +34,6 @@ maemo5 {
 
   INSTALLS += eventd_script logrotate_script icon desktop_file
 }
+
+target.path = /usr/bin
+INSTALLS += target

@@ -17,11 +17,11 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
   Q_OBJECT
 
     bool m_isServiceStarted;
-  QTcpSocket *m_daemon;
-  QTextStream *m_device;
-  QString m_lastCoord;
+  //  QTcpSocket *m_daemon;
+  //  QTextStream *m_device;
+  //  QString m_lastCoord;
   // contain data, recieved from daemon
-  QString m_message;
+  //  QString m_message;
 
   LogWidget * m_logWidget;
   OptionsWidget *m_optionsWidget;

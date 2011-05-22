@@ -51,9 +51,9 @@ HEADERS += \
            inc/DataMarkInternal.h \
            inc/UserInternal.h \
            inc/DbSession.h \
-	   inc/UpdateThread.h \
+      	   inc/UpdateThread.h \
            inc/QueryExecutor.h \
-    	   inc/TimeSlotInternal.h
+    	     inc/TimeSlotInternal.h \
 
 
 SOURCES += src/main.cpp \
@@ -65,7 +65,7 @@ SOURCES += src/main.cpp \
            src/DbSession.cpp \
            src/UpdateThread.cpp \
            src/QueryExecutor.cpp \
-           src/TimeSlotInternal.cpp
+           src/TimeSlotInternal.cpp\
 
 LIBS +=  -lcommon -lfcgi -lwikigpsJson -lpq 
 OBJECTS_DIR = .obj

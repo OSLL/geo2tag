@@ -1,6 +1,5 @@
 #include <QSettings>
 #include <QDebug>
-#include <syslog.h>
 #include "defines.h"
 
 QString getServerUrl()
