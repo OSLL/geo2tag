@@ -36,13 +36,14 @@
  *
  * File description
  *
- * PROJ: OSLL/geoblog
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
 #include "ChannelInternal.h"
 #include "DataMarkInternal.h"
 #include "DbSession.h"
 #include "DynamicCastFailure.h"
+#include "JsonTimeSlot.h"
 #include <syslog.h>
 
 DbChannel::DbChannel(qlonglong id,

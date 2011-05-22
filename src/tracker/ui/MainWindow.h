@@ -3,8 +3,11 @@
 
 #include <QTcpSocket>
 #include <QTextStream>
-
+#ifndef MAEMO5_UI
 #include "ui_MainWindow.h"
+#else
+#include "ui_MainWindow_maemo.h"
+#endif
 #include "LogWidget.h"
 #include "OptionsWidget.h"
 #include "AboutWidget.h"
@@ -14,11 +17,11 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
   Q_OBJECT
 
     bool m_isServiceStarted;
-  QTcpSocket *m_daemon;
-  QTextStream *m_device;
-  QString m_lastCoord;
+  //  QTcpSocket *m_daemon;
+  //  QTextStream *m_device;
+  //  QString m_lastCoord;
   // contain data, recieved from daemon
-  QString m_message;
+  //  QString m_message;
 
   LogWidget * m_logWidget;
   OptionsWidget *m_optionsWidget;
