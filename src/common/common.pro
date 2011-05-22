@@ -28,8 +28,7 @@ HEADERS += \
     inc/DataMarks.h \
     inc/GpsInfo.h \
     inc/defines.h \
-    inc/DataChannel.h
-
+    inc/DataChannel.h\
     inc/TimeSlot.h \
     inc/ChannelAction.h\
 		inc/DataMarks.h
