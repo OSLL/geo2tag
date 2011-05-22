@@ -58,14 +58,13 @@ class Channel: public QObject
   QSharedPointer<TimeSlot> m_timeSlot;
   bool m_timeSlotIsDefault;
 
-  protected:
-    Channel(const QString &name, const QString &description, const QString& url="");
-
   public:
 
-    static const qulonglong DEFAULT_TIME_SLOT_VALUE_MS;
+    static const qulonglong DEFAULT_TIME_SLOT_VALUE_MIN;
+		
+    Channel(const QString &name, const QString &description, const QString& url="");
 
-    virtual qlonglong getId() const = 0;
+    virtual qlonglong getId() const;
 
     const QString& getDescription() const;
 

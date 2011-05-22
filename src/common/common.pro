@@ -24,16 +24,18 @@ HEADERS += \
     inc/DataMarks.h \
     inc/GpsInfo.h \
     inc/defines.h \
-    inc/DataChannel.h
-
+    inc/DataChannel.h \
+    inc/TimeSlot.h \
+    inc/ChannelAction.h\
+		inc/DataMarks.h
 
 SOURCES += \
     src/TimeSlot.cpp \
     src/Channel.cpp \
     src/User.cpp \
-    src/DataMarks.cpp \
-    src/GpsInfo.cpp \ 
-    src/defines.cpp
+    src/ChannelAction.cpp \
+    src/defines.cpp \
+		src/DataMarks.cpp
 
 linux: {
     HEADERS += inc/GpsModeller.h
@@ -54,7 +56,6 @@ maemo5: {
     MOBILITY = location
 
     HEADERS += inc/MobilityGps.h
-
     SOURCES += src/MobilityGps.cpp
 
     LIBS += -lQtLocation
