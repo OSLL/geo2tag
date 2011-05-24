@@ -45,74 +45,65 @@
 namespace common
 {
 
-User::User(const QString& name, const QString& pass):
-m_login(name),
-  m_password(pass),
-  m_channels(new Channels())
-{
-}
+  User::User(const QString& name, const QString& pass):
+  m_login(name),
+    m_password(pass),
+    m_channels(new Channels())
+  {
+  }
 
+  qlonglong User::getId() const
+  {
+    // Database is not contain 0 in sequences, see scripts/base.sql
+    return 0;
+  }
 
-qlonglong User::getId() const
-{
-  // Database is not contain 0 in sequences, see scripts/base.sql
-  return 0;
-}
+  void User::subscribe(const QSharedPointer<Channel>& channel)
+  {
+    if(!m_channels->exist(channel->getId()))
+      m_channels->push_back(channel);
+  }
 
+  void User::unsubscribe(const QSharedPointer<Channel>& channel)
+  {
+    m_channels->erase(channel);
+  }
 
-void User::subscribe(const QSharedPointer<Channel>& channel)
-{
-  if(!m_channels->exist(channel->getId()))
-    m_channels->push_back(channel);
-}
+  const QString& User::getLogin() const
+  {
+    return m_login;
+  }
 
+  const QString& User::getToken() const
+  {
+    return m_token;
+  }
 
-void User::unsubscribe(const QSharedPointer<Channel>& channel)
-{
-  m_channels->erase(channel);
-}
+  const QString& User::getPassword() const
+  {
+    return m_password;
+  }
 
+  const QSharedPointer<Channels> User::getSubscribedChannels() const
+  {
+    return m_channels;
+  }
 
-const QString& User::getLogin() const
-{
-  return m_login;
-}
+  void User::setPassword(QString password)
+  {
+    m_password = password;
+  }
 
+  void User::setToken(const QString &token)
+  {
+    m_token = token;
+  }
 
-const QString& User::getToken() const
-{
-  return m_token;
-}
+  User::~User()
+  {
+  }
 
+}                                       // namespace common
 
-const QString& User::getPassword() const
-{
-  return m_password;
-}
-
-
-const QSharedPointer<Channels> User::getSubscribedChannels() const
-{
-  return m_channels;
-}
-
-
-void User::setPassword(QString password)
-{
-  m_password = password;
-}
-
-
-void User::setToken(const QString &token)
-{
-  m_token = token;
-}
-
-
-User::~User()
-{
-}
-
-} // namespace common
 
 /* ===[ End of file ]=== */

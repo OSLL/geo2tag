@@ -80,6 +80,7 @@ qlonglong DataMark::getId() const
   return 0;
 }
 
+
 void DataMark::setUser(QSharedPointer<common::User> user)
 {
   m_user=user;

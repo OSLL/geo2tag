@@ -48,45 +48,46 @@
 namespace common
 {
 
-class User: public QObject
-{
-  Q_OBJECT
-    QString m_login;
-  QString m_password;
+  class User: public QObject
+  {
+    Q_OBJECT
+      QString m_login;
+    QString m_password;
 
-  QString m_result;
-  QString m_token;
-  // list of subscribed channels
-  QSharedPointer<Channels> m_channels;
+    QString m_result;
+    QString m_token;
+    // list of subscribed channels
+    QSharedPointer<Channels> m_channels;
 
-  protected:
+    protected:
 
-    void setToken(const QString&);
+      void setToken(const QString&);
 
-  public:
+    public:
 
-    User(const QString& name, const QString& passw);
+      User(const QString& name, const QString& passw);
 
-    virtual qlonglong getId() const;
+      virtual qlonglong getId() const;
 
-    void subscribe(const QSharedPointer<Channel>& channel);
+      void subscribe(const QSharedPointer<Channel>& channel);
 
-    void unsubscribe(const QSharedPointer<Channel>& channel);
+      void unsubscribe(const QSharedPointer<Channel>& channel);
 
-    const QString& getLogin() const;
-    const QString& getPassword() const;
-    const QString& getToken() const;
-    const QSharedPointer<Channels> getSubscribedChannels() const;
+      const QString& getLogin() const;
+      const QString& getPassword() const;
+      const QString& getToken() const;
+      const QSharedPointer<Channels> getSubscribedChannels() const;
 
-    void setPassword(const QString password);
+      void setPassword(const QString password);
 
-    virtual ~User();
-    // class User
-};
+      virtual ~User();
+      // class User
+  };
 
-typedef ConcurrentVector<User> Users;
+  typedef ConcurrentVector<User> Users;
 
-} //namespace common
+}                                       //namespace common
+
 
 //_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 #endif

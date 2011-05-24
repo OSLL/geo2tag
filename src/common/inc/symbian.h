@@ -39,11 +39,10 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _symbian_H_B050ADA3_17AA_483B_A8CF_7A678519D725_INCLUDED_
 #define _symbian_H_B050ADA3_17AA_483B_A8CF_7A678519D725_INCLUDED_
 
-namespace 
+namespace
 {
   const int LOG_INFO = 0;
   void syslog(int priority, const char *format, ...)
@@ -51,7 +50,5 @@ namespace
 
   }
 
-  
-} // namespace 
-
-#endif //_symbian_H_B050ADA3_17AA_483B_A8CF_7A678519D725_INCLUDED_
+}                                       // namespace
+#endif                                  //_symbian_H_B050ADA3_17AA_483B_A8CF_7A678519D725_INCLUDED_

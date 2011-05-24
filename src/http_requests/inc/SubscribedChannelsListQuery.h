@@ -53,45 +53,45 @@
 
 namespace GUI
 {
-/*!
+  /*!
    * SubscribedChannelsListQuery class definition.
    *
    * The object of this class represents http query to server.
    * This query includes json request for list of subscribed channels.
    *
    */
-class SubscribedChannelsListQuery : public DefaultQuery
-{
-  Q_OBJECT
+  class SubscribedChannelsListQuery : public DefaultQuery
+  {
+    Q_OBJECT
 
-  QSharedPointer<User> m_user;
-  QSharedPointer<Channels> m_channels;
+      QSharedPointer<User> m_user;
+    QSharedPointer<Channels> m_channels;
 
-  virtual QString getUrl() const;
-  virtual QByteArray getRequestBody() const;
+    virtual QString getUrl() const;
+    virtual QByteArray getRequestBody() const;
 
-private Q_SLOTS:
+    private Q_SLOTS:
 
-  virtual void processReply(QNetworkReply *reply);
+      virtual void processReply(QNetworkReply *reply);
 
-public:
+    public:
 
-  SubscribedChannelsListQuery(QObject *parent = 0);
+      SubscribedChannelsListQuery(QObject *parent = 0);
 
-  SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent = 0);
+      SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent = 0);
 
-  ~SubscribedChannelsListQuery();
+      ~SubscribedChannelsListQuery();
 
-  const QSharedPointer<Channels>& getChannels() const;
+      const QSharedPointer<Channels>& getChannels() const;
 
-Q_SIGNALS:
+      Q_SIGNALS:
 
-  void responseReceived();
+      void responseReceived();
 
-  // class SubscribedChannelsListQuery
-};
+      // class SubscribedChannelsListQuery
+  };
 
-// namespace GUI
+  // namespace GUI
 }
 
 

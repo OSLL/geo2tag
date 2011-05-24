@@ -31,32 +31,38 @@
 using namespace QJson;
 
 ParserPrivate::ParserPrivate() :
-    m_scanner(0)
-  , m_negate(false)
-  , m_error(false)
+m_scanner(0)
+, m_negate(false)
+, m_error(false)
 {
 }
+
 
 ParserPrivate::~ParserPrivate()
 {
   delete m_scanner;
 }
 
-void ParserPrivate::setError(QString errorMsg, int errorLine) {
+
+void ParserPrivate::setError(QString errorMsg, int errorLine)
+{
   m_error = true;
   m_errorMsg = errorMsg;
   m_errorLine = errorLine;
 }
 
+
 Parser::Parser() :
-    d(new ParserPrivate)
+d(new ParserPrivate)
 {
 }
+
 
 Parser::~Parser()
 {
   delete d;
 }
+
 
 QVariant Parser::parse (QIODevice* io, bool* ok)
 {
@@ -64,8 +70,10 @@ QVariant Parser::parse (QIODevice* io, bool* ok)
   delete d->m_scanner;
   d->m_scanner = 0;
 
-  if (!io->isOpen()) {
-    if (!io->open(QIODevice::ReadOnly)) {
+  if (!io->isOpen())
+  {
+    if (!io->open(QIODevice::ReadOnly))
+    {
       if (ok != 0)
         *ok = false;
       qCritical ("Error opening device");
@@ -73,7 +81,8 @@ QVariant Parser::parse (QIODevice* io, bool* ok)
     }
   }
 
-  if (!io->isReadable()) {
+  if (!io->isReadable())
+  {
     if (ok != 0)
       *ok = false;
     qCritical ("Device is not readable");
@@ -95,7 +104,9 @@ QVariant Parser::parse (QIODevice* io, bool* ok)
   return d->m_result;
 }
 
-QVariant Parser::parse(const QByteArray& jsonString, bool* ok) {
+
+QVariant Parser::parse(const QByteArray& jsonString, bool* ok)
+{
   QBuffer buffer;
   buffer.open(QBuffer::ReadWrite);
   buffer.write(jsonString);
@@ -103,10 +114,12 @@ QVariant Parser::parse(const QByteArray& jsonString, bool* ok) {
   return parse (&buffer, ok);
 }
 
+
 QString Parser::errorString() const
 {
   return d->m_errorMsg;
 }
+
 
 int Parser::errorLine() const
 {

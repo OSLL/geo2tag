@@ -1,22 +1,22 @@
 /* This file is part of qjson
-  *
-  * Copyright (C) 2009 Flavio Castelli <flavio@castelli.name>
-  *
-  * This library is free software; you can redistribute it and/or
-  * modify it under the terms of the GNU Library General Public
-  * License as published by the Free Software Foundation; either
-  * version 2 of the License, or (at your option) any later version.
-  *
-  * This library is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  * Library General Public License for more details.
-  *
-  * You should have received a copy of the GNU Library General Public License
-  * along with this library; see the file COPYING.LIB.  If not, write to
-  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  * Boston, MA 02110-1301, USA.
-  */
+ *
+ * Copyright (C) 2009 Flavio Castelli <flavio@castelli.name>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 #ifndef PARSERRUNNABLE_H
 #define PARSERRUNNABLE_H
@@ -28,19 +28,20 @@
 
 class QVariant;
 
-namespace QJson {
+namespace QJson
+{
   /**
-  * @brief Convenience class for converting JSON data to QVariant objects using a dedicated thread
-  */
+   * @brief Convenience class for converting JSON data to QVariant objects using a dedicated thread
+   */
   class QJSON_EXPORT ParserRunnable  : public QObject, public QRunnable
   {
     Q_OBJECT
-    public:
+      public:
       /**
-      * This signal is emitted when the conversion process has been completed
-      * @param data contains the JSON data that has to be converted
-      * @param parent parent of the object
-      **/
+       * This signal is emitted when the conversion process has been completed
+       * @param data contains the JSON data that has to be converted
+       * @param parent parent of the object
+       **/
       explicit ParserRunnable(QObject* parent = 0);
       ~ParserRunnable();
 
@@ -48,20 +49,19 @@ namespace QJson {
 
       void run();
 
-    Q_SIGNALS:
+      Q_SIGNALS:
       /**
-      * This signal is emitted when the parsing process has been completed
-      * @param json contains the result of the parsing
-      * @param ok if a parsing error occurs ok is set to false, otherwise it's set to true.
-      * @param error_msg contains a string explaining the failure reason
-      **/
+       * This signal is emitted when the parsing process has been completed
+       * @param json contains the result of the parsing
+       * @param ok if a parsing error occurs ok is set to false, otherwise it's set to true.
+       * @param error_msg contains a string explaining the failure reason
+       **/
       void parsingFinished(const QVariant& json, bool ok, const QString& error_msg);
 
     private:
       Q_DISABLE_COPY(ParserRunnable)
-      class Private;
+        class Private;
       Private* const d;
   };
 }
-
-#endif // PARSERRUNNABLE_H
+#endif                                  // PARSERRUNNABLE_H

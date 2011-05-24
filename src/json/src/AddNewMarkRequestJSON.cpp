@@ -13,7 +13,6 @@
 #include "serializer.h"
 #endif
 
-
 AddNewMarkRequestJSON::AddNewMarkRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }

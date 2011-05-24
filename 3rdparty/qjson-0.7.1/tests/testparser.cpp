@@ -27,7 +27,7 @@
 class TestParser: public QObject
 {
   Q_OBJECT
-  private slots:
+    private slots:
     void parseNonAsciiString();
     void parseSimpleObject();
     void parseEmptyObject();
@@ -50,7 +50,8 @@ Q_DECLARE_METATYPE(QVariant::Type)
 
 using namespace QJson;
 
-void TestParser::parseSimpleObject() {
+void TestParser::parseSimpleObject()
+{
   QByteArray json = "{\"foo\":\"bar\"}";
   QVariantMap map;
   map.insert (QLatin1String("foo"), QLatin1String("bar"));
@@ -63,7 +64,9 @@ void TestParser::parseSimpleObject() {
   QCOMPARE(result, expected);
 }
 
-void TestParser::parseEmptyObject() {
+
+void TestParser::parseEmptyObject()
+{
   QByteArray json = "{}";
   QVariantMap map;
   QVariant expected (map);
@@ -75,7 +78,9 @@ void TestParser::parseEmptyObject() {
   QCOMPARE(result, expected);
 }
 
-void TestParser::parseEmptyValue() {
+
+void TestParser::parseEmptyValue()
+{
   QByteArray json = "{\"value\": \"\"}";
 
   QVariantMap map;
@@ -93,7 +98,9 @@ void TestParser::parseEmptyValue() {
   QVERIFY (value.isEmpty());
 }
 
-void TestParser::parseInvalidObject() {
+
+void TestParser::parseInvalidObject()
+{
   QByteArray json = "{\"foo\":\"bar\"";
 
   Parser parser;
@@ -102,7 +109,9 @@ void TestParser::parseInvalidObject() {
   QVERIFY (!ok);
 }
 
-void TestParser::parseNonAsciiString() {
+
+void TestParser::parseNonAsciiString()
+{
   QByteArray json = "{\"artist\":\"Queensr\\u00ffche\"}";
   QVariantMap map;
 
@@ -110,7 +119,7 @@ void TestParser::parseNonAsciiString() {
   QString unicode_string;
   unicode_string.setUnicode(&unicode_char, 1);
   unicode_string = QLatin1String("Queensr") + unicode_string + QLatin1String("che");
-  
+
   map.insert (QLatin1String("artist"), unicode_string);
   QVariant expected (map);
 
@@ -121,7 +130,9 @@ void TestParser::parseNonAsciiString() {
   QCOMPARE(result, expected);
 }
 
-void TestParser::parseMultipleObject() {
+
+void TestParser::parseMultipleObject()
+{
   //put also some extra spaces inside the json string
   QByteArray json = "{ \"foo\":\"bar\",\n\"number\" : 51.3 , \"array\":[\"item1\", 123]}";
   QVariantMap map;
@@ -142,7 +153,9 @@ void TestParser::parseMultipleObject() {
   QVERIFY (result.toMap().value(QLatin1String("array")).canConvert<QVariantList>());
 }
 
-void TestParser::parseUrl(){
+
+void TestParser::parseUrl()
+{
   //"http:\/\/www.last.fm\/venue\/8926427"
   QByteArray json = "[\"http:\\/\\/www.last.fm\\/venue\\/8926427\"]";
   QVariantList list;
@@ -156,7 +169,9 @@ void TestParser::parseUrl(){
   QCOMPARE(result, expected);
 }
 
- void TestParser::parseSimpleArray() {
+
+void TestParser::parseSimpleArray()
+{
   QByteArray json = "[\"foo\",\"bar\"]";
   QVariantList list;
   list.append (QLatin1String("foo"));
@@ -170,7 +185,9 @@ void TestParser::parseUrl(){
   QCOMPARE(result, expected);
 }
 
-void TestParser::parseMultipleArray() {
+
+void TestParser::parseMultipleArray()
+{
   //put also some extra spaces inside the json string
   QByteArray json = "[ {\"foo\":\"bar\"},\n\"number\",51.3 , [\"item1\", 123]]";
   QVariantMap map;
@@ -179,7 +196,7 @@ void TestParser::parseMultipleArray() {
   QVariantList array;
   array.append (QLatin1String("item1"));
   array.append (123);
-  
+
   QVariantList list;
   list.append (map);
   list.append (QLatin1String("number"));
@@ -195,7 +212,9 @@ void TestParser::parseMultipleArray() {
   QCOMPARE(result, expected);
 }
 
-void TestParser::testTrueFalseNullValues() {
+
+void TestParser::testTrueFalseNullValues()
+{
   QByteArray json = "[true,false, null, {\"foo\" : true}]";
   QVariantList list;
   list.append (QVariant(true));
@@ -216,7 +235,9 @@ void TestParser::testTrueFalseNullValues() {
   QVERIFY (result.toList().at(2).isNull());
 }
 
-void TestParser::testEscapeChars() {
+
+void TestParser::testEscapeChars()
+{
   QByteArray json = "[\"\\b \\f \\n \\r \\t \", \" \\\\ \\/ \\\\\", \"http:\\/\\/foo.com\"]";
 
   QVariantList list;
@@ -234,7 +255,9 @@ void TestParser::testEscapeChars() {
   QCOMPARE(result, expected);
 }
 
-void TestParser::testNumbers() {
+
+void TestParser::testNumbers()
+{
   QFETCH(QByteArray, input);
   QFETCH(QVariant, expected);
   QFETCH(QVariant::Type, type);
@@ -249,7 +272,9 @@ void TestParser::testNumbers() {
   QCOMPARE( value.type(), type);
 }
 
-void TestParser::testNumbers_data() {
+
+void TestParser::testNumbers_data()
+{
   QTest::addColumn<QByteArray>( "input" );
   QTest::addColumn<QVariant>( "expected" );
   QTest::addColumn<QVariant::Type>( "type" );
@@ -327,6 +352,7 @@ void TestParser::testNumbers_data() {
 
   QTest::newRow("exp5") << input << output << QVariant::ByteArray;
 }
+
 
 QTEST_MAIN(TestParser)
 #include "moc_testparser.cxx"

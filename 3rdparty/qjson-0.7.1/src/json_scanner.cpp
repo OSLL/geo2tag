@@ -29,37 +29,47 @@
 
 #include <cassert>
 
-bool ishexnstring(const QString& string) {
-  for (int i = 0; i < string.length(); i++) {
+bool ishexnstring(const QString& string)
+{
+  for (int i = 0; i < string.length(); i++)
+  {
     if (isxdigit(string[i] == 0))
       return false;
   }
   return true;
 }
 
+
 JSonScanner::JSonScanner(QIODevice* io)
-  : m_io (io)
+: m_io (io)
 {
   m_quotmarkClosed = true;
   m_quotmarkCount = 0;
 }
 
-static QString unescape( const QByteArray& ba, bool* ok ) {
+
+static QString unescape( const QByteArray& ba, bool* ok )
+{
   assert( ok );
   *ok = false;
   QString res;
   QByteArray seg;
   bool bs = false;
-  for ( int i = 0, size = ba.size(); i < size; ++i ) {
+  for ( int i = 0, size = ba.size(); i < size; ++i )
+  {
     const char ch = ba[i];
-    if ( !bs ) {
+    if ( !bs )
+    {
       if ( ch == '\\' )
         bs = true;
       else
         seg += ch;
-    } else {
+    }
+    else
+    {
       bs = false;
-      switch ( ch ) {
+      switch ( ch )
+      {
         case 'b':
           seg += '\b';
           break;
@@ -80,7 +90,8 @@ static QString unescape( const QByteArray& ba, bool* ok ) {
           res += QString::fromUtf8( seg );
           seg.clear();
 
-          if ( i > size - 5 ) {
+          if ( i > size - 5 )
+          {
             //error
             return QString();
           }
@@ -89,18 +100,21 @@ static QString unescape( const QByteArray& ba, bool* ok ) {
           const QString hex_digit2 = QString::fromUtf8( ba.mid( i + 3, 2 ) );
           i += 4;
 
-          if ( !ishexnstring( hex_digit1 ) || !ishexnstring( hex_digit2 ) ) {
+          if ( !ishexnstring( hex_digit1 ) || !ishexnstring( hex_digit2 ) )
+          {
             qCritical() << "Not an hex string:" << hex_digit1 << hex_digit2;
             return QString();
           }
           bool hexOk;
           const ushort hex_code1 = hex_digit1.toShort( &hexOk, 16 );
-          if (!hexOk) {
+          if (!hexOk)
+          {
             qCritical() << "error converting hex value to short:" << hex_digit1;
             return QString();
           }
           const ushort hex_code2 = hex_digit2.toShort( &hexOk, 16 );
-          if (!hexOk) {
+          if (!hexOk)
+          {
             qCritical() << "error converting hex value to short:" << hex_digit2;
             return QString();
           }
@@ -122,53 +136,62 @@ static QString unescape( const QByteArray& ba, bool* ok ) {
   return res;
 }
 
+
 int JSonScanner::yylex(YYSTYPE* yylval, yy::location *yylloc)
 {
   char ch;
-  
-  if (!m_io->isOpen()) {
+
+  if (!m_io->isOpen())
+  {
     qCritical() << "JSonScanner::yylex - io device is not open";
     return -1;
   }
 
   yylloc->step();
 
-  do {
+  do
+  {
     bool ret;
-    if (m_io->atEnd()) {
+    if (m_io->atEnd())
+    {
       qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::END";
       return yy::json_parser::token::END;
     }
     else
       ret = m_io->getChar(&ch);
 
-    if (!ret) {
+    if (!ret)
+    {
       qCritical() << "JSonScanner::yylex - error reading from io device";
       return -1;
     }
 
     qjsonDebug() << "JSonScanner::yylex - got |" << ch << "|";
-    
+
     yylloc->columns();
-    
+
     if (ch == '\n' || ch == '\r')
       yylloc->lines();
-      
+
   } while (m_quotmarkClosed && (isspace(ch) != 0));
 
   if (m_quotmarkClosed && ((ch == 't') || (ch == 'T')
-      || (ch == 'n') || (ch == 'N'))) {
+    || (ch == 'n') || (ch == 'N')))
+  {
     // check true & null value
     const QByteArray buf = m_io->peek(3).toLower();
 
-    if (buf.length() == 3) {
-      if (buf == "rue") {
+    if (buf.length() == 3)
+    {
+      if (buf == "rue")
+      {
         m_io->read (3);
         yylloc->columns(3);
         qjsonDebug() << "JSonScanner::yylex - TRUE_VAL";
         return yy::json_parser::token::TRUE_VAL;
       }
-      else if (buf == "ull") {
+      else if (buf == "ull")
+      {
         m_io->read (3);
         yylloc->columns(3);
         qjsonDebug() << "JSonScanner::yylex - NULL_VAL";
@@ -176,11 +199,14 @@ int JSonScanner::yylex(YYSTYPE* yylval, yy::location *yylloc)
       }
     }
   }
-  else if (m_quotmarkClosed && ((ch == 'f') || (ch == 'F'))) {
+  else if (m_quotmarkClosed && ((ch == 'f') || (ch == 'F')))
+  {
     // check false value
     const QByteArray buf = m_io->peek(4).toLower();
-    if (buf.length() == 4) {
-      if (buf == "alse") {
+    if (buf.length() == 4)
+    {
+      if (buf == "alse")
+      {
         m_io->read (4);
         yylloc->columns(4);
         qjsonDebug() << "JSonScanner::yylex - FALSE_VAL";
@@ -188,134 +214,161 @@ int JSonScanner::yylex(YYSTYPE* yylval, yy::location *yylloc)
       }
     }
   }
-  else if (m_quotmarkClosed && ((ch == 'e') || (ch == 'E'))) {
+  else if (m_quotmarkClosed && ((ch == 'e') || (ch == 'E')))
+  {
     QByteArray ret(1, ch);
     const QByteArray buf = m_io->peek(1);
-    if (!buf.isEmpty()) {
-      if ((buf[0] == '+' ) || (buf[0] == '-' )) {
-        ret += m_io->read (1);  
+    if (!buf.isEmpty())
+    {
+      if ((buf[0] == '+' ) || (buf[0] == '-' ))
+      {
+        ret += m_io->read (1);
         yylloc->columns();
       }
     }
     *yylval = QVariant(QString::fromUtf8(ret));
     return yy::json_parser::token::E;
   }
-  
-  if (ch != '"' && !m_quotmarkClosed) {
+
+  if (ch != '"' && !m_quotmarkClosed)
+  {
     // we're inside a " " block
     QByteArray raw;
     raw += ch;
     char prevCh = ch;
     bool escape_on = (ch == '\\') ? true : false;
 
-    while ( true ) {
+    while ( true )
+    {
       char nextCh;
       qint64 ret = m_io->peek(&nextCh, 1);
-      if (ret != 1) {
+      if (ret != 1)
+      {
         if (m_io->atEnd())
           return yy::json_parser::token::END;
         else
           return -1;
-      } else if ( !escape_on && nextCh == '\"' ) {
+      }
+      else if ( !escape_on && nextCh == '\"' )
+      {
         bool ok;
         const QString str = unescape( raw, &ok );
         *yylval = ok ? str : QString();
         return ok ? yy::json_parser::token::STRING : -1;
       }
-#if 0
+      #if 0
       if ( prevCh == '\\' && nextCh != '"' && nextCh != '\\' && nextCh != '/' &&
-           nextCh != 'b' && nextCh != 'f' && nextCh != 'n' &&
-           nextCh != 'r' && nextCh != 't' && nextCh != 'u') {
+        nextCh != 'b' && nextCh != 'f' && nextCh != 'n' &&
+        nextCh != 'r' && nextCh != 't' && nextCh != 'u')
+      {
         qjsonDebug() << "Just read" << nextCh;
         qjsonDebug() << "JSonScanner::yylex - error decoding escaped sequence";
         return -1;
-       }
-#endif
-      m_io->read(1); // consume
+      }
+      #endif
+      m_io->read(1);                    // consume
       raw += nextCh;
       prevCh = nextCh;
       if (escape_on)
         escape_on = false;
       else
         escape_on = (prevCh == '\\') ? true : false;
-#if 0
-      if (nextCh == '\\') {
+      #if 0
+      if (nextCh == '\\')
+      {
         char buf;
-        if (m_io->getChar (&buf)) {
+        if (m_io->getChar (&buf))
+        {
           yylloc->columns();
           if (((buf != '"') && (buf != '\\') && (buf != '/') &&
-              (buf != 'b') && (buf != 'f') && (buf != 'n') &&
-              (buf != 'r') && (buf != 't') && (buf != 'u'))) {
-                qjsonDebug() << "Just read" << buf;
-                qjsonDebug() << "JSonScanner::yylex - error decoding escaped sequence";
-                return -1;
+            (buf != 'b') && (buf != 'f') && (buf != 'n') &&
+            (buf != 'r') && (buf != 't') && (buf != 'u')))
+          {
+            qjsonDebug() << "Just read" << buf;
+            qjsonDebug() << "JSonScanner::yylex - error decoding escaped sequence";
+            return -1;
           }
-        } else {
+        }
+        else
+        {
           qCritical() << "JSonScanner::yylex - error decoding escaped sequence : io error";
           return -1;
         }
       }
-#endif
+      #endif
     }
   }
-  else if (isdigit(ch) != 0 && m_quotmarkClosed) {
+  else if (isdigit(ch) != 0 && m_quotmarkClosed)
+  {
     *yylval = QVariant(QString::fromLatin1(QByteArray(&ch,1)));
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::DIGIT";
     return yy::json_parser::token::DIGIT;
   }
-  else if (isalnum(ch) != 0) {
+  else if (isalnum(ch) != 0)
+  {
     *yylval = QVariant(QString(QChar::fromLatin1(ch)));
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::WORD ("
-             << ch << ")";
+      << ch << ")";
     return yy::json_parser::token::STRING;
   }
-  else if (ch == ':') {
+  else if (ch == ':')
+  {
     // set yylval
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::COLON";
     return yy::json_parser::token::COLON;
   }
-  else if (ch == '"') {
+  else if (ch == '"')
+  {
     // yy::json_parser::token::QUOTMARK (")
 
     // set yylval
     m_quotmarkCount++;
-    if (m_quotmarkCount %2 == 0) {
+    if (m_quotmarkCount %2 == 0)
+    {
       m_quotmarkClosed = true;
       m_quotmarkCount = 0;
       qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::QUOTMARKCLOSE";
       return yy::json_parser::token::QUOTMARKCLOSE;
     }
-    else {
+    else
+    {
       m_quotmarkClosed = false;
       qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::QUOTMARKOPEN";
       return yy::json_parser::token::QUOTMARKOPEN;
     }
   }
-  else if (ch == ',') {
+  else if (ch == ',')
+  {
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::COMMA";
     return yy::json_parser::token::COMMA;
   }
-  else if (ch == '.') {
+  else if (ch == '.')
+  {
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::DOT";
     return yy::json_parser::token::DOT;
   }
-  else if (ch == '-') {
+  else if (ch == '-')
+  {
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::MINUS";
     return yy::json_parser::token::MINUS;
   }
-  else if (ch == '[') {
+  else if (ch == '[')
+  {
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::SQUARE_BRACKET_OPEN";
     return yy::json_parser::token::SQUARE_BRACKET_OPEN;
   }
-  else if (ch == ']') {
+  else if (ch == ']')
+  {
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::SQUARE_BRACKET_CLOSE";
     return yy::json_parser::token::SQUARE_BRACKET_CLOSE;
   }
-  else if (ch == '{') {
+  else if (ch == '{')
+  {
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::CURLY_BRACKET_OPEN";
     return yy::json_parser::token::CURLY_BRACKET_OPEN;
   }
-  else if (ch == '}') {
+  else if (ch == '}')
+  {
     qjsonDebug() << "JSonScanner::yylex - yy::json_parser::token::CURLY_BRACKET_CLOSE";
     return yy::json_parser::token::CURLY_BRACKET_CLOSE;
   }
@@ -325,5 +378,3 @@ int JSonScanner::yylex(YYSTYPE* yylval, yy::location *yylloc)
   qCritical() << "JSonScanner::yylex - unknown char, returning -1";
   return -1;
 }
-
-

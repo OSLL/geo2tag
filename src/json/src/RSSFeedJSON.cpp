@@ -40,7 +40,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #include <QVariant>
 #include <QDebug>
 #include "RSSFeedJSON.h"
@@ -52,7 +51,6 @@
 #include "parser.h"
 #include "serializer.h"
 #endif
-
 
 #include "User.h"
 #include "Channel.h"
@@ -75,7 +73,7 @@ RSSFeedResponseJSON::RSSFeedResponseJSON(QObject *parent) : JsonSerializer(paren
 void RSSFeedResponseJSON::parseJson(const QByteArray &data)
 {
   //TODO: enable for symbian
-#ifndef  Q_OS_SYMBIAN
+  #ifndef  Q_OS_SYMBIAN
   clearContainers();
 
   QJson::Parser parser;
@@ -129,7 +127,7 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
       m_hashMap.insert(channel, newMark);
     }
   }
-#endif // Q_OS_SYMBIAN
+  #endif                                // Q_OS_SYMBIAN
 }
 
 

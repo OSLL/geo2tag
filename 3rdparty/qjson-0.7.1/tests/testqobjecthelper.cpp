@@ -31,7 +31,7 @@
 class TestQObjectHelper: public QObject
 {
   Q_OBJECT
-  private slots:
+    private slots:
     void testQObject2QVariant();
     void testQVariant2QObject();
 };
@@ -64,6 +64,7 @@ void TestQObjectHelper::testQObject2QVariant()
   QCOMPARE(result, expected);
 }
 
+
 void TestQObjectHelper::testQVariant2QObject()
 {
   QString name = QLatin1String("Flavio Castelli");
@@ -86,6 +87,7 @@ void TestQObjectHelper::testQVariant2QObject()
   QCOMPARE(person.gender(), gender);
   QCOMPARE(person.dob(), dob);
 }
+
 
 QTEST_MAIN(TestQObjectHelper)
 #include "moc_testqobjecthelper.cxx"

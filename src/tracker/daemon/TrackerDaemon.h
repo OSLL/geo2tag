@@ -68,7 +68,6 @@ class TrackerDaemon : /*public QThread,*/ public Control
   public slots:
 
 };
-
 #endif
 
 // TRACKERDAEMON_H

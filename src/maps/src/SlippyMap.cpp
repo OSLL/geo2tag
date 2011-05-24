@@ -15,8 +15,6 @@
 // tile size in pixels
 static const int tdim = 256;
 
-
-
 QPointF tileForCoordinate(qreal lat, qreal lng, int zoom)
 {
   qreal zn = static_cast<qreal>(1 << zoom);

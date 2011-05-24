@@ -29,11 +29,14 @@
 
 class JSonScanner;
 
-namespace yy {
+namespace yy
+{
   class json_parser;
 }
 
-namespace QJson {
+
+namespace QJson
+{
 
   class ParserPrivate
   {
@@ -51,5 +54,4 @@ namespace QJson {
       QVariant m_result;
   };
 }
-
-#endif // QJSON_PARSER_H
+#endif                                  // QJSON_PARSER_H
