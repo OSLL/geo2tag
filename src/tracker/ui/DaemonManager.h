@@ -1,11 +1,14 @@
-#ifndef DAEMONMANAGER_H
-#define DAEMONMANAGER_H
-
+#ifndef DAEMONMANAGER_H_
+#define DAEMONMANAGER_H_
+#include <QObject>
 #include <QPointF>
 
-class Daemon
+
+class Daemon: public QObject
 {
+				Q_OBJECT
   public:
+		Daemon():QObject(0){}
     virtual QPointF getLastCoordinates() const=0;
     virtual bool isConnected() const=0;
     virtual bool isStarted() const=0;
@@ -22,7 +25,7 @@ class DaemonManager
     DaemonManager();
     ~DaemonManager();
 
-    static DaemonManager& getInstance();
+    static Daemon& getInstance();
 
 };
 // DAEMONMANAGER_H

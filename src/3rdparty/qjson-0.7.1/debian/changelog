@@ -1,0 +1,29 @@
+qjson (0.7.1-1ubuntu1) natty; urgency=low
+
+  * In debian/rules copy the cmake module into /usr/share/cmake-
+    2.8/Modules/ where KDE now expects to find it
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 26 Nov 2010 15:27:08 +0000
+
+qjson (0.7.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Lisandro Damián Nicanor Pérez Meyer <perezmeyer@gmail.com>  Thu, 03 Dec 2009 21:15:23 -0300
+
+qjson (0.6.3+svn1050695-1) unstable; urgency=low
+
+  * New upstream release.
+  * Improved parser performances.
+
+ -- Lisandro Damián Nicanor Pérez Meyer <perezmeyer@gmail.com>  Tue, 17 Nov 2009 19:47:52 -0300
+
+qjson (0.6.2-1) unstable; urgency=low
+
+  * Initial release (Closes: #549160)
+
+  +++ Changes by Sune Vuorela:
+
+  * Add dbg package
+
+ -- Lisandro Damián Nicanor Pérez Meyer <perezmeyer@gmail.com>  Sun, 27 Sep 2009 17:44:37 -0300

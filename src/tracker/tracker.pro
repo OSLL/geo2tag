@@ -18,7 +18,7 @@ symbian {
 }
 
 maemo5 {
-	SUBDIRS = ui daemon
+        SUBDIRS = ui observer
 	TARGET += daemon/wikigpsTracker 
 	eventd_script.files = wikigpsTracker
 	eventd_script.path = /etc/event.d

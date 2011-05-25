@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+%:
+	dh --dbg-package=libqjson0-dbg $@
+
+override_dh_install:
+	dh_install
+	mkdir -p debian/libqjson-dev/usr/share/cmake-2.8/Modules/
+	cp debian/libqjson-dev/usr/share/apps/cmake/modules/FindQJSON.cmake debian/libqjson-dev/usr/share/cmake-2.8/Modules/

@@ -13,7 +13,7 @@
 #include <QSettings>
 #include <QMessageBox>
 #ifndef Q_OS_SYMBIAN
-#include <DaemonManager.h>
+//#include "DaemonManager.h"
 #endif
 #include <QtNetwork/QNetworkProxy>
 #include <QDir>

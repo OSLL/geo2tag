@@ -1,9 +1,9 @@
 CONFIG += debug
 
-CONFIG += linux
+#CONFIG += linux
 #CONFIG += linux_profiling
 #CONFIG += maemo5
-#CONFIG += symbian
+CONFIG += symbian
 SOURCE_DIR = $$PWD
 
 #contains(QT_CONFIG, reduce_exports):CONFIG+=hide_symbols
@@ -19,6 +19,7 @@ maemo5: {
                       -I/usr/include/gconf/2 \
                       -I/usr/include/dbus-1.0 \
                       -I/usr/lib/dbus-1.0/include
+	INCLUDEPATH += /usr/include/libxml2/
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
     QMAKE_CXXFLAGS += -Werror

@@ -44,7 +44,7 @@
 #include <QDebug>
 #include "RSSFeedJSON.h"
 
-#ifndef Q_OS_SYMBIAN
+#if !defined(Q_OS_SYMBIAN) && !defined(MAEMO_OS)
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #else

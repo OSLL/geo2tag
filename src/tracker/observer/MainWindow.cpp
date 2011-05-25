@@ -13,8 +13,10 @@ QMainWindow(parent)
   m_menu = new QMenu(this);
   m_settingsAction = new QAction("Settings...",this);
   m_marksSettingsAction = new QAction("Marks view settings",this);
+  m_preloadAction = new QAction("Start preload",this);
   connect(m_settingsAction,SIGNAL(triggered()),this,SLOT(settings()));
   connect(m_marksSettingsAction,SIGNAL(triggered()),this,SLOT(marksSettings()));
+  connect(m_preloadAction, SIGNAL(triggered()), m_map, SLOT(preload()));
   m_optWidget = new OptionsWidget("observer");
   m_marksOptWidget = new ViewOptsWidget();
   connect(m_optWidget,SIGNAL(done()),this,SLOT(settingsDone()));
@@ -25,6 +27,7 @@ QMainWindow(parent)
   m_menu=menuBar()->addMenu("Options");
   m_menu->addAction(m_settingsAction);
   m_menu->addAction(m_marksSettingsAction);
+  m_menu->addAction(m_preloadAction);
   m_view = new QGraphicsView(this);
   m_view->setScene(m_map);
   m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

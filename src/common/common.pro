@@ -15,9 +15,6 @@ INCLUDEPATH += . \
     inc \
 
 
-CONFIG += mobility
-MOBILITY = location
-
 
 # Input
 HEADERS += \
@@ -56,12 +53,15 @@ linux: {
 }
 
 maemo5: {
+    CONFIG += mobility
+
+    MOBILITY = location
+
+    LIBS += -lQtLocation
 
     HEADERS += inc/MobilityGps.h
 
     SOURCES += src/MobilityGps.cpp
-    SOURCES += src/MobilityGps.cpp
-    LIBS += -lQtLocation
 }
 
 symbian: {
