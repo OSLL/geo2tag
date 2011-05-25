@@ -1,5 +1,4 @@
 #include <QApplication>
-#include "TrackerGUI.h"
 #include "MainWindow.h"
 
 int main(int c, char **v)

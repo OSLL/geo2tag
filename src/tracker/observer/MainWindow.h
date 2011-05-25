@@ -21,6 +21,7 @@ class MainWindow:public QMainWindow
   QMenu * m_menu;
   QAction * m_settingsAction;
   QAction * m_marksSettingsAction;
+  QAction * m_preloadAction;
   QStackedWidget * m_stackedWidget;
   DataThread * m_thread;
   OptionsWidget * m_optWidget;

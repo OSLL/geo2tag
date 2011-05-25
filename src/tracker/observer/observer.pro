@@ -10,7 +10,7 @@ include(../../../config.pri)
 
 QT += network
 
-LIBS += -lcommon
+LIBS += -lcommon -lqjson -lmaps -lwikigpsHttp -lwikigpsJson
 
 DEPENDPATH += . \
 
@@ -20,8 +20,6 @@ INCLUDEPATH += . \
                ../../json/inc \
                ../ui/ \
                ../../http_requests/inc
-
-LIBS += -lmaps -lqjson -lcommon -lwikigpsHttp -lwikigpsJson
 
 # Input
 SOURCES += main.cpp \

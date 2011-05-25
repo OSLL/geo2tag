@@ -22,6 +22,7 @@ INCLUDEPATH += . \
 maemo5 {
 SOURCES += MaemoDaemon.cpp
 HEADERS += MaemoDaemon.h
+DEFINES += MAEMO5_UI
 }
 
 linux {

@@ -11,7 +11,6 @@ maemo5: {
              json \
 	     http_requests \ 
              tracker
-	     
 }
 
 linux: {
