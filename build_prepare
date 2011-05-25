@@ -1,0 +1,20 @@
+#!/bin/bash
+BRANCH_NAME=`git branch | grep \* | grep -o '[^ ]*$' | sed 's/_/-/g'`;
+SERVICE_NAME="wikigps-service-$BRANCH_NAME"
+LIBS_NAME="wikigps-libs-$BRANCH_NAME"
+# Get package list from server, select all package names that NOT contain your branch name
+PACKAGE_LIST=`curl http://zps.spb.su/osll_repo/binary_i386/Packages.gz | gunzip | grep Package | grep -v $BRANCH_NAME`;
+# Select all packages for wikigps-service. They all will be in conflicts field.
+SERVICE_VERSIONS=`echo $PACKAGE_LIST | grep -o wikigps-service.* `;
+# The same for libs
+LIBS_VERSIONS=`echo $PACKAGE_LIST | grep -o 'wikigps-libs[^ ]*'`;
+CONFLICT_LIBS=`echo $LIBS_VERSIONS | sed 's/ / [i386], /g' | sed 's/$/ [i386]/g'`
+# Generate control file from template control.temp
+cat debian/control.temp | sed "s/CONFLICTS/$CONFLICT_LIBS/" | sed "s/wikigps-service$/$SERVICE_NAME/" | sed "s/wikigps-libs$/$LIBS_NAME/" | sed "s/LIBS/$LIBS_NAME/" > debian/control
+# Create files for new package names
+cp debian/wikigps-libs.dirs debian/$LIBS_NAME.dirs
+cp debian/wikigps-libs.install debian/$LIBS_NAME.install
+cp debian/wikigps-libs.postinst debian/$LIBS_NAME.postinst
+cp debian/wikigps-service.dirs debian/$SERVICE_NAME.dirs
+cp debian/wikigps-service.install debian/$SERVICE_NAME.install
+cp debian/wikigps-service.postinst debian/$SERVICE_NAME.postinst

@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent),
-m_isServiceStarted(false),
+m_isServiceStarted(false)
 {
   setupUi(this);
 
@@ -123,15 +123,12 @@ void MainWindow::readData()
 
 void MainWindow::restartDaemon()
 {
-  DaemonManager::getInstance().restart()
+  DaemonManager::getInstance().restart();
 }
 
 
 void MainWindow::checkDaemon()
 {
-  if(DaemonManager::getInstance().isConnected())
-  {
-    updateData();
-  }
-  else m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");
+  if(!DaemonManager::getInstance().isConnected())
+  m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");
 }

@@ -11,7 +11,6 @@ maemo5: {
              json \
 	     http_requests \ 
              tracker
-	     
 }
 
 linux: {
@@ -20,6 +19,7 @@ linux: {
              http_requests \
              maps \ 
              service \
+						 tracker \
 	     common/tst
 }
 

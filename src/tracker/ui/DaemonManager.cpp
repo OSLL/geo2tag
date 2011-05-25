@@ -1,7 +1,10 @@
 #include "DaemonManager.h"
 
+#ifdef NO_DAEMON
 #include "SymbianDaemon.h"
+#else
 #include "MaemoDaemon.h"
+#endif
 
 DaemonManager::DaemonManager()
 {
