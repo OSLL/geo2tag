@@ -48,7 +48,6 @@
 #include <DefaultQuery.h>
 
 #include "DataMarks.h"
-#include "User.h"
 #include "Channel.h"
 #include "DataChannel.h"
 
@@ -62,7 +61,7 @@ class RSSFeedQuery : public DefaultQuery
 {
   Q_OBJECT
 
-    QSharedPointer<User> m_user;
+    QString m_token;
   double m_latitude;
   double m_longitude;
   double m_radius;
@@ -78,7 +77,7 @@ class RSSFeedQuery : public DefaultQuery
 
   public:
 
-    RSSFeedQuery(QSharedPointer<User> &user,
+    RSSFeedQuery(QString &token,
       double latitude,
       double longitude,
       double radius,
@@ -86,7 +85,7 @@ class RSSFeedQuery : public DefaultQuery
 
     RSSFeedQuery(QObject *parent = 0);
 
-    void setQuery(QSharedPointer<User> &user,
+    void setQuery(QString &token,
       double latitude,
       double longitude,
       double radius);

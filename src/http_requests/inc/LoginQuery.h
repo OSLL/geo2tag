@@ -62,8 +62,9 @@ class LoginQuery: public DefaultQuery
     QString m_login;
   QString m_password;
 
-  //!< full information about user
-  QSharedPointer<User> m_user;
+/*  //!< full information about user
+  QSharedPointer<User> m_user;*/
+  QString m_token;
 
   virtual QString getUrl() const;
   virtual QByteArray getRequestBody() const;
@@ -80,7 +81,7 @@ class LoginQuery: public DefaultQuery
 
     void setQuery(const QString& login, const QString& password);
 
-    QSharedPointer<User> getUser() const;
+    const QString& getAuthToken() const;
 
     ~LoginQuery();
 

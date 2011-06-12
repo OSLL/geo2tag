@@ -48,12 +48,12 @@
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 
-RSSFeedQuery::RSSFeedQuery(QSharedPointer<User> &user,
+RSSFeedQuery::RSSFeedQuery(QString &token,
 double latitude,
 double longitude,
 double radius,
 QObject *parent): DefaultQuery(parent),
-m_user(user),
+m_token(token),
 m_latitude(latitude),
 m_longitude(longitude),
 m_radius(radius)
@@ -66,12 +66,12 @@ RSSFeedQuery::RSSFeedQuery(QObject *parent): DefaultQuery(parent)
 }
 
 
-void RSSFeedQuery::setQuery(QSharedPointer<User> &user,
+void RSSFeedQuery::setQuery(QString &token,
 double latitude,
 double longitude,
 double radius)
 {
-  m_user=user;
+  m_token=token;
   m_latitude=latitude;
   m_longitude=longitude;
   m_radius=radius;
@@ -87,7 +87,7 @@ QString RSSFeedQuery::getUrl() const
 QByteArray RSSFeedQuery::getRequestBody() const
 {
   RSSFeedRequestJSON request(m_latitude, m_longitude, m_radius);
-  request.addUser(m_user);
+  request.setAuthToken(m_token);
   return request.getJson();
 }
 

@@ -53,8 +53,9 @@ void DataThread::run()
 void DataThread::onConnected()
 {
   m_isConnected = true;
-  m_user=m_loginQuery->getUser();
-  m_rssQuery=new RSSFeedQuery(m_user,60.,30.,3000000.,parent());
+//  m_user=m_loginQuery->getUser();
+  m_token=m_loginQuery->getAuthToken();
+  m_rssQuery=new RSSFeedQuery(m_token,60.,30.,3000000.,parent());
   qDebug() << "rssFeedQuery setted" << m_rssQuery;
   connect(m_rssQuery, SIGNAL(rssFeedReceived()), this,SLOT(onMarksGotten()));
   connect(m_rssQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));

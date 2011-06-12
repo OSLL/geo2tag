@@ -83,7 +83,8 @@ void LoginQuery::processReply(QNetworkReply *reply)
   response.parseJson(reply->readAll());
   if(response.getStatus() == "Ok")
   {
-    m_user = QSharedPointer<User>(new JsonUser(m_login, m_password));
+    m_token= response.getAuthToken();
+  //  m_user = QSharedPointer<User>(new JsonUser(m_login, m_password));
     syslog(LOG_INFO,"!!connected!");
     Q_EMIT connected();
   }
@@ -102,11 +103,15 @@ void LoginQuery::setQuery(const QString& login, const QString& password)
 }
 
 
-QSharedPointer<User> LoginQuery::getUser() const
+/*QSharedPointer<User> LoginQuery::getUser() const
 {
   return m_user;
-}
+}*/
 
+const QString& LoginQuery::getAuthToken() const
+{
+    return m_token;
+}
 
 LoginQuery::~LoginQuery()
 {
