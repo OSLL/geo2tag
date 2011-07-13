@@ -4,6 +4,11 @@ import java.io.*;
 import javax.microedition.io.*;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
+import javax.microedition.location.Coordinates;
+import javax.microedition.location.Criteria;
+import javax.microedition.location.Location;
+import javax.microedition.location.LocationException;
+import javax.microedition.location.LocationProvider;
  
 public class HelloWorld extends MIDlet implements CommandListener {
  
@@ -16,7 +21,7 @@ public class HelloWorld extends MIDlet implements CommandListener {
     // For the message
     private StringItem stringItem;
     // For the exit command
-    private Command exitCommand, getCommand, postCommand;
+    private Command exitCommand, getCommand, postCommand,coordCommand;
  
     public void commandAction(Command command, Displayable displayable){
         if (displayable == form) {
@@ -27,8 +32,10 @@ public class HelloWorld extends MIDlet implements CommandListener {
                 doGETRequest();
             }else if(command == postCommand) {
                 doPOSTRequest();
-            }     	
-        }catch (IOException e) {
+            }else if (command == coordCommand){
+            	printLocation();
+            }
+        }catch (Exception e) {
         	stringItem.setText("Exception!");
         }
         }
@@ -40,11 +47,13 @@ public class HelloWorld extends MIDlet implements CommandListener {
         form = new Form(null, new Item[] {stringItem});
         exitCommand = new Command("Exit", Command.EXIT, 1);
         //Adding external controls
-        getCommand = new Command("GET", Command.ITEM, 2);
-        postCommand = new Command("POST", Command.ITEM, 3);
+        getCommand = new Command("GET", Command.SCREEN, 2);
+        postCommand = new Command("POST", Command.SCREEN, 2);
+        coordCommand = new Command("Get Location", Command.SCREEN, 2);
         form.addCommand(exitCommand);
         form.addCommand(getCommand);
         form.addCommand(postCommand);
+        form.addCommand(coordCommand);
         form.setCommandListener(this);
  
         // Get display for drawning
@@ -83,6 +92,7 @@ public class HelloWorld extends MIDlet implements CommandListener {
                 httpConn.close();
         }
     }
+    
  //Make String from InputStream
     private String streamToStr(InputStream is) throws IOException{
     	StringBuffer sb = new StringBuffer();
@@ -120,6 +130,23 @@ public class HelloWorld extends MIDlet implements CommandListener {
             if(httpConn != null)
                 httpConn.close();
         }
+    }
+    
+    public void printLocation() throws LocationException, InterruptedException{
+    	Location location;
+        LocationProvider locationProvider;
+        Coordinates coordinates;
+        // Set criteria for selecting a location provider:
+        // accurate to 500 meters horizontally
+        Criteria criteria= new Criteria();
+        criteria.setHorizontalAccuracy(500);
+        // Get an instance of the provider
+        locationProvider = LocationProvider.getInstance(criteria);
+        // Request the location, setting a one-minute timeout
+        location = locationProvider.getLocation(60);
+        coordinates = location.getQualifiedCoordinates();
+        stringItem.setText("Location:"+Double.toString(coordinates.getLatitude())+" "
+        		+Double.toString(coordinates.getLongitude()));
     }
     
     public void exitMIDlet() {
