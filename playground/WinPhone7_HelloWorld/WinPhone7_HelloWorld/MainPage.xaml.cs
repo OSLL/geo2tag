@@ -33,10 +33,13 @@ namespace WinPhone7_HelloWorld
             textBlock1.Text = "Doing GET request";
             WebClient wc = new WebClient();
             string sRequest = "http://tracklife.ru";
+            // Adding onDownloadComplete event handler
             wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(wc_DownloadStringCompleted);
+            // Download
             wc.DownloadStringAsync(new Uri(sRequest));
         }
 
+        //GET request event handler
         private void wc_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             textBlock1.Text = e.Result;
@@ -51,6 +54,7 @@ namespace WinPhone7_HelloWorld
             request.Method = "POST"; 
             // don't miss out this 
             request.ContentType = "application/x-www-form-urlencoded"; 
+            // Adding function that will fill POST data
             request.BeginGetRequestStream(new AsyncCallback(RequestReady), request); 
 
 
@@ -58,6 +62,7 @@ namespace WinPhone7_HelloWorld
 
         void RequestReady(IAsyncResult asyncResult)
         {
+            // Casting argument to HttpWebRequest           
             HttpWebRequest request = asyncResult.AsyncState as HttpWebRequest;
             Stream stream = request.EndGetRequestStream(asyncResult);
 
@@ -71,6 +76,7 @@ namespace WinPhone7_HelloWorld
                 writer.Write(postData);
                 writer.Flush();
                 writer.Close();
+                // Setting up event handler for onResponseRecieved event
                 request.BeginGetResponse(new AsyncCallback(ResponseReady), request);
             });
         }
@@ -79,6 +85,7 @@ namespace WinPhone7_HelloWorld
 
         void ResponseReady(IAsyncResult asyncResult)
         {
+            // Casting argument to HttpWebRequest
             HttpWebRequest request = asyncResult.AsyncState as HttpWebRequest;
             HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(asyncResult);
             this.Dispatcher.BeginInvoke(delegate()
