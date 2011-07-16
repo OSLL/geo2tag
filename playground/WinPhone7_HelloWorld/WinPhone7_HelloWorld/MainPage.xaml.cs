@@ -10,16 +10,23 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Device.Location;
+
 using Microsoft.Phone.Controls;
 
 namespace WinPhone7_HelloWorld
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        GeoCoordinateWatcher watcher;
         // Constructor
         public MainPage()
         {
             InitializeComponent();
+            // Init watcher with default accuracy
+            watcher = new GeoCoordinateWatcher();
+            // Start listen for coordinates
+            watcher.TryStart(false, TimeSpan.FromMilliseconds(1000));
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -80,9 +87,7 @@ namespace WinPhone7_HelloWorld
                 request.BeginGetResponse(new AsyncCallback(ResponseReady), request);
             });
         }
-
-
-
+        
         void ResponseReady(IAsyncResult asyncResult)
         {
             // Casting argument to HttpWebRequest
@@ -99,6 +104,23 @@ namespace WinPhone7_HelloWorld
                 // TODO parse the result
 
             });
+        }
+
+        private void button4_Click(object sender, RoutedEventArgs e)
+        {
+            textBlock1.Text = "Getting location...";
+
+            GeoCoordinate coord = watcher.Position.Location;
+            // Check validity of coordinates
+            if (coord.IsUnknown != true)
+            {
+                textBlock1.Text = "Lat.:" + coord.Latitude.ToString() + ", lon.:" + coord.Longitude.ToString();
+            }
+            else
+            {
+                textBlock1.Text = "Error getting coordinates";
+            }
+
         }
     }
 }
