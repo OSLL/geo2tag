@@ -14,44 +14,21 @@ namespace HelloWorld
 {
     public partial class Form1 : Form
     {
-        [StructLayout(LayoutKind.Sequential)]
-        struct gps_info
-        {
-            internal int param1;
-            internal int param2;
-            internal int param3;
-            internal int param4;
-
-            internal short param21;
-            internal short param23;
-            internal short param22;
-            internal short param24;
-
-            internal short param25;
-            internal short param26;
-            internal short param27;
-            internal short param28;
-
-            internal double longitude;
-            internal double latitude;
-        }
 
         IntPtr device = IntPtr.Zero;
 
-        IntPtr newLocationHandle = IntPtr.Zero;
-        IntPtr deviceStateChangedHandle = IntPtr.Zero;
-        IntPtr stopHandle = IntPtr.Zero;
 
         public Form1()
         {
             InitializeComponent();
 
-            newLocationHandle = CreateEvent(IntPtr.Zero, 0, 0, null);
-            deviceStateChangedHandle = CreateEvent(IntPtr.Zero, 0, 0, null);
-            stopHandle = CreateEvent(IntPtr.Zero, 0, 0, null);
 
-            device = GPSOpenDevice(newLocationHandle, deviceStateChangedHandle, null, 0);
+            device = GPSOpenDevice(IntPtr.Zero, IntPtr.Zero, null, 0);
             if (device != IntPtr.Zero) label1.Text = "Device gotten";
+            else
+            {
+                label1.Text = "Error while opening device";
+            }
 
         }
 
@@ -134,24 +111,26 @@ namespace HelloWorld
             //Here will be code for location 
 
             label1.Text = "Locating.....";
+            // Prepare GpsPosition struct 
+            GpsPosition coordinates = new GpsPosition();
+            coordinates.dwVersion = 1;
+            coordinates.dwSize = Marshal.SizeOf(typeof(GpsPosition));
 
-            IntPtr position = Marshal.AllocHGlobal(1024*1024);
-            GPSGetPosition(device, position, 1000, 0);
+            
+            IntPtr position = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GpsPosition)));
+            // Marshal our data to the native pointer we allocated.
+            Marshal.StructureToPtr(coordinates, position, false);
+            GPSGetPosition(device, position, 10000, 0);
             
             try
             {
                 if (position != IntPtr.Zero)
                 {
-                    gps_info coordinates = (gps_info)Marshal.PtrToStructure(position, typeof(gps_info));
-                    label1.Text = coordinates.ToString();
-                    label1.Text = "Position: " + coordinates.latitude.ToString() + ","
-                        + coordinates.longitude.ToString();
 
-
-                    /*double[] coords = new double[2];
-                    
-                    Marshal.Copy(position, coords, sizeof(Int32) * (4+18) + sizeof(short) * 8 - 1, 2);
-                    label1.Text = coords[0].ToString() + "," + coords[1].ToString();*/
+                    coordinates = (GpsPosition)Marshal.PtrToStructure(position, typeof(GpsPosition));
+                 
+                    label1.Text = "Position: " + coordinates.Latitude + ","
+                        + coordinates.Longitude;
 
                 }
                 else 
