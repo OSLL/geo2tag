@@ -1,0 +1,3 @@
+# Module geo2tag
+# RPC service class, partial path of RPC policy file
+ru.spb.osll.web.client.GreetingService, CA6E559792C7589414D2EFE2EBCA84AF.gwt.rpc

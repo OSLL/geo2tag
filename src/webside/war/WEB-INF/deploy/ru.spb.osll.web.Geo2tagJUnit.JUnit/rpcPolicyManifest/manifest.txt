@@ -1,0 +1,2 @@
+# Module ru.spb.osll.web.Geo2tagJUnit.JUnit
+# RPC service class, partial path of RPC policy file
