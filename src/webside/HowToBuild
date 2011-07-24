@@ -7,6 +7,6 @@ Prerequisites:
 
 2. Apache Ant >= 1.8.0
 
-3. Apache Tomcat >= 1.7.0
+3. Apache Tomcat >= 7.0
 
 4. GWT SDK >= 2.3.0
