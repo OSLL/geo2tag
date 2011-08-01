@@ -7,7 +7,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class UIUtil {
-	public static String FILL_PARENT = "100%";
 	
 	public static TextBox getTextBox(int  visibleLength, int width){
 		TextBox textBox = new TextBox();
@@ -16,7 +15,7 @@ public class UIUtil {
 		return textBox;
 	}
 
-	public static TextBox getPasswordTextBox(int visibleLength, int width){
+	public static PasswordTextBox getPasswordTextBox(int visibleLength, int width){
 		PasswordTextBox passwordTextBox = new PasswordTextBox();
 		passwordTextBox.setVisibleLength(visibleLength);
 		passwordTextBox.setWidth(width + "px");
