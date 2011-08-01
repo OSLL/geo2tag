@@ -230,9 +230,8 @@
         <g:center>
           <g:DockLayoutPanel
             unit='PT'>
-
             <g:center>
-              <g:ScrollPanel
+              <g:ScrollPanel 
                 addStyleNames='{style.contentPanel}'
                 ui:field='contentPanel' />
             </g:center>

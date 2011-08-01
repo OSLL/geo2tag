@@ -5,7 +5,6 @@ import ru.spb.osll.web.client.ui.image.ResImages;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -38,12 +37,6 @@ public class WidgetByDesigner extends SimpleComposite {
 	@Override
 	protected Widget onInitialize() {
 		return uiBinder.createAndBindUi(this);
-	}
-
-	@Override
-	public ImageResource getImage() {
-		Images images = GWT.create(Images.class);
-		return images.peek();
 	}
 
 	@Override
