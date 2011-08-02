@@ -22,7 +22,7 @@
   </welcome-file-list>
   <servlet>
   	<servlet-name>LoginService</servlet-name>
-  	<servlet-class>ru.spb.osll.web.server.rpc.service.login.LoginServiceImpl</servlet-class>
+  	<servlet-class>ru.spb.osll.web.server.services.users.LoginServiceImpl</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>LoginService</servlet-name>
