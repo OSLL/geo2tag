@@ -1,7 +1,7 @@
-package ru.spb.osll.web.server.rpc.service.login;
+package ru.spb.osll.web.server.services.users;
 
-import ru.spb.osll.web.client.rpc.services.login.LoginService;
 import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.server.db.Users;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.spb.osll.web.client.localization.Localizer;
-import ru.spb.osll.web.client.rpc.services.login.LoginService;
-import ru.spb.osll.web.client.rpc.services.login.LoginServiceAsync;
 import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.users.LoginService;
+import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.ui.core.FieldsWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
 

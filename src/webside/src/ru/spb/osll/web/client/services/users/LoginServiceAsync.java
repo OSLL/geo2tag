@@ -1,4 +1,4 @@
-package ru.spb.osll.web.client.rpc.services.login;
+package ru.spb.osll.web.client.services.users;
 
 import ru.spb.osll.web.client.services.objects.User;
 
