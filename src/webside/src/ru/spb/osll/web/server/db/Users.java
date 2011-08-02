@@ -16,20 +16,25 @@ public class Users {
 	public static final String PASSWORD	= "password";
 	public static final String TOKEN 	= "token";
 	
-	public static User insertUser(User user){
+	public static User insert(User user){
 		// TODO
 		return user;
 	}
 
-	public static User updateUser(User user){
+	public static User update(User user){
 		// TODO
 		return user;
+	}
+
+	public static boolean delete(User user){
+		// TODO
+		return true;
 	}
 
 	
 	private static final String SELECT_USER = "SELECT * FROM users WHERE login='%s';";
 	
-	public static User selectUser(String login){
+	public static User select(String login){
 		User user = null;
 		try {
 			final Connection c = DBUtil.getConnction();

@@ -11,13 +11,13 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
 	@Override
 	public User login(User user) throws IllegalArgumentException {
-		user = Users.selectUser(user.getLogin());
+		user = Users.select(user.getLogin());
 		return user;
 	}
 
 	@Override
 	public User addUser(User user) throws IllegalArgumentException {
-		user = Users.insertUser(user);
+		user = Users.insert(user);
 		return null;
 	}
 }

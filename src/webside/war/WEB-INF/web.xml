@@ -20,5 +20,13 @@
   <welcome-file-list>
     <welcome-file>Geo2tag.html</welcome-file>
   </welcome-file-list>
+  <servlet>
+  	<servlet-name>LoginService</servlet-name>
+  	<servlet-class>ru.spb.osll.web.server.rpc.service.login.LoginServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>LoginService</servlet-name>
+  	<url-pattern>/geo2tag/LoginService</url-pattern>
+  </servlet-mapping>
 
 </web-app>
