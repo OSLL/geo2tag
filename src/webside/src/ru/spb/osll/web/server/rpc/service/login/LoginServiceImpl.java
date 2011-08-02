@@ -2,6 +2,7 @@ package ru.spb.osll.web.server.rpc.service.login;
 
 import ru.spb.osll.web.client.rpc.services.login.LoginService;
 import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.server.db.Users;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -10,7 +11,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
 	@Override
 	public User login(User user) throws IllegalArgumentException {
-		user.setId(1);
+		//user = Users.selectUser(user.getLogin());
 		return user;
 	}
 }

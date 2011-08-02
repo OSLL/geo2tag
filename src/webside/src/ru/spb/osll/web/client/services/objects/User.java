@@ -8,7 +8,7 @@ public class User implements Serializable {
 	private long id; 
 	private String login;
 	private String password;
-//	private String token;
+	private String token;
 	
 	public User() {
 	}
@@ -40,4 +40,13 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 }

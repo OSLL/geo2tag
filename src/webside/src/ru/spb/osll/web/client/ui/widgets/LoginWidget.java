@@ -58,7 +58,11 @@ public class LoginWidget extends FieldsWidget {
 
 					@Override
 					public void onSuccess(User result) {
-						Window.alert("id = " + result.getId() + "login = " + result.getLogin());
+						if (result == null){
+							Window.alert(" user == null ");
+						} else {
+							Window.alert("id = " + result.getId() + "login = " + result.getLogin());
+						}
 					}
 				});
 			}
