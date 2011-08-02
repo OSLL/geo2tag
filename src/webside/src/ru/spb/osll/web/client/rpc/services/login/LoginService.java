@@ -11,6 +11,8 @@ public interface LoginService extends RemoteService {
 
 	User login(User user) throws IllegalArgumentException;
 
+	User addUser(User user) throws IllegalArgumentException;
+	
 	public static class Util {
 		private static LoginServiceAsync instance;
 		public static LoginServiceAsync getInstance(){

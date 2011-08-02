@@ -48,8 +48,7 @@ public class LoginWidget extends FieldsWidget {
 		btn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				User user = new User(m_loginField.getText(), m_passField.getText());
-				
+				final User user = new User(m_loginField.getText(), m_passField.getText());
 				service.login(user, new AsyncCallback<User>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -61,7 +60,7 @@ public class LoginWidget extends FieldsWidget {
 						if (result == null){
 							Window.alert(" user == null ");
 						} else {
-							Window.alert("id = " + result.getId() + "login = " + result.getLogin());
+							Window.alert("id = " + result.getId() + " login = " + result.getLogin());
 						}
 					}
 				});

@@ -7,4 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface LoginServiceAsync {
 	void login(User user, AsyncCallback<User> callback)
 		throws IllegalArgumentException;
+
+	void addUser(User user, AsyncCallback<User> callback)
+		throws IllegalArgumentException;
 }
