@@ -57,6 +57,10 @@ public class GTShell extends Composite {
 		showWidget();
 	}
 	
+	public Widget getContent(){
+		return content;
+	}
+	
 	private void showWidget() {
 		if (content == null) {
 			return;

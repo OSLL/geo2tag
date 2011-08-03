@@ -2,6 +2,7 @@ package ru.spb.osll.web.server.db.common;
 
 import java.sql.*;
 
+import org.apache.log4j.Logger;
 import org.scb.gwt.web.server.i18n.GWTI18N;
 
 public class DBUtil {
@@ -25,8 +26,7 @@ public class DBUtil {
 				connection = DriverManager.getConnection(url, user, pass);
 				return connection;
 			} catch (Exception e) {
-				// TODO use log4j
-				e.printStackTrace();
+				Logger.getLogger(DBUtil.class).error(e.getLocalizedMessage());
 			}
 		}
 		return connection;
