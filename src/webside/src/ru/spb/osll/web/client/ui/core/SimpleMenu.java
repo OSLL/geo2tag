@@ -1,6 +1,5 @@
 package ru.spb.osll.web.client.ui.core;
 
-import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree.GroupItem;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree.MenuItem;
 
@@ -35,6 +34,16 @@ abstract public class SimpleMenu <T extends SimpleComposite> extends Composite {
 
 	abstract protected void initMenu();
 
+	abstract protected boolean setContentWidget(T widget);
+	
+	protected T getDefaultWidget(){
+		return null;
+	}
+
+	protected int getDefaultGroup(){
+		return 0;
+	}
+	
 	public Widget onInitialize() {
 		final DecoratedStackPanel stackPanel = new DecoratedStackPanel();
 		stackPanel.setWidth("224px");
@@ -49,13 +58,11 @@ abstract public class SimpleMenu <T extends SimpleComposite> extends Composite {
 		History.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				final String token = event.getValue();
-				final Pair<Integer, T> pair = getWidgetByToken(token);
+				final Pair pair = getWidgetByToken(token);
 				final int group = pair.left;
-				final Widget widget = pair.right;
+				final T widget = pair.right;
 
-				final GTShell shell = GTShell.Instance;
-				if (shell.getContent() != widget){
-					shell.setContent(widget);
+				if (setContentWidget(widget)){
 					stackPanel.showStack(group);
 				}
 			}
@@ -71,7 +78,6 @@ abstract public class SimpleMenu <T extends SimpleComposite> extends Composite {
 			hPanel.add(new Image(image));
 		}
 		HTML headerText = new HTML(text);
-		headerText.setStyleName("cw-StackPanelHeader");
 		hPanel.add(headerText);
 
 		// Return the HTML string for the panel
@@ -82,14 +88,12 @@ abstract public class SimpleMenu <T extends SimpleComposite> extends Composite {
 		VerticalPanel panel = new VerticalPanel();
 		for (MenuItem<T> item : group.getItems()) {
 			final T widget = item.getWidget();
-			final String token = getTokenByWidget(widget);
+			final String token = getToken(group, widget);
 			
 			ClickHandler handler = new ClickHandler() {
 				public void onClick(ClickEvent event) {
-					GTShell shell = GTShell.Instance;
-					if (shell != null){
+					if (setContentWidget(widget)){
 						History.newItem(token);
-						shell.setContent(widget);
 					}
 				}
 			};
@@ -111,41 +115,41 @@ abstract public class SimpleMenu <T extends SimpleComposite> extends Composite {
 		return panel;
 	}
 	
-	private Pair<Integer, T> getWidgetByToken(String token){
-		Pair<Integer, T> nullPair = new Pair<Integer, T>(0, null);
+	private Pair getWidgetByToken(String token){
+		Pair defaultPair = new Pair(getDefaultGroup(), getDefaultWidget());
 		if (token.equals("")){
-			return nullPair; // TODO return defauld widget
+			return defaultPair;
 		}
 		int groupIndex = 0;
 		for(GroupItem<T> group : m_menuTree.getGroups()){
 			for(MenuItem<T> item : group.getItems()){
 				final T widget = item.getWidget();
-				if (getTokenByWidget(widget).contains(token)){
-					return new Pair<Integer, T>(groupIndex, widget);
+				if (getToken(group, widget).contains(token)){
+					return new Pair(groupIndex, widget);
 				}
 			}
 			groupIndex++;
 		}
-		return nullPair;
+		return defaultPair;
 	}
 
-	public String getTokenByWidget(T content) {
-		return getContentWidgetToken(content.getClass());
+	public String getToken(GroupItem<T> group, T content) {
+		return group.getName() + "_" + getTokenByClass(content.getClass());
 	}
 	
-	public static <T>String getContentWidgetToken(Class<T> cwClass) {
+	public static <T>String getTokenByClass(Class<T> cwClass) {
 		String className = cwClass.getName();
 		className = className.substring(className.lastIndexOf('.') + 1);
 		return className;
 	}
 	
-	private class Pair<L, R>{
-		L left;
-		R right;
-		
-		Pair(L l, R r) {
-			left = l;
-			right = r;
+	private class Pair{
+		final int left;
+		final T right;
+
+		Pair(int left, T right) {
+			this.left = left;
+			this.right = right;
 		}
 	}
 }
