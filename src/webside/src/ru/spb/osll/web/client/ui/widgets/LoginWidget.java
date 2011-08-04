@@ -3,7 +3,9 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.localization.Localizer;
+import ru.spb.osll.web.client.services.objects.Response;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
@@ -13,16 +15,14 @@ import ru.spb.osll.web.client.ui.core.UIUtil;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 
 public class LoginWidget extends FieldsWidget {
-	
-	TextBox m_loginField;
-	PasswordTextBox m_passField;
+	private TextBox m_loginField;
+	private PasswordTextBox m_passField;
 	
 	@Override
 	protected String getName() {
@@ -40,7 +40,7 @@ public class LoginWidget extends FieldsWidget {
 		return fields;
 	}
 	
-	private final LoginServiceAsync service = GWT.create(LoginService.class);
+	private final LoginServiceAsync m_service = GWT.create(LoginService.class);
 
 	@Override
 	protected List<Button> getButtons() {
@@ -49,18 +49,24 @@ public class LoginWidget extends FieldsWidget {
 			@Override
 			public void onClick(ClickEvent event) {
 				final User user = new User(m_loginField.getText(), m_passField.getText());
-				service.login(user, new AsyncCallback<User>() {
+				hideMessage();
+
+				m_service.login(user, new AsyncCallback<User>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						Window.alert(caught.getMessage());
+						showMessage(caught.getMessage());
 					}
 
 					@Override
 					public void onSuccess(User result) {
-						if (result == null){
-							Window.alert(" user == null ");
-						} else {
-							Window.alert("id = " + result.getId() + " login = " + result.getLogin());
+						if (result != null){
+							if (result.getStatus() == Response.STATUS_SUCCES){
+								final String title = "Authorization";
+								UIUtil.getSimpleDialog(title, result.getMessage()).center();
+								GTShell.Instance.setDefaultContent();
+							} else if (result.getStatus() == Response.STATUS_FAIL){
+								showMessage(result.getMessage());
+							}
 						}
 					}
 				});

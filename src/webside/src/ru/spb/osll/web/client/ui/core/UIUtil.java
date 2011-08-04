@@ -1,5 +1,12 @@
 package ru.spb.osll.web.client.ui.core;
 
+import ru.spb.osll.web.client.localization.Localizer;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
@@ -46,6 +53,34 @@ public class UIUtil {
 			horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		}
 		return horizontalPanel;
+	}
+	
+	public static DialogBox getSimpleDialog(String title, String message){
+		return getSimpleDialog(title, message, Localizer.res().btnOk());
+	}
+	
+	public static DialogBox getSimpleDialog(String title, String message, String btnText){
+		final DialogBox dialogBox = new DialogBox();
+		dialogBox.setText(title);
+		dialogBox.setAnimationEnabled(true);
+		dialogBox.setWidth("300px");
+
+		final VerticalPanel dialogVPanel = getVerticalPanel(true);
+		dialogVPanel.addStyleName("dialogVPanel");
+
+		Button btn = new Button(btnText);
+		btn.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				dialogBox.hide(true);
+			}
+		});
+		
+		dialogVPanel.add(new HTML(message));
+		dialogVPanel.add(btn);
+		dialogBox.setWidget(dialogVPanel);
+		
+		return dialogBox;
 	}
 
 }

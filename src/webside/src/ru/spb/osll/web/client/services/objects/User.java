@@ -3,7 +3,7 @@ package ru.spb.osll.web.client.services.objects;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class User implements Serializable {
+public class User extends Response implements Serializable {
 
 	private long id; 
 	private String login;

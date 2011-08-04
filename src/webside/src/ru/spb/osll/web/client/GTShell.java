@@ -60,7 +60,11 @@ public class GTShell extends Composite {
 	public Widget getContent(){
 		return content;
 	}
-	
+
+	public void setDefaultContent(){
+		setContent(null);	// TODO
+	}
+
 	private void showWidget() {
 		if (content == null) {
 			return;

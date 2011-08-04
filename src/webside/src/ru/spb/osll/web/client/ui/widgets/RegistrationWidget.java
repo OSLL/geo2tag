@@ -1,0 +1,109 @@
+package ru.spb.osll.web.client.ui.widgets;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ru.spb.osll.web.client.GTShell;
+import ru.spb.osll.web.client.localization.Localizer;
+import ru.spb.osll.web.client.services.objects.Response;
+import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.users.LoginService;
+import ru.spb.osll.web.client.services.users.LoginServiceAsync;
+import ru.spb.osll.web.client.ui.core.FieldsWidget;
+import ru.spb.osll.web.client.ui.core.UIUtil;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.TextBox;
+
+public class RegistrationWidget extends FieldsWidget {
+	private TextBox m_login;
+	private PasswordTextBox m_pass;
+	private PasswordTextBox m_passConfirm;
+
+	@Override
+	protected String getName() {
+		return Localizer.res().registration();
+	}
+
+	@Override
+	protected List<TField> getFields() {
+		m_login = UIUtil.getTextBox(65, 200);
+		m_pass = UIUtil.getPasswordTextBox(65, 200);
+		m_passConfirm = UIUtil.getPasswordTextBox(65, 200);
+
+		List<TField> fields = new ArrayList<TField>();
+		fields.add(new TField(Localizer.res().login(), m_login));
+		fields.add(new TField(Localizer.res().password(), m_pass));
+		fields.add(new TField(Localizer.res().confirm(), m_passConfirm));
+		return fields;
+	}
+
+	private final LoginServiceAsync m_service = GWT.create(LoginService.class);
+
+	@Override
+	protected List<Button> getButtons() {
+		Button btn = new Button(Localizer.res().btnSignin());
+		btn.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				hideMessage();
+				if (isValid()) {
+					final User user = new User(m_login.getText(), m_pass.getText());
+					m_service.addUser(user, new AsyncCallback<User>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							showMessage(caught.getMessage());
+						}
+
+						@Override
+						public void onSuccess(User result) {
+							if (result != null) {
+								if (result.getStatus() == Response.STATUS_SUCCES) {
+									final String title = "Registration";
+									UIUtil.getSimpleDialog(title,result.getMessage()).center();
+									GTShell.Instance.setDefaultContent();
+								} else {
+									showMessage("Message: " + result.getMessage());
+								}
+							}
+						}
+					});
+				}
+			}
+		});
+
+		List<Button> buttons = new ArrayList<Button>();
+		buttons.add(btn);
+		return buttons;
+	}
+
+	private boolean isValid() {
+		final String login = m_login.getText();
+		final String pass = m_pass.getText();
+		final String conf = m_passConfirm.getText();
+
+		if (login.equals("")) {
+			showMessage(" login null "); // TODO localize
+			return false;
+		}
+		if (pass.equals("")) {
+			showMessage(" pass null "); // TODO localize
+			return false;
+		}
+		if (conf.equals("")) {
+			showMessage(" conf null "); // TODO localize
+			return false;
+		}
+		if (!pass.equals(conf)) {
+			showMessage(" pass != conf "); // TODO localize
+			return false;
+		}
+		return true;
+	}
+
+}
