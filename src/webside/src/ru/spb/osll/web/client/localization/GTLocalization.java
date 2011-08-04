@@ -7,8 +7,15 @@ public interface GTLocalization extends Constants {
 	String password();
 	String confirm();
 	String registration();
-	
+
+	// buttons
 	String btnOk();
 	String btnCancel();
 	String btnSignin();
+	
+	// warnings
+	String wrngLoginNull();
+	String wrngPasswordNull();
+	String wrngConfirmNull();
+	String wrngPassAndConf(); 
 }

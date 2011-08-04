@@ -64,11 +64,11 @@ public class RegistrationWidget extends FieldsWidget {
 						public void onSuccess(User result) {
 							if (result != null) {
 								if (result.getStatus() == Response.STATUS_SUCCES) {
-									final String title = "Registration";
+									final String title = Localizer.res().registration();
 									UIUtil.getSimpleDialog(title,result.getMessage()).center();
 									GTShell.Instance.setDefaultContent();
 								} else {
-									showMessage("Message: " + result.getMessage());
+									showMessage(result.getMessage());
 								}
 							}
 						}
@@ -88,19 +88,19 @@ public class RegistrationWidget extends FieldsWidget {
 		final String conf = m_passConfirm.getText();
 
 		if (login.equals("")) {
-			showMessage(" login null "); // TODO localize
+			showMessage(Localizer.res().wrngLoginNull());
 			return false;
 		}
 		if (pass.equals("")) {
-			showMessage(" pass null "); // TODO localize
+			showMessage(Localizer.res().wrngPasswordNull());
 			return false;
 		}
 		if (conf.equals("")) {
-			showMessage(" conf null "); // TODO localize
+			showMessage(Localizer.res().wrngConfirmNull());
 			return false;
 		}
 		if (!pass.equals(conf)) {
-			showMessage(" pass != conf "); // TODO localize
+			showMessage(Localizer.res().wrngPassAndConf());
 			return false;
 		}
 		return true;

@@ -61,7 +61,7 @@ public class LoginWidget extends FieldsWidget {
 					public void onSuccess(User result) {
 						if (result != null){
 							if (result.getStatus() == Response.STATUS_SUCCES){
-								final String title = "Authorization";
+								final String title = Localizer.res().login();
 								UIUtil.getSimpleDialog(title, result.getMessage()).center();
 								GTShell.Instance.setDefaultContent();
 							} else if (result.getStatus() == Response.STATUS_FAIL){
