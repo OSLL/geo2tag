@@ -16,19 +16,40 @@ public class Users {
 	public static final String PASSWORD	= "password";
 	public static final String TOKEN 	= "token";
 	
-	public static User insert(User user){
-		// TODO
-		return user;
+	private static final String INSERT_USER = "INSERT INTO users VALUES (%li, '%s', '%s', '%s');";
+	
+	public static boolean insert(User user){
+		boolean success = true; 
+		try {
+			final Connection c = DBUtil.getConnection();
+			final Statement Ex1Stmt = c.createStatement();
+			final String query = String.format(INSERT_USER, user.getId(), user.getLogin(), user.getPassword(), user.getToken());
+			final int result = Ex1Stmt.executeUpdate(query);     
+		} catch (Exception e) {
+			Logger.getLogger(Users.class).error("insertUser", e.getCause());
+			success = false;
+		}
+		return success;
 	}
-
-	public static User update(User user){
-		// TODO
-		return user;
-	}
+	
+	private static final String DELETE_USER = "DELETE FROM users WHERE login='%s';";
 
 	public static boolean delete(User user){
-		// TODO
-		return true;
+		boolean success = true; 
+		try {
+			final Connection c = DBUtil.getConnection();
+			final Statement Ex1Stmt = c.createStatement();
+			final String query = String.format(DELETE_USER, user.getLogin());
+			final int result = Ex1Stmt.executeUpdate(query);     
+		} catch (Exception e) {
+			Logger.getLogger(Users.class).error("deleteUser", e.getCause());
+			success = false;
+		}
+		return success;
+	}	
+
+	public static boolean update(User user){
+		return delete(user) && insert(user);
 	}
 
 	
@@ -37,7 +58,7 @@ public class Users {
 	public static User select(String login){
 		User user = null;
 		try {
-			final Connection c = DBUtil.getConnction();
+			final Connection c = DBUtil.getConnection();
 			final Statement Ex1Stmt = c.createStatement();
 			final String query = String.format(SELECT_USER, login);
 			final ResultSet result = Ex1Stmt.executeQuery(query);
