@@ -24,7 +24,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
           "Name must be at least 4 characters long");
     }
     try{
-		Connection c = DBUtil.getConnction();
+		Connection c = DBUtil.getConnection();
 		Statement Ex1Stmt = c.createStatement();
 		ResultSet result = Ex1Stmt.executeQuery("select login from users;");
 	    while (result.next()) {

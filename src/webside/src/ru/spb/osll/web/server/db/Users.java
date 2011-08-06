@@ -17,16 +17,21 @@ public class Users {
 	public static final String TOKEN 	= "token";
 	private static long id = 0;
 	
-	private static final String INSERT_USER = "INSERT INTO users VALUES (%li, '%s', '%s', '%s');";
+	private static final String INSERT_USER = "INSERT INTO users VALUES (%s, '%s', '%s', '%s');";
 	
 	public static User insert(User user){
 		try {
 			final Connection c = DBUtil.getConnection();
 			final Statement Ex1Stmt = c.createStatement();
-			final String query = String.format(INSERT_USER, id, user.getLogin(), user.getPassword(), user.getToken());
-			final int result = Ex1Stmt.executeUpdate(query);
-			id++;
+			final ResultSet res = Ex1Stmt.executeQuery("SELECT MAX(id) FROM users;");
+			long id = 0;
+			while (res.next()) {
+			id = res.getInt("max");
+			};
+			id = id + 1;
 			user.setId(id);
+			final String query = String.format(INSERT_USER, id + "", user.getLogin(), user.getPassword(), user.getToken());
+			final int result = Ex1Stmt.executeUpdate(query);
 		} catch (Exception e) {
 			Logger.getLogger(Users.class).error("insertUser", e.getCause());
 		}

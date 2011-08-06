@@ -20,22 +20,27 @@ public class Channels {
 	public static final String URL 			= "url";
 	private static long id = 0;
 
-	private static final String INSERT_CHANNEL = "INSERT INTO channels VALUES (%li, '%s', '%s', '%s');";
+	private static final String INSERT_CHANNEL = "INSERT INTO channel VALUES (%s, '%s', '%s', '%s');";
 	public static Channel insert(Channel channel){  
 		try {
 			final Connection c = DBUtil.getConnection();
 			final Statement Ex1Stmt = c.createStatement();
-			final String query = String.format(INSERT_CHANNEL, id, channel.getName(), channel.getDescription(), channel.getUrl());
-			final int result = Ex1Stmt.executeUpdate(query);
-			id++;
+			final ResultSet res = Ex1Stmt.executeQuery("SELECT MAX(id) FROM channel;");
+			long id = 0;
+			while (res.next()) {
+			id = res.getInt("max");
+			};
+			id = id + 1;
 			channel.setId(id);
+			final String query = String.format(INSERT_CHANNEL, id + "", channel.getName(), channel.getDescription(), channel.getUrl());
+			final int result = Ex1Stmt.executeUpdate(query);
 		} catch (Exception e) {
 		    Logger.getLogger(Channels.class).error("insertChannel", e.getCause());
 		}
 		return channel;
 	}
 
-	private static final String DELETE_CHANNEL = "DELETE FROM channels WHERE name='%s';";	
+	private static final String DELETE_CHANNEL = "DELETE FROM channel WHERE name='%s';";	
 	public static boolean delete(Channel channel){
 		boolean success = true; 
 		try {
@@ -55,7 +60,7 @@ public class Channels {
 		return insert(channel);
 	}
 	
-	private static final String SELECT_ALL_CHANNELS = "SELECT * FROM channels;";
+	private static final String SELECT_ALL_CHANNELS = "SELECT * FROM channel;";
 	public static List<Channel> selectAll(){
 		Channel channel = null;
 		List<Channel> listChannels = new ArrayList<Channel>();
@@ -79,7 +84,7 @@ public class Channels {
 	}
 
 	private static final String SELECT_BY_USER = "SELECT * FROM subscribes WHERE user_id='%s';";
-	private static final String SELECT_CHANNELS = "SELECT * FROM channels WHERE id='%s';";
+	private static final String SELECT_CHANNELS = "SELECT * FROM channel WHERE id='%s';";
 	public static final String CHANNEL_ID 		= "channel_id";
 	public static final String USER_ID 			= "user_id";
 	public static List<Channel> selectByUser(User user){

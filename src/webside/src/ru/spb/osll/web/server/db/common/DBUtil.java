@@ -9,7 +9,7 @@ public class DBUtil {
 
 	private static Connection connection = null;
 
-	public static Connection getConnction() {
+	public static Connection getConnection() {
 		if (connection == null) {
 			try {
 				DB dbconf = GWTI18N.create(DB.class);
