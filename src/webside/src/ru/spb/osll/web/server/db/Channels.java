@@ -18,7 +18,6 @@ public class Channels {
 	public static final String NAME 		= "name";
 	public static final String DESCRIPTION 	= "description";
 	public static final String URL 			= "url";
-	private static long id = 0;
 
 	private static final String INSERT_CHANNEL = "INSERT INTO channel VALUES (%s, '%s', '%s', '%s');";
 	public static Channel insert(Channel channel){  

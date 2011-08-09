@@ -1,6 +1,5 @@
 package ru.spb.osll.web.server.db;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -15,60 +14,59 @@ public class Users {
 	public static final String LOGIN 	= "login";
 	public static final String PASSWORD	= "password";
 	public static final String TOKEN 	= "token";
-	private static long id = 0;
 	
-	private static final String INSERT_USER = "INSERT INTO users VALUES (%s, '%s', '%s', '%s');";
-	
+	private static final String INSERT_USER = "INSERT INTO users (login, password, token) VALUES ('%s', '%s', '%s');";
 	public static User insert(User user){
 		try {
-			final Connection c = DBUtil.getConnection();
-			final Statement Ex1Stmt = c.createStatement();
-			final ResultSet res = Ex1Stmt.executeQuery("SELECT MAX(id) FROM users;");
-			long id = 0;
-			while (res.next()) {
-			id = res.getInt("max");
-			};
-			id = id + 1;
+			final Statement statement = DBUtil.getConnection().createStatement();
+			final String query = String.format(INSERT_USER, user.getLogin(), user.getPassword(), user.getToken());
+			statement.execute(query, Statement.RETURN_GENERATED_KEYS); 
+			final ResultSet rs = statement.getGeneratedKeys();
+			rs.next();
+			final long id = rs.getLong(1); 
 			user.setId(id);
-			final String query = String.format(INSERT_USER, id + "", user.getLogin(), user.getPassword(), user.getToken());
-			final int result = Ex1Stmt.executeUpdate(query);
+			return user;
 		} catch (Exception e) {
 			Logger.getLogger(Users.class).error("insertUser", e.getCause());
 		}
-		return user;
+		return null;
 	}
-	
-	private static final String DELETE_USER = "DELETE FROM users WHERE login='%s';";
 
+	private static final String DELETE_USER = "DELETE FROM users WHERE login='%s';";
 	public static boolean delete(User user){
-		boolean success = true; 
 		try {
-			final Connection c = DBUtil.getConnection();
-			final Statement Ex1Stmt = c.createStatement();
+			final Statement statement = DBUtil.getConnection().createStatement();
 			final String query = String.format(DELETE_USER, user.getLogin());
-			final int result = Ex1Stmt.executeUpdate(query);     
+			statement.execute(query);
+			return true;
 		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("deleteUser", e.getCause());
-			success = false;
+			Logger.getLogger(Users.class).error("delete", e.getCause());
+			return false;
 		}
-		return success;
 	}	
 
-	public static User update(User user){
-		boolean success = delete(user);
-		return insert(user);
+	
+	private static final String UPDATE_USER = "UPDATE users SET password='%s', token='%s' WHERE login='%s';";
+	public static boolean update(User user){
+		try {
+			final Statement statement = DBUtil.getConnection().createStatement();
+			final String query = String.format(UPDATE_USER, user.getPassword(), user.getToken(), user.getLogin());
+			statement.execute(query);
+			return true;
+		} catch (Exception e) {
+			Logger.getLogger(Users.class).error("update", e.getCause());
+			return false;
+		}
 	}
 
 	
 	private static final String SELECT_USER = "SELECT * FROM users WHERE login='%s';";
-	
 	public static User select(String login){
 		User user = null;
 		try {
-			final Connection c = DBUtil.getConnection();
-			final Statement Ex1Stmt = c.createStatement();
+			final Statement statement = DBUtil.getConnection().createStatement();
 			final String query = String.format(SELECT_USER, login);
-			final ResultSet result = Ex1Stmt.executeQuery(query);
+			final ResultSet result = statement.executeQuery(query);
 		    while (result.next()) {
 		    	user = new User();	
 		    	user.setId(result.getInt(ID)); 
@@ -77,7 +75,7 @@ public class Users {
 		    	user.setToken(result.getString(TOKEN));
 		    }
 		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("selectUser", e.getCause());
+			Logger.getLogger(Users.class).error("select", e.getCause());
 		}
 	    return user;
 	}

@@ -49,4 +49,9 @@ public class User extends Response implements Serializable {
 		this.token = token;
 	}
 
+	@Override
+	public String toString() {
+		return "user: " + id + " \t| " + login + " \t| " + password + " \t| " + token;
+	}
+
 }
