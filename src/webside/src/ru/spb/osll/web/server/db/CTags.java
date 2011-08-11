@@ -1,7 +1,6 @@
 package ru.spb.osll.web.server.db;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Statement;
 
 import org.apache.log4j.Logger;

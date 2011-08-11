@@ -9,9 +9,7 @@ import org.apache.log4j.Logger;
 
 import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.Tag;
-import ru.spb.osll.web.client.services.objects.CTag;
 import ru.spb.osll.web.client.services.objects.User;
-import ru.spb.osll.web.client.services.objects.Subscribe;
 import ru.spb.osll.web.server.db.common.DBUtil;
 
 public class Tags {

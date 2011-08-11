@@ -10,14 +10,9 @@ import ru.spb.osll.web.server.db.CTags;
 import ru.spb.osll.web.server.db.Channels;
 import ru.spb.osll.web.server.db.Tags;
 import ru.spb.osll.web.server.db.Users;
-import java.sql.Timestamp;
 
 public class Geo2TagServTest extends TestCase{
 	
-	  /*
-	   * Tests class Users
-	   */
-	  
 	public void testUsers() {
 	    User testUser = new User("Dima", "Parol");
 	    testUser = Users.insert(testUser);
