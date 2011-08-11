@@ -19,7 +19,7 @@ public class Geo2TagServTest extends TestCase{
 	    testUser = Users.insert(testUser);
 	    assertTrue(Users.select("Dima").getPassword().equals("Parol"));
 	    testUser.setToken("blablabla");
-	    testUser = Users.update(testUser);
+	    Users.update(testUser);
 	    String testToken = Users.select("Dima").getToken();
 	    assertTrue(testToken.equals("blablabla"));
 	    boolean success = Users.delete(testUser);
@@ -32,7 +32,7 @@ public class Geo2TagServTest extends TestCase{
 	    testChannel = Channels.insert(testChannel);
 	    assertTrue(Channels.selectAll().get((int)testChannel.getId()-1).getName().equals("Channel1")); 		
 	    testChannel.setDescription("blablabla");
-	    testChannel = Channels.update(testChannel);
+	    Channels.update(testChannel);
 	    assertTrue(Channels.selectAll().get((int)testChannel.getId()-1).getDescription().equals("blablabla"));
 	    boolean success = Channels.delete(testChannel);
 	    assertTrue(success == true);
