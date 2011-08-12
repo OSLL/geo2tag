@@ -2,11 +2,9 @@ package ru.spb.osll.web.server;
 
 import junit.framework.TestCase;
 
-import ru.spb.osll.web.client.services.objects.CTag;
 import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.services.objects.User;
-import ru.spb.osll.web.server.db.CTags;
 import ru.spb.osll.web.server.db.Channels;
 import ru.spb.osll.web.server.db.Tags;
 import ru.spb.osll.web.server.db.Users;
@@ -49,14 +47,13 @@ public class Geo2TagServTest extends TestCase{
 	    assertTrue(Tags.selectByUser(testUser).get(0).getDescription().equals("blablabla"));
 	    Channel testChannel = new Channel("Channel1", "testurl");
 	    testChannel = Channels.insert(testChannel);
-	    CTag testCTag = new CTag(testChannel.getId(), testTag.getId());
-	    testCTag = CTags.insert(testCTag);
+	    Tags.addTagToChannel(testTag, testChannel);
 	    assertTrue(Tags.selectByChannel(testChannel).get(0).getDescription().equals("blablabla"));
 	    boolean success = Users.delete(testUser);
 	    assertTrue(success == true);
 	    success = Channels.delete(testChannel);
 	    assertTrue(success == true);
-	    success = CTags.delete(testCTag);
+	    success = Tags.removeTagFromChannel(testTag);
 	    assertTrue(success == true);
 	    success = Tags.delete(testTag);
 	    assertTrue(success == true);
