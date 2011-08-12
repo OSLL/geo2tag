@@ -60,6 +60,23 @@ public class Tags {
 	}	
 
 	
+	private static final String UPDATE_TAG = "UPDATE tag SET latitude='%s', longitude='%s', label='%s'," +
+			" description='%s', url='%s', user_id='%s' WHERE id='%s';";
+	public static boolean update(Tag tag){
+		boolean success = false;
+		try {
+			final Statement statement = DBUtil.getConnection().createStatement();
+			final String query = String.format(UPDATE_TAG, tag.getLatitude(), tag.getLongitude(), tag.getLabel(),
+					tag.getDescription(), tag.getUrl(), tag.getUserId(), tag.getId());
+			statement.execute(query);
+			success = true;
+		} catch (Exception e) {
+			Logger.getLogger(Users.class).error("update", e.getCause());
+		}
+		return success;
+	}
+	
+	
 	private static final String SELECT_TAGS_BY_USER = "SELECT * FROM tag WHERE user_id=%s;";
 	public static List<Tag> selectByUser(User user){
 		List<Tag> tags = new ArrayList<Tag>();
@@ -108,6 +125,42 @@ public class Tags {
 	    	tags.add(tag);
 	    }		
 	}
+	
+	
+	private static final String INSERT_TAG_CHANNEL = "INSERT INTO tags(channel_id, tag_id) VALUES (%s, %s);";
+	public static boolean addTagToChannel(Tag tag, Channel ch){
+		boolean succes = false;
+		try {
+			final Statement statement = DBUtil.getConnection().createStatement();
+			final String query = String.format(INSERT_TAG_CHANNEL, ch.getId() , tag.getId());
+			statement.execute(query);
+			succes = true;
+		} catch (Exception e) {
+		    Logger.getLogger(Channels.class).error("addTagToChannel", e.getCause());
+		}
+		return succes;
+	}
 
+
+	private static final String DELETE_TAG_CHANNEL = "DELETE FROM tags WHERE tag_id=%s;";	
+	public static boolean removeTagFromChannel(Tag tag){
+		boolean succes = false;
+		try {
+			final Statement statement = DBUtil.getConnection().createStatement();
+			final String query = String.format(DELETE_TAG_CHANNEL, tag.getId());
+			statement.execute(query);
+			succes = true;
+		} catch (Exception e) {
+		    Logger.getLogger(Channels.class).error("addTagToChannel", e.getCause());
+		}
+		return succes;
+	}
+
+	
+	public static boolean updateTagFromChannel(Tag tag, Channel ch){
+		// TODO
+		return true;
+	}
+	
 }
 

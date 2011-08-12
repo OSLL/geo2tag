@@ -9,10 +9,6 @@ import ru.spb.osll.web.client.services.objects.CTag;
 import ru.spb.osll.web.server.db.common.DBUtil;
 
 public class CTags {
-	public static final String TABLE 		= "tags";
-	public static final String CHANNEL_ID 	= "channel_id";
-	public static final String TAG_ID   	= "user_id";
-
 	private static final String INSERT_TAGS = "INSERT INTO tags VALUES (%s, %s);";
 	public static CTag insert(CTag tag){  
 		try {

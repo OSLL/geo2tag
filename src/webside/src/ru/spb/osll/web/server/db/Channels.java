@@ -126,6 +126,8 @@ public class Channels {
 	public static boolean unsubscribeFromChannel(Channel ch, User user){
 		// TODO
 		return true;
-	}	
+	}
+	
+	
 
 }

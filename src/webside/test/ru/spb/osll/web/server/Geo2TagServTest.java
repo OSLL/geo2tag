@@ -45,7 +45,7 @@ public class Geo2TagServTest extends TestCase{
 	    testTag = Tags.insert(testTag);
 	    assertTrue(Tags.selectByUser(testUser).get(0).getLabel().equals("testlabel")); 		
 	    testTag.setDescription("blablabla");
-	    testTag = Tags.update(testTag);
+	    assertTrue(Tags.update(testTag));
 	    assertTrue(Tags.selectByUser(testUser).get(0).getDescription().equals("blablabla"));
 	    Channel testChannel = new Channel("Channel1", "testurl");
 	    testChannel = Channels.insert(testChannel);
