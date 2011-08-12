@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 public class Tag implements Serializable {
 
 	private long id;
-	private java.sql.Timestamp time;
+	private Timestamp time;
     private float latitude;
     private float longitude;
 	private String label;

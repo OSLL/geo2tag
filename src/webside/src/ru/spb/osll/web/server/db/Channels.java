@@ -17,7 +17,6 @@ public class Channels {
 	public static final String NAME 		= "name";
 	public static final String DESCRIPTION 	= "description";
 	public static final String URL 			= "url";
-
 	
 	
 	private static final String INSERT_CHANNEL 
