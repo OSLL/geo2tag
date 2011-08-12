@@ -5,6 +5,7 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
+import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.server.db.common.DBUtil;
 
@@ -85,4 +86,33 @@ public class Users {
 	    return user;
 	}
 	
+	
+	private static final String SUBSCRIBE = "INSERT INTO subscribe(channel_id, user_id) values('%s', '%s');";
+	public static boolean subscribeToChannel(Channel ch, User user){
+		boolean succes = false;
+		try {
+			final Statement statement = DBUtil.getConnection().createStatement();
+			final String query = String.format(SUBSCRIBE, ch.getId(), user.getId());
+			statement.execute(query);
+			succes = true;
+		} catch (Exception e) {
+			Logger.getLogger(Users.class).error("subscribeToChannel", e.getCause());
+		}
+		return succes;
+	}	
+	
+	
+	private static final String UNSUBSCRIBE = "DELETE FROM subscribe WHERE channel_id='%s' AND user_id='%s';";
+	public static boolean unsubscribeFromChannel(Channel ch, User user){
+		boolean succes = false;
+		try {
+			final Statement statement = DBUtil.getConnection().createStatement();
+			final String query = String.format(UNSUBSCRIBE, ch.getId(), user.getId());
+			statement.execute(query);
+			succes = true;
+		} catch (Exception e) {
+			Logger.getLogger(Users.class).error("unsubscribeFromChannel", e.getCause());
+		}
+		return succes;
+	}	
 }

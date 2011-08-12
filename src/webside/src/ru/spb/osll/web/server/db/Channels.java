@@ -118,16 +118,4 @@ public class Channels {
 		return null;
 	}	
 
-	public static boolean subscribeToChannel(Channel ch, User user){
-		// TODO
-		return true;
-	}	
-
-	public static boolean unsubscribeFromChannel(Channel ch, User user){
-		// TODO
-		return true;
-	}
-	
-	
-
 }
