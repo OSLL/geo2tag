@@ -1,15 +1,12 @@
 package ru.spb.osll.web.server.db;
 
 import java.sql.ResultSet;
-import java.sql.Statement;
-
-import org.apache.log4j.Logger;
+import java.sql.SQLException;
 
 import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.User;
-import ru.spb.osll.web.server.db.common.DBUtil;
 
-public class Users {
+public class Users extends AbstractBase<User> {
 	public static final String TABLE 	= "users";
 	
 	public static final String ID 		= "id";
@@ -17,102 +14,75 @@ public class Users {
 	public static final String PASSWORD	= "password";
 	public static final String TOKEN 	= "token";
 	
+	public static Users Instance(){
+		if (instance == null){
+			instance = new Users();
+		}
+		return instance;
+	}
+	private static Users instance;
+	private Users(){}
+
+
 	
-	private static final String INSERT_USER = "INSERT INTO users (login, password, token) VALUES ('%s', '%s', '%s');";
-	public static User insert(User user){
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(INSERT_USER, user.getLogin(), user.getPassword(), user.getToken());
-			statement.execute(query, Statement.RETURN_GENERATED_KEYS); 
-			final ResultSet rs = statement.getGeneratedKeys();
-			rs.next();
-			final long id = rs.getLong(1); 
+	@Override
+	protected User constructObject(ResultSet result) throws SQLException {
+		User user = new User();	
+    	user.setId(result.getInt(ID)); 
+    	user.setLogin(result.getString(LOGIN));
+    	user.setPassword(result.getString(PASSWORD));
+    	user.setToken(result.getString(TOKEN));
+		return user;
+	}	
+
+	public User select(String login){
+		final String selectUser = "SELECT * FROM users WHERE login='%s';";
+		final String query = String.format(selectUser, login);
+		return baseSelect(query);
+	}
+	
+	public User insert(User user){
+		final String insertUser = "INSERT INTO users (login, password, token) VALUES ('%s', '%s', '%s');";
+		final String query = String.format(insertUser, user.getLogin(), user.getPassword(), user.getToken());
+		final long id = baseInsert(query); 
+		if (id != -1){
 			user.setId(id);
-			return user;
-		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("insertUser", e.getCause());
+		}else {
+			user = null;
 		}
-		return null;
-	}
-
-	
-	private static final String DELETE_USER = "DELETE FROM users WHERE login='%s';";
-	public static boolean delete(User user){
-		boolean success = false;
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(DELETE_USER, user.getLogin());
-			statement.execute(query);
-			success = true;
-		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("delete", e.getCause());
-		}
-		return success;
-	}	
-
-	
-	private static final String UPDATE_USER = "UPDATE users SET password='%s', token='%s' WHERE login='%s';";
-	public static boolean update(User user){
-		boolean success = false;
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(UPDATE_USER, user.getPassword(), user.getToken(), user.getLogin());
-			statement.execute(query);
-			success = true;
-		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("update", e.getCause());
-		}
-		return success;
-	}
-
-	
-	private static final String SELECT_USER = "SELECT * FROM users WHERE login='%s';";
-	public static User select(String login){
-		User user = null;
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(SELECT_USER, login);
-			final ResultSet result = statement.executeQuery(query);
-		    while (result.next()) {
-		    	user = new User();	
-		    	user.setId(result.getInt(ID)); 
-		    	user.setLogin(result.getString(LOGIN));
-		    	user.setPassword(result.getString(PASSWORD));
-		    	user.setToken(result.getString(TOKEN));
-		    }
-		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("select", e.getCause());
-		}
-	    return user;
+		return user;
 	}
 	
-	
-	private static final String SUBSCRIBE = "INSERT INTO subscribe(channel_id, user_id) values('%s', '%s');";
-	public static boolean subscribeToChannel(Channel ch, User user){
-		boolean succes = false;
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(SUBSCRIBE, ch.getId(), user.getId());
-			statement.execute(query);
-			succes = true;
-		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("subscribeToChannel", e.getCause());
-		}
-		return succes;
+	public boolean delete(User user){
+		final String deleteUser = "DELETE FROM users WHERE login='%s';";
+		final String query = String.format(deleteUser, user.getLogin());
+		return baseBoolQuery(query);
 	}	
 	
+	public boolean update(User u){
+		final String updateUser = "UPDATE users SET password='%s', token='%s' WHERE login='%s';";
+		final String query = String.format(updateUser, u.getPassword(), u.getToken(), u.getLogin());
+		return baseBoolQuery(query);
+	}
 	
-	private static final String UNSUBSCRIBE = "DELETE FROM subscribe WHERE channel_id='%s' AND user_id='%s';";
-	public static boolean unsubscribeFromChannel(Channel ch, User user){
-		boolean succes = false;
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(UNSUBSCRIBE, ch.getId(), user.getId());
-			statement.execute(query);
-			succes = true;
-		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("unsubscribeFromChannel", e.getCause());
-		}
-		return succes;
+	public boolean subscribeToChannel(Channel ch, User user){
+		return subscribeToChannel(ch.getId(), user.getId());
 	}	
+	
+	public boolean unsubscribeFromChannel(Channel ch, User user){
+		return unsubscribeFromChannel(ch.getId(), user.getId());
+	}	
+	
+	public boolean subscribeToChannel(long channelId, long userId){
+		final String subscribe = "INSERT INTO subscribe(channel_id, user_id) values('%s', '%s');";
+		final String query = String.format(subscribe, channelId, userId);
+		return baseBoolQuery(query);
+	}	
+
+	public boolean unsubscribeFromChannel(long channelId, long userId){
+		final String unsubscribe = "DELETE FROM subscribe WHERE channel_id='%s' AND user_id='%s';";
+		final String query = String.format(unsubscribe, channelId, userId);
+		return baseBoolQuery(query);
+	}
+
 }

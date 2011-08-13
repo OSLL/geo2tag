@@ -127,8 +127,8 @@ public class Tags {
 	}
 	
 	
-	private static final String INSERT_TAG_CHANNEL = "INSERT INTO tags(channel_id, tag_id) VALUES (%s, %s);";
-	public static boolean addTagToChannel(Tag tag, Channel ch){
+	private static final String INSERT_TAG_CHANNEL = "INSERT INTO tags(channel_id, tag_id) VALUES ('%s', '%s');";
+	public static boolean addTagToChannel(Channel ch, Tag tag){
 		boolean succes = false;
 		try {
 			final Statement statement = DBUtil.getConnection().createStatement();
@@ -142,12 +142,12 @@ public class Tags {
 	}
 
 
-	private static final String DELETE_TAG_CHANNEL = "DELETE FROM tags WHERE tag_id=%s;";	
-	public static boolean removeTagFromChannel(Tag tag){
+	private static final String DELETE_TAG_CHANNEL = "DELETE FROM tags WHERE channel_id='%s' AND tag_id='%s';";	
+	public static boolean removeTagFromChannel(Channel ch, Tag tag){
 		boolean succes = false;
 		try {
 			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(DELETE_TAG_CHANNEL, tag.getId());
+			final String query = String.format(DELETE_TAG_CHANNEL, ch.getId(), tag.getId());
 			statement.execute(query);
 			succes = true;
 		} catch (Exception e) {
@@ -157,7 +157,7 @@ public class Tags {
 	}
 
 	
-	public static boolean updateTagFromChannel(Tag tag, Channel ch){
+	public static boolean updateTagFromChannel(Channel ch, Tag tag){
 		// TODO
 		return true;
 	}

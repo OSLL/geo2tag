@@ -12,7 +12,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
 	@Override
 	public User login(User user) throws IllegalArgumentException {
-		User standart = Users.select(user.getLogin());
+		User standart = Users.Instance().select(user.getLogin());
 		if (standart != null){
 			if (standart.getPassword().equals(user.getPassword())){
 				standart.setStatus(Response.STATUS_SUCCES);
@@ -31,8 +31,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
 	@Override
 	public User addUser(User user) throws IllegalArgumentException {
-		// TODO
-		user = Users.insert(user);
+		user = Users.Instance().insert(user);
 		return user;
 	}
 }
