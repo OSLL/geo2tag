@@ -13,8 +13,9 @@ public class Channel implements Serializable {
 	public Channel() {
 	}
 	
-	public Channel(final String name, final String url) {
+	public Channel(final String name, final String decsription, final String url) {
 		this.name = name;
+		this.description = decsription;
 		this.url = url;
 	}
 	

@@ -2,17 +2,13 @@ package ru.spb.osll.web.server.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
-import java.util.ArrayList;
-import org.apache.log4j.Logger;
 
 import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.services.objects.User;
-import ru.spb.osll.web.server.db.common.DBUtil;
 
-public class Tags {
+public class Tags extends AbstractBase<Tag> {
 	public static final String TABLE 		= "tag";
 	
 	public static final String ID 			= "id";
@@ -24,142 +20,81 @@ public class Tags {
 	public static final String URL 			= "url";
 	public static final String USERID   	= "user_id";
 
+	public static Tags Instance(){
+		if (instance == null){
+			instance = new Tags();
+		}
+		return instance;
+	}
+	private static Tags instance;
+	private Tags(){}
 	
-	private static final String INSERT_TAG = "INSERT INTO tag(latitude, longitude, label, description, user_id, url)" +
-			" VALUES (%s, %s, %s, '%s', '%s', '%s', %s);";
-	public static Tag insert(Tag tag){  
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(INSERT_TAG, tag.getLatitude(), tag.getLongitude(), 
-					tag.getLabel(), tag.getDescription(), tag.getUserId(), tag.getUrl());
-			statement.execute(query, Statement.RETURN_GENERATED_KEYS); 
-			final ResultSet rs = statement.getGeneratedKeys();
-			rs.next();
-			final long id = rs.getLong(1); 
+	
+	public Tag insert(Tag tag){  
+		final String insertTag = "INSERT INTO tag(latitude, longitude, label, description, user_id, url) " +
+				"VALUES (%s, %s, '%s', '%s', '%s', '%s');";
+		final String query = String.format(insertTag, tag.getLatitude(), tag.getLongitude(), 
+				tag.getLabel(), tag.getDescription(), tag.getUserId(), tag.getUrl());
+		final long id = baseInsert(query);
+		if (-1 != id){
 			tag.setId(id);
-			return tag;
-		} catch (Exception e) {
-		    Logger.getLogger(Channels.class).error("insertTag", e.getCause());
+		} else {
+			tag = null;
 		}
 		return tag;
 	}
-
-	
-	private static final String DELETE_TAG = "DELETE FROM tag WHERE id=%s;";	
-	public static boolean delete(Tag tag){
-		boolean success = true; 
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(DELETE_TAG, tag.getId());
-			statement.execute(query);     
-		} catch (Exception e) {
-			Logger.getLogger(Channels.class).error("deleteTag", e.getCause());
-			success = false;
-		}
-		return success;
+		
+	public boolean delete(Tag tag){
+		final String deleteTag = "DELETE FROM tag WHERE id=%s;"; 
+		final String query = String.format(deleteTag, tag.getId());
+		return baseBoolQuery(query);
 	}	
-
 	
-	private static final String UPDATE_TAG = "UPDATE tag SET latitude='%s', longitude='%s', label='%s'," +
-			" description='%s', url='%s', user_id='%s' WHERE id='%s';";
-	public static boolean update(Tag tag){
-		boolean success = false;
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(UPDATE_TAG, tag.getLatitude(), tag.getLongitude(), tag.getLabel(),
-					tag.getDescription(), tag.getUrl(), tag.getUserId(), tag.getId());
-			statement.execute(query);
-			success = true;
-		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("update", e.getCause());
-		}
-		return success;
+	public boolean update(Tag tag){
+		final String updateTag = "UPDATE tag SET latitude='%s', longitude='%s', " +
+				"label='%s', description='%s', url='%s', user_id='%s' WHERE id='%s';";
+		final String query = String.format(updateTag, tag.getLatitude(), tag.getLongitude(), 
+				tag.getLabel(),	tag.getDescription(), tag.getUrl(), tag.getUserId(), tag.getId());
+		return baseBoolQuery(query);
 	}
 	
-	
-	private static final String SELECT_TAGS_BY_USER = "SELECT * FROM tag WHERE user_id=%s;";
-	public static List<Tag> selectByUser(User user){
-		List<Tag> tags = new ArrayList<Tag>();
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(SELECT_TAGS_BY_USER, user.getId());
-			final ResultSet result = statement.executeQuery(query);
-			selectInternal(result, tags);
-		} catch (Exception e) {
-			Logger.getLogger(Channels.class).error("selectTagByUser", e.getCause());
-		}
-	    return tags;
+	public List<Tag> selectByUser(User user){
+		final String selectTagsByUser = "SELECT * FROM tag WHERE user_id=%s;";
+		final String query = String.format(selectTagsByUser, user.getId());
+	    return baseMultiSelect(query);
 	}
-
 	
-	private static final String SELECT_TAGS_BY_CHANNEL = "SELECT time, id, latitude, longitude, label, description, url, user_id" +
+	public List<Tag> selectByChannel(Channel channel){
+		final String selectTagsByChannel = "SELECT time, id, latitude, longitude, label, description, url, user_id" +
 			" FROM tag INNER JOIN tags ON tag.id = tags.tag_id WHERE tags.channel_id = '%s';";
-	public static List<Tag> selectByChannel(Channel channel){
-		List<Tag> tags = new ArrayList<Tag>();
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(SELECT_TAGS_BY_CHANNEL, channel.getId());
-			final ResultSet result = statement.executeQuery(query);
-			selectInternal(result, tags);
-		} catch (Exception e) {
-			Logger.getLogger(Channels.class).error("selectTagsByChannel", e.getCause());
-		}
-	    return tags;
+		final String query = String.format(selectTagsByChannel, channel.getId());
+	    return baseMultiSelect(query);
 	}	
 	
-	private static void selectInternal(ResultSet result, List<Tag> tags) throws SQLException{
-		if (tags == null){
-			return;
-		}
-		Tag tag = null;
-		while (result.next()) {
-	    	tag = new Tag();
-	    	tag.setId(result.getInt(ID)); 
-	    	tag.setTime(result.getTimestamp(TIME));
-	    	tag.setLatitude(result.getFloat(LATITUDE));
-	    	tag.setLongitude(result.getFloat(LONGITUDE));
-	    	tag.setLabel(result.getString(LABEL));
-	    	tag.setDescription(result.getString(DESCRIPTION));
-	    	tag.setUrl(result.getString(URL));
-	    	tag.setUserId(result.getInt(USERID));
-	    	tags.add(tag);
-	    }		
-	}
-	
-	
-	private static final String INSERT_TAG_CHANNEL = "INSERT INTO tags(channel_id, tag_id) VALUES ('%s', '%s');";
-	public static boolean addTagToChannel(Channel ch, Tag tag){
-		boolean succes = false;
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(INSERT_TAG_CHANNEL, ch.getId() , tag.getId());
-			statement.execute(query);
-			succes = true;
-		} catch (Exception e) {
-		    Logger.getLogger(Channels.class).error("addTagToChannel", e.getCause());
-		}
-		return succes;
+	public boolean addTagToChannel(Channel ch, Tag tag){
+		final String insertTagChannel = "INSERT INTO tags(channel_id, tag_id) VALUES ('%s', '%s');";
+		final String query = String.format(insertTagChannel, ch.getId() , tag.getId());
+		return baseBoolQuery(query);
 	}
 
-
-	private static final String DELETE_TAG_CHANNEL = "DELETE FROM tags WHERE channel_id='%s' AND tag_id='%s';";	
-	public static boolean removeTagFromChannel(Channel ch, Tag tag){
-		boolean succes = false;
-		try {
-			final Statement statement = DBUtil.getConnection().createStatement();
-			final String query = String.format(DELETE_TAG_CHANNEL, ch.getId(), tag.getId());
-			statement.execute(query);
-			succes = true;
-		} catch (Exception e) {
-		    Logger.getLogger(Channels.class).error("addTagToChannel", e.getCause());
-		}
-		return succes;
+	public boolean removeTagFromChannel(Channel ch, Tag tag){
+		final String deleteTagChannel = "DELETE FROM tags WHERE channel_id='%s' AND tag_id='%s';";	
+		final String query = String.format(deleteTagChannel, ch.getId(), tag.getId());
+		return baseBoolQuery(query);
 	}
 
-	
-	public static boolean updateTagFromChannel(Channel ch, Tag tag){
-		// TODO
-		return true;
+	@Override
+	protected Tag constructObject(ResultSet result) throws SQLException {
+		Tag tag = new Tag();
+    	tag.setId(result.getInt(ID)); 
+    	tag.setTime(result.getTimestamp(TIME));
+    	tag.setLatitude(result.getFloat(LATITUDE));
+    	tag.setLongitude(result.getFloat(LONGITUDE));
+    	tag.setLabel(result.getString(LABEL));
+    	tag.setDescription(result.getString(DESCRIPTION));
+    	tag.setUrl(result.getString(URL));
+    	tag.setUserId(result.getInt(USERID));
+		return tag;
 	}
 	
 }

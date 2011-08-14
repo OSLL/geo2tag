@@ -3,6 +3,8 @@ package ru.spb.osll.web.server.db;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -20,7 +22,7 @@ abstract class AbstractBase <T> {
 				id = rs.getLong(1); 
 			}
 		} catch (Exception e) {
-			Logger.getLogger(Users.class).error("insertUser", e.getCause());
+			Logger.getLogger(Users.class).error("baseInsert", e.getCause());
 		}
 		return id;
 	}
@@ -28,7 +30,7 @@ abstract class AbstractBase <T> {
 	
 	abstract protected T constructObject(ResultSet result) throws SQLException;
 	
-	protected T baseSelect(final String query){
+	protected T baseSingleSelect(final String query){
 		T object = null;
 		try {
 			final Statement statement = DBUtil.getConnection().createStatement();
@@ -37,11 +39,25 @@ abstract class AbstractBase <T> {
 		    	object = constructObject(result);
 		    }
 		} catch (Exception e) {
-			Logger.getLogger(AbstractBase.class).error("select", e.getCause());
+			Logger.getLogger(AbstractBase.class).error("baseSingleSelect", e.getCause());
 		}
 	    return object;
 	}
-	
+
+	protected List<T> baseMultiSelect(final String query){
+		List<T> list = new ArrayList<T>();
+		try {
+			final Statement statement = DBUtil.getConnection().createStatement();
+			final ResultSet result = statement.executeQuery(query);
+		    while (result.next()) {
+		    	list.add(constructObject(result));
+		    }
+		} catch (Exception e) {
+			Logger.getLogger(AbstractBase.class).error("baseMultiSelect", e.getCause());
+		}
+	    return list;
+	}
+
 	
 	protected boolean baseBoolQuery(final String query){
 		boolean succes = false;

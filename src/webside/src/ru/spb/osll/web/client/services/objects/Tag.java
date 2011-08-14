@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 @SuppressWarnings("serial")
 public class Tag implements Serializable {
 
-	private long id;
+	private long id = -1;
 	private Timestamp time;
     private float latitude;
     private float longitude;
@@ -18,8 +18,12 @@ public class Tag implements Serializable {
 	public Tag() {
 	}
 	
-	public Tag(final String label, final String url, final long user_id) {
+	public Tag(final float latitude, final float longitude, final String label,
+			final String description, final String url, final long user_id) {
+		this.latitude = latitude;
+		this.longitude = longitude;
 		this.label = label;
+		this.description = description;
 		this.url = url;
 		this.user_id = user_id;
 	}

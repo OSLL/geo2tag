@@ -24,21 +24,10 @@ public class Users extends AbstractBase<User> {
 	private Users(){}
 
 
-	
-	@Override
-	protected User constructObject(ResultSet result) throws SQLException {
-		User user = new User();	
-    	user.setId(result.getInt(ID)); 
-    	user.setLogin(result.getString(LOGIN));
-    	user.setPassword(result.getString(PASSWORD));
-    	user.setToken(result.getString(TOKEN));
-		return user;
-	}	
-
 	public User select(String login){
 		final String selectUser = "SELECT * FROM users WHERE login='%s';";
 		final String query = String.format(selectUser, login);
-		return baseSelect(query);
+		return baseSingleSelect(query);
 	}
 	
 	public User insert(User user){
@@ -84,5 +73,15 @@ public class Users extends AbstractBase<User> {
 		final String query = String.format(unsubscribe, channelId, userId);
 		return baseBoolQuery(query);
 	}
+	
+	@Override
+	protected User constructObject(ResultSet result) throws SQLException {
+		User user = new User();	
+    	user.setId(result.getInt(ID)); 
+    	user.setLogin(result.getString(LOGIN));
+    	user.setPassword(result.getString(PASSWORD));
+    	user.setToken(result.getString(TOKEN));
+		return user;
+	}	
 
 }
