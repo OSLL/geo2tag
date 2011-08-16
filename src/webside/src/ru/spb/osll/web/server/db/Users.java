@@ -29,6 +29,12 @@ public class Users extends AbstractBase<User> {
 		final String query = String.format(selectUser, login);
 		return baseSingleSelect(query);
 	}
+
+	public User select(long id){
+		final String selectUser = "SELECT * FROM users WHERE id=%s;";
+		final String query = String.format(selectUser, id);
+		return baseSingleSelect(query);
+	}
 	
 	public User insert(User user){
 		final String insertUser = "INSERT INTO users (login, password, token) VALUES ('%s', '%s', '%s');";

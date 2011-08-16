@@ -12,10 +12,14 @@ public interface GTLocalization extends Constants {
 	String btnOk();
 	String btnCancel();
 	String btnSignin();
+	String btnSignout();
 	
 	// warnings
 	String wrngLoginNull();
 	String wrngPasswordNull();
 	String wrngConfirmNull();
 	String wrngPassAndConf(); 
+	
+	// menu items
+	String pageHome();
 }

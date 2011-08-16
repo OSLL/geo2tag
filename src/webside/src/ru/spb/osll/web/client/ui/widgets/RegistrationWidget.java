@@ -8,11 +8,9 @@ import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.objects.Response;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
-import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.ui.core.FieldsWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -43,8 +41,6 @@ public class RegistrationWidget extends FieldsWidget {
 		return fields;
 	}
 
-	private final LoginServiceAsync m_service = GWT.create(LoginService.class);
-
 	@Override
 	protected List<Button> getButtons() {
 		Button btn = new Button(Localizer.res().btnSignin());
@@ -54,25 +50,25 @@ public class RegistrationWidget extends FieldsWidget {
 				hideMessage();
 				if (isValid()) {
 					final User user = new User(m_login.getText(), m_pass.getText());
-					m_service.addUser(user, new AsyncCallback<User>() {
+					final AsyncCallback<User> callback = new AsyncCallback<User>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							showMessage(caught.getMessage());
 						}
-
 						@Override
-						public void onSuccess(User result) {
-							if (result != null) {
-								if (result.getStatus() == Response.STATUS_SUCCES) {
+						public void onSuccess(User user) {
+							if (user != null) {
+								if (user.getStatus() == Response.STATUS_SUCCES) {
 									final String title = Localizer.res().registration();
-									UIUtil.getSimpleDialog(title,result.getMessage()).center();
+									UIUtil.getSimpleDialog(title,user.getMessage()).center();
 									GTShell.Instance.setDefaultContent();
 								} else {
-									showMessage(result.getMessage());
+									showMessage(user.getMessage());
 								}
 							}
 						}
-					});
+					};
+					LoginService.Util.getInstance().addUser(user, callback);
 				}
 			}
 		});

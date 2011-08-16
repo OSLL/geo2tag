@@ -71,4 +71,5 @@ public class GTShell extends Composite {
 		}
 		contentPanel.setWidget(content);
 	}
+	
 }

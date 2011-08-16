@@ -11,6 +11,10 @@ public interface LoginService extends RemoteService {
 
 	User login(User user) throws IllegalArgumentException;
 
+	boolean logout() throws IllegalArgumentException;
+
+	User isAuthorized() throws IllegalArgumentException;
+	
 	User addUser(User user) throws IllegalArgumentException;
 	
 	public static class Util {
@@ -20,7 +24,6 @@ public interface LoginService extends RemoteService {
 				instance = GWT.create(LoginService.class);
 			}
 			return instance;
-		}
+		}		
 	}
-	
 }

@@ -8,6 +8,11 @@ public interface LoginServiceAsync {
 	void login(User user, AsyncCallback<User> callback)
 		throws IllegalArgumentException;
 
+	void logout(AsyncCallback<Boolean> callback);
+
+	void isAuthorized(AsyncCallback<User> callback)
+		throws IllegalArgumentException;
+	
 	void addUser(User user, AsyncCallback<User> callback)
 		throws IllegalArgumentException;
 }
