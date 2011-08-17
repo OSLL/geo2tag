@@ -49,4 +49,14 @@ public class HomePage extends SimpleComposite {
 		LoginService.Util.getInstance().logout(callback);
 	}
 	
+	public static HomePage Instance(){
+		if (instance == null){
+			instance = new HomePage();
+		}
+		return instance;
+	}
+	private static HomePage instance;
+	private HomePage(){
+		super();
+	}
 }

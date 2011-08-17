@@ -102,4 +102,14 @@ public class RegistrationWidget extends FieldsWidget {
 		return true;
 	}
 
+	public static RegistrationWidget Instance(){
+		if (instance == null){
+			instance = new RegistrationWidget();
+		}
+		return instance;
+	}
+	private static RegistrationWidget instance;
+	private RegistrationWidget(){
+		super();
+	}
 }

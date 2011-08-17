@@ -73,7 +73,7 @@ public abstract class FieldsWidget extends SimpleComposite {
 		}
 		
 		// BUTTONS
-		HorizontalPanel buttonsContainer = UIUtil.getHorizontalPanel(true);
+		HorizontalPanel buttonsContainer = UIUtil.getHorizontalPanel(true, 8);
 		for (Button button : getButtons()){
 			buttonsContainer.add(button);
 		}

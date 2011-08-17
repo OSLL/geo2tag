@@ -15,6 +15,7 @@ import ru.spb.osll.web.client.ui.core.UIUtil;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -37,6 +38,21 @@ public class LoginWidget extends FieldsWidget {
 		fields.add(new TField(Localizer.res().login(), m_loginField));
 		fields.add(new TField(Localizer.res().password(), m_passField));
 		return fields;
+	}
+	
+	@Override
+	protected List<Anchor> getLinks(){
+		Anchor regLink = new Anchor(Localizer.res().registration());
+		regLink.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				GTShell.Instance.setContent(RegistrationWidget.Instance());
+			}
+		});
+		
+		final List<Anchor> links = new ArrayList<Anchor>();
+		links.add(regLink);
+		return links;
 	}
 	
 	@Override
@@ -93,5 +109,4 @@ public class LoginWidget extends FieldsWidget {
 	private LoginWidget(){
 		super();
 	};
-	
 }

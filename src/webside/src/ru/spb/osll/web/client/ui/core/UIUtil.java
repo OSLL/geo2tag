@@ -47,7 +47,12 @@ public class UIUtil {
 	}
 	
 	public static HorizontalPanel getHorizontalPanel(boolean alignCenter){
+		return getHorizontalPanel(alignCenter, 0);
+	}
+	
+	public static HorizontalPanel getHorizontalPanel(boolean alignCenter, int spacing){
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setSpacing(spacing);
 		if (alignCenter){
 			horizontalPanel.setWidth("100%");
 			horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);

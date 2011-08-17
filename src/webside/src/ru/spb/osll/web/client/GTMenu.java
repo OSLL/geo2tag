@@ -1,10 +1,5 @@
 package ru.spb.osll.web.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import ru.spb.osll.web.client.services.objects.User;
-import ru.spb.osll.web.client.services.users.LoginService;
-import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.SimpleMenu;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree;
@@ -25,9 +20,9 @@ public class GTMenu extends SimpleMenu<SimpleComposite> {
 		// group1
 		{
 			groupItem = menu.getGroupMenuItem("Group 1", Images.res().folder());
-			groupItem.addMenuItem(new HomePage());
+			groupItem.addMenuItem(HomePage.Instance());
 			groupItem.addMenuItem(LoginWidget.Instance());
-			groupItem.addMenuItem(new RegistrationWidget());
+			groupItem.addMenuItem(RegistrationWidget.Instance());
 		}
 
 		// group1
@@ -37,32 +32,13 @@ public class GTMenu extends SimpleMenu<SimpleComposite> {
 			groupItem.addMenuItem(new TestRPC());
 		}
 
-
-		LoginServiceAsync service = LoginService.Util.getInstance();
-		service.isAuthorized(new AsyncCallback<User>() {
-			@Override
-			public void onSuccess(User user) {
-				if (user == null){
-					setContentWidget(LoginWidget.Instance());
-				} else {
-					setContentWidget(new HomePage());
-				}				
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-			}
-		});
-
 	}
 	
 	@Override
-	protected boolean setContentWidget(SimpleComposite widget) {
+	protected void setContentWidget(SimpleComposite widget) {
 		GTShell shell = GTShell.Instance;
 		if (shell != null){
 			shell.setContent(widget);
-			return true;
 		}
-		return false;
 	}
 }
