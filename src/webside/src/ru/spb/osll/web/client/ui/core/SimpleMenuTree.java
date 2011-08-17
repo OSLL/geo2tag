@@ -5,24 +5,21 @@ import java.util.List;
 
 import com.google.gwt.resources.client.ImageResource;
 
-/*
- * T Type of leaf
- */
-public class SimpleMenuTree <T extends SimpleComposite> {
+public class SimpleMenuTree {
 		
-	private List<GroupItem<T>> m_grops = new ArrayList<GroupItem<T>>();
+	private List<GroupItem> m_grops = new ArrayList<GroupItem>();
 
-	public GroupItem<T> getGroupMenuItem(final String name){
+	public GroupItem getGroupMenuItem(final String name){
 		return getGroupMenuItem(name, null);
 	}
 	
-	public GroupItem<T> getGroupMenuItem(final String name, final ImageResource im){
-		GroupItem<T> groupItem = new GroupItem<T>(name, im);
+	public GroupItem getGroupMenuItem(final String name, final ImageResource im){
+		GroupItem groupItem = new GroupItem(name, im);
 		m_grops.add(groupItem);
 		return groupItem;
 	}
 	
-	public List<GroupItem<T>> getGroups(){
+	public List<GroupItem> getGroups(){
 		return m_grops;
 	}
 
@@ -44,30 +41,30 @@ public class SimpleMenuTree <T extends SimpleComposite> {
 		}
 	}
 	
-	public static class GroupItem<T extends SimpleComposite> extends Item{
-		private List<MenuItem<T>> m_items = new ArrayList<MenuItem<T>>();
+	public static class GroupItem extends Item{
+		private List<MenuItem> m_items = new ArrayList<MenuItem>();
 		
 		public GroupItem (final String name, final ImageResource im){
 			super(name, im);
 		}
 		
-		public void addMenuItem(T w){
-			m_items.add(new MenuItem<T>(w.getName(), w.getImage(), w));
+		public void addMenuItem(SimpleComposite w){
+			m_items.add(new MenuItem(w.getName(), w.getImage(), w));
 		}
-		public List<MenuItem<T>> getItems(){
+		public List<MenuItem> getItems(){
 			return m_items;
 		}
 	}
 
-	public static class MenuItem <T extends SimpleComposite> extends Item {
-		private T m_widget; 
+	public static class MenuItem extends Item {
+		private SimpleComposite m_widget; 
 
-		public MenuItem(final String name, final ImageResource im, T w) {
+		public MenuItem(final String name, final ImageResource im, SimpleComposite w) {
 			super(name, im);
 			m_widget = w;
 		}
 		
-		public T getWidget(){
+		public SimpleComposite getWidget(){
 			return m_widget;
 		}
 	}

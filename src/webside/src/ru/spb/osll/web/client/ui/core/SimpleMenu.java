@@ -18,30 +18,30 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-abstract public class SimpleMenu <T extends SimpleComposite> extends Composite {
+abstract public class SimpleMenu extends Composite {
 
-	private SimpleMenuTree<T> m_menuTree = new SimpleMenuTree<T>();
+	private SimpleMenuTree m_menuTree = new SimpleMenuTree();
 	
 	private DecoratedStackPanel m_stackPanel;
 
 	abstract protected void initMenu();
 
-	abstract protected void setContentWidget(T widget);
+	abstract protected void setContentWidget(SimpleComposite widget);
 	
 	public SimpleMenu() {
 		initMenu();
 		initWidget(onInitialize());
 	}
 	
-	public SimpleMenuTree<T> getMenuTree(){
+	public SimpleMenuTree getMenuTree(){
 		return m_menuTree;
 	}
 
-	public void setSecectedGroup(T w){
+	public void setSecectedGroup(Widget w){
 		int index = m_stackPanel.getSelectedIndex();
-		final List<GroupItem<T>> groups = m_menuTree.getGroups();
+		final List<GroupItem> groups = m_menuTree.getGroups();
 		for (int i = 0; i < groups.size(); i++){
-			for (MenuItem<T> item : groups.get(i).getItems()){
+			for (MenuItem item : groups.get(i).getItems()){
 				if (item.getWidget() == w){
 					index = i;
 				}
@@ -50,10 +50,10 @@ abstract public class SimpleMenu <T extends SimpleComposite> extends Composite {
 		m_stackPanel.showStack(index);
 	}
 
-	public String getGroup(T w){ 
-		final List<GroupItem<T>> groups = m_menuTree.getGroups();
-		for (GroupItem<T> group : groups){
-			for (MenuItem<T> item : group.getItems()){
+	public String getGroup(Widget w){ 
+		final List<GroupItem> groups = m_menuTree.getGroups();
+		for (GroupItem group : groups){
+			for (MenuItem item : group.getItems()){
 				if (item.getWidget() == w){
 					return group.getName();
 				}
@@ -65,7 +65,7 @@ abstract public class SimpleMenu <T extends SimpleComposite> extends Composite {
 	public Widget onInitialize() {
 		m_stackPanel = new DecoratedStackPanel();
 		m_stackPanel.setWidth("224px");
-		for (GroupItem<T> group : m_menuTree.getGroups()){
+		for (GroupItem group : m_menuTree.getGroups()){
 			final boolean containtPicture = group.getImage() != null;
 			final String header = containtPicture ? 
 					getHeaderString(group.getName(), group.getImage()): group.getName();
@@ -87,10 +87,10 @@ abstract public class SimpleMenu <T extends SimpleComposite> extends Composite {
 		return hPanel.getElement().getString();
 	}
 	
-	private VerticalPanel createItemsWidget(GroupItem<T> group) {
+	private VerticalPanel createItemsWidget(GroupItem group) {
 		VerticalPanel panel = new VerticalPanel();
-		for (MenuItem<T> item : group.getItems()) {
-			final T widget = item.getWidget();
+		for (MenuItem item : group.getItems()) {
+			final SimpleComposite widget = item.getWidget();
 			ClickHandler handler = new ClickHandler() {
 				public void onClick(ClickEvent event) {
 					setContentWidget(widget);

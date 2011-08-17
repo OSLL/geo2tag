@@ -98,7 +98,6 @@ public class LoginWidget extends FieldsWidget {
 		LoginService.Util.getInstance().login(user, callback);		
 	}
 	
-	
 	public static LoginWidget Instance(){
 		if(instance == null){
 			instance = new LoginWidget();

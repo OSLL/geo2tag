@@ -67,22 +67,19 @@ public class GTShell extends Composite {
 		}
 		
 		final String token = getTokenByWidget(content);
-		m_widgetsCache.put(token, content);
 		if (useHistory) {
+			m_widgetsCache.put(token, content);
 			History.newItem(token, false);
 		}
-		if (content instanceof SimpleComposite){
-			m_mainMenu.setSecectedGroup((SimpleComposite)content);
-		}
+		m_mainMenu.setSecectedGroup(content);
 		contentPanel.setWidget(content);   
 	}
 	
 	private void initHistoryListener(){
 		History.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				final String t = event.getValue();
-				final Widget w = getWidgetByToken(t);
-				setContent(w);
+				String t = event.getValue();
+				setContent(getWidgetByToken(t), false);
 			}
 		});
 	}
@@ -110,20 +107,15 @@ public class GTShell extends Composite {
 		if (w == null){
 			return "";
 		}
-		final String group = null;
-		if (w instanceof SimpleComposite) {
-			m_mainMenu.getGroup((SimpleComposite) w);
-		}
+		final String group = m_mainMenu.getGroup((SimpleComposite) w);
 		final String token = getTokenByClass(w.getClass());
 		return group == null ? token : group + "_" + token;
 	}
-	
-	private Widget getWidgetByToken(String t){
-		final Widget w = m_widgetsCache.get(t);
-		m_widgetsCache.remove(t);
-		return w;
-	}
 
+	private Widget getWidgetByToken(String t){
+		return m_widgetsCache.get(t);
+	}
+	
 	public static String getTokenByClass(Class<?> cwClass) {
 		String className = cwClass.getName();
 		className = className.substring(className.lastIndexOf('.') + 1);

@@ -10,13 +10,13 @@ import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
 import ru.spb.osll.web.client.ui.widgets.TestRPC;
 
-public class GTMenu extends SimpleMenu<SimpleComposite> {
+public class GTMenu extends SimpleMenu {
 
 	@Override
 	protected void initMenu() {
-		final SimpleMenuTree<SimpleComposite> menu = getMenuTree();
-		GroupItem<SimpleComposite> groupItem ; 
-		
+		final SimpleMenuTree menu = getMenuTree();
+		GroupItem groupItem ; 
+
 		// group1
 		{
 			groupItem = menu.getGroupMenuItem("Group 1", Images.res().folder());
