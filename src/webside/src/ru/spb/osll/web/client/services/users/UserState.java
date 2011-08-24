@@ -22,15 +22,5 @@ public class UserState {
 	}
 	private static UserState instance;
 	private UserState(){};
-	
-	
-//	public abstract static class UserCallback implements AsyncCallback<User>{
-//		public abstract void onSuccesss(User user);
-//		@Override
-//		public void onSuccess(User user) {
-//			UserState.Instanse().setCurUser(user);
-//			onSuccesss(user);
-//		}
-//	}
 
 }
