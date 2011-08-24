@@ -5,6 +5,7 @@ import ru.spb.osll.web.client.ui.core.SimpleMenu;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree.GroupItem;
 import ru.spb.osll.web.client.ui.image.Images;
+import ru.spb.osll.web.client.ui.widgets.Channels;
 import ru.spb.osll.web.client.ui.widgets.HomePage;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
@@ -20,6 +21,7 @@ public class GTMenu extends SimpleMenu {
 		// group1
 		{
 			groupItem = menu.getGroupMenuItem("Group 1", Images.res().folder());
+			groupItem.addMenuItem(new Channels());
 			groupItem.addMenuItem(HomePage.Instance());
 			groupItem.addMenuItem(LoginWidget.Instance());
 			groupItem.addMenuItem(RegistrationWidget.Instance());

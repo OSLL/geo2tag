@@ -21,7 +21,7 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 		setBorderWidth(1);
 		setCellPadding(1);
 		setCellSpacing(0);
-		setWidth("100%");
+		setWidth("90%");
 		setStyleName("gtTable");
 		m_selectedStyle = "gtTable-selected";
 		m_headerStyle = "gtTable-header";
