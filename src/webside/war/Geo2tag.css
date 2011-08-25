@@ -37,3 +37,22 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+.gtTable {
+	border: 1px solid dodgerblue;
+	border-collapse: collapse;
+}
+
+.gtTable-header {
+	color: White;
+	border-bottom: 1px solid black;
+	font-weight: bold;
+	text-align: center;
+	background-color: lightblue;
+}
+
+.gtTable-selected {
+	color: white;
+	border: 1px dotted white;
+	background-color: deepskyblue;
+}

@@ -3,6 +3,8 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.spb.osll.web.client.services.channels.ChannelService;
+import ru.spb.osll.web.client.services.channels.ChannelServiceAsync;
 import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.TableWidget;
@@ -10,6 +12,7 @@ import ru.spb.osll.web.client.ui.core.TableWidget.IsTableAccessor;
 import ru.spb.osll.web.client.ui.core.TableWidget.TableField;
 import ru.spb.osll.web.client.ui.core.UIUtil;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -39,9 +42,19 @@ public class Channels extends SimpleComposite {
 	}
 	
 	private void showChannels(){
-		// TODO channel service to get channels
+		final ChannelServiceAsync service = ChannelService.Util.getInstance();
+		service.getAllChannels(new AsyncCallback<List<Channel>>() {
+			@Override
+			public void onSuccess(List<Channel> result) {
+				m_table.addRows(result);
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO use logger;
+			}
+		});
 	}
-	
+
 	private final static IsTableAccessor<Channel> ACC_NAME = new IsTableAccessor<Channel>() {
 		public String toCell(Channel ch) {
 			return ch.getName();
