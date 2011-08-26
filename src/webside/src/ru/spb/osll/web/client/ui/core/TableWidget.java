@@ -11,6 +11,7 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 	private String m_selectedStyle;
 	private int m_selectedRow;
 	private List<TableField<T>> m_fields;
+	private List<T> m_data;
 
 	public TableWidget(List<TableField<T>> fields) {
 		this(fields, null);
@@ -21,7 +22,7 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 		setBorderWidth(1);
 		setCellPadding(1);
 		setCellSpacing(0);
-		setWidth("95%");
+		setWidth("100%");
 		setStyleName("gtTable");
 		m_selectedStyle = "gtTable-selected";
 		m_headerStyle = "gtTable-header";
@@ -47,6 +48,11 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 		return m_selectedRow - 1;
 	}
 
+	public T getSelectedObject(){
+		final int index = getSelectedRow();
+		return index >= 0 ? m_data.get(index) : null;
+	}
+	
 	@Override
 	public void onClick(ClickEvent event) {
 		final int row = getCellForEvent(event).getRowIndex();
@@ -58,6 +64,7 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 	}
 	
 	public void addRow(T obj) {
+		m_data.add(obj);
 		int row = getRowCount();
 		for (int i = 0; i < m_fields.size(); i++) {
 			final String s = m_fields.get(i).getAccessor().toCell(obj);
