@@ -1,5 +1,6 @@
 package ru.spb.osll.web.client.ui.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -11,7 +12,7 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 	private String m_selectedStyle;
 	private int m_selectedRow;
 	private List<TableField<T>> m_fields;
-	private List<T> m_data;
+	private List<T> m_data = new ArrayList<T>();
 
 	public TableWidget(List<TableField<T>> fields) {
 		this(fields, null);

@@ -3,6 +3,7 @@ package ru.spb.osll.web.client.ui.core;
 import java.util.List;
 
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree.GroupItem;
+import ru.spb.osll.web.client.ui.core.SimpleMenuTree.MenuAction;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree.MenuItem;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -111,6 +112,36 @@ abstract public class SimpleMenu extends Composite {
 			
 			panel.add(imlink);
 		}
+		
+		
+		class MenuHandler implements ClickHandler {
+			private MenuAction m_action;
+			private MenuHandler(MenuAction action){
+				m_action = action;
+			}
+			@Override
+			public void onClick(ClickEvent event) {
+				m_action.getAction().run();
+			}
+		}
+		
+		// MenuActions
+		for (MenuAction action : group.getActions()) {
+			final HorizontalPanel imlink = new HorizontalPanel();
+			imlink.setSpacing(6);
+
+			if (action.getImage() != null){
+				final Image im = new Image(action.getImage());
+				im.addClickHandler(new MenuHandler(action));
+				imlink.add(im);
+			}
+			final Anchor link = new Anchor(action.getName());
+			link.addClickHandler(new MenuHandler(action));
+			imlink.add(link);
+			
+			panel.add(imlink);
+		}
+		
 		return panel;
 	}
 }

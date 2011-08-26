@@ -43,16 +43,26 @@ public class SimpleMenuTree {
 	
 	public static class GroupItem extends Item{
 		private List<MenuItem> m_items = new ArrayList<MenuItem>();
+		private List<MenuAction> m_actions = new ArrayList<MenuAction>();
 		
 		public GroupItem (final String name, final ImageResource im){
 			super(name, im);
 		}
-		
 		public void addMenuItem(SimpleComposite w){
 			m_items.add(new MenuItem(w.getName(), w.getImage(), w));
 		}
 		public List<MenuItem> getItems(){
 			return m_items;
+		}
+
+		public void addMenuAction(final String name, final ImageResource im, Runnable a){
+			m_actions.add(new MenuAction(name, im, a));
+		}
+		public void addMenuAction(MenuAction menuAction){
+			m_actions.add(menuAction);
+		}
+		public List<MenuAction> getActions(){
+			return m_actions;
 		}
 	}
 
@@ -68,5 +78,19 @@ public class SimpleMenuTree {
 			return m_widget;
 		}
 	}
+	
+	public static class MenuAction extends Item {
+		private Runnable m_action; 
+
+		public MenuAction(final String name, final ImageResource im, Runnable a) {
+			super(name, im);
+			m_action = a;
+		}
+		
+		public Runnable getAction(){
+			return m_action;
+		}
+	}
+
 }
 

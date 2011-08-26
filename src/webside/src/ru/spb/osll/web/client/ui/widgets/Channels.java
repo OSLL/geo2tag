@@ -10,10 +10,12 @@ import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.UserState;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.TableWidget;
+import ru.spb.osll.web.client.ui.core.UIUtil;
 import ru.spb.osll.web.client.ui.core.TableWidget.IsTableAccessor;
 import ru.spb.osll.web.client.ui.core.TableWidget.TableField;
-import ru.spb.osll.web.client.ui.core.UIUtil;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
@@ -21,6 +23,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -50,9 +53,11 @@ public class Channels extends SimpleComposite {
 		
 		VerticalPanel vp = UIUtil.getVerticalPanel();
 		vp.setSpacing(10);
-		
+
+		vp.add(constructTitle("Your channels", 20));
 		vp.add(borderOnTable(m_userChannels));
 		vp.add(initButtons());
+		vp.add(constructTitle("Available channels", 20));
 		vp.add(borderOnTable(m_avalChannels));
 		vp.setWidth("100%");
 		return vp;
@@ -96,7 +101,7 @@ public class Channels extends SimpleComposite {
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO use logger
+				GWT.log("onFailure : " + caught.getMessage());
 			}
 		});
 		
@@ -118,11 +123,17 @@ public class Channels extends SimpleComposite {
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO use logger
+				GWT.log("onFailure : " + caught.getMessage());
 			}
 		});
 	}
 
+	private Label constructTitle(String title, int px){
+		Label label = new Label(title);
+		label.getElement().getStyle().setFontSize(px, Unit.PX);
+		return label;
+	}
+	
 	private SimplePanel borderOnTable(TableWidget<?> table){
 		ScrollPanel scrollPanel = new ScrollPanel();
 		scrollPanel.add(table);
@@ -145,7 +156,7 @@ public class Channels extends SimpleComposite {
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO use logger;
+				GWT.log("onFailure : " + caught.getMessage());
 			}
 		});
 	}
@@ -159,7 +170,7 @@ public class Channels extends SimpleComposite {
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO use logger;
+				GWT.log("onFailure : " + caught.getMessage());
 			}
 		});
 	}

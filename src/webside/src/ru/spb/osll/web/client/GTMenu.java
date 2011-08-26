@@ -16,15 +16,21 @@ public class GTMenu extends SimpleMenu {
 	@Override
 	protected void initMenu() {
 		final SimpleMenuTree menu = getMenuTree();
-		GroupItem groupItem ; 
+		GroupItem groupItem;
 
 		// group1
 		{
 			groupItem = menu.getGroupMenuItem("Group 1", Images.res().folder());
-			groupItem.addMenuItem(new Channels());
+
 			groupItem.addMenuItem(HomePage.Instance());
 			groupItem.addMenuItem(LoginWidget.Instance());
 			groupItem.addMenuItem(RegistrationWidget.Instance());
+
+			groupItem.addMenuAction("Channels", Images.res().peek(), new Runnable() {
+				public void run() {
+					setContentWidget(new Channels());
+				}
+			});
 		}
 
 		// group1
@@ -35,12 +41,13 @@ public class GTMenu extends SimpleMenu {
 		}
 
 	}
-	
+
 	@Override
 	protected void setContentWidget(SimpleComposite widget) {
 		GTShell shell = GTShell.Instance;
-		if (shell != null){
+		if (shell != null) {
 			shell.setContent(widget);
 		}
 	}
+
 }
