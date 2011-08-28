@@ -40,12 +40,16 @@
 		<classpath refid="tomcat.class.path" />
 	</taskdef>
 
+	<taskdef name="reload"  classname="org.apache.catalina.ant.ReloadTask">
+		<classpath refid="tomcat.class.path" />
+	</taskdef>
+
 	<property name="url" value="${server.url}/manager/text" />
 	<property name="username" value="${server.username}" />
 	<property name="password" value="${server.password}" />
 	<property name="path" value="/${app.name}" />
 
-	<target name="deploy-release" description="Install web application" >
+	<target name="deploy-release" depends="war" description="Install web application on remote server" >
 		<deploy
 			url="${url}" 
 			username="${username}"
@@ -54,9 +58,14 @@
 			war="file:${app.name}.war"/>
 	</target>
 
-	<target name="undeploy-release" description="Remove web application">
+	<target name="undeploy-release" description="Remove web application from remote server">
 	    <undeploy url="${url}" username="${username}" password="${password}" path="${path}"/>
 	</target>
+
+	<target name="reload-release" depends="war" description="Reload web application on remote server">
+    	<reload  url="${url}" username="${username}" password="${password}" path="${path}"/>
+  	</target>
+
 	<!-- deploy/undeploy app on remote server -->
 
 	<target name="clean" description="Cleans this project">
