@@ -27,6 +27,38 @@
 		</copy>
 	</target>
 
+	<!-- deploy/undeploy app on remote server depends="war" -->
+	<path id="tomcat.class.path">
+		<fileset dir="${tom.dir}/lib" includes="*.jar" />
+	</path>
+
+	<taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask">
+		<classpath refid="tomcat.class.path" />
+	</taskdef>
+
+	<taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask">
+		<classpath refid="tomcat.class.path" />
+	</taskdef>
+
+	<property name="url" value="${server.url}/manager/text" />
+	<property name="username" value="${server.username}" />
+	<property name="password" value="${server.password}" />
+	<property name="path" value="/${app.name}" />
+
+	<target name="deploy-release" description="Install web application" >
+		<deploy
+			url="${url}" 
+			username="${username}"
+			password="${password}"
+			path="${path}"
+			war="file:${app.name}.war"/>
+	</target>
+
+	<target name="undeploy-release" description="Remove web application">
+	    <undeploy url="${url}" username="${username}" password="${password}" path="${path}"/>
+	</target>
+	<!-- deploy/undeploy app on remote server -->
+
 	<target name="clean" description="Cleans this project">
 		<delete dir="war/WEB-INF/classes" failonerror="false" />
 		<delete dir="war/WEB-INF/lib" failonerror="false" />
