@@ -8,7 +8,6 @@ import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.services.users.UserState;
-import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.widgets.HomePage;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 
@@ -157,7 +156,7 @@ public class GTShell extends Composite {
 		if (w == null){
 			return "";
 		}
-		final String group = m_mainMenu.getGroup((SimpleComposite) w);
+		final String group = m_mainMenu.getGroup(w);
 		final String token = getTokenByClass(w.getClass());
 		return group == null ? token : group + "_" + token;
 	}

@@ -1,9 +1,12 @@
 package ru.spb.osll.web.client;
 
-import ru.spb.osll.web.client.ui.core.SimpleComposite;
+import com.google.gwt.user.client.ui.Widget;
+
+import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.ui.core.SimpleMenu;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree.GroupItem;
+import ru.spb.osll.web.client.ui.core.UnderConstructionWidget;
 import ru.spb.osll.web.client.ui.image.Images;
 import ru.spb.osll.web.client.ui.widgets.Channels;
 import ru.spb.osll.web.client.ui.widgets.HomePage;
@@ -31,6 +34,14 @@ public class GTMenu extends SimpleMenu {
 					setContentWidget(new Channels());
 				}
 			});
+
+			groupItem.addMenuAction("UnderConstr", Images.res().peek(), new Runnable() {
+				public void run() {
+					final String mess = Localizer.res().disabledRegistration();
+					setContentWidget(new UnderConstructionWidget(mess));
+				}
+			});
+
 		}
 
 		// group1
@@ -43,7 +54,7 @@ public class GTMenu extends SimpleMenu {
 	}
 
 	@Override
-	protected void setContentWidget(SimpleComposite widget) {
+	protected void setContentWidget(Widget widget) {
 		GTShell shell = GTShell.Instance;
 		if (shell != null) {
 			shell.setContent(widget);

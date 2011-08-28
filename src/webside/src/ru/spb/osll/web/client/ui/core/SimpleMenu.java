@@ -27,7 +27,7 @@ abstract public class SimpleMenu extends Composite {
 
 	abstract protected void initMenu();
 
-	abstract protected void setContentWidget(SimpleComposite widget);
+	abstract protected void setContentWidget(Widget widget);
 	
 	public SimpleMenu() {
 		initMenu();

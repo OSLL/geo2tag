@@ -22,4 +22,8 @@ public interface GTLocalization extends Constants {
 	
 	// menu items
 	String pageHome();
+	
+	// Widget : UnderConstructionWidget
+	String disabledRegistration();
+	
 }

@@ -7,7 +7,9 @@ public interface ResImages extends ClientBundle {
 	ImageResource folder();
 	
 	ImageResource peek();
-	
+
+	ImageResource underConstruction();
+
 	@Source("noimage.png")
 	ImageResource treeLeaf();
 }

@@ -15,7 +15,6 @@ import ru.spb.osll.web.client.ui.core.TableWidget.IsTableAccessor;
 import ru.spb.osll.web.client.ui.core.TableWidget.TableField;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
@@ -129,9 +128,7 @@ public class Channels extends SimpleComposite {
 	}
 
 	private Label constructTitle(String title, int px){
-		Label label = new Label(title);
-		label.getElement().getStyle().setFontSize(px, Unit.PX);
-		return label;
+		return UIUtil.constructLabel(title, px);
 	}
 	
 	private SimplePanel borderOnTable(TableWidget<?> table){
