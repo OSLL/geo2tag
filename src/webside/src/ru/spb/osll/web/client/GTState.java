@@ -50,7 +50,7 @@ public class GTState {
 	}
 
 	public static interface ChannelStateListener{
-		public void onChannelChange(Channel u);
+		public void onChannelChange(Channel ch);
 	}
 
 	

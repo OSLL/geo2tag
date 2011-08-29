@@ -3,6 +3,7 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.GTState.UserStateListener;
 import ru.spb.osll.web.client.services.channels.ChannelService;
@@ -78,17 +79,25 @@ public class Channels extends SimpleComposite
 	}
 	
 	private HorizontalPanel initButtons(){
-		Button subscribeBtn = new Button("sub", new ClickHandler() {
+		Button subscribeBtn = new Button("sub", new ClickHandler() {		// TODO
 			@Override
 			public void onClick(ClickEvent event) {
 				subscribe();
 			}
 		});
 		
-		Button unsubscribeBtn = new Button("unsub", new ClickHandler() {
+		Button unsubscribeBtn = new Button("unsub", new ClickHandler() {	// TODO
 			@Override
 			public void onClick(ClickEvent event) {
 				unsubscribe();
+			}
+		});
+		
+		Button showTagsBtn = new Button("Show tags", new ClickHandler() {	// TODO
+			@Override
+			public void onClick(ClickEvent event) {
+				GTState.Instanse().setCurChannel(m_userChannels.getSelectedObject());
+				GTShell.Instance.setContent(new TagsTableWidget());
 			}
 		});
 		
@@ -96,6 +105,7 @@ public class Channels extends SimpleComposite
 		buttons.setSpacing(8);
 		buttons.add(subscribeBtn);
 		buttons.add(unsubscribeBtn);
+		buttons.add(showTagsBtn);
 		return buttons;
 	}
 	

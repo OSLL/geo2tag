@@ -1,19 +1,29 @@
 package ru.spb.osll.web.client.ui.widgets;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import ru.spb.osll.web.client.GTState;
+import ru.spb.osll.web.client.GTState.ChannelStateListener;
+import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.Tag;
+import ru.spb.osll.web.client.services.tags.TagService;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.TableWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
 import ru.spb.osll.web.client.ui.core.TableWidget.IsTableAccessor;
 import ru.spb.osll.web.client.ui.core.TableWidget.TableField;
 
-public class TagsTableWidget extends SimpleComposite {
+public class TagsTableWidget extends SimpleComposite
+	implements ChannelStateListener {
 	
 	private TableWidget<Tag> m_tagsTable;
 	
@@ -24,8 +34,13 @@ public class TagsTableWidget extends SimpleComposite {
 
 	@Override
 	protected Widget onInitialize() {
-//		GTState.Instanse().addOnUserStateListerer(this);
-	
+		GTState.Instanse().addOnChannelStateListerer(this);
+
+		VerticalPanel contaier = UIUtil.getVerticalPanel();
+		contaier.setSpacing(10);
+		contaier.setWidth("100%");
+		initFiltersPanel(contaier);
+		
 		List<TableField<Tag>> fields = new ArrayList<TableField<Tag>>();
 		fields.add(FIELD_LABEL);
 		fields.add(FIELD_DESC);
@@ -33,22 +48,46 @@ public class TagsTableWidget extends SimpleComposite {
 		fields.add(FIELD_TIME);
 		fields.add(FIELD_LAT);
 		fields.add(FIELD_LON);
-
 		m_tagsTable = new TableWidget<Tag>(fields);
 		
-		VerticalPanel vp = UIUtil.getVerticalPanel();
-		vp.setSpacing(10);
-		vp.setWidth("100%");
-		
-		vp.add(m_tagsTable);
+		contaier.add(m_tagsTable);
 		loadTags();
-		
-		return vp;
+		return contaier;
+	}
+
+	private void initFiltersPanel(VerticalPanel container){
+//		CheckBox 
+		//TODO
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+	}
+	
+	
+	@Override
+	public void onChannelChange(Channel ch){
+		m_tagsTable.erase();
+		loadTags(ch);
 	}
 
 	private void loadTags(){
-		// TODO
-		
+		final Channel ch = GTState.Instanse().getCurChannel();
+		if (ch == null){
+			return;
+		}
+		loadTags(ch);
+	}
+	
+	private void loadTags(Channel ch){
+		TagService.Util.getInstance().getTags(ch, new AsyncCallback<List<Tag>>() {
+			@Override
+			public void onSuccess(List<Tag> result) {
+				m_tagsTable.addRows(result);
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("loadTags", caught);
+			}
+		});
 	}
 	
 	private final static IsTableAccessor<Tag> ACC_LABEL = new IsTableAccessor<Tag>() {
@@ -86,7 +125,6 @@ public class TagsTableWidget extends SimpleComposite {
 			return t.getLongitude() + ""; 		// FIXME
 		}
 	};
-
 	
 	// TODO Localize
 	private final static TableField<Tag> FIELD_LABEL = 
