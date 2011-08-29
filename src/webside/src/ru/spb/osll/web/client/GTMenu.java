@@ -28,20 +28,14 @@ public class GTMenu extends SimpleMenu {
 			groupItem.addMenuItem(HomePage.Instance());
 			groupItem.addMenuItem(LoginWidget.Instance());
 			groupItem.addMenuItem(RegistrationWidget.Instance());
+			groupItem.addMenuItem(new Channels());
 
-			groupItem.addMenuAction("Channels", Images.res().peek(), new Runnable() {
-				public void run() {
-					setContentWidget(new Channels());
-				}
-			});
-
-			groupItem.addMenuAction("UnderConstr", Images.res().peek(), new Runnable() {
-				public void run() {
-					final String mess = Localizer.res().disabledRegistration();
-					setContentWidget(new UnderConstructionWidget(mess));
-				}
-			});
-
+//			groupItem.addMenuAction("UnderConstr", Images.res().peek(), new Runnable() {
+//				public void run() {
+//					final String mess = Localizer.res().disabledRegistration();
+//					setContentWidget(new UnderConstructionWidget(mess));
+//				}
+//			});
 		}
 
 		// group1

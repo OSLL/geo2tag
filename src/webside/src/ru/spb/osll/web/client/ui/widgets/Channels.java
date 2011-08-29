@@ -3,11 +3,12 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.spb.osll.web.client.GTState;
+import ru.spb.osll.web.client.GTState.UserStateListener;
 import ru.spb.osll.web.client.services.channels.ChannelService;
 import ru.spb.osll.web.client.services.channels.ChannelServiceAsync;
 import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.User;
-import ru.spb.osll.web.client.services.users.UserState;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.TableWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
@@ -28,7 +29,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Channels extends SimpleComposite {
+public class Channels extends SimpleComposite 
+	implements UserStateListener {
 
 	private TableWidget<Channel> m_userChannels;
 	private TableWidget<Channel> m_avalChannels;
@@ -40,6 +42,7 @@ public class Channels extends SimpleComposite {
 
 	@Override
 	protected Widget onInitialize() {
+		GTState.Instanse().addOnUserStateListerer(this);
 		List<TableField<Channel>> fields = new ArrayList<TableField<Channel>>();
 		fields.add(FIELD_NAME);
 		fields.add(FIELD_DESC);
@@ -60,6 +63,17 @@ public class Channels extends SimpleComposite {
 		vp.add(borderOnTable(m_avalChannels));
 		vp.setWidth("100%");
 		return vp;
+	}
+	
+	@Override
+	public void onUserChange(User u) {
+		String logMess = (u != null) ? u.toString() : "null";
+		GWT.log(logMess);
+		
+		m_userChannels.erase();
+		m_avalChannels.erase();
+		loadUserChannels();
+		loadAvaiChannels();
 	}
 	
 	private HorizontalPanel initButtons(){
@@ -85,7 +99,7 @@ public class Channels extends SimpleComposite {
 	}
 	
 	private void subscribe(){
-		final User u = UserState.Instanse().getCurUser();
+		final User u = GTState.Instanse().getCurUser();
 		final Channel ch = m_avalChannels.getSelectedObject();
 		if (null == u || ch == null){
 			return;
@@ -107,7 +121,7 @@ public class Channels extends SimpleComposite {
 	}
 	
 	private void unsubscribe(){
-		final User u = UserState.Instanse().getCurUser();
+		final User u = GTState.Instanse().getCurUser();
 		final Channel ch = m_userChannels.getSelectedObject();
 		if (null == u || ch == null){
 			return;
@@ -140,7 +154,7 @@ public class Channels extends SimpleComposite {
 	}
 	
 	private void loadUserChannels(){
-		final User u = UserState.Instanse().getCurUser();
+		final User u = GTState.Instanse().getCurUser();
 		if (null == u){
 			return;
 		}
@@ -198,5 +212,4 @@ public class Channels extends SimpleComposite {
 
 	private final static TableField<Channel> FIELD_URL = 
 			new TableField<Channel>("field.name", "Url", ACC_URL);
-
 }

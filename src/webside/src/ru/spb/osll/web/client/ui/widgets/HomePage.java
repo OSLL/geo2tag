@@ -1,8 +1,8 @@
 package ru.spb.osll.web.client.ui.widgets;
 
+import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.users.LoginService;
-import ru.spb.osll.web.client.services.users.UserState;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.UIUtil;
 
@@ -43,7 +43,7 @@ public class HomePage extends SimpleComposite {
 			}
 			@Override
 			public void onSuccess(Boolean result) {
-				UserState.Instanse().setCurUser(null);
+				GTState.Instanse().setCurUser(null);
 			}		
 		};
 		LoginService.Util.getInstance().logout(callback);

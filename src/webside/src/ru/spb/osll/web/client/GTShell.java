@@ -7,7 +7,6 @@ import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
-import ru.spb.osll.web.client.services.users.UserState;
 import ru.spb.osll.web.client.ui.widgets.HomePage;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 
@@ -87,7 +86,7 @@ public class GTShell extends Composite {
 	}
 
 	public void refreshAutorizedStatus(){
-		boolean autorized = UserState.Instanse().getCurUser() != null;
+		boolean autorized = GTState.Instanse().getCurUser() != null;
 		if (autorized){
 			m_authLink.setText(Localizer.res().btnSignout());
 		} else {
@@ -112,15 +111,14 @@ public class GTShell extends Composite {
 				if (user == null){
 					setContent(LoginWidget.Instance(), false);
 				} else {
-					UserState.Instanse().setCurUser(user); // TODO ???
+					GTState.Instanse().setCurUser(user); // TODO ???
 					setContent(HomePage.Instance(), false);
 				}
 				refreshAutorizedStatus();
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				//TODO uncomment later
-				//Logger.getLogger(GTShell.class).warn(caught.getMessage()); 
+				GWT.log("initDefaultWidget", caught);
 			}
 		});
 	}
@@ -128,7 +126,7 @@ public class GTShell extends Composite {
 	private ClickHandler m_authHandler = new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
-			if (UserState.Instanse().getCurUser() != null){
+			if (GTState.Instanse().getCurUser() != null){
 				logout();
 				m_authLink.setText(Localizer.res().btnSignin());
 				setContent(LoginWidget.Instance());
@@ -142,11 +140,11 @@ public class GTShell extends Composite {
 		final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
 			@Override
 			public void onSuccess(Boolean result) {
-				UserState.Instanse().setCurUser(null);
+				GTState.Instanse().setCurUser(null);
 			}		
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO log
+				GWT.log("logout", caught);
 			}
 		};
 		LoginService.Util.getInstance().logout(callback);

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.spb.osll.web.client.GTShell;
+import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.objects.Response;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
-import ru.spb.osll.web.client.services.users.UserState;
 import ru.spb.osll.web.client.ui.core.FieldsWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
 
@@ -84,7 +84,7 @@ public class LoginWidget extends FieldsWidget {
 			public void onSuccess(User user) {
 				if (user != null){
 					if (user.getStatus() == Response.STATUS_SUCCES){
-						UserState.Instanse().setCurUser(user);
+						GTState.Instanse().setCurUser(user);
 						
 						final String title = Localizer.res().login();
 						UIUtil.getSimpleDialog(title, user.getMessage()).center();
