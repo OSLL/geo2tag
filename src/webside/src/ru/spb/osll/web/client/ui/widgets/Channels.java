@@ -43,6 +43,7 @@ public class Channels extends SimpleComposite
 	@Override
 	protected Widget onInitialize() {
 		GTState.Instanse().addOnUserStateListerer(this);
+		
 		List<TableField<Channel>> fields = new ArrayList<TableField<Channel>>();
 		fields.add(FIELD_NAME);
 		fields.add(FIELD_DESC);

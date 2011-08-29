@@ -12,6 +12,7 @@ import ru.spb.osll.web.client.ui.widgets.Channels;
 import ru.spb.osll.web.client.ui.widgets.HomePage;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
+import ru.spb.osll.web.client.ui.widgets.TagsTableWidget;
 import ru.spb.osll.web.client.ui.widgets.TestRPC;
 
 public class GTMenu extends SimpleMenu {
@@ -29,7 +30,8 @@ public class GTMenu extends SimpleMenu {
 			groupItem.addMenuItem(LoginWidget.Instance());
 			groupItem.addMenuItem(RegistrationWidget.Instance());
 			groupItem.addMenuItem(new Channels());
-
+			groupItem.addMenuItem(new TagsTableWidget());
+			
 //			groupItem.addMenuAction("UnderConstr", Images.res().peek(), new Runnable() {
 //				public void run() {
 //					final String mess = Localizer.res().disabledRegistration();
