@@ -11,7 +11,6 @@ import ru.spb.osll.web.client.ui.widgets.HomePage;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
 import ru.spb.osll.web.client.ui.widgets.TagsTableWidget;
-import ru.spb.osll.web.client.ui.widgets.TestRPC;
 
 public class GTMenu extends SimpleMenu {
 
