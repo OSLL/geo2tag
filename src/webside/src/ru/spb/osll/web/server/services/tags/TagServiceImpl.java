@@ -16,4 +16,5 @@ public class TagServiceImpl extends RemoteServiceServlet implements TagService {
 	public List<Tag> getTags(Channel ch) throws IllegalArgumentException {
 		return Tags.Instance().selectByChannel(ch);
 	}
+
 }

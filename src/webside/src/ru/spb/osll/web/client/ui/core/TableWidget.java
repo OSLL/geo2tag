@@ -68,7 +68,7 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 		m_data.add(obj);
 		int row = getRowCount();
 		for (int i = 0; i < m_fields.size(); i++) {
-			final String s = m_fields.get(i).getAccessor().toCell(obj);
+			final String s = m_fields.get(i).getAccessor().extractData(obj);
 			setText(row, i, s);
 		}
 	}
@@ -98,14 +98,13 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 		getRowFormatter().addStyleName(0, m_headerStyle);
 	}
 
-
 	
 	public static class TableField<T> {
 		private final String m_id;
 		private final String m_title;
-		private IsTableAccessor<T> m_accessor;
+		private IsDataAccessor<T> m_accessor;
 
-		public TableField(String id, String title, IsTableAccessor<T> acc) {
+		public TableField(String id, String title, IsDataAccessor<T> acc) {
 			m_id = id;
 			m_title = title;
 			m_accessor = acc;
@@ -119,13 +118,8 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 			return m_title;
 		}
 
-		public IsTableAccessor<T> getAccessor() {
+		public IsDataAccessor<T> getAccessor() {
 			return m_accessor;
 		}
-
-	}
-
-	public static interface IsTableAccessor<T> {
-		String toCell(T object);
 	}
 }

@@ -10,10 +10,10 @@ import ru.spb.osll.web.client.services.channels.ChannelService;
 import ru.spb.osll.web.client.services.channels.ChannelServiceAsync;
 import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.ui.common.Fields;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.TableWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
-import ru.spb.osll.web.client.ui.core.TableWidget.IsTableAccessor;
 import ru.spb.osll.web.client.ui.core.TableWidget.TableField;
 
 import com.google.gwt.core.client.GWT;
@@ -46,9 +46,9 @@ public class Channels extends SimpleComposite
 		GTState.Instanse().addOnUserStateListerer(this);
 		
 		List<TableField<Channel>> fields = new ArrayList<TableField<Channel>>();
-		fields.add(FIELD_NAME);
-		fields.add(FIELD_DESC);
-		fields.add(FIELD_URL);
+		fields.add(Fields.CHANNEL_FIELD_NAME);
+		fields.add(Fields.CHANNEL_FIELD_DESC);
+		fields.add(Fields.CHANNEL_FIELD_URL);
 
 		m_userChannels = new TableWidget<Channel>(fields);
 		m_avalChannels = new TableWidget<Channel>(fields);
@@ -197,30 +197,4 @@ public class Channels extends SimpleComposite
 		});
 	}
 
-	private final static IsTableAccessor<Channel> ACC_NAME = new IsTableAccessor<Channel>() {
-		public String toCell(Channel ch) {
-			return ch.getName();
-		}
-	};
-
-	private final static IsTableAccessor<Channel> ACC_DESC = new IsTableAccessor<Channel>() {
-		public String toCell(Channel ch) {
-			return ch.getDescription();
-		}
-	};
-
-	private final static IsTableAccessor<Channel> ACC_URL = new IsTableAccessor<Channel>() {
-		public String toCell(Channel ch) {
-			return ch.getUrl();
-		}
-	};
-	
-	private final static TableField<Channel> FIELD_NAME = 
-			new TableField<Channel>("field.name", "Name", ACC_NAME);
-
-	private final static TableField<Channel> FIELD_DESC = 
-			new TableField<Channel>("field.name", "Desc", ACC_DESC);
-
-	private final static TableField<Channel> FIELD_URL = 
-			new TableField<Channel>("field.name", "Url", ACC_URL);
 }

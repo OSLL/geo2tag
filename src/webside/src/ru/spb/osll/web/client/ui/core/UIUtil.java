@@ -51,6 +51,10 @@ public class UIUtil {
 	public static HorizontalPanel getHorizontalPanel(boolean alignCenter){
 		return getHorizontalPanel(alignCenter, 0);
 	}
+
+	public static HorizontalPanel getHorizontalPanel(int spacing){
+		return getHorizontalPanel(false, spacing);
+	}
 	
 	public static HorizontalPanel getHorizontalPanel(boolean alignCenter, int spacing){
 		HorizontalPanel horizontalPanel = new HorizontalPanel();

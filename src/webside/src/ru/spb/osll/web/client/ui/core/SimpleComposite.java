@@ -11,11 +11,17 @@ abstract public class SimpleComposite extends Composite {
 	public SimpleComposite(){
 		initWidget(onInitialize());
 	}
+
+	public void resume(){
+		onResume();
+	}
 	
 	abstract protected String getName();
 
 	abstract protected Widget onInitialize();
-	
+
+	protected void onResume(){}
+
 	protected ImageResource getImage() {
 		return Images.res().peek();
 	}
