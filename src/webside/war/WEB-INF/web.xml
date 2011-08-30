@@ -10,14 +10,6 @@
   </welcome-file-list>
   
   <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>ru.spb.osll.web.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/geo2tag/greet</url-pattern>
-  </servlet-mapping>
   
   <servlet>
   	<servlet-name>LoginService</servlet-name>
@@ -35,6 +27,15 @@
   <servlet-mapping>
   	<servlet-name>ChannelService</servlet-name>
   	<url-pattern>/geo2tag/ChannelService</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+  	<servlet-name>TagService</servlet-name>
+  	<servlet-class>ru.spb.osll.web.server.services.tags.TagServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>TagService</servlet-name>
+  	<url-pattern>/geo2tag/TagService</url-pattern>
   </servlet-mapping>
 
 </web-app>
