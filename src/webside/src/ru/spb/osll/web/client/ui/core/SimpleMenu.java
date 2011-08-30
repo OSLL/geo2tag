@@ -94,6 +94,7 @@ abstract public class SimpleMenu extends Composite {
 			final SimpleComposite widget = item.getWidget();
 			ClickHandler handler = new ClickHandler() {
 				public void onClick(ClickEvent event) {
+					widget.resume();
 					setContentWidget(widget);
 				}
 			};

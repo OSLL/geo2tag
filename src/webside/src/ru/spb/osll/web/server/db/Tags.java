@@ -87,10 +87,6 @@ public class Tags extends AbstractBase<Tag> {
 	public List<Tag> selectByChannel(Channel channel, Date dateFrom, Date dateTo){
 		final String timeFromCondition = getTimeFromCondition(dateFrom);
 		final String timeToCondition = getTimeToCondition(dateTo);
-		
-		GWT.log("SERVER : dateFrom: " + dateFrom);
-		GWT.log("SERVER : dateTo: " + dateTo);
-		
 		final String selectTagsByChannel = "SELECT time, id, latitude, longitude, label, description, url, user_id" +
 			" FROM tag INNER JOIN tags ON tag.id = tags.tag_id WHERE tags.channel_id = '%s'" + 
 			timeFromCondition + timeToCondition + ";";

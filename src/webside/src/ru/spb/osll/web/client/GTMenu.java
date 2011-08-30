@@ -2,11 +2,9 @@ package ru.spb.osll.web.client;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.ui.core.SimpleMenu;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree.GroupItem;
-import ru.spb.osll.web.client.ui.core.UnderConstructionWidget;
 import ru.spb.osll.web.client.ui.image.Images;
 import ru.spb.osll.web.client.ui.widgets.Channels;
 import ru.spb.osll.web.client.ui.widgets.HomePage;
@@ -29,15 +27,8 @@ public class GTMenu extends SimpleMenu {
 			groupItem.addMenuItem(HomePage.Instance());
 			groupItem.addMenuItem(LoginWidget.Instance());
 			groupItem.addMenuItem(RegistrationWidget.Instance());
-			groupItem.addMenuItem(new Channels());
-			groupItem.addMenuItem(new TagsTableWidget());
-			
-//			groupItem.addMenuAction("UnderConstr", Images.res().peek(), new Runnable() {
-//				public void run() {
-//					final String mess = Localizer.res().disabledRegistration();
-//					setContentWidget(new UnderConstructionWidget(mess));
-//				}
-//			});
+			groupItem.addMenuItem(Channels.Instance());
+			groupItem.addMenuItem(TagsTableWidget.Instance());
 		}
 
 		// group1

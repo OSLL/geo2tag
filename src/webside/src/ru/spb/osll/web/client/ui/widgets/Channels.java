@@ -5,7 +5,6 @@ import java.util.List;
 
 import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.GTState;
-import ru.spb.osll.web.client.GTState.UserStateListener;
 import ru.spb.osll.web.client.services.channels.ChannelService;
 import ru.spb.osll.web.client.services.channels.ChannelServiceAsync;
 import ru.spb.osll.web.client.services.objects.Channel;
@@ -30,9 +29,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Channels extends SimpleComposite 
-	implements UserStateListener {
-
+public class Channels extends SimpleComposite {
 	private TableWidget<Channel> m_userChannels;
 	private TableWidget<Channel> m_avalChannels;
 	
@@ -43,8 +40,6 @@ public class Channels extends SimpleComposite
 
 	@Override
 	protected Widget onInitialize() {
-		GTState.Instanse().addOnUserStateListerer(this);
-		
 		List<TableField<Channel>> fields = new ArrayList<TableField<Channel>>();
 		fields.add(Fields.CHANNEL_FIELD_NAME);
 		fields.add(Fields.CHANNEL_FIELD_DESC);
@@ -68,10 +63,13 @@ public class Channels extends SimpleComposite
 	}
 	
 	@Override
-	public void onUserChange(User u) {
+	public void onResume() {
+		final User u = GTState.Instanse().getCurUser();
 		String logMess = (u != null) ? u.toString() : "null";
 		GWT.log(logMess);
-		
+		if (null == u){
+			return;
+		}
 		m_userChannels.erase();
 		m_avalChannels.erase();
 		loadUserChannels();
@@ -97,7 +95,7 @@ public class Channels extends SimpleComposite
 			@Override
 			public void onClick(ClickEvent event) {
 				GTState.Instanse().setCurChannel(m_userChannels.getSelectedObject());
-				GTShell.Instance.setContent(new TagsTableWidget());
+				GTShell.Instance.setContent(TagsTableWidget.Instance());
 			}
 		});
 		
@@ -196,5 +194,18 @@ public class Channels extends SimpleComposite
 			}
 		});
 	}
+	
+	
+	public static Channels Instance(){
+		if(instance == null){
+			instance = new Channels();
+		}
+		instance.resume();
+		return instance;
+	}
+	private static Channels instance;
+	private Channels(){
+		super();
+	};
 
 }

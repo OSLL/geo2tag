@@ -5,20 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import ru.spb.osll.web.client.GTState;
-import ru.spb.osll.web.client.GTState.ChannelStateListener;
-import ru.spb.osll.web.client.GTState.UserStateListener;
 import ru.spb.osll.web.client.services.channels.ChannelService;
-import ru.spb.osll.web.client.services.objects.Channel;
-import ru.spb.osll.web.client.services.objects.Tag;
-import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.tags.TagService;
 import ru.spb.osll.web.client.ui.common.Accessors;
 import ru.spb.osll.web.client.ui.common.Fields;
-import ru.spb.osll.web.client.ui.core.SimpleComposite;
-import ru.spb.osll.web.client.ui.core.SmartListBox;
-import ru.spb.osll.web.client.ui.core.TableWidget;
 import ru.spb.osll.web.client.ui.core.TableWidget.TableField;
-import ru.spb.osll.web.client.ui.core.UIUtil;
+import ru.spb.osll.web.client.ui.core.*;
+import ru.spb.osll.web.client.services.objects.*;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,17 +19,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-public class TagsTableWidget extends SimpleComposite
-	implements UserStateListener, ChannelStateListener {
+public class TagsTableWidget extends SimpleComposite {
 	
 	private TableWidget<Tag> m_tagsTable;
 	
@@ -47,9 +33,6 @@ public class TagsTableWidget extends SimpleComposite
 
 	@Override
 	protected Widget onInitialize() {
-		GTState.Instanse().addOnUserStateListerer(this);
-		GTState.Instanse().addOnChannelStateListerer(this);
-		
 		VerticalPanel contaier = UIUtil.getVerticalPanel();
 		contaier.setSpacing(10);
 		contaier.setWidth("100%");
@@ -70,17 +53,15 @@ public class TagsTableWidget extends SimpleComposite
 	}
 	
 	@Override
-	public void onChannelChange(Channel ch){
-		m_tagsTable.erase();
-		loadTags(ch);
-	}
-	
-	@Override
-	public void onUserChange(User u) {
-		// FIXME why it call twice
-		fillChannelBox(u);
+	public void onResume() {
+		final User user = GTState.Instanse().getCurUser();
+		fillChannelBox(user);
 	}
 
+	// TODO 
+	// setSelectedChannel(Channel ch){
+	// }
+	
 	private SmartListBox<Channel> m_channelBox;
     private DateBox m_dateBoxFrom;
     private DateBox m_dateBoxTo;
@@ -94,9 +75,9 @@ public class TagsTableWidget extends SimpleComposite
 	    m_dateBoxTo.setFormat(new DateBox.DefaultFormat());
 
 	    m_channelBox = new SmartListBox<Channel>(Accessors.CHANNEL_ACC_NAME, false);
-	    m_channelBox.setWidth("250px");
+	    m_channelBox.setWidth("200px");
 	    
-	    m_radioBtnAll = new RadioButton("channle.type", "all", false);
+	    m_radioBtnAll = new RadioButton("channle.type", "In channel", false);
 	    m_radioBtnAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -104,25 +85,29 @@ public class TagsTableWidget extends SimpleComposite
 			}
 		});
 	    m_radioBtnAll.setValue(true);
-	    m_radioBtnMy = new RadioButton("channle.type", "my", false);
-
+	    m_radioBtnMy = new RadioButton("channle.type", "My", false);
+	    m_radioBtnMy.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				m_channelBox.setEnabled(!event.getValue());
+			}
+		});
+	    
 	    Button refreshBtn = new Button("Refresh");	// TODO localize
 	    refreshBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				final Channel ch = m_channelBox.getSelectedObject();
-				final Date dateFrom = m_dateBoxFrom.getValue();
-				final Date dateTo = m_dateBoxTo.getValue();
-				refresh(ch, dateFrom, dateTo);
+				refresh();
 			}
 		});
 
 	    Widget widgets[] = {
+	    		new Label("Tags"),
+	    		m_radioBtnAll,
+	    		m_radioBtnMy,
 	    		cosntuctPair("Channel", m_channelBox),
 	    		cosntuctPair("From", m_dateBoxFrom),
 	    		cosntuctPair("To", m_dateBoxTo),
-	    		m_radioBtnAll,
-	    		m_radioBtnMy,
 	    		refreshBtn
 	    };
 
@@ -134,7 +119,7 @@ public class TagsTableWidget extends SimpleComposite
 	
 	private Widget cosntuctPair(String label, Widget w){
 		Grid container = new Grid(1, 2);
-		container.setCellSpacing(8);
+		container.setCellSpacing(4);
 		container.setWidget(0, 0, new Label(label));
 		container.setWidget(0, 1, w);
 		return container;
@@ -142,21 +127,20 @@ public class TagsTableWidget extends SimpleComposite
 
 	private Widget cosntuctLine(Widget widgets[]){
 		Grid container = new Grid(1, widgets.length);
-		container.setCellSpacing(10);
+		container.setCellSpacing(5);
 		for (int i = 0; i < widgets.length; i++){
 			container.setWidget(0, i, widgets[i]);
 		}
 		return container;
 	}
 
-	private void refresh(Channel ch, Date dateFrom, Date dateTo){
-		// TODO
+	private void refresh(){
+		final Channel ch = m_channelBox.getSelectedObject();
+		final Date dateFrom = m_dateBoxFrom.getValue();
+		final Date dateTo = m_dateBoxTo.getValue();
 		if(ch == null){
 			return;
 		}
-		GWT.log("dateFrom: " + dateFrom);
-		GWT.log("dateTo: " + dateTo);
-		
 		m_tagsTable.erase();
 		loadTags(ch, dateFrom, dateTo);
 	}
@@ -205,6 +189,7 @@ public class TagsTableWidget extends SimpleComposite
 			@Override
 			public void onSuccess(List<Channel> result) {
 				m_channelBox.setData(result);
+				refresh();
 			}
 			@Override
 			public void onFailure(Throwable caught) {
@@ -213,4 +198,17 @@ public class TagsTableWidget extends SimpleComposite
 		};
 		ChannelService.Util.getInstance().getUserChannels(u, callback);
 	}
+
+	
+	public static TagsTableWidget Instance(){
+		if(instance == null){
+			instance = new TagsTableWidget();
+		}
+		instance.resume();
+		return instance;
+	}
+	private static TagsTableWidget instance;
+	private TagsTableWidget(){
+		super();
+	};
 }
