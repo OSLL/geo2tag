@@ -34,8 +34,7 @@ public class GTMenu extends SimpleMenu {
 		// group1
 		{
 			groupItem = menu.getGroupMenuItem("Group 2", Images.res().folder());
-			groupItem.addMenuItem(new TestRPC());
-			groupItem.addMenuItem(new TestRPC());
+			groupItem.addMenuItem(HomePage.Instance());
 		}
 
 	}
