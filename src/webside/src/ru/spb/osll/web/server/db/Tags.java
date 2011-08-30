@@ -2,7 +2,11 @@ package ru.spb.osll.web.server.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
+
+import com.google.gwt.core.client.GWT;
 
 import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.Tag;
@@ -63,6 +67,15 @@ public class Tags extends AbstractBase<Tag> {
 		final String query = String.format(selectTagsByUser, user.getId());
 	    return baseMultiSelect(query);
 	}
+
+	public List<Tag> selectByUser(User user, Date dateFrom, Date dateTo){
+		final String timeFromCondition = getTimeFromCondition(dateFrom);
+		final String timeToCondition = getTimeToCondition(dateTo);
+		final String selectTagsByUser = "SELECT * FROM tag WHERE user_id=%s " + 
+			timeFromCondition + timeToCondition + ";";
+		final String query = String.format(selectTagsByUser, user.getId());
+	    return baseMultiSelect(query);
+	}
 	
 	public List<Tag> selectByChannel(Channel channel){
 		final String selectTagsByChannel = "SELECT time, id, latitude, longitude, label, description, url, user_id" +
@@ -70,6 +83,36 @@ public class Tags extends AbstractBase<Tag> {
 		final String query = String.format(selectTagsByChannel, channel.getId());
 	    return baseMultiSelect(query);
 	}	
+
+	public List<Tag> selectByChannel(Channel channel, Date dateFrom, Date dateTo){
+		final String timeFromCondition = getTimeFromCondition(dateFrom);
+		final String timeToCondition = getTimeToCondition(dateTo);
+		
+		GWT.log("SERVER : dateFrom: " + dateFrom);
+		GWT.log("SERVER : dateTo: " + dateTo);
+		
+		final String selectTagsByChannel = "SELECT time, id, latitude, longitude, label, description, url, user_id" +
+			" FROM tag INNER JOIN tags ON tag.id = tags.tag_id WHERE tags.channel_id = '%s'" + 
+			timeFromCondition + timeToCondition + ";";
+		final String query = String.format(selectTagsByChannel, channel.getId());
+	    return baseMultiSelect(query);
+	}	
+	
+	private String getTimeFromCondition(Date timeFrom){
+		if (timeFrom == null){
+			return "";
+		}
+		final String condition = " AND time >= '%s' ";
+		return String.format(condition, new Timestamp(timeFrom.getTime()));
+	}
+
+	private String getTimeToCondition(Date timeTo){
+		if (timeTo == null){
+			return "";
+		}
+		final String condition = " AND time <= '%s' ";
+		return String.format(condition, new Timestamp(timeTo.getTime()));
+	}
 	
 	public boolean addTagToChannel(Channel ch, Tag tag){
 		final String insertTagChannel = "INSERT INTO tags(channel_id, tag_id) VALUES ('%s', '%s');";

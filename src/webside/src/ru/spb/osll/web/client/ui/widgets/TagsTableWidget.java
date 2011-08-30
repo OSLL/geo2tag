@@ -1,22 +1,8 @@
 package ru.spb.osll.web.client.ui.widgets;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.datepicker.client.DateBox;
 
 import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.GTState.ChannelStateListener;
@@ -31,9 +17,23 @@ import ru.spb.osll.web.client.ui.common.Fields;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.SmartListBox;
 import ru.spb.osll.web.client.ui.core.TableWidget;
-import ru.spb.osll.web.client.ui.core.UIUtil;
-import ru.spb.osll.web.client.ui.core.IsDataAccessor;
 import ru.spb.osll.web.client.ui.core.TableWidget.TableField;
+import ru.spb.osll.web.client.ui.core.UIUtil;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 public class TagsTableWidget extends SimpleComposite
 	implements UserStateListener, ChannelStateListener {
@@ -78,7 +78,6 @@ public class TagsTableWidget extends SimpleComposite
 	@Override
 	public void onUserChange(User u) {
 		// FIXME why it call twice
-		
 		fillChannelBox(u);
 	}
 
@@ -98,6 +97,12 @@ public class TagsTableWidget extends SimpleComposite
 	    m_channelBox.setWidth("250px");
 	    
 	    m_radioBtnAll = new RadioButton("channle.type", "all", false);
+	    m_radioBtnAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				m_channelBox.setEnabled(event.getValue());
+			}
+		});
 	    m_radioBtnAll.setValue(true);
 	    m_radioBtnMy = new RadioButton("channle.type", "my", false);
 
@@ -108,9 +113,7 @@ public class TagsTableWidget extends SimpleComposite
 				final Channel ch = m_channelBox.getSelectedObject();
 				final Date dateFrom = m_dateBoxFrom.getValue();
 				final Date dateTo = m_dateBoxTo.getValue();
-				final boolean allTags = m_radioBtnAll.getValue();
-				
-				refresh(ch, dateFrom, dateTo, allTags);
+				refresh(ch, dateFrom, dateTo);
 			}
 		});
 
@@ -146,14 +149,16 @@ public class TagsTableWidget extends SimpleComposite
 		return container;
 	}
 
-	private void refresh(Channel ch, Date dateFrom, Date dateTo, boolean allTags){
+	private void refresh(Channel ch, Date dateFrom, Date dateTo){
 		// TODO
 		if(ch == null){
 			return;
 		}
+		GWT.log("dateFrom: " + dateFrom);
+		GWT.log("dateTo: " + dateTo);
 		
 		m_tagsTable.erase();
-		loadTags(ch);
+		loadTags(ch, dateFrom, dateTo);
 	}
 	
 	private void loadTags(){
@@ -177,8 +182,25 @@ public class TagsTableWidget extends SimpleComposite
 		});
 	}
 
+	private void loadTags(Channel ch, Date dateFrom, Date dateTo){
+		TagService.Util.getInstance().getTags(ch, dateFrom, dateTo,
+			new AsyncCallback<List<Tag>>() {
+				@Override
+				public void onSuccess(List<Tag> result) {
+					m_tagsTable.addRows(result);
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					GWT.log("loadTags", caught);
+				}
+			}
+		);
+	}
 	
 	private void fillChannelBox(final User u){
+		if (u == null){
+			return;
+		}
 		AsyncCallback<List<Channel>> callback = new AsyncCallback<List<Channel>>() {
 			@Override
 			public void onSuccess(List<Channel> result) {
