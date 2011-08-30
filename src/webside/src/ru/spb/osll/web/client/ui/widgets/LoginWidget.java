@@ -85,12 +85,9 @@ public class LoginWidget extends FieldsWidget {
 				if (user != null){
 					if (user.getStatus() == Response.STATUS_SUCCES){
 						GTState.Instanse().setCurUser(user);
-						
-						final String title = Localizer.res().login();
-						UIUtil.getSimpleDialog(title, user.getMessage()).center();
 						GTShell.Instance.setDefaultContent();
 					} else if (user.getStatus() == Response.STATUS_FAIL){
-						showMessage(user.getMessage());
+						showMessage(Localizer.res().loginFailed());
 					}
 				}
 			}

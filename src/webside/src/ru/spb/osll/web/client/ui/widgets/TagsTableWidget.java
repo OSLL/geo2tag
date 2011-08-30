@@ -48,12 +48,12 @@ public class TagsTableWidget extends SimpleComposite {
 		m_tagsTable = new TableWidget<Tag>(fields);
 		
 		contaier.add(m_tagsTable);
-		loadTags();
 		return contaier;
 	}
 	
 	@Override
 	public void onResume() {
+		m_tagsTable.erase();
 		final User user = GTState.Instanse().getCurUser();
 		fillChannelBox(user);
 	}
@@ -97,7 +97,11 @@ public class TagsTableWidget extends SimpleComposite {
 	    refreshBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				refresh();
+				if (m_radioBtnAll.getValue()){
+					refreshByChannel();
+				} else {
+					refreshByUser();
+				}
 			}
 		});
 
@@ -134,7 +138,18 @@ public class TagsTableWidget extends SimpleComposite {
 		return container;
 	}
 
-	private void refresh(){
+	private void refreshByUser(){
+		final User u = GTState.Instanse().getCurUser();
+		final Date dateFrom = m_dateBoxFrom.getValue();
+		final Date dateTo = m_dateBoxTo.getValue();
+		if(u == null){
+			return;
+		}
+		m_tagsTable.erase();
+		loadTags(u, dateFrom, dateTo);
+	}
+	
+	private void refreshByChannel(){
 		final Channel ch = m_channelBox.getSelectedObject();
 		final Date dateFrom = m_dateBoxFrom.getValue();
 		final Date dateTo = m_dateBoxTo.getValue();
@@ -144,28 +159,22 @@ public class TagsTableWidget extends SimpleComposite {
 		m_tagsTable.erase();
 		loadTags(ch, dateFrom, dateTo);
 	}
-	
-	private void loadTags(){
-		final Channel ch = GTState.Instanse().getCurChannel();
-		if (ch == null){
-			return;
-		}
-		loadTags(ch);
-	}
-	
-	private void loadTags(Channel ch){
-		TagService.Util.getInstance().getTags(ch, new AsyncCallback<List<Tag>>() {
-			@Override
-			public void onSuccess(List<Tag> result) {
-				m_tagsTable.addRows(result);
-			}
-			@Override
-			public void onFailure(Throwable caught) {
-				GWT.log("loadTags", caught);
-			}
-		});
-	}
 
+	private void loadTags(User u, Date dateFrom, Date dateTo){
+		TagService.Util.getInstance().getTags(u, dateFrom, dateTo,
+			new AsyncCallback<List<Tag>>() {
+				@Override
+				public void onSuccess(List<Tag> result) {
+					m_tagsTable.addRows(result);
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					GWT.log("loadTags", caught);
+				}
+			}
+		);
+	}
+	
 	private void loadTags(Channel ch, Date dateFrom, Date dateTo){
 		TagService.Util.getInstance().getTags(ch, dateFrom, dateTo,
 			new AsyncCallback<List<Tag>>() {
@@ -189,7 +198,7 @@ public class TagsTableWidget extends SimpleComposite {
 			@Override
 			public void onSuccess(List<Channel> result) {
 				m_channelBox.setData(result);
-				refresh();
+				refreshByChannel();
 			}
 			@Override
 			public void onFailure(Throwable caught) {

@@ -7,7 +7,7 @@ import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
-import ru.spb.osll.web.client.ui.widgets.HomePage;
+import ru.spb.osll.web.client.ui.widgets.Channels;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 
 import com.google.gwt.user.client.ui.Anchor;
@@ -111,8 +111,8 @@ public class GTShell extends Composite {
 				if (user == null){
 					setContent(LoginWidget.Instance(), false);
 				} else {
-					GTState.Instanse().setCurUser(user); // TODO ???
-					setContent(HomePage.Instance(), false);
+					GTState.Instanse().setCurUser(user); 
+					setContent(Channels.Instance(), false);
 				}
 				refreshAutorizedStatus();
 			}

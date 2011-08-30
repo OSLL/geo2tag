@@ -1,5 +1,7 @@
 package ru.spb.osll.web.client.ui.core;
 
+import ru.spb.osll.web.client.localization.GTLocalization;
+import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.ui.image.Images;
 
 import com.google.gwt.resources.client.ImageResource;
@@ -7,8 +9,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 abstract public class SimpleComposite extends Composite {
-		
+	protected GTLocalization res;
+	
 	public SimpleComposite(){
+		res = Localizer.res();
 		initWidget(onInitialize());
 	}
 

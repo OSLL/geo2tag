@@ -35,7 +35,7 @@ public class Channels extends SimpleComposite {
 	
 	@Override
 	protected String getName() {
-		return "Channels"; // TODO localize
+		return res.channels(); 
 	}
 
 	@Override
@@ -64,12 +64,6 @@ public class Channels extends SimpleComposite {
 	
 	@Override
 	public void onResume() {
-		final User u = GTState.Instanse().getCurUser();
-		String logMess = (u != null) ? u.toString() : "null";
-		GWT.log(logMess);
-		if (null == u){
-			return;
-		}
 		m_userChannels.erase();
 		m_avalChannels.erase();
 		loadUserChannels();
@@ -77,23 +71,24 @@ public class Channels extends SimpleComposite {
 	}
 	
 	private HorizontalPanel initButtons(){
-		Button subscribeBtn = new Button("sub", new ClickHandler() {		// TODO
+		Button subscribeBtn = new Button(res.btnSubscribe(), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				subscribe();
 			}
 		});
 		
-		Button unsubscribeBtn = new Button("unsub", new ClickHandler() {	// TODO
+		Button unsubscribeBtn = new Button(res.btnUnsubscribe(), new ClickHandler() {	
 			@Override
 			public void onClick(ClickEvent event) {
 				unsubscribe();
 			}
 		});
 		
-		Button showTagsBtn = new Button("Show tags", new ClickHandler() {	// TODO
+		Button showTagsBtn = new Button(res.btnShowTags(), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				// TODO setSelected Channel
 				GTState.Instanse().setCurChannel(m_userChannels.getSelectedObject());
 				GTShell.Instance.setContent(TagsTableWidget.Instance());
 			}
@@ -123,7 +118,7 @@ public class Channels extends SimpleComposite {
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				GWT.log("onFailure : " + caught.getMessage());
+				GWT.log("subscribe : " + caught.getMessage());
 			}
 		});
 		
@@ -145,7 +140,7 @@ public class Channels extends SimpleComposite {
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				GWT.log("onFailure : " + caught.getMessage());
+				GWT.log("unsubscribe : " + caught.getMessage());
 			}
 		});
 	}
@@ -176,7 +171,7 @@ public class Channels extends SimpleComposite {
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				GWT.log("onFailure : " + caught.getMessage());
+				GWT.log("loadUserChannels : " + caught.getMessage());
 			}
 		});
 	}
@@ -190,7 +185,7 @@ public class Channels extends SimpleComposite {
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				GWT.log("onFailure : " + caught.getMessage());
+				GWT.log("loadUserChannels : " + caught.getMessage());
 			}
 		});
 	}

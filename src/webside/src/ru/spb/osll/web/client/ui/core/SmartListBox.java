@@ -24,6 +24,9 @@ public class SmartListBox<T> extends ListBox {
 	}
 	
 	public T getSelectedObject(){
+		if (getSelectedIndex() < 0){
+			return null;
+		}
 		return m_data != null ? m_data.get(getSelectedIndex()) : null;
 	}	
 }

@@ -80,9 +80,15 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 	}
 	
 	public void deleteRow(int row) {
+		m_data.remove(row);
 		row += 1;
 		if (row < getRowCount()){
 			super.removeRow(row);
+		}
+
+		m_selectedRow--;
+		if (m_selectedRow > 0){
+			getRowFormatter().addStyleName(m_selectedRow, m_selectedStyle);
 		}
 	}
 
@@ -98,6 +104,9 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 		getRowFormatter().addStyleName(0, m_headerStyle);
 	}
 
+	public boolean contains(T obj) {
+		return m_data.contains(obj);
+	}
 	
 	public static class TableField<T> {
 		private final String m_id;

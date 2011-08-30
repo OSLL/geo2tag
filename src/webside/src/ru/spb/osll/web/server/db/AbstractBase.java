@@ -57,7 +57,6 @@ abstract class AbstractBase <T> {
 		}
 	    return list;
 	}
-
 	
 	protected boolean baseBoolQuery(final String query){
 		boolean succes = false;
@@ -70,5 +69,19 @@ abstract class AbstractBase <T> {
 		}
 		return succes;
 	}	
-	
+
+	protected boolean containQuery(final String query){
+		boolean succes = false;
+		try {
+			final Statement statement = DBUtil.getConnection().createStatement();
+			final ResultSet result = statement.executeQuery(query);
+		    while (result.next()) {
+		    	succes = true;
+		    }
+		} catch (Exception e) {
+			Logger.getLogger(AbstractBase.class).error("containQuery", e.getCause());
+		}
+		return succes;
+	}	
+
 }

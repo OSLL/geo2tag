@@ -10,6 +10,7 @@ import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.ui.core.FieldsWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
+import ru.spb.osll.web.client.ui.core.UnderConstructionWidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 
 public class RegistrationWidget extends FieldsWidget {
 	private TextBox m_login;
@@ -26,6 +28,14 @@ public class RegistrationWidget extends FieldsWidget {
 	@Override
 	protected String getName() {
 		return Localizer.res().registration();
+	}
+
+	// TODO delete later
+	@Override
+	protected Widget onInitialize() {
+		// super.onInitialize();
+		final String mess = Localizer.res().disabledRegistration();
+		return new UnderConstructionWidget(mess);
 	}
 
 	@Override

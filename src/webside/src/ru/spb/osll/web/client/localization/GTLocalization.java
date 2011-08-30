@@ -3,11 +3,6 @@ package ru.spb.osll.web.client.localization;
 import com.google.gwt.i18n.client.Constants;
 
 public interface GTLocalization extends Constants {
-	String login();
-	String password();
-	String confirm();
-	String registration();
-
 	// buttons
 	String btnOk();
 	String btnCancel();
@@ -20,10 +15,32 @@ public interface GTLocalization extends Constants {
 	String wrngConfirmNull();
 	String wrngPassAndConf(); 
 	
-	// menu items
-	String pageHome();
 	
+	// --------------------- Menu --------------------- 
+	String menuGrForUser();
+	String menuGrServices();
+	
+	// -------------------- Widgets -------------------
 	// Widget : UnderConstructionWidget
 	String disabledRegistration();
+	String disabledTagsOnMap();
 	
+	// Widget : HomePage
+	String pageHome();
+
+	// Widget : TagsMapWidget
+	String TagsMapWidget();
+
+	// Widget : LoginWidget
+	String login();
+	String password();
+	String confirm();
+	String registration();
+	String loginFailed();
+
+	// Widget : Channel
+	String channels();
+	String btnSubscribe();
+	String btnUnsubscribe();
+	String btnShowTags();
 }

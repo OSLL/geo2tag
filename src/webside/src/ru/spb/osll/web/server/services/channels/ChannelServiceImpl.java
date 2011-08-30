@@ -25,6 +25,9 @@ public class ChannelServiceImpl extends RemoteServiceServlet implements ChannelS
 
 	@Override
 	public Boolean subscribe(Channel ch, User u) throws IllegalArgumentException {
+		if (Users.Instance().isSubscribed(ch.getId(), u.getId())){
+			return false;
+		}
 		return Users.Instance().subscribeToChannel(ch, u);
 	}
 

@@ -79,6 +79,11 @@ public class Users extends AbstractBase<User> {
 		final String query = String.format(unsubscribe, channelId, userId);
 		return baseBoolQuery(query);
 	}
+
+	public boolean isSubscribed(long channelId, long userId){
+		final String query = "SELECT * FROM subscribe WHERE channel_id='%s' AND user_id='%s';";
+		return containQuery(String.format(query, channelId, userId));
+	}
 	
 	@Override
 	protected User constructObject(ResultSet result) throws SQLException {
