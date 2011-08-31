@@ -1,7 +1,6 @@
 TEMPLATE = subdirs
 
-TARGET = ui/wikigpsTracker-ui observer/wikigps-observer
-
+TARGET = ui/wikigpsTracker-ui
 INSTALLS += target 
 
 include(../../config.pri)
@@ -35,5 +34,7 @@ maemo5 {
   INSTALLS += eventd_script logrotate_script icon desktop_file
 }
 
-target.path = /usr/bin
-INSTALLS += target
+!symbian{
+    target.path = /usr/bin
+    INSTALLS += target
+}

@@ -45,14 +45,11 @@
 #include "GpsInfo.h"
 #include "defines.h"
 
-#ifndef Q_OS_SYMBIAN
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#endif
 
 // This file maybe used only if SIMULATE_GPS is turned on
 #ifdef SIMULATE_GPS
-
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 namespace common
 {
   /*!

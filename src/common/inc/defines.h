@@ -79,8 +79,9 @@ void setServerPort(int port);
 
 #define TRACKER_MSECS_TIMEOUT 500
 
+#ifndef Q_WS_SYMBIAN
 extern uint qHash(const QPoint & p);
-
+#endif
 //_defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #endif
 

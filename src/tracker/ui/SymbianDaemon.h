@@ -2,15 +2,16 @@
 #define SYMBIANDAEMON_H_
 
 #include "DaemonManager.h"
+#include <QtConcurrentRun>
 
-#ifndef Q_OS_SYMBIAN
 #include "TrackerDaemon.h"
-#endif
+
 
 class SymbianDaemon : public Daemon
 {
-
+    TrackerDaemon * m_daemon;
   public:
+    SymbianDaemon();
     virtual QPointF getLastCoordinates() const;
     virtual bool isConnected() const;
     virtual bool isStarted() const;

@@ -3,8 +3,9 @@ include(../config.pri)
 
 
 CONFIG += ordered
-SUBDIRS += common
-
+!symbian{
+  SUBDIRS += common
+}
 
 
 maemo5: {
@@ -21,14 +22,10 @@ linux: {
              http_requests \
              maps \ 
              service \
-						 tracker/observer \
-	           common/tst
+             tracker/observer \
+             common/tst
 }
 
 symbian: {
-  SUBDIRS += json \
-             http_requests \
-             tracker
+  SUBDIRS += tracker
 }
-
-

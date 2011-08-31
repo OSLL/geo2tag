@@ -1,6 +1,7 @@
 #include "MaemoDaemon.h"
-
-MaemoDaemon::MaemoDaemon:
+#include <QStringList>
+#include <QDebug>
+MaemoDaemon::MaemoDaemon():
 m_daemon(new QTcpSocket()),
 m_device(new QTextStream(m_daemon)),
 m_started(false)
@@ -23,7 +24,7 @@ void MaemoDaemon::readData()
     QString buf=commands.last();
     QStringList lastCoord = buf.right(buf.size()-QString("lastCoords_").size()).split(",",QString::SkipEmptyParts);
 
-    qDebug() << "REcieved coordinates" << lastCoord.at(0) << " " lastCoord.at(1);
+    qDebug() << "REcieved coordinates" << lastCoord.at(0) << " "<< lastCoord.at(1);
     m_lastCoordinates.setX(lastCoord.at(0).toDouble());
     m_lastCoordinates.setY(lastCoord.at(1).toDouble());
     m_started = true;

@@ -2,6 +2,7 @@
 #define MAEMODAEMON_H_
 
 #include "DaemonManager.h"
+#include <QTcpSocket>
 
 class MaemoDaemon : public Daemon
 {
@@ -10,6 +11,7 @@ class MaemoDaemon : public Daemon
   bool m_started;
   QTcpSocket m_daemon;
   public:
+  MaemoDaemon();
     virtual QPointF getLastCoordinates() const;
     virtual bool isConnected() const;
     virtual bool isStarted() const;

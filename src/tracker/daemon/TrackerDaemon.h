@@ -17,11 +17,11 @@
 #include <QPointF>
 #include <QNetworkConfigurationManager>
 
-#ifndef Q_OS_SYMBIAN
+//#ifndef Q_OS_SYMBIAN
 
 class TrackerDaemon : /*public QThread,*/ public Control
 {
-  Q_OBJECT;
+  Q_OBJECT
 
   QSettings m_settings;
   QString m_channelName;
@@ -68,7 +68,7 @@ class TrackerDaemon : /*public QThread,*/ public Control
   public slots:
 
 };
-#endif
+//#endif
 
 // TRACKERDAEMON_H
 #endif
