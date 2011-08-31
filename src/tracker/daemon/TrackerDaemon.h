@@ -16,7 +16,7 @@
 #include <QPointF>
 #include <QNetworkConfigurationManager>
 
-#ifndef Q_WS_SYMBIAN
+//#ifndef Q_OS_SYMBIAN
 #include "Control.h"
 #define PARENT Control
 #else

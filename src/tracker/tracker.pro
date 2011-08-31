@@ -36,5 +36,5 @@ maemo5 {
 
 !symbian{
     target.path = /usr/bin
-
+    INSTALLS += target
 }

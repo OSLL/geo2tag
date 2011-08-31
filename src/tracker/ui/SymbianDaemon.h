@@ -6,9 +6,10 @@
 
 #include "TrackerDaemon.h"
 
+
 class SymbianDaemon : public Daemon
 {
-  TrackerDaemon * m_daemon;
+    TrackerDaemon * m_daemon;
   public:
     SymbianDaemon();
     virtual QPointF getLastCoordinates() const;

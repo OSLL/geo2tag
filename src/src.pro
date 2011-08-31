@@ -3,7 +3,9 @@ include(../config.pri)
 
 
 CONFIG += ordered
-
+!symbian{
+  SUBDIRS += common
+}
 message($$CONFIG)
 
 symbian: {
@@ -30,3 +32,5 @@ linux: {
              tracker/observer \
              common/tst
 }
+
+  SUBDIRS += tracker
