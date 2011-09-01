@@ -27,11 +27,10 @@
 
 #include <QtCore/QVariant>
 
-
 class TestSerializer: public QObject
 {
   Q_OBJECT
-  private slots:
+    private slots:
     void testReadWriteEmptyDocument();
     void testReadWrite();
     void testReadWrite_data();
@@ -69,6 +68,7 @@ void TestSerializer::testReadWriteEmptyDocument()
   QCOMPARE(expected, serialized);
 }
 
+
 void TestSerializer::testReadWrite()
 {
   QFETCH( QByteArray, json );
@@ -83,28 +83,29 @@ void TestSerializer::testReadWrite()
   QCOMPARE( result, writtenThenRead );
 }
 
+
 void TestSerializer::testReadWrite_data()
 {
-    QTest::addColumn<QByteArray>( "json" );
+  QTest::addColumn<QByteArray>( "json" );
 
-    // array tests
-    QTest::newRow( "empty array" ) << QByteArray("[]");
-    QTest::newRow( "basic array" ) << QByteArray("[\"person\",\"bar\"]");
-    QTest::newRow( "single int array" ) << QByteArray("[6]");
-    QTest::newRow( "int array" ) << QByteArray("[6,5,6,7]");
-    const QByteArray json = "[1,2.4, -100, -3.4, -5e+, 2e,3e+,4.3E,5.4E-]";
-    QTest::newRow( QByteArray("array of various numbers") ) << json;
+  // array tests
+  QTest::newRow( "empty array" ) << QByteArray("[]");
+  QTest::newRow( "basic array" ) << QByteArray("[\"person\",\"bar\"]");
+  QTest::newRow( "single int array" ) << QByteArray("[6]");
+  QTest::newRow( "int array" ) << QByteArray("[6,5,6,7]");
+  const QByteArray json = "[1,2.4, -100, -3.4, -5e+, 2e,3e+,4.3E,5.4E-]";
+  QTest::newRow( QByteArray("array of various numbers") ) << json;
 
-    // document tests
-    QTest::newRow( "empty object" ) << QByteArray("{}");
-    QTest::newRow( "basic document" ) << QByteArray("{\"person\":\"bar\"}");
-    QTest::newRow( "object with ints" ) << QByteArray("{\"person\":6}");
-    const QByteArray json2 = "{ \"person\":\"bar\",\n\"number\" : 51.3 , \"array\":[\"item1\", 123]}";
-    QTest::newRow( "complicated document" ) << json2;
+  // document tests
+  QTest::newRow( "empty object" ) << QByteArray("{}");
+  QTest::newRow( "basic document" ) << QByteArray("{\"person\":\"bar\"}");
+  QTest::newRow( "object with ints" ) << QByteArray("{\"person\":6}");
+  const QByteArray json2 = "{ \"person\":\"bar\",\n\"number\" : 51.3 , \"array\":[\"item1\", 123]}";
+  QTest::newRow( "complicated document" ) << json2;
 
-    // more complex cases
-    const QByteArray json3 = "[ {\"person\":\"bar\"},\n\"number\",51.3 , [\"item1\", 123]]";
-    QTest::newRow( "complicated array" ) << json3;
+  // more complex cases
+  const QByteArray json3 = "[ {\"person\":\"bar\"},\n\"number\",51.3 , [\"item1\", 123]]";
+  QTest::newRow( "complicated array" ) << json3;
 }
 
 
@@ -117,8 +118,9 @@ void TestSerializer::valueTest( const QVariant& value, const QString& expectedRe
   QVERIFY( expected.isValid() );
   QVERIFY2( expected.exactMatch( serializedUnicode ),
     qPrintable( QString( QLatin1String( "Expected regexp \"%1\" but got \"%2\"." ) )
-      .arg( expectedRegExp ).arg( serializedUnicode ) ) );
+    .arg( expectedRegExp ).arg( serializedUnicode ) ) );
 }
+
 
 void TestSerializer::valueTest( const QObject* object, const QString& expectedRegExp )
 {
@@ -129,8 +131,9 @@ void TestSerializer::valueTest( const QObject* object, const QString& expectedRe
   QVERIFY( expected.isValid() );
   QVERIFY2( expected.exactMatch( serializedUnicode ),
     qPrintable( QString( QLatin1String( "Expected regexp \"%1\" but got \"%2\"." ) )
-      .arg( expectedRegExp ).arg( serializedUnicode ) ) );
+    .arg( expectedRegExp ).arg( serializedUnicode ) ) );
 }
+
 
 void TestSerializer::testValueNull()
 {
@@ -139,6 +142,7 @@ void TestSerializer::testValueNull()
   map[QLatin1String("value")] = QVariant();
   valueTest( QVariant(map), QLatin1String( "\\s*\\{\\s*\"value\"\\s*:\\s*null\\s*\\}\\s*" ) );
 }
+
 
 void TestSerializer::testValueString()
 {
@@ -151,11 +155,12 @@ void TestSerializer::testValueString()
   valueTest( QVariant(map), QLatin1String( "\\s*\\{\\s*\"value\"\\s*:" ) + expected + QLatin1String( "\\}\\s*" ) );
 }
 
+
 void TestSerializer::testValueString_data()
 {
   QTest::addColumn<QVariant>( "value" );
   QTest::addColumn<QString>( "expected" );
-  
+
   QTest::newRow( "null string" ) << QVariant( QString() ) << QString( QLatin1String( "\\s*\"\"\\s*" ) );
   QTest::newRow( "empty string" ) << QVariant( QString( QLatin1String( "" ) ) ) << QString( QLatin1String( "\\s*\"\"\\s*" ) );
   QTest::newRow( "Simple String" ) << QVariant( QString( QLatin1String( "simpleString" ) ) ) << QString( QLatin1String( "\\s*\"simpleString\"\\s*" ) );
@@ -169,6 +174,7 @@ void TestSerializer::testValueString_data()
   QTest::newRow( "string with unicode" ) << QVariant( testStringWithUnicode ) << QLatin1String( "\\s*\"" ) + testStringWithUnicode + QLatin1String( "\"\\s*" );
 }
 
+
 void TestSerializer::testValueInteger()
 {
   QFETCH( QVariant, value );
@@ -180,11 +186,12 @@ void TestSerializer::testValueInteger()
   valueTest( QVariant(map), QLatin1String( "\\s*\\{\\s*\"value\"\\s*:" ) + expected + QLatin1String( "\\}\\s*" ) );
 }
 
+
 void TestSerializer::testValueInteger_data()
 {
   QTest::addColumn<QVariant>( "value" );
   QTest::addColumn<QString>( "expected" );
-  
+
   QTest::newRow( "int 0" ) << QVariant( static_cast<int>( 0 ) ) << QString( QLatin1String( "\\s*0\\s*" ) );
   QTest::newRow( "uint 0" ) << QVariant( static_cast<uint>( 0 ) ) << QString( QLatin1String( "\\s*0\\s*" ) );
   QTest::newRow( "int -1" ) << QVariant( static_cast<int>( -1 ) ) << QString( QLatin1String( "\\s*-1\\s*" ) );
@@ -193,6 +200,7 @@ void TestSerializer::testValueInteger_data()
   QTest::newRow( "uint64 932838457459459" ) << QVariant( Q_UINT64_C(932838457459459) ) << QString( QLatin1String( "\\s*932838457459459\\s*" ) );
   QTest::newRow( "max unsigned long long" ) << QVariant( std::numeric_limits<unsigned long long>::max() ) << QString( QLatin1String( "\\s*%1\\s*" ) ).arg(std::numeric_limits<unsigned long long>::max());
 }
+
 
 void TestSerializer::testValueDouble()
 {
@@ -205,17 +213,19 @@ void TestSerializer::testValueDouble()
   valueTest( QVariant(map), QLatin1String( "\\s*\\{\\s*\"value\"\\s*:" ) + expected + QLatin1String( "\\}\\s*" ) );
 }
 
+
 void TestSerializer::testValueDouble_data()
 {
   QTest::addColumn<QVariant>( "value" );
   QTest::addColumn<QString>( "expected" );
-  
+
   QTest::newRow( "double 0" ) << QVariant( 0.0 ) << QString( QLatin1String( "\\s*0.0\\s*" ) );
   QTest::newRow( "double -1" ) << QVariant( -1.0 ) << QString( QLatin1String( "\\s*-1.0\\s*" ) );
   QTest::newRow( "double 1.5E-20" ) << QVariant( 1.5e-20 ) << QString( QLatin1String( "\\s*1.5[Ee]-20\\s*" ) );
   QTest::newRow( "double -1.5E-20" ) << QVariant( -1.5e-20 ) << QString( QLatin1String( "\\s*-1.5[Ee]-20\\s*" ) );
   QTest::newRow( "double 2.0E-20" ) << QVariant( 2.0e-20 ) << QString( QLatin1String( "\\s*2(?:.0)?[Ee]-20\\s*" ) );
 }
+
 
 void TestSerializer::testValueBoolean()
 {
@@ -228,6 +238,7 @@ void TestSerializer::testValueBoolean()
   valueTest( QVariant(map), QLatin1String( "\\s*\\{\\s*\"value\"\\s*:" ) + expected + QLatin1String( "\\}\\s*" ) );
 }
 
+
 void TestSerializer::testValueBoolean_data()
 {
   QTest::addColumn<QVariant>( "value" );
@@ -236,6 +247,7 @@ void TestSerializer::testValueBoolean_data()
   QTest::newRow( "bool false" ) << QVariant( false ) << QString( QLatin1String( "\\s*false\\s*" ) );
   QTest::newRow( "bool true" ) << QVariant( true ) << QString( QLatin1String( "\\s*true\\s*" ) );
 }
+
 
 QTEST_MAIN(TestSerializer)
 #include "moc_testserializer.cxx"

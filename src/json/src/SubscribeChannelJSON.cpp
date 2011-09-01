@@ -57,7 +57,7 @@ SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(QObject *parent) : Json
 }
 
 
-SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel, 
+SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel,
 const QSharedPointer<common::User> &user, QObject *parent) : JsonSerializer(parent)
 {
   m_usersContainer->push_back(user);

@@ -29,10 +29,6 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-
-
-
-
 #include <QVariant>
 #include <QDebug>
 #include "RSSFeedRequestJSON.h"
@@ -48,7 +44,6 @@
 #include "parser.h"
 #include "serializer.h"
 #endif
-
 
 RSSFeedRequestJSON::RSSFeedRequestJSON(double latitude, double longitude, double radius, QObject *parent):
 JsonSerializer(parent), m_latitude(latitude), m_longitude(longitude), m_radius(radius)

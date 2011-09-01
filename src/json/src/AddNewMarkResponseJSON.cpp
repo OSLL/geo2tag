@@ -1,5 +1,4 @@
 
-
 #include <QDebug>
 
 #include "AddNewMarkResponseJSON.h"
@@ -13,7 +12,6 @@
 #include "parser.h"
 #include "serializer.h"
 #endif
-
 
 AddNewMarkResponseJSON::AddNewMarkResponseJSON(QObject *parent) : JsonSerializer(parent)
 {

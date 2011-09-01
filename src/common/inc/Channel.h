@@ -50,7 +50,7 @@
 class Channel: public QObject
 {
   Q_OBJECT                              //!< channel name
-  QString m_name;                     //!< Description for channel
+    QString m_name;                     //!< Description for channel
   QString m_description;                //!< URL for mark
   QString m_url;                        //< Radius for visible marks
   double m_activeRadius;                //!< Displayed on the UI
@@ -58,38 +58,38 @@ class Channel: public QObject
   QSharedPointer<TimeSlot> m_timeSlot;
   bool m_timeSlotIsDefault;
 
-public:
+  public:
 
-  static const qulonglong DEFAULT_TIME_SLOT_VALUE_MIN;
-		
-  Channel(const QString &name, const QString &description, const QString& url="");
+    static const qulonglong DEFAULT_TIME_SLOT_VALUE_MIN;
 
-  virtual qlonglong getId() const;
+    Channel(const QString &name, const QString &description, const QString& url="");
 
-  const QString& getDescription() const;
+    virtual qlonglong getId() const;
 
-  const QString& getName() const;
+    const QString& getDescription() const;
 
-  const QString& getUrl() const;
+    const QString& getName() const;
 
-  void setDescription(const QString& description);
+    const QString& getUrl() const;
 
-  void setUrl(const QString& url);
+    void setDescription(const QString& description);
 
-  void setRadius(const double &radius);
-  double getRadius() const;
+    void setUrl(const QString& url);
 
-  bool isDisplayed() const;
-  void setDisplayed(bool);
+    void setRadius(const double &radius);
+    double getRadius() const;
 
-  void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
-  QSharedPointer<TimeSlot> getTimeSlot() const;
+    bool isDisplayed() const;
+    void setDisplayed(bool);
 
-  bool timeSlotIsDefault() const;
-  void setDefaultTimeSlot(bool);
+    void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
+    QSharedPointer<TimeSlot> getTimeSlot() const;
 
-  virtual ~Channel();
-  // class Channel
+    bool timeSlotIsDefault() const;
+    void setDefaultTimeSlot(bool);
+
+    virtual ~Channel();
+    // class Channel
 };
 
 typedef ConcurrentVector<Channel> Channels;

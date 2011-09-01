@@ -9,7 +9,6 @@
 #include "serializer.h"
 #endif
 
-
 #include "LoginResponseJSON.h"
 #include "JsonUser.h"
 

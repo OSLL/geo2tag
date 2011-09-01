@@ -5,17 +5,15 @@
 
 class ChannelActions: public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
     int m_user;
-    int m_channel;
-    int m_action;
+  int m_channel;
+  int m_action;
 
-public:
+  public:
     ChannelActions(int user, int channel, int action);
 
     virtual ~ChannelActions();
 
-
 };
-
-#endif // CHANNELACTION_H
+#endif                                  // CHANNELACTION_H

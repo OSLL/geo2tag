@@ -339,20 +339,19 @@ void MapScene::keyPressEvent(QKeyEvent *event)
 
   switch(event->key())
   {
-  case Qt::Key_Plus:
-    m_zoom ++;
-    break;
+    case Qt::Key_Plus:
+      m_zoom ++;
+      break;
 
-  case Qt::Key_Minus:
-    m_zoom--;
-  break;
+    case Qt::Key_Minus:
+      m_zoom--;
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
   set_zoom();
   emit update();
-
 
   qDebug() << "Pressed key: " << event->key() << "\n";
 
@@ -365,17 +364,18 @@ void MapScene::keyPressEvent(QKeyEvent *event)
 
   if(event->key() == Qt::Key_Plus && m_zoom < 18)
   {
-  	m_zoom++;
-	this->set_zoom();
+    m_zoom++;
+    this->set_zoom();
   }
   if(event->key() == Qt::Key_Minus && m_zoom > 0)
   {
-  	m_zoom--;
-	this->set_zoom();
+    m_zoom--;
+    this->set_zoom();
   }
   else
     this->update_state();
 }
+
 
 QPair<QPoint, QPoint> MapScene::getBorders()
 {
@@ -407,6 +407,7 @@ QPair<QPoint, QPoint> MapScene::getBorders()
   return qMakePair(point_top_left, point_bottom_right);
 }
 
+
 void MapScene::update_state()
 {
   QPair<QPoint, QPoint> borders = this->getBorders();
@@ -423,8 +424,8 @@ void MapScene::update_state()
 
   while(width > 2 && height > 2)
   {
-  	point_top_left = point_top_left + QPoint(1,1);
-	point_bottom_right = point_bottom_right - QPoint(1,1);
+    point_top_left = point_top_left + QPoint(1,1);
+    point_bottom_right = point_bottom_right - QPoint(1,1);
     width = point_bottom_right.x() - point_top_left.x() + 1;
     height = point_bottom_right.y() - point_top_left.y() + 1;
   }
@@ -441,13 +442,13 @@ void MapScene::update_state()
     }
   }
 
-/*
-  if(tiles_for_upload.size() != 0)
-  {
-    emit this->uploadTiles(tiles_for_upload);
-	tiles_for_upload.clear();
-  }
-*/
+  /*
+    if(tiles_for_upload.size() != 0)
+    {
+      emit this->uploadTiles(tiles_for_upload);
+    tiles_for_upload.clear();
+    }
+  */
 
   QPoint snake(x-1, y-1);
   QPoint move(0,1);
@@ -459,31 +460,31 @@ void MapScene::update_state()
     if(!m_tiles.contains(tp))
       tiles_for_upload.push_back(tp);
 
-	if(snake.x() < point_top_left.x())
-	{
-	  move.setX(0);
-	  move.setY(-1);
-	  point_top_left.setX(point_top_left.x() - 1);
-	}
-	else if(snake.x() > point_bottom_right.x())
-	{
+    if(snake.x() < point_top_left.x())
+    {
       move.setX(0);
-	  move.setY(1);
-	  point_bottom_right.setX(point_bottom_right.x() + 1);
-	}
+      move.setY(-1);
+      point_top_left.setX(point_top_left.x() - 1);
+    }
+    else if(snake.x() > point_bottom_right.x())
+    {
+      move.setX(0);
+      move.setY(1);
+      point_bottom_right.setX(point_bottom_right.x() + 1);
+    }
 
-	if(snake.y() < point_top_left.y())
-	{
+    if(snake.y() < point_top_left.y())
+    {
       move.setY(0);
-	  move.setX(1);
+      move.setX(1);
       point_top_left.setY(point_top_left.y() - 1);
-	}
-	else if(snake.y() > point_bottom_right.y())
-	{
+    }
+    else if(snake.y() > point_bottom_right.y())
+    {
       move.setY(0);
-	  move.setX(-1);
+      move.setX(-1);
       point_bottom_right.setY(point_bottom_right.y() + 1);
-	}
+    }
   }
 
   if(tiles_for_upload.size() != 0)

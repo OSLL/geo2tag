@@ -31,22 +31,22 @@
 
 #include "parser_p.h"
 
-namespace yy {
+namespace yy
+{
   class location;
   int yylex(YYSTYPE *yylval, yy::location *yylloc, QJson::ParserPrivate* driver);
 }
 
+
 class JSonScanner
 {
-    public:
-        explicit JSonScanner(QIODevice* io);
-        int yylex(YYSTYPE* yylval, yy::location *yylloc);
-        
-    protected:
-        bool m_quotmarkClosed;
-        unsigned int m_quotmarkCount;
-        QIODevice* m_io;
+  public:
+    explicit JSonScanner(QIODevice* io);
+    int yylex(YYSTYPE* yylval, yy::location *yylloc);
+
+  protected:
+    bool m_quotmarkClosed;
+    unsigned int m_quotmarkCount;
+    QIODevice* m_io;
 };
-
 #endif
-

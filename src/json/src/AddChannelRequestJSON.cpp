@@ -1,5 +1,4 @@
 
-
 #include "AddChannelRequestJSON.h"
 #include "JsonUser.h"
 #include "JsonChannel.h"
@@ -11,7 +10,6 @@
 #include "parser.h"
 #include "serializer.h"
 #endif
-
 
 AddChannelRequestJSON::AddChannelRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
