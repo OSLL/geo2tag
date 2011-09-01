@@ -12,13 +12,13 @@ class Daemon;
 
 class MaemoDaemon : public Daemon
 {
-	Q_OBJECT
-  QPointF m_lastCoordinates;
+  Q_OBJECT
+    QPointF m_lastCoordinates;
   QTcpSocket * m_daemon;
-	QTextStream * m_device;
+  QTextStream * m_device;
   bool m_started;
   public:
-		MaemoDaemon();
+    MaemoDaemon();
     virtual QPointF getLastCoordinates() const;
     virtual bool isConnected() const;
     virtual bool isStarted() const;

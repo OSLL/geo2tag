@@ -130,5 +130,5 @@ void MainWindow::restartDaemon()
 void MainWindow::checkDaemon()
 {
   if(!DaemonManager::getInstance().isConnected())
-  m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");
+    m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");
 }

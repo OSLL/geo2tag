@@ -3,12 +3,11 @@
 #include <QObject>
 #include <QPointF>
 
-
 class Daemon: public QObject
 {
-				Q_OBJECT
-  public:
-		Daemon():QObject(0){}
+  Q_OBJECT
+    public:
+    Daemon():QObject(0){}
     virtual QPointF getLastCoordinates() const=0;
     virtual bool isConnected() const=0;
     virtual bool isStarted() const=0;
