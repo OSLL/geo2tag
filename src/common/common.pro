@@ -60,7 +60,6 @@ maemo5: {
     HEADERS += inc/MobilityGps.h
 
     SOURCES += src/MobilityGps.cpp
-    SOURCES += src/MobilityGps.cpp
     LIBS += -lQtLocation
 }
 
