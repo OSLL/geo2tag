@@ -34,8 +34,6 @@ TARGET.UID3 = 0x20041E3E
 CONFIG += mobility
 MOBILITY += location
 
-QT += network
-
 INCLUDEPATH += ../../../../http_requests/inc \
                inc \
                ../../json/inc \
@@ -53,9 +51,6 @@ TARGET.CAPABILITY = NetworkServices \
 DEFINES += NO_DAEMON
 SOURCES += SymbianDaemon.cpp \
 ../daemon/TrackerDaemon.cpp \
-../ui/OptionsWidget.cpp \
-../ui/src/ByteSpinBox.cpp \
-../../http_requests/src/RSSFeedQuery.cpp \
 ../../http_requests/src/LoginQuery.cpp \
 ../../http_requests/src/DefaultQuery.cpp \
 ../../http_requests/src/AddNewMarkQuery.cpp \
@@ -84,9 +79,6 @@ SOURCES += SymbianDaemon.cpp \
 
 HEADERS += SymbianDaemon.h \
 ../daemon/TrackerDaemon.h \
-../ui/OptionsWidget.h \
-../ui/tracker.h \
-../ui/inc/ByteSpinBox.h \
 ../../http_requests/inc/LoginQuery.h \
 ../../http_requests/inc/DefaultQuery.h \
 ../../http_requests/inc/AddNewMarkQuery.h \

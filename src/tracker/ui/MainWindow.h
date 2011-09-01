@@ -24,7 +24,7 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
   //  QString m_message;
 
   LogWidget * m_logWidget;
-  OptionsWidget *m_optionsWidget;
+  OptionsWidget * m_optionsWidget;
   AboutWidget * m_aboutWidget;
 
   void updateState();

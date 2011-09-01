@@ -2,13 +2,15 @@
 #include <QDateTime>
 #include "MainWindow.h"
 #include <QLabel>
+#ifndef Q_WS_SYMBIAN
 #include <stdio.h>
+#endif
 #include "DaemonManager.h"
 #define BUFSIZE 1024
 
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent),
-m_isServiceStarted(false),
+m_isServiceStarted(false)
 {
   setupUi(this);
 
@@ -123,7 +125,7 @@ void MainWindow::readData()
 
 void MainWindow::restartDaemon()
 {
-  DaemonManager::getInstance().restart()
+  DaemonManager::getInstance().restart();
 }
 
 
@@ -131,7 +133,8 @@ void MainWindow::checkDaemon()
 {
   if(DaemonManager::getInstance().isConnected())
   {
-    updateData();
+ // TODO investigate what does it mean
+//    updateData();
   }
   else m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");
 }
