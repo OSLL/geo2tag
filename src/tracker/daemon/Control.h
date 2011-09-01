@@ -3,6 +3,8 @@
 
 #include <QStringList>
 
+
+
 class Control: public QObject
 {
   public:

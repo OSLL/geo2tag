@@ -19,7 +19,14 @@
 
 //#ifndef Q_OS_SYMBIAN
 
-class TrackerDaemon : /*public QThread,*/ public Control
+#ifndef Q_WS_SYMBIAN
+#define PARENT Control
+#else
+#include <QThread>
+#define PARENT QThread
+#endif
+
+class TrackerDaemon : /*public QThread,*/ public PARENT
 {
   Q_OBJECT
 
