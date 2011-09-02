@@ -1,12 +1,8 @@
 package ru.spb.osll.web.client.ui.widgets;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import ru.spb.osll.web.client.localization.Localizer;
-import ru.spb.osll.web.client.ui.core.SimpleComposite;
-import ru.spb.osll.web.client.ui.core.UnderConstructionWidget;
 
-public class TagsMapWidget extends SimpleComposite {
+public class TagsMapWidget extends BaseTagsWidget {
 
 	@Override
 	protected String getName() {
@@ -14,10 +10,10 @@ public class TagsMapWidget extends SimpleComposite {
 	}
 
 	@Override
-	protected Widget onInitialize() {
-		final String mess = Localizer.res().disabledTagsOnMap();
-		return new UnderConstructionWidget(mess);
-	}
+	protected TagsView getTagsView() {
+		return new OSMWidget();
+	};
+	
 	
 	public static TagsMapWidget Instance(){
 		if(instance == null){
@@ -29,5 +25,5 @@ public class TagsMapWidget extends SimpleComposite {
 	private static TagsMapWidget instance;
 	private TagsMapWidget(){
 		super();
-	};
+	}
 }

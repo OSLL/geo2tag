@@ -31,6 +31,9 @@ public interface GTLocalization extends Constants {
 	// Widget : TagsMapWidget
 	String TagsMapWidget();
 
+	// Widget : TagsTableWidget
+	String TagsTableWidget();
+	
 	// Widget : LoginWidget
 	String login();
 	String password();
