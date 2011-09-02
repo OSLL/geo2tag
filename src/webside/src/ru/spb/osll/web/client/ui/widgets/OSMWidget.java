@@ -1,5 +1,6 @@
 package ru.spb.osll.web.client.ui.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gwtopenmaps.openlayers.client.Icon;
@@ -20,13 +21,32 @@ import com.google.gwt.user.client.ui.Widget;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 
-public abstract class OSMWidget extends SimpleComposite {
+public class OSMWidget extends SimpleComposite {
 	
-	abstract protected List<Tag> getTags();
+	List<Tag> m_tags;
 	
 	@Override
     public Widget onInitialize() {
 
+		m_tags = new ArrayList<Tag>();
+			
+		Tag firstTag = new Tag();
+		firstTag.setLabel("firstTestLabel");
+		firstTag.setDescription("firstTestUrl");
+		firstTag.setUserId(5);
+		firstTag.setLongitude((float) 6.95);
+		firstTag.setLatitude((float) 50.94);
+		m_tags.add(firstTag);
+		
+		Tag secondTag = new Tag();
+		secondTag.setLabel("firstTestLabel");
+		secondTag.setDescription("firstTestUrl");
+		secondTag.setUserId(5);
+		secondTag.setLongitude((float) 6.96);
+		secondTag.setLatitude((float) 50.94);
+		m_tags.add(secondTag); 
+		
+		
         MapOptions defaultMapOptions = new MapOptions();
         MapWidget mapWidget = new MapWidget("800px", "600px", defaultMapOptions);
 
@@ -61,8 +81,8 @@ public abstract class OSMWidget extends SimpleComposite {
 
             Size size = new Size(21,25);
             Pixel offset = new Pixel((int)-(size.getWidth()/2), (int) -size.getHeight());
-            List<Tag> tags = getTags();
-            for (Tag tag:tags) {
+  
+            for (Tag tag:m_tags) {
             	LonLat longLat = new LonLat(tag.getLongitude(), tag.getLatitude());
             	longLat.transform("EPSG:4326", "EPSG:900913");
             	Icon icon = new Icon("http://www.openlayers.org/dev/img/marker.png", size, offset);
