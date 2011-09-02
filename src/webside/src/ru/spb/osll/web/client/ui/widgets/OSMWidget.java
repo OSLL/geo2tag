@@ -73,7 +73,9 @@ public class OSMWidget extends BaseMapWidget {
 	}
 
 	@Override
-	public void refresh(){}
+	public void refresh(){
+		removeMarkers();
+	}
 	
 	private void removeMarkers(){
 		m_mapWidget.getMap().removeLayer(m_markers);

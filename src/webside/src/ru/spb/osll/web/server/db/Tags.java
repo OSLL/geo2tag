@@ -6,8 +6,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-
 import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.services.objects.User;
