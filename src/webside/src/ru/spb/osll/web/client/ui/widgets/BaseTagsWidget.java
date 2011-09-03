@@ -3,6 +3,17 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.Date;
 import java.util.List;
 
+import ru.spb.osll.web.client.GTState;
+import ru.spb.osll.web.client.services.channels.ChannelService;
+import ru.spb.osll.web.client.services.objects.Channel;
+import ru.spb.osll.web.client.services.objects.Tag;
+import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.tags.TagService;
+import ru.spb.osll.web.client.ui.common.Accessors;
+import ru.spb.osll.web.client.ui.core.SimpleComposite;
+import ru.spb.osll.web.client.ui.core.SmartListBox;
+import ru.spb.osll.web.client.ui.core.UIUtil;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -14,21 +25,11 @@ import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
-
-import ru.spb.osll.web.client.GTState;
-import ru.spb.osll.web.client.services.channels.ChannelService;
-import ru.spb.osll.web.client.services.objects.Channel;
-import ru.spb.osll.web.client.services.objects.Tag;
-import ru.spb.osll.web.client.services.objects.User;
-import ru.spb.osll.web.client.services.tags.TagService;
-import ru.spb.osll.web.client.ui.common.Accessors;
-import ru.spb.osll.web.client.ui.core.SimpleComposite;
-import ru.spb.osll.web.client.ui.core.SmartListBox;
-import ru.spb.osll.web.client.ui.core.UIUtil;
 
 public abstract class BaseTagsWidget extends SimpleComposite {
 	private TagsView m_tagsView; 
@@ -61,8 +62,9 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	}
 	
 	private void initFiltersPanel(VerticalPanel container){
-	    m_dateBoxFrom = new DateBox();
-	    m_dateBoxTo = new DateBox();
+	    m_dateBoxFrom = new GTDateBox();
+	    m_dateBoxTo = new GTDateBox();
+	    
 	    m_dateBoxFrom.setFormat(new DateBox.DefaultFormat());
 	    m_dateBoxTo.setFormat(new DateBox.DefaultFormat());
 
@@ -204,6 +206,26 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	public interface TagsView extends IsWidget {
 		public void setTags(List<Tag> tags);
 		public void clear();
+	}
+	
+	// customize of GWT's DateBox class 
+	private static class GTDateBox extends DateBox {
+		private final static int SIZE = 120;
+		public GTDateBox(){
+			super();
+			getDatePicker().setSize(SIZE + "px", SIZE + "px");
+		}
+
+		@Override
+		public void showDatePicker() {
+			//it's a trick
+			super.showDatePicker();
+			super.hideDatePicker();
+			final int offsetY = SIZE + 10;
+			PopupPanel popup = (PopupPanel)getDatePicker().getParent();
+			popup.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop() - offsetY);
+			popup.show();
+		}
 	}
 }
 

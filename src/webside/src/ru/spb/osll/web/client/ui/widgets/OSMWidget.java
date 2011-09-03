@@ -27,7 +27,7 @@ public class OSMWidget extends BaseMapWidget {
 	@Override
 	protected Widget onInitializeMap() {
 		MapOptions defaultMapOptions = new MapOptions();
-		m_mapWidget = new MapWidget("100%", "550px", defaultMapOptions);
+		m_mapWidget = new MapWidget("100%", "600px", defaultMapOptions);
 
 		OSM osm_1 = OSM.Osmarender("Osmarender"); 
 		osm_1.setIsBaseLayer(true);
