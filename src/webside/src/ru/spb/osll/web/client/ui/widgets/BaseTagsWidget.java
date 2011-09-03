@@ -56,8 +56,8 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	@Override
 	public void onResume() {
 		final User user = GTState.Instanse().getCurUser();
-		fillChannelBox(user);
-		m_tagsView.refresh();
+		refreshChannelBox(user);
+		m_tagsView.clear();
 	}
 	
 	private void initFiltersPanel(VerticalPanel container){
@@ -69,7 +69,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    m_channelBox = new SmartListBox<Channel>(Accessors.CHANNEL_ACC_NAME, false);
 	    m_channelBox.setWidth("200px");
 	    
-	    m_radioBtnAll = new RadioButton("channle.type", "In channel", false); 	// TODO loclize
+	    m_radioBtnAll = new RadioButton("channle.type", LOC.radioBtnInChannel(), false);
 	    m_radioBtnAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -77,7 +77,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			}
 		});
 	    m_radioBtnAll.setValue(true);
-	    m_radioBtnMy = new RadioButton("channle.type", "My", false);	// TODO loclize
+	    m_radioBtnMy = new RadioButton("channle.type", LOC.radioBtnMy(), false);
 	    m_radioBtnMy.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -85,7 +85,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			}
 		});
 	    
-	    Button refreshBtn = new Button("Refresh");	// TODO localize
+	    Button refreshBtn = new Button(LOC.btnRefresh());
 	    refreshBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -138,7 +138,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			return;
 		}
 		loadTags(u, dateFrom, dateTo);
-		m_tagsView.refresh();
+		m_tagsView.clear();
 	}
 	
 	private void refreshByChannel(){
@@ -149,7 +149,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			return;
 		}
 		loadTags(ch, dateFrom, dateTo);
-		m_tagsView.refresh();
+		m_tagsView.clear();
 	}
 
 	private void loadTags(User u, Date dateFrom, Date dateTo){
@@ -182,7 +182,8 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		);
 	}
 	
-	private void fillChannelBox(final User u){
+	private void refreshChannelBox(final User u){
+		m_channelBox.clear();
 		if (u == null){
 			return;
 		}
@@ -202,7 +203,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 
 	public interface TagsView extends IsWidget {
 		public void setTags(List<Tag> tags);
-		public void refresh();
+		public void clear();
 	}
 }
 

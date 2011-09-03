@@ -9,10 +9,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 abstract public class SimpleComposite extends Composite {
-	protected GTLocalization res;
+	protected GTLocalization LOC;
 	
 	public SimpleComposite(){
-		res = Localizer.res();
+		LOC = Localizer.res();
 		initWidget(onInitialize());
 	}
 

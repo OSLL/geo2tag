@@ -1,12 +1,11 @@
 package ru.spb.osll.web.client.ui.widgets;
 
-import ru.spb.osll.web.client.localization.Localizer;
 
 public class TagsMapWidget extends BaseTagsWidget {
 
 	@Override
 	protected String getName() {
-		return Localizer.res().TagsMapWidget();
+		return LOC.TagsMapWidget();
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class HomePage extends SimpleComposite {
 
 	@Override
 	protected String getName() {
-		return Localizer.res().pageHome(); 
+		return LOC.pageHome(); 
 	}
 
 	@Override

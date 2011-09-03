@@ -26,7 +26,7 @@ public class LoginWidget extends FieldsWidget {
 	
 	@Override
 	protected String getName() {
-		return Localizer.res().login();
+		return LOC.login();
 	}
 
 	@Override

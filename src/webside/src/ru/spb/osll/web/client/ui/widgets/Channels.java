@@ -35,7 +35,7 @@ public class Channels extends SimpleComposite {
 	
 	@Override
 	protected String getName() {
-		return res.channels(); 
+		return LOC.channels(); 
 	}
 
 	@Override
@@ -71,21 +71,21 @@ public class Channels extends SimpleComposite {
 	}
 	
 	private HorizontalPanel initButtons(){
-		Button subscribeBtn = new Button(res.btnSubscribe(), new ClickHandler() {
+		Button subscribeBtn = new Button(LOC.btnSubscribe(), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				subscribe();
 			}
 		});
 		
-		Button unsubscribeBtn = new Button(res.btnUnsubscribe(), new ClickHandler() {	
+		Button unsubscribeBtn = new Button(LOC.btnUnsubscribe(), new ClickHandler() {	
 			@Override
 			public void onClick(ClickEvent event) {
 				unsubscribe();
 			}
 		});
 		
-		Button showTagsBtn = new Button(res.btnShowTags(), new ClickHandler() {
+		Button showTagsBtn = new Button(LOC.btnShowTags(), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO setSelected Channel

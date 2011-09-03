@@ -2,7 +2,14 @@ package ru.spb.osll.web.client.ui.widgets;
 
 import java.util.List;
 
-import org.gwtopenmaps.openlayers.client.*;
+import org.gwtopenmaps.openlayers.client.Icon;
+import org.gwtopenmaps.openlayers.client.LonLat;
+import org.gwtopenmaps.openlayers.client.Map;
+import org.gwtopenmaps.openlayers.client.MapOptions;
+import org.gwtopenmaps.openlayers.client.MapWidget;
+import org.gwtopenmaps.openlayers.client.Marker;
+import org.gwtopenmaps.openlayers.client.Pixel;
+import org.gwtopenmaps.openlayers.client.Size;
 import org.gwtopenmaps.openlayers.client.control.LayerSwitcher;
 import org.gwtopenmaps.openlayers.client.control.MousePosition;
 import org.gwtopenmaps.openlayers.client.layer.Markers;
@@ -22,30 +29,29 @@ public class OSMWidget extends BaseMapWidget {
 		MapOptions defaultMapOptions = new MapOptions();
 		m_mapWidget = new MapWidget("100%", "550px", defaultMapOptions);
 
-		OSM osm_1 = OSM.Osmarender("Osmarender"); // Label for menu 'LayerSwitcher'
+		OSM osm_1 = OSM.Osmarender("Osmarender"); 
 		osm_1.setIsBaseLayer(true);
 
-		OSM osm_2 = OSM.Mapnik("Mapnik"); // Label for menu 'LayerSwitcher'
+		OSM osm_2 = OSM.Mapnik("Mapnik"); 
 		osm_2.setIsBaseLayer(true);
 
 		OSM osm_3 = OSM.CycleMap("CycleMap");
 		osm_3.setIsBaseLayer(true);
 
-		// OSM osm_4 = OSM.Maplint("Maplint");
-		// osm_4.setIsBaseLayer(true);
+//		OSM osm_4 = OSM.Maplint("Maplint");
+//		osm_4.setIsBaseLayer(true);
 
 		Map map = m_mapWidget.getMap();
 		map.addLayer(osm_1);
 		map.addLayer(osm_2);
 		map.addLayer(osm_3);
-		// map.addLayer(osm_4);
+//		map.addLayer(osm_4);
+		
 		map.addControl(new LayerSwitcher());
 		map.addControl(new MousePosition());
 
-		// map.setCenter(new LonLat(6.95, 50.94), 12);
 		m_markers = new Markers("Markers");
 		map.addLayer(m_markers);
-
 		return m_mapWidget;
 	}
 	
@@ -73,7 +79,7 @@ public class OSMWidget extends BaseMapWidget {
 	}
 
 	@Override
-	public void refresh(){
+	public void clear(){
 		removeMarkers();
 	}
 	

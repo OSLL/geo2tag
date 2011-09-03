@@ -27,7 +27,7 @@ public class RegistrationWidget extends FieldsWidget {
 
 	@Override
 	protected String getName() {
-		return Localizer.res().registration();
+		return LOC.registration();
 	}
 
 	// TODO delete later

@@ -3,7 +3,6 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.ui.common.Fields;
 import ru.spb.osll.web.client.ui.core.TableWidget;
@@ -14,7 +13,7 @@ import com.google.gwt.user.client.ui.Composite;
 public class TagsTableWidget extends BaseTagsWidget {
 	@Override
 	protected String getName() {
-		return Localizer.res().TagsTableWidget();
+		return LOC.TagsTableWidget();
 	}
 
 	@Override
@@ -57,7 +56,8 @@ public class TagsTableWidget extends BaseTagsWidget {
 		}
 
 		@Override
-		public void refresh(){}
+		public void clear(){
+			m_tagsTable.erase();
+		}
 	}
-
 }

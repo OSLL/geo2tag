@@ -28,12 +28,6 @@ public interface GTLocalization extends Constants {
 	// Widget : HomePage
 	String pageHome();
 
-	// Widget : TagsMapWidget
-	String TagsMapWidget();
-
-	// Widget : TagsTableWidget
-	String TagsTableWidget();
-	
 	// Widget : LoginWidget
 	String login();
 	String password();
@@ -46,4 +40,15 @@ public interface GTLocalization extends Constants {
 	String btnSubscribe();
 	String btnUnsubscribe();
 	String btnShowTags();
+
+	// Widget : TagsMapWidget
+	String TagsMapWidget();
+
+	// Widget : TagsTableWidget
+	String TagsTableWidget();
+
+	// Widget : TagsTableWidget
+	String radioBtnInChannel();
+	String radioBtnMy();
+	String btnRefresh();
 }
