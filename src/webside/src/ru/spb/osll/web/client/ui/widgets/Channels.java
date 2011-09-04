@@ -47,16 +47,16 @@ public class Channels extends SimpleComposite {
 
 		m_userChannels = new TableWidget<Channel>(fields);
 		m_avalChannels = new TableWidget<Channel>(fields);
-		loadUserChannels();
-		loadAvaiChannels();
+		refreshUserChannels();
+		refreshAvaiChannels();
 		
 		VerticalPanel vp = UIUtil.getVerticalPanel();
 		vp.setSpacing(10);
 
-		vp.add(constructTitle("Your channels", 20));
+		vp.add(constructTitle(LOC.labYourChannels(), 20)); 
 		vp.add(borderOnTable(m_userChannels));
 		vp.add(initButtons());
-		vp.add(constructTitle("Available channels", 20));
+		vp.add(constructTitle(LOC.labAvalChannels(), 20));	
 		vp.add(borderOnTable(m_avalChannels));
 		vp.setWidth("100%");
 		return vp;
@@ -64,10 +64,8 @@ public class Channels extends SimpleComposite {
 	
 	@Override
 	public void onResume() {
-		m_userChannels.erase();
-		m_avalChannels.erase();
-		loadUserChannels();
-		loadAvaiChannels();
+		refreshUserChannels();
+		refreshAvaiChannels();
 	}
 	
 	private HorizontalPanel initButtons(){
@@ -157,7 +155,8 @@ public class Channels extends SimpleComposite {
 		return scrollPanel;
 	}
 	
-	private void loadUserChannels(){
+	private void refreshUserChannels(){
+		m_userChannels.erase();
 		final User u = GTState.Instanse().getCurUser();
 		if (null == u){
 			return;
@@ -176,7 +175,8 @@ public class Channels extends SimpleComposite {
 		});
 	}
 	
-	private void loadAvaiChannels(){
+	private void refreshAvaiChannels(){
+		m_avalChannels.erase();
 		final ChannelServiceAsync service = ChannelService.Util.getInstance();
 		service.getAllChannels(new AsyncCallback<List<Channel>>() {
 			@Override
