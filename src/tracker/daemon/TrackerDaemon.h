@@ -13,13 +13,13 @@
 #include "LoginQuery.h"
 #include "AddNewMarkQuery.h"
 #include <QTimer>
-#include "Control.h"
 #include <QPointF>
 #include <QNetworkConfigurationManager>
 
-//#ifndef Q_OS_SYMBIAN
+
 
 #ifndef Q_WS_SYMBIAN
+#include "Control.h"
 #define PARENT Control
 #else
 #include <QThread>

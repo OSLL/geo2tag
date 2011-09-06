@@ -1,15 +1,10 @@
 TEMPLATE = app
 
 TARGET = wikigpsTracker-ui
-
-
-
 include(../../../config.pri)
 
 
 QT += network
-
-
 
 DEPENDPATH += . \
 
@@ -29,8 +24,8 @@ HEADERS += MaemoDaemon.h
 
 symbian {
 VERSION = 0.16.1
-TARGET.UID3 = 0x20041E3E
-
+#TARGET.UID3 = 0x20041E3E
+LIBS+= -lQtLocation
 CONFIG += mobility
 MOBILITY += location
 
@@ -78,7 +73,6 @@ SOURCES += SymbianDaemon.cpp \
 ../../../3rdparty/qjson-0.7.1/src/json_parser.cc
 
 HEADERS += SymbianDaemon.h \
-../daemon/TrackerDaemon.h \
 ../../http_requests/inc/LoginQuery.h \
 ../../http_requests/inc/DefaultQuery.h \
 ../../http_requests/inc/AddNewMarkQuery.h \
@@ -115,8 +109,8 @@ HEADERS += SymbianDaemon.h \
 ../../../3rdparty/qjson-0.7.1/src/json_parser.hh \
 ../../../3rdparty/qjson-0.7.1/src/stack.hh \
 ../../../3rdparty/qjson-0.7.1/src/location.hh \
-../../../3rdparty/qjson-0.7.1/src/position.hh
-
+../../../3rdparty/qjson-0.7.1/src/position.hh \
+../daemon/TrackerDaemon.h
 #TARGET.UID3 = 0xA000C606
 
 }

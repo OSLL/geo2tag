@@ -1,5 +1,6 @@
 #include "TrackerDaemon.h"
 #include <QSettings>
+#include <QStringList>
 #include <QDebug>
 #include <QFile>
 #include <QEventLoop>
@@ -9,7 +10,10 @@
 #include "JsonUser.h"
 #include "LoginQuery.h"
 #include "AddNewMarkQuery.h"
+
+#ifndef Q_WS_SYMBIAN
 #include "ReportThread.h"
+#endif
 
 #include "defines.h"
 

@@ -28,7 +28,7 @@ maemo5 {
 	icon.files = ../data/wikigpsTracker-ui.png
 	icon.path = /usr/share/icons/hicolor/48x48/apps/
 
-  desktop_file.files = ../data/tracker.desktop
+        desktop_file.files = ../data/tracker.desktop
 	desktop_file.path = /usr/share/applications/hildon/
 
   INSTALLS += eventd_script logrotate_script icon desktop_file
@@ -36,5 +36,5 @@ maemo5 {
 
 !symbian{
     target.path = /usr/bin
-    INSTALLS += target
+
 }
