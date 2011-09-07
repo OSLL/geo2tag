@@ -51,6 +51,9 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		contaier.setWidth("100%");
 		initFiltersPanel(contaier);
 		contaier.add(m_tagsView);
+
+		GWT.log(this.toString());
+
 		return contaier;
 	}
     
@@ -71,7 +74,8 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    m_channelBox = new SmartListBox<Channel>(Accessors.CHANNEL_ACC_NAME, false);
 	    m_channelBox.setWidth("200px");
 	    
-	    m_radioBtnAll = new RadioButton("channle.type", LOC.radioBtnInChannel(), false);
+	    final String uniqueId = UIUtil.getUniqueId("channle.type"); 
+	    m_radioBtnAll = new RadioButton(uniqueId, LOC.radioBtnInChannel(), false);
 	    m_radioBtnAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -79,7 +83,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			}
 		});
 	    m_radioBtnAll.setValue(true);
-	    m_radioBtnMy = new RadioButton("channle.type", LOC.radioBtnMy(), false);
+	    m_radioBtnMy = new RadioButton(uniqueId, LOC.radioBtnMy(), false);
 	    m_radioBtnMy.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {

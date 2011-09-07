@@ -118,4 +118,9 @@ public class UIUtil {
 		return label;
 	}
 
+	private static long uniqueNum = 0;
+	public static String getUniqueId(String prefix){
+		return prefix + uniqueNum++;
+	}
+
 }
