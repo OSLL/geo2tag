@@ -8,6 +8,7 @@
 		<pathelement location="war/WEB-INF/classes" />
 		<pathelement location="${gwt.sdk}/gwt-user.jar" />
 		<pathelement location="${junit.jar}" />
+		<pathelement location="${openlayers.jar}" />
 		<fileset dir="${gwt.sdk}" includes="gwt-dev*.jar" />
 		<!-- Add any additional non-server libs (such as JUnit) -->
 		<fileset dir="war/WEB-INF/lib" includes="**/*.jar" />
@@ -84,7 +85,6 @@
 		<copy todir="war/WEB-INF/lib" file="lib/log4j-1.2.16.jar" />
 		<copy todir="war/WEB-INF/lib" file="lib/postgresql-9.0-801.jdbc4.jar" />
 		<copy todir="war/WEB-INF/lib" file="lib/gwt_i18n_server_1.0.jar" />
-		<copy todir="war/WEB-INF/lib" file="lib/gwt-openlayers-client-0.5.jar" />
 		<!-- Add any additional server libs that need to be copied -->
 	</target>
 

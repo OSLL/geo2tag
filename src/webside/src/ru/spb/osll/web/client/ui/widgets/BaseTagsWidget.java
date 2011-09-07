@@ -45,15 +45,11 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	@Override
 	protected Widget onInitialize() {
 		m_tagsView = getTagsView();
-		
 		VerticalPanel contaier = UIUtil.getVerticalPanel();
 		contaier.setSpacing(10);
 		contaier.setWidth("100%");
 		initFiltersPanel(contaier);
 		contaier.add(m_tagsView);
-
-		GWT.log(this.toString());
-
 		return contaier;
 	}
     
