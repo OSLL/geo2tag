@@ -73,8 +73,8 @@
 		<delete dir="war/WEB-INF/classes" failonerror="false" />
 		<delete dir="war/WEB-INF/lib" failonerror="false" />
 		<delete dir="war/${app.name}" failonerror="false" />
-		<delete dir="/bin" failonerror="false" />
-		<delete dir="/reports" failonerror="false" />
+		<delete dir="bin" failonerror="false" />
+		<delete dir="reports" failonerror="false" />
 		<delete file="${app.name}.war" failonerror="false" />
 	</target>
 
