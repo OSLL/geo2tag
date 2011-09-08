@@ -1,14 +1,13 @@
 Source: tracker
 Section: user/hidden
 Priority: optional
-Maintainer: unknown <vood@unknown>
+Maintainer: Mark Zaslavskiy <Mark.Zaslavskiy@gmail.com>
 Build-Depends: debhelper (>= 5), libqt4-dev
 Standards-Version: 3.7.3
-Homepage: <insert the upstream URL, if relevant>
+Homepage: https://github.com/OSLL/geo2tag
 
 Package: tracker
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: simple client for Geo2Tag service
 XB-Maemo-Display-Name: tracker

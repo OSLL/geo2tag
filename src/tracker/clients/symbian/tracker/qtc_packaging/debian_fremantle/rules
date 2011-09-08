@@ -16,7 +16,7 @@
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	# qmake PREFIX=/usr# Uncomment this line for use without Qt Creator
+        qmake PREFIX=/usr# Uncomment this line for use without Qt Creator
 
 	touch configure-stamp
 
@@ -27,7 +27,7 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
-	# $(MAKE) # Uncomment this line for use without Qt Creator
+        $(MAKE) # Uncomment this line for use without Qt Creator
 	#docbook-to-man debian/tracker.sgml > tracker.1
 
 	touch $@
@@ -49,7 +49,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/tracker.
-	$(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/tracker install
+        $(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/tracker install
 
 
 # Build architecture-independent files here.
