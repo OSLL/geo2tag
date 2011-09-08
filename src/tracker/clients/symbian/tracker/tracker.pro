@@ -16,9 +16,11 @@ OBJECTS_DIR = obj
 MOC_DIR = moc
 INCLUDEPATH += $$MOC_DIR
 
-QT += network
+DEFINES +=  Q_WS_SYMBIAN
 
-INCLUDEPATH += ../../../../http_requests/inc \
+QT += network
+INCLUDEPATH += . \
+               ../../../../http_requests/inc \
                ../../../../json/inc \
                ../../../../common/inc \
                ../../../../../3rdparty/qjson-0.7.1/src/
@@ -101,14 +103,26 @@ MainWindow.cpp \
 ../../../../../3rdparty/qjson-0.7.1/src/json_parser.cc
 
 OTHER_FILES += \
-    qtc_packaging/debian_fremantle/rules \
-    qtc_packaging/debian_fremantle/README \
-    qtc_packaging/debian_fremantle/copyright \
-    qtc_packaging/debian_fremantle/control \
-    qtc_packaging/debian_fremantle/compat \
-    qtc_packaging/debian_fremantle/changelog
+    debian/rules \
+    debian/README \
+    debian/copyright \
+    debian/control \
+    debian/compat \
+    debian/changelog
 
 maemo5 {
     target.path = /opt/tracker/bin
     INSTALLS += target
+}
+
+maemo5 {
+    icon.files = tracker.png
+    icon.path = /usr/share/icons/hicolor/64x64/apps
+    INSTALLS += icon
+}
+
+maemo5 {
+    desktopfile.files = $${TARGET}.desktop
+    desktopfile.path = /usr/share/applications/hildon
+    INSTALLS += desktopfile
 }
