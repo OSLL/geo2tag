@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Geo2tag" default="build" basedir=".">
 	<property file="local.properties" />
+	<property file="mail.properties" />
 	<!-- Arguments to gwtc and devmode targets -->
 	<property name="gwt.args" value="" />
 
@@ -60,12 +61,12 @@
 	</target>
 
 	<target name="undeploy-release" description="Remove web application from remote server">
-	    <undeploy url="${url}" username="${username}" password="${password}" path="${path}"/>
+		<undeploy url="${url}" username="${username}" password="${password}" path="${path}"/>
 	</target>
 
 	<target name="reload-release" depends="war" description="Reload web application on remote server">
-    	<reload  url="${url}" username="${username}" password="${password}" path="${path}"/>
-  	</target>
+		<reload  url="${url}" username="${username}" password="${password}" path="${path}"/>
+	</target>
 
 	<!-- deploy/undeploy app on remote server -->
 
@@ -187,5 +188,5 @@
 			<arg value="ru.spb.osll.web.Geo2tag" />
 		</java>
 	</target>
-
+	
 </project>
