@@ -13,13 +13,13 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 	
 		QLabel * m_status;
-		QVBoxLayout * m_layout;
 		bool m_authentificated;
 		LoginQuery * m_loginQuery;
 		AddNewMarkQuery * m_tagQuery;
     
 		void sendTag();
 		void pause();
+                bool positionNotReady();
 	public:
 		explicit MainWindow(QWidget *parent = 0);
 	public slots:

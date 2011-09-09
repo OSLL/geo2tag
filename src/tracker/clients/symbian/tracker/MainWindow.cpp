@@ -5,19 +5,17 @@
 #include "JsonChannel.h"
 #include "JsonUser.h"
 
+#include <QDebug>
 #include <QEventLoop>
 #include <QTimer>
 
-#define TICKING_INTERVAL 5000
+#define TICKING_INTERVAL 7000
 
 MainWindow::MainWindow(QWidget *parent):
 QMainWindow(parent),m_authentificated(false)
 {
-  m_layout = new QVBoxLayout;
-	m_status = new QLabel(this);
-	m_layout->addWidget(m_status);
-	setLayout(m_layout);
-
+        m_status = new QLabel(this);
+        setCentralWidget(m_status);
         m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
         connect(m_loginQuery, SIGNAL(connected()), SLOT(onAuthentificated()));
   connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
@@ -29,7 +27,7 @@ QMainWindow(parent),m_authentificated(false)
 void MainWindow::onAuthentificated()
 {
 	m_status->setText("Authentification succesful");
-  m_authentificated = true;
+        m_authentificated = true;
 	QSharedPointer<DataMark> mark(new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
                                                        common::GpsInfo::getInstance().getLongitude(),"t",
 			"this tag was generated","unknown",	QDateTime::currentDateTime()));
@@ -49,7 +47,7 @@ void MainWindow::sendTag()
 	m_tagQuery->getTag()->setLatitude(common::GpsInfo::getInstance().getLatitude());
 	m_tagQuery->getTag()->setLongitude(common::GpsInfo::getInstance().getLongitude());
 
-  m_tagQuery->doRequest();
+        m_tagQuery->doRequest();
 }
 
 void MainWindow::pause()
@@ -59,11 +57,23 @@ void MainWindow::pause()
 	eventLoop.exec();
 }
 
+bool MainWindow::positionNotReady()
+{
+    if( common::GpsInfo::getInstance().getLatitude()==0. &&
+            common::GpsInfo::getInstance().getLongitude()==0.) return true;
+    else return false;
+}
+
 void MainWindow::onTagAdded()
 {
 	m_status->setText(QString("Tag added succesfuly at:")+QDateTime::currentDateTime().toString());
-
-	pause();
+        do
+        {
+            m_status->setText("Position source not ready, waiting...");
+            qDebug() << "gps not ready";
+            pause();
+        }
+        while (positionNotReady());
   sendTag();
 }
 

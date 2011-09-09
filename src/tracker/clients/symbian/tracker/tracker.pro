@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = tracker
+TARGET = tracker-demo
 DEPENDPATH += .
 INCLUDEPATH += .
 
@@ -117,16 +117,16 @@ maemo5 {
     INSTALLS += target
 }
 
-maemo5 {
-    desktopfile.files = $${TARGET}.desktop
-    desktopfile.path = /usr/share/applications/hildon
-    INSTALLS += desktopfile
-}
-
 
 
 maemo5 {
     icon.files = tracker.png
     icon.path = /usr/share/icons/hicolor/64x64/apps
     INSTALLS += icon
+}
+
+maemo5 {
+    desktopfile.files = $${TARGET}.desktop
+    desktopfile.path = /usr/share/applications/hildon
+    INSTALLS += desktopfile
 }
