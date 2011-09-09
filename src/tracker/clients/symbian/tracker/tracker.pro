@@ -16,6 +16,8 @@ OBJECTS_DIR = obj
 MOC_DIR = moc
 INCLUDEPATH += $$MOC_DIR
 
+DEFINES += Q_WS_SYMBIAN
+
 QT += network
 
 INCLUDEPATH += ../../../../http_requests/inc \
@@ -106,9 +108,25 @@ OTHER_FILES += \
     qtc_packaging/debian_fremantle/copyright \
     qtc_packaging/debian_fremantle/control \
     qtc_packaging/debian_fremantle/compat \
-    qtc_packaging/debian_fremantle/changelog
+    qtc_packaging/debian_fremantle/changelog \
+    qtc_packaging/debian_fremantle/tracker.dirs \
+    qtc_packaging/debian_fremantle/tracker.install
 
 maemo5 {
     target.path = /opt/tracker/bin
     INSTALLS += target
+}
+
+maemo5 {
+    desktopfile.files = $${TARGET}.desktop
+    desktopfile.path = /usr/share/applications/hildon
+    INSTALLS += desktopfile
+}
+
+
+
+maemo5 {
+    icon.files = tracker.png
+    icon.path = /usr/share/icons/hicolor/64x64/apps
+    INSTALLS += icon
 }
