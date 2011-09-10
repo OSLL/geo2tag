@@ -33,7 +33,7 @@ public class OSMWidget extends BaseMapWidget {
 		m_labels= new ArrayList<Popup>();
 		
 		MapOptions defaultMapOptions = new MapOptions();
-		m_mapWidget = new MapWidget("100%", "600px", defaultMapOptions);
+		m_mapWidget = new MapWidget("100%", "630px", defaultMapOptions);
 
 		OSM osm_1 = OSM.Osmarender("Osmarender"); 
 		osm_1.setIsBaseLayer(true);

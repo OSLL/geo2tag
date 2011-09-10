@@ -25,7 +25,7 @@
 		
 		.title {
 			color: #7b8fae;
-			font-size: 20pt;
+			font-size: 18pt;
 			font-weight: bold;
 			text-shadow: #ddd 3px 3px 1px;
 			margin: 0;
@@ -34,7 +34,7 @@
 		
 		.subtitle {
 			color: #888;
-			font-size: 16pt;
+			font-size: 15pt;
 			margin: 0;
 			padding: 0 0 0 6px;
 		}
@@ -135,7 +135,7 @@
 		</g:north>
 		
 		<!-- Title Bar. -->
-		<g:north size='120.2'>
+		<g:north size='70'>
 			<g:HTMLPanel styleName='{style.titleBar}'>
 				<table cellpadding='0' cellspacing='0' width='100%'>
 					<tr>
@@ -158,9 +158,10 @@
 								</tr>
 							</table>
 						</td>
+		
+						<!-- 
 						<td ui:field='localeSelectionCell' align='right' valign='top'
 							class='{style.options}'>
-							<!-- Locale selection. -->
 							<table cellpadding='0' cellspacing='0'>
 								<tr>
 									<td valign='middle'>
@@ -173,7 +174,8 @@
 								</tr>
 							</table>
 						</td>
-
+						 -->
+						
 						<td align='right' valign='bottom'>
 							<table cellpadding='0' cellspacing='0'>
 								<td align='right'>

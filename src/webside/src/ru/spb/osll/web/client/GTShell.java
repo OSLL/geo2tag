@@ -10,9 +10,7 @@ import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.ui.widgets.Channels;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.TableCellElement;
 import com.google.gwt.dom.client.TableElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -22,8 +20,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -37,8 +35,8 @@ public class GTShell extends Composite {
 
 	@UiField SimplePanel contentPanel;
 	@UiField TableElement linkCell;
-	@UiField ListBox localeBox;
-	@UiField TableCellElement localeSelectionCell;
+//	@UiField ListBox localeBox;
+//	@UiField TableCellElement localeSelectionCell;
 	@UiField SimplePanel mainMenuContainer;
 	@UiField VerticalPanel autentificationBox;
 	
@@ -50,6 +48,7 @@ public class GTShell extends Composite {
 	
 	public GTShell() {
 		initWidget(uiBinder.createAndBindUi(this));
+		
 		m_mainMenu = new GTMenu();
 		mainMenuContainer.add(m_mainMenu);
 		Instance = this;

@@ -10,6 +10,7 @@ import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
 import ru.spb.osll.web.client.ui.widgets.TagsMapWidget;
 import ru.spb.osll.web.client.ui.widgets.TagsTableWidget;
+import ru.spb.osll.web.client.ui.widgets.TestAccountWidget;
 
 import com.google.gwt.user.client.ui.Widget;
 
@@ -24,6 +25,7 @@ public class GTMenu extends SimpleMenu {
 		{
 			group = Localizer.res().menuGrServices();
 			groupItem = menu.getGroupMenuItem(group, Images.res().folder());
+			groupItem.addMenuItem(TestAccountWidget.Instance());
 			groupItem.addMenuItem(Channels.Instance());
 			groupItem.addMenuItem(TagsTableWidget.Instance());
 			groupItem.addMenuItem(TagsMapWidget.Instance());

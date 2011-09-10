@@ -1,34 +1,32 @@
 package ru.spb.osll.web.client.ui.core;
 
-import ru.spb.osll.web.client.ui.image.Images;
+import java.util.List;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class UnderConstructionWidget extends Composite {
+public abstract class StubWidget extends Composite {
 	
-	private Label m_message;
+	protected abstract ImageResource getImage();
 	
-	public UnderConstructionWidget(){
-		this(null);
-	}
-
-	public UnderConstructionWidget(String message){
-		m_message = UIUtil.constructLabel(17, "100%");
-		if (null != message){
-			m_message.setText(message);
-		}
-		Image image = new Image(Images.res().underConstruction());
-		
+	protected abstract List<Label> getLabels();
+	
+	public StubWidget(){
 		VerticalPanel container = UIUtil.getVerticalPanel(true);
 		container.setWidth("300px");
 		container.setSpacing(10);
-		container.add(image);
-		container.add(m_message);
 		
+		ImageResource im = getImage();
+		if (null != im){
+			container.add(new Image(im));
+		}
+		for (Label label : getLabels()){
+			container.add(label);
+		}
 		DecoratorPanel decPanel = new DecoratorPanel();
 		decPanel.setWidget(container);
 
@@ -36,8 +34,5 @@ public class UnderConstructionWidget extends Composite {
 		main.add(decPanel);
 		initWidget(main);
 	}
-	
-	public void setText(String message){
-		m_message.setText(message);
-	}
+
 }

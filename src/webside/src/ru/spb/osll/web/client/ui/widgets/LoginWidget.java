@@ -42,6 +42,14 @@ public class LoginWidget extends FieldsWidget {
 	
 	@Override
 	protected List<Anchor> getLinks(){
+		Anchor testAccLink = new Anchor("Test Account");		// TODO localize
+		testAccLink.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				GTShell.Instance.setContent(TestAccountWidget.Instance());
+			}
+		});
+		
 		Anchor regLink = new Anchor(Localizer.res().registration());
 		regLink.addClickHandler(new ClickHandler() {
 			@Override
@@ -51,6 +59,7 @@ public class LoginWidget extends FieldsWidget {
 		});
 		
 		final List<Anchor> links = new ArrayList<Anchor>();
+		links.add(testAccLink);
 		links.add(regLink);
 		return links;
 	}
