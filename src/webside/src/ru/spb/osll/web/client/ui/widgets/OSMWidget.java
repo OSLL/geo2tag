@@ -1,21 +1,23 @@
 package ru.spb.osll.web.client.ui.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.gwtopenmaps.openlayers.client.Icon;
 import org.gwtopenmaps.openlayers.client.LonLat;
 import org.gwtopenmaps.openlayers.client.Map;
 import org.gwtopenmaps.openlayers.client.MapOptions;
 import org.gwtopenmaps.openlayers.client.MapWidget;
 import org.gwtopenmaps.openlayers.client.Marker;
-import org.gwtopenmaps.openlayers.client.Pixel;
-import org.gwtopenmaps.openlayers.client.Size;
 import org.gwtopenmaps.openlayers.client.control.LayerSwitcher;
 import org.gwtopenmaps.openlayers.client.control.MousePosition;
+import org.gwtopenmaps.openlayers.client.event.MarkerBrowserEventListener;
 import org.gwtopenmaps.openlayers.client.layer.Markers;
 import org.gwtopenmaps.openlayers.client.layer.OSM;
+import org.gwtopenmaps.openlayers.client.popup.FramedCloud;
+import org.gwtopenmaps.openlayers.client.popup.Popup;
 
 import ru.spb.osll.web.client.services.objects.Tag;
+import ru.spb.osll.web.client.tools.HTMLUtil;
 
 import com.google.gwt.user.client.ui.Widget;
 
@@ -23,9 +25,13 @@ public class OSMWidget extends BaseMapWidget {
 
 	private MapWidget m_mapWidget;
 	private Markers m_markers;
+	private Popup m_curPopup;
+	private List<Popup> m_labels;
 	
 	@Override
 	protected Widget onInitializeMap() {
+		m_labels= new ArrayList<Popup>();
+		
 		MapOptions defaultMapOptions = new MapOptions();
 		m_mapWidget = new MapWidget("100%", "600px", defaultMapOptions);
 
@@ -46,10 +52,10 @@ public class OSMWidget extends BaseMapWidget {
 		map.addLayer(osm_2);
 		map.addLayer(osm_3);
 //		map.addLayer(osm_4);
-		
+
 		map.addControl(new LayerSwitcher());
 		map.addControl(new MousePosition());
-
+		
 		m_markers = new Markers("Markers");
 		map.addLayer(m_markers);
 		return m_mapWidget;
@@ -65,16 +71,30 @@ public class OSMWidget extends BaseMapWidget {
 		final Tag initTag = tags.get(0);
 		LonLat lonLat = new LonLat(initTag.getLongitude(), initTag.getLatitude());
 		lonLat.transform("EPSG:4326", "EPSG:900913");
-		m_mapWidget.getMap().setCenter(lonLat, 12);
+		final Map map = m_mapWidget.getMap(); 
+		map.setCenter(lonLat, 12);
 		
-		Size size = new Size(21, 25);
-		Pixel offset = new Pixel((int) -(size.getWidth() / 2), (int) -size.getHeight());
-
 		for (Tag tag : tags) {
-			LonLat longLat = new LonLat(tag.getLongitude(), tag.getLatitude());
+			final LonLat longLat = new LonLat(tag.getLongitude(), tag.getLatitude());
 			longLat.transform("EPSG:4326", "EPSG:900913");
-			Icon icon = new Icon("http://www.openlayers.org/dev/img/marker.png", size, offset);
-			m_markers.addMarker(new Marker(longLat, icon));
+	
+			final String html  = HTMLUtil.toHTML(tag);
+			final Marker marker = new Marker(longLat);
+			marker.addBrowserEventListener("mousedown", new MarkerBrowserEventListener() {
+				@Override
+				public void onBrowserEvent(MarkerBrowserEvent markerBrowserEvent) {
+					if (m_curPopup != null){
+						map.removePopup(m_curPopup);
+					}
+					m_curPopup = getPopupFrame(longLat, html);
+					m_mapWidget.getMap().addPopup(m_curPopup);
+				}
+			});
+			
+			final Popup l = getSub(longLat, tag.getLabel());
+			m_labels.add(l);
+			map.addPopup(l);
+			m_markers.addMarker(marker);
 		}
 	}
 
@@ -87,5 +107,27 @@ public class OSMWidget extends BaseMapWidget {
 		m_mapWidget.getMap().removeLayer(m_markers);
 		m_markers = new Markers("Markers");
 		m_mapWidget.getMap().addLayer(m_markers);
+		
+		if (m_curPopup != null){
+			m_mapWidget.getMap().removePopup(m_curPopup);
+		}
+		for(Popup popup : m_labels){
+			m_mapWidget.getMap().removePopup(popup);
+		}
+	}
+	
+	private Popup getSub(LonLat lonLat, String title){
+		String label = HTMLUtil.bold(HTMLUtil.text(title, 2));
+		final Popup popup = new Popup("title", lonLat, null, label, false);
+		popup.setAutoSize(true);
+		popup.setOpacity(0.6);
+		return popup;
+	}
+	
+	private FramedCloud getPopupFrame(LonLat lonLat, String html){
+		final FramedCloud frame = new FramedCloud("fullmess", lonLat, null, html, null, true);
+		frame.setAutoSize(true);
+		frame.setPanMapIfOutOfView(true);
+		return frame; 
 	}
 }
