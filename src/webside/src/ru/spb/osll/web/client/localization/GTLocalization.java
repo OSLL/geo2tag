@@ -53,4 +53,7 @@ public interface GTLocalization extends Constants {
 	String radioBtnInChannel();
 	String radioBtnMy();
 	String btnRefresh();
+	
+	// Widget : TestAccountWidget
+	String TestAccountWidget();
 }

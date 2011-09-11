@@ -1,8 +1,10 @@
 package ru.spb.osll.web.client.ui.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -14,6 +16,10 @@ public abstract class StubWidget extends Composite {
 	protected abstract ImageResource getImage();
 	
 	protected abstract List<Label> getLabels();
+	
+	protected List<Anchor> getLinks(){
+		return new ArrayList<Anchor>();
+	}
 	
 	public StubWidget(){
 		VerticalPanel container = UIUtil.getVerticalPanel(true);
@@ -27,6 +33,10 @@ public abstract class StubWidget extends Composite {
 		for (Label label : getLabels()){
 			container.add(label);
 		}
+		for (Anchor link : getLinks()){
+			container.add(link);
+		}
+		
 		DecoratorPanel decPanel = new DecoratorPanel();
 		decPanel.setWidget(container);
 

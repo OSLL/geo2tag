@@ -18,6 +18,7 @@
 	<!-- Configure path to Tomcat -->
 	<property environment="env" />
 	<property name="tom.dir" value="${env.CATALINA_HOME}" />
+	<property name="geo.dir" value="${env.WEBGEO_HOME}" />
 	<property name="deploy.dir" location="${tom.dir}/webapps" />
 	<property name="app.name" value="Geo2tag" />
 
@@ -188,5 +189,24 @@
 			<arg value="ru.spb.osll.web.Geo2tag" />
 		</java>
 	</target>
-	
+
+	<!-- SEND REPORT -->
+	<target name="send-reports" description="Send mail with reports">
+		<mail mailhost="smtp.gmail.com" mailport="465" ssl="true"
+			user="osll.spb" password="${MailLogger.password}" 
+			subject="Geo2tag-web: test, byuld, deploy report"
+			from="osll.spb@gmail.com"
+			tolist="bac1ca89@gmail.com, osll.spb@gmail.com">
+			<message>Geo2tag-web: test, byuld, deploy report</message>
+			<attachments>
+				<fileset dir="${geo.dir}/sandbox/log">
+					<include name="**/*.log" />
+				</fileset>
+				<fileset dir="reports">
+					<include name="**/*.txt" />
+				</fileset>
+			</attachments>
+		</mail>
+	</target>
+
 </project>

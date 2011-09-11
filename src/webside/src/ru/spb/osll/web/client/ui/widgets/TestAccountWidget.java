@@ -3,10 +3,14 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.StubWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
@@ -16,7 +20,7 @@ public class TestAccountWidget extends SimpleComposite {
 
 	@Override
 	protected String getName() {
-		return "Test Account"; 		// TODO Localize
+		return LOC.TestAccountWidget();
 	}
 
 	@Override
@@ -49,7 +53,20 @@ public class TestAccountWidget extends SimpleComposite {
 			labels.add(UIUtil.constructLabel("Password: Test", 18));
 			return labels;
 		}
-		
+
+		@Override
+		protected List<Anchor> getLinks() {
+			Anchor loginLink = new Anchor(LOC.login());
+			loginLink.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					GTShell.Instance.setContent(LoginWidget.Instance());
+				}
+			});
+			List<Anchor> links = super.getLinks();
+			links.add(loginLink);
+			return links;
+		}
 	}
 
 }

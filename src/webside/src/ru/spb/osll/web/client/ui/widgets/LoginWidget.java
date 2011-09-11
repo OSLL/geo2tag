@@ -42,7 +42,7 @@ public class LoginWidget extends FieldsWidget {
 	
 	@Override
 	protected List<Anchor> getLinks(){
-		Anchor testAccLink = new Anchor("Test Account");		// TODO localize
+		Anchor testAccLink = new Anchor(LOC.TestAccountWidget());
 		testAccLink.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
