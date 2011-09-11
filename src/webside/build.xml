@@ -200,7 +200,7 @@
 			<message>Geo2tag-web: test, byuld, deploy report</message>
 			<attachments>
 				<fileset dir="${geo.dir}/sandbox/log">
-					<include name="**/*.log" />
+					<include name="**/*.txt" />
 				</fileset>
 				<fileset dir="reports">
 					<include name="**/*.txt" />
