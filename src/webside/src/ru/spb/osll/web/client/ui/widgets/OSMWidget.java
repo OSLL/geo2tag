@@ -10,7 +10,11 @@ import org.gwtopenmaps.openlayers.client.MapWidget;
 import org.gwtopenmaps.openlayers.client.Marker;
 import org.gwtopenmaps.openlayers.client.control.LayerSwitcher;
 import org.gwtopenmaps.openlayers.client.control.MousePosition;
+import org.gwtopenmaps.openlayers.client.event.MapMoveListener;
+import org.gwtopenmaps.openlayers.client.event.MapZoomListener;
 import org.gwtopenmaps.openlayers.client.event.MarkerBrowserEventListener;
+import org.gwtopenmaps.openlayers.client.event.MapMoveListener.MapMoveEvent;
+import org.gwtopenmaps.openlayers.client.event.MapZoomListener.MapZoomEvent;
 import org.gwtopenmaps.openlayers.client.layer.Markers;
 import org.gwtopenmaps.openlayers.client.layer.OSM;
 import org.gwtopenmaps.openlayers.client.popup.FramedCloud;
@@ -47,7 +51,7 @@ public class OSMWidget extends BaseMapWidget {
 //		OSM osm_4 = OSM.Maplint("Maplint");
 //		osm_4.setIsBaseLayer(true);
 
-		Map map = m_mapWidget.getMap();
+		final Map map = m_mapWidget.getMap();
 		map.addLayer(osm_1);
 		map.addLayer(osm_2);
 		map.addLayer(osm_3);
@@ -58,8 +62,25 @@ public class OSMWidget extends BaseMapWidget {
 		
 		m_markers = new Markers("Markers");
 		map.addLayer(m_markers);
+		
+		map.addMapZoomListener(new MapZoomListener() {
+			@Override
+			public void onMapZoom(MapZoomEvent eventObject) {
+				m_zoom = map.getZoom();
+			}
+		});
+		map.addMapMoveListener(new MapMoveListener() {
+			@Override
+			public void onMapMove(MapMoveEvent eventObject) {
+				m_center = map.getCenter();
+			}
+		});
+		
 		return m_mapWidget;
 	}
+	
+	private int m_zoom = 12;
+	private LonLat m_center;
 	
 	@Override
 	public void setTags(List<Tag> tags){
@@ -67,12 +88,16 @@ public class OSMWidget extends BaseMapWidget {
 		if (tags == null || tags.size() == 0){
 			return;
 		}
-		
-		final Tag initTag = tags.get(0);
-		LonLat lonLat = new LonLat(initTag.getLongitude(), initTag.getLatitude());
-		lonLat.transform("EPSG:4326", "EPSG:900913");
+
 		final Map map = m_mapWidget.getMap(); 
-		map.setCenter(lonLat, 12);
+		if (m_center != null) {
+			map.setCenter(m_center, m_zoom);
+		} else {
+			final Tag initTag = tags.get(0);
+			LonLat lonLat = new LonLat(initTag.getLongitude(), initTag.getLatitude());
+			lonLat.transform("EPSG:4326", "EPSG:900913");
+			map.setCenter(lonLat, m_zoom);
+		}
 		
 		for (Tag tag : tags) {
 			final LonLat longLat = new LonLat(tag.getLongitude(), tag.getLatitude());
