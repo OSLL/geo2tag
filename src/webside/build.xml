@@ -20,7 +20,7 @@
 	<property name="tom.dir" value="${env.CATALINA_HOME}" />
 	<property name="geo.dir" value="${env.WEBGEO_HOME}" />
 	<property name="deploy.dir" location="${tom.dir}/webapps" />
-	<property name="app.name" value="Geo2tag" />
+	<property name="app.name" value="geo2tag" />
 
 	<target name="deploy" depends="war" description="Deploy the war file">
 		<delete dir="${deploy.dir}/${app.name}" />
@@ -142,7 +142,7 @@
 	<target name="build" depends="gwtc" description="Build this project" />
 
 	<target name="war" depends="build" description="Create a war file">
-		<zip destfile="Geo2tag.war" basedir="war" />
+		<zip destfile="${app.name}.war" basedir="war" />
 	</target>
 
 	<!-- TESTING -->
@@ -194,10 +194,10 @@
 	<target name="send-good-news" description="Send mail with reports">
 		<mail mailhost="smtp.gmail.com" mailport="465" ssl="true"
 			user="osll.spb" password="${MailLogger.password}" 
-			subject="Geo2tag-web (Success): test, build, deploy report"
+			subject="geo2tag-web (Success): test, build, deploy report"
 			from="osll.spb@gmail.com"
 			tolist="${MailLogger.success.to}">
-			<message>Geo2tag-web: test, byuld, deploy report</message>
+			<message>geo2tag-web (Success): test, build, deploy report</message>
 			<attachments>
 				<fileset dir="${geo.dir}/sandbox/log">
 					<include name="**/*.txt" />
@@ -212,10 +212,10 @@
 	<target name="send-bad-news" description="Send mail with reports">
 		<mail mailhost="smtp.gmail.com" mailport="465" ssl="true"
 			user="osll.spb" password="${MailLogger.password}" 
-			subject="Geo2tag-web (Fail): test, build, deploy report"
+			subject="geo2tag-web (Fail): test, build, deploy report"
 			from="osll.spb@gmail.com"
 			tolist="${MailLogger.failure.to}">
-			<message>Geo2tag-web: test, byuld, deploy report</message>
+			<message>geo2tag-web (Fail): test, build, deploy report</message>
 			<attachments>
 				<fileset dir="${geo.dir}/sandbox/log">
 					<include name="**/*.txt" />
@@ -226,6 +226,5 @@
 			</attachments>
 		</mail>
 	</target>
-
 	
 </project>
