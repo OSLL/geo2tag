@@ -191,12 +191,12 @@
 	</target>
 
 	<!-- SEND REPORT -->
-	<target name="send-reports" description="Send mail with reports">
+	<target name="send-good-news" description="Send mail with reports">
 		<mail mailhost="smtp.gmail.com" mailport="465" ssl="true"
 			user="osll.spb" password="${MailLogger.password}" 
-			subject="Geo2tag-web: test, byuld, deploy report"
+			subject="Geo2tag-web (Success): test, build, deploy report"
 			from="osll.spb@gmail.com"
-			tolist="bac1ca89@gmail.com, osll.spb@gmail.com">
+			tolist="${MailLogger.success.to}">
 			<message>Geo2tag-web: test, byuld, deploy report</message>
 			<attachments>
 				<fileset dir="${geo.dir}/sandbox/log">
@@ -209,4 +209,23 @@
 		</mail>
 	</target>
 
+	<target name="send-bad-news" description="Send mail with reports">
+		<mail mailhost="smtp.gmail.com" mailport="465" ssl="true"
+			user="osll.spb" password="${MailLogger.password}" 
+			subject="Geo2tag-web (Fail): test, build, deploy report"
+			from="osll.spb@gmail.com"
+			tolist="${MailLogger.failure.to}">
+			<message>Geo2tag-web: test, byuld, deploy report</message>
+			<attachments>
+				<fileset dir="${geo.dir}/sandbox/log">
+					<include name="**/*.txt" />
+				</fileset>
+				<fileset dir="reports">
+					<include name="**/*.txt" />
+				</fileset>
+			</attachments>
+		</mail>
+	</target>
+
+	
 </project>
