@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Geo2tag" default="build" basedir=".">
+	<property name="version" value="0.18" />
+	<!-- =============================== -->
+	
 	<property file="local.properties" />
 	<property file="mail.properties" />
 	<!-- Arguments to gwtc and devmode targets -->
@@ -207,6 +210,14 @@
 				</fileset>
 			</attachments>
 		</mail>
+	</target>
+
+	<target name="deploy-refresh-info" depends="deploy">
+		<tstamp>
+		     <format property="NOW" pattern="yyyy MMMM dd HH:mm:ss" locale="en"/>
+		</tstamp>
+		<echo message="version=${version}${line.separator}" file="${tom.dir}/geo2tag-build"/>
+		<echo message="deployDate=${NOW}${line.separator}" append="true" file="${tom.dir}/geo2tag-build"/>
 	</target>
 	
 </project>
