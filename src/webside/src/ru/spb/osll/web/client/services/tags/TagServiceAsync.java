@@ -21,4 +21,6 @@ public interface TagServiceAsync {
 	void getTags(Channel ch, Date dateFrom, Date dateTo,
 			AsyncCallback<List<Tag>> callback);
 
+	void getTags(List<Channel> channels, Date dateFrom, Date dateTo,
+			AsyncCallback<List<Tag>> callback);
 }

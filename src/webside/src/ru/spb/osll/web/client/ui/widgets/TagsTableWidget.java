@@ -56,7 +56,7 @@ public class TagsTableWidget extends BaseTagsWidget {
 		}
 
 		@Override
-		public void clear(){
+		public void refresh(){
 			m_tagsTable.erase();
 		}
 	}

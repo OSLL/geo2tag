@@ -36,4 +36,10 @@ public class TagServiceImpl extends RemoteServiceServlet implements TagService {
 		return Tags.Instance().selectByChannel(ch, dateFrom, dateTo);
 	}
 
+	@Override
+	public List<Tag> getTags(List<Channel> channels, Date dateFrom, Date dateTo) 
+			throws IllegalArgumentException {
+		return Tags.Instance().selectByChannels(channels, dateFrom, dateTo);
+	}
+
 }

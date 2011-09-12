@@ -45,6 +45,7 @@ public interface GTLocalization extends Constants {
 	String btnShowTags();
 	String labYourChannels();
 	String labAvalChannels();
+	String itemAllChannels();
 
 	// Widget : TagsMapWidget
 	String TagsMapWidget();

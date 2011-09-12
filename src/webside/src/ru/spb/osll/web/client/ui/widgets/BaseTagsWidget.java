@@ -57,7 +57,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	public void onResume() {
 		final User user = GTState.Instanse().getCurUser();
 		refreshChannelBox(user);
-		m_tagsView.clear();
+		m_tagsView.refresh();
 	}
 	
 	private void initFiltersPanel(VerticalPanel container){
@@ -67,7 +67,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    m_dateBoxFrom.setFormat(new DateBox.DefaultFormat());
 	    m_dateBoxTo.setFormat(new DateBox.DefaultFormat());
 
-	    m_channelBox = new SmartListBox<Channel>(Accessors.CHANNEL_ACC_NAME, false);
+	    m_channelBox = new SmartListBox<Channel>(Accessors.CHANNEL_ACC_NAME);
 	    m_channelBox.setWidth("200px");
 	    
 	    final String uniqueId = UIUtil.getUniqueId("channle.type"); 
@@ -140,18 +140,27 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			return;
 		}
 		loadTags(u, dateFrom, dateTo);
-		m_tagsView.clear();
+		m_tagsView.refresh();
 	}
 	
 	private void refreshByChannel(){
-		final Channel ch = m_channelBox.getSelectedObject();
 		final Date dateFrom = m_dateBoxFrom.getValue();
 		final Date dateTo = m_dateBoxTo.getValue();
-		if(ch == null){
+
+		final Object obj = m_channelBox.getSelectedObject();
+		if(obj == null){
 			return;
 		}
-		loadTags(ch, dateFrom, dateTo);
-		m_tagsView.clear();
+		else if (obj instanceof Channel){
+			final Channel ch = (Channel) obj;
+			loadTags(ch, dateFrom, dateTo);
+		}
+		else if (obj instanceof List<?>){
+			@SuppressWarnings("unchecked")
+			final List<Channel> chs = (List<Channel>)obj;
+			loadTags(chs, dateFrom, dateTo);
+		}
+		m_tagsView.refresh();
 	}
 
 	private void loadTags(User u, Date dateFrom, Date dateTo){
@@ -183,6 +192,21 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			}
 		);
 	}
+
+	private void loadTags(List<Channel> chs, Date dateFrom, Date dateTo){
+		TagService.Util.getInstance().getTags(chs, dateFrom, dateTo,
+			new AsyncCallback<List<Tag>>() {
+				@Override
+				public void onSuccess(List<Tag> result) {
+					m_tagsView.setTags(result);
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					GWT.log("loadTags", caught);
+				}
+			}
+		);
+	}
 	
 	private void refreshChannelBox(final User u){
 		m_channelBox.clear();
@@ -192,7 +216,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		AsyncCallback<List<Channel>> callback = new AsyncCallback<List<Channel>>() {
 			@Override
 			public void onSuccess(List<Channel> result) {
-				m_channelBox.setData(result);
+				m_channelBox.setData(result, LOC.itemAllChannels()); 
 				refreshByChannel();
 			}
 			@Override
@@ -205,7 +229,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 
 	public interface TagsView extends IsWidget {
 		public void setTags(List<Tag> tags);
-		public void clear();
+		public void refresh();
 	}
 	
 	// customize of GWT's DateBox class 

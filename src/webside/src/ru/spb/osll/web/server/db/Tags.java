@@ -3,6 +3,7 @@ package ru.spb.osll.web.server.db;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -91,6 +92,15 @@ public class Tags extends AbstractBase<Tag> {
 		final String query = String.format(selectTagsByChannel, channel.getId());
 	    return baseMultiSelect(query);
 	}	
+
+	// FIXME later
+	public List<Tag> selectByChannels(List<Channel> channels, Date dateFrom, Date dateTo){
+		List<Tag> result = new ArrayList<Tag>();
+		for (Channel ch : channels){
+			result.addAll(selectByChannel(ch, dateFrom, dateTo));
+		}
+		return result;
+	}
 	
 	private String getTimeFromCondition(Date timeFrom){
 		if (timeFrom == null){

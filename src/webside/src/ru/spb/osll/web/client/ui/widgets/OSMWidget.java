@@ -122,7 +122,7 @@ public class OSMWidget extends BaseMapWidget {
 	}
 
 	@Override
-	public void clear(){
+	public void refresh(){
 		removeMarkers();
 	}
 	

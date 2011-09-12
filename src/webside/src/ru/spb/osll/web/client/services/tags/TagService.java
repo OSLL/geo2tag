@@ -26,6 +26,10 @@ public interface TagService extends RemoteService {
 	List<Tag> getTags(Channel ch, Date dateFrom, Date dateTo)
 			throws IllegalArgumentException;
 
+	List<Tag> getTags(List<Channel> channels, Date dateFrom, Date dateTo)
+			throws IllegalArgumentException;
+
+	
 	public static class Util {
 		private static TagServiceAsync instance;
 		public static TagServiceAsync getInstance(){
