@@ -6,6 +6,7 @@ import ru.spb.osll.web.client.ui.core.SimpleMenuTree;
 import ru.spb.osll.web.client.ui.core.SimpleMenuTree.GroupItem;
 import ru.spb.osll.web.client.ui.image.Images;
 import ru.spb.osll.web.client.ui.widgets.Channels;
+import ru.spb.osll.web.client.ui.widgets.HomePage;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
 import ru.spb.osll.web.client.ui.widgets.TagsMapWidget;
@@ -25,6 +26,7 @@ public class GTMenu extends SimpleMenu {
 		{
 			group = Localizer.res().menuGrServices();
 			groupItem = menu.getGroupMenuItem(group, Images.res().folder());
+			groupItem.addMenuItem(HomePage.Instance());
 			groupItem.addMenuItem(TestAccountWidget.Instance());
 			groupItem.addMenuItem(Channels.Instance());
 			groupItem.addMenuItem(TagsTableWidget.Instance());

@@ -27,7 +27,10 @@ public interface GTLocalization extends Constants {
 	
 	// Widget : HomePage
 	String pageHome();
-
+	String currentBuild();
+	String version();
+	String deployDate();
+	
 	// Widget : LoginWidget
 	String login();
 	String password();

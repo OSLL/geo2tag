@@ -13,8 +13,6 @@ import org.gwtopenmaps.openlayers.client.control.MousePosition;
 import org.gwtopenmaps.openlayers.client.event.MapMoveListener;
 import org.gwtopenmaps.openlayers.client.event.MapZoomListener;
 import org.gwtopenmaps.openlayers.client.event.MarkerBrowserEventListener;
-import org.gwtopenmaps.openlayers.client.event.MapMoveListener.MapMoveEvent;
-import org.gwtopenmaps.openlayers.client.event.MapZoomListener.MapZoomEvent;
 import org.gwtopenmaps.openlayers.client.layer.Markers;
 import org.gwtopenmaps.openlayers.client.layer.OSM;
 import org.gwtopenmaps.openlayers.client.popup.FramedCloud;

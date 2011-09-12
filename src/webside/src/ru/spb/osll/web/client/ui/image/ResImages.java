@@ -11,6 +11,8 @@ public interface ResImages extends ClientBundle {
 	ImageResource underConstruction();
 
 	ImageResource testing();
+
+	ImageResource comingSoonLogo();
 	
 	@Source("noimage.png")
 	ImageResource treeLeaf();

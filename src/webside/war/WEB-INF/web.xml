@@ -37,5 +37,13 @@
   	<servlet-name>TagService</servlet-name>
   	<url-pattern>/geo2tag/TagService</url-pattern>
   </servlet-mapping>
+  <servlet>
+  	<servlet-name>VersionService</servlet-name>
+  	<servlet-class>ru.spb.osll.web.server.services.version.VersionServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>VersionService</servlet-name>
+  	<url-pattern>/geo2tag/VersionService</url-pattern>
+  </servlet-mapping>
 
 </web-app>

@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public abstract class StubWidget extends Composite {
-	
+
 	protected abstract ImageResource getImage();
 	
 	protected abstract List<Label> getLabels();
@@ -22,8 +22,12 @@ public abstract class StubWidget extends Composite {
 	}
 	
 	public StubWidget(){
+		this("300px");
+	}
+	
+	public StubWidget(String width){
 		VerticalPanel container = UIUtil.getVerticalPanel(true);
-		container.setWidth("300px");
+		container.setWidth(width);
 		container.setSpacing(10);
 		
 		ImageResource im = getImage();
