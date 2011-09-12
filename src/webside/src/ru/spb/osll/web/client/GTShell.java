@@ -9,6 +9,7 @@ import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.ui.widgets.Channels;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
+import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.TableElement;
@@ -41,6 +42,7 @@ public class GTShell extends Composite {
 	@UiField VerticalPanel autentificationBox;
 	
 	private Anchor m_authLink;
+	private Anchor m_regLink;
 	private GTMenu m_mainMenu;
 	private Map<String, Widget> m_widgetsCache = new HashMap<String, Widget>();
 	
@@ -53,8 +55,13 @@ public class GTShell extends Composite {
 		mainMenuContainer.add(m_mainMenu);
 		Instance = this;
 
+		m_regLink = new Anchor(Localizer.res().registration());
+		m_regLink.addClickHandler(m_regHandler);
+		
 		m_authLink = new Anchor("");
 		m_authLink.addClickHandler(m_authHandler);
+		
+		autentificationBox.add( m_regLink);
 		autentificationBox.add(m_authLink);
 
 		initDefaultWidget();
@@ -88,8 +95,10 @@ public class GTShell extends Composite {
 		boolean autorized = GTState.Instanse().getCurUser() != null;
 		if (autorized){
 			m_authLink.setText(Localizer.res().btnSignout());
+			m_regLink.setVisible(false);
 		} else {
 			m_authLink.setText(Localizer.res().btnSignin());
+			m_regLink.setVisible(true);
 		}
 	}
 	
@@ -128,10 +137,17 @@ public class GTShell extends Composite {
 			if (GTState.Instanse().getCurUser() != null){
 				logout();
 				m_authLink.setText(Localizer.res().btnSignin());
-				setContent(LoginWidget.Instance());
-			} else {
-				setContent(LoginWidget.Instance());
+				m_regLink.setVisible(true);
 			}
+			setContent(LoginWidget.Instance());
+			// TODO refreshAutorizedStatus()
+		}
+	};
+
+	private ClickHandler m_regHandler = new ClickHandler() {
+		@Override
+		public void onClick(ClickEvent event) {
+			setContent(RegistrationWidget.Instance());
 		}
 	};
 	
