@@ -7,6 +7,7 @@ import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
+import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.widgets.Channels;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
@@ -105,8 +106,12 @@ public class GTShell extends Composite {
 	private void initHistoryListener(){
 		History.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				String t = event.getValue();
-				setContent(getWidgetByToken(t), false);
+				final String t = event.getValue();
+				final Widget w = getWidgetByToken(t);
+				if (w instanceof SimpleComposite){
+					((SimpleComposite) w).resume();
+				}
+				setContent(w, false);
 			}
 		});
 	}
