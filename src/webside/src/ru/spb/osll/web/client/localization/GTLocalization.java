@@ -14,7 +14,7 @@ public interface GTLocalization extends Constants {
 	String wrngPasswordNull();
 	String wrngConfirmNull();
 	String wrngPassAndConf(); 
-	
+	String wrngNotLogged();
 	
 	// --------------------- Menu --------------------- 
 	String menuGrForUser();

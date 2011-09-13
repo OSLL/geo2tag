@@ -64,8 +64,17 @@ public class Channels extends SimpleComposite {
 	
 	@Override
 	public void onResume() {
+		showWarningMessage(GTState.Instanse().getCurUser());
 		refreshUserChannels();
 		refreshAvaiChannels();
+	}
+
+	private void showWarningMessage(User u){
+		if (u != null){
+			hideWarningMessage();
+		} else {
+			showWarningMessage(LOC.wrngNotLogged());
+		}
 	}
 	
 	private HorizontalPanel initButtons(){

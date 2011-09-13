@@ -56,8 +56,17 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	@Override
 	public void onResume() {
 		final User user = GTState.Instanse().getCurUser();
-		refreshChannelBox(user);
+		showWarningMessage(user);
+		refreshChannelBox (user);
 		m_tagsView.refresh();
+	}
+
+	private void showWarningMessage(User u){
+		if (u != null){
+			hideWarningMessage();
+		} else {
+			showWarningMessage(LOC.wrngNotLogged());
+		}
 	}
 	
 	private void initFiltersPanel(VerticalPanel container){
