@@ -9,6 +9,7 @@ import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.widgets.Channels;
+import ru.spb.osll.web.client.ui.widgets.HomePage;
 import ru.spb.osll.web.client.ui.widgets.LoginWidget;
 import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
 
@@ -65,7 +66,7 @@ public class GTShell extends Composite {
 		autentificationBox.add( m_regLink);
 		autentificationBox.add(m_authLink);
 
-		initDefaultWidget();
+		initStartWidget();
 		initHistoryListener();
 	}
 
@@ -112,6 +113,23 @@ public class GTShell extends Composite {
 					((SimpleComposite) w).resume();
 				}
 				setContent(w, false);
+			}
+		});
+	}
+	
+	protected void initStartWidget(){
+		setContent(HomePage.Instance(), false);
+
+		LoginServiceAsync service = LoginService.Util.getInstance();
+		service.isAuthorized(new AsyncCallback<User>() {
+			@Override
+			public void onSuccess(User user) {
+				GTState.Instanse().setCurUser(user); 
+				refreshAutorizedStatus();
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("initStartWidget", caught);
 			}
 		});
 	}
