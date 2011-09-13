@@ -25,7 +25,18 @@ public class TestAccountWidget extends SimpleComposite {
 
 	@Override
 	protected Widget onInitialize() {
-		return new TestAccountView();
+		final TestAccountView v = new TestAccountView();
+		// ??? 
+//		UserStateListener l = new UserStateListener() {
+//			@Override
+//			public void onUserChange(User u) {
+//				GWT.log("onUserChange");
+//				v.setLinksVisible(u == null);
+//			}
+//		};
+//		GTState.Instanse().addOnUserStateListerer(l);
+//		GTState.Instanse().checkAuth();
+		return v;
 	}
 	
 	public static TestAccountWidget Instance(){
@@ -67,6 +78,12 @@ public class TestAccountWidget extends SimpleComposite {
 			List<Anchor> links = super.getLinks();
 			links.add(loginLink);
 			return links;
+		}
+		
+		public void setLinksVisible(boolean visible){
+			for(Anchor link : getLinks()){
+				link.setVisible(visible);
+			}
 		}
 	}
 }

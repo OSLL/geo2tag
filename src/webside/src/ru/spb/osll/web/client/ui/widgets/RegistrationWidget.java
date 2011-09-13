@@ -34,7 +34,7 @@ public class RegistrationWidget extends FieldsWidget {
 	@Override
 	protected Widget onInitialize() {
 		// super.onInitialize();
-		final String mess = Localizer.res().disabledRegistration();
+		final String mess = LOC.disabledRegistration();
 		return new UnderConstructionWidget(mess);
 	}
 

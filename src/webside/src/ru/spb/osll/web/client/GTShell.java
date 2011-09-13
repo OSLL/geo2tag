@@ -25,8 +25,8 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GTShell extends Composite {
@@ -41,7 +41,7 @@ public class GTShell extends Composite {
 //	@UiField ListBox localeBox;
 //	@UiField TableCellElement localeSelectionCell;
 	@UiField SimplePanel mainMenuContainer;
-	@UiField VerticalPanel autentificationBox;
+	@UiField HorizontalPanel autentificationBox;
 	
 	private Anchor m_authLink;
 	private Anchor m_regLink;
@@ -63,6 +63,7 @@ public class GTShell extends Composite {
 		m_authLink = new Anchor("");
 		m_authLink.addClickHandler(m_authHandler);
 		
+		autentificationBox.setSpacing(8);
 		autentificationBox.add( m_regLink);
 		autentificationBox.add(m_authLink);
 
