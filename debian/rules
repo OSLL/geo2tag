@@ -34,7 +34,7 @@ build-stamp:
 	echo "Current diRRR"
 	echo $(CURDIR)
 #Check what architecture we are use. If it is i386, we need to build all for i386, else build all armel code
-	if [ "$(DEB_BUILD_ARCH)" = "i386" ] ; then \
+	if [ "$(DEB_BUILD_ARCH)" != "armel" ] ; then \
 		echo $$PWD ; \
 		echo "i386 architecture selection"; \
 		cd $(BUILDDIR) && qmake "CONFIG +=linux" -after *.pro && $(MAKE); \
