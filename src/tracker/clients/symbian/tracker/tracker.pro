@@ -30,9 +30,9 @@ TARGET.CAPABILITY = NetworkServices \
                     ReadUserData \
                     WriteUserData \
                     LocalServices \
-                    UserEnvironment \
-                    ReadDeviceData \
-                    WriteDeviceData
+                    UserEnvironment #\
+                  #  ReadDeviceData \
+                  #  WriteDeviceData
 
 
 # Input

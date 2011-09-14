@@ -1,9 +1,9 @@
 CONFIG += debug
 
-#CONFIG += linux
+CONFIG += linux
 #CONFIG += linux_profiling
 #CONFIG += maemo5
-CONFIG += symbian
+#CONFIG += symbian
 SOURCE_DIR = $$PWD
 
 #contains(QT_CONFIG, reduce_exports):CONFIG+=hide_symbols

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by Qt Creator 2.3.0, 2011-09-12T00:00:05. -->
+<!-- Written by Qt Creator 2.3.0, 2011-09-14T01:22:41. -->
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -35,7 +35,7 @@
    </valuemap>
    <value type="int" key="EditorConfiguration.CodeStyle.Count">1</value>
    <value type="QByteArray" key="EditorConfiguration.Codec">System</value>
-   <value type="QString" key="EditorConfiguration.CurrentFallback">Project</value>
+   <value type="QString" key="EditorConfiguration.CurrentFallback">Global</value>
    <value type="int" key="EditorConfiguration.IndentSize">4</value>
    <value type="bool" key="EditorConfiguration.MouseNavigation">true</value>
    <value type="int" key="EditorConfiguration.PaddingMode">1</value>
@@ -759,10 +759,10 @@
       <value type="QString" key="RemoteCompiler.BuildStep.CertKeyFile">/home/vood/ws/geo2tag/data/RDA_cert_2011-08-18/RDA_private-key.pem</value>
       <value type="QString" key="RemoteCompiler.BuildStep.CertKeyPass"></value>
       <value type="int" key="RemoteCompiler.BuildStep.PkgOpt">0</value>
-      <value type="int" key="RemoteCompiler.BuildStep.PostOp">1</value>
-      <value type="QString" key="RemoteCompiler.BuildStep.QtVersion">4_7_1_m1_1_0</value>
+      <value type="int" key="RemoteCompiler.BuildStep.PostOp">2</value>
+      <value type="QString" key="RemoteCompiler.BuildStep.QtVersion">4_7_3</value>
       <value type="int" key="RemoteCompiler.BuildStep.SisOpt">7</value>
-      <value type="QString" key="RemoteCompiler.BuildStep.Target">s60_5_0_n97</value>
+      <value type="QString" key="RemoteCompiler.BuildStep.Target">symbian3</value>
      </valuemap>
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Сборка</value>
