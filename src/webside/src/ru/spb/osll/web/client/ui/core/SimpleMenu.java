@@ -62,7 +62,33 @@ abstract public class SimpleMenu extends Composite {
 		}
 		return null;
 	}
-	
+
+	// FIXME common part
+	public void setVisibleWidget(Widget w, boolean visible){
+		boolean isFound = false;
+		int idxGroup = 0;
+		int idxItem = 0;
+		final List<GroupItem> groups = m_menuTree.getGroups();
+		for (int i = 0; i < groups.size(); i++){
+			GroupItem group = groups.get(i);
+			for (int j = 0; j < group.getItems().size(); j++){
+				MenuItem item = group.getItems().get(j);
+				if (item.getWidget() == w){
+					isFound = true;
+					idxGroup = i;
+					idxItem =  j;
+					break;
+				}
+			}
+		}
+
+		//GWT.log("disableWidget " + isFound + " " + idxGroup + " " + idxItem);
+		if (isFound){
+			VerticalPanel vp = (VerticalPanel) m_stackPanel.getWidget(idxGroup);
+			vp.getWidget(idxItem).setVisible(visible);
+		}
+	}
+
 	public Widget onInitialize() {
 		m_stackPanel = new DecoratedStackPanel();
 		m_stackPanel.setWidth("224px");
