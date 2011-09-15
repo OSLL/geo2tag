@@ -62,7 +62,7 @@ public class TestAccountWidget extends SimpleComposite {
 			List<Label> labels = new ArrayList<Label>();
 			labels.add(UIUtil.constructLabel(LOC.TestAccountWidget(), 20));
 			labels.add(UIUtil.constructLabel(LOC.login() + ": Paul", 18));		
-			labels.add(UIUtil.constructLabel(LOC.password() + ": Test", 18));	
+			labels.add(UIUtil.constructLabel(LOC.password() + ": test", 18));	
 			return labels;
 		}
 
