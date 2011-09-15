@@ -1,11 +1,4 @@
 <entry xmlns="http://www.w3.org/2005/Atom">
-  <title>TestMap2</title>
-  <summary>TestMap added</summary>
-     <Placemark>
-       <name>Faulkner's Birthplace</name>
-       <description/>
-       <Point>
-         <coordinates>-89.520753,34.360902,0.0</coordinates>
-       </Point>
-     </Placemark>
+  <title>My Map</title>
+  <summary>My Description</summary>
 </entry>
