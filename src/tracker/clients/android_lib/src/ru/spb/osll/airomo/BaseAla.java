@@ -3,6 +3,7 @@ package ru.spb.osll.airomo;
 import java.util.LinkedList;
 import java.util.List;
 
+import ru.spb.osll.error.AlaError;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
@@ -20,22 +21,23 @@ abstract class BaseAla implements IsAla {
 	
 	private List<NetworkListener> m_netListeners = new LinkedList<NetworkListener>();
 	private List<GooffListener> m_gooffListeners = new LinkedList<GooffListener>();
+	private List<ErrorListener> m_errorListeners = new LinkedList<ErrorListener>();
 	private SharedPreferences m_preferences;
 	private Editor m_preferencesEditor;
 	private LocationState m_locationState;
 
 	private Boolean m_isOnline = false;
-	
 	protected String m_serverUrl;
 	
-	// TODO private || public
-	BaseAla(Context c) {
+	public BaseAla(Context c) {
 		m_locationState = new LocationState(c);
 		initSettings(c);
 
 		m_serverUrl = getPreference(ITrackerNetSettings.SERVER_URL, ""); 
 		c.registerReceiver(new ConnectionChangeReceiver(), 
 				new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+		c.registerReceiver(new ShutdownReceiver(), 
+				new IntentFilter("android.intent.action.BATTERY_LOW"));
 	}
 
 	private void initSettings(Context c) {
@@ -80,11 +82,18 @@ abstract class BaseAla implements IsAla {
 		m_netListeners.add(l);
 	}
 
+	@Override
+	public void addErrorListener(ErrorListener l) {
+		m_errorListeners.add(l);
+	}
+
 	private String m_lastError;
 	@Override
 	public void onErrorOccured(String error) {
-		// TODO
 		m_lastError = error;
+		for(ErrorListener l : m_errorListeners){
+			l.onError(new AlaError(error));
+		}
 	}
 
 	@Override
@@ -106,6 +115,8 @@ abstract class BaseAla implements IsAla {
 		m_locationState.stopLocationListener();
 	}
 	
+	protected abstract void networkStatusChanged(boolean isOnline);
+	
 	public class ConnectionChangeReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -113,11 +124,24 @@ abstract class BaseAla implements IsAla {
 			synchronized (m_isOnline){
 				m_isOnline = isOnline;
 			}
+			networkStatusChanged(isOnline);
 			for(NetworkListener l : m_netListeners){
 				l.networkChanged(isOnline);
 			}
 			Log.v(ALA_LOG, "ConnectionChangeReceiver " + isOnline);
 		}
-	}
-	
+	}	
+
+	public class ShutdownReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.v(ALA_LOG, "ShutdownReceiver ");
+			sendLastCoordinate();
+			sendHistory();
+			for(GooffListener l : m_gooffListeners){
+				l.gooff();
+			}
+		}
+	}	
+
 }

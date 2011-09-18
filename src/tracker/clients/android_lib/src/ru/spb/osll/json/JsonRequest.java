@@ -22,7 +22,9 @@ public abstract class JsonRequest {
 		} catch (URISyntaxException e) {
 			Log.v(JSON_LOG, e.getMessage());
 		}	catch (Exception e) {
-			Log.v(JSON_LOG, e.getMessage());
+			if (e.getMessage() != null){
+				Log.v(JSON_LOG, e.getMessage());
+			}
 		}
 		
 		return resultJSON;

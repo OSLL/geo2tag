@@ -1,12 +1,11 @@
 package ru.spb.osll.airomo;
 
-import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
 public class Buffer<T> {
 	private int m_bufferSize = 50;
-	Queue<T> m_queue = new LinkedList<T>();
+	LinkedList<T> m_queue = new LinkedList<T>();
 
 	public Buffer(int bufferSize){
 		m_bufferSize = bufferSize;
@@ -37,11 +36,28 @@ public class Buffer<T> {
 		}
 	}
 	
+	public T getFirst(){
+		if (hasElements()){
+			return m_queue.get(0);
+		} 
+		return null;
+	}
+
+	public void removeFirst(){
+		if (hasElements()){
+			m_queue.remove(0);
+		} 
+	}
+	
+	public boolean hasElements(){
+		return getCount() > 0;
+	}
+	
 	public int getCount(){
 		return m_queue.size();
 	}
 	
-	Collection<T> getBufferData(){
+	List<T> getBufferData(){
 		return m_queue;
 	}
 	

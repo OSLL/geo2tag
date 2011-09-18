@@ -1,5 +1,10 @@
 package ru.spb.osll.airomo;
 
+import java.util.List;
+
+import ru.spb.osll.error.AlaError;
+import ru.spb.osll.objects.Mark;
+
 
 public interface IsAla {
 	void setUserData(String user, String pass);
@@ -25,10 +30,8 @@ public interface IsAla {
 
 	void sendLastCoordinate();
 
-//	List<Mark> getAllMarks(); // TODO 
+	List<Mark> getAllMarks();  
 	
-	// TODO move listeners 
-	// on closed || on low battery
 	void addGooffListener(GooffListener l);	
 	public interface GooffListener {
 		void gooff();
@@ -39,12 +42,15 @@ public interface IsAla {
 		void networkChanged(boolean isOnline); 
 	}
 
-	//signal:
+	void addErrorListener(ErrorListener l);	
+	public interface ErrorListener {
+		void onError(AlaError error); 
+	}
+	
 	void onErrorOccured(String error);
 
 	String getLastError();
 
-	// if NetworkListener is private 
 	boolean isOnline();
 	// TODO GPS is’t ready
 }

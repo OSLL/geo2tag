@@ -3,6 +3,7 @@ package ru.spb.osll;
 import ru.spb.osll.airomo.Ala;
 import ru.spb.osll.exception.ExceptionHandler;
 import ru.spb.osll.preferences.Settings;
+import ru.spb.osll.preferences.SettingsActivity;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -69,11 +70,11 @@ public class TrackerActivity extends Activity {
 		settingsBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				if (RequestService.isActive()){
-//					showToast(TrackerUtil.MESS_SETTINGS_NOT_AVAILABLE);
-//				} else {
-//					startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
-//				}
+				if (ALA.isTracking()){
+					showToast(TrackerUtil.MESS_SETTINGS_NOT_AVAILABLE);
+				} else {
+					startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
+				}
 			}
 		});
 
@@ -81,8 +82,7 @@ public class TrackerActivity extends Activity {
 		creenBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//TrackerUtil.hideApplication(TrackerActivity.this); 
-				appendToLogView("isOnline: " + ALA.isOnline());
+				TrackerUtil.hideApplication(TrackerActivity.this); 
 			}
 		});
 
@@ -106,22 +106,6 @@ public class TrackerActivity extends Activity {
 			clearLogView();
 			ALA.startTrack();
 		} 
-
-//		if (RequestService.isActive()){
-//			showToast(TrackerUtil.MESS_TRACKER_ALREADY_RUNNING);
-//		} else if (TrackerUtil.isOnline(this)){
-//			showToast(TrackerUtil.MESS_TRACKER_START);
-//			clearLogView();
-//			TrackerUtil.notify(this);
-//			startService(new Intent(this, RequestService.class));
-//			startService(new Intent(this, LocationService.class));
-//			
-//			if (Settings.getPreferences(this).getBoolean(ITrackerAppSettings.IS_HIDE_APP, true)){
-//				TrackerUtil.hideApplication(TrackerActivity.this);
-//			}
-//		} else if (!TrackerUtil.isOnline(this)){
-//			showToast(TrackerUtil.MESS_FAIL_CONNECTION);
-//		}
 	}
 	
 	private void stopTracker(){
@@ -129,13 +113,6 @@ public class TrackerActivity extends Activity {
 			showToast(TrackerUtil.MESS_TRACKER_STOP);
 			ALA.stopTrack();
 		}
-
-//		if (RequestService.isActive()){
-//			showToast(TrackerUtil.MESS_TRACKER_STOP);
-//			TrackerUtil.disnotify(this);
-//			stopService(new Intent(this, RequestService.class));
-//			stopService(new Intent(this, LocationService.class));
-//		}
 	}
 
 	private void showToast(final String mess){
