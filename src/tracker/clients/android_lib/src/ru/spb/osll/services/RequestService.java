@@ -6,12 +6,12 @@ import org.json.JSONObject;
 
 import ru.spb.osll.TrackerActivity;
 import ru.spb.osll.TrackerActivity.TrackerReceiver;
+import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.json.JsonAddUserRequest;
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonLoginRequest;
-import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
@@ -72,6 +72,7 @@ public class RequestService extends Service {
 		m_channel = settings.getString(ITrackerNetSettings.CHANNEL, "");
 		//m_channelKey = settings.getString(ITrackerSettings.CHANNEL_KEY, "");
 		m_serverUrl = settings.getString(ITrackerNetSettings.SERVER_URL, "");
+		Log.v(TrackerActivity.LOG, "m_serever " + m_serverUrl);
 	}
 	
 	private Runnable loginRunnable = new Runnable() {

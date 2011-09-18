@@ -1,10 +1,9 @@
 package ru.spb.osll;
 
+import ru.spb.osll.airomo.Ala;
 import ru.spb.osll.exception.ExceptionHandler;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.SettingsActivity;
-import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
-import ru.spb.osll.services.LocationService;
 import ru.spb.osll.services.RequestService;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
@@ -24,9 +23,13 @@ public class TrackerActivity extends Activity {
 	public static String LOG = "Tracker";
 	TextView m_logView;
 	
+	private Ala ALA;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ALA = new Ala(TrackerActivity.this);
+
 		setContentView(R.layout.main);
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		registerReceiver(m_trackerReceiver, new IntentFilter(TrackerReceiver.ACTION_SHOW_MESS));
@@ -69,11 +72,11 @@ public class TrackerActivity extends Activity {
 		settingsBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (RequestService.isActive()){
-					showToast(TrackerUtil.MESS_SETTINGS_NOT_AVAILABLE);
-				} else {
-					startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
-				}
+//				if (RequestService.isActive()){
+//					showToast(TrackerUtil.MESS_SETTINGS_NOT_AVAILABLE);
+//				} else {
+//					startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
+//				}
 			}
 		});
 
@@ -81,10 +84,11 @@ public class TrackerActivity extends Activity {
 		creenBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				TrackerUtil.hideApplication(TrackerActivity.this); 
+				//TrackerUtil.hideApplication(TrackerActivity.this); 
+				appendToLogView("isOnline: " + ALA.isOnline());
 			}
 		});
-		
+
 		createWakeLock();
 	}
 
@@ -98,30 +102,45 @@ public class TrackerActivity extends Activity {
 
 	
 	private void startTracker(){
-		if (RequestService.isActive()){
+		if (ALA.isTracking()){
 			showToast(TrackerUtil.MESS_TRACKER_ALREADY_RUNNING);
-		} else if (TrackerUtil.isOnline(this)){
+		} else if (ALA.isOnline()){
 			showToast(TrackerUtil.MESS_TRACKER_START);
 			clearLogView();
-			TrackerUtil.notify(this);
-			startService(new Intent(this, RequestService.class));
-			startService(new Intent(this, LocationService.class));
-			
-			if (Settings.getPreferences(this).getBoolean(ITrackerAppSettings.IS_HIDE_APP, true)){
-				TrackerUtil.hideApplication(TrackerActivity.this);
-			}
-		} else if (!TrackerUtil.isOnline(this)){
+			ALA.startTrack();
+		} else if (!ALA.isOnline()){
 			showToast(TrackerUtil.MESS_FAIL_CONNECTION);
 		}
+
+//		if (RequestService.isActive()){
+//			showToast(TrackerUtil.MESS_TRACKER_ALREADY_RUNNING);
+//		} else if (TrackerUtil.isOnline(this)){
+//			showToast(TrackerUtil.MESS_TRACKER_START);
+//			clearLogView();
+//			TrackerUtil.notify(this);
+//			startService(new Intent(this, RequestService.class));
+//			startService(new Intent(this, LocationService.class));
+//			
+//			if (Settings.getPreferences(this).getBoolean(ITrackerAppSettings.IS_HIDE_APP, true)){
+//				TrackerUtil.hideApplication(TrackerActivity.this);
+//			}
+//		} else if (!TrackerUtil.isOnline(this)){
+//			showToast(TrackerUtil.MESS_FAIL_CONNECTION);
+//		}
 	}
 	
 	private void stopTracker(){
-		if (RequestService.isActive()){
+		if (ALA.isTracking()){
 			showToast(TrackerUtil.MESS_TRACKER_STOP);
-			TrackerUtil.disnotify(this);
-			stopService(new Intent(this, RequestService.class));
-			stopService(new Intent(this, LocationService.class));
+			ALA.stopTrack();
 		}
+
+//		if (RequestService.isActive()){
+//			showToast(TrackerUtil.MESS_TRACKER_STOP);
+//			TrackerUtil.disnotify(this);
+//			stopService(new Intent(this, RequestService.class));
+//			stopService(new Intent(this, LocationService.class));
+//		}
 	}
 
 	private void showToast(final String mess){
@@ -162,9 +181,7 @@ public class TrackerActivity extends Activity {
 		});
 	}	
 	
-	private 
-
-	TrackerReceiver m_trackerReceiver = new TrackerReceiver();
+	private TrackerReceiver m_trackerReceiver = new TrackerReceiver();
 	public class TrackerReceiver extends BroadcastReceiver{
 		public static final String 	ACTION_SHOW_MESS = "show.mess.action";
 		

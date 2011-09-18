@@ -42,6 +42,10 @@ public class TrackerUtil {
 		nm.cancel(TRACKER_NOTIFY_ID);
 	}	
 	
+	public static String convertLocation(Location loc){
+		return convertLocation(loc.getLatitude(), loc.getLongitude());
+	}
+	
 	public static String convertLocation(double latitude, double longitude){
 		StringBuffer strBuffer = new StringBuffer();
 		strBuffer.append("lat: ").append(Location.convert(latitude, Location.FORMAT_MINUTES)).

@@ -39,11 +39,13 @@ public class ConfigFeedParser extends DefaultHandler implements IXMLSettrings {
     		m_configEditor.putString(ITrackerNetSettings.SERVER_URL, m_sb.toString());
     	} else if (localName.equals(time_tick)){
     		m_configEditor.putInt(ITrackerNetSettings.TIME_TICK, Integer.parseInt(m_sb.toString()));
+    	} else if (localName.equals(history_limit)){
+    		m_configEditor.putInt(ITrackerNetSettings.HISTORY_LIMIT, Integer.parseInt(m_sb.toString()));
     	} else if (localName.equals(show_tick)){
-    		boolean val = m_sb.toString().equals("true") ? true : false; 
+    		final boolean val = m_sb.toString().equals("true") ? true : false; 
     		m_configEditor.putBoolean(ITrackerAppSettings.IS_SHOW_TICKS, val);
     	} else if (localName.equals(hide_app)){
-    		boolean val = m_sb.toString().equals("true") ? true : false; 
+    		final boolean val = m_sb.toString().equals("true") ? true : false; 
     		m_configEditor.putBoolean(ITrackerAppSettings.IS_HIDE_APP, val);
     	} 
 	}
@@ -56,14 +58,15 @@ public class ConfigFeedParser extends DefaultHandler implements IXMLSettrings {
 }
 
 interface IXMLSettrings{
-	String config = "config";
-	String login = "login";
-	String password = "password";
-	String channel = "channel";
-	String key = "key";
-	String server_url = "server_url";
-	String time_tick = "time_tick";
-	String show_tick = "show_tick";
-	String hide_app = "hide_app";
+	String config 		= "config";
+	String login 		= "login";
+	String password 	= "password";
+	String channel 		= "channel";
+	String key 			= "key";
+	String server_url 	= "server_url";
+	String time_tick 	= "time_tick";
+	String history_limit= "history_limit";
+	String show_tick 	= "show_tick";
+	String hide_app 	= "hide_app";
 }
 

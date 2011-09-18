@@ -54,7 +54,7 @@ public class Settings {
 		}
 	}
 
-	
+	// TODO delete later
 	public static SharedPreferences getPreferences(Context c){
 		return new Settings(c).getPreferences();
 	}
@@ -62,14 +62,15 @@ public class Settings {
 	public interface ITrackerNetSettings{
 		String TRACKER_SETTINGS = "tracker_settings";
 		
-		String LOGIN = "login";
-		String PASSWORD = "password";
-		String CHANNEL = "channel";
-		String CHANNEL_KEY = "channel_key";
-	   	String SERVER_URL = "server_url";
-	   	String TIME_TICK = "time_request";
-		String RADIUS = "radius";
-		String URI = "uri";
+		String LOGIN 			= "login";
+		String PASSWORD 		= "password";
+		String CHANNEL 			= "channel";
+		String CHANNEL_KEY 		= "channel_key";
+	   	String SERVER_URL 		= "server_url";
+	   	String TIME_TICK 		= "time_request";
+	   	String HISTORY_LIMIT 	= "history_limit";
+		String RADIUS 			= "radius";
+		String URI 				= "uri";
 	}
 	
 	public interface ITrackerAppSettings{
