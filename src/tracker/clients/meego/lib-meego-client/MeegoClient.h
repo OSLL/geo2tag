@@ -45,7 +45,7 @@ public:
 	int getHistoryLimit();
 	void sendHistory();
 
-
+        bool isAuthentificated();
 
         MarksHistory * getAllMarks();
 
@@ -71,6 +71,7 @@ public slots:
         void onHistoryFull();
 signals:
 	void errorOccured(QString error);
+        void authentificated();
 };
 
 #endif

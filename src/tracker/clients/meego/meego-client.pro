@@ -1,3 +1,4 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS = lib ui
+SUBDIRS = lib-meego-client ui
+

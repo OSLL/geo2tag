@@ -83,6 +83,7 @@ void MeegoClient::sendHistory()
 {
     while(!m_history->isEmpty() && isOnline())
     {
+        qDebug() << "sending coordinates";
         sendLastCoordinate();
         pause(250);
     }
@@ -108,6 +109,7 @@ void MeegoClient::track()
     QSharedPointer<Channel> channel(new JsonChannel(DEFAULT_CHANNEL,"dummy channel"));
     mark->setChannel(channel);
     m_history->pushMark(mark);
+    qDebug() << "Tracked mark" << mark->getLatitude() << " " <<mark->getLongitude();
 }
 
 void MeegoClient::onError(QString error)
@@ -116,10 +118,20 @@ void MeegoClient::onError(QString error)
     if(!m_authentificated)
     {
         // Retry authentification
+        qDebug() << "Error during authentification";
         pause(1000);
         m_loginQuery->doRequest();
+
+    }else{
+        qDebug() << "Error during mark sending";
     }
 }
+
+bool MeegoClient::isAuthentificated()
+{
+    return m_authentificated;
+}
+
 
 QString MeegoClient::getLastError()
 {
@@ -134,11 +146,12 @@ bool MeegoClient::isOnline()
 void MeegoClient::onAuthentificated()
 {
     m_user =  m_loginQuery->getUser();
+    emit authentificated();
 }
 
 void MeegoClient::onMarkAdded()
 {
-  //  qDebug() << "markAdded";
+   qDebug() << "markAdded succesfuly";
     //If MarkHistory not empty than repeate mark sending to the server
 }
 void MeegoClient::onNetworkEvent(bool state)

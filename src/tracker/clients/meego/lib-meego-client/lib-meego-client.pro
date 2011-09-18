@@ -11,13 +11,15 @@ MOBILITY += location
 QT += network
 CONFIG += network
 #QT -= gui
+DEFINES += Q_WS_SYMBIAN
 
 VERSION = 0.0.1
-LIBS+= -lqjson -lQtLocation
+LIBS+=  -lQtLocation
 DEPENDPATH += .
 INCLUDEPATH += . \
 	       ../../../../http_requests/inc \
                ../../../../json/inc \
+               ../../../../../3rdparty/qjson-0.7.1/src/ \
                ../../../../common/inc
 
 HEADERS += MeegoClient.h \
@@ -43,6 +45,19 @@ HEADERS += MeegoClient.h \
 ../../../../common/inc/DataChannel.h \
 ../../../../common/inc/GpsInfo.h \
 ../../../../common/inc/MobilityGps.h \ 
+../../../../../3rdparty/qjson-0.7.1/src/parser.h \
+../../../../../3rdparty/qjson-0.7.1/src/serializerrunnable.h \
+../../../../../3rdparty/qjson-0.7.1/src/serializer.h \
+../../../../../3rdparty/qjson-0.7.1/src/qobjecthelper.h \
+../../../../../3rdparty/qjson-0.7.1/src/qjson_export.h \
+../../../../../3rdparty/qjson-0.7.1/src/qjson_debug.h \
+../../../../../3rdparty/qjson-0.7.1/src/parser_p.h \
+../../../../../3rdparty/qjson-0.7.1/src/json_scanner.h \
+../../../../../3rdparty/qjson-0.7.1/src/parserrunnable.h \
+../../../../../3rdparty/qjson-0.7.1/src/json_parser.hh \
+../../../../../3rdparty/qjson-0.7.1/src/stack.hh \
+../../../../../3rdparty/qjson-0.7.1/src/location.hh \
+../../../../../3rdparty/qjson-0.7.1/src/position.hh \
     markshistory.h
 
 SOURCES += MeegoClient.cpp \
@@ -64,6 +79,13 @@ SOURCES += MeegoClient.cpp \
 ../../../../json/src/AddNewMarkRequestJSON.cpp \
 ../../../../json/src/JsonDataMark.cpp \
 ../../../../json/src/JsonChannel.cpp \
+../../../../../3rdparty/qjson-0.7.1/src/serializerrunnable.cpp \
+../../../../../3rdparty/qjson-0.7.1/src/serializer.cpp \
+../../../../../3rdparty/qjson-0.7.1/src/qobjecthelper.cpp \
+../../../../../3rdparty/qjson-0.7.1/src/parserrunnable.cpp \
+../../../../../3rdparty/qjson-0.7.1/src/parser.cpp \
+../../../../../3rdparty/qjson-0.7.1/src/json_scanner.cpp \
+../../../../../3rdparty/qjson-0.7.1/src/json_parser.cc \
     markshistory.cpp
 
 
