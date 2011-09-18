@@ -3,10 +3,6 @@ package ru.spb.osll.airomo;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.JSONObject;
-
-import ru.spb.osll.TrackerActivity;
-import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
@@ -20,13 +16,16 @@ import android.location.Location;
 import android.util.Log;
 
 abstract class BaseAla implements IsAla {
+	public static final String ALA_LOG = "AlaLog";
+	
 	private List<NetworkListener> m_netListeners = new LinkedList<NetworkListener>();
 	private List<GooffListener> m_gooffListeners = new LinkedList<GooffListener>();
-	
 	private SharedPreferences m_preferences;
 	private Editor m_preferencesEditor;
 	private LocationState m_locationState;
 
+	private Boolean m_isOnline = false;
+	
 	protected String m_serverUrl;
 	
 	// TODO private || public
@@ -94,11 +93,9 @@ abstract class BaseAla implements IsAla {
 	}
 	
 	@Override
-	public boolean isOnline() {
-		final JSONObject JSONResponse = new JsonLoginRequest("", "", m_serverUrl).doRequest();
-		return JSONResponse != null;
+	public synchronized boolean isOnline() {
+		return m_isOnline;
 	}
-
 	
 	// ---------------- IsAla extension ------------------
 	public void startLocationListener(){
@@ -113,10 +110,13 @@ abstract class BaseAla implements IsAla {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final boolean isOnline = TrackerUtil.isOnline(context);
-			Log.v(TrackerActivity.LOG, "ConnectionChangeReceiver " + isOnline);
+			synchronized (m_isOnline){
+				m_isOnline = isOnline;
+			}
 			for(NetworkListener l : m_netListeners){
 				l.networkChanged(isOnline);
 			}
+			Log.v(ALA_LOG, "ConnectionChangeReceiver " + isOnline);
 		}
 	}
 	

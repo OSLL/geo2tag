@@ -4,12 +4,12 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
-import ru.spb.osll.TrackerActivity;
 import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonLoginRequest;
+import ru.spb.osll.objects.Mark;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
 import android.content.Context;
@@ -19,13 +19,15 @@ import android.util.Log;
 public class Ala extends BaseAla {
 	private boolean m_isWorking = false;
 	private int m_trackInterval;
-	private int  m_historyLimit;
+	private Buffer<Mark> m_history;
 	
 	public Ala(Context c) {
 		super(c);
 		m_trackInterval = getTrackInterval();
+		m_history = new Buffer<Mark>(getHistoryLimit());
 	}
 	
+	@Override
 	public void setUserData(String login, String pass){
 		setPreference(ITrackerNetSettings.LOGIN, login);
 		setPreference(ITrackerNetSettings.PASSWORD, pass);
@@ -76,7 +78,7 @@ public class Ala extends BaseAla {
 
 	@Override
 	public void setHistoryLimit(int maxMarks) {
-		m_historyLimit = maxMarks;
+		m_history.setBufferSize(maxMarks);
 		setPreference(ITrackerNetSettings.HISTORY_LIMIT, maxMarks);
 	}
 
@@ -97,37 +99,47 @@ public class Ala extends BaseAla {
 		
 	}
 
-	// TODO
+	private String authTokenCache = null;
+	private boolean isChanAvailableCache = false;
+	private void dropCache(){
+		authTokenCache = null;
+		isChanAvailableCache = false;
+	}
+	
 	private Runnable m_doTracking = new Runnable() {
 		@Override
 		public void run(){
-			Log.v(TrackerActivity.LOG, "m_doTracking");
-			if (isOnline()){
-				final String login  =  getPreference(ITrackerNetSettings.LOGIN, "");
-				final String pass = getPreference(ITrackerNetSettings.PASSWORD, "");
-				final String authToken = auth(login, pass);
-				Log.v(TrackerActivity.LOG, "authToken : " + authToken);
-				final String channel = getPreference(ITrackerNetSettings.CHANNEL, "");
-				if (applyChannel(authToken, channel)){
-					Log.v(TrackerActivity.LOG, "lol " + m_isWorking);
-					int delay = getPreference(ITrackerNetSettings.TIME_TICK, 5);
-					while(m_isWorking){
-						try {
-							applyMark(authToken, channel);
-							Thread.sleep(delay*1000);
-						} catch (InterruptedException e) {
-							m_isWorking = false;
-						}
+			final String login    =  getPreference(ITrackerNetSettings.LOGIN, "");
+			final String pass   = getPreference(ITrackerNetSettings.PASSWORD, "");
+			final String channel = getPreference(ITrackerNetSettings.CHANNEL, "");
+			
+			while (m_isWorking){
+				final Mark mark = constructDruftMark();
+				if (isOnline()){
+					if (authTokenCache == null){
+						authTokenCache = auth(login, pass);
+						isChanAvailableCache = applyChannel(authTokenCache, channel);
 					}
+					if (isChanAvailableCache){
+						completeMark(mark, authTokenCache, channel);
+						applyMark(mark);
+					}
+				} else {
+					Log.v(ALA_LOG, "add mark to history");
+					dropCache();
+					m_history.add(mark);
+				}
+				try {
+					Thread.sleep(m_trackInterval * 1000);
+				} catch (InterruptedException e) {
+					m_isWorking = false;
 				}
 			}
 		}
 	};
 	
-
 	private boolean applyChannel(String authToken, String channel){
-		Log.v(TrackerActivity.LOG, "appayChannel ");
-		
+		Log.v(ALA_LOG, "applayChannel");
 		JSONObject JSONResponse = new JsonApplyChannelRequest(authToken, channel,
 				"Geo2Tag tracker channel", "http://osll.spb.ru/", 3000, m_serverUrl)
 				.doRequest();
@@ -146,9 +158,27 @@ public class Ala extends BaseAla {
 		return success;
 	}
 	
-	private void applyMark(String authToken, String channel){
-		double latitude = 30.0;
-		double longitude = 60.0;
+	private void applyMark(Mark mark){
+		JSONObject JSONResponse = new JsonApplyMarkRequest(mark, m_serverUrl).doRequest();
+		if (JSONResponse != null){
+			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
+			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
+			if (status.equals(IResponse.OK_STATUS)){
+				Log.v(ALA_LOG, "sent " + TrackerUtil.convertLocation(mark));
+			} else {
+				onErrorOccured("apply mark:" + status + "," + statusDescription);
+			}
+		} 
+	}
+	
+	private void completeMark(Mark mark, String authToken, String channel){
+		mark.setAuthToken(authToken);
+		mark.setChannel(channel);
+	}
+
+	private Mark constructDruftMark(){
+		double latitude 	= 0.0;
+		double longitude 	= 0.0;
 	
 		Location location = getLocation();
 		if (location == null){
@@ -157,28 +187,14 @@ public class Ala extends BaseAla {
 			latitude = location.getLatitude();
 			longitude = location.getLongitude();
 		}
-		
-		JSONObject JSONResponse;
-		JSONResponse = new JsonApplyMarkRequest(
-				authToken,
-				channel,
-				"title",
-				"unknown",
-				"this tag was generated automaticaly by tracker application",
-				latitude,	
-				longitude,	
-				TrackerUtil.getTime(new Date()), 
-				m_serverUrl).doRequest();
-		if (JSONResponse != null){
-			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
-			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
-			if (status.equals(IResponse.OK_STATUS)){
-				Log.v(TrackerActivity.LOG, "sent " + TrackerUtil.convertLocation(latitude, longitude));
-				//onErrorOccured(TrackerUtil.convertLocation(latitude, longitude));
-			} else {
-				onErrorOccured("apply mark:" + status + "," + statusDescription);
-			}
-		} 
+		Mark mark = new Mark();
+		mark.setTitle("title");
+		mark.setLink("unknown");
+		mark.setDescription("this tag was generated automaticaly by tracker application");
+		mark.setLatitude(latitude);
+		mark.setLongitude(longitude);
+		mark.setTime(TrackerUtil.getTime(new Date()));
+		return mark;
 	}
-
+	
 }

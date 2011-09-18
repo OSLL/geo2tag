@@ -2,9 +2,10 @@ package ru.spb.osll.airomo;
 
 
 public interface IsAla {
-	
-	String auth(String user, String pass);
+	void setUserData(String user, String pass);
 
+	String auth(String user, String pass);
+	
 	void startTrack();
 
 	void stopTrack();

@@ -10,6 +10,7 @@ import java.util.Date;
 
 import ru.spb.osll.R;
 import ru.spb.osll.TrackerActivity;
+import ru.spb.osll.objects.Mark;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -41,6 +42,10 @@ public class TrackerUtil {
 		NotificationManager nm = (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
 		nm.cancel(TRACKER_NOTIFY_ID);
 	}	
+
+	public static String convertLocation(Mark mark){
+		return convertLocation(mark.getLatitude(), mark.getLongitude());
+	}
 	
 	public static String convertLocation(Location loc){
 		return convertLocation(loc.getLatitude(), loc.getLongitude());

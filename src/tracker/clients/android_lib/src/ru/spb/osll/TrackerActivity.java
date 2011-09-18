@@ -3,8 +3,6 @@ package ru.spb.osll;
 import ru.spb.osll.airomo.Ala;
 import ru.spb.osll.exception.ExceptionHandler;
 import ru.spb.osll.preferences.Settings;
-import ru.spb.osll.preferences.SettingsActivity;
-import ru.spb.osll.services.RequestService;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -21,8 +19,7 @@ import android.widget.Toast;
 
 public class TrackerActivity extends Activity {
 	public static String LOG = "Tracker";
-	TextView m_logView;
-	
+	private TextView m_logView;
 	private Ala ALA;
 	
 	@Override
@@ -104,13 +101,11 @@ public class TrackerActivity extends Activity {
 	private void startTracker(){
 		if (ALA.isTracking()){
 			showToast(TrackerUtil.MESS_TRACKER_ALREADY_RUNNING);
-		} else if (ALA.isOnline()){
+		} else {
 			showToast(TrackerUtil.MESS_TRACKER_START);
 			clearLogView();
 			ALA.startTrack();
-		} else if (!ALA.isOnline()){
-			showToast(TrackerUtil.MESS_FAIL_CONNECTION);
-		}
+		} 
 
 //		if (RequestService.isActive()){
 //			showToast(TrackerUtil.MESS_TRACKER_ALREADY_RUNNING);

@@ -1,6 +1,5 @@
 package ru.spb.osll.airomo;
 
-import ru.spb.osll.TrackerActivity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,7 +14,7 @@ public class LocationState {
 	private Context m_context;			// FIXME Context!!!
 	
 	public LocationState(Context context) {
-		Log.v(TrackerActivity.LOG, "LocationState create");
+		Log.v(Ala.ALA_LOG, "LocationState create");
 		m_context = context;
 		m_locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}

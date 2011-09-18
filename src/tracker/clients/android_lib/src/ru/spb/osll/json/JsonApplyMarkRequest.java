@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ru.spb.osll.objects.Mark;
+
 import android.util.Log;
 
 public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IApplyMark {
@@ -19,6 +21,18 @@ public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IAppl
 	private double m_longitude;
 	private String m_time;
 	private String m_serverUrl;
+	
+	public JsonApplyMarkRequest(Mark mark, String serverUrl){
+		m_authToken = mark.getAuthToken();
+		m_channel = mark.getChannel();
+		m_title = mark.getTitle();
+		m_link = mark.getLink();
+		m_description = mark.getDescription();
+		m_latitude = mark.getLatitude();
+		m_longitude = mark.getLongitude();
+		m_time = mark.getTime();
+		m_serverUrl = serverUrl;
+	}
 	
 	public JsonApplyMarkRequest(String authToken, String channel, String title, String link,
 			String description, double latitude, double longitude, String time, String serverUrl){
