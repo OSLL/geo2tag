@@ -2,24 +2,20 @@ TEMPLATE = lib
 
 TARGET = meego-client
 
-target.path = /usr/lib
-INSTALLS += target
-
-CONFIG += mobility debug
+CONFIG += mobility debug network
 MOBILITY += location
 
 QT += network
-CONFIG += network
-#QT -= gui
+QT -= gui
 DEFINES += Q_WS_SYMBIAN
 
 VERSION = 0.0.1
-LIBS+=  -lQtLocation
+LIBS+= -lQtLocation
 DEPENDPATH += .
 INCLUDEPATH += . \
-	       ../../../../http_requests/inc \
-               ../../../../json/inc \
                ../../../../../3rdparty/qjson-0.7.1/src/ \
+	       ../../../../http_requests/inc \
+               ../../../../json/inc \             
                ../../../../common/inc
 
 HEADERS += MeegoClient.h \
@@ -88,7 +84,12 @@ SOURCES += MeegoClient.cpp \
 ../../../../../3rdparty/qjson-0.7.1/src/json_parser.cc \
     markshistory.cpp
 
-
-
-
+unix:!symbian {
+    meego5 {
+        target.path = /opt/usr/lib
+    } else {
+        target.path = /usr/local/lib
+    }
+    INSTALLS += target
+}
 

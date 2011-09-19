@@ -34,3 +34,12 @@ maemo5 {
     target.path = /opt/ui/bin
     INSTALLS += target
 }
+
+unix:!symbian {
+    meego5 {
+        target.path = /opt/usr/bin
+    } else {
+        target.path = /usr/local/bin
+    }
+    INSTALLS += target
+}
