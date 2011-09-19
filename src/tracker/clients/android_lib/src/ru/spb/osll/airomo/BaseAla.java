@@ -29,13 +29,13 @@ abstract class BaseAla implements IsAla {
 	private Editor m_preferencesEditor;
 
 	private Boolean m_isOnline = false;
-	protected String m_serverUrl;
+	private ConnectionData m_connectData;
 
 	
 	public BaseAla(Context c) {
 		initSettings(c);
-		m_serverUrl = getPreference(ITrackerNetSettings.SERVER_URL, ""); 
-
+		refreshConnectionData();
+		
 		Log.v(ALA_LOG, "BaseAla was created...");
 		c.startService(new Intent(c, LocationService.class));
 		c.registerReceiver(m_networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
@@ -82,10 +82,6 @@ abstract class BaseAla implements IsAla {
 		return m_preferences.getString(key, defVal);
 	}
 	
-	protected Location getLocation() {
-		return LocationService.getLocation();
-	}
-	
 	protected void completeMark(Mark mark, String authToken, String channel){
 		mark.setAuthToken(authToken);
 		mark.setChannel(channel);
@@ -95,7 +91,7 @@ abstract class BaseAla implements IsAla {
 		double latitude 	= 0.0;
 		double longitude 	= 0.0;
 	
-		Location location = getLocation();
+		Location location = LocationService.getLocation();
 		if (location == null){
 			//return; //FIXME
 		} else {
@@ -157,6 +153,8 @@ abstract class BaseAla implements IsAla {
 		LocationService.stopLocationListener();
 	}
 	
+	
+	// ---------------- for lesteners ... ----------------
 	protected abstract void networkStatusChanged(boolean isOnline);
 	private ConnectionChangeReceiver m_networkReceiver = new ConnectionChangeReceiver();
 	private class ConnectionChangeReceiver extends BroadcastReceiver {
@@ -186,5 +184,19 @@ abstract class BaseAla implements IsAla {
 			}
 		}
 	}	
+	
+	class ConnectionData {
+		public String login = getPreference(ITrackerNetSettings.LOGIN, "");
+		public String pass = getPreference(ITrackerNetSettings.PASSWORD, "");
+		public String channel = getPreference(ITrackerNetSettings.CHANNEL, "");
+		public String serverUrl = getPreference(ITrackerNetSettings.SERVER_URL, "");
+	}
+	
+	protected void refreshConnectionData(){
+		m_connectData = new ConnectionData();
+	}
 
+	protected ConnectionData netData(){
+		return m_connectData;
+	}
 }

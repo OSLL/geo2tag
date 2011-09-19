@@ -29,7 +29,6 @@ public class Ala extends BaseAla {
 	@Override
 	public void onDestroy(Context c) {
 		super.onDestroy(c);
-		dropCache();
 		if (m_trackThread != null){
 			m_trackThread.interrupt();
 		}
@@ -52,7 +51,8 @@ public class Ala extends BaseAla {
 	@Override
 	public String auth(String login, String pass) {
 		String authToken = null;
-		JSONObject JSONResponse = new JsonLoginRequest(login, pass, m_serverUrl).doRequest();
+		final String serverUrl = netData().serverUrl;
+		JSONObject JSONResponse = new JsonLoginRequest(login, pass, serverUrl).doRequest();
 		if (JSONResponse != null) {
 			authToken = JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN);
 		} else {
@@ -133,22 +133,14 @@ public class Ala extends BaseAla {
 		m_historyThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final String login = getPreference(ITrackerNetSettings.LOGIN, "");
-				final String pass = getPreference(ITrackerNetSettings.PASSWORD, "");
-				final String channel = getPreference(ITrackerNetSettings.CHANNEL, "");
+				refreshConnectionData();
 				try {
 					while(isOnline() && getHistory().hasElements()){
 						Log.v(ALA_LOG, "sending history...");
-						if (m_authTokenCache == null){
-							m_authTokenCache = auth(login, pass);
-							m_isChanAvailableCache = applyChannel(m_authTokenCache, channel);
-						}
-						if (m_isChanAvailableCache){
-							final Mark mark = getHistory().getFirst();
-							completeMark(mark, m_authTokenCache, channel);
-							if ( applyMark(mark) ){
-								getHistory().removeFirst();
-							}
+						final Mark mark = getHistory().getFirst();
+						if (sendMark(mark)){
+							Log.v(ALA_LOG, "sending history: mark was sent...");
+							getHistory().removeFirst();
 						}
 						Thread.sleep(333);
 					}
@@ -165,26 +157,17 @@ public class Ala extends BaseAla {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final String login =  getPreference(ITrackerNetSettings.LOGIN, "");
-				final String pass = getPreference(ITrackerNetSettings.PASSWORD, "");
-				final String channel = getPreference(ITrackerNetSettings.CHANNEL, "");
-				if (m_authTokenCache == null){
-					m_authTokenCache = auth(login, pass);
-					m_isChanAvailableCache = applyChannel(m_authTokenCache, channel);
-				}
-				if (m_isChanAvailableCache){
-					Mark mark = constructDruftMark();
-					completeMark(mark, m_authTokenCache, channel);
-					applyMark(mark);
-				}
+				refreshConnectionData();
+				final Mark mark = constructDruftMark();
+				sendMark(mark);
 			}
 		}).start();
 	}
-	
+
+	@Override
 	public List<Mark> getAllMarks(){
 		return getHistory().getBufferData();
 	}
-	
 
 	private Thread m_trackThread;
 	private void doTracking(){
@@ -194,40 +177,43 @@ public class Ala extends BaseAla {
 		m_trackThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final String login = getPreference(ITrackerNetSettings.LOGIN, "");
-				final String pass = getPreference(ITrackerNetSettings.PASSWORD, "");
-				final String channel = getPreference(ITrackerNetSettings.CHANNEL, "");
+				refreshConnectionData();
 				try {
 					while (!Thread.currentThread().isInterrupted() && m_isWorking){
 						final Mark mark = constructDruftMark();
 						if (isOnline()){
-							if (m_authTokenCache == null){
-								m_authTokenCache = auth(login, pass);
-								m_isChanAvailableCache = applyChannel(m_authTokenCache, channel);
-							}
-							if (m_isChanAvailableCache){
-								completeMark(mark, m_authTokenCache, channel);
-								Log.v(ALA_LOG, "track...");
-								applyMark(mark);
-							}
+							Log.v(ALA_LOG, "send mark to server...");
+							sendMark(mark);
 						} else {
-							Log.v(ALA_LOG, "add mark to history");
+							Log.v(ALA_LOG, "add mark to history...");
 							getHistory().add(mark);
 						}
 						Thread.sleep(m_trackInterval * 1000);
 					}
 				} catch (InterruptedException e) {
-					//m_isWorking = false;
+					Log.v(ALA_LOG, "m_trackThread is interrupted");
 				}
 			}
 		});
 		m_trackThread.start();
 	}
 	
+	private boolean sendMark(Mark mark){
+		if(!m_isChanAvailableCache){
+			m_authTokenCache = auth(netData().login, netData().pass);
+			m_isChanAvailableCache = applyChannel(m_authTokenCache, netData().channel);
+		}
+		if (m_isChanAvailableCache){
+			completeMark(mark, m_authTokenCache, netData().channel);
+			return applyMark(mark);
+		}
+		return false;
+	}
+	
 	private boolean applyChannel(String authToken, String channel){
 		Log.v(ALA_LOG, "applayChannel");
 		JSONObject JSONResponse = new JsonApplyChannelRequest(authToken, channel,
-				"Geo2Tag tracker channel", "http://osll.spb.ru/", 3000, m_serverUrl)
+				"Geo2Tag tracker channel", "http://osll.spb.ru/", 3000, netData().serverUrl)
 				.doRequest();
 		boolean success = false;
 		if(JSONResponse != null){
@@ -245,7 +231,7 @@ public class Ala extends BaseAla {
 	
 	private boolean applyMark(Mark mark){
 		boolean success = false;
-		JSONObject JSONResponse = new JsonApplyMarkRequest(mark, m_serverUrl).doRequest();
+		JSONObject JSONResponse = new JsonApplyMarkRequest(mark, netData().serverUrl).doRequest();
 		if (JSONResponse != null){
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);

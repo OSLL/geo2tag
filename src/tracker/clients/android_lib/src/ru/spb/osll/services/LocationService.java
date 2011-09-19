@@ -56,18 +56,9 @@ public class LocationService extends Service {
 			//	Log.v(TrackerActivity.LOG, "onLocationChanged  " + location.toString());
 			//}
 		}
-
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			//Log.v(TrackerActivity.LOG, "onStatusChanged " + provider + " " + status + " " + extras);
-		}
-
-		public void onProviderEnabled(String provider) {
-			//Log.v(TrackerActivity.LOG, "onProviderEnabled " + provider);
-		}
-
-		public void onProviderDisabled(String provider) {
-			//Log.v(TrackerActivity.LOG, "onProviderDisabled " + provider);
-		}
+		public void onStatusChanged(String provider, int status, Bundle extras) {}
+		public void onProviderEnabled(String provider) {}
+		public void onProviderDisabled(String provider) {}
 	};
 
 	public static boolean startLocationListener(){
