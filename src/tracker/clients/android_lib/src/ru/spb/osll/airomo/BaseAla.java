@@ -1,9 +1,11 @@
 package ru.spb.osll.airomo;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import ru.spb.osll.error.AlaError;
+import ru.spb.osll.objects.Mark;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
@@ -28,17 +30,28 @@ abstract class BaseAla implements IsAla {
 
 	private Boolean m_isOnline = false;
 	protected String m_serverUrl;
+
 	
 	public BaseAla(Context c) {
 		m_locationState = new LocationState(c);
 		initSettings(c);
 
 		m_serverUrl = getPreference(ITrackerNetSettings.SERVER_URL, ""); 
-		c.registerReceiver(new ConnectionChangeReceiver(), 
-				new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
-		c.registerReceiver(new ShutdownReceiver(), 
-				new IntentFilter("android.intent.action.BATTERY_LOW"));
+		c.registerReceiver(m_networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+		c.registerReceiver(m_shutdownReceiver, new IntentFilter("android.intent.action.BATTERY_LOW"));
 	}
+
+	public void onDestroy(Context c) {
+		Log.v(ALA_LOG, "Base Ala - onDestroy...");
+		c.unregisterReceiver(m_networkReceiver);
+		c.unregisterReceiver(m_shutdownReceiver);
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+	}
+
 
 	private void initSettings(Context c) {
 		final Settings settings = new Settings(c);
@@ -70,6 +83,33 @@ abstract class BaseAla implements IsAla {
 	protected Location getLocation() {
 		return m_locationState.getLocation();
 	}
+	
+	protected void completeMark(Mark mark, String authToken, String channel){
+		mark.setAuthToken(authToken);
+		mark.setChannel(channel);
+	}
+
+	protected Mark constructDruftMark(){
+		double latitude 	= 0.0;
+		double longitude 	= 0.0;
+	
+		Location location = getLocation();
+		if (location == null){
+			//return; //FIXME
+		} else {
+			latitude = location.getLatitude();
+			longitude = location.getLongitude();
+		}
+		Mark mark = new Mark();
+		mark.setTitle("title");
+		mark.setLink("unknown");
+		mark.setDescription("this tag was generated automaticaly by tracker application");
+		mark.setLatitude(latitude);
+		mark.setLongitude(longitude);
+		mark.setTime(TrackerUtil.getTime(new Date()));
+		return mark;
+	}
+
 
 	// ------------------- IsAla ---------------------
 	@Override
@@ -116,8 +156,8 @@ abstract class BaseAla implements IsAla {
 	}
 	
 	protected abstract void networkStatusChanged(boolean isOnline);
-	
-	public class ConnectionChangeReceiver extends BroadcastReceiver {
+	private ConnectionChangeReceiver m_networkReceiver = new ConnectionChangeReceiver();
+	private class ConnectionChangeReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final boolean isOnline = TrackerUtil.isOnline(context);
@@ -132,12 +172,13 @@ abstract class BaseAla implements IsAla {
 		}
 	}	
 
-	public class ShutdownReceiver extends BroadcastReceiver {
+	protected abstract void gooffEvent();
+	private ShutdownReceiver m_shutdownReceiver = new ShutdownReceiver();
+	private class ShutdownReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.v(ALA_LOG, "ShutdownReceiver ");
-			sendLastCoordinate();
-			sendHistory();
+			gooffEvent();
 			for(GooffListener l : m_gooffListeners){
 				l.gooff();
 			}

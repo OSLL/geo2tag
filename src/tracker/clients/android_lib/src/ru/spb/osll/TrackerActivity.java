@@ -43,8 +43,9 @@ public class TrackerActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
+		ALA.onDestroy(this);
 		unregisterReceiver(m_trackerReceiver);
+		super.onDestroy();
 	}
 
 	// ----------------------------------------------------------------
