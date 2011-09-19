@@ -139,7 +139,7 @@ public class Ala extends BaseAla {
 				try {
 					while(isOnline() && getHistory().hasElements()){
 						Log.v(ALA_LOG, "sending history...");
-						if(!m_isChanAvailableCache){
+						if (m_authTokenCache == null){
 							m_authTokenCache = auth(login, pass);
 							m_isChanAvailableCache = applyChannel(m_authTokenCache, channel);
 						}
@@ -152,7 +152,9 @@ public class Ala extends BaseAla {
 						}
 						Thread.sleep(333);
 					}
-				} catch (InterruptedException e) {}
+				} catch (InterruptedException e) {
+					Log.v(ALA_LOG, "m_historyThread is interrupted");
+				}
 			}
 		});
 		m_historyThread.start();

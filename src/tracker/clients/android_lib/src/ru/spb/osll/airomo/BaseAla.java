@@ -8,6 +8,7 @@ import ru.spb.osll.error.AlaError;
 import ru.spb.osll.objects.Mark;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
+import ru.spb.osll.services.LocationService;
 import ru.spb.osll.utils.TrackerUtil;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,23 +27,24 @@ abstract class BaseAla implements IsAla {
 	private List<ErrorListener> m_errorListeners = new LinkedList<ErrorListener>();
 	private SharedPreferences m_preferences;
 	private Editor m_preferencesEditor;
-	private LocationState m_locationState;
 
 	private Boolean m_isOnline = false;
 	protected String m_serverUrl;
 
 	
 	public BaseAla(Context c) {
-		m_locationState = new LocationState(c);
 		initSettings(c);
-
 		m_serverUrl = getPreference(ITrackerNetSettings.SERVER_URL, ""); 
+
+		Log.v(ALA_LOG, "BaseAla was created...");
+		c.startService(new Intent(c, LocationService.class));
 		c.registerReceiver(m_networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 		c.registerReceiver(m_shutdownReceiver, new IntentFilter("android.intent.action.BATTERY_LOW"));
 	}
 
 	public void onDestroy(Context c) {
 		Log.v(ALA_LOG, "Base Ala - onDestroy...");
+		c.stopService(new Intent(c, LocationService.class));
 		c.unregisterReceiver(m_networkReceiver);
 		c.unregisterReceiver(m_shutdownReceiver);
 	}
@@ -81,7 +83,7 @@ abstract class BaseAla implements IsAla {
 	}
 	
 	protected Location getLocation() {
-		return m_locationState.getLocation();
+		return LocationService.getLocation();
 	}
 	
 	protected void completeMark(Mark mark, String authToken, String channel){
@@ -148,11 +150,11 @@ abstract class BaseAla implements IsAla {
 	
 	// ---------------- IsAla extension ------------------
 	public void startLocationListener(){
-		m_locationState.startLocationListener();
+		LocationService.startLocationListener();
 	}
 
 	public void stopLocationListener(){
-		m_locationState.stopLocationListener();
+		LocationService.stopLocationListener();
 	}
 	
 	protected abstract void networkStatusChanged(boolean isOnline);

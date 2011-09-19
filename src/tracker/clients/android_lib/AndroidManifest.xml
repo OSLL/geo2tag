@@ -20,7 +20,6 @@
        	<activity android:name="ru.spb.osll.preferences.SettingsActivity" android:configChanges="orientation|keyboardHidden"/>
 	    <activity android:name="ru.spb.osll.exception.ExceptionActivity" android:configChanges="orientation|keyboardHidden"/>
 	   
-        <service android:enabled="true" android:name="ru.spb.osll.services.RequestService"></service>
-        <service android:enabled="true" android:name="ru.spb.osll.services.LocationService"></service>
+        <service android:enabled="true" android:name=".services.LocationService"></service>
     </application>
 </manifest> 
