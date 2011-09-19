@@ -53,10 +53,9 @@ public class Settings {
 			Log.v(TrackerActivity.LOG, "loadFromXMLFile - exception: " + e.getMessage());
 		}
 	}
-
-	// TODO delete later
-	public static SharedPreferences getPreferences(Context c){
-		return new Settings(c).getPreferences();
+	
+	public static boolean getPreference(Context c, String key, boolean defVal){
+		return new Settings(c).getPreferences().getBoolean(key, defVal);
 	}
 	
 	public interface ITrackerNetSettings{
@@ -77,5 +76,5 @@ public class Settings {
 		String IS_SHOW_TICKS = "is_show_ticks";
 		String IS_HIDE_APP = "is_hide_app";
 	}
-		
+
 }

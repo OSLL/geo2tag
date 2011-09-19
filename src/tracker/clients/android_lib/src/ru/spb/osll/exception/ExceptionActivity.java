@@ -21,7 +21,7 @@ public class ExceptionActivity extends Activity{
 		exeptionTextView.setClickable(false);
 		exeptionTextView.setLongClickable(false);
 
-		exeptionTextView.append("Tracker has been crached!");
+		exeptionTextView.append("Tracker has been crached!\n");
 		exeptionTextView.append(stackTrace);
 		
 		findViewById(R.id.send).setOnClickListener(

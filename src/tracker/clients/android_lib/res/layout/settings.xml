@@ -82,6 +82,16 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/button_settings_tick"/>
+
+	        <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/history_size"        	
+	        	android:singleLine="true"/>
+			<Button
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/button_settings_history"/>
 				
 			<CheckBox
 				android:layout_width="fill_parent"

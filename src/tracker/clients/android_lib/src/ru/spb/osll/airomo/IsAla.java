@@ -7,8 +7,6 @@ import ru.spb.osll.objects.Mark;
 
 
 public interface IsAla {
-	void setUserData(String user, String pass);
-
 	String auth(String user, String pass);
 	
 	void startTrack();
@@ -17,20 +15,35 @@ public interface IsAla {
 
 	boolean isTracking();
 
-	void setTrackInterval(int sec);
+	// preferences
+	void setUser(String user);
+	String getUser();
+	
+	void  setPass(String pass);
+	String getPass();
 
+	void setTrackInterval(int sec);
 	int getTrackInterval();
 
-	// default 50, maximum 200;
 	void setHistoryLimit(int maxMarks);
-	
 	int getHistoryLimit();
+	
+	void setServerUrl(String severUrl);
+	String getServerUrl();
 
+	void setChannel(String channel);
+	String getChannel();
+	
 	void sendHistory();
 
 	void sendLastCoordinate();
 
 	List<Mark> getAllMarks();  
+
+	void addTrackListener(TrackListener l);	
+	public interface TrackListener {
+		void onNewMark(Mark mark);
+	}
 	
 	void addGooffListener(GooffListener l);	
 	public interface GooffListener {

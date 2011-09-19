@@ -1,8 +1,11 @@
 package ru.spb.osll;
 
 import ru.spb.osll.airomo.Ala;
+import ru.spb.osll.airomo.IsAla.TrackListener;
 import ru.spb.osll.exception.ExceptionHandler;
+import ru.spb.osll.objects.Mark;
 import ru.spb.osll.preferences.Settings;
+import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.preferences.SettingsActivity;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
@@ -21,13 +24,18 @@ import android.widget.Toast;
 public class TrackerActivity extends Activity {
 	public static String LOG = "Tracker";
 	private TextView m_logView;
-	private Ala ALA;
+	private static Ala ALA;
+	
+	public static Ala alaInstance() {
+		return ALA;
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ALA = new Ala(TrackerActivity.this);
-
+		ALA.addTrackListener(m_trackListener);
+		
 		setContentView(R.layout.main);
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		registerReceiver(m_trackerReceiver, new IntentFilter(TrackerReceiver.ACTION_SHOW_MESS));
@@ -47,6 +55,18 @@ public class TrackerActivity extends Activity {
 		unregisterReceiver(m_trackerReceiver);
 		super.onDestroy();
 	}
+	
+	private TrackListener m_trackListener = new TrackListener() {
+		@Override
+		public void onNewMark(Mark mark) {
+			final String mess = TrackerUtil.convertLocation(mark);
+			appendToLogView(mess);
+			if (Settings.getPreference(TrackerActivity.this, 
+				ITrackerAppSettings.IS_SHOW_TICKS, false)){
+				showToast(mess);
+			}
+		}
+	};  
 
 	// ----------------------------------------------------------------
 	private void initialization(){
@@ -56,6 +76,10 @@ public class TrackerActivity extends Activity {
 		btnService.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	startTracker();
+            	if (Settings.getPreference(TrackerActivity.this, 
+            		ITrackerAppSettings.IS_HIDE_APP, false)){
+                	TrackerUtil.hideApplication(TrackerActivity.this); 
+            	}
             }
         });
 

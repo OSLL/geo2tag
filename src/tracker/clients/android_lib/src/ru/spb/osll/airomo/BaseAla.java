@@ -25,6 +25,7 @@ abstract class BaseAla implements IsAla {
 	private List<NetworkListener> m_netListeners = new LinkedList<NetworkListener>();
 	private List<GooffListener> m_gooffListeners = new LinkedList<GooffListener>();
 	private List<ErrorListener> m_errorListeners = new LinkedList<ErrorListener>();
+	private List<TrackListener> m_trackListeners = new LinkedList<TrackListener>();
 	private SharedPreferences m_preferences;
 	private Editor m_preferencesEditor;
 
@@ -105,11 +106,23 @@ abstract class BaseAla implements IsAla {
 		mark.setLatitude(latitude);
 		mark.setLongitude(longitude);
 		mark.setTime(TrackerUtil.getTime(new Date()));
+		newMark(mark);
 		return mark;
 	}
-
-
+	
+	
 	// ------------------- IsAla ---------------------
+	@Override
+	public void addTrackListener(TrackListener l) {
+		m_trackListeners.add(l);
+	}
+	
+	private void newMark(Mark mark){
+		for(TrackListener l : m_trackListeners){
+			l.onNewMark(mark);
+		}
+	}
+	
 	@Override
 	public void addGooffListener(GooffListener l) {
 		m_gooffListeners.add(l);

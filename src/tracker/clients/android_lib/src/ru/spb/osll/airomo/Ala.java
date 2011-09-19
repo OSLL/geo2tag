@@ -5,10 +5,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import ru.spb.osll.json.IRequest.IResponse;
-import ru.spb.osll.json.JsonApplyChannelRequest;
-import ru.spb.osll.json.JsonApplyMarkRequest;
-import ru.spb.osll.json.JsonBase;
-import ru.spb.osll.json.JsonLoginRequest;
+import ru.spb.osll.json.*;
 import ru.spb.osll.objects.Mark;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
@@ -40,12 +37,6 @@ public class Ala extends BaseAla {
 
 	private synchronized Buffer<Mark> getHistory(){
 		return m_history;
-	}
-	
-	@Override
-	public void setUserData(String login, String pass){
-		setPreference(ITrackerNetSettings.LOGIN, login);
-		setPreference(ITrackerNetSettings.PASSWORD, pass);
 	}
 
 	@Override
@@ -79,6 +70,26 @@ public class Ala extends BaseAla {
 	public boolean isTracking() {
 		return m_isWorking;
 	}
+	
+	@Override
+	public void setUser(String login) {
+		setPreference(ITrackerNetSettings.LOGIN, login);
+	}
+
+	@Override
+	public String getUser() {
+		return getPreference(ITrackerNetSettings.LOGIN, "?????");
+	}
+
+	@Override
+	public void setPass(String pass) {
+		setPreference(ITrackerNetSettings.PASSWORD, pass);
+	}
+
+	@Override
+	public String getPass() {
+		return getPreference(ITrackerNetSettings.PASSWORD, "?????");
+	}	
 
 	@Override
 	public void setTrackInterval(int sec) {
@@ -100,6 +111,27 @@ public class Ala extends BaseAla {
 	@Override
 	public int getHistoryLimit() {
 		return getPreference(ITrackerNetSettings.HISTORY_LIMIT, 50);
+	}
+	
+	@Override
+	public void setServerUrl(String severUrl) {
+		netData().serverUrl = severUrl;
+		setPreference(ITrackerNetSettings.SERVER_URL, severUrl);
+	}
+
+	@Override
+	public String getServerUrl() {
+		return getPreference(ITrackerNetSettings.SERVER_URL, "?????");
+	}
+
+	@Override
+	public void setChannel(String channel) {
+		setPreference(ITrackerNetSettings.CHANNEL, channel);
+	}
+
+	@Override
+	public String getChannel() {
+		return getPreference(ITrackerNetSettings.CHANNEL, "?????");
 	}
 	
 	@Override
@@ -243,5 +275,5 @@ public class Ala extends BaseAla {
 			}
 		} 
 		return success;
-	}	
+	}
 }
