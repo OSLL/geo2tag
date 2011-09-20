@@ -13,7 +13,7 @@ Release:        1
 License:        <insert license tag>
 Summary:        <insert summary tag>
 Url:            <insert url tag>
-Group:          <insert group tag>
+Group:          Other
 Source0:        %{name}-%{version}.tar.gz
 #BuildRequires:  pkgconfig(QtCore)
 BuildRequires:  libqt-devel
