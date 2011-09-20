@@ -17,6 +17,8 @@ Group:          <insert group tag>
 Source0:        %{name}-%{version}.tar.gz
 #BuildRequires:  pkgconfig(QtCore)
 BuildRequires:  libqt-devel
+BuildRequires:  qjson-devel
+BuildRequires:  fakeroot
 
 %description
 MeeGo client of geo2tag platform
@@ -38,9 +40,12 @@ make
 # Add here commands to install the package.
 #%qmake_install
 make install INSTALL_ROOT=%{buildroot}
-#ln -f -s %{buildroot}/opt/usr/lib/libmeego-client.so.0.0.1 %{buildroot}/opt/usr/lib/libmeego-client.so
-#ln -f -s %{buildroot}/opt/usr/lib/libmeego-client.so.0.0.1 %{buildroot}/opt/usr/lib/libmeego-client.so.0
-#ln -f -s %{buildroot}/opt/usr/lib/libmeego-client.so.0.0.1 %{buildroot}/opt/usr/lib/libmeego-client.so.0.0
+
+%post
+ln -f -s /usr/lib/libmeego-client.so.0.0.1 /usr/lib/libmeego-client.so
+ln -f -s /usr/lib/libmeego-client.so.0.0.1 /usr/lib/libmeego-client.so.0
+ln -f -s /usr/lib/libmeego-client.so.0.0.1 /usr/lib/libmeego-client.so.0.0
+fakeroot /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)

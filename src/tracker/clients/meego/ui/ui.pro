@@ -36,10 +36,6 @@ maemo5 {
 }
 
 unix:!symbian {
-    meego5 {
-        target.path = /opt/usr/bin
-    } else {
-        target.path = /usr/local/bin
-    }
+    target.path = /opt/usr/bin
     INSTALLS += target
 }

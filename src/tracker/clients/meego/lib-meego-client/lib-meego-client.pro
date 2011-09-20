@@ -85,11 +85,8 @@ SOURCES += MeegoClient.cpp \
     markshistory.cpp
 
 unix:!symbian {
-    meego5 {
-        target.path = /opt/usr/lib
-    } else {
-        target.path = /usr/local/lib
-    }
+
+    target.path = /usr/lib
     INSTALLS += target
 }
 
