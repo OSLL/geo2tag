@@ -20,7 +20,7 @@ private slots:
 
     void on_startstopButton_pressed();
     void on_authentificated();
-
+    void on_error(QString error);
 private:
     Ui::MainWindow *ui;
 };

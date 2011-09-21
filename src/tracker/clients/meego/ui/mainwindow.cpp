@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QTextEdit>
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QObject::connect(&m_client,SIGNAL(authentificated()),this,SLOT(on_authentificated()));
+    connect(&m_client,SIGNAL(authentificated()),SLOT(on_authentificated()));
+    connect(&m_client,SIGNAL(error(QString)),SLOT(on_error(string)));
 }
 
 MainWindow::~MainWindow()
@@ -40,4 +42,10 @@ void MainWindow::on_startstopButton_pressed()
 void MainWindow::on_authentificated()
 {
     ui->auth_button->setEnabled(false);
+}
+
+void MainWindow::on_error(QString error)
+{
+  // qDebug() << "Error in lib occured";
+   ui->log_edit->append(QDateTime::currentDateTimeUtc().toString()+":" + error);
 }

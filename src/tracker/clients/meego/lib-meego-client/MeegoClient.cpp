@@ -10,13 +10,14 @@
 #define PAUSE_INTERVAL 250
 #define DEFAULT_CHANNEL "default"
 
-MeegoClient::MeegoClient(QObject * parent):QObject(parent),m_trackInterval(5)
+MeegoClient::MeegoClient(QObject * parent):QObject(parent),m_trackInterval(5),
+    m_authentificated(0)
 {
 
         m_loginQuery = new LoginQuery(this);
         connect(m_loginQuery, SIGNAL(connected()), SLOT(onAuthentificated()));
         connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
-        connect(m_loginQuery, SIGNAL(errorOccured(QString)), SIGNAL(errorOccured(QString)));
+        connect(m_loginQuery, SIGNAL(errorOccured(QString)), SIGNAL(error(QString)));
 
         m_timer = new QTimer(this);
         connect(m_timer, SIGNAL(timeout()), SLOT(track()));
@@ -29,7 +30,7 @@ MeegoClient::MeegoClient(QObject * parent):QObject(parent),m_trackInterval(5)
 
         m_addNewMarkQuery = new AddNewMarkQuery(this);
         connect(m_addNewMarkQuery,SIGNAL(tagAdded()),SLOT(onMarkAdded()));
-        connect(m_addNewMarkQuery, SIGNAL(errorOccured(QString)), SIGNAL(errorOccured(QString)));
+        connect(m_addNewMarkQuery, SIGNAL(errorOccured(QString)), SIGNAL(error(QString)));
 }
 
 void MeegoClient::auth(QString user, QString pass)
@@ -41,12 +42,16 @@ void MeegoClient::auth(QString user, QString pass)
 // Starting write marks into history
 void MeegoClient::startTrack()
 {
+    qDebug() << "Start tracking";
     if (!m_timer->isActive()) m_timer->start(m_trackInterval*1000);
 }
 // Stop write marks
 void MeegoClient::stopTrack()
 {
+    qDebug() << "Stop tracking";
     if (m_timer->isActive()) m_timer->stop();
+    //If we stop tracking than check is there any marks in hystory
+    if (isOnline() && isAuthentificated() && !m_history->isEmpty()) sendHistory();
 }
 
 bool MeegoClient::isTracking()
@@ -83,7 +88,7 @@ void MeegoClient::sendHistory()
 {
     while(!m_history->isEmpty() && isOnline())
     {
-        qDebug() << "sending coordinates";
+       // qDebug() << "sending coordinates";
         sendLastCoordinate();
         pause(250);
     }
@@ -103,13 +108,17 @@ MarksHistory * MeegoClient::getAllMarks()
 
 void MeegoClient::track()
 {
-    QSharedPointer<DataMark> mark(new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
-                                                           common::GpsInfo::getInstance().getLongitude(),"t",
-                            "this tag was generated","unknown",     QDateTime::currentDateTime()));
+   // Primitive stub for position source
+  //  double lat=common::GpsInfo::getInstance().getLatitude();
+ //   double lon=common::GpsInfo::getInstance().getLongitude();
+    double lat=qrand()%60;
+    double lon=qrand()%60;
+    QSharedPointer<DataMark> mark(new JsonDataMark(lat,lon,"t",
+                            "this tag was generated","unknown",QDateTime::currentDateTime()));
+
     QSharedPointer<Channel> channel(new JsonChannel(DEFAULT_CHANNEL,"dummy channel"));
     mark->setChannel(channel);
     m_history->pushMark(mark);
-    qDebug() << "Tracked mark" << mark->getLatitude() << " " <<mark->getLongitude();
 }
 
 void MeegoClient::onError(QString error)
@@ -145,7 +154,9 @@ bool MeegoClient::isOnline()
 
 void MeegoClient::onAuthentificated()
 {
+    qDebug() << "Authentificated " <<  m_loginQuery->getUser()->getToken();
     m_user =  m_loginQuery->getUser();
+    m_authentificated = true;
     emit authentificated();
 }
 
@@ -169,7 +180,7 @@ void MeegoClient::onGoOffEvent()
 
 void MeegoClient::onHistoryFull()
 {
-    if (isOnline()) sendHistory();
+    if (isOnline() && isAuthentificated()) sendHistory();
 }
 
 void MeegoClient::pause(int msecs)

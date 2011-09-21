@@ -70,7 +70,7 @@ public slots:
         // When history is full
         void onHistoryFull();
 signals:
-	void errorOccured(QString error);
+        void error(QString error);
         void authentificated();
 };
 
