@@ -10,8 +10,22 @@ public class Geo2tag implements EntryPoint {
 
 	public void onModuleLoad() {
 		// Create the application shell.
-		GTShell shell = new GTShell();
+		final GTShell shell = new GTShell();
 		RootLayoutPanel.get().add(shell);
+
+		// demo visualization
+//		Runnable onLoadCallback = new Runnable() {
+//			public void run() {
+//				GTShell.Instance.setContent(new ChartPie());
+//			}
+//		};
+//		VisualizationUtils.loadVisualizationApi(onLoadCallback, PieChart.PACKAGE);
+//		Runnable onLoadCallback = new Runnable() {
+//			public void run() {
+//				GTShell.Instance.setContent(new ChartLine());
+//			}
+//		};
+//		VisualizationUtils.loadVisualizationApi(onLoadCallback, PieChart.PACKAGE);
 	}
 	
 }
