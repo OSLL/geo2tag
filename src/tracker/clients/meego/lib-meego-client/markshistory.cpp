@@ -54,7 +54,8 @@ QSharedPointer<DataMark> MarksHistory::popMark()
 {
     //return and remove the last element from vector
     qDebug() << "Accessing to "<< m_marks.size()-1;
-   // QSharedPointer<DataMark> mark(m_marks.at(m_marks.size()-1));
-    return m_marks.at(m_marks.size()-1);
+    QSharedPointer<DataMark> mark(m_marks.at(m_marks.size()-1));
+    m_marks.remove(m_marks.size()-1);
+    return mark;
 }
 

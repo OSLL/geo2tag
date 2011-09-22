@@ -106,6 +106,11 @@ MarksHistory * MeegoClient::getAllMarks()
     return m_history;
 }
 
+void MeegoClient::setDispName(const QString & name )
+{
+    m_name = name;
+}
+
 void MeegoClient::track()
 {
    // Primitive stub for position source
@@ -113,7 +118,7 @@ void MeegoClient::track()
  //   double lon=common::GpsInfo::getInstance().getLongitude();
     double lat=qrand()%60;
     double lon=qrand()%60;
-    QSharedPointer<DataMark> mark(new JsonDataMark(lat,lon,"t",
+    QSharedPointer<DataMark> mark(new JsonDataMark(lat,lon,m_name,
                             "this tag was generated","unknown",QDateTime::currentDateTime()));
 
     QSharedPointer<Channel> channel(new JsonChannel(DEFAULT_CHANNEL,"dummy channel"));

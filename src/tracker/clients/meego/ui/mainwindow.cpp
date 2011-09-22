@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(&m_client,SIGNAL(authentificated()),SLOT(on_authentificated()));
     connect(&m_client,SIGNAL(error(QString)),SLOT(on_error(string)));
+    ui->log_edit->append("Error log");
+
 }
 
 MainWindow::~MainWindow()
