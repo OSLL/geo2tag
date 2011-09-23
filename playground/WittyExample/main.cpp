@@ -21,14 +21,14 @@ using namespace Wt;
  */
 class HelloApplication : public WApplication
 {
-public:
-  HelloApplication(const WEnvironment& env);
+  public:
+    HelloApplication(const WEnvironment& env);
 
-private:
-  WLineEdit *nameEdit_;
-  WText *greeting_;
+  private:
+    WLineEdit *nameEdit_;
+    WText *greeting_;
 
-  void greet();
+    void greet();
 };
 
 /*
@@ -36,22 +36,24 @@ private:
  * the initial request. It must be passed to the WApplication
  * constructor so it is typically also an argument for your custom
  * application constructor.
-*/
+ */
 HelloApplication::HelloApplication(const WEnvironment& env)
-  : WApplication(env)
+: WApplication(env)
 {
-  setTitle("Hello world");                               // application title
+  setTitle("Hello world");              // application title
 
-  root()->addWidget(new WText("Your name, please ? "));  // show some text
-  nameEdit_ = new WLineEdit(root());                     // allow text input
-  nameEdit_->setFocus();                                 // give focus
+                                        // show some text
+  root()->addWidget(new WText("Your name, please ? "));
+  nameEdit_ = new WLineEdit(root());    // allow text input
+  nameEdit_->setFocus();                // give focus
 
-  WPushButton *b = new WPushButton("Greet me.", root()); // create a button
-  b->setMargin(5, Left);                                 // add 5 pixels margin
+                                        // create a button
+  WPushButton *b = new WPushButton("Greet me.", root());
+  b->setMargin(5, Left);                // add 5 pixels margin
 
-  root()->addWidget(new WBreak());                       // insert a line break
+  root()->addWidget(new WBreak());      // insert a line break
 
-  greeting_ = new WText(root());                         // empty text
+  greeting_ = new WText(root());        // empty text
 
   /*
    * Connect signals with slots
@@ -66,6 +68,7 @@ HelloApplication::HelloApplication(const WEnvironment& env)
   //nameEdit_->enterPressed().connect(boost::bind(&HelloApplication::greet, this));
 }
 
+
 void HelloApplication::greet()
 {
   /*
@@ -73,6 +76,7 @@ void HelloApplication::greet()
    */
   greeting_->setText("Hello there, " + nameEdit_->text());
 }
+
 
 WApplication *createApplication(const WEnvironment& env)
 {
@@ -82,6 +86,7 @@ WApplication *createApplication(const WEnvironment& env)
    */
   return new HelloApplication(env);
 }
+
 
 int main(int argc, char **argv)
 {
