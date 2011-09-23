@@ -8,19 +8,18 @@ def getBranch(push)
   branch = branch[11..-1]
 end
 
-post '/refresh' do
+post '/refresh_webside' do
   branch = getBranch(JSON.parse(params[:payload]))
-  #wasGood = system( "./commit_deploy.sh #{branch}" )
+  wasGood = system( "./build_webside.sh #{branch}" )
 end
 
 post '/refresh_platform' do
   branch = getBranch(JSON.parse(params[:payload]))
-  #wasGood = system( "./commit_platform_deploy.sh #{branch}" )
+  wasGood = system( "./build_platform.sh #{branch}" )
 end
 
 post '/test' do
   branch = getBranch(JSON.parse(params[:payload]))
   puts branch
 end
-
 
