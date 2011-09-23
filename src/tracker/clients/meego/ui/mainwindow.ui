@@ -35,7 +35,7 @@
        <item>
         <widget class="QLineEdit" name="loginEdit">
          <property name="text">
-          <string>Mark</string>
+          <string>tracker</string>
          </property>
         </widget>
        </item>
@@ -43,6 +43,13 @@
         <widget class="QLineEdit" name="passEdit">
          <property name="text">
           <string>test</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="nameEdit">
+         <property name="text">
+          <string>displayed_name</string>
          </property>
         </widget>
        </item>

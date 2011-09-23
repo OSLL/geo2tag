@@ -116,8 +116,8 @@ void MeegoClient::track()
    // Primitive stub for position source
   //  double lat=common::GpsInfo::getInstance().getLatitude();
  //   double lon=common::GpsInfo::getInstance().getLongitude();
-    double lat=qrand()%60;
-    double lon=qrand()%60;
+    double lat=30+0.01*(qrand()%100);
+    double lon=60+0.01*(qrand()%100);
     QSharedPointer<DataMark> mark(new JsonDataMark(lat,lon,m_name,
                             "this tag was generated","unknown",QDateTime::currentDateTime()));
 

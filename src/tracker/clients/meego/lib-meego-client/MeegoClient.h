@@ -20,6 +20,7 @@ Q_OBJECT
 
 	QString m_lastError;
         QTimer * m_timer;
+        QString m_name;
 
 	LoginQuery * m_loginQuery;
 	AddNewMarkQuery * m_addNewMarkQuery;
@@ -46,7 +47,7 @@ public:
 	void sendHistory();
 
         bool isAuthentificated();
-
+        void setDispName(const QString & name );
         MarksHistory * getAllMarks();
 
 	QString getLastError();

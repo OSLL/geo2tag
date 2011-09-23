@@ -21,6 +21,8 @@ private slots:
     void on_startstopButton_pressed();
     void on_authentificated();
     void on_error(QString error);
+    void on_nameEdit_textChanged(QString name );
+
 private:
     Ui::MainWindow *ui;
 };

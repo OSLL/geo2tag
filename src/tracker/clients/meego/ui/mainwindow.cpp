@@ -51,3 +51,8 @@ void MainWindow::on_error(QString error)
   // qDebug() << "Error in lib occured";
    ui->log_edit->append(QDateTime::currentDateTimeUtc().toString()+":" + error);
 }
+
+void MainWindow::on_nameEdit_textChanged(QString name )
+{
+    m_client.setDispName(name);
+}
