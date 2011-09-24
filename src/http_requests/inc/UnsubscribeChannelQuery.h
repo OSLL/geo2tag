@@ -49,6 +49,7 @@
 #include <QNetworkReply>
 
 #include "Channel.h"
+#include "User.h"
 
 namespace GUI
 {

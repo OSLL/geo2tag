@@ -3,7 +3,7 @@
 JsonSerializer::JsonSerializer(QObject * parent):QObject(parent),
 m_channelsContainer(new Channels),
 m_tagsContainer(new DataMarks),
-m_usersContainer(new Users)
+m_usersContainer(new common::Users)
 {
 }
 
@@ -14,7 +14,7 @@ JsonSerializer::~JsonSerializer()
 }
 
 
-QSharedPointer<Users> JsonSerializer::getUsers() const
+QSharedPointer<common::Users> JsonSerializer::getUsers() const
 {
   return m_usersContainer;
 }
@@ -44,7 +44,7 @@ void JsonSerializer::addTag(const QSharedPointer<DataMark> &tag)
 }
 
 
-void JsonSerializer::addUser(const QSharedPointer<User> &tag)
+void JsonSerializer::addUser(const QSharedPointer<common::User> &tag)
 {
   m_usersContainer->push_back(tag);
 }

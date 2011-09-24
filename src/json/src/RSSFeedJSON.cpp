@@ -40,12 +40,17 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-
 #include <QVariant>
 #include <QDebug>
 #include "RSSFeedJSON.h"
+
+#ifndef Q_OS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
 #include "User.h"
 #include "Channel.h"
@@ -67,6 +72,8 @@ RSSFeedResponseJSON::RSSFeedResponseJSON(QObject *parent) : JsonSerializer(paren
 
 void RSSFeedResponseJSON::parseJson(const QByteArray &data)
 {
+  //TODO: enable for symbian
+  #ifndef  Q_OS_SYMBIAN
   clearContainers();
 
   QJson::Parser parser;
@@ -106,8 +113,8 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
       QString timeStr =  markMap["pubDate"].toString();
       QDateTime time = QDateTime::fromString(timeStr, "dd MM yyyy HH:mm:ss.zzz");
 
-      QVector<QSharedPointer<User> > v = m_usersContainer->vector();
-      QSharedPointer<User> user(new JsonUser(userName));
+      QVector<QSharedPointer<common::User> > v = m_usersContainer->vector();
+      QSharedPointer<common::User> user(new JsonUser(userName));
       m_usersContainer->push_back(user);
 
       QSharedPointer<JsonDataMark> newMark(new JsonDataMark(latitude,
@@ -120,6 +127,7 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
       m_hashMap.insert(channel, newMark);
     }
   }
+  #endif                                // Q_OS_SYMBIAN
 }
 
 

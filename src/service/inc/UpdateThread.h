@@ -17,7 +17,7 @@ class UpdateThread: public QThread
 
     QSharedPointer<Channels>     m_channelsContainer;
   QSharedPointer<DataMarks>    m_tagsContainer;
-  QSharedPointer<Users>        m_usersContainer;
+  QSharedPointer<common::Users>        m_usersContainer;
   QSharedPointer<TimeSlots>    m_timeSlotsContainer;
   QSharedPointer<DataChannels> m_dataChannelsMap;
 
@@ -26,11 +26,11 @@ class UpdateThread: public QThread
   //will be locked when containers is being updated
   QReadWriteLock m_updateLock;
 
-  void loadUsers(Users &);
+  void loadUsers(common::Users &);
   void loadTags(DataMarks &);
   void loadChannels(Channels &);
   void loadTimeSlots(TimeSlots &);
-  void updateReflections(DataMarks&, Users&, Channels&, TimeSlots&);
+  void updateReflections(DataMarks&, common::Users&, Channels&, TimeSlots&);
 
   void run();
 
@@ -38,7 +38,7 @@ class UpdateThread: public QThread
     UpdateThread(
       const QSqlDatabase &db,
       const QSharedPointer<DataMarks>& tags,
-      const QSharedPointer<Users>& users,
+      const QSharedPointer<common::Users>& users,
       const QSharedPointer<Channels>& channels,
       const QSharedPointer<TimeSlots>& timeSlots,
       const QSharedPointer<DataChannels>& dataChannelsMap,

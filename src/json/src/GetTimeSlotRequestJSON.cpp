@@ -39,6 +39,6 @@ void GetTimeSlotRequestJSON::parseJson(const QByteArray &data)
   QString token = result["auth_token"].toString();
   QString channel = result["channel"].toString();
 
-  m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("unknown","unknown", token)));
   m_channelsContainer->push_back(QSharedPointer<Channel> (new JsonChannel(channel, "unknown")));
 }

@@ -48,6 +48,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "DefaultQuery.h"
+#include "User.h"
+#include <QSharedPointer>
 
 namespace GUI
 {

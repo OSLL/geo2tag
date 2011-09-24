@@ -1,27 +1,29 @@
 #ifndef DAEMONMANAGER_H
 #define DAEMONMANAGER_H
 
-#include <QString>
-#include <QObject>
-#include <QFile>
+#include <QPointF>
 
-#include "Status.h"
-
-#define LOG QString("/var/wikigps-tracker")
+class Daemon
+{
+  public:
+    virtual QPointF getLastCoordinates() const=0;
+    virtual bool isConnected() const=0;
+    virtual bool isStarted() const=0;
+    virtual void start() =0;
+    virtual void stop() =0;
+    virtual void reload() =0;
+    virtual void restart() =0;
+};
 
 class DaemonManager
 {
-  QObject object;
-  QFile *m_log;
 
   public:
     DaemonManager();
+    ~DaemonManager();
 
     static DaemonManager& getInstance();
-    void start();
-    void stop();
-    Status getStatus();
-    QDateTime lastStatusModification();
+
 };
 // DAEMONMANAGER_H
 #endif

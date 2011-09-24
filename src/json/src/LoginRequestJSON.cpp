@@ -1,8 +1,14 @@
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
 
 #include "LoginRequestJSON.h"
 #include "JsonUser.h"
+
+#ifndef Q_OS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
 LoginRequestJSON::LoginRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
@@ -32,5 +38,5 @@ void LoginRequestJSON::parseJson(const QByteArray&data)
   }
   QString login = result["login"].toString();
   QString password = result["password"].toString();
-  m_usersContainer->push_back(QSharedPointer<User>(new JsonUser(login,password)));
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login,password)));
 }

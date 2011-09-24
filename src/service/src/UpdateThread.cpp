@@ -4,7 +4,7 @@
 
 UpdateThread::UpdateThread(const QSqlDatabase &db,
 const QSharedPointer<DataMarks> &tags,
-const QSharedPointer<Users> &users,
+const QSharedPointer<common::Users> &users,
 const QSharedPointer<Channels> &channels,
 const QSharedPointer<TimeSlots> &timeSlots,
 const QSharedPointer<DataChannels>& dataChannelsMap,
@@ -45,7 +45,7 @@ void UpdateThread::run()
       continue;
     }
     qDebug() << "connected...";
-    Users       usersContainer(*m_usersContainer);
+    common::Users       usersContainer(*m_usersContainer);
     DataMarks   tagsContainer(*m_tagsContainer);
     Channels    channelsContainer(*m_channelsContainer);
     TimeSlots   timeSlotsContainer(*m_timeSlotsContainer);
@@ -87,7 +87,7 @@ void UpdateThread::run()
 }
 
 
-void UpdateThread::loadUsers(Users &container)
+void UpdateThread::loadUsers(common::Users &container)
 {
   QSqlQuery query(m_database);
   query.exec("select id, login, password, token from users order by id;");
@@ -193,7 +193,7 @@ void UpdateThread::loadTags(DataMarks &container)
 }
 
 
-void UpdateThread::updateReflections(DataMarks &tags, Users &users, Channels &channels, TimeSlots & timeSlots)
+void UpdateThread::updateReflections(DataMarks &tags, common::Users &users, Channels &channels, TimeSlots & timeSlots)
 {
   {
     QSqlQuery query(m_database);
@@ -237,6 +237,22 @@ void UpdateThread::updateReflections(DataMarks &tags, Users &users, Channels &ch
       QSharedPointer<TimeSlot> timeslot = timeSlots.item(timeslot_id);
 
       channel->setTimeSlot(timeslot);
+      channel->setDefaultTimeSlot(false);
+    }
+  }
+
+  {
+    QSqlQuery query(m_database);
+    query.exec("select tag_id, timeslot_id from tagtimeslot;");
+    while (query.next())
+    {
+      qulonglong timeslot_id = query.record().value("timeslot_id").toULongLong();
+      qlonglong tag_id = query.record().value("tag_id").toLongLong();
+
+      QSharedPointer<DataMark> tag = tags.item(tag_id);
+      QSharedPointer<TimeSlot> timeslot = timeSlots.item(timeslot_id);
+
+      tag->setTimeSlot(timeslot);
     }
   }
 

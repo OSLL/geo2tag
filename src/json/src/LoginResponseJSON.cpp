@@ -1,7 +1,13 @@
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
 
 #include <QDebug>
+
+#ifndef Q_OS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
 #include "LoginResponseJSON.h"
 #include "JsonUser.h"
@@ -40,6 +46,6 @@ void LoginResponseJSON::parseJson(const QByteArray &data)
   m_statusMessage = result["status_description"].toString();
 
   QString auth_token = result["auth_token"].toString();
-  QSharedPointer<User> user(new JsonUser("unknown", "unknown", auth_token));
+  QSharedPointer<common::User> user(new JsonUser("unknown", "unknown", auth_token));
   m_usersContainer->push_back(user);
 }

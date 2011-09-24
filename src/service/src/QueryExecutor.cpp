@@ -152,7 +152,7 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
 }
 
 
-QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& user)
+QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<common::User>& user)
 {
   bool result;
   QSqlQuery newUserQuery(m_database);
@@ -176,7 +176,7 @@ QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& us
   {
     syslog(LOG_INFO,"Rollback for NewUser sql query");
     m_database.rollback();
-    return QSharedPointer<User>(NULL);
+    return QSharedPointer<common::User>(NULL);
   }else
   {
     syslog(LOG_INFO,"Commit for NewUser sql query");
@@ -187,7 +187,7 @@ QSharedPointer<User> QueryExecutor::insertNewUser(const QSharedPointer<User>& us
 }
 
 
-bool QueryExecutor::subscribeChannel(const QSharedPointer<User>& user,const QSharedPointer<Channel>& channel)
+bool QueryExecutor::subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel)
 {
   bool result;
   QSqlQuery insertNewSubscribtion(m_database);
@@ -337,6 +337,31 @@ bool QueryExecutor::changeMarkTimeSlot(const QSharedPointer<DataMark>& tag, cons
   }else
   {
     syslog(LOG_INFO,"Commit for changeMarkTimeSlot sql query");
+    m_database.commit();
+  }
+  return result;
+}
+
+
+bool QueryExecutor::deleteChannelTimeSlot(const QSharedPointer<Channel>& channel)
+{
+  bool result;
+  QSqlQuery deleteChannelTimeSlot(m_database);
+  deleteChannelTimeSlot.prepare("delete from channelTimeSlot where channel_id = :channel_id;");
+  deleteChannelTimeSlot.bindValue(":channel_id",channel->getId());
+
+  syslog(LOG_INFO,"Deleting channel %s (Id = %lld)", channel->getName().toStdString().c_str(), channel->getId());
+
+  m_database.transaction();
+  result=deleteChannelTimeSlot.exec();
+  if(!result)
+  {
+    syslog(LOG_INFO,"Rollback for deleteChannelTimeSlot sql query");
+    m_database.rollback();
+  }
+  else
+  {
+    syslog(LOG_INFO,"Commit for deleteChannelTimeSlot sql query");
     m_database.commit();
   }
   return result;

@@ -48,7 +48,7 @@
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 
-RSSFeedQuery::RSSFeedQuery(QSharedPointer<User> &user,
+RSSFeedQuery::RSSFeedQuery(QSharedPointer<common::User> &user,
 double latitude,
 double longitude,
 double radius,
@@ -66,7 +66,7 @@ RSSFeedQuery::RSSFeedQuery(QObject *parent): DefaultQuery(parent)
 }
 
 
-void RSSFeedQuery::setQuery(QSharedPointer<User> &user,
+void RSSFeedQuery::setQuery(QSharedPointer<common::User> &user,
 double latitude,
 double longitude,
 double radius)

@@ -1,6 +1,5 @@
 #include <QSettings>
 #include <QDebug>
-#include <syslog.h>
 #include "defines.h"
 
 QString getServerUrl()
@@ -10,8 +9,16 @@ QString getServerUrl()
   {
     return DEFAULT_SERVER;
   }
-  return settings.value("server_url").toString();
 
+  QString serverUrl=settings.value("server_url").toString();
+
+  if(serverUrl == "")
+  {
+    serverUrl = DEFAULT_SERVER;
+    setServerUrl(serverUrl);
+  }
+
+  return serverUrl;
 }
 
 
@@ -29,7 +36,10 @@ int getServerPort()
   {
     return DEFAULT_PORT;
   }
-  return settings.value("server_port").toInt();
+  int serverPort = DEFAULT_PORT;
+  setServerPort(serverPort);
+
+return serverPort;
 }
 
 

@@ -17,6 +17,8 @@
 #include <QPointF>
 #include <QNetworkConfigurationManager>
 
+#ifndef Q_OS_SYMBIAN
+
 class TrackerDaemon : /*public QThread,*/ public Control
 {
   Q_OBJECT;
@@ -34,8 +36,9 @@ class TrackerDaemon : /*public QThread,*/ public Control
 
   bool m_pauseFlag;
   bool m_isConnected;
-
+  #ifndef NO_DAEMON
   QTcpServer * m_controlServer;
+  #endif
   public:
     void run();
   private slots:
@@ -46,9 +49,9 @@ class TrackerDaemon : /*public QThread,*/ public Control
     void onError(QString);
 
     void onOnlineChanged(bool state);
-
+  #ifndef NO_DAEMON
     void newControlConnection();
-
+  #endif
   public:
     TrackerDaemon();
 
@@ -65,5 +68,7 @@ class TrackerDaemon : /*public QThread,*/ public Control
   public slots:
 
 };
+#endif
+
 // TRACKERDAEMON_H
 #endif
