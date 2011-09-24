@@ -52,7 +52,7 @@ clean:
 	dh_clean
 
 unittest:
-	./run_tests.sh
+	./tst/unit/platform.sh
 	
 
 install: build unittest
