@@ -3,11 +3,16 @@ include(../config.pri)
 
 
 CONFIG += ordered
-SUBDIRS += common
 
+message($$CONFIG)
 
+symbian: {
+	message(symbian target)
+  SUBDIRS += tracker
+}
 
 maemo5: {
+  SUBDIRS += common
   SUBDIRS += maps \
              json \
 	     http_requests \ 
@@ -16,19 +21,12 @@ maemo5: {
 }
 
 linux: {
+  SUBDIRS += common
   SUBDIRS += \
              json json/tst \
              http_requests \
              maps \ 
              service \
-						 tracker/observer \
-	           common/tst
+             tracker/observer \
+             common/tst
 }
-
-symbian: {
-  SUBDIRS += json \
-             http_requests \
-             tracker
-}
-
-

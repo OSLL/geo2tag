@@ -63,19 +63,6 @@ maemo5: {
     LIBS += -lQtLocation
 }
 
-symbian: {
-    CONFIG += mobility
-
-    MOBILITY = location
-
-    LIBS += -lQtLocation
-
-    HEADERS += inc/MobilityGps.h
-
-    SOURCES += src/MobilityGps.cpp
-
-    DEFINES += NO_GPS SIMULATE_GPS
-}
 
 webside: {
     HEADERS += inc/GpsModeller.h

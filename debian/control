@@ -2,11 +2,11 @@ Source: wikigps
 Section: user/other
 Priority: optional
 Maintainer: Open Source and Linux lab <osll@lists.osll.spb.ru>
-Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6), libqtm-dev [armel], libxml2-dev [i386],libqjson-dev ,libfcgi-dev [i386], libpq-dev [i386] 
+Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6), libqtm-dev [armel], libxml2-dev [i386]
 
 Package: wikigps-libs
 Architecture: any
-Depends: ${shlibs:Depends}, libxml2 (>=2.6)[i386],libqt4-core ,libqt4-network ,libqt4-gui, libqt4-sql-psql [i386]
+Depends: ${shlibs:Depends}, libxml2 (>=2.6) [i386],libqt4-core ,libqt4-network ,libqt4-gui, libqt4-sql-psql [i386]
 Description: Geo2tag libs
 
 Package: wikigps-libs-standalone

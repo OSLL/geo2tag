@@ -1,9 +1,11 @@
 #include "SymbianDaemon.h"
+#include <QtCore>
 
 SymbianDaemon::SymbianDaemon()
 {
-  m_daemon=new TrackerDaemon();
-  QtConcurrent::run(&m_daemon,TrackerDaemon::run);
+  m_daemon = new TrackerDaemon();
+  m_daemon->start();
+  //QtConcurrent::run(&m_daemon,TrackerDaemon::run);
 }
 
 
@@ -31,13 +33,13 @@ void SymbianDaemon::restart()
 }
 
 
-bool SymbianDaemon::isConnected()
+bool SymbianDaemon::isConnected() const
 {
   return true;
 }
 
 
-bool SymbianDaemon::isStarted()
+bool SymbianDaemon::isStarted() const
 {
   return m_daemon->isTracking();
 }

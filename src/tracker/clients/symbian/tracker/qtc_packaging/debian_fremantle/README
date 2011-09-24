@@ -1,0 +1,17 @@
+The Debian Package tracker
+----------------------------
+
+Location based services platform (geo2tag) This is a LBS solution for integrating all location based functionality
+
+
+Today there are more and more mobile devices equipped with GPS module on the market. And it is not only about GPS navigators — big part of mobile phones also have this functionality. But they have not other usage except navigation.
+
+At the same time social networks become a dominant part of internet services. They count millions of users and they increase number of features all the time - from simple text messaging to user`s media content storage.
+
+Our project is an attempt to use Location technologies for something other than navigation. We decided to combine it`s capabilities with social network`s features in our project — Geo2tag. It will give user an opportunity not only for information sharing but also for showing it on map, for example shows where were created user`s photos, videos or notes. The ultimate goal is to create Open Source Location Platform for global geo tagging.
+
+see more on http://osll.spb.ru/projects/geo2tag
+
+(c) osll team
+
+ --  Mark Zaslavskiy <Mark.Zaslavskiy@gmail.com>  Wed, 07 Sep 2011 20:59:08 +0400

@@ -22,7 +22,7 @@ class DaemonManager
     DaemonManager();
     ~DaemonManager();
 
-    static DaemonManager& getInstance();
+    static Daemon& getInstance();
 
 };
 // DAEMONMANAGER_H

@@ -1,7 +1,7 @@
 
 #include <QDebug>
 
-#ifndef Q_OS_SYMBIAN
+#ifndef Q_WS_SYMBIAN
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #else

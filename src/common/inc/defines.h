@@ -47,8 +47,8 @@ QString getServerUrl();
 void setServerUrl(QString serverUrl);
 int getServerPort();
 void setServerPort(int port);
-#define DEFAULT_SERVER "http://tracklife.ru/"
-#define DEFAULT_PORT 80
+#define DEFAULT_SERVER "http://tracks.osll.spb.ru:81/"
+#define DEFAULT_PORT 81
 
 // "demo"
 #define DATABASE_NAME "geo2tag"
@@ -79,8 +79,9 @@ void setServerPort(int port);
 
 #define TRACKER_MSECS_TIMEOUT 500
 
+#ifndef Q_WS_SYMBIAN
 extern uint qHash(const QPoint & p);
-
+#endif
 //_defines_H_CB67F287_A4BC_4745_9700_14421ED3AE3D_INCLUDED_
 #endif
 

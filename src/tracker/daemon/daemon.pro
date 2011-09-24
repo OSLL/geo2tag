@@ -33,15 +33,4 @@ HEADERS += TrackerDaemon.h \
 
 LIBS += -lqjson -lcommon -lwikigpsHttp -lwikigpsJson
 
-symbian: {
- #   TARGET.UID3 = 0xEEF9CA31
 
-    TARGET.CAPABILITY = NetworkServices \
-    Location \
-    ReadUserData \
-    WriteUserData \
-    LocalServices \
-    UserEnvironment \
-    ReadDeviceData \
-    WriteDeviceData
-}

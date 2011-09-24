@@ -7,12 +7,12 @@
 #include <QToolBox>
 #include <QLabel>
 #include <QFile>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
+//#include <QtXml/QDomDocument>
+//#include <QtXml/QDomElement>
 #include <QDebug>
 #include <QSettings>
 #include <QMessageBox>
-#ifndef Q_OS_SYMBIAN
+#ifndef Q_WS_SYMBIAN
 #include <DaemonManager.h>
 #endif
 #include <QtNetwork/QNetworkProxy>
@@ -22,18 +22,6 @@
 #include "tracker.h"
 #include "inc/ByteSpinBox.h"
 #include "defines.h"
-
-void OptionsWidget::applyProxySettings()
-{
-  QNetworkProxy proxy;
-  QNetworkProxy::ProxyType proxy_type;
-  proxy_type = (QNetworkProxy::ProxyType) m_proxyType->itemData(m_proxyType->currentIndex()).value<int>();
-  proxy.setType(proxy_type);
-  proxy.setHostName(m_proxyHostEdit->text());
-  proxy.setPort(m_proxyPortEdit->value());
-  QNetworkProxy::setApplicationProxy(proxy);
-}
-
 
 OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
 QScrollArea(parent), m_productName(productName), m_settings(QSettings::SystemScope,"osll",m_productName)
@@ -122,6 +110,18 @@ QScrollArea(parent), m_productName(productName), m_settings(QSettings::SystemSco
 
   initSettings();
   applyProxySettings();
+}
+
+
+void OptionsWidget::applyProxySettings()
+{
+  QNetworkProxy proxy;
+  QNetworkProxy::ProxyType proxy_type;
+  proxy_type = (QNetworkProxy::ProxyType) m_proxyType->itemData(m_proxyType->currentIndex()).value<int>();
+  proxy.setType(proxy_type);
+  proxy.setHostName(m_proxyHostEdit->text());
+  proxy.setPort(m_proxyPortEdit->value());
+  QNetworkProxy::setApplicationProxy(proxy);
 }
 
 
