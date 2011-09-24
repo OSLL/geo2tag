@@ -203,7 +203,7 @@
 			tolist="${MailLogger.success.to}">
 			<message>${subject}</message>
 			<attachments>
-				<fileset dir="${geo.dir}/sandbox/log">
+				<fileset dir="${geo.dir}/sandbox/webside_logs">
 					<include name="**/*.txt" />
 				</fileset>
 				<fileset dir="reports">
