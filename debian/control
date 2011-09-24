@@ -2,7 +2,7 @@ Source: wikigps
 Section: user/other
 Priority: optional
 Maintainer: Open Source and Linux lab <osll@lists.osll.spb.ru>
-Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6)
+Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6), libqtm-dev [armel], libxml2-dev [i386],libqjson-dev ,libfcgi-dev [i386], libpq-dev [i386] 
 
 Package: wikigps-libs
 Architecture: any
@@ -10,7 +10,7 @@ Depends: ${shlibs:Depends}, libxml2 (>=2.6)[i386],libqt4-core ,libqt4-network ,l
 Description: Geo2tag libs
 
 Package: wikigps-libs-standalone
-Architecture: i386
+Architecture: i386 amd64 
 Depends:wikigps-qt, libxml2 (>=2.6)
 Description: Geo2tag libs
 
@@ -27,22 +27,22 @@ Description: WikiGPS tracker
  has very tiny interface. alfa version.
 
 Package: wikigps-observer
-Architecture: i386
+Architecture: i386 amd64
 Depends: ${shlibs:Depends},wikigps-libs (>=0.1.2)
 Description: WikiGPS observer
  observs marks setted by tracker.
 
 #Package: wikigps-webside
-#Architecture:i386 
+#Architecture:i386 amd64
 #Depends: ${shlibs:Depends}, wikigps-service, wikigps-libs
 #Description: Geo2tag website
-
+#
 Package: wikigps-service
-Architecture: i386
+Architecture: i386 amd64
 Depends: lighttpd, postgresql, wikigps-libs, libpq5, libfcgi0ldbl
 Description: Geo2tag webservice
 
 Package: wikigps-service-standalone
-Architecture: i386
+Architecture: i386 amd64
 Depends: lighttpd, postgresql, wikigps-libs-standalone, libpq5, libfcgi0ldbl
 Description: Geo2tag webservice for platform that doesnt support qt 4.7

@@ -1,0 +1,23 @@
+#!/bin/bash
+## DEPENDS FROM curl AND tidy
+# Do an authentificate request
+a_request=`curl https://www.google.com/accounts/ClientLogin --data-urlencode Email=osll.test.acc@gmail.com --data-urlencode Passwd=osllrulez -d accountType=GOOGLE  -d source=Google-cURL-Example -d service=local`;
+# Getting last value - auth_token
+token=`echo $a_request | grep -o '[^=]*$'`;
+echo "Got auth token: $token "
+# Now we need to get USER_ID
+# It is possible using map feed
+mapFeed=`curl --silent --header "Authorization: GoogleLogin auth=$token" "http://maps.google.com/maps/feeds/maps/default/full" `;
+# Extracting userID from mapsFeed
+userID=`echo "$mapFeed" | grep -o 'http://maps.google.com/maps/feeds/maps/[0-9]*<' | grep -o '[0-9]*' `;
+echo "Got userID: $userID"
+# Create new map and getting MapID
+mapID=`curl --silent --request POST --data-binary "@map.xml" --header "Content-Type: application/atom+xml" --header "Authorization: GoogleLogin auth=$token" "http://maps.google.com/maps/feeds/maps/$userID/full" | grep -o '/[abcdef0-9]*<' | grep -o '[abcdef0-9]*'`;
+echo "Got mapID: $mapID"
+# Post fence to map
+fence_post=`curl --silent --request POST --data-binary "@map_fence.xml" --header "Content-Type: application/atom+xml" --header "Authorization: GoogleLogin auth=$token" "http://maps.google.com/maps/feeds/features/$userID/$mapID/full" | tidy -xml -indent -quiet`;
+# Post mark to map
+poi_post=`curl --silent --request POST --data-binary "@map_poi.xml" --header "Content-Type: application/atom+xml" --header "Authorization: GoogleLogin auth=$token" "http://maps.google.com/maps/feeds/features/$userID/$mapID/full" | tidy -xml -indent -quiet`;
+echo "Finding test objects in code of map:"
+# Get all map elements
+curl --silent --header "Authorization: GoogleLogin auth=$token" "http://maps.google.com/maps/feeds/features/$userID/$mapID/full" | tidy -xml -indent -quiet | grep 'TestObject' 

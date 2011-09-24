@@ -6,10 +6,10 @@
 QString getServerUrl()
 {
   QSettings settings(QSettings::SystemScope,"osll","libs");
-        if (settings.value("server_url").toString().isEmpty())
-	{
-		return DEFAULT_SERVER;
-	}
+  if (settings.value("server_url").toString().isEmpty())
+  {
+    return DEFAULT_SERVER;
+  }
   return settings.value("server_url").toString();
 
 }
@@ -18,17 +18,17 @@ QString getServerUrl()
 void setServerUrl(QString serverUrl)
 {
   QSettings settings(QSettings::SystemScope,"osll","libs");
-        settings.setValue("server_url",serverUrl);
+  settings.setValue("server_url",serverUrl);
 }
 
 
 int getServerPort()
 {
   QSettings settings(QSettings::SystemScope,"osll","libs");
-        if (settings.value("server_port").toInt()==0)
-	{
-                return DEFAULT_PORT;
-        }
+  if (settings.value("server_port").toInt()==0)
+  {
+    return DEFAULT_PORT;
+  }
   return settings.value("server_port").toInt();
 }
 
@@ -36,5 +36,5 @@ int getServerPort()
 void setServerPort(int port)
 {
   QSettings settings(QSettings::SystemScope,"osll","libs");
-        settings.setValue("server_port",port);
+  settings.setValue("server_port",port);
 }
