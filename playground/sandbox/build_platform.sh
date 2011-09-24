@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # download sources
 # build deb
 # backup previous version
@@ -7,11 +8,19 @@
 # if there are errors restore backup
 # send logs to the maillist
 
+# First parametr of this script - name of the branch, wich platform will be builded and tested
+
 dir_sandbox="$WEBGEO_HOME/sandbox"
 dir_geo2tag="${dir_sandbox}/geo2tag"
 dir_log="${dir_sandbox}/platform_logs"
 dir_backup="${dir_sandbox}/platform_backup"
-branch="2460_build_platform_system"
+branch="$1"
+
+# If branch name is "web-devel" then exit
+if [ "$branch" == "web-devel" ]
+then
+	exit 0
+fi
 
 if [ -e $dir_geo2tag ]; then
         echo "geo2tag directory exists" 
@@ -27,8 +36,8 @@ date > ${dir_log}/test.log.txt
 
 # hack for determining git problems
 cd $dir_geo2tag
-git stash >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
-git pull -a >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
+#git stash >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
+git pull --all >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 git checkout $branch >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 
 mkdir ${dir_log}
@@ -45,7 +54,17 @@ echo "After building ${founded_packages}"
 if [  $(echo "${founded_packages}" | wc -w ) == "2" ] ;
 then
 
+status="success";
 # Build succesful
+
+#UNIT TESTING
+
+echo "Unit testing:"  >>${dir_log}/test.log.txt
+${dir_sandbox}/geo2tag/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
+
+# DEPLOY and TEST only if branch is devel
+if [ "$branch" == "devel" ]
+then
 
 #DEPLOY
 cd ${dir_sandbox}
@@ -71,20 +90,30 @@ dpkg -i wikigps-libs_* wikigps-service_* >> ${dir_log}/deploy.log.txt 2>>${dir_l
 		echo "Restore backup" >> ${dir_log}/test.log.txt
 		dpkg -i `ls .` >> ${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 	fi
+fi
+
 else 
 	status="fail";
 fi
 
 cd ${dir_geo2tag}
 dh_clean
-git stash
+#git stash
 cd ${dir_sandbox}
 rm -rf wikigps*
 
 #SEND EMAIL
 echo "E-mailing!"
-ant -f mail_sender.xml -Dsubject "geo2tag-platform ($status): build, test, deploy reports " -Dlogdir "platform_logs" 
+if [ "$branch" == "devel" ]
+then
+	ant -f mail_sender.xml -Dsubject "geo2tag-platform devel ($status): integration reports " -Dlogdir "platform_logs" 
+else
+	ant -f mail_sender.xml -Dsubject "geo2tag-platform $branch ($status): build and test reports " -Dlogdir "platform_logs"
+fi
 echo "" > ${dir_log}/build.log.txt
 echo "" > ${dir_log}/deploy.log.txt
 echo "" > ${dir_log}/test.log.txt
+
+git reset --hard 
+git clean -fxd
 
