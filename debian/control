@@ -32,10 +32,10 @@ Depends: ${shlibs:Depends},wikigps-libs (>=0.1.2)
 Description: WikiGPS observer
  observs marks setted by tracker.
 
-Package: wikigps-webside
-Architecture:i386 
-Depends: ${shlibs:Depends}, wikigps-service, wikigps-libs
-Description: Geo2tag website
+#Package: wikigps-webside
+#Architecture:i386 
+#Depends: ${shlibs:Depends}, wikigps-service, wikigps-libs
+#Description: Geo2tag website
 
 Package: wikigps-service
 Architecture: i386

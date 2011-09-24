@@ -51,7 +51,11 @@ clean:
 	rm -rf $(BUILDDIR)
 	dh_clean
 
-install: build
+unittest:
+	./run_tests.sh
+	
+
+install: build unittest
 	dh_testdir
 	dh_testroot
 	dh_clean -k
@@ -73,9 +77,6 @@ install: build
                 cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
                 cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp -r $(BUILDDIR)/webside/www-data/* $(CURDIR)/debian/tmp/var/www; \
-		cp $(BUILDDIR)/webside/sketch.wt $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp $(BUILDDIR)/webside/webside.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 	fi;
 	cp $(BUILDDIR)tracker/wikigpsTracker $(CURDIR)/debian/tmp/etc/event.d; 
 	cp $(BUILDDIR)tracker/wikigpsTracker-logrotate $(CURDIR)/debian/tmp/etc/logrotate.d; 
