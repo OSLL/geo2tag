@@ -194,7 +194,7 @@
 		</java>
 	</target>
 
-	<!-- SEND REPORT -->
+	<!-- SEND MAIL REPORT -->
 	<target name="send-report" description="Send mail with reports">
 		<mail mailhost="smtp.gmail.com" mailport="465" ssl="true"
 			user="osll.spb" password="${MailLogger.password}" 
