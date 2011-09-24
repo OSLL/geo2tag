@@ -39,7 +39,7 @@ int getServerPort()
   int serverPort = DEFAULT_PORT;
   setServerPort(serverPort);
 
-return serverPort;
+  return serverPort;
 }
 
 

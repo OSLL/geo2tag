@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="Geo2tag" default="build" basedir=".">
+	<property name="version" value="0.18" />
+	<!-- =============================== -->
+	
+	<property file="local.properties" />
+	<property file="mail.properties" />
+	<!-- Arguments to gwtc and devmode targets -->
+	<property name="gwt.args" value="" />
+
+	<path id="project.class.path">
+		<pathelement location="war/WEB-INF/classes" />
+		<pathelement location="${gwt.sdk}/gwt-user.jar" />
+		<pathelement location="${junit.jar}" />
+		<pathelement location="${openlayers.jar}" />
+		<pathelement location="${gwt-visual.jar}" />
+		<fileset dir="${gwt.sdk}" includes="gwt-dev*.jar" />
+		<!-- Add any additional non-server libs (such as JUnit) -->
+		<fileset dir="war/WEB-INF/lib" includes="**/*.jar" />
+	</path>
+
+	<!-- Configure path to Tomcat -->
+	<property environment="env" />
+	<property name="tom.dir" value="${env.CATALINA_HOME}" />
+	<property name="geo.dir" value="${env.WEBGEO_HOME}" />
+	<property name="deploy.dir" location="${tom.dir}/webapps" />
+	<property name="app.name" value="geo2tag" />
+
+	<target name="deploy" depends="war" description="Deploy the war file">
+		<delete dir="${deploy.dir}/${app.name}" />
+		<delete dir="${deploy.dir}/${app.name}.war" />
+		<copy todir="${deploy.dir}">
+			<fileset dir="${basedir}" includes="${app.name}.war" />
+		</copy>
+	</target>
+
+	<!-- deploy/undeploy app on remote server depends="war" -->
+	<path id="tomcat.class.path">
+		<fileset dir="${tom.dir}/lib" includes="*.jar" />
+	</path>
+
+	<taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask">
+		<classpath refid="tomcat.class.path" />
+	</taskdef>
+
+	<taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask">
+		<classpath refid="tomcat.class.path" />
+	</taskdef>
+
+	<taskdef name="reload"  classname="org.apache.catalina.ant.ReloadTask">
+		<classpath refid="tomcat.class.path" />
+	</taskdef>
+
+	<property name="url" value="${server.url}/manager/text" />
+	<property name="username" value="${server.username}" />
+	<property name="password" value="${server.password}" />
+	<property name="path" value="/${app.name}" />
+
+	<target name="deploy-release" depends="war" description="Install web application on remote server" >
+		<deploy
+			url="${url}" 
+			username="${username}"
+			password="${password}"
+			path="${path}"
+			war="file:${app.name}.war"/>
+	</target>
+
+	<target name="undeploy-release" description="Remove web application from remote server">
+		<undeploy url="${url}" username="${username}" password="${password}" path="${path}"/>
+	</target>
+
+	<target name="reload-release" depends="war" description="Reload web application on remote server">
+		<reload  url="${url}" username="${username}" password="${password}" path="${path}"/>
+	</target>
+
+	<!-- deploy/undeploy app on remote server -->
+
+	<target name="clean" description="Cleans this project">
+		<delete dir="war/WEB-INF/classes" failonerror="false" />
+		<delete dir="war/WEB-INF/lib" failonerror="false" />
+		<delete dir="war/${app.name}" failonerror="false" />
+		<delete dir="bin" failonerror="false" />
+		<delete dir="reports" failonerror="false" />
+		<delete file="${app.name}.war" failonerror="false" />
+	</target>
+
+	<target name="libs" description="Copy libs to WEB-INF/lib">
+		<mkdir dir="war/WEB-INF/lib" />
+		<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet.jar" />
+		<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet-deps.jar" />
+		<copy todir="war/WEB-INF/lib" file="lib/log4j-1.2.16.jar" />
+		<copy todir="war/WEB-INF/lib" file="lib/postgresql-9.0-801.jdbc4.jar" />
+		<copy todir="war/WEB-INF/lib" file="lib/gwt_i18n_server_1.0.jar" />
+		<!-- Add any additional server libs that need to be copied -->
+	</target>
+
+	<target name="javac" depends="libs" description="Compile java source to bytecode">
+		<mkdir dir="war/WEB-INF/classes" />
+		<javac srcdir="src" includes="**" encoding="utf-8" destdir="war/WEB-INF/classes" source="1.5" target="1.5" nowarn="true" debug="true" debuglevel="lines,vars,source">
+			<classpath refid="project.class.path" />
+		</javac>
+		<copy todir="war/WEB-INF/classes">
+			<fileset dir="src" excludes="**/*.java" />
+		</copy>
+	</target>
+
+	<target name="gwtc" depends="javac" description="GWT compile to JavaScript (production mode)">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+			<classpath>
+				<pathelement location="src" />
+				<path refid="project.class.path" />
+				<pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+				<pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
+			</classpath>
+			<!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+			<jvmarg value="-Xmx256M" />
+			<arg line="-war" />
+			<arg value="war" />
+			<!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+			<arg line="${gwt.args}" />
+			<arg value="ru.spb.osll.web.Geo2tag" />
+		</java>
+	</target>
+
+	<target name="devmode" depends="javac" description="Run development mode">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.DevMode">
+			<classpath>
+				<pathelement location="src" />
+				<path refid="project.class.path" />
+				<pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+				<pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
+			</classpath>
+			<jvmarg value="-Xmx256M" />
+			<arg value="-startupUrl" />
+			<arg value="Geo2tag.html" />
+			<arg line="-war" />
+			<arg value="war" />
+			<!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+			<arg line="${gwt.args}" />
+			<arg value="ru.spb.osll.web.Geo2tag" />
+		</java>
+	</target>
+
+	<target name="hosted" depends="devmode" description="Run development mode (NOTE: the 'hosted' target is deprecated)" />
+
+	<target name="build" depends="gwtc" description="Build this project" />
+
+	<target name="war" depends="build" description="Create a war file">
+		<zip destfile="${app.name}.war" basedir="war" />
+	</target>
+
+	<!-- TESTING -->
+	<target name="javac.tests" depends="javac" description="Compiles test code">
+		<javac srcdir="test" includes="**" encoding="utf-8" source="1.5" target="1.5" nowarn="true" destdir="war/WEB-INF/classes" debug="true" debuglevel="lines,vars,source">
+			<classpath location="${junit.jar}" />
+			<classpath refid="project.class.path" />
+		</javac>
+	</target>
+
+	<path id="test.classpath">
+		<pathelement location="src" />
+		<pathelement location="test" />
+		<pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+		<pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
+		<pathelement location="${junit.jar}" />
+	</path>
+
+	<target name="test" depends="javac.tests" description="Test this project">
+		<mkdir dir="reports" />
+		<junit fork="yes">
+			<classpath refid="project.class.path" />
+			<classpath refid="test.classpath" />
+			<batchtest todir="reports">
+				<fileset dir="test">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+			<formatter type="plain" />
+		</junit>
+	</target>
+
+	<!-- TARGET FOR ECLIPSE IDE -->
+	<target name="eclipse.generate" depends="libs" description="Generate eclipse project">
+		<java failonerror="true" fork="true" classname="com.google.gwt.user.tools.WebAppCreator">
+			<classpath>
+				<path refid="project.class.path"/>
+				<path refid="test.classpath" />
+			</classpath>
+			<arg value="-XonlyEclipse"/>
+			<arg value="-ignore"/>
+			<arg value="-junit"/>
+			<arg value="${junit.jar}"/>
+			<arg value="ru.spb.osll.web.Geo2tag" />
+		</java>
+	</target>
+
+	<!-- SEND REPORT -->
+	<target name="send-report" description="Send mail with reports">
+		<mail mailhost="smtp.gmail.com" mailport="465" ssl="true"
+			user="osll.spb" password="${MailLogger.password}" 
+			subject="${subject}"
+			from="osll.spb@gmail.com"
+			tolist="${MailLogger.success.to}">
+			<message>${subject}</message>
+			<attachments>
+				<fileset dir="${geo.dir}/sandbox/log">
+					<include name="**/*.txt" />
+				</fileset>
+				<fileset dir="reports">
+					<include name="**/*.txt" />
+				</fileset>
+			</attachments>
+		</mail>
+	</target>
+
+	<target name="deploy-refresh-info" depends="deploy">
+		<tstamp>
+		     <format property="NOW" pattern="yyyy MMMM dd HH:mm:ss" locale="en"/>
+		</tstamp>
+		<echo message="version='${version}'${line.separator}" file="${tom.dir}/geo2tag-build"/>
+		<echo message="deployDate='${NOW}'${line.separator}" append="true" file="${tom.dir}/geo2tag-build"/>
+	</target>
+	
+</project>
