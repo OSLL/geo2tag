@@ -2,6 +2,8 @@ require 'rubygems'
 require 'sinatra'
 require 'stubs'
 
+set :port, 9494
+
 def getBranch(push)
   #puts "I got some JSON: #{push.inspect}"
   branch = push["ref"]
