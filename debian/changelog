@@ -1,6 +1,7 @@
 wikigps (0.1.5k) unstable; urgency=low
 
   * added fixies and new features into tracker
+  * fix for daemon fail
 
  -- Open Source and Linux lab <osll@lists.osll.spb.ru>  Mon, 01 May 2011 22:41:17 +0400
 
