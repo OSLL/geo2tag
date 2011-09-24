@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6)
 
 Package: wikigps-libs
 Architecture: any
-Depends: ${shlibs:Depends}, libxml2 (>=2.6),libqt4-core ,libqt4-network ,libqt4-gui, libqt4-sql-psql [i386]
+Depends: ${shlibs:Depends}, libxml2 (>=2.6)[i386],libqt4-core ,libqt4-network ,libqt4-gui, libqt4-sql-psql [i386]
 Description: Geo2tag libs
 
 Package: wikigps-libs-standalone
