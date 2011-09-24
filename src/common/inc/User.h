@@ -35,51 +35,60 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
-#define _User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
+#ifndef _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
+#define _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
 
 #include <QString>
 #include <QSharedPointer>
+#include <typeinfo>
 #include "Channel.h"
 
-#include "ConcurrentVector.h"
+//#include "ConcurrentVector.h"
 
-class User: public QObject
+namespace common
 {
-  Q_OBJECT
-    QString m_login;
-  QString m_password;
 
-  QString m_result;
-  QString m_token;
-  // list of subscribed channels
-  QSharedPointer<Channels> m_channels;
+  class User: public QObject
+  {
+    Q_OBJECT
+      QString m_login;
+    QString m_password;
 
-  protected:
-    User(const QString& name, const QString& passw);
+    QString m_result;
+    QString m_token;
+    // list of subscribed channels
+    QSharedPointer<Channels> m_channels;
 
-    void setToken(const QString&);
+    protected:
 
-  public:
+      void setToken(const QString&);
 
-    virtual qlonglong getId() const = 0;
+    public:
 
-    void subscribe(const QSharedPointer<Channel>& channel);
+      User(const QString& name, const QString& passw);
 
-    void unsubscribe(const QSharedPointer<Channel>& channel);
+      virtual qlonglong getId() const;
 
-    const QString& getLogin() const;
-    const QString& getPassword() const;
-    const QString& getToken() const;
-    const QSharedPointer<Channels> getSubscribedChannels() const;
+      void subscribe(const QSharedPointer<Channel>& channel);
 
-    void setPassword(const QString password);
+      void unsubscribe(const QSharedPointer<Channel>& channel);
 
-    virtual ~User();
-    // class User
-};
+      const QString& getLogin() const;
+      const QString& getPassword() const;
+      const QString& getToken() const;
+      const QSharedPointer<Channels> getSubscribedChannels() const;
 
-typedef ConcurrentVector<User> Users;
+      void setPassword(const QString password);
+
+      virtual ~User();
+      // class User
+  };
+
+  typedef ConcurrentVector<User> Users;
+
+}                                       //namespace common
+
+
 //_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
 #endif
 

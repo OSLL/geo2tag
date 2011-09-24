@@ -38,16 +38,7 @@
 #ifndef _SETDEFAULTTIMESLOTMARKREQUESTJSON_H_404ac795_44af_4d40_8b15_f652438d71f2_
 #define _SETDEFAULTTIMESLOTMARKREQUESTJSON_H_404ac795_44af_4d40_8b15_f652438d71f2_
 
-#include "JsonSerializer.h"
+#include "GetTimeSlotMarkRequestJSON.h"
 
-class SetDefaultTimeSlotMarkRequestJSON : public JsonSerializer
-{
-  Q_OBJECT;
-  public:
-    SetDefaultTimeSlotMarkRequestJSON(QObject *parent=0);
-
-    QByteArray getJson() const;
-
-    void parseJson(const QByteArray&);
-};
+typedef GetTimeSlotMarkRequestJSON SetDefaultTimeSlotMarkRequestJSON;
 #endif                                  // _SETDEFAULTTIMESLOTMARKREQUESTJSON_H_404ac795_44af_4d40_8b15_f652438d71f2_

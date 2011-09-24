@@ -44,11 +44,12 @@
 #define _SubscribedChannelsJSON_H_INCLUDED_
 
 #include "JsonSerializer.h"
+#include "User.h"
 
 class SubscribedChannelsRequestJSON: public JsonSerializer
 {
   public:
-    SubscribedChannelsRequestJSON(const QSharedPointer<User> &user);
+    SubscribedChannelsRequestJSON(const QSharedPointer<common::User> &user);
 
     // Three functions below was virtual
     QByteArray getJson() const;

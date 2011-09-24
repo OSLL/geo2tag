@@ -40,136 +40,149 @@
  * PROJ: OSLL/fedexday
  * ---------------------------------------------------------------- */
 
-#include "ApplyMarkQuery.h"
 #include "defines.h"
 #include <QDebug>
+#ifndef Q_OS_SYMBIAN
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 #include "QVariant"
 #include "QVariantMap"
+#include "ApplyMarkQuery.h"
 
-namespace GUI
+//kkv namespace GUI
+//kkv {
+ApplyMarkQuery::ApplyMarkQuery(QObject *parent)
+: QObject(parent)
 {
-  ApplyMarkQuery::ApplyMarkQuery(QObject *parent)
-    : QObject(parent)
-  {
-    jsonQuery = "";
-    httpQuery = "";
-    manager = new QNetworkAccessManager(this);
+  jsonQuery = "";
+  httpQuery = "";
+  manager = new QNetworkAccessManager(this);
 
-    qDebug() << "Free ApplyMarkQuery created";
+  qDebug() << "Free ApplyMarkQuery created";
+}
+
+
+ApplyMarkQuery::ApplyMarkQuery(QString auth_token, QString channel, QString title,
+QString link, QString description, qreal latitude,
+qreal longitude, QString time, QObject *parent)
+: QObject(parent)
+{
+  manager = new QNetworkAccessManager(this);
+  setQuery(auth_token, channel, title, link, description, latitude, longitude, time);
+  qDebug() << "ApplyMarkQuery created:\n"
+    << httpQuery << jsonQuery;
+}
+
+
+void ApplyMarkQuery::setQuery(QString auth_token, QString channel, QString title,
+QString link, QString description, qreal latitude,
+qreal longitude, QString time)
+{
+  QVariantMap request;
+  request.insert("auth_token", auth_token);
+  request.insert("channel", channel);
+  request.insert("title", title);
+  request.insert("link", link);
+  request.insert("description", description);
+  request.insert("latitude", QString::number(latitude).toDouble());
+  request.insert("longitude", QString::number(longitude).toDouble());
+  request.insert("time", time);
+  QJson::Serializer serializer;
+  jsonQuery = serializer.serialize(request);
+
+  httpQuery = APPLY_HTTP_URL;
+}
+
+
+ApplyMarkQuery::~ApplyMarkQuery()
+{
+
+}
+
+
+const QString& ApplyMarkQuery::getHttpQuery()
+{
+  return httpQuery;
+}
+
+
+const QString& ApplyMarkQuery::getJsonQuery()
+{
+  return jsonQuery;
+}
+
+
+void ApplyMarkQuery::doRequest()
+{
+  if (httpQuery == "" || jsonQuery == "")
+  {
+    qDebug() << "ApplyMarkQuery: can't do request because query isn't set";
+    return;
   }
 
-  ApplyMarkQuery::ApplyMarkQuery(QString auth_token, QString channel, QString title,
-    QString link, QString description, qreal latitude,
-    qreal longitude, QString time, QObject *parent)
-    : QObject(parent)
+  QNetworkRequest request;
+  QUrl url(httpQuery);
+  url.setPort(getServerPort());
+  request.setUrl(url);
+
+  QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
+
+  QNetworkReply *reply = manager->post(request, data);
+
+  connect(manager, SIGNAL(finished(QNetworkReply*)),
+    this, SLOT(onManagerFinished(QNetworkReply*)));
+  connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
+    this, SIGNAL(managerSslErrors()));
+  connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+    this, SIGNAL(replyError(QNetworkReply::NetworkError)));
+
+  qDebug() << "ApplyMarkQuery did request:\n"
+    << httpQuery << jsonQuery;
+}
+
+
+void ApplyMarkQuery::onManagerFinished(QNetworkReply *reply)
+{
+  QByteArray jsonResponseByteArray = reply->readAll();
+
+  if (jsonResponseByteArray.size() > 0)
   {
-    manager = new QNetworkAccessManager(this);
-    setQuery(auth_token, channel, title, link, description, latitude, longitude, time);
-    qDebug() << "ApplyMarkQuery created:\n"
-      << httpQuery << jsonQuery;
-  }
-
-  void ApplyMarkQuery::setQuery(QString auth_token, QString channel, QString title,
-    QString link, QString description, qreal latitude,
-    qreal longitude, QString time)
-  {
-    QVariantMap request;
-    request.insert("auth_token", auth_token);
-    request.insert("channel", channel);
-    request.insert("title", title);
-    request.insert("link", link);
-    request.insert("description", description);
-    request.insert("latitude", QString::number(latitude).toDouble());
-    request.insert("longitude", QString::number(longitude).toDouble());
-    request.insert("time", time);
-    QJson::Serializer serializer;
-    jsonQuery = serializer.serialize(request);
-
-    httpQuery = APPLY_HTTP_URL;
-  }
-
-  ApplyMarkQuery::~ApplyMarkQuery()
-  {
-
-  }
-
-  const QString& ApplyMarkQuery::getHttpQuery()
-  {
-    return httpQuery;
-  }
-
-  const QString& ApplyMarkQuery::getJsonQuery()
-  {
-    return jsonQuery;
-  }
-
-  void ApplyMarkQuery::doRequest()
-  {
-    if (httpQuery == "" || jsonQuery == "")
+    QString jsonResponse(jsonResponseByteArray);
+    qDebug() << "Gotten response (json): " << jsonResponse;
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
+    QString status("");
+    QString status_description("");
+    if (!ok)
     {
-      qDebug() << "ApplyMarkQuery: can't do request because query isn't set";
-      return;
+      qFatal("An error occured during parsing json with response to apply mark");
+    }
+    else
+    {
+      status = result["status"].toString();
+      status_description = result["status_description"].toString();
     }
 
-    QNetworkRequest request;
-    QUrl url(httpQuery);
-    url.setPort(getServerPort());
-    request.setUrl(url);
-
-    QByteArray data(jsonQuery.toAscii(), jsonQuery.size());
-
-    QNetworkReply *reply = manager->post(request, data);
-
-    connect(manager, SIGNAL(finished(QNetworkReply*)),
-      this, SLOT(onManagerFinished(QNetworkReply*)));
-    connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-      this, SIGNAL(managerSslErrors()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-      this, SIGNAL(replyError(QNetworkReply::NetworkError)));
-
-    qDebug() << "ApplyMarkQuery did request:\n"
-      << httpQuery << jsonQuery;
+    Q_EMIT responseReceived(status,status_description);
   }
+}
 
-  void ApplyMarkQuery::onManagerFinished(QNetworkReply *reply)
-  {
-    QByteArray jsonResponseByteArray = reply->readAll();
 
-    if (jsonResponseByteArray.size() > 0)
+/*
+    void ApplyMarkQuery::onReplyError(QNetworkReply::NetworkError error)
     {
-      QString jsonResponse(jsonResponseByteArray);
-      qDebug() << "Gotten response (json): " << jsonResponse;
-      QJson::Parser parser;
-      bool ok;
-      QVariantMap result = parser.parse(QByteArray(jsonResponse.toAscii()), &ok).toMap();
-      QString status("");
-      QString status_description("");
-      if (!ok)
-      {
-        qFatal("An error occured during parsing json with response to apply mark");
-      }
-      else
-      {
-        status = result["status"].toString();
-        status_description = result["status_description"].toString();
-      }
-
-      Q_EMIT responseReceived(status,status_description);
+        qDebug("Network error: %d \n", error);
     }
-  }
-  /*
-      void ApplyMarkQuery::onReplyError(QNetworkReply::NetworkError error)
-      {
-          qDebug("Network error: %d \n", error);
-      }
 
-      void ApplyMarkQuery::onManagerSslErrors()
-      {
-          qDebug("ssl error \n");
-      }*/
-}                                       // namespace GUI
-
+    void ApplyMarkQuery::onManagerSslErrors()
+    {
+        qDebug("ssl error \n");
+    }*/
+//kkv}                                       // namespace GUI
 
 /* ===[ End of file $HeadURL$ ]=== */

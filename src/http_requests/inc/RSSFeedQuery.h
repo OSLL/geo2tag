@@ -62,7 +62,7 @@ class RSSFeedQuery : public DefaultQuery
 {
   Q_OBJECT
 
-    QSharedPointer<User> m_user;
+    QSharedPointer<common::User> m_user;
   double m_latitude;
   double m_longitude;
   double m_radius;
@@ -78,7 +78,7 @@ class RSSFeedQuery : public DefaultQuery
 
   public:
 
-    RSSFeedQuery(QSharedPointer<User> &user,
+    RSSFeedQuery(QSharedPointer<common::User> &user,
       double latitude,
       double longitude,
       double radius,
@@ -86,7 +86,7 @@ class RSSFeedQuery : public DefaultQuery
 
     RSSFeedQuery(QObject *parent = 0);
 
-    void setQuery(QSharedPointer<User> &user,
+    void setQuery(QSharedPointer<common::User> &user,
       double latitude,
       double longitude,
       double radius);

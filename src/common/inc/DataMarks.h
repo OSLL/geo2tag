@@ -42,13 +42,13 @@
 #ifndef _DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
 #define _DataMarks_H_E8A2619E_0BF6_4AE8_BB61_F09B92F73637_INCLUDED_
 
-#include <QString>
+//#include <QString>
 #include <QVector>
 #include <QSharedPointer>
 #include <QDateTime>
 #include "User.h"
 #include "ConcurrentVector.h"
-#include "Channel.h"
+//#include "Channel.h"
 
 class DataMark: public QObject
 {
@@ -61,7 +61,7 @@ class DataMark: public QObject
   QString m_url;
   QDateTime m_time;
 
-  QSharedPointer<User> m_user;
+  QSharedPointer<common::User> m_user;
 
   QSharedPointer<Channel> m_channel;
 
@@ -72,13 +72,13 @@ class DataMark: public QObject
     DataMark(double latitude, double longitude, QString label,
       QString description, QString url, QDateTime time);
 
-    void setUser(QSharedPointer<User> user);
+    void setUser(QSharedPointer<common::User> user);
 
     void setChannel(QSharedPointer<Channel> channel);
 
   public:
 
-    virtual qlonglong getId() const = 0;
+    virtual qlonglong getId() const;
 
     void setDescription(const QString&);
     const QString& getDescription() const;
@@ -98,7 +98,7 @@ class DataMark: public QObject
     const QDateTime& getTime() const;
     void setTime(const QDateTime& time=QDateTime::currentDateTime().toUTC());
 
-    QSharedPointer<User> getUser() const;
+    QSharedPointer<common::User> getUser() const;
 
     QSharedPointer<Channel> getChannel() const;
     static double getDistance(double lat1, double lon1, double lat2, double lon2);

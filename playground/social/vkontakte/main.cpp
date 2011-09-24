@@ -14,5 +14,5 @@ int main(int argc, char *argv[])
         QObject::connect(auth, SIGNAL(success(QString,QString,int)),request,SLOT(getProfile(QString,QString)));
         auth->show();
         return a.exec();
-}
 
+}

@@ -42,66 +42,68 @@
 #include "User.h"
 #include <algorithm>
 
-User::User(const QString& name, const QString& pass):
-m_login(name),
-m_password(pass),
-m_channels(new Channels())
+namespace common
 {
-}
 
+  User::User(const QString& name, const QString& pass):
+  m_login(name),
+    m_password(pass),
+    m_channels(new Channels())
+  {
+  }
 
-void User::subscribe(const QSharedPointer<Channel>& channel)
-{
-  if(!m_channels->exist(channel->getId()))
-    m_channels->push_back(channel);
-}
+  qlonglong User::getId() const
+  {
+    // Database is not contain 0 in sequences, see scripts/base.sql
+    return 0;
+  }
 
+  void User::subscribe(const QSharedPointer<Channel>& channel)
+  {
+    if(!m_channels->exist(channel->getId()))
+      m_channels->push_back(channel);
+  }
 
-void User::unsubscribe(const QSharedPointer<Channel>& channel)
-{
-  m_channels->erase(channel);
-}
+  void User::unsubscribe(const QSharedPointer<Channel>& channel)
+  {
+    m_channels->erase(channel);
+  }
 
+  const QString& User::getLogin() const
+  {
+    return m_login;
+  }
 
-const QString& User::getLogin() const
-{
-  return m_login;
-}
+  const QString& User::getToken() const
+  {
+    return m_token;
+  }
 
+  const QString& User::getPassword() const
+  {
+    return m_password;
+  }
 
-const QString& User::getToken() const
-{
-  return m_token;
-}
+  const QSharedPointer<Channels> User::getSubscribedChannels() const
+  {
+    return m_channels;
+  }
 
+  void User::setPassword(QString password)
+  {
+    m_password = password;
+  }
 
-const QString& User::getPassword() const
-{
-  return m_password;
-}
+  void User::setToken(const QString &token)
+  {
+    m_token = token;
+  }
 
+  User::~User()
+  {
+  }
 
-const QSharedPointer<Channels> User::getSubscribedChannels() const
-{
-  return m_channels;
-}
-
-
-void User::setPassword(QString password)
-{
-  m_password = password;
-}
-
-
-void User::setToken(const QString &token)
-{
-  m_token = token;
-}
-
-
-User::~User()
-{
-}
+}                                       // namespace common
 
 
 /* ===[ End of file ]=== */

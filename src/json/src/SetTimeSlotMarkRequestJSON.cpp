@@ -41,7 +41,7 @@ void SetTimeSlotMarkRequestJSON::parseJson(const QByteArray &data)
   qlonglong markId = result["mark_id"].toLongLong();
   qulonglong timeSlot = result["timeSlot"].toULongLong();
 
-  m_usersContainer->push_back(QSharedPointer<User>(new JsonUser("unknown","unknown", token)));
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("unknown","unknown", token)));
 
   JsonDataMark* jsonMark = new JsonDataMark(0,0,"unknown", "unknown", "unknown", QDateTime());
   jsonMark->setId(markId);

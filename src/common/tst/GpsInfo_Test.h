@@ -51,7 +51,7 @@ namespace Test
 
     public:
 
-      GpsInfo_Test()
+      GpsInfo_Test(QObject *parent = NULL) : QObject(parent)
       {
         // initialization here
       }
@@ -60,12 +60,6 @@ namespace Test
 
       void test1()
       {
-        // see docs: http://doc.qt.nokia.com/4.7/qtest.html
-
-        //QCOMPARE();
-        //QWARN();
-        //QVERIFY();
-        //QTEST();
         QCOMPARE(common::GpsInfo::getInstance().isReady(),false);
         QCOMPARE(common::GpsInfo::getInstance().getLatitude(),0.);
         QCOMPARE(common::GpsInfo::getInstance().getLongitude(),0.);

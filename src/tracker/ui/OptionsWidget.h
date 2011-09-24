@@ -26,10 +26,10 @@ class OptionsWidget : public QScrollArea
   QLineEdit *m_serverUrlEdit;
   QSpinBox *m_serverPortEdit;
 
-  QCheckBox *m_passwordCheckBox;
+  QCheckBox * m_passwordCheckBox;
 
-  QSpinBox *m_proxyPortEdit;
-  QComboBox *m_proxyType;
+  QSpinBox * m_proxyPortEdit;
+  QComboBox * m_proxyType;
 
   QComboBox * m_cacheType;
   QLineEdit * m_cachePath;
@@ -41,9 +41,9 @@ class OptionsWidget : public QScrollArea
   QString m_productName;
 
   QPushButton * m_cachePathButton;
-  QPushButton *m_doneButton;
-  QPushButton *m_cancelButton;
-  QPushButton *m_defaultButton;
+  QPushButton * m_doneButton;
+  QPushButton * m_cancelButton;
+  QPushButton * m_defaultButton;
 
   QSettings m_settings;
 

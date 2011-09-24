@@ -13,65 +13,61 @@ DEPENDPATH += . \
 
 INCLUDEPATH += . \
     inc \
-    /usr/include/libxml2
+
+
+CONFIG += mobility
+MOBILITY = location
+
 
 # Input
 HEADERS += \
-    inc/DataMarks.h \
-    inc/DefaultException.h \
-    inc/GpsInfo.h \
-    inc/User.h \
-    inc/Channel.h \
-    inc/defines.h \
     inc/ConcurrentVector.h \
-    inc/DataChannel.h \
-    inc/TimeSlot.h
+    inc/TimeSlot.h \
+    inc/Channel.h \
+    inc/User.h \
+    inc/DataMarks.h \
+    inc/GpsInfo.h \
+    inc/defines.h \
+    inc/DataChannel.h\
+    inc/TimeSlot.h \
+    inc/ChannelAction.h\
+		inc/DataMarks.h
 
 SOURCES += \
-    src/DataMarks.cpp \
-    src/DefaultException.cpp \
-    src/GpsInfo.cpp \
+    src/TimeSlot.cpp \
     src/Channel.cpp \
-    src/defines.cpp \
     src/User.cpp \
-    src/TimeSlot.cpp
+    src/ChannelAction.cpp \
+    src/GpsInfo.cpp \ 
+    src/DataMarks.cpp \
+    src/defines.cpp
 
 linux: {
-    HEADERS +=  \
-                inc/GpsModeller.h
+    HEADERS += inc/GpsModeller.h
 
-    SOURCES +=  \
-                src/GpsModeller.cpp
+    SOURCES += src/GpsModeller.cpp
 
     QT -= gui
     LIBS += -lxml2
 
     DEFINES += SIMULATE_GPS
+
+    INCLUDEPATH += /usr/include/libxml2
 }
 
 maemo5: {
 
-    CONFIG += mobility
-    MOBILITY = location
+    HEADERS += inc/MobilityGps.h
 
-    HEADERS +=  \
-               inc/MobilityGps.h
-
-    SOURCES +=  \
-               src/MobilityGps.cpp
-
+    SOURCES += src/MobilityGps.cpp
     LIBS += -lQtLocation
 }
 
-symbian: {
-}
 
 webside: {
-    HEADERS +=  \
-                inc/GpsModeller.h
+    HEADERS += inc/GpsModeller.h
 
-    SOURCES +=  \
-                src/GpsModeller.cpp
+    SOURCES += src/GpsModeller.cpp
 
     LIBS += -lxml2 -lodbc
 

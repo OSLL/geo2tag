@@ -6,6 +6,7 @@
 void myMessageHandler(QtMsgType type, const char *msg)
 {
   QString txt;
+
   switch (type)
   {
     case QtDebugMsg:
@@ -23,6 +24,7 @@ void myMessageHandler(QtMsgType type, const char *msg)
   }
   QFile outFile("/tmp/wikigpsTracker.log");
   outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+
   QTextStream ts(&outFile);
   ts << QTime::currentTime().toString() << ":" << txt << endl;
 }
@@ -32,10 +34,12 @@ int main(int c, char **v)
 {
   QCoreApplication app(c,v);
   qInstallMsgHandler(myMessageHandler);
+
   qDebug() << "Application is started";
+
   TrackerDaemon daemon;
-  //  daemon.start();
+
   daemon.run();
-  //  QObject::connect(&app,SIGNAL(aboutToQuit()),&daemon,SLOT(stop()));
+
   return app.exec();
 }

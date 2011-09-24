@@ -11,6 +11,7 @@
 #include <QComboBox>
 #include <QSettings>
 #include "defines.h"
+
 class ViewOptsWidget : public QScrollArea
 {
   Q_OBJECT

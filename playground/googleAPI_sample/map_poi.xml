@@ -1,0 +1,13 @@
+<atom:entry xmlns='http://www.opengis.net/kml/2.2'
+    xmlns:atom='http://www.w3.org/2005/Atom'>
+   <atom:title type='text'>TestObject1</atom:title>
+   <atom:content type='application/vnd.google-earth.kml+xml'>
+     <Placemark>
+       <name>TestObject1</name>
+       <description/>
+       <Point>
+         <coordinates>30.350161,59.994179,0.00000</coordinates>
+       </Point>
+     </Placemark>
+   </atom:content>
+</atom:entry>

@@ -1,0 +1,7 @@
+export JAVA_HOME=/home/bac1ca/programming/jdk1.6.0_20/
+export PATH=${PATH}:/home/bac1ca/programming/jdk1.6.0_20/bin/
+export CATALINA_HOME=/home/bac1ca/programming/apache-tomcat-7.0.19
+export ANT_HOME=/home/bac1ca/programming/apache-ant-1.8.2
+export PATH=${PATH}:/home/bac1ca/programming/apache-ant-1.8.2/bin/
+export WEBGEO_HOME=/home/bac1ca/programming
+

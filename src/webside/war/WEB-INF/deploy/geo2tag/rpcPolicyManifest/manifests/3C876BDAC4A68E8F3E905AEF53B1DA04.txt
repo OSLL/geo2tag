@@ -1,2 +1,0 @@
-serviceClass: ru.spb.osll.web.client.GreetingService
-path: CA6E559792C7589414D2EFE2EBCA84AF.gwt.rpc

@@ -13,15 +13,22 @@
 #include "LoginQuery.h"
 #include "AddNewMarkQuery.h"
 #include <QTimer>
-#include "Control.h"
 #include <QPointF>
 #include <QNetworkConfigurationManager>
 
-class TrackerDaemon : /*public QThread,*/ public Control
-{
-  Q_OBJECT;
+#ifndef Q_WS_SYMBIAN
+#include "Control.h"
+#define PARENT Control
+#else
+#include <QThread>
+#define PARENT QThread
+#endif
 
-  QSettings m_settings;
+class TrackerDaemon : /*public QThread,*/ public PARENT
+{
+  Q_OBJECT
+
+    QSettings m_settings;
   QString m_channelName;
   QString m_visibleName;
   QPointF m_lastCoords;
@@ -34,8 +41,9 @@ class TrackerDaemon : /*public QThread,*/ public Control
 
   bool m_pauseFlag;
   bool m_isConnected;
-
+  #ifndef NO_DAEMON
   QTcpServer * m_controlServer;
+  #endif
   public:
     void run();
   private slots:
@@ -46,9 +54,9 @@ class TrackerDaemon : /*public QThread,*/ public Control
     void onError(QString);
 
     void onOnlineChanged(bool state);
-
+  #ifndef NO_DAEMON
     void newControlConnection();
-
+  #endif
   public:
     TrackerDaemon();
 
@@ -65,5 +73,7 @@ class TrackerDaemon : /*public QThread,*/ public Control
   public slots:
 
 };
+//#endif
+
 // TRACKERDAEMON_H
 #endif

@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QList>
 #include <QPointF>
+#include <QSharedPointer>
 #include "LoginQuery.h"
 #include "AddNewMarkQuery.h"
 #include <QFile>

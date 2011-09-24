@@ -25,9 +25,12 @@ SOURCES += src/OSMCoordinatesConverter.cpp \
         src/MapsUploadThread.cpp \
         src/Preloading.cpp
 
+!symbian{
 OBJECTS_DIR = .obj
 
 MOC_DIR = .moc
+}
+
 
 RESOURCES += \
     images.qrc

@@ -19,9 +19,10 @@ class AddNewMarkQuery: public DefaultQuery
 
   public:
     AddNewMarkQuery(const QSharedPointer<DataMark> &tag, QObject *parent = 0);
+    AddNewMarkQuery(QObject *parent = 0);
 
     ~AddNewMarkQuery();
-
+    void setTag(const QSharedPointer<DataMark> &tag);
     QSharedPointer<DataMark> getTag();
     const QSharedPointer<DataMark>& getTag() const;
 

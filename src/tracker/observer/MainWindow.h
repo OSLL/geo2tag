@@ -11,6 +11,7 @@
 #include "DataThread.h"
 #include "OptionsWidget.h"
 #include "ViewOptsWidget.h"
+
 class MainWindow:public QMainWindow
 {
   Q_OBJECT

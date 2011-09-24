@@ -4,6 +4,7 @@
 #include <QNetworkReply>
 
 #include "SlippyMap.h"
+#include "defines.h"
 
 #include <math.h>
 
@@ -13,12 +14,6 @@
 
 // tile size in pixels
 static const int tdim = 256;
-
-uint qHash(const QPoint& p)
-{
-  return p.x() * 17 ^ p.y();
-}
-
 
 QPointF tileForCoordinate(qreal lat, qreal lng, int zoom)
 {

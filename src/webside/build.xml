@@ -13,6 +13,7 @@
 		<pathelement location="${gwt.sdk}/gwt-user.jar" />
 		<pathelement location="${junit.jar}" />
 		<pathelement location="${openlayers.jar}" />
+		<pathelement location="${gwt-visual.jar}" />
 		<fileset dir="${gwt.sdk}" includes="gwt-dev*.jar" />
 		<!-- Add any additional non-server libs (such as JUnit) -->
 		<fileset dir="war/WEB-INF/lib" includes="**/*.jar" />

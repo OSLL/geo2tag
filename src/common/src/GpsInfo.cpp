@@ -41,8 +41,9 @@
 
 #include <iostream>
 #include "GpsInfo.h"
+#ifdef SIMULATE_GPS
 #include "GpsModeller.h"
-#ifndef SIMULATE_GPS
+#else
 #include "MobilityGps.h"
 #endif
 

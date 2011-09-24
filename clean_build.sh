@@ -1,5 +1,8 @@
 #!/bin/bash
 
-./erase_tests.sh
-make distclean 
-qmake && make -j5 && ./run_tests.sh
+find ./ -name test.suite | xargs rm
+
+dpkg-buildpackage -rfakeroot -j5
+
+cat ./test_summary.log
+

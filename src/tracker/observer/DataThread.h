@@ -15,7 +15,7 @@ class DataThread : public QThread
     QSettings m_settings;
   // here marks are stored
   DataChannels m_marks;
-  QSharedPointer<User> m_user;
+  QSharedPointer<common::User> m_user;
   MapScene * m_map;
 
   // this field needs because query is asynchronous

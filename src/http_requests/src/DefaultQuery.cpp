@@ -1,8 +1,13 @@
 #include <QDebug>
 #include <QNetworkConfiguration>
-#include <syslog.h>
 #include "DefaultQuery.h"
 #include "defines.h"
+
+#ifndef Q_OS_SYMBIAN
+#include <syslog.h>
+#else
+#include "symbian.h"
+#endif
 
 DefaultQuery::DefaultQuery(QObject *parent): QObject(parent),
 m_manager(new QNetworkAccessManager(parent))

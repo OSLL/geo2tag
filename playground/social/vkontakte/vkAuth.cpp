@@ -5,20 +5,18 @@ vkAuth::vkAuth(QString appId, QWidget *parent):QWebView(parent)
 {
 
 
-
-    connect(this, SIGNAL(urlChanged(QUrl)), this, SLOT(slotChanged(QUrl)));
-    QUrl url("http://api.vkontakte.ru/oauth/authorize");
-    url.addQueryItem("client_id", appId);
-    url.addQueryItem("display", "popup");
-    url.addQueryItem("scope", "friends,photos,video");
-    url.addQueryItem("redirect_uri","http://api.vkontakte.ru/blank.html");
-    url.addQueryItem("response_type", "token");
-    this->load(url);
-
-
+  connect(this, SIGNAL(urlChanged(QUrl)), this, SLOT(slotChanged(QUrl)));
+  QUrl url("http://api.vkontakte.ru/oauth/authorize");
+  url.addQueryItem("client_id", appId);
+  url.addQueryItem("display", "popup");
+  url.addQueryItem("scope", "friends,video,offline");
+  url.addQueryItem("redirect_uri","http://api.vkontakte.ru/blank.html");
+  url.addQueryItem("response_type", "token");
+  this->load(url);
 
 
 }
+
 
 void vkAuth::slotChanged(const QUrl & url)
 {
@@ -49,16 +47,20 @@ void vkAuth::slotChanged(const QUrl & url)
      qDebug()<<"ALL: "<<url.toString();
  }
 
+
 }
+
 
 QString & vkAuth::getToken()
 {
-    return token;
+  return token;
 }
+
 
 QString vkAuth::getUserId()
 {
-    return userId;
+  return userId;
 }
+
 
 

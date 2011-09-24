@@ -3,11 +3,10 @@
 #include <QWebView>
 
 
-
 class vkAuth:public QWebView
 {
-    Q_OBJECT
-private:
+  Q_OBJECT
+    private:
     QString token;
     QUrl url;
     int expires;
@@ -19,8 +18,8 @@ public:
     QString getUserId();
 signals:
     void success(const QString &token, const QString &userId, int expires);
-private slots:
+  private slots:
     void slotChanged(const QUrl & url);
 
 };
-#endif // VKAUTH_H
+#endif                                  // VKAUTH_H

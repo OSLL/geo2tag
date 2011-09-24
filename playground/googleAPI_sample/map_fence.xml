@@ -1,0 +1,40 @@
+<atom:entry xmlns='http://www.opengis.net/kml/2.2'
+    xmlns:atom='http://www.w3.org/2005/Atom'>
+   <atom:title type='text'>TestObject2-fence</atom:title>
+   <atom:content type='application/vnd.google-earth.kml+xml'>
+  <Placemark>
+    <name>TestObject2-fence</name>
+    <description>Fence1 description</description>
+    <Polygon>
+      <outerBoundaryIs>
+        <LinearRing>
+          <tessellate>1</tessellate>
+          <coordinates>
+            30.336300,59.993687,0.000000
+            30.339130,59.992741,0.000000
+            30.340246,59.990959,0.000000
+            30.341364,59.990746,0.000000
+            30.342909,59.990723,0.000000
+            30.344496,59.990704,0.000000
+            30.346169,59.990681,0.000000
+            30.346899,59.991001,0.000000
+            30.346899,59.991646,0.000000
+            30.345612,59.992439,0.000000
+            30.346769,59.992764,0.000000
+            30.343424,59.993256,0.000000
+            30.344625,59.993557,0.000000
+            30.342693,59.994373,0.000000
+            30.343637,59.995296,0.000000
+            30.340376,59.995960,0.000000
+            30.341791,59.996777,0.000000
+            30.337973,59.996517,0.000000
+            30.338659,59.995209,0.000000
+            30.335871,59.994480,0.000000
+            30.336300,59.993687,0.000000
+          </coordinates>
+        </LinearRing>
+      </outerBoundaryIs>
+    </Polygon>
+  </Placemark>
+   </atom:content>
+</atom:entry>

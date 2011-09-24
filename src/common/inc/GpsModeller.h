@@ -42,15 +42,13 @@
 #include <QDateTime>
 #include <QString>
 #include <QThread>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #include "GpsInfo.h"
 #include "defines.h"
 
 // This file maybe used only if SIMULATE_GPS is turned on
 #ifdef SIMULATE_GPS
-
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 namespace common
 {
   /*!
