@@ -5,9 +5,9 @@
 web_repo="geo2tag-web-repo"
 app="geo2tag.war"
 app_backup="geo2tag-backup.war"
-dir_sandbox="$WEBGEO_HOME/sandbox"
-dir_geo2tag="${dir_sandbox}/${web_repo}"
-dir_log="${dir_sandbox}/webside_logs"
+dir_automation="$WEBGEO_HOME/automation"
+dir_geo2tag="${dir_automation}/${web_repo}"
+dir_log="${dir_automation}/webside_logs"
 branch="$1"
 
 if [ "$branch" == "devel" ]
@@ -26,7 +26,8 @@ fi
 cd $dir_geo2tag
 git pull --all
 git checkout ${branch} #origin/${branch}
-cp ${dir_sandbox}/mail.properties ${dir_geo2tag}/src/webside/
+cp ${dir_automation}/local.properties ${dir_geo2tag}/src/webside/local.properties
+cp ${dir_automation}/mail.properties ${dir_geo2tag}/src/webside/
 
 # TEST AND BUILD
 mkdir ${dir_log}
@@ -49,14 +50,14 @@ then
 		date > ${dir_log}/deploy.log.txt
 		echo "Deploy of new version of site successful." >> ${dir_log}/deploy.log.txt
 		echo "" >> ${dir_log}/deploy.log.txt
-		${dir_sandbox}/gen_index.sh
-		ant -f ${dir_sandbox}/mail_sender.xml -Dsubject "geo2tag-web web-devel (success): integration reports" -Dlogdir ${dir_log}
+		${dir_automation}/gen_index.sh
+		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web web-devel (success): integration reports" -Dlogdir ${dir_log}
 	else 
 		date > ${dir_log}/deploy.log.txt
 		echo "Deploy of new version of site failed. Set stable version." >> ${dir_log}/deploy.log.txt
 		echo "" >> ${dir_log}/deploy.log.txt
 		mv $CATALINA_HOME/webapps/${app_backup} $CATALINA_HOME/webapps/${app}
-		ant -f ${dir_sandbox}/mail_sender.xml -Dsubject "geo2tag-web web-devel (fail): integration reports" -Dlogdir ${dir_log}
+		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web web-devel (fail): integration reports" -Dlogdir ${dir_log}
 	fi 
 
 else
@@ -68,10 +69,10 @@ else
 	if [ -e ${dir_geo2tag}/src/webside/${app} ]
 	then
 		echo "Build of $branch successful." >> ${dir_log}/build.log.txt
- 		ant -f ${dir_sandbox}/mail_sender.xml -Dsubject "geo2tag-web $branch (success): build and test reports" -Dlogdir ${dir_log}
+ 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web $branch (success): build and test reports" -Dlogdir ${dir_log}
 	else
 		echo "Build of $branch failed." >> ${dir_log}/build.log.txt
- 		ant -f ${dir_sandbox}/mail_sender.xml -Dsubject "geo2tag-web $branch (fail): build and test reports" -Dlogdir ${dir_log}
+ 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web $branch (fail): build and test reports" -Dlogdir ${dir_log}
 	fi
 fi
 ant clean

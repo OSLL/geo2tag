@@ -10,10 +10,10 @@
 
 # First parametr of this script - name of the branch, wich platform will be builded and tested
 
-dir_sandbox="$WEBGEO_HOME/sandbox"
-dir_geo2tag="${dir_sandbox}/geo2tag"
-dir_log="${dir_sandbox}/platform_logs"
-dir_backup="${dir_sandbox}/platform_backup"
+dir_automation="$WEBGEO_HOME/automation"
+dir_geo2tag="${dir_automation}/geo2tag"
+dir_log="${dir_automation}/platform_logs"
+dir_backup="${dir_automation}/platform_backup"
 branch="$1"
 
 # If branch name is "web-devel" then exit
@@ -30,6 +30,7 @@ else
 fi
 
 #CREATE LOGS
+mkdir -p ${dir_log}
 date > ${dir_log}/build.log.txt
 date > ${dir_log}/deploy.log.txt
 date > ${dir_log}/test.log.txt
@@ -40,7 +41,6 @@ cd $dir_geo2tag
 git pull --all >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 git checkout $branch >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 
-mkdir ${dir_log}
 
 
 
@@ -49,7 +49,7 @@ mkdir ${dir_log}
 cd ${dir_geo2tag}
 dh_clean
 dpkg-buildpackage -rfakeroot >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
-founded_packages=`ls "${dir_sandbox}" | grep deb | grep -v standalone | grep -v observer`;
+founded_packages=`ls "${dir_automation}" | grep deb | grep -v standalone | grep -v observer`;
 echo "After building ${founded_packages}"
 if [  $(echo "${founded_packages}" | wc -w ) == "2" ] ;
 then
@@ -60,28 +60,28 @@ status="success";
 #UNIT TESTING
 
 echo "Unit testing:"  >>${dir_log}/test.log.txt
-${dir_sandbox}/geo2tag/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
+${dir_automation}/geo2tag/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 
 # DEPLOY and TEST only if branch is devel
 if [ "$branch" == "devel" ]
 then
 
 #DEPLOY
-cd ${dir_sandbox}
+cd ${dir_automation}
 ls
 dpkg -i wikigps-libs_* wikigps-service_* >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 
 #TEST
-	if "${dir_sandbox}"/test_platform.sh 
+	if "${dir_automation}"/test_platform.sh 
 	then
 	# test cases passed, move installed debs to backup
 		echo "Tests passed" >> ${dir_log}/test.log.txt
 		status="success";
-		cd "${dir_sandbox}"
+		cd "${dir_automation}"
 		rm -rf "${dir_backup}"
 		mkdir "${dir_backup}"
-		mv -f ${dir_sandbox}/wikigps-libs_* "${dir_backup}"
-		mv -f ${dir_sandbox}/wikigps-service_* "${dir_backup}"	
+		mv -f ${dir_automation}/wikigps-libs_* "${dir_backup}"
+		mv -f ${dir_automation}/wikigps-service_* "${dir_backup}"	
 	else
 	# test cases not passed, restore backup
 		echo "Tests not passed" >> ${dir_log}/test.log.txt
@@ -99,7 +99,7 @@ fi
 cd ${dir_geo2tag}
 dh_clean
 #git stash
-cd ${dir_sandbox}
+cd ${dir_automation}
 rm -rf wikigps*
 
 #SEND EMAIL
@@ -114,6 +114,7 @@ echo "" > ${dir_log}/build.log.txt
 echo "" > ${dir_log}/deploy.log.txt
 echo "" > ${dir_log}/test.log.txt
 
+cd ${dir_geo2tag}
 git reset --hard 
 git clean -fxd
 
