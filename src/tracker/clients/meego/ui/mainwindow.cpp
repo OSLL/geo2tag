@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&m_client,SIGNAL(error(QString)),SLOT(on_error(string)));
     ui->log_edit->append("Error log");
 
+
 }
 
 MainWindow::~MainWindow()

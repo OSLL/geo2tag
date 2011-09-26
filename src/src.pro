@@ -28,5 +28,6 @@ linux: {
              maps \ 
              service \
              tracker/observer \
+	     tracker/clients/meego/tst \
              common/tst
 }
