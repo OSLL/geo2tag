@@ -36,6 +36,9 @@ cp -rf ${dir_repo}/automation ${dir_automation}
 cp ${dir_3rd_party}/mail.properties ${dir_automation}/mail.properties
 cp ${dir_3rd_party}/mail.properties ${dir_automation}/platform_mail.properties
 
+# 3.2.
+cp -rf ${dir_3rd_party}/www /var/
+
 # 4.
 export JAVA_HOME=$WEBGEO_HOME/3rd_party/jdk1.6.0_20/
 export PATH=${PATH}:$WEBGEO_HOME/3rd_party/jdk1.6.0_20/bin/

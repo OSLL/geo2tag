@@ -17,6 +17,7 @@ fi
 cd $dir_geo2tag
 git pull --all
 git checkout web-devel
+cp ${dir_automation}/local.properties ${dir_geo2tag}/src/webside/local.properties
 cp ${dir_automation}/mail.properties ${dir_geo2tag}/src/webside/
 
 # TEST AND BUILD

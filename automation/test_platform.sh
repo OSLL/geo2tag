@@ -9,7 +9,3 @@ then
 fi
 echo "Succes"
 
-# testing ruby stubsa
-echo ""
-echo "testing airomo stubs"
-ruby1.8 test_stubs.rb

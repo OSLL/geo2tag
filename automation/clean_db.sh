@@ -1,12 +1,13 @@
 #!/bin/bash
 
-dir_sandbox="$WEBGEO_HOME/sandbox"
-dir_geo2tag="${dir_sandbox}/geo2tag"
-dir_log="${dir_sandbox}/platform_logs"
-dir_backup="${dir_sandbox}/platform_backup"
+dir_automation="$WEBGEO_HOME/automation"
+dir_geo2tag="${dir_automation}/geo2tag"
+dir_log="${dir_automation}/platform_logs"
+dir_backup="${dir_automation}/platform_backup"
 
 
 #CREATE LOGS
+mkdir ${dir_log}
 date > ${dir_log}/build.log.txt
 date > ${dir_log}/deploy.log.txt
 date > ${dir_log}/test.log.txt
@@ -27,24 +28,24 @@ if [[ -n "$db" ]]
 then
 	status="success"
 else
-	status="fail"
+	status="fail_1"
 fi
 
 #TEST
-if ${dir_sandbox}/test_platform.sh >> ${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
+if ${dir_automation}/test_platform.sh >> ${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 then
         # test cases passed
 	status="success"
 else
 	# test cases not passed
-	status="fail"
+	status="fail_2"
 fi
 
 # suscribe user "tracker" for "default" channel
 curl -d '{"auth_token":"82dfa68f508feb7f6139327cdb837e69","channel":"default"}'  http://localhost:81/service?query=subscribe ;
 
 #SEND EMAIL
-cd ${dir_sandbox}
+cd ${dir_automation}
 ant -f mail_sender.xml -Dsubject "geo2tag-platform night build($status): build, test, deploy reports " -Dlogdir "platform_logs"
 
 #CLEAN LOGS
