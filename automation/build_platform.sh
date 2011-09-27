@@ -43,7 +43,6 @@ git checkout $branch >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 
 
 
-
 #BUILD deb
 
 cd ${dir_geo2tag}
@@ -54,44 +53,43 @@ echo "After building ${founded_packages}"
 if [  $(echo "${founded_packages}" | wc -w ) == "2" ] ;
 then
 
-status="success";
-# Build succesful
+	status="success";
+	# Build succesful
 
-#UNIT TESTING
+	#UNIT TESTING
 
-echo "Unit testing:"  >>${dir_log}/test.log.txt
-${dir_automation}/geo2tag/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
+	echo "Unit testing:"  >>${dir_log}/test.log.txt
+	${dir_automation}/geo2tag/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 
-# DEPLOY and TEST only if branch is devel
-if [ "$branch" == "devel" ]
-then
-
-#DEPLOY
-cd ${dir_automation}
-ls
-dpkg -i wikigps-libs_* wikigps-service_* >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
-
-#TEST
-	if "${dir_automation}"/test_platform.sh 
+	# DEPLOY and TEST only if branch is devel
+	if [ "$branch" == "devel" ]
 	then
-	# test cases passed, move installed debs to backup
-		echo "Tests passed" >> ${dir_log}/test.log.txt
-		status="success";
-		cd "${dir_automation}"
-		rm -rf "${dir_backup}"
-		mkdir "${dir_backup}"
-		mv -f ${dir_automation}/wikigps-libs_* "${dir_backup}"
-		mv -f ${dir_automation}/wikigps-service_* "${dir_backup}"	
-	else
-	# test cases not passed, restore backup
-		echo "Tests not passed" >> ${dir_log}/test.log.txt
-		status="fail";
-		cd "${dir_backup}"
-		echo "Restore backup" >> ${dir_log}/test.log.txt
-		dpkg -i `ls .` >> ${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
-	fi
-fi
 
+		#DEPLOY
+		cd ${dir_automation}
+		ls
+		dpkg -i wikigps-libs_* wikigps-service_* >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
+
+		#TEST
+		if [[ "${dir_automation}"/test_platform.sh ]]
+		then
+		# test cases passed, move installed debs to backup
+			echo "Tests passed" >> ${dir_log}/test.log.txt
+			status="success";
+			cd "${dir_automation}"
+			rm -rf "${dir_backup}"
+			mkdir "${dir_backup}"
+			mv -f ${dir_automation}/wikigps-libs_* "${dir_backup}"
+			mv -f ${dir_automation}/wikigps-service_* "${dir_backup}"	
+		else
+		# test cases not passed, restore backup
+			echo "Tests not passed" >> ${dir_log}/test.log.txt
+			status="fail";
+			cd "${dir_backup}"
+			echo "Restore backup" >> ${dir_log}/test.log.txt
+			dpkg -i `ls .` >> ${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
+		fi
+	fi
 else 
 	status="fail";
 fi
@@ -117,4 +115,3 @@ echo "" > ${dir_log}/test.log.txt
 cd ${dir_geo2tag}
 git reset --hard 
 git clean -fxd
-

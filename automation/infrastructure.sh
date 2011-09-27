@@ -1,9 +1,12 @@
 #!/bin/bash
+
+# init
 init_dir=$(pwd)
 $CATALINA_HOME/bin/shutdown.sh
+/etc/init.d/lighttpd stop
 
 # required software
-sudo apt-get install unzip git-core rubygems1.8 ruby1.8 ruby1.8-dev apache2
+sudo apt-get install unzip lsof git-core rubygems1.8 ruby1.8 ruby1.8-dev apache2
 sudo gem install sinatra json test rack-test
 
 # geo2tag infrastructure
@@ -56,9 +59,6 @@ echo 'export ANT_HOME=$WEBGEO_HOME/3rd_party/apache-ant-1.8.2' 		>> ~/.bashrc
 echo 'export PATH=${PATH}:$WEBGEO_HOME/3rd_party/apache-ant-1.8.2/bin/' >> ~/.bashrc
 
 # 5.
-$CATALINA_HOME/bin/startup.sh 
-
-# 6.
 file=${dir_automation}/local.properties
 
 echo "gwt.sdk=${dir_3rd_party}/gwt-2.3.0"					 > ${file}
@@ -70,7 +70,7 @@ echo "server.url=http://62.76.179.81:8080"					>> ${file}
 echo "server.username=name"							>> ${file}
 echo "server.password=pass"							>> ${file}
 
-# 7.
+# 6.
 cron_file=${dir_automation}/crontab.properties
 echo "SHELL=/bin/bash"								 > ${cron_file} 
 echo "PATH=${PATH}"								>> ${cron_file}
@@ -83,11 +83,17 @@ echo ""										>> ${cron_file}
 echo "59 23 * * * ${dir_automation}/midnight_deploy.sh"				>> ${cron_file}
 crontab ${cron_file}
 
+# 7.
 # Listening on 0.0.0.0:9494
 cd ${dir_automation}
 ruby1.8 refresh.rb &
 echo "finish..."
 
-cd ${init_dir}
-bash -i
+# start tomcat
+$CATALINA_HOME/bin/startup.sh
 
+# start lighttpd
+/etc/init.d/lighttpd start
+
+#cd ${init_dir}
+bash -i
