@@ -24,7 +24,8 @@ abstract class BaseAlaService extends Service {
 
 	private ConnectionReceiver m_networkReceiver = new ConnectionReceiver();
 	private ShutdownReceiver  m_shutdownReceiver = new ShutdownReceiver();
-
+	private InternalReceiver  m_internalReceiver = new InternalReceiver();
+	
 	private boolean m_isDeviceReady = false;
 	private Boolean m_isOnline = false;
 	
@@ -45,6 +46,7 @@ abstract class BaseAlaService extends Service {
 		m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 		registerReceiver(m_networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 		registerReceiver(m_shutdownReceiver, new IntentFilter("android.intent.action.BATTERY_LOW"));
+		registerReceiver(m_internalReceiver, new IntentFilter(InternalReceiver.ACTION));
 	}
 
 	@Override
@@ -62,6 +64,7 @@ abstract class BaseAlaService extends Service {
 		m_locationManager.removeUpdates(locationListener);
 		unregisterReceiver(m_networkReceiver);
 		unregisterReceiver(m_shutdownReceiver);
+		unregisterReceiver(m_internalReceiver);
 	}
 	
 	private LocationListener locationListener = new LocationListener() {
@@ -114,6 +117,25 @@ abstract class BaseAlaService extends Service {
 		}
 	}	
 
+	public class InternalReceiver extends BroadcastReceiver {
+		public static final String ACTION 	= "airomo.ala.action.internal";
+		public static final String TYPE_SIGNAL	= "airomo.ala.signal";
+
+		public static final int SIGNAL_UPDATE_SETTINGS	= 0;
+//		public static final int SIGNAL_UPDATE_SETTINGS	= 0;
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int type = intent.getIntExtra(TYPE_SIGNAL, -1);
+			switch (type) {
+			case SIGNAL_UPDATE_SETTINGS:
+				refreshConnectionData();
+				break;
+			}
+		}
+	}
+
+	
 	// ------------------------------------------------------------
 	private ConnectionData m_connectData;
 	class ConnectionData {
