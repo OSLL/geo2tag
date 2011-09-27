@@ -61,26 +61,14 @@ public class TrackerActivity extends Activity {
 	private AlaReceiver m_alaAlaReceiver = new AlaReceiver() {
 		@Override
 		public void onNewMark(String lonlat) {
-			appendToLogView(">>" + lonlat);
+			appendToLogView(">> " + lonlat);
 		}
 		@Override
 		public void onErrorOccured(String error) {
-
+			appendToLogView(error);
 		}
 	};
 	
-	private TrackListener m_trackListener = new TrackListener() {
-		@Override
-		public void onNewMark(Mark mark) {
-			final String mess = TrackerUtil.convertLocation(mark);
-			appendToLogView(mess);
-			if (Settings.getPreference(TrackerActivity.this, 
-				ITrackerAppSettings.IS_SHOW_TICKS, false)){
-				showToast(mess);
-			}
-		}
-	};  
-
 	// ----------------------------------------------------------------
 	private void initialization(){
 		Log.v(LOG, "TrackerActivity - initialization");

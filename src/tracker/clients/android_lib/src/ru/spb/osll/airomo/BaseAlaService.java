@@ -11,6 +11,7 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,6 +21,16 @@ import android.util.Log;
  
 abstract class BaseAlaService extends Service {
 	private LocationManager m_locationManager;
+
+	private ConnectionReceiver m_networkReceiver = new ConnectionReceiver();
+	private ShutdownReceiver  m_shutdownReceiver = new ShutdownReceiver();
+
+	private boolean m_isDeviceReady = false;
+	private Boolean m_isOnline = false;
+	
+	protected abstract void onLocationDeviceStatusChanged(boolean isReady);
+	protected abstract void networkStatusChanged(boolean isOnline);
+	protected abstract void gooffEvent();
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -32,13 +43,15 @@ abstract class BaseAlaService extends Service {
 		Log.v(Ala.ALA_LOG, "BaseAlaService create");
 		m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		registerReceiver(m_networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+		registerReceiver(m_shutdownReceiver, new IntentFilter("android.intent.action.BATTERY_LOW"));
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		m_isDeviceReady = false;
 		Log.v(Ala.ALA_LOG, "BaseAlaService start");
+		m_isDeviceReady = false;
 	}
 
 	@Override
@@ -47,11 +60,10 @@ abstract class BaseAlaService extends Service {
 		Log.v(Ala.ALA_LOG, "BaseAlaService destroy");
 		m_isDeviceReady = false;
 		m_locationManager.removeUpdates(locationListener);
+		unregisterReceiver(m_networkReceiver);
+		unregisterReceiver(m_shutdownReceiver);
 	}
 	
-	protected abstract void onLocationDeviceStatusChanged(boolean isReady);
-	
-	private boolean m_isDeviceReady = false;
 	private LocationListener locationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
 			if (!m_isDeviceReady && location != null){
@@ -82,11 +94,7 @@ abstract class BaseAlaService extends Service {
 	}
 
 	// ------------------------------------------------------------
-	protected abstract void networkStatusChanged(boolean isOnline);
-
-	private Boolean m_isOnline = false;
-	private ConnectionChangeReceiver m_networkReceiver = new ConnectionChangeReceiver();
-	private class ConnectionChangeReceiver extends BroadcastReceiver {
+	private class ConnectionReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final boolean isOnline = TrackerUtil.isOnline(context);
@@ -98,8 +106,6 @@ abstract class BaseAlaService extends Service {
 		}
 	}	
 
-	protected abstract void gooffEvent();
-	private ShutdownReceiver m_shutdownReceiver = new ShutdownReceiver();
 	private class ShutdownReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -110,7 +116,6 @@ abstract class BaseAlaService extends Service {
 
 	// ------------------------------------------------------------
 	private ConnectionData m_connectData;
-	
 	class ConnectionData {
 		public String login = getPreference(ITrackerNetSettings.LOGIN, "");
 		public String pass = getPreference(ITrackerNetSettings.PASSWORD, "");
@@ -118,6 +123,7 @@ abstract class BaseAlaService extends Service {
 		public String serverUrl = getPreference(ITrackerNetSettings.SERVER_URL, "");
 	}
 
+	// FIXME ????? 
 	Settings m_settings = new Settings(this);
 	private String getPreference(String key, String defVal) {
 		return m_settings.getPreferences().getString(key, defVal);
@@ -159,14 +165,16 @@ abstract class BaseAlaService extends Service {
 	}
 	
 	protected boolean isOnline(){
-		return false;		// TODO	
+		return m_isOnline;	
 	}
 	
 	protected void onErrorOccured(String error){
-		// TODO
+		Intent intent = new Intent(AlaReceiver.ACTION_ALA);
+		intent.putExtra(AlaReceiver.TYPE_OPERATION, AlaReceiver.TYPE_ERROR);
+		intent.putExtra(AlaReceiver.ERROR, error);
+		sendBroadcast(intent);
 	}
 	
-	// TODO move later
 	private void broadcastMark(Mark mark){
 		Intent intent = new Intent(AlaReceiver.ACTION_ALA);
 		intent.putExtra(AlaReceiver.TYPE_OPERATION, AlaReceiver.TYPE_MARK);
