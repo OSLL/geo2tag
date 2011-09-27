@@ -14,11 +14,11 @@ import android.util.Log;
 
 public class AlaService extends BaseAlaService {
 //	private boolean m_isTracking = false;
-//	private Buffer<Mark> m_history = new Buffer<Mark>(60); // TODO
+	private Buffer<Mark> m_history = new Buffer<Mark>(60); // TODO
 	
-//	private synchronized Buffer<Mark> getHistory(){
-//		return m_history;
-//	}
+	private synchronized Buffer<Mark> getHistory(){
+		return m_history;
+	}
 	
 	@Override
 	public void onCreate() {
@@ -41,21 +41,21 @@ public class AlaService extends BaseAlaService {
 		Log.v(Ala.ALA_LOG, "AlaService destroy");
 	}
 
-//	@Override
-//	protected void networkStatusChanged(boolean isOnline) {
-//		Log.v(Ala.ALA_LOG, "networkStatusChanged: " + isOnline);
-//		if(isOnline){
-//			sendHistory();
-//		} else {
-//			dropCache();			
-//		}
-//	}
-//
-//	@Override
-//	protected void gooffEvent() {
-//		sendLastCoordinate();
-//		sendHistory();
-//	}
+	@Override
+	protected void networkStatusChanged(boolean isOnline) {
+		Log.v(Ala.ALA_LOG, "networkStatusChanged: " + isOnline);
+		if(isOnline){
+			sendHistory();
+		} else {
+			dropCache();			
+		}
+	}
+
+	@Override
+	protected void gooffEvent() {
+		sendLastCoordinate();
+		sendHistory();
+	}
 	
 	@Override
 	protected void onLocationDeviceStatusChanged(boolean isReady) {
@@ -88,29 +88,29 @@ public class AlaService extends BaseAlaService {
 	
 	private Thread m_historyThread;
 	public void sendHistory() {
-//		if  (m_historyThread != null){
-//			m_historyThread.interrupt();
-//		}
-//		m_historyThread = new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				refreshConnectionData();
-//				try {
-//					while(isOnline() && getHistory().hasElements()){
-//						Log.v(Ala.ALA_LOG, "sending history...");
-//						final Mark mark = getHistory().getFirst();
-//						if (sendMark(mark)){
-//							Log.v(Ala.ALA_LOG, "sending history: mark was sent...");
-//							getHistory().removeFirst();
-//						}
-//						Thread.sleep(333);
-//					}
-//				} catch (InterruptedException e) {
-//					Log.v(Ala.ALA_LOG, "m_historyThread is interrupted");
-//				}
-//			}
-//		});
-//		m_historyThread.start();
+		if  (m_historyThread != null){
+			m_historyThread.interrupt();
+		}
+		m_historyThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				refreshConnectionData();
+				try {
+					while(isOnline() && getHistory().hasElements()){
+						Log.v(Ala.ALA_LOG, "sending history...");
+						final Mark mark = getHistory().getFirst();
+						if (sendMark(mark)){
+							Log.v(Ala.ALA_LOG, "sending history: mark was sent...");
+							getHistory().removeFirst();
+						}
+						Thread.sleep(333);
+					}
+				} catch (InterruptedException e) {
+					Log.v(Ala.ALA_LOG, "m_historyThread is interrupted");
+				}
+			}
+		});
+		m_historyThread.start();
 	}	
 
 	
@@ -138,7 +138,7 @@ public class AlaService extends BaseAlaService {
 							sendMark(mark);
 						} else {
 							Log.v(Ala.ALA_LOG, "add mark to history...");
-//							getHistory().add(mark); 			// TODO
+							getHistory().add(mark); 			// TODO
 						}
 						int m_trackInterval = 2;				// TODO
 						Thread.sleep(m_trackInterval * 1000);	// TODO

@@ -61,7 +61,7 @@ public class TrackerActivity extends Activity {
 	private AlaReceiver m_alaAlaReceiver = new AlaReceiver() {
 		@Override
 		public void onNewMark(String lonlat) {
-			appendToLogView(lonlat);
+			appendToLogView(">>" + lonlat);
 		}
 		@Override
 		public void onErrorOccured(String error) {

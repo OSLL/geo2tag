@@ -8,6 +8,7 @@ import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -53,8 +54,6 @@ abstract class BaseAlaService extends Service {
 	private boolean m_isDeviceReady = false;
 	private LocationListener locationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
-			Log.v(Ala.ALA_LOG, "loc " + location);
-			
 			if (!m_isDeviceReady && location != null){
 				m_isDeviceReady = true;
 				onLocationDeviceStatusChanged(true);
@@ -82,36 +81,34 @@ abstract class BaseAlaService extends Service {
 		return location;
 	}
 
-//	// ------------------------------------------------------------
-//	protected abstract void networkStatusChanged(boolean isOnline);
-//
-//	private Boolean m_isOnline = false;
-//	private ConnectionChangeReceiver m_networkReceiver = new ConnectionChangeReceiver();
-//	private class ConnectionChangeReceiver extends BroadcastReceiver {
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			final boolean isOnline = TrackerUtil.isOnline(context);
-//			synchronized (m_isOnline){
-//				m_isOnline = isOnline;
-//			}
-//			networkStatusChanged(isOnline);
-//			Log.v(Ala.ALA_LOG, "ConnectionChangeReceiver " + isOnline);
-//		}
-//	}	
-//
-//	protected abstract void gooffEvent();
-//	private ShutdownReceiver m_shutdownReceiver = new ShutdownReceiver();
-//	private class ShutdownReceiver extends BroadcastReceiver {
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			Log.v(Ala.ALA_LOG, "ShutdownReceiver ");
-//			gooffEvent();
-//		}
-//	}	
+	// ------------------------------------------------------------
+	protected abstract void networkStatusChanged(boolean isOnline);
+
+	private Boolean m_isOnline = false;
+	private ConnectionChangeReceiver m_networkReceiver = new ConnectionChangeReceiver();
+	private class ConnectionChangeReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final boolean isOnline = TrackerUtil.isOnline(context);
+			synchronized (m_isOnline){
+				m_isOnline = isOnline;
+			}
+			networkStatusChanged(isOnline);
+			Log.v(Ala.ALA_LOG, "ConnectionChangeReceiver " + isOnline);
+		}
+	}	
+
+	protected abstract void gooffEvent();
+	private ShutdownReceiver m_shutdownReceiver = new ShutdownReceiver();
+	private class ShutdownReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.v(Ala.ALA_LOG, "ShutdownReceiver ");
+			gooffEvent();
+		}
+	}	
 
 	// ------------------------------------------------------------
-
-	
 	private ConnectionData m_connectData;
 	
 	class ConnectionData {
