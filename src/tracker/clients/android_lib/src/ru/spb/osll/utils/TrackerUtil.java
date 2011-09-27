@@ -11,9 +11,11 @@ import java.util.Date;
 import ru.spb.osll.R;
 import ru.spb.osll.TrackerActivity;
 import ru.spb.osll.objects.Mark;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -73,6 +75,16 @@ public class TrackerUtil {
 	    else {
 	        return false;
 	    }
+	}
+	
+	public static boolean isServiceRunning(String serviceName, Context c){
+	    ActivityManager manager = (ActivityManager) c.getSystemService(c.ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	        if (serviceName.equals(service.service.getClassName())) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 	
 	public class Logger {

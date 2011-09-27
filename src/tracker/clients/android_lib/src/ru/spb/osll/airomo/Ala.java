@@ -10,6 +10,7 @@ import ru.spb.osll.objects.Mark;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class Ala extends BaseAla {
@@ -53,21 +54,25 @@ public class Ala extends BaseAla {
 	}
 
 	@Override
-	public void startTrack() {
+	public void startTrack(Context c) {
 		m_isWorking = true;
-		startLocationListener();
-		doTracking();
+//		startLocationListener();
+//		doTracking();
+
+		c.startService(new Intent(c, AlaService.class));
 	}
 
 	@Override
-	public void stopTrack() {
+	public void stopTrack(Context c) {
 		m_isWorking = false;
-		dropCache();
-		stopLocationListener();
+//		dropCache();
+//		stopLocationListener();
+
+		c.stopService(new Intent(c, AlaService.class));
 	}
 
 	@Override
-	public boolean isTracking() {
+	public boolean isTracking(Context c) {
 		return m_isWorking;
 	}
 	

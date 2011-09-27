@@ -2,6 +2,8 @@ package ru.spb.osll.airomo;
 
 import java.util.List;
 
+import android.content.Context;
+
 import ru.spb.osll.error.AlaError;
 import ru.spb.osll.objects.Mark;
 
@@ -9,11 +11,11 @@ import ru.spb.osll.objects.Mark;
 public interface IsAla {
 	String auth(String user, String pass);
 	
-	void startTrack();
+	void startTrack(Context c);
 
-	void stopTrack();
+	void stopTrack(Context c);
 
-	boolean isTracking();
+	boolean isTracking(Context c);
 
 	// preferences
 	void setUser(String user);

@@ -21,5 +21,6 @@
 	    <activity android:name="ru.spb.osll.exception.ExceptionActivity" android:configChanges="orientation|keyboardHidden"/>
 	   
         <service android:enabled="true" android:name=".services.LocationService"></service>
+        <service android:enabled="true" android:name=".airomo.AlaService"></service>
     </application>
 </manifest> 

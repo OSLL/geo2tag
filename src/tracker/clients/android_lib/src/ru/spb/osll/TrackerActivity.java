@@ -2,6 +2,7 @@ package ru.spb.osll;
 
 import ru.spb.osll.airomo.Ala;
 import ru.spb.osll.airomo.IsAla.TrackListener;
+import ru.spb.osll.ala.AlaReceiver;
 import ru.spb.osll.exception.ExceptionHandler;
 import ru.spb.osll.objects.Mark;
 import ru.spb.osll.preferences.Settings;
@@ -34,11 +35,11 @@ public class TrackerActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ALA = new Ala(TrackerActivity.this);
-		ALA.addTrackListener(m_trackListener);
 		
 		setContentView(R.layout.main);
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		registerReceiver(m_trackerReceiver, new IntentFilter(TrackerReceiver.ACTION_SHOW_MESS));
+		registerReceiver(m_alaAlaReceiver, new IntentFilter(AlaReceiver.ACTION_ALA));
 		
 		m_logView = (TextView) findViewById(R.id.TextField);
 		initialization();
@@ -53,8 +54,20 @@ public class TrackerActivity extends Activity {
 	protected void onDestroy() {
 		ALA.onDestroy(this);
 		unregisterReceiver(m_trackerReceiver);
+		unregisterReceiver(m_alaAlaReceiver);
 		super.onDestroy();
 	}
+
+	private AlaReceiver m_alaAlaReceiver = new AlaReceiver() {
+		@Override
+		public void onNewMark(String lonlat) {
+			appendToLogView(lonlat);
+		}
+		@Override
+		public void onErrorOccured(String error) {
+
+		}
+	};
 	
 	private TrackListener m_trackListener = new TrackListener() {
 		@Override
@@ -95,7 +108,7 @@ public class TrackerActivity extends Activity {
 		settingsBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (ALA.isTracking()){
+				if (ALA.isTracking(TrackerActivity.this)){
 					showToast(TrackerUtil.MESS_SETTINGS_NOT_AVAILABLE);
 				} else {
 					startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
@@ -124,19 +137,19 @@ public class TrackerActivity extends Activity {
 
 	
 	private void startTracker(){
-		if (ALA.isTracking()){
+		if (ALA.isTracking(TrackerActivity.this)){
 			showToast(TrackerUtil.MESS_TRACKER_ALREADY_RUNNING);
 		} else {
 			showToast(TrackerUtil.MESS_TRACKER_START);
 			clearLogView();
-			ALA.startTrack();
+			ALA.startTrack(TrackerActivity.this);
 		} 
 	}
 	
 	private void stopTracker(){
-		if (ALA.isTracking()){
+		if (ALA.isTracking(TrackerActivity.this)){
 			showToast(TrackerUtil.MESS_TRACKER_STOP);
-			ALA.stopTrack();
+			ALA.stopTrack(TrackerActivity.this);
 		}
 	}
 
