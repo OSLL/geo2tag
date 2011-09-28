@@ -9,8 +9,8 @@ public abstract class AlaReceiver extends BroadcastReceiver {
 
 	public static final String TYPE_OPERATION 	= "airomo.type";
 	public static final int TYPE_ERROR 			= 0;
-	public static final int TYPE_MARK 			= 1;
-	
+	public static final int TYPE_NEW_MARK		= 1;
+
 	public static final String 	ERROR 			= "type.error";
 	public static final String 	LONLAT 			= "type.lonlat";
 	
@@ -22,7 +22,7 @@ public abstract class AlaReceiver extends BroadcastReceiver {
 			final String error = intent.getStringExtra(ERROR);
 			onErrorOccured(error);
 			break;
-		case TYPE_MARK:
+		case TYPE_NEW_MARK:
 			final String lonlat = intent.getStringExtra(LONLAT);
 			onNewMark(lonlat);
 			break;

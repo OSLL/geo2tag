@@ -143,7 +143,7 @@ abstract class BaseAlaService extends Service {
 	
 	private void broadcastMark(Mark mark){
 		Intent intent = new Intent(AlaReceiver.ACTION_ALA);
-		intent.putExtra(AlaReceiver.TYPE_OPERATION, AlaReceiver.TYPE_MARK);
+		intent.putExtra(AlaReceiver.TYPE_OPERATION, AlaReceiver.TYPE_NEW_MARK);
 		intent.putExtra(AlaReceiver.LONLAT, "set : " + TrackerUtil.convertLocation(mark));
 		sendBroadcast(intent);
 	}

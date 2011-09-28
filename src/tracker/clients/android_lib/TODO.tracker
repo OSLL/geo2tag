@@ -1,8 +1,0 @@
-DONE	широта, долгота в градусах, минутах, секундах
-DONE	bug: start>stop>start>stop>....
-DONE 	реализация нестатического класса StateUtul
-DONE	исходные настройки берутся из файла tracker.conf
-DONE 	добавить StackTraceView
-DONE	hide application
-* 	пакет common
-DONE 	shutdown screen
