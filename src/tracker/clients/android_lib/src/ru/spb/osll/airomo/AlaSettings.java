@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 
-class AlaSettings {
+class AlaSettings implements IsAlaSettings {
 	private Settings m_settings; 
 	private Context  m_context;
 	
@@ -41,7 +41,7 @@ class AlaSettings {
 		settingsSignal();
 	}
 	
-	public void setHistorySize(int size){
+	public void setHistoryLimit(int size){
 		m_settings.setPreference(ITrackerNetSettings.HISTORY_LIMIT, size);
 		settingsSignal();
 	}
@@ -66,7 +66,7 @@ class AlaSettings {
 		return m_settings.getPreference(ITrackerNetSettings.TIME_TICK, 5);
 	}
 	
-	public int getHistorySize(){
+	public int getHistoryLimit(){
 		return m_settings.getPreference(ITrackerNetSettings.HISTORY_LIMIT, 50);
 	}
 	

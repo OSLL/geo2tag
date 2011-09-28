@@ -1,6 +1,7 @@
 package ru.spb.osll;
 
 import ru.spb.osll.airomo.Ala;
+import ru.spb.osll.airomo.IsAlaSettings;
 import ru.spb.osll.ala.AlaReceiver;
 import ru.spb.osll.exception.ExceptionHandler;
 import ru.spb.osll.preferences.Settings;
@@ -23,16 +24,12 @@ import android.widget.Toast;
 public class TrackerActivity extends Activity {
 	public static String LOG = "Tracker";
 	private TextView m_logView;
-	private static Ala ALA;
-	
-	public static Ala alaInstance() {
-		return ALA;
-	}
+	private Ala ALA;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ALA = new Ala(TrackerActivity.this);
+		ALA = new Ala();
 		
 		setContentView(R.layout.main);
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
@@ -50,7 +47,6 @@ public class TrackerActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		ALA.onDestroy(this);
 		unregisterReceiver(m_trackerReceiver);
 		unregisterReceiver(m_alaAlaReceiver);
 		super.onDestroy();
@@ -106,8 +102,7 @@ public class TrackerActivity extends Activity {
 		creenBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				TrackerUtil.hideApplication(TrackerActivity.this); // TODO 
-//				new AlaSettings(TrackerActivity.this).setTrackInterval(1); // TODO
+				TrackerUtil.hideApplication(TrackerActivity.this); 
 			}
 		});
 

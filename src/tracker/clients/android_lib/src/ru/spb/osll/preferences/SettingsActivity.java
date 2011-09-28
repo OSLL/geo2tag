@@ -1,8 +1,8 @@
 package ru.spb.osll.preferences;
 
 import ru.spb.osll.R;
-import ru.spb.osll.TrackerActivity;
 import ru.spb.osll.airomo.Ala;
+import ru.spb.osll.airomo.IsAlaSettings;
 import ru.spb.osll.gui.RadioButtonDialog;
 import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
@@ -52,26 +52,21 @@ public class SettingsActivity extends Activity implements ITrackerNetSettings, I
 	private int m_timeTick;
 	private int m_history;
 	private void initializeFields(){
-		final Ala ALA = TrackerActivity.alaInstance();
-		if(ALA == null)
-			return;
-		
-		initField(R.id.edit_login, ALA.getUser());
-		initField(R.id.edit_password, ALA.getPass());
-		initField(R.id.edit_channel, ALA.getChannel());
+		final IsAlaSettings settings = new Ala().getAlaSettings(this);
+		initField(R.id.edit_login, settings.getLogin());
+		initField(R.id.edit_password, settings.getPass());
+		initField(R.id.edit_channel, settings.getChannel());
 		initField(R.id.edit_key, "");	// TODO
-		initField(R.id.edit_server_address, ALA.getServerUrl());
+		initField(R.id.edit_server_address, settings.getServerUrl());
 		
 		initCheckBox(IS_HIDE_APP, R.id.checkbox_hide);
 		initCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick);
 	}
 	
 	private void initializeButtons(){
-		final Ala ALA = TrackerActivity.alaInstance();
-		if(ALA == null)
-			return;
+		final IsAlaSettings settings = new Ala().getAlaSettings(this);
 		
-		m_timeTick = ALA.getTrackInterval();
+		m_timeTick = settings.getTrackInterval();
 		Button btnTick = (Button) findViewById(R.id.button_settings_tick);
 		btnTick.setText(Integer.toString(m_timeTick));
 		btnTick.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +76,7 @@ public class SettingsActivity extends Activity implements ITrackerNetSettings, I
 			}
 		});
 
-		m_history = ALA.getHistoryLimit();
+		m_history = settings.getHistoryLimit();
 		Button btnHist = (Button) findViewById(R.id.button_settings_history);
 		btnHist.setText(Integer.toString(m_history));
 		btnHist.setOnClickListener(new View.OnClickListener() {
@@ -93,16 +88,15 @@ public class SettingsActivity extends Activity implements ITrackerNetSettings, I
 	}
 	
 	private void savePreferences(){
-		final Ala ALA = TrackerActivity.alaInstance();
-		if(ALA == null) return;
+		final IsAlaSettings settings = new Ala().getAlaSettings(this);
 		
-		ALA.setUser(fieldVal(R.id.edit_login));
-		ALA.setPass(fieldVal(R.id.edit_password));
-		ALA.setChannel(fieldVal(R.id.edit_channel));
-		//ALA.setChannelKey();
-		ALA.setServerUrl(fieldVal(R.id.edit_server_address));
-		ALA.setTrackInterval(m_timeTick);
-		ALA.setHistoryLimit(m_history);
+		settings.setLogin(fieldVal(R.id.edit_login));
+		settings.setPass(fieldVal(R.id.edit_password));
+		settings.setChannel(fieldVal(R.id.edit_channel));
+		//settings.setChannelKey();
+		settings.setServerUrl(fieldVal(R.id.edit_server_address));
+		settings.setTrackInterval(m_timeTick);
+		settings.setHistoryLimit(m_history);
 		
 		Editor prefEditor = new Settings(this).getPreferencesEditor();
 		saveCheckBox(IS_HIDE_APP, R.id.checkbox_hide, prefEditor);

@@ -1,15 +1,9 @@
 package ru.spb.osll.airomo;
 
-import java.util.List;
-
 import android.content.Context;
-
-import ru.spb.osll.error.AlaError;
-import ru.spb.osll.objects.Mark;
-
+import android.content.ContextWrapper;
 
 public interface IsAla {
-	String auth(String user, String pass);
 	
 	void startTrack(Context c);
 
@@ -17,56 +11,17 @@ public interface IsAla {
 
 	boolean isTracking(Context c);
 
-	// preferences
-	void setUser(String user);
-	String getUser();
-	
-	void  setPass(String pass);
-	String getPass();
+	void sendHistory(ContextWrapper c);
 
-	void setTrackInterval(int sec);
-	int getTrackInterval();
+	void sendLastCoordinate(ContextWrapper c);
 
-	void setHistoryLimit(int maxMarks);
-	int getHistoryLimit();
-	
-	void setServerUrl(String severUrl);
-	String getServerUrl();
+	IsAlaSettings getAlaSettings(Context c);
 
-	void setChannel(String channel);
-	String getChannel();
-	
-	void sendHistory();
+	//List<Mark> getAllMarks();	// TODO  
 
-	void sendLastCoordinate();
+	//String getLastError();	// TODO
 
-	List<Mark> getAllMarks();  
-
-	void addTrackListener(TrackListener l);	
-	public interface TrackListener {
-		void onNewMark(Mark mark);
-	}
-	
-	void addGooffListener(GooffListener l);	
-	public interface GooffListener {
-		void gooff();
-	}
-
-	void addOnNetworkListener(NetworkListener l);	
-	public interface NetworkListener {
-		void networkChanged(boolean isOnline); 
-	}
-
-	void addErrorListener(ErrorListener l);	
-	public interface ErrorListener {
-		void onError(AlaError error); 
-	}
-	
-	void onErrorOccured(String error);
-
-	String getLastError();
-
-	boolean isOnline();
+	boolean isOnline(Context c);
 	// TODO GPS is’t ready
 }
 

@@ -77,7 +77,8 @@ public class TrackerUtil {
 	    }
 	}
 	
-	public static boolean isServiceRunning(String serviceName, Context c){
+	@SuppressWarnings("static-access")
+	public static boolean isServiceRunning(Context c, String serviceName){
 	    ActivityManager manager = (ActivityManager) c.getSystemService(c.ACTIVITY_SERVICE);
 	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
 	        if (serviceName.equals(service.service.getClassName())) {

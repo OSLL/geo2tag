@@ -15,6 +15,16 @@ import android.util.Log;
 public class AlaService extends BaseAlaService {
 	private Buffer<Mark> m_history;
 
+	private Thread m_trackThread;
+	private Thread m_historyThread;
+	private String m_authTokenCache = null;
+	private boolean m_isChanAvailableCache = false;
+
+	private void dropCache(){
+		m_authTokenCache = null;
+		m_isChanAvailableCache = false;
+	}
+	
 	private synchronized Buffer<Mark> getHistory(){
 		return m_history;
 	}
@@ -23,14 +33,12 @@ public class AlaService extends BaseAlaService {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		m_history = new Buffer<Mark>(sCache().historyLimit); 
-		dropCache();
 	}
-
+	
 	@Override
 	public void onDestroy() {
 		stopTracking();
 		super.onDestroy();
-		Log.v(Ala.ALA_LOG, "AlaService destroy");
 	}
 
 	@Override
@@ -53,7 +61,7 @@ public class AlaService extends BaseAlaService {
 	protected void onLocationDeviceStatusChanged(boolean isReady) {
 		Log.v(Ala.ALA_LOG, "onLocationDeviceStatusChanged: " + isReady);
 		if (isReady) {
-			doTracking();
+			startTracking();
 		} else {
 			stopTracking();
 		}
@@ -64,27 +72,47 @@ public class AlaService extends BaseAlaService {
 		getHistory().setBufferSize(sCache().historyLimit);
 	}
 	
-	private String m_authTokenCache = null;
-	private boolean m_isChanAvailableCache = false;
-	private void dropCache(){
-		m_authTokenCache = null;
-		m_isChanAvailableCache = false;
+	@Override
+	protected void stopTracking(){
+		setTrackStatus(false);
+		if (m_trackThread != null){
+			m_trackThread.interrupt();
+		}
 	}
 	
-	// Override
-	public void sendLastCoordinate() {
-		new Thread(new Runnable() {
+	@Override
+	protected void startTracking(){
+		setTrackStatus(true);
+		if (m_trackThread != null){
+			m_trackThread.interrupt();
+		}
+		m_trackThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				refreshSCache();
-				final Mark mark = constructDruftMark();
-				sendMark(mark);
+				try {
+					while (!Thread.currentThread().isInterrupted()){
+						final Mark mark = constructDruftMark();
+						if (isOnline()){
+							Log.v(Ala.ALA_LOG, "send mark to server...");
+							sendMark(mark);
+						} else {
+							Log.v(Ala.ALA_LOG, "add mark to history...");
+							getHistory().add(mark); 			
+						}
+						Thread.sleep(sCache().trackInterval * 1000);
+					}
+				} catch (InterruptedException e) {
+					Log.v(Ala.ALA_LOG, "m_trackThread is interrupted");
+				}
 			}
-		}).start();
+		});
+		m_trackThread.start();
 	}
-	
-	private Thread m_historyThread;
+
+	@Override
 	public void sendHistory() {
+		Log.v(Ala.ALA_LOG, "CALLED: sendHistory");
 		if  (m_historyThread != null){
 			m_historyThread.interrupt();
 		}
@@ -109,44 +137,23 @@ public class AlaService extends BaseAlaService {
 		});
 		m_historyThread.start();
 	}	
-
 	
-	private Thread m_trackThread;
-	
-	private void stopTracking(){
-		if (m_trackThread != null){
-			m_trackThread.interrupt();
-		}
-	}
-	
-	private void doTracking(){
-		if (m_trackThread != null){
-			m_trackThread.interrupt();
-		}
-		m_trackThread = new Thread(new Runnable() {
+	@Override
+	public void sendLastCoordinate() {
+		Log.v(Ala.ALA_LOG, "CALLED: sendLastCoordinate");
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				refreshSCache();
-				try {
-					while (!Thread.currentThread().isInterrupted()){
-						final Mark mark = constructDruftMark();
-						if (isOnline()){
-							Log.v(Ala.ALA_LOG, "send mark to server...");
-							sendMark(mark);
-						} else {
-							Log.v(Ala.ALA_LOG, "add mark to history...");
-							getHistory().add(mark); 			// TODO
-						}
-						Thread.sleep(sCache().trackInterval * 1000);
-					}
-				} catch (InterruptedException e) {
-					Log.v(Ala.ALA_LOG, "m_trackThread is interrupted");
-				}
+				final Mark mark = constructDruftMark();
+				sendMark(mark);
 			}
-		});
-		m_trackThread.start();
+		}).start();
 	}
-
+	
+	
+	
+	
 	private boolean sendMark(Mark mark){
 		if(!m_isChanAvailableCache){
 			m_authTokenCache = auth(sCache().login, sCache().pass);
@@ -205,4 +212,6 @@ public class AlaService extends BaseAlaService {
 		} 
 		return success;
 	}
+	
+	
 }

@@ -27,10 +27,17 @@ abstract class BaseAlaService extends Service {
 	private boolean m_isDeviceReady = false;
 	private Boolean m_isOnline = false;
 	
+	private static boolean ourIsTracking = false;
+	
 	protected abstract void onLocationDeviceStatusChanged(boolean isReady);
 	protected abstract void networkStatusChanged(boolean isOnline);
 	protected abstract void gooffEvent();
+	
 	protected abstract void onSettingUpdated();
+	protected abstract void stopTracking();
+	protected abstract void startTracking();
+	protected abstract void sendHistory();
+	protected abstract void sendLastCoordinate();
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -52,15 +59,17 @@ abstract class BaseAlaService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		super.onStart(intent, startId);
 		Log.v(Ala.ALA_LOG, "BaseAlaService start");
+
+		super.onStart(intent, startId);
 		m_isDeviceReady = false;
 	}
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
 		Log.v(Ala.ALA_LOG, "BaseAlaService destroy");
+		
+		super.onDestroy();
 		m_locationManager.removeUpdates(locationListener);
 		unregisterReceiver(m_networkReceiver);
 		unregisterReceiver(m_shutdownReceiver);
@@ -139,7 +148,17 @@ abstract class BaseAlaService extends Service {
 		sendBroadcast(intent);
 	}
 	
-	// ------------------------------------------------------------
+	public synchronized static boolean isTracking(){
+		return ourIsTracking;
+	}
+
+	protected synchronized void setTrackStatus(boolean isTracking){
+		ourIsTracking = isTracking;
+	}
+	
+	// -------------------------------------------------------------
+	//----------------------- SETTINGS CACHE -----------------------
+	// -------------------------------------------------------------
 	private SettingsCache m_sCache;
 
 	class SettingsCache {
@@ -157,7 +176,7 @@ abstract class BaseAlaService extends Service {
 			channel = alaSettings.getChannel();
 			serverUrl = alaSettings.getServerUrl();
 			trackInterval = alaSettings.getTrackInterval();
-			historyLimit = alaSettings.getHistorySize();
+			historyLimit = alaSettings.getHistoryLimit();
 		}
 		
 	}
@@ -170,7 +189,9 @@ abstract class BaseAlaService extends Service {
 		return m_sCache;
 	}
 	
+	// -------------------------------------------------------------
 	//----------------------- RECEIVERS ----------------------------
+	// -------------------------------------------------------------
 	private class ConnectionReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -197,7 +218,8 @@ abstract class BaseAlaService extends Service {
 
 		public static final int SIGNAL_UPDATE_SETTINGS	= 0;
 		public static final int SIGNAL_SEND_HISTORY		= 1;
-
+		public static final int SIGNAL_SEND_COORDINATE	= 2;
+		
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			int type = intent.getIntExtra(TYPE_SIGNAL, -1);
@@ -205,6 +227,14 @@ abstract class BaseAlaService extends Service {
 			case SIGNAL_UPDATE_SETTINGS:
 				refreshSCache();
 				onSettingUpdated();
+				break;
+			case SIGNAL_SEND_HISTORY:
+				refreshSCache();
+				sendHistory();
+				break;
+			case SIGNAL_SEND_COORDINATE:
+				refreshSCache();
+				sendLastCoordinate();
 				break;
 			}
 		}

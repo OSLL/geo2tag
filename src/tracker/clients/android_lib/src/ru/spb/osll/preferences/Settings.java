@@ -19,6 +19,9 @@ public class Settings {
 	
 	public Settings(Context context){
 		m_context = context;
+		if (isSettingsEmpty()) {
+			setDefaultSettrings();
+		}
 	}
 	
 	public SharedPreferences getPreferences(){
@@ -74,10 +77,12 @@ public class Settings {
 		}
 	}
 	
+	// TODO
 	public static boolean getPreference(Context c, String key, boolean defVal){
 		return new Settings(c).getPreferences().getBoolean(key, defVal);
 	}
 	
+	// TODO
 	public interface ITrackerNetSettings{
 		String TRACKER_SETTINGS = "tracker_settings";
 		
