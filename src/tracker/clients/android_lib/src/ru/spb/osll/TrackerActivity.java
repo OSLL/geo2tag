@@ -1,7 +1,7 @@
 package ru.spb.osll;
 
 import ru.spb.osll.airomo.Ala;
-import ru.spb.osll.ala.AlaReceiver;
+import ru.spb.osll.airomo.receiver.AlaReceiver;
 import ru.spb.osll.exception.ExceptionHandler;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.SettingsActivity;

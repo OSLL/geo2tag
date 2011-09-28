@@ -1,4 +1,4 @@
-package ru.spb.osll.ala;
+package ru.spb.osll.airomo.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

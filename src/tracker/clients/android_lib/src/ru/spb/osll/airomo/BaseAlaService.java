@@ -2,7 +2,7 @@ package ru.spb.osll.airomo;
 
 import java.util.Date;
 
-import ru.spb.osll.ala.AlaReceiver;
+import ru.spb.osll.airomo.receiver.AlaReceiver;
 import ru.spb.osll.objects.Mark;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Service;
