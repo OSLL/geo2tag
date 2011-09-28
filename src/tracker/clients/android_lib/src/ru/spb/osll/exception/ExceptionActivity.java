@@ -28,7 +28,7 @@ public class ExceptionActivity extends Activity{
 			new View.OnClickListener() {
 				public void onClick(View view) {
 					Intent sendIntent = new Intent(Intent.ACTION_SEND);
-					sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "bac1ca89@gmail.com" });
+					sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "airomo@lists.osll.spb.ru" });
 					sendIntent.putExtra(Intent.EXTRA_TEXT, stackTrace);
 					sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Tracker exception report");
 					sendIntent.setType("message/rfc822");

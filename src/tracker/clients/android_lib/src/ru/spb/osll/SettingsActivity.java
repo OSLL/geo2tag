@@ -22,7 +22,6 @@ public class SettingsActivity extends Activity implements ITrackerNetSettings {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 	
-		setTitle("Tracker Settings");
 		initializeFields();
 		initializeButtons();
 		

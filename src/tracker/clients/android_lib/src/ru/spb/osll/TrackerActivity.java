@@ -3,10 +3,8 @@ package ru.spb.osll;
 import ru.spb.osll.airomo.Ala;
 import ru.spb.osll.airomo.receiver.AlaReceiver;
 import ru.spb.osll.exception.ExceptionHandler;
-import ru.spb.osll.SettingsActivity;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -30,7 +28,6 @@ public class TrackerActivity extends Activity {
 		
 		setContentView(R.layout.main);
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
-		registerReceiver(m_trackerReceiver, new IntentFilter(TrackerReceiver.ACTION_SHOW_MESS));
 		registerReceiver(m_alaAlaReceiver, new IntentFilter(AlaReceiver.ACTION_ALA));
 		
 		m_logView = (TextView) findViewById(R.id.TextField);
@@ -39,7 +36,6 @@ public class TrackerActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(m_trackerReceiver);
 		unregisterReceiver(m_alaAlaReceiver);
 		super.onDestroy();
 	}
@@ -159,29 +155,5 @@ public class TrackerActivity extends Activity {
 				m_logView.setText("");
 			}
 		});
-	}	
-	
-	private TrackerReceiver m_trackerReceiver = new TrackerReceiver();
-	public class TrackerReceiver extends BroadcastReceiver{
-		public static final String 	ACTION_SHOW_MESS = "show.mess.action";
-		
-		public static final String 	TYPE_MESS = "type.mess";
-		public static final String 	TYPE_OPEATION = "type.operation";
-		public static final int 	ID_SHOW_TOAST = 0;
-		public static final int 	ID_APPEND_TO_LOG = 1;
-		
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String mess = (String) intent.getStringExtra(TYPE_MESS);
-			int type = intent.getIntExtra(TYPE_OPEATION, ID_APPEND_TO_LOG);
-			switch (type) {
-				case ID_APPEND_TO_LOG:
-					appendToLogView(mess);
-					break;
-				case ID_SHOW_TOAST:
-					showToast(mess);
-					break;
-			}
-		}
-	}
+	}		
 }

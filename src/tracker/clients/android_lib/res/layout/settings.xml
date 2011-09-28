@@ -93,16 +93,6 @@
 				android:layout_height="wrap_content"
 				android:id="@+id/button_settings_history"/>
 				
-			<CheckBox
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/checkbox_tick"
-				android:text="@string/checkbox_show_tick_toast"/>
-			<CheckBox
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/checkbox_hide"
-				android:text="@string/checkbox_hide_on_start"/>
 		</LinearLayout>
     </ScrollView>
 
