@@ -4,7 +4,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import android.content.SharedPreferences.Editor;
 
@@ -41,13 +40,7 @@ public class ConfigFeedParser extends DefaultHandler implements IXMLSettrings {
     		m_configEditor.putInt(ITrackerNetSettings.TIME_TICK, Integer.parseInt(m_sb.toString()));
     	} else if (localName.equals(history_limit)){
     		m_configEditor.putInt(ITrackerNetSettings.HISTORY_LIMIT, Integer.parseInt(m_sb.toString()));
-    	} else if (localName.equals(show_tick)){
-    		final boolean val = m_sb.toString().equals("true") ? true : false; 
-    		m_configEditor.putBoolean(ITrackerAppSettings.IS_SHOW_TICKS, val);
-    	} else if (localName.equals(hide_app)){
-    		final boolean val = m_sb.toString().equals("true") ? true : false; 
-    		m_configEditor.putBoolean(ITrackerAppSettings.IS_HIDE_APP, val);
-    	} 
+    	}
 	}
 
     @Override

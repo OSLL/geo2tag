@@ -7,8 +7,6 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ru.spb.osll.objects.User;
-
 import android.util.Log;
 
 public class JsonLoginRequest extends JsonRequest implements IRequest.ILogin {
@@ -16,10 +14,6 @@ public class JsonLoginRequest extends JsonRequest implements IRequest.ILogin {
 	private String m_password;
 	private String m_serverUrl;
 
-	public JsonLoginRequest(User user, String serverUrl){
-		this(user.getLogin(), user.getPassword(), serverUrl);
-	}
-	
 	public JsonLoginRequest(String login, String password, String serverUrl){
 		m_login = login;
 		m_password = password;

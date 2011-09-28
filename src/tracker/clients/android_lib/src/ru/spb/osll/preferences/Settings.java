@@ -76,13 +76,7 @@ public class Settings {
 			Log.v(TrackerActivity.LOG, "loadFromXMLFile - exception: " + e.getMessage());
 		}
 	}
-	
-	// TODO
-	public static boolean getPreference(Context c, String key, boolean defVal){
-		return new Settings(c).getPreferences().getBoolean(key, defVal);
-	}
-	
-	// TODO
+		
 	public interface ITrackerNetSettings{
 		String TRACKER_SETTINGS = "tracker_settings";
 		
@@ -96,10 +90,4 @@ public class Settings {
 		String RADIUS 			= "radius";
 		String URI 				= "uri";
 	}
-	
-	public interface ITrackerAppSettings{
-		String IS_SHOW_TICKS = "is_show_ticks";
-		String IS_HIDE_APP = "is_hide_app";
-	}
-
 }

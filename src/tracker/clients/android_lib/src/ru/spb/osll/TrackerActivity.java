@@ -1,12 +1,10 @@
 package ru.spb.osll;
 
 import ru.spb.osll.airomo.Ala;
-import ru.spb.osll.airomo.IsAlaSettings;
 import ru.spb.osll.ala.AlaReceiver;
 import ru.spb.osll.exception.ExceptionHandler;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.SettingsActivity;
-import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -71,10 +69,6 @@ public class TrackerActivity extends Activity {
 		btnService.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	startTracker();
-            	if (Settings.getPreference(TrackerActivity.this, 
-            		ITrackerAppSettings.IS_HIDE_APP, false)){
-                	TrackerUtil.hideApplication(TrackerActivity.this); 
-            	}
             }
         });
 

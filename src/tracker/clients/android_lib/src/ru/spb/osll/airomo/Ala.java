@@ -6,8 +6,9 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 
-public class Ala extends BaseAla {
-
+public class Ala implements IsAla {
+	public static final String ALA_LOG = "AlaLog";
+	
 	@Override
 	public void startTrack(Context c) {
 		c.startService(new Intent(c, AlaService.class));

@@ -3,7 +3,7 @@ package ru.spb.osll.airomo;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Buffer<T> {
+class Buffer<T> {
 	private int m_bufferSize = 50;
 	LinkedList<T> m_queue = new LinkedList<T>();
 

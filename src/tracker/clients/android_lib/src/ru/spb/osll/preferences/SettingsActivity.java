@@ -4,22 +4,18 @@ import ru.spb.osll.R;
 import ru.spb.osll.airomo.Ala;
 import ru.spb.osll.airomo.IsAlaSettings;
 import ru.spb.osll.gui.RadioButtonDialog;
-import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class SettingsActivity extends Activity implements ITrackerNetSettings, ITrackerAppSettings {
+public class SettingsActivity extends Activity implements ITrackerNetSettings {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,9 +54,6 @@ public class SettingsActivity extends Activity implements ITrackerNetSettings, I
 		initField(R.id.edit_channel, settings.getChannel());
 		initField(R.id.edit_key, "");	// TODO
 		initField(R.id.edit_server_address, settings.getServerUrl());
-		
-		initCheckBox(IS_HIDE_APP, R.id.checkbox_hide);
-		initCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick);
 	}
 	
 	private void initializeButtons(){
@@ -96,12 +89,7 @@ public class SettingsActivity extends Activity implements ITrackerNetSettings, I
 		//settings.setChannelKey();
 		settings.setServerUrl(fieldVal(R.id.edit_server_address));
 		settings.setTrackInterval(m_timeTick);
-		settings.setHistoryLimit(m_history);
-		
-		Editor prefEditor = new Settings(this).getPreferencesEditor();
-		saveCheckBox(IS_HIDE_APP, R.id.checkbox_hide, prefEditor);
-		saveCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick, prefEditor);
-		prefEditor.commit();
+		settings.setHistoryLimit(m_history);		
 	}
 	
 	private Runnable m_saveToast = new Runnable() {
@@ -115,18 +103,8 @@ public class SettingsActivity extends Activity implements ITrackerNetSettings, I
 		((EditText) findViewById(idField)).setText(val);
 	}
 
-	private void initCheckBox(String key, int id){
-		SharedPreferences settings = new Settings(this).getPreferences();
-		((CheckBox) findViewById(id)).setChecked(settings.getBoolean(key, false));
-	}
-
 	private String fieldVal(int idField){
 		return ((EditText) findViewById(idField)).getText().toString().trim();
-	}
-
-	private void saveCheckBox(String key, int id, Editor prefEditor){
-		boolean status = ((CheckBox) findViewById(id)).isChecked();
-		prefEditor.putBoolean(key, status);
 	}
 
 	String[] argsTick = {"1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "60"};
