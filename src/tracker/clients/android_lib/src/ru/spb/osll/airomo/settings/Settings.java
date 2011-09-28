@@ -1,4 +1,4 @@
-package ru.spb.osll.preferences;
+package ru.spb.osll.airomo.settings;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;

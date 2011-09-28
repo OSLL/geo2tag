@@ -3,7 +3,6 @@ package ru.spb.osll;
 import ru.spb.osll.airomo.Ala;
 import ru.spb.osll.airomo.receiver.AlaReceiver;
 import ru.spb.osll.exception.ExceptionHandler;
-import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.SettingsActivity;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
@@ -36,11 +35,6 @@ public class TrackerActivity extends Activity {
 		
 		m_logView = (TextView) findViewById(R.id.TextField);
 		initialization();
-		
-		Settings settings = new Settings(this);
-		if (settings.isSettingsEmpty()){
-			settings.setDefaultSettrings();
-		}
 	}
 
 	@Override

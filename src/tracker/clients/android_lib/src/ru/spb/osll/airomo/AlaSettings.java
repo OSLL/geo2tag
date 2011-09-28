@@ -1,8 +1,8 @@
 package ru.spb.osll.airomo;
 
 import ru.spb.osll.airomo.BaseAlaService.InternalReceiver;
-import ru.spb.osll.preferences.Settings;
-import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
+import ru.spb.osll.airomo.settings.Settings;
+import ru.spb.osll.airomo.settings.Settings.ITrackerNetSettings;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;

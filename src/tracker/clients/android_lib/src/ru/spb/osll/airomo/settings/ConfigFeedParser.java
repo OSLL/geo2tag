@@ -1,10 +1,10 @@
-package ru.spb.osll.preferences;
+package ru.spb.osll.airomo.settings;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
+import ru.spb.osll.airomo.settings.Settings.ITrackerNetSettings;
 import android.content.SharedPreferences.Editor;
 
 public class ConfigFeedParser extends DefaultHandler implements IXMLSettrings {
