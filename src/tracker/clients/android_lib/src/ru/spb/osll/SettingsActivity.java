@@ -1,4 +1,4 @@
-package ru.spb.osll.preferences;
+package ru.spb.osll;
 
 import ru.spb.osll.R;
 import ru.spb.osll.airomo.Ala;

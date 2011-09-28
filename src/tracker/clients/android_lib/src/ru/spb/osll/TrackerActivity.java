@@ -3,7 +3,7 @@ package ru.spb.osll;
 import ru.spb.osll.airomo.Ala;
 import ru.spb.osll.airomo.receiver.AlaReceiver;
 import ru.spb.osll.exception.ExceptionHandler;
-import ru.spb.osll.preferences.SettingsActivity;
+import ru.spb.osll.SettingsActivity;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
