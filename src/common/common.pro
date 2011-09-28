@@ -52,7 +52,8 @@ linux: {
 
     DEFINES += SIMULATE_GPS
 
-    INCLUDEPATH += /usr/include/libxml2
+
+    INCLUDEPATH += /usr/local/include/libxml2
 }
 
 maemo5: {

@@ -1,20 +1,20 @@
 #Define package name
-%define app_name wikigps-libs
+%define app_name wikigps-service
 
-Name:           wikigps-libs
+Name:           wikigps-service
 Version:        0.1.7
 Release:        1%{?dist}
-Summary:        Libs for Geo2Tag platform
+Summary:        Libs and Geo2Tag platform
 
 Group:          System Tools
 License:        GPL
 URL:            http://osll.spb.ru/projects/geo2tag
 Source0: 	%{app_name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{app_name}-%{version}-%{release}-root
-BuildRequires:  qt-devel libxml2 libqt4-sql-psql qjson qjson-devel libxml2-devel
+BuildRequires:  qt-devel libxml2 libqt4-sql-psql qjson qjson-devel make qmake-qt4 fcgi-devel qt3-PostgreSQL libpqxx-devel
 
 %description
-This libs provide main functions for Geo2Tag platform
+This is Geo2Tag platform
 
 %prep
 %setup -q
