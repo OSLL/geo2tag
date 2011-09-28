@@ -40,6 +40,26 @@ public class Settings {
 		editor.commit();
 	}
 	
+	public void setPreference(String key, String val){
+		final Editor editor = getPreferencesEditor();
+		editor.putString(key, val);
+		editor.commit();
+	}
+
+	public void setPreference(String key, int val){
+		final Editor editor = getPreferencesEditor();
+		editor.putInt(key, val);
+		editor.commit();
+	}
+	
+	public String getPreference(String key, String defVal){
+		return getPreferences().getString(key, defVal);
+	}
+	
+	public int getPreference(String key, int defVal){
+		return getPreferences().getInt(key, defVal);
+	}
+	
 	private void loadFromXMLFile(Editor configEditor) {
 		try {
 			InputSource is = 

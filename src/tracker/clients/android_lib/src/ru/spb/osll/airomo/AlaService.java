@@ -13,24 +13,16 @@ import android.content.Intent;
 import android.util.Log;
 
 public class AlaService extends BaseAlaService {
-//	private boolean m_isTracking = false;
-	private Buffer<Mark> m_history = new Buffer<Mark>(60); // TODO
-	
+	private Buffer<Mark> m_history;
+
 	private synchronized Buffer<Mark> getHistory(){
 		return m_history;
 	}
 	
 	@Override
-	public void onCreate() {
-		super.onCreate();
-		Log.v(Ala.ALA_LOG, "AlaService create");
-	}
-
-	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		Log.v(Ala.ALA_LOG, "AlaService start");
-		
+		m_history = new Buffer<Mark>(sCache().historyLimit); 
 		dropCache();
 	}
 
@@ -79,7 +71,7 @@ public class AlaService extends BaseAlaService {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				refreshConnectionData();
+				refreshSCache();
 				final Mark mark = constructDruftMark();
 				sendMark(mark);
 			}
@@ -94,7 +86,7 @@ public class AlaService extends BaseAlaService {
 		m_historyThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				refreshConnectionData();
+				refreshSCache();
 				try {
 					while(isOnline() && getHistory().hasElements()){
 						Log.v(Ala.ALA_LOG, "sending history...");
@@ -129,7 +121,7 @@ public class AlaService extends BaseAlaService {
 		m_trackThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				refreshConnectionData();
+				refreshSCache();
 				try {
 					while (!Thread.currentThread().isInterrupted()){
 						final Mark mark = constructDruftMark();
@@ -140,8 +132,7 @@ public class AlaService extends BaseAlaService {
 							Log.v(Ala.ALA_LOG, "add mark to history...");
 							getHistory().add(mark); 			// TODO
 						}
-						int m_trackInterval = 2;				// TODO
-						Thread.sleep(m_trackInterval * 1000);	// TODO
+						Thread.sleep(sCache().trackInterval * 1000);
 					}
 				} catch (InterruptedException e) {
 					Log.v(Ala.ALA_LOG, "m_trackThread is interrupted");
@@ -153,11 +144,11 @@ public class AlaService extends BaseAlaService {
 
 	private boolean sendMark(Mark mark){
 		if(!m_isChanAvailableCache){
-			m_authTokenCache = auth(netData().login, netData().pass);
-			m_isChanAvailableCache = applyChannel(m_authTokenCache, netData().channel);
+			m_authTokenCache = auth(sCache().login, sCache().pass);
+			m_isChanAvailableCache = applyChannel(m_authTokenCache, sCache().channel);
 		}
 		if (m_isChanAvailableCache){
-			completeMark(mark, m_authTokenCache, netData().channel);
+			completeMark(mark, m_authTokenCache, sCache().channel);
 			return applyMark(mark);
 		}
 		return false;
@@ -165,7 +156,7 @@ public class AlaService extends BaseAlaService {
 
 	private String auth(String login, String pass) {
 		String authToken = null;
-		final String serverUrl = netData().serverUrl;
+		final String serverUrl = sCache().serverUrl;
 		JSONObject JSONResponse = new JsonLoginRequest(login, pass, serverUrl).doRequest();
 		if (JSONResponse != null) {
 			authToken = JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN);
@@ -178,7 +169,7 @@ public class AlaService extends BaseAlaService {
 	private boolean applyChannel(String authToken, String channel){
 		Log.v(Ala.ALA_LOG, "applayChannel");
 		JSONObject JSONResponse = new JsonApplyChannelRequest(authToken, channel,
-				"Geo2Tag tracker channel", "http://osll.spb.ru/", 3000, netData().serverUrl)
+				"Geo2Tag tracker channel", "http://osll.spb.ru/", 3000, sCache().serverUrl)
 				.doRequest();
 		boolean success = false;
 		if(JSONResponse != null){
@@ -196,7 +187,7 @@ public class AlaService extends BaseAlaService {
 	
 	private boolean applyMark(Mark mark){
 		boolean success = false;
-		JSONObject JSONResponse = new JsonApplyMarkRequest(mark, netData().serverUrl).doRequest();
+		JSONObject JSONResponse = new JsonApplyMarkRequest(mark, sCache().serverUrl).doRequest();
 		if (JSONResponse != null){
 			String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 			String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);

@@ -4,8 +4,6 @@ import java.util.Date;
 
 import ru.spb.osll.ala.AlaReceiver;
 import ru.spb.osll.objects.Mark;
-import ru.spb.osll.preferences.Settings;
-import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -40,8 +38,10 @@ abstract class BaseAlaService extends Service {
 	
 	@Override
 	public void onCreate() {
-		super.onCreate();
 		Log.v(Ala.ALA_LOG, "BaseAlaService create");
+		
+		super.onCreate();
+		refreshSCache();
 		m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 		registerReceiver(m_networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
@@ -60,7 +60,6 @@ abstract class BaseAlaService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		Log.v(Ala.ALA_LOG, "BaseAlaService destroy");
-		m_isDeviceReady = false;
 		m_locationManager.removeUpdates(locationListener);
 		unregisterReceiver(m_networkReceiver);
 		unregisterReceiver(m_shutdownReceiver);
@@ -95,78 +94,13 @@ abstract class BaseAlaService extends Service {
 		}
 		return location;
 	}
-
-	// ------------------------------------------------------------
-	private class ConnectionReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			final boolean isOnline = TrackerUtil.isOnline(context);
-			synchronized (m_isOnline){
-				m_isOnline = isOnline;
-			}
-			networkStatusChanged(isOnline);
-			Log.v(Ala.ALA_LOG, "ConnectionChangeReceiver " + isOnline);
-		}
-	}	
-
-	private class ShutdownReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Log.v(Ala.ALA_LOG, "ShutdownReceiver ");
-			gooffEvent();
-		}
-	}	
-
-	public class InternalReceiver extends BroadcastReceiver {
-		public static final String ACTION 	= "airomo.ala.action.internal";
-		public static final String TYPE_SIGNAL	= "airomo.ala.signal";
-
-		public static final int SIGNAL_UPDATE_SETTINGS	= 0;
-//		public static final int SIGNAL_UPDATE_SETTINGS	= 0;
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			int type = intent.getIntExtra(TYPE_SIGNAL, -1);
-			switch (type) {
-			case SIGNAL_UPDATE_SETTINGS:
-				refreshConnectionData();
-				break;
-			}
-		}
-	}
-
-	
-	// ------------------------------------------------------------
-	private ConnectionData m_connectData;
-	class ConnectionData {
-		public String login = getPreference(ITrackerNetSettings.LOGIN, "");
-		public String pass = getPreference(ITrackerNetSettings.PASSWORD, "");
-		public String channel = getPreference(ITrackerNetSettings.CHANNEL, "");
-		public String serverUrl = getPreference(ITrackerNetSettings.SERVER_URL, "");
-	}
-
-	// FIXME ????? 
-	Settings m_settings = new Settings(this);
-	private String getPreference(String key, String defVal) {
-		return m_settings.getPreferences().getString(key, defVal);
-	}
-	
-	protected void refreshConnectionData(){
-		m_connectData = new ConnectionData();
-	}
-
-	protected ConnectionData netData(){
-		return m_connectData;
-	}
 	
 	protected Mark constructDruftMark(){
-		double latitude 	= 0.0;
-		double longitude 	= 0.0;
+		double latitude 	= -0.0;
+		double longitude 	= -0.0;
 	
 		Location location = getLocation();
-		if (location == null){
-			//return; //FIXME
-		} else {
+		if (location != null){
 			latitude = location.getLatitude();
 			longitude = location.getLongitude();
 		}
@@ -202,6 +136,76 @@ abstract class BaseAlaService extends Service {
 		intent.putExtra(AlaReceiver.TYPE_OPERATION, AlaReceiver.TYPE_MARK);
 		intent.putExtra(AlaReceiver.LONLAT, "set : " + TrackerUtil.convertLocation(mark));
 		sendBroadcast(intent);
+	}
+	
+	// ------------------------------------------------------------
+	private SettingsCache m_sCache;
+
+	class SettingsCache {
+		public String login;
+		public String pass;
+		public String channel;
+		public String serverUrl;	
+		public int trackInterval;
+		public int historyLimit;
+		
+		public SettingsCache(Context c){
+			final AlaSettings alaSettings = new AlaSettings(c); 
+			login = alaSettings.getLogin();
+			pass = alaSettings.getPass();
+			channel = alaSettings.getChannel();
+			serverUrl = alaSettings.getServerUrl();
+			trackInterval = alaSettings.getTrackInterval();
+			historyLimit = alaSettings.getHistorySize();
+		}
+		
+	}
+	
+	protected synchronized void refreshSCache(){
+		m_sCache = new SettingsCache(this);
+	}
+
+	protected synchronized SettingsCache sCache(){
+		return m_sCache;
+	}
+	
+	//----------------------- RECEIVERS ----------------------------
+	private class ConnectionReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final boolean isOnline = TrackerUtil.isOnline(context);
+			synchronized (m_isOnline){
+				m_isOnline = isOnline;
+			}
+			networkStatusChanged(isOnline);
+			Log.v(Ala.ALA_LOG, "ConnectionChangeReceiver " + isOnline);
+		}
 	}	
+
+	private class ShutdownReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.v(Ala.ALA_LOG, "ShutdownReceiver ");
+			gooffEvent();
+		}
+	}	
+
+	public class InternalReceiver extends BroadcastReceiver {
+		public static final String ACTION 	= "airomo.ala.action.internal";
+		public static final String TYPE_SIGNAL	= "airomo.ala.signal";
+
+		public static final int SIGNAL_UPDATE_SETTINGS	= 0;
+		public static final int SIGNAL_SEND_HISTORY		= 1;
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int type = intent.getIntExtra(TYPE_SIGNAL, -1);
+			switch (type) {
+			case SIGNAL_UPDATE_SETTINGS:
+				refreshSCache();
+				break;
+			}
+		}
+	}
 
 }

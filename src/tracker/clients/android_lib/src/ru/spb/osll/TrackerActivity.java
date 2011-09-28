@@ -1,13 +1,11 @@
 package ru.spb.osll;
 
 import ru.spb.osll.airomo.Ala;
-import ru.spb.osll.airomo.IsAla.TrackListener;
 import ru.spb.osll.ala.AlaReceiver;
 import ru.spb.osll.exception.ExceptionHandler;
-import ru.spb.osll.objects.Mark;
 import ru.spb.osll.preferences.Settings;
-import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.preferences.SettingsActivity;
+import ru.spb.osll.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -61,7 +59,7 @@ public class TrackerActivity extends Activity {
 	private AlaReceiver m_alaAlaReceiver = new AlaReceiver() {
 		@Override
 		public void onNewMark(String lonlat) {
-			appendToLogView(">> " + lonlat);
+			appendToLogView(lonlat);
 		}
 		@Override
 		public void onErrorOccured(String error) {
