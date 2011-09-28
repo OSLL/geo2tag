@@ -106,7 +106,8 @@ public class TrackerActivity extends Activity {
 		creenBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				TrackerUtil.hideApplication(TrackerActivity.this); 
+//				TrackerUtil.hideApplication(TrackerActivity.this); // TODO 
+//				new AlaSettings(TrackerActivity.this).setTrackInterval(1); // TODO
 			}
 		});
 

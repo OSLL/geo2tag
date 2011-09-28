@@ -1,38 +1,49 @@
 package ru.spb.osll.airomo;
 
+import ru.spb.osll.airomo.BaseAlaService.InternalReceiver;
 import ru.spb.osll.preferences.Settings;
 import ru.spb.osll.preferences.Settings.ITrackerNetSettings;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 
-public class AlaSettings {
+class AlaSettings {
 	private Settings m_settings; 
+	private Context  m_context;
 	
 	public AlaSettings(Context c){
 		m_settings = new Settings(c);
+		m_context = c;
 	}
 	
 	public void setLogin(String login){
 		m_settings.setPreference(ITrackerNetSettings.LOGIN, login);	
+		settingsSignal();
 	}
 	
 	public void setPass(String pass){
 		m_settings.setPreference(ITrackerNetSettings.PASSWORD, pass);	
+		settingsSignal();
 	}
 
 	public void setServerUrl(String url){
 		m_settings.setPreference(ITrackerNetSettings.SERVER_URL, url);
+		settingsSignal();
 	}
 		
 	public void setChannel(String channel){
 		m_settings.setPreference(ITrackerNetSettings.CHANNEL, channel);
+		settingsSignal();
 	}
 	
 	public void setTrackInterval(int sec){
 		m_settings.setPreference(ITrackerNetSettings.TIME_TICK, sec);
+		settingsSignal();
 	}
 	
 	public void setHistorySize(int size){
 		m_settings.setPreference(ITrackerNetSettings.HISTORY_LIMIT, size);
+		settingsSignal();
 	}
 	
 	public String getLogin(){
@@ -57,5 +68,11 @@ public class AlaSettings {
 	
 	public int getHistorySize(){
 		return m_settings.getPreference(ITrackerNetSettings.HISTORY_LIMIT, 50);
+	}
+	
+	private void settingsSignal(){
+		Intent intent = new Intent(InternalReceiver.ACTION);
+		intent.putExtra(InternalReceiver.TYPE_SIGNAL, InternalReceiver.SIGNAL_UPDATE_SETTINGS);
+		((ContextWrapper) m_context).sendBroadcast(intent);
 	}
 }

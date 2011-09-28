@@ -30,6 +30,7 @@ abstract class BaseAlaService extends Service {
 	protected abstract void onLocationDeviceStatusChanged(boolean isReady);
 	protected abstract void networkStatusChanged(boolean isOnline);
 	protected abstract void gooffEvent();
+	protected abstract void onSettingUpdated();
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -203,6 +204,7 @@ abstract class BaseAlaService extends Service {
 			switch (type) {
 			case SIGNAL_UPDATE_SETTINGS:
 				refreshSCache();
+				onSettingUpdated();
 				break;
 			}
 		}

@@ -59,6 +59,11 @@ public class AlaService extends BaseAlaService {
 		}
 	}
 	
+	@Override
+	protected void onSettingUpdated() {
+		getHistory().setBufferSize(sCache().historyLimit);
+	}
+	
 	private String m_authTokenCache = null;
 	private boolean m_isChanAvailableCache = false;
 	private void dropCache(){
