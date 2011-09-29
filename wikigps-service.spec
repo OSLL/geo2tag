@@ -34,6 +34,24 @@ make install INSTALL_ROOT=$RPM_BUILD_ROOT
 mkdir -p /etc/xdg/osll
 chmod 777 /etc/xdg/osllt
 ldconfig
+/etc/init.d/lighttpd restart;
+# down will be DB initialization
+# check is there geo2tag db and user
+isEmpt=`sudo -u postgres psql -A -q -t -c "select datname from pg_database" template1 | grep geo2tag`;
+if [[ -n "$isEmpt" ]] 
+then
+exit 0;
+fi 
+sudo -u postgres createuser -s geo2tag
+sudo -u postgres createdb -O geo2tag geo2tag
+sudo -u postgres psql --command="GRANT ALL privileges on database geo2tag to geo2tag;"
+sudo cp /opt/geo2tag/pg_hba.conf `find /etc/postgresql -name pg_hba.conf`
+sudo /etc/init.d/postgresql restart
+psql geo2tag -U geo2tag < /opt/geo2tag/base.sql
+echo "sudo -u postgres psql --command=\"ALTER USER"
+sudo -u postgres psql --command="ALTER USER geo2tag WITH PASSWORD 'geo2tag';"
+sudo /etc/init.d/postgresql restart
+sudo /etc/init.d/lighttpd restart;
 
 %clean
 rm -rf %{_builddir}
