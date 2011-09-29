@@ -27,6 +27,6 @@ linux: {
              http_requests \
              maps \ 
              service \
-             tracker/observer \
              common/tst
+#             tracker/observer \
 }
