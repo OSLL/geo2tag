@@ -15,15 +15,11 @@ public abstract class JsonRequest {
 		JSONObject resultJSON = null; 
 		try {
 			resultJSON = doRequestInternal(); 
-		} catch (JSONException e) {
-			Log.v(JSON_LOG, e.getMessage());
-		} catch (IOException e) {
-			Log.v(JSON_LOG, e.getMessage());
-		} catch (URISyntaxException e) {
-			Log.v(JSON_LOG, e.getMessage());
-		}	catch (Exception e) {
-			if (e.getMessage() != null){
+		} catch (Exception e) {
+			if (e != null && e.getMessage() != null){
 				Log.v(JSON_LOG, e.getMessage());
+			} else {
+				Log.v(JSON_LOG, "unknown error...");
 			}
 		}
 		return resultJSON;

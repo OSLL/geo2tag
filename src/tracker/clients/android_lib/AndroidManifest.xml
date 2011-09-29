@@ -7,10 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".TrackerActivity"
+        <activity android:name=".TrackerActivity" android:configChanges="orientation|keyboardHidden" 
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +19,6 @@
        	<activity android:name=".SettingsActivity" android:configChanges="orientation|keyboardHidden"/>
 	    <activity android:name=".exception.ExceptionActivity" android:configChanges="orientation|keyboardHidden"/>
 	   
-        <service android:enabled="true" android:name=".services.LocationService"></service>
-        <service android:enabled="true" android:name=".airomo.AlaService"></service>
+        <service android:name=".airomo.AlaService" android:process=":tracking"></service>
     </application>
 </manifest> 

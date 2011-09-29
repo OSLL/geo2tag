@@ -3,6 +3,7 @@ package ru.spb.osll.airomo;
 import java.util.Date;
 
 import ru.spb.osll.airomo.receiver.AlaReceiver;
+import ru.spb.osll.exception.ExceptionHandler;
 import ru.spb.osll.objects.Mark;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Service;
@@ -27,8 +28,6 @@ abstract class BaseAlaService extends Service {
 	private boolean m_isDeviceReady = false;
 	private Boolean m_isOnline = false;
 	
-	private static boolean ourIsTracking = false;
-	
 	protected abstract void onLocationDeviceStatusChanged(boolean isReady);
 	protected abstract void networkStatusChanged(boolean isOnline);
 	protected abstract void gooffEvent();
@@ -49,18 +48,19 @@ abstract class BaseAlaService extends Service {
 		Log.v(Ala.ALA_LOG, "BaseAlaService create");
 		
 		super.onCreate();
+		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		refreshSCache();
 		m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 		registerReceiver(m_networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 		registerReceiver(m_shutdownReceiver, new IntentFilter("android.intent.action.BATTERY_LOW"));
 		registerReceiver(m_internalReceiver, new IntentFilter(InternalReceiver.ACTION));
+		getLocation();
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
 		Log.v(Ala.ALA_LOG, "BaseAlaService start");
-
 		super.onStart(intent, startId);
 		m_isDeviceReady = false;
 	}
@@ -146,14 +146,6 @@ abstract class BaseAlaService extends Service {
 		intent.putExtra(AlaReceiver.TYPE_OPERATION, AlaReceiver.TYPE_NEW_MARK);
 		intent.putExtra(AlaReceiver.LONLAT, "set : " + TrackerUtil.convertLocation(mark));
 		sendBroadcast(intent);
-	}
-	
-	public synchronized static boolean isTracking(){
-		return ourIsTracking;
-	}
-
-	protected synchronized void setTrackStatus(boolean isTracking){
-		ourIsTracking = isTracking;
 	}
 	
 	// -------------------------------------------------------------

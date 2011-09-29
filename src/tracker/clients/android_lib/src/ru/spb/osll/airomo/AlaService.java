@@ -10,6 +10,7 @@ import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.objects.Mark;
 import ru.spb.osll.utils.TrackerUtil;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
 public class AlaService extends BaseAlaService {
@@ -30,14 +31,21 @@ public class AlaService extends BaseAlaService {
 	}
 	
 	@Override
+	public void onCreate() {
+		super.onCreate();
+		m_history = new Buffer<Mark>(sCache().historyLimit); 
+	}
+
+	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		m_history = new Buffer<Mark>(sCache().historyLimit); 
+		//startTracking(); // TODO for testing on AVD
 	}
 	
 	@Override
 	public void onDestroy() {
 		stopTracking();
+		stopSendHistory();
 		super.onDestroy();
 	}
 
@@ -74,7 +82,6 @@ public class AlaService extends BaseAlaService {
 	
 	@Override
 	protected void stopTracking(){
-		setTrackStatus(false);
 		if (m_trackThread != null){
 			m_trackThread.interrupt();
 		}
@@ -82,7 +89,6 @@ public class AlaService extends BaseAlaService {
 	
 	@Override
 	protected void startTracking(){
-		setTrackStatus(true);
 		if (m_trackThread != null){
 			m_trackThread.interrupt();
 		}
@@ -90,26 +96,28 @@ public class AlaService extends BaseAlaService {
 			@Override
 			public void run() {
 				refreshSCache();
-				try {
-					while (!Thread.currentThread().isInterrupted()){
-						final Mark mark = constructDruftMark();
-						if (isOnline()){
-							Log.v(Ala.ALA_LOG, "send mark to server...");
-							sendMark(mark);
-						} else {
-							Log.v(Ala.ALA_LOG, "add mark to history...");
-							getHistory().add(mark); 			
-						}
-						Thread.sleep(sCache().trackInterval * 1000);
+				while (!Thread.currentThread().isInterrupted()){
+					final Mark mark = constructDruftMark();
+					if (isOnline()){
+						Log.v(Ala.ALA_LOG, "send mark to server...");
+						sendMark(mark);
+					} else {
+						Log.v(Ala.ALA_LOG, "add mark to history...");
+						getHistory().add(mark); 			
 					}
-				} catch (InterruptedException e) {
-					Log.v(Ala.ALA_LOG, "m_trackThread is interrupted");
+					SystemClock.sleep(sCache().trackInterval * 1000);
 				}
 			}
 		});
 		m_trackThread.start();
 	}
 
+	private void stopSendHistory(){
+		if (m_historyThread != null){
+			m_historyThread.interrupt();
+		}
+	}
+	
 	@Override
 	public void sendHistory() {
 		Log.v(Ala.ALA_LOG, "CALLED: sendHistory");
@@ -120,18 +128,14 @@ public class AlaService extends BaseAlaService {
 			@Override
 			public void run() {
 				refreshSCache();
-				try {
-					while(isOnline() && getHistory().hasElements()){
-						Log.v(Ala.ALA_LOG, "sending history...");
-						final Mark mark = getHistory().getFirst();
-						if (sendMark(mark)){
-							Log.v(Ala.ALA_LOG, "sending history: mark was sent...");
-							getHistory().removeFirst();
-						}
-						Thread.sleep(333);
+				while(isOnline() && getHistory().hasElements()){
+					Log.v(Ala.ALA_LOG, "sending history...");
+					final Mark mark = getHistory().getFirst();
+					if (sendMark(mark)){
+						Log.v(Ala.ALA_LOG, "sending history: mark was sent...");
+						getHistory().removeFirst();
 					}
-				} catch (InterruptedException e) {
-					Log.v(Ala.ALA_LOG, "m_historyThread is interrupted");
+					SystemClock.sleep(333);
 				}
 			}
 		});

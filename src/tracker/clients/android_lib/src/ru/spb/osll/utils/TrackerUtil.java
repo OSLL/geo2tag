@@ -19,8 +19,10 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 
 public class TrackerUtil {
 	private static DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
@@ -86,6 +88,16 @@ public class TrackerUtil {
 	        }
 	    }
 	    return false;
+	}
+	
+	public static void openGPSSettings(Context c){
+		c.startActivity(new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS )); 
+	}
+	
+	@SuppressWarnings("static-access")
+	public static boolean isGPSEnabled(Context c){
+		LocationManager locationManager = (LocationManager) c.getSystemService(c.LOCATION_SERVICE); 
+		return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER ); 
 	}
 	
 	public class Logger {

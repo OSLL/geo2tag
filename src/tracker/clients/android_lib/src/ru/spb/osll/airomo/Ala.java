@@ -21,7 +21,7 @@ public class Ala implements IsAla {
 
 	@Override
 	public boolean isTracking(Context c) {
-		return AlaService.isTracking();
+		return TrackerUtil.isServiceRunning(c, AlaService.class.getName());
 	}
 
 	@Override

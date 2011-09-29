@@ -5,11 +5,9 @@ import ru.spb.osll.airomo.receiver.AlaReceiver;
 import ru.spb.osll.exception.ExceptionHandler;
 import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -86,21 +84,10 @@ public class TrackerActivity extends Activity {
 		creenBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				TrackerUtil.hideApplication(TrackerActivity.this); 
+				TrackerUtil.hideApplication(TrackerActivity.this);
 			}
 		});
-
-		createWakeLock();
 	}
-
-	private final void createWakeLock() {
-		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, LOG);
-		wl.acquire(60 * 1000);	//30 sec
-		//wl.acquire();
-		//wl.release();
-	}	
-
 	
 	private void startTracker(){
 		if (ALA.isTracking(TrackerActivity.this)){
@@ -113,7 +100,7 @@ public class TrackerActivity extends Activity {
 	}
 	
 	private void stopTracker(){
-		if (ALA.isTracking(TrackerActivity.this)){
+		if (ALA.isTracking(this)){
 			showToast(TrackerUtil.MESS_TRACKER_STOP);
 			ALA.stopTrack(TrackerActivity.this);
 		}
