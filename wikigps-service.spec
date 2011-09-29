@@ -32,7 +32,7 @@ make install INSTALL_ROOT=$RPM_BUILD_ROOT
 
 %post
 mkdir -p /etc/xdg/osll
-chmod 777 /etc/xdg/osllt
+chmod 777 /etc/xdg/osll
 ldconfig
 /etc/init.d/lighttpd restart;
 # down will be DB initialization
