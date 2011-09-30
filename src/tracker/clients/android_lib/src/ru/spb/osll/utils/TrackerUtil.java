@@ -132,6 +132,7 @@ public class TrackerUtil {
 	public static final String MESS_TRACKER_ALREADY_RUNNING = "Tracker is already running...";
 	public static final String MESS_TRACKER_START = "Tracker is running...";
 	public static final String MESS_TRACKER_STOP = "Tracker stopped...";
+	public static final String MESS_TRACKER_WAIT = "Waiting... receiving GPS data...";
 	
 	public static final String MESS_SETTINGS_SAVED = "Settings saved!";
 	public static final String MESS_SETTINGS_NOT_AVAILABLE = "Settings are not available! Stop the tracker...";

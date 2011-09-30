@@ -80,5 +80,17 @@
              - customize to your needs.
     -->
     <setup />
+	
+    <target name="install-dev" depends="debug" >
+		<echo message="install-dev" />
+        <exec executable="bash" newenvironment="false" dir=".">
+        	<arg value="-c"/>
+            <arg line='"adb install -r bin/*-debug.apk"'/>
+        </exec>
+        <exec executable="bash" newenvironment="false" dir=".">
+        	<arg value="-c"/>
+            <arg line='"adb shell am start -a android.intent.action.MAIN -n ru.spb.osll/.TrackerActivity"'/>
+        </exec>
+     </target>
 
 </project>

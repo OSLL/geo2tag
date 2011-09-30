@@ -93,8 +93,10 @@ public class TrackerActivity extends Activity {
 		if (ALA.isTracking(TrackerActivity.this)){
 			showToast(TrackerUtil.MESS_TRACKER_ALREADY_RUNNING);
 		} else {
-			showToast(TrackerUtil.MESS_TRACKER_START);
 			clearLogView();
+			appendToLogView(TrackerUtil.MESS_TRACKER_WAIT);
+			showToast(TrackerUtil.MESS_TRACKER_START);
+			showToast(TrackerUtil.MESS_TRACKER_WAIT);
 			ALA.startTrack(TrackerActivity.this);
 		} 
 	}

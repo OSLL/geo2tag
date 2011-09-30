@@ -16,9 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-       	<activity android:name=".SettingsActivity" android:configChanges="orientation|keyboardHidden"/>
-	    <activity android:name=".exception.ExceptionActivity" android:configChanges="orientation|keyboardHidden"/>
+       	<activity android:name="ru.spb.osll.SettingsActivity" android:configChanges="orientation|keyboardHidden"/>
+	    <activity android:name="ru.spb.osll.exception.ExceptionActivity" android:configChanges="orientation|keyboardHidden"/>
 	   
-        <service android:name=".airomo.AlaService" android:process=":tracking"></service>
+        <service android:enabled="true" android:name="ru.spb.osll.airomo.AlaService" android:process=":tracking"></service>
     </application>
 </manifest> 
