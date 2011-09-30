@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical">
+  
+    <ScrollView 
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_weight="0.5"
+    	>
+        
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			>
+	        <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/login" 
+	        	android:singleLine="true"/>
+			<EditText
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/edit_login"
+				android:singleLine="true"/>
+	    
+	        <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/password"        	
+	        	android:singleLine="true"
+	        	/>
+			<EditText
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/edit_password"
+				android:password="true"
+				android:singleLine="true"/>
+				
+	        <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/channel"        	
+	        	android:singleLine="true"/>
+			<EditText
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/edit_channel"
+				android:singleLine="true"/>
+
+	        <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/key"        	
+	        	android:singleLine="true"/>
+			<EditText
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/edit_key"
+				android:singleLine="true"/>
+
+	        <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/server_address"        	
+	        	android:singleLine="true"/>
+			<EditText
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/edit_server_address"
+				android:singleLine="true"/>
+
+	        <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/time_request"        	
+	        	android:singleLine="true"/>
+			<Button
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/button_settings_tick"/>
+
+	        <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/history_size"        	
+	        	android:singleLine="true"/>
+			<Button
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/button_settings_history"/>
+				
+		</LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:gravity="bottom">
+     	<Button android:id="@+id/button_cancel"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+			android:layout_weight="0.5"
+		    android:text="@string/btnCancel"
+		/>
+	   	<Button android:id="@+id/button_ok"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+			android:layout_weight="0.5"
+		    android:text="@string/btnOk"
+		/>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Airomo LSB Client</string>
+       
+<!-- settings -->
+   	<string name="login">Login</string>
+   	<string name="password">Password</string>
+   	<string name="channel">Channel</string>
+   	<string name="key">Key</string>
+   	<string name="server_address">Geo2Tag server</string>
+   	<string name="time_request">Time between ticks</string>
+   	<string name="history_size">History size</string>
+	<string name="radius">Radius</string>
+	<string name="uri">Uri</string>
+
+<!-- buttons -->
+	<string name="btnOk">Ok</string>
+	<string name="btnCancel">Cancel</string>
+	<string name="btnStart">Start Tracker</string>
+	<string name="btnStop">Stop Tracker</string>
+	<string name="btnSettings">Settings</string>
+	<string name="btnHide">Hide</string>
+	
+</resources>
