@@ -108,6 +108,7 @@ public class GTShell extends Composite {
 	private void initHistoryListener(){
 		History.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
+				GWT.log("History onValueChange " + event.getValue());
 				final String t = event.getValue();
 				final Widget w = getWidgetByToken(t);
 				if (w instanceof SimpleComposite){
@@ -116,6 +117,13 @@ public class GTShell extends Composite {
 				setContent(w, false);
 			}
 		});
+//		final String t = History.getToken();
+//		GWT.log("initHistoryListener " + t);
+//		final Widget w = getWidgetByToken(t);
+//		if (w instanceof SimpleComposite){
+//			((SimpleComposite) w).resume();
+//		}
+//		setContent(w, false);
 	}
 	
 	protected void initStartWidget(){

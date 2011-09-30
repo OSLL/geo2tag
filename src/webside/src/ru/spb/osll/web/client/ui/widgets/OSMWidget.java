@@ -30,6 +30,9 @@ public class OSMWidget extends BaseMapWidget {
 	private Popup m_curPopup;
 	private List<Popup> m_labels;
 	
+	private int m_zoom = 12;
+	private LonLat m_center;
+	
 	@Override
 	protected Widget onInitializeMap() {
 		m_labels= new ArrayList<Popup>();
@@ -74,11 +77,12 @@ public class OSMWidget extends BaseMapWidget {
 			}
 		});
 		
+		m_center = new LonLat(30.606215, 59.870569);
+		m_center.transform("EPSG:4326", "EPSG:900913");
+		m_zoom = 8;
+		map.setCenter(m_center, m_zoom);
 		return m_mapWidget;
 	}
-	
-	private int m_zoom = 12;
-	private LonLat m_center;
 	
 	@Override
 	public void setTags(List<Tag> tags){
