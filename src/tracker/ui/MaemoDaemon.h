@@ -11,7 +11,7 @@ class MaemoDaemon : public Daemon
   bool m_started;
   QTcpSocket m_daemon;
   public:
-  MaemoDaemon();
+    MaemoDaemon();
     virtual QPointF getLastCoordinates() const;
     virtual bool isConnected() const;
     virtual bool isStarted() const;

@@ -4,7 +4,7 @@
 SymbianDaemon::SymbianDaemon()
 {
   m_daemon = new TrackerDaemon();
-//  QtConcurrent::run(&m_daemon,TrackerDaemon::run);
+  m_daemon->start();
   //QtConcurrent::run(&m_daemon,TrackerDaemon::run);
 }
 

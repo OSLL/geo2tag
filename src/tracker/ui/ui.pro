@@ -1,11 +1,8 @@
 TEMPLATE = app
 
 TARGET = wikigpsTracker-ui
-
 include(../../../config.pri)
 
-
-QT += network
 
 QT += network
 
@@ -27,12 +24,10 @@ HEADERS += MaemoDaemon.h
 
 symbian {
 VERSION = 0.16.1
-TARGET.UID3 = 0x20041E3E
-
+#TARGET.UID3 = 0x20041E3E
+LIBS+= -lQtLocation
 CONFIG += mobility
 MOBILITY += location
-
-QT += network
 
 INCLUDEPATH += ../../../../http_requests/inc \
                inc \
@@ -51,9 +46,6 @@ TARGET.CAPABILITY = NetworkServices \
 DEFINES += NO_DAEMON
 SOURCES += SymbianDaemon.cpp \
 ../daemon/TrackerDaemon.cpp \
-../ui/OptionsWidget.cpp \
-../ui/src/ByteSpinBox.cpp \
-../../http_requests/src/RSSFeedQuery.cpp \
 ../../http_requests/src/LoginQuery.cpp \
 ../../http_requests/src/DefaultQuery.cpp \
 ../../http_requests/src/AddNewMarkQuery.cpp \
@@ -81,10 +73,6 @@ SOURCES += SymbianDaemon.cpp \
 ../../../3rdparty/qjson-0.7.1/src/json_parser.cc
 
 HEADERS += SymbianDaemon.h \
-../daemon/TrackerDaemon.h \
-../ui/OptionsWidget.h \
-../ui/tracker.h \
-../ui/inc/ByteSpinBox.h \
 ../../http_requests/inc/LoginQuery.h \
 ../../http_requests/inc/DefaultQuery.h \
 ../../http_requests/inc/AddNewMarkQuery.h \
@@ -121,8 +109,8 @@ HEADERS += SymbianDaemon.h \
 ../../../3rdparty/qjson-0.7.1/src/json_parser.hh \
 ../../../3rdparty/qjson-0.7.1/src/stack.hh \
 ../../../3rdparty/qjson-0.7.1/src/location.hh \
-../../../3rdparty/qjson-0.7.1/src/position.hh
-
+../../../3rdparty/qjson-0.7.1/src/position.hh \
+../daemon/TrackerDaemon.h
 #TARGET.UID3 = 0xA000C606
 
 }
