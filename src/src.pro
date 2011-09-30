@@ -27,6 +27,8 @@ linux: {
              http_requests \
              maps \ 
              service \
+             tracker/observer \
+	     tracker/clients/meego/tst \
              common/tst
 #             tracker/observer \
 }

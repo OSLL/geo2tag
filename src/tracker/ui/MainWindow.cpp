@@ -133,13 +133,8 @@ void MainWindow::checkDaemon()
 {
   if(DaemonManager::getInstance().isConnected())
   {
-    <<<<<<< HEAD
     // TODO investigate what does it mean
     //    updateData();
-      =======
-    // TODO investigate what does it mean
-    //    updateData();
-      >>>>>>> tracker compiles for symbian, but QtConcurrent calling commented
   }
   else m_logWidget->addToLog(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss.zzz")+": can't connect to daemon");
 }
