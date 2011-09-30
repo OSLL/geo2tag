@@ -3,15 +3,9 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gwtopenmaps.openlayers.client.LonLat;
-import org.gwtopenmaps.openlayers.client.Map;
-import org.gwtopenmaps.openlayers.client.MapOptions;
-import org.gwtopenmaps.openlayers.client.MapWidget;
-import org.gwtopenmaps.openlayers.client.Marker;
+import org.gwtopenmaps.openlayers.client.*;
 import org.gwtopenmaps.openlayers.client.control.LayerSwitcher;
 import org.gwtopenmaps.openlayers.client.control.MousePosition;
-import org.gwtopenmaps.openlayers.client.event.MapMoveListener;
-import org.gwtopenmaps.openlayers.client.event.MapZoomListener;
 import org.gwtopenmaps.openlayers.client.event.MarkerBrowserEventListener;
 import org.gwtopenmaps.openlayers.client.layer.Markers;
 import org.gwtopenmaps.openlayers.client.layer.OSM;

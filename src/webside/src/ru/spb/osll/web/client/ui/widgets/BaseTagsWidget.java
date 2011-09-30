@@ -57,7 +57,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	public void onResume() {
 		final User user = GTState.Instanse().getCurUser();
 		showWarningMessage(user);
-		refreshChannelBox (user);
+		refreshFilterPanel(user);
 		m_tagsView.refresh();
 	}
 
@@ -87,7 +87,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 				m_channelBox.setEnabled(event.getValue());
 			}
 		});
-	    m_radioBtnAll.setValue(true);
 	    m_radioBtnMy = new RadioButton(uniqueId, LOC.radioBtnMy(), false);
 	    m_radioBtnMy.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
@@ -217,7 +216,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		);
 	}
 	
-	private void refreshChannelBox(final User u){
+	private void refreshFilterPanel(final User u){
 		m_channelBox.clear();
 		if (u == null){
 			return;
@@ -225,8 +224,16 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		AsyncCallback<List<Channel>> callback = new AsyncCallback<List<Channel>>() {
 			@Override
 			public void onSuccess(List<Channel> result) {
-				m_channelBox.setData(result, LOC.itemAllChannels()); 
-				refreshByChannel();
+				m_channelBox.setData(result, LOC.itemAllChannels());
+				if (result.size() > 0){
+					m_radioBtnAll.setValue(true);
+					m_radioBtnMy.setValue(false);
+					refreshByChannel();
+				} else {
+					m_radioBtnMy.setValue(true);
+					m_radioBtnAll.setValue(false);
+					refreshByUser();
+				}
 			}
 			@Override
 			public void onFailure(Throwable caught) {
