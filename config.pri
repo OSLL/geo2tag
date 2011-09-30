@@ -35,8 +35,9 @@ symbian: {
 linux: {
 #    QMAKE_CXX = g++-4.5
 #    QMAKE_LINK = g++-4.5
-    QMAKE_CXXFLAGS += -fpermissive -g3 -Werror -DREDEFINE_QT_SIGNALS -I/usr/include/libxml2
-		INCLUDEPATH += /usr/include/libxml2/
+    QMAKE_CXXFLAGS += -fpermissive -g3 -DREDEFINE_QT_SIGNALS -I/usr/local/include/libxml2 
+	#	-Werror 
+		INCLUDEPATH += /usr/local/include/libxml2/
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }

@@ -75,6 +75,7 @@ else
  		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web $branch (fail): build and test reports" -Dlogdir ${dir_log}
 	fi
 fi
+
 ant clean
 git reset --hard
 git clean -fxd

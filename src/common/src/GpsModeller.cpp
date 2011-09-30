@@ -121,7 +121,9 @@ namespace common
         s << (const char *)lon << " " << (const char *) lat;
         setReady(true);
         s >> m_longitude >> m_latitude;
-        QThread::msleep(begin.msecsTo(currentModellerTime));
+        // This code doesnt used by service
+        //QThread::msleep(begin.msecsTo(currentModellerTime));
+        QThread::msleep(begin.secsTo(currentModellerTime)*1000);
         begin=currentModellerTime;
       }
       searchElement(cur_node->children);
