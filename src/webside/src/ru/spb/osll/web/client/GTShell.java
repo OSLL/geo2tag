@@ -1,8 +1,5 @@
 package ru.spb.osll.web.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
@@ -46,16 +43,19 @@ public class GTShell extends Composite {
 	private Anchor m_authLink;
 	private Anchor m_regLink;
 	private GTMenu m_mainMenu;
-	private Map<String, Widget> m_widgetsCache = new HashMap<String, Widget>();
+	private GTSiteMap m_siteMap;
+//	private Map<String, Widget> m_widgetsCache = new HashMap<String, Widget>();
 	
 	public static GTShell Instance;
 	
 	public GTShell() {
 		initWidget(uiBinder.createAndBindUi(this));
+		Instance = this;
 		
 		m_mainMenu = new GTMenu();
+		m_siteMap = new GTSiteMap(m_mainMenu);
+		
 		mainMenuContainer.add(m_mainMenu);
-		Instance = this;
 
 		m_regLink = new Anchor(Localizer.res().registration());
 		m_regLink.addClickHandler(m_regHandler);
@@ -85,9 +85,8 @@ public class GTShell extends Composite {
 			return;
 		}
 		
-		final String token = getTokenByWidget(content);
+		final String token = m_siteMap.getToken(content);
 		if (useHistory) {
-			m_widgetsCache.put(token, content);
 			History.newItem(token, false);
 		}
 		m_mainMenu.setSecectedGroup(content);
@@ -108,22 +107,21 @@ public class GTShell extends Composite {
 	private void initHistoryListener(){
 		History.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				GWT.log("History onValueChange " + event.getValue());
 				final String t = event.getValue();
-				final Widget w = getWidgetByToken(t);
+				final Widget w = m_siteMap.getWidget(t);
 				if (w instanceof SimpleComposite){
 					((SimpleComposite) w).resume();
 				}
 				setContent(w, false);
 			}
 		});
-//		final String t = History.getToken();
-//		GWT.log("initHistoryListener " + t);
-//		final Widget w = getWidgetByToken(t);
-//		if (w instanceof SimpleComposite){
-//			((SimpleComposite) w).resume();
-//		}
-//		setContent(w, false);
+		final String t = History.getToken();
+		GWT.log("initHistoryListener " + t);
+		final Widget w = m_siteMap.getWidget(t);
+		if (w instanceof SimpleComposite){
+			((SimpleComposite) w).resume();
+		}
+		setContent(w, false);
 	}
 	
 	protected void initStartWidget(){
@@ -197,22 +195,4 @@ public class GTShell extends Composite {
 		LoginService.Util.getInstance().logout(callback);
 	}
 
-	private String getTokenByWidget(Widget w){
-		if (w == null){
-			return "";
-		}
-		final String group = m_mainMenu.getGroup(w);
-		final String token = getTokenByClass(w.getClass());
-		return group == null ? token : group + "_" + token;
-	}
-
-	private Widget getWidgetByToken(String t){
-		return m_widgetsCache.get(t);
-	}
-	
-	public static String getTokenByClass(Class<?> cwClass) {
-		String className = cwClass.getName();
-		className = className.substring(className.lastIndexOf('.') + 1);
-		return className;
-	}
 }
