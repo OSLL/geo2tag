@@ -8,17 +8,16 @@
 
 class vkRequest : public QObject
 {
-    Q_OBJECT
-private:
+  Q_OBJECT
+    private:
     QNetworkAccessManager manager;
     QNetworkReply *replyProfile;
-public:
+  public:
     explicit vkRequest(QObject *parent = 0);
 
-public slots:
+  public slots:
     void getProfile(const QString &token,const QString userId);
     void getReplyFinished();
 
 };
-
-#endif // VKREQUEST_H
+#endif                                  // VKREQUEST_H

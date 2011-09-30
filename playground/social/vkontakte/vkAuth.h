@@ -2,7 +2,6 @@
 #define VKAUTH_H
 #include <QWebView>
 
-
 class vkAuth:public QWebView
 {
   Q_OBJECT
@@ -12,11 +11,11 @@ class vkAuth:public QWebView
     int expires;
     QString userId;
 
-public:
+  public:
     vkAuth(QString appid, QWidget *parent=0);
     QString & getToken();
     QString getUserId();
-signals:
+    signals:
     void success(const QString &token, const QString &userId, int expires);
   private slots:
     void slotChanged(const QUrl & url);

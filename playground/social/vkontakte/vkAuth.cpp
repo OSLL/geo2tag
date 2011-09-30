@@ -4,7 +4,6 @@
 vkAuth::vkAuth(QString appId, QWidget *parent):QWebView(parent)
 {
 
-
   connect(this, SIGNAL(urlChanged(QUrl)), this, SLOT(slotChanged(QUrl)));
   QUrl url("http://api.vkontakte.ru/oauth/authorize");
   url.addQueryItem("client_id", appId);
@@ -14,39 +13,34 @@ vkAuth::vkAuth(QString appId, QWidget *parent):QWebView(parent)
   url.addQueryItem("response_type", "token");
   this->load(url);
 
-
 }
 
 
 void vkAuth::slotChanged(const QUrl & url)
 {
- this->url = url.toString().replace("#","?");
- if (this->url.hasQueryItem("error"))
- {
-     qDebug()<<"Error";
+  this->url = url.toString().replace("#","?");
+  if (this->url.hasQueryItem("error"))
+  {
+    qDebug()<<"Error";
 
- return;
- }
- if (!this->url.hasQueryItem("access_token"))
- {
-     return;
- }
- else
- {
-     token = this->url.queryItemValue("access_token");
-     expires = this->url.queryItemValue("expires_in").toInt();
-     userId = this->url.queryItemValue("user_id");
+    return;
+  }
+  if (!this->url.hasQueryItem("access_token"))
+  {
+    return;
+  }
+  else
+  {
+    token = this->url.queryItemValue("access_token");
+    expires = this->url.queryItemValue("expires_in").toInt();
+    userId = this->url.queryItemValue("user_id");
 
+    emit success(token,userId,expires);
 
-     emit success(token,userId,expires);
-
-
-
-     qDebug() <<"token: "<< token;
-     qDebug() <<"expires_in: "<< expires;
-     qDebug()<<"ALL: "<<url.toString();
- }
-
+    qDebug() <<"token: "<< token;
+    qDebug() <<"expires_in: "<< expires;
+    qDebug()<<"ALL: "<<url.toString();
+  }
 
 }
 
@@ -61,6 +55,3 @@ QString vkAuth::getUserId()
 {
   return userId;
 }
-
-
-
