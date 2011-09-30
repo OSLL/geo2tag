@@ -13,66 +13,64 @@
 
 class MeegoClient: public QObject
 {
-Q_OBJECT
+  Q_OBJECT
 
-	int m_trackInterval;
-	bool m_authentificated;
+    int m_trackInterval;
+  bool m_authentificated;
 
-	QString m_lastError;
-        QTimer * m_timer;
-        QString m_name;
+  QString m_lastError;
+  QTimer * m_timer;
+  QString m_name;
 
-	LoginQuery * m_loginQuery;
-	AddNewMarkQuery * m_addNewMarkQuery;
-        MarksHistory * m_history;
+  LoginQuery * m_loginQuery;
+  AddNewMarkQuery * m_addNewMarkQuery;
+  MarksHistory * m_history;
 
-        QSharedPointer<common::User> m_user;
-        QNetworkConfigurationManager * m_netManager;
-        void pause(int msecs);
-public:
-	MeegoClient(QObject * parent=0);
-	// stub for authentification mechanizm
-	void auth(QString user, QString pass);
+  QSharedPointer<common::User> m_user;
+  QNetworkConfigurationManager * m_netManager;
+  void pause(int msecs);
+  public:
+    MeegoClient(QObject * parent=0);
+    // stub for authentification mechanizm
+    void auth(QString user, QString pass);
 
-	void startTrack();
-	void stopTrack();
-	bool isTracking();
+    void startTrack();
+    void stopTrack();
+    bool isTracking();
 
-	void setTrackInterval(int sec);
-	int getTrackInterval();
+    void setTrackInterval(int sec);
+    int getTrackInterval();
 
-	// default 50, maximum 200;
-	void setHistoryLimit(int maxMarks);	
-	int getHistoryLimit();
-	void sendHistory();
+    // default 50, maximum 200;
+    void setHistoryLimit(int maxMarks);
+    int getHistoryLimit();
+    void sendHistory();
 
-        bool isAuthentificated();
-        void setDispName(const QString & name );
-        MarksHistory * getAllMarks();
+    bool isAuthentificated();
+    void setDispName(const QString & name );
+    MarksHistory * getAllMarks();
 
-	QString getLastError();
+    QString getLastError();
 
-	bool isOnline();
+    bool isOnline();
 
+  private slots:
+    void onError(QString error);
+    void onAuthentificated();
+    void onMarkAdded();
+    void track();
 
-private slots:
-	void onError(QString error);
-	void onAuthentificated();
-	void onMarkAdded();
-        void track();
-
-public slots:
-	// Network going down|up
-        void onNetworkEvent(bool state);
-	// on closed || on low battery
-        void onGoOffEvent();
-        // Send last added coordinate
-        void sendLastCoordinate();
-        // When history is full
-        void onHistoryFull();
-signals:
-        void error(QString error);
-        void authentificated();
+  public slots:
+    // Network going down|up
+    void onNetworkEvent(bool state);
+    // on closed || on low battery
+    void onGoOffEvent();
+    // Send last added coordinate
+    void sendLastCoordinate();
+    // When history is full
+    void onHistoryFull();
+    signals:
+    void error(QString error);
+    void authentificated();
 };
-
 #endif

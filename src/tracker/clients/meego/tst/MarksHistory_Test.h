@@ -36,7 +36,6 @@
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-
 #include <QObject>
 #include <QtTest/QtTest>
 #include <QSignalSpy>
@@ -56,57 +55,57 @@ namespace Test
   {
     Q_OBJECT;
 
-		// MarksHistory*  m_tstObject; // Object for testing
+    // MarksHistory*  m_tstObject; // Object for testing
     MarksHistoryTestImpl * m_history;
-  public:
-    
-    MarksHistory_Test(QObject *parent =NULL) : QObject(parent)
-    {
-  	  // initialization here
-			// m_tstObject = new MarksHistory;
-	m_history = new MarksHistoryTestImpl;
-    }
-    
-		~MarksHistory_Test()
-    {
-  	  // destroying  here
-			// delete m_tstObject;
-			// m_tstObject = NULL;
-    }
-  
-  private slots:
-  
-    void testFilling()
-    {
-	m_history->setHistoryLimit(TEST_OBJECT_SIZE);
-	QSharedPointer<Channel> channel(new JsonChannel("dummy channel","dummy channel"));
-	for (int i=0;i<TEST_OBJECT_SIZE;i++)
-	{
-		QSharedPointer<DataMark> mark(new JsonDataMark(i,i,"","","",QDateTime::currentDateTime()));
-		mark->setChannel(channel);
-		m_history->pushMark(mark);
-	}
-	// Check that if we decrease size of m_history it removes first elements
-	m_history->setHistoryLimit(TEST_OBJECT_SIZE/2);
+    public:
+
+      MarksHistory_Test(QObject *parent =NULL) : QObject(parent)
+      {
+        // initialization here
+        // m_tstObject = new MarksHistory;
+        m_history = new MarksHistoryTestImpl;
+      }
+
+      ~MarksHistory_Test()
+      {
+        // destroying  here
+        // delete m_tstObject;
+        // m_tstObject = NULL;
+      }
+
+    private slots:
+
+      void testFilling()
+      {
+        m_history->setHistoryLimit(TEST_OBJECT_SIZE);
+        QSharedPointer<Channel> channel(new JsonChannel("dummy channel","dummy channel"));
+        for (int i=0;i<TEST_OBJECT_SIZE;i++)
+        {
+          QSharedPointer<DataMark> mark(new JsonDataMark(i,i,"","","",QDateTime::currentDateTime()));
+          mark->setChannel(channel);
+          m_history->pushMark(mark);
+        }
+        // Check that if we decrease size of m_history it removes first elements
+        m_history->setHistoryLimit(TEST_OBJECT_SIZE/2);
         for (int i=TEST_OBJECT_SIZE/2;i<TEST_OBJECT_SIZE;i++)
         {
-//		qDebug() << m_history->popMark()->getLatitude();
-		QSharedPointer<DataMark> mark(m_history->popMark());	
-		int lat = mark->getLatitude();
-		int lon = mark->getLongitude();
-		qDebug() << lat << i;
-		QVERIFY(lat==i);
-		QVERIFY(lon==i);
-	}
-     QVERIFY(m_history->isEmpty()==true);		
-     // see docs: http://doc.qt.nokia.com/4.7/qtest.html
-  
-     //QCOMPARE();
-     //QWARN();
-     //QVERIFY();
-     //QTEST();
-    }
-  
-  }; // class MarksHistory_Test
+          //		qDebug() << m_history->popMark()->getLatitude();
+          QSharedPointer<DataMark> mark(m_history->popMark());
+          int lat = mark->getLatitude();
+          int lon = mark->getLongitude();
+          qDebug() << lat << i;
+          QVERIFY(lat==i);
+          QVERIFY(lon==i);
+        }
+        QVERIFY(m_history->isEmpty()==true);
+        // see docs: http://doc.qt.nokia.com/4.7/qtest.html
 
-} // end of namespace Test
+        //QCOMPARE();
+        //QWARN();
+        //QVERIFY();
+        //QTEST();
+      }
+
+  };                                    // class MarksHistory_Test
+
+}                                       // end of namespace Test

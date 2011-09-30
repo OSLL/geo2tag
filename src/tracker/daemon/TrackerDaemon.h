@@ -16,8 +16,6 @@
 #include <QPointF>
 #include <QNetworkConfigurationManager>
 
-
-
 #ifndef Q_WS_SYMBIAN
 #include "Control.h"
 #define PARENT Control
@@ -30,7 +28,7 @@ class TrackerDaemon : /*public QThread,*/ public PARENT
 {
   Q_OBJECT
 
-  QSettings m_settings;
+    QSettings m_settings;
   QString m_channelName;
   QString m_visibleName;
   QPointF m_lastCoords;

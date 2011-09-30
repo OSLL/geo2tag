@@ -45,7 +45,6 @@
 #include "GpsInfo.h"
 #include "defines.h"
 
-
 // This file maybe used only if SIMULATE_GPS is turned on
 #ifdef SIMULATE_GPS
 #include <libxml/parser.h>

@@ -16,7 +16,6 @@ namespace Test
 
       }
 
-
       friend class MarksHistory_Test;
   };
 
@@ -25,4 +24,3 @@ namespace Test
 
 // MARKSHISTORY_TESTOBJ_H
 #endif
-

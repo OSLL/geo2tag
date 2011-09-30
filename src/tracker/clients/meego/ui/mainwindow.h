@@ -3,19 +3,21 @@
 
 #include <QMainWindow>
 #include "MeegoClient.h"
-namespace Ui {
-    class MainWindow;
+namespace Ui
+{
+  class MainWindow;
 }
+
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
     MeegoClient m_client;
-public:
+  public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
+  private slots:
     void on_auth_button_pressed();
 
     void on_startstopButton_pressed();
@@ -23,8 +25,7 @@ private slots:
     void on_error(QString error);
     void on_nameEdit_textChanged(QString name );
 
-private:
+  private:
     Ui::MainWindow *ui;
 };
-
-#endif // MAINWINDOW_H
+#endif                                  // MAINWINDOW_H

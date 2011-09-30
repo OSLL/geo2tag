@@ -31,7 +31,7 @@
 
 /*!
  * \file main.cpp
- * \brief Test suite for 
+ * \brief Test suite for
  *
  * PROJ: OSLL/geo2tag
  * ------------------------------------------------------------------------ */
@@ -40,18 +40,18 @@
 #include <QtCore/QtCore>
 #include <QApplication>
 
-
 // Test headers
 #include "MarksHistory_Test.h"
-
 
 int main(int c, char **v)
 {
   QApplication app(c,v);
 
   Test::MarksHistory_Test test;
-	QTest::qExec(&test);
+  QTest::qExec(&test);
 
-	return 0; 
+  return 0;
 }
+
+
 /* ===[ End of file $HeadURL$ ]=== */

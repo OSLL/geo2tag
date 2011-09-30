@@ -8,14 +8,17 @@ AddNewMarkQuery::AddNewMarkQuery(const QSharedPointer<DataMark> &tag, QObject *p
 
 }
 
+
 AddNewMarkQuery::AddNewMarkQuery(QObject *parent): DefaultQuery(parent)
 {
 }
 
+
 void AddNewMarkQuery::setTag(const QSharedPointer<DataMark> &tag)
 {
-	m_tag = tag;
+  m_tag = tag;
 }
+
 
 QString AddNewMarkQuery::getUrl() const
 {

@@ -247,7 +247,7 @@ const QPointF& TrackerDaemon::getLastCoords() const
 
 TrackerDaemon::~TrackerDaemon()
 {
-    #ifndef NO_DAEMON
+  #ifndef NO_DAEMON
   delete m_controlServer;
-#endif
+  #endif
 }

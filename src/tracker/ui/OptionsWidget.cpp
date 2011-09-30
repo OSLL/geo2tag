@@ -23,7 +23,6 @@
 #include "inc/ByteSpinBox.h"
 #include "defines.h"
 
-
 OptionsWidget::OptionsWidget(QString productName,QWidget *parent) :
 QScrollArea(parent), m_productName(productName), m_settings(QSettings::SystemScope,"osll",m_productName)
 {
@@ -113,6 +112,7 @@ QScrollArea(parent), m_productName(productName), m_settings(QSettings::SystemSco
   applyProxySettings();
 }
 
+
 void OptionsWidget::applyProxySettings()
 {
   QNetworkProxy proxy;
@@ -123,6 +123,7 @@ void OptionsWidget::applyProxySettings()
   proxy.setPort(m_proxyPortEdit->value());
   QNetworkProxy::setApplicationProxy(proxy);
 }
+
 
 QString OptionsWidget::name()
 {
