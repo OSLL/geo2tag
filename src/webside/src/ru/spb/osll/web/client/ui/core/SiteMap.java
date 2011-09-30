@@ -5,14 +5,22 @@ import java.util.Map;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public class SiteMap {
+public abstract class SiteMap {
 	SimpleMenu m_menu;
 	private Map<String, Widget> m_siteMap = new HashMap<String, Widget>();
 	
-	public SiteMap(SimpleMenu menu){
-		m_menu = menu;
+	protected abstract SimpleMenu createMenu();
+	protected abstract void initSiteMap();
+	
+	public SiteMap(){
+		m_menu = createMenu();
+		initSiteMap();
 	}
 
+	public SimpleMenu getMenu(){
+		return m_menu;
+	}
+	
 	protected void addWidget(Widget w){
 		m_siteMap.put(getToken(w), w);
 	}

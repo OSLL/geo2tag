@@ -30,9 +30,6 @@ public class OSMWidget extends BaseMapWidget {
 	private Popup m_curPopup;
 	private List<Popup> m_labels;
 	
-	private int m_zoom = 12;
-	private LonLat m_center;
-	
 	@Override
 	protected Widget onInitializeMap() {
 		m_labels= new ArrayList<Popup>();
@@ -64,23 +61,20 @@ public class OSMWidget extends BaseMapWidget {
 		m_markers = new Markers("Markers");
 		map.addLayer(m_markers);
 		
-		map.addMapZoomListener(new MapZoomListener() {
-			@Override
-			public void onMapZoom(MapZoomEvent eventObject) {
-				m_zoom = map.getZoom();
-			}
-		});
-		map.addMapMoveListener(new MapMoveListener() {
-			@Override
-			public void onMapMove(MapMoveEvent eventObject) {
-				m_center = map.getCenter();
-			}
-		});
+//		map.addMapZoomListener(new MapZoomListener() {
+//			@Override
+//			public void onMapZoom(MapZoomEvent eventObject) {
+//				m_zoom = map.getZoom();
+//			}
+//		});
+//		map.addMapMoveListener(new MapMoveListener() {
+//			@Override
+//			public void onMapMove(MapMoveEvent eventObject) {
+//				m_center = map.getCenter();
+//			}
+//		});
 		
-		m_center = new LonLat(30.606215, 59.870569);
-		m_center.transform("EPSG:4326", "EPSG:900913");
-		m_zoom = 8;
-		map.setCenter(m_center, m_zoom);
+		setMapCenter(30.606215, 59.870569, 8);
 		return m_mapWidget;
 	}
 	
@@ -90,16 +84,9 @@ public class OSMWidget extends BaseMapWidget {
 		if (tags == null || tags.size() == 0){
 			return;
 		}
-
 		final Map map = m_mapWidget.getMap(); 
-		if (m_center != null) {
-			map.setCenter(m_center, m_zoom);
-		} else {
-			final Tag initTag = tags.get(0);
-			LonLat lonLat = new LonLat(initTag.getLongitude(), initTag.getLatitude());
-			lonLat.transform("EPSG:4326", "EPSG:900913");
-			map.setCenter(lonLat, m_zoom);
-		}
+		final Tag initTag = tags.get(0);
+		setMapCenter(initTag.getLongitude(), initTag.getLatitude(), 10);
 		
 		for (Tag tag : tags) {
 			final LonLat longLat = new LonLat(tag.getLongitude(), tag.getLatitude());
@@ -157,4 +144,11 @@ public class OSMWidget extends BaseMapWidget {
 		frame.setPanMapIfOutOfView(true);
 		return frame; 
 	}
+	
+	private void setMapCenter(double lon, double lat, int zoom){
+		LonLat center = new LonLat(lon, lat);
+		center.transform("EPSG:4326", "EPSG:900913");
+		m_mapWidget.getMap().setCenter(center, zoom);
+	}
+	
 }

@@ -5,10 +5,6 @@ import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
-import ru.spb.osll.web.client.ui.widgets.Channels;
-import ru.spb.osll.web.client.ui.widgets.HomePage;
-import ru.spb.osll.web.client.ui.widgets.LoginWidget;
-import ru.spb.osll.web.client.ui.widgets.RegistrationWidget;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.TableElement;
@@ -20,11 +16,9 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
+
+import com.google.gwt.user.client.ui.*;
+import ru.spb.osll.web.client.ui.widgets.*;
 
 public class GTShell extends Composite {
 
@@ -42,9 +36,7 @@ public class GTShell extends Composite {
 	
 	private Anchor m_authLink;
 	private Anchor m_regLink;
-	private GTMenu m_mainMenu;
 	private GTSiteMap m_siteMap;
-//	private Map<String, Widget> m_widgetsCache = new HashMap<String, Widget>();
 	
 	public static GTShell Instance;
 	
@@ -52,10 +44,8 @@ public class GTShell extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		Instance = this;
 		
-		m_mainMenu = new GTMenu();
-		m_siteMap = new GTSiteMap(m_mainMenu);
-		
-		mainMenuContainer.add(m_mainMenu);
+		m_siteMap = new GTSiteMap();
+		mainMenuContainer.add(m_siteMap.getMenu());
 
 		m_regLink = new Anchor(Localizer.res().registration());
 		m_regLink.addClickHandler(m_regHandler);
@@ -81,7 +71,6 @@ public class GTShell extends Composite {
 
 	private void setContent(Widget content, boolean useHistory) {
 		if (content == null){
-			setDefaultContent();
 			return;
 		}
 		
@@ -89,7 +78,7 @@ public class GTShell extends Composite {
 		if (useHistory) {
 			History.newItem(token, false);
 		}
-		m_mainMenu.setSecectedGroup(content);
+		m_siteMap.getMenu().setSecectedGroup(content);
 		contentPanel.setWidget(content);   
 	}
 
@@ -104,29 +93,9 @@ public class GTShell extends Composite {
 		}
 	}
 	
-	private void initHistoryListener(){
-		History.addValueChangeHandler(new ValueChangeHandler<String>() {
-			public void onValueChange(ValueChangeEvent<String> event) {
-				final String t = event.getValue();
-				final Widget w = m_siteMap.getWidget(t);
-				if (w instanceof SimpleComposite){
-					((SimpleComposite) w).resume();
-				}
-				setContent(w, false);
-			}
-		});
-		final String t = History.getToken();
-		GWT.log("initHistoryListener " + t);
-		final Widget w = m_siteMap.getWidget(t);
-		if (w instanceof SimpleComposite){
-			((SimpleComposite) w).resume();
-		}
-		setContent(w, false);
-	}
-	
 	protected void initStartWidget(){
 		setContent(HomePage.Instance(), false);
-
+		
 		LoginServiceAsync service = LoginService.Util.getInstance();
 		service.isAuthorized(new AsyncCallback<User>() {
 			@Override
@@ -139,6 +108,23 @@ public class GTShell extends Composite {
 				GWT.log("initStartWidget", caught);
 			}
 		});
+	}
+	
+	private void initHistoryListener(){
+		History.addValueChangeHandler(new ValueChangeHandler<String>() {
+			public void onValueChange(ValueChangeEvent<String> event) {
+				setContentByToken(event.getValue(), false);
+			}
+		});
+		setContentByToken(History.getToken(), false);
+	}
+
+	private void setContentByToken(String t, boolean useHistory){
+		final Widget w = m_siteMap.getWidget(t);
+		if (w instanceof SimpleComposite){
+			((SimpleComposite) w).resume();
+		}
+		setContent(w, false);
 	}
 	
 	protected void initDefaultWidget(){
