@@ -25,7 +25,6 @@ linux: {
   SUBDIRS += \
              json json/tst \
              http_requests \
-             maps \ 
              service \
              common/tst
 #             tracker/observer \
