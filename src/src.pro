@@ -25,7 +25,6 @@ linux: {
   SUBDIRS += \
              json json/tst \
              http_requests \
-             maps \ 
              service \
              tracker/observer \
 	     tracker/clients/meego/tst \
