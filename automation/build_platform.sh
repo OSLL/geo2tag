@@ -10,11 +10,20 @@
 
 # First parametr of this script - name of the branch, wich platform will be builded and tested
 
+platform_repo="geo2tag-platform-repo"
 dir_automation="$WEBGEO_HOME/automation"
-dir_geo2tag="${dir_automation}/geo2tag"
+dir_geo2tag="${dir_automation}/${platform_repo}"
 dir_log="${dir_automation}/platform_logs"
 dir_backup="${dir_automation}/platform_backup"
+
 branch="$1"
+last_commit="$2"
+AIROMO_FLAG="$3"
+
+if [ "$AIROMO_FLAG" == "AIROMO" ] ; then
+        platform_repo="airomo-platform-repo"
+        dir_geo2tag="${dir_automation}/${platform_repo}"
+fi
 
 # If branch name is "web-devel" then exit
 if [ "$branch" == "web-devel" ]
@@ -25,8 +34,11 @@ fi
 if [ -e $dir_geo2tag ]; then
         echo "geo2tag directory exists" 
 else
-        echo "geo2tag directory does not exists"
-        git clone git://github.com/OSLL/geo2tag.git
+	if [ "$AIROMO_FLAG" == "AIROMO" ] ; then
+                git clone ssh://airomo@repo.osll.spb.ru/git/airomo ${platform_repo}
+        else
+                git clone git://github.com/OSLL/geo2tag.git ${platform_repo}
+        fi
 fi
 
 #CREATE LOGS
@@ -40,8 +52,6 @@ cd $dir_geo2tag
 #git stash >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 git pull --all >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 git checkout $branch >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
-
-
 
 #BUILD deb
 
@@ -59,7 +69,7 @@ then
 	#UNIT TESTING
 
 	echo "Unit testing:"  >>${dir_log}/test.log.txt
-	${dir_automation}/geo2tag/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
+	${dir_automation}/${dir_geo2tag}/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 
 	# DEPLOY and TEST only if branch is devel
 	if [ "$branch" == "devel" ]
@@ -104,9 +114,9 @@ rm -rf wikigps*
 echo "E-mailing!"
 if [ "$branch" == "devel" ]
 then
-	ant -f mail_sender.xml -Dsubject "geo2tag-platform devel ($status): integration reports " -Dlogdir "platform_logs" 
+	ant -f mail_sender.xml -Dsubject "geo2tag-platform devel ($status) ${last_commit}: integration reports " -Dlogdir "platform_logs" 
 else
-	ant -f mail_sender.xml -Dsubject "geo2tag-platform $branch ($status): build and test reports " -Dlogdir "platform_logs"
+	ant -f mail_sender.xml -Dsubject "geo2tag-platform $branch ($status) ${last_commit}: build and test reports " -Dlogdir "platform_logs"
 fi
 echo "" > ${dir_log}/build.log.txt
 echo "" > ${dir_log}/deploy.log.txt
