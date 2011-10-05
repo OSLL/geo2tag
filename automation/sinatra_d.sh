@@ -36,7 +36,7 @@ if [ "$target" == "restart" ] ; then
 	/etc/init.d/lighttpd stop
 	cd ${dir_automation}
 	ruby1.8 refresh.rb &
-	/etc/init.d/lighttpd stop
+	/etc/init.d/lighttpd start
 	
 	echo "sinatra restarted ...";
 fi
