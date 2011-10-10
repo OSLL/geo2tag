@@ -69,7 +69,7 @@ then
 	#UNIT TESTING
 
 	echo "Unit testing:"  >>${dir_log}/test.log.txt
-	${dir_automation}/${dir_geo2tag}/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
+	${dir_geo2tag}/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 
 	# DEPLOY and TEST only if branch is devel
 	if [ "$branch" == "devel" ]
