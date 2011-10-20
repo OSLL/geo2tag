@@ -88,7 +88,7 @@ public class HomePage extends SimpleComposite {
 		
 		@Override
 		protected ImageResource getImage() {
-			return Images.res().comingSoonLogo();
+			return Images.res().globeLogo();
 		}
 
 		@Override
