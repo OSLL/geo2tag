@@ -8,8 +8,9 @@ index_html="/var/www/index.html"
 #index_html="index.html"
 
 #Reading and Printing the values.
-echo '<img src="images/coming_soon_logo.png" border="0"><br>' > $index_html
-echo '<p align="center">' >> $index_html
+
+echo '<p align="center">' > $index_html
+echo '<img src="images/globe-150x150.jpg" border="0"><br>' >> $index_html
 echo '<font size="7">Current build</font><br>' >> $index_html
 echo "<font size=\"6\">Version: ${version}</font><br>" >> $index_html
 echo "<font size=\"6\">Date of deploy: ${deployDate} </font><br>" >> $index_html
