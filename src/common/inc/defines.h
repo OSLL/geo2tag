@@ -53,15 +53,15 @@ void setServerPort(int port);
 // "demo"
 #define DATABASE_NAME "geo2tag"
 
-#define SUBSCRIBE_HTTP_URL        getServerUrl()+QString("service?query=subscribe")
-#define UNSUBSCRIBE_HTTP_URL      getServerUrl()+QString("service?query=unsubscribe")
-#define APPLY_HTTP_URL            getServerUrl()+QString("service?query=apply")
-#define FEED_HTTP_URL             getServerUrl()+QString("service?query=rss")
-#define SUBSCRIBED_LIST_HTTP_URL  getServerUrl()+QString("service?query=subscribed")
-#define AVAILABLE_LIST_HTTP_URL   getServerUrl()+QString("service?query=channels")
-#define LOGIN_HTTP_URL            getServerUrl()+QString("service?query=login")
-#define APPLY_CHANNEL_HTTP_URL    getServerUrl()+QString("service?query=addChannel")
-#define ADD_USER_HTTP_URL         getServerUrl()+QString("service?query=addUser")
+#define SUBSCRIBE_HTTP_URL        getServerUrl()+QString("service/subscribe")
+#define UNSUBSCRIBE_HTTP_URL      getServerUrl()+QString("service/unsubscribe")
+#define APPLY_HTTP_URL            getServerUrl()+QString("service/apply")
+#define FEED_HTTP_URL             getServerUrl()+QString("service/rss")
+#define SUBSCRIBED_LIST_HTTP_URL  getServerUrl()+QString("service/subscribed")
+#define AVAILABLE_LIST_HTTP_URL   getServerUrl()+QString("service/channels")
+#define LOGIN_HTTP_URL            getServerUrl()+QString("service/login")
+#define APPLY_CHANNEL_HTTP_URL    getServerUrl()+QString("service/addChannel")
+#define ADD_USER_HTTP_URL         getServerUrl()+QString("service/addUser")
 
 #define GPS_MODELLER_FILE         "/usr/share/wikigps/helsinki.gpx"
 #define CONFIG_FILE               "/usr/share/wikigps/wikigps.conf"

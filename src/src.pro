@@ -26,8 +26,8 @@ linux: {
              json json/tst \
              http_requests \
              service \
-             tracker/observer \
 	     tracker/clients/meego/tst \
-             common/tst
-#             tracker/observer \
+             common/tst \
+	     maps \
+             tracker/observer
 }

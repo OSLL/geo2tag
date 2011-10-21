@@ -73,12 +73,19 @@ QMap<QString, QString> parseQuery(const QString& string)
   return map;
 }
 
-
-QByteArray Server::process(const QString& query, const QByteArray &data)
+QString Server::extractRESTQuery()
 {
-  QMap<QString, QString> queryParameters = parseQuery(query);
+  QString query_string(FCGX_GetParam("PATH_INFO", m_cgi.envp));
+// remove first simbol - slash
+  return query_string.right(query_string.size()-1);
+}
+
+QByteArray Server::process( const QByteArray &data)
+{
+//  QMap<QString, QString> queryParameters = parseQuery(query);
   common::DbObjectsCollection &dboc = common::DbObjectsCollection::getInstance();
-  QByteArray result = dboc.process(queryParameters.value("query"), data);
+//  QByteArray result = dboc.process(queryParameters.value("query"), data);
+  QByteArray result = dboc.process(extractRESTQuery(), data);
   return result;
 }
 
@@ -114,7 +121,7 @@ void Server::run()
     QByteArray queryBody, response;
     extractIncomingData(m_cgi,queryString,queryBody);
     syslog(LOG_INFO, "query: %s", queryString.toStdString().c_str());
-    response = process(queryString, queryBody);
+    response = process( queryBody);
     int written = FCGX_PutStr(response.data(), response.size(), m_cgi.out);
     if(written != response.size())
     {
