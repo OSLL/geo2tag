@@ -72,7 +72,7 @@ then
 	${dir_geo2tag}/run_tests.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 
 	# DEPLOY and TEST only if branch is devel
-	if [ "$branch" == "devel" ]
+	if [ "$branch" == "devel" ] && [ "$AIROMO_FLAG" != "AIROMO" ]
 	then
 
 		#DEPLOY
@@ -114,9 +114,9 @@ rm -rf wikigps*
 echo "E-mailing!"
 if [ "$branch" == "devel" ]
 then
-	ant -f mail_sender.xml -Dsubject "geo2tag-platform devel ($status) ${last_commit}: integration reports " -Dlogdir "platform_logs" 
+	ant -f mail_sender.xml -Dsubject "geo2tag-platform devel ($status) ${AIROMO_FLAG} ${last_commit}: integration reports " -Dlogdir "platform_logs" 
 else
-	ant -f mail_sender.xml -Dsubject "geo2tag-platform $branch ($status) ${last_commit}: build and test reports " -Dlogdir "platform_logs"
+	ant -f mail_sender.xml -Dsubject "geo2tag-platform $branch ($status) ${AIROMO_FLAG} ${last_commit}: build and test reports " -Dlogdir "platform_logs"
 fi
 echo "" > ${dir_log}/build.log.txt
 echo "" > ${dir_log}/deploy.log.txt
