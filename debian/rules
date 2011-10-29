@@ -74,9 +74,9 @@ install: build unittest
 #		install -d $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp $(BUILDDIR)/service/wikigps-service.conf $(CURDIR)/debian/tmp/etc/lighttpd/conf-enabled; \
 		cp $(BUILDDIR)/service/pg_hba.conf $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp $(BUILDDIR)/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; \
-		cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
+		cp $(BUILDDIR)/service/fcgi_server $(CURDIR)/debian/tmp/opt/geo2tag; 
+		cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; 
+#		cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; 
 #	fi;
 #	cp $(BUILDDIR)tracker/wikigpsTracker $(CURDIR)/debian/tmp/etc/event.d; 

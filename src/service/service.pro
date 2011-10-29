@@ -12,8 +12,8 @@ conf_lighttpd.path = /etc/lighttpd/conf-enabled
 postgre_conf.files = pg_hba.conf
 postgre_conf.path = /opt/geo2tag/
 
-#db_content.files = base.sql
-#db_content.path = /opt/geo2tag/
+db_content.files = base.sql
+db_content.path = /opt/geo2tag/
 
 odbc_configs.files = ../../scripts/odbc.ini ../../scripts/odbcinst.ini
 odbc_configs.path = /opt/geo2tag/
