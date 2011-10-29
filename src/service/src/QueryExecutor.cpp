@@ -4,6 +4,7 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QVariant>
+#include <QString>
 #include "QueryExecutor.h"
 
 #include "DataMarkInternal.h"
@@ -78,8 +79,11 @@ const QString QueryExecutor::generateNewToken(const QString& login,const QString
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
   bool result;
-  QSqlQuery newTagQuery(m_database);
   qlonglong newId = nextTagKey();
+
+  syslog(LOG_INFO, "%s", QString("insertNewTag-start-").append(QString::number(newId)).toStdString().c_str());
+
+  QSqlQuery newTagQuery(m_database);
   newTagQuery.prepare("insert into tag (latitude, longitude, label, description, url, user_id, time, id) "
     "         values(:latitude,:longitude,:label,:description,:url,:user_id,:time,:id);");
   newTagQuery.bindValue(":latitude", tag->getLatitude());
@@ -91,33 +95,49 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
   newTagQuery.bindValue(":time", tag->getTime().toUTC());
   newTagQuery.bindValue(":id", newId);
 
+  syslog(LOG_INFO, "%s", QString("insertNewTag-step-0-").append(QString::number(newId)).toStdString().c_str());
+
   QSqlQuery putTagToChannelQuery(m_database);
   putTagToChannelQuery.prepare("insert into tags (tag_id,channel_id) values(:tag_id,:channel_id);");
   putTagToChannelQuery.bindValue(":tag_id",newId);
   putTagToChannelQuery.bindValue(":channel_id",tag->getChannel()->getId());
 
+  syslog(LOG_INFO, "%s", QString("insertNewTag-step-1-").append(QString::number(newId)).toStdString().c_str());
+
   m_database.transaction();
+
+  syslog(LOG_INFO, "%s", QString("insertNewTag-step-2-").append(QString::number(newId)).toStdString().c_str());
 
   result = newTagQuery.exec();
   if(!result)
   {
     m_database.rollback();
+    syslog(LOG_INFO, "%s", QString("insertNewTag-step-31-").append(QString::number(newId)).toStdString().c_str());
     return QSharedPointer<DataMark>(NULL);
   }
+  syslog(LOG_INFO, "%s", QString("insertNewTag-step-32-").append(QString::number(newId)).toStdString().c_str());
+
   result = putTagToChannelQuery.exec();
   if(!result)
   {
     m_database.rollback();
+    syslog(LOG_INFO, "%s", QString("insertNewTag-step-41-").append(QString::number(newId)).toStdString().c_str());
     return QSharedPointer<DataMark>(NULL);
   }
+  syslog(LOG_INFO, "%s", QString("insertNewTag-step-42-").append(QString::number(newId)).toStdString().c_str());
 
   m_database.commit();
+
+  syslog(LOG_INFO, "%s", QString("insertNewTag-step-5-").append(QString::number(newId)).toStdString().c_str());
 
   QSharedPointer<DataMark> t(
     new DbDataMark(newId,tag->getLatitude(),tag->getLongitude(),tag->getLabel(),
     tag->getDescription(),tag->getUrl(),tag->getTime(),tag->getUser()->getId()));
   t->setUser(tag->getUser());
   t->setChannel(tag->getChannel());
+
+  syslog(LOG_INFO, "%s", QString("insertNewTag-end-").append(QString::number(newId)).toStdString().c_str());
+
   return t;
 }
 
