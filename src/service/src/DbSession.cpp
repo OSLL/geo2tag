@@ -279,8 +279,11 @@ namespace common
     syslog(LOG_INFO, "%s", QString("m_updateThread-lock").append(QString::number(realTag->getId())).toStdString().c_str());
     
     m_updateThread->lockWriting();
+    syslog(LOG_INFO, "%s", QString("lockWriting").append(QString::number(realTag->getId())).toStdString().c_str());
     m_tagsContainer->push_back(realTag);
+    syslog(LOG_INFO, "%s", QString("push_back(realTag)").append(QString::number(realTag->getId())).toStdString().c_str());
     m_dataChannelsMap->insert(realChannel, realTag);
+    syslog(LOG_INFO, "%s", QString("insert(realChannel, realTag)").append(QString::number(realTag->getId())).toStdString().c_str());
     m_updateThread->unlockWriting();
 
     syslog(LOG_INFO, "%s", QString("m_updateThread-unlock").append(QString::number(realTag->getId())).toStdString().c_str());
