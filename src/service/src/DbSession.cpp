@@ -275,14 +275,22 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
+
+    syslog(LOG_INFO, "%s", QString("m_updateThread-lock").append(QString::number(realTag->getId())).toStdString().c_str());
+    
     m_updateThread->lockWriting();
     m_tagsContainer->push_back(realTag);
     m_dataChannelsMap->insert(realChannel, realTag);
     m_updateThread->unlockWriting();
 
+    syslog(LOG_INFO, "%s", QString("m_updateThread-unlock").append(QString::number(realTag->getId())).toStdString().c_str());
+
     response.setStatus(ok);
     response.setStatusMessage("Tag has been added");
     response.addTag(realTag);
+
+    syslog(LOG_INFO, "%s", QString("pre-getJson()").append(QString::number(realTag->getId())).toStdString().c_str());
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
