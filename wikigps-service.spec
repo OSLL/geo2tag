@@ -4,7 +4,7 @@
 Name:           wikigps-service
 Version:        0.1.7
 Release:        1%{?dist}
-Summary:        Libs and Geo2Tag platform
+Summary:        Libs and Geo2Tag platform.
 
 Group:          System Tools
 License:        GPL
