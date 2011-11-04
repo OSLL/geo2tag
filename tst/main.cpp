@@ -9,7 +9,7 @@ int main(int argc, char **argv)
   common::DataMarks marks;
   common::DataMark m;
   m.m_name = 'A';
-  m.m_latitude = 60.;
+  m.m_latitude = 60.1;
   m.m_longitude = 30.;
   m.m_description = "Hello";
   marks.push_back(m);
