@@ -84,6 +84,9 @@
 #include "AvailableChannelsRequestJSON.h"
 #include "AvailableChannelsResponseJSON.h"
 
+#include "UnsubscribeChannelRequestJSON.h"
+#include "UnsubscribeChannelResponseJSON.h"
+
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
 
@@ -119,6 +122,7 @@ namespace common
     m_processors.insert("setDefaultTimeSlot", &DbObjectsCollection::processSetDefaultTimeSlotQuery);
     m_processors.insert("setDefaultTimeSlotMark", &DbObjectsCollection::processSetDefaultTimeSlotMarkQuery);
     m_processors.insert("channels", &DbObjectsCollection::processAvailableChannelsQuery);
+    m_processors.insert("unsubscribe", &DbObjectsCollection::processUnsubscribeQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -410,6 +414,18 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
+
+    QSharedPointer<Channels>  subscribedChannels = realUser->getSubscribedChannels();
+    for(int i=0; i<subscribedChannels->size(); i++)
+    {
+      if(subscribedChannels->at(i)->getName() == realChannel->getName())
+      {
+        response.setStatus(error);
+        response.setStatusMessage("Already subscribed");
+        answer.append(response.getJson());
+        return answer;
+      }
+    }
     syslog(LOG_INFO, "Sending sql request for SubscribeQuery");
     bool result = m_queryExecutor->subscribeChannel(realUser,realChannel);
     if(!result)
@@ -420,7 +436,7 @@ namespace common
       return answer;
     }
     m_updateThread->lockWriting();
-    realUser->subscribe(dummyChannel);
+    realUser->subscribe(realChannel);
     m_updateThread->unlockWriting();
 
     response.setStatus(ok);
@@ -1060,6 +1076,62 @@ namespace common
     }
     response.setChannels(m_channelsContainer);
     response.setStatus("Ok");
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
+  QByteArray DbObjectsCollection::processUnsubscribeQuery(const QByteArray &data)
+  {
+    UnsubscribeChannelRequestJSON request;
+    UnsubscribeChannelResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    request.parseJson(data);
+    QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
+    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+
+    if(realUser.isNull())
+    {
+      response.setStatus(error);
+      response.setStatusMessage("Wrong authentification key");
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
+
+    QSharedPointer<Channel> realChannel;// Null pointer
+    QSharedPointer<Channels> subscribedChannels = realUser->getSubscribedChannels();
+    for(int i=0; i<subscribedChannels->size(); i++)
+    {
+      if(subscribedChannels->at(i)->getName() == dummyChannel->getName())
+      {
+        realChannel = subscribedChannels->at(i);
+      }
+    }
+    if(realChannel.isNull())
+    {
+      response.setStatus(error);
+      response.setStatusMessage("Channel is not from subscribed channels");
+      answer.append(response.getJson());
+      return answer;
+    }
+    syslog(LOG_INFO, "Sending sql request for SubscribeQuery");
+    bool result = m_queryExecutor->unsubscribeChannel(realUser,realChannel);
+    if(!result)
+    {
+      response.setStatus(error);
+      response.setStatusMessage("Internal server error ):");
+      answer.append(response.getJson());
+      return answer;
+    }
+    m_updateThread->lockWriting();
+    realUser->unsubscribe(realChannel);
+    m_updateThread->unlockWriting();
+
+    response.setStatus(ok);
+    response.setStatusMessage("Channel unsubscribed");
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;

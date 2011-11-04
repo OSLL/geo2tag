@@ -411,3 +411,27 @@ bool QueryExecutor::deleteMarkTimeSlot(const QSharedPointer<DataMark>& tag)
   }
   return result;
 }
+
+bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel)
+{
+  bool result;
+  QSqlQuery deleteSubscribtion(m_database);
+  deleteSubscribtion.prepare("delete from subscribe where channel_id = :channel_id AND user_id = :user_id;");
+  deleteSubscribtion.bindValue(":channel_id",channel->getId());
+  deleteSubscribtion.bindValue(":user_id",user->getId());
+  syslog(LOG_INFO,"Unsubscribing %s (Id = %lld) for %s (Id = %lld)",user->getLogin().toStdString().c_str(),user->getId(),
+    channel->getName().toStdString().c_str(),channel->getId());
+
+  m_database.transaction();
+  result=deleteSubscribtion.exec();
+  if(!result)
+  {
+    syslog(LOG_INFO,"Rollback for unsubscribeChannel sql query");
+    m_database.rollback();
+  }else
+  {
+    syslog(LOG_INFO,"Commit for unsubscribeChannel sql query");
+    m_database.commit();
+  }
+  return result;
+}

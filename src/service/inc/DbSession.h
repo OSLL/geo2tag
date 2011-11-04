@@ -90,6 +90,7 @@ namespace common
     QByteArray processAddNewMarkQuery(const QByteArray&);
     QByteArray processRssFeedQuery(const QByteArray&);
     QByteArray processSubscribeQuery(const QByteArray&);
+    QByteArray processUnsubscribeQuery(const QByteArray&);
     QByteArray processAddUserQuery(const QByteArray&);
     QByteArray processAddChannelQuery(const QByteArray&);
     QByteArray processGetTimeSlotQuery(const QByteArray&);

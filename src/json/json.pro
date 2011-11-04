@@ -30,7 +30,7 @@ HEADERS += \
            inc/AddNewMarkRequestJSON.h \
            inc/AddNewMarkResponseJSON.h \
            inc/SubscribeChannelResponseJSON.h \
-           inc/UnsubscribeChannelResponse.h \
+           inc/UnsubscribeChannelResponseJSON.h \
            inc/SubscribedChannelsRequestJSON.h \
            inc/SubscribedChannelsResponseJSON.h \
            inc/AddChannelRequestJSON.h \
