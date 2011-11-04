@@ -81,6 +81,9 @@
 #include "SetDefaultTimeSlotMarkRequestJSON.h"
 #include "SetDefaultTimeSlotMarkResponseJSON.h"
 
+#include "AvailableChannelsRequestJSON.h"
+#include "AvailableChannelsResponseJSON.h"
+
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
 
@@ -115,6 +118,7 @@ namespace common
     m_processors.insert("setTimeSlotMark", &DbObjectsCollection::processSetTimeSlotMarkQuery);
     m_processors.insert("setDefaultTimeSlot", &DbObjectsCollection::processSetDefaultTimeSlotQuery);
     m_processors.insert("setDefaultTimeSlotMark", &DbObjectsCollection::processSetDefaultTimeSlotMarkQuery);
+    m_processors.insert("channels", &DbObjectsCollection::processAvailableChannelsQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -1038,6 +1042,28 @@ namespace common
 
   }
 
+  QByteArray DbObjectsCollection::processAvailableChannelsQuery(const QByteArray &data)
+  {
+    AvailableChannelsRequestJSON request;
+    AvailableChannelsResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    request.parseJson(data);
+    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    if(realUser.isNull())
+    {
+      response.setStatus("Error");
+      response.setStatusMessage("Wrong authentification key");
+      answer.append(response.getJson());
+      return answer;
+    }
+    response.setChannels(m_channelsContainer);
+    response.setStatus("Ok");
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
 }                                       // namespace common
 
 

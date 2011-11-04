@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
+ * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,36 +28,23 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file ChannelListJSON.h
- * \brief header of ChannelListJSON
+
+/*! ---------------------------------------------------------------
+ * \file AvailableChannelsRequestJSON.h
+ * \brief Header of AvailableChannelsRequestJSON
+ * \todo add comment here
  *
  * File description
  *
- *  PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#ifndef _ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
-#define _ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
 
-#include "JsonSerializer.h"
+#ifndef _AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_
+#define _AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_
 
-class ChannelListResponseJSON: public JsonSerializer
-{
-  public:
-    ChannelListResponseJSON(QObject *parent=0);
+#include "RSSFeedRequestJSON.h"
 
-    void setChannels(QSharedPointer<Channels> channels);
+typedef RSSFeedRequestJSON AvailableChannelsRequestJSON;
 
-    virtual QByteArray getJson() const;
-
-    virtual void parseJson(const QByteArray&);
-
-    virtual ~ChannelListResponseJSON();
-
-    //class ChannelListJSON
-};
-//_ChannelListJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
-#endif
-
-/* ===[ End of file $HeadURL$ ]=== */
+#endif //_AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_

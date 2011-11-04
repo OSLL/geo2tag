@@ -43,28 +43,28 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#include "ChannelListJSON.h"
+#include "AvailableChannelsResponseJSON.h"
 #include "JsonChannel.h"
 
-ChannelListResponseJSON::ChannelListResponseJSON(QObject *parent) : JsonSerializer(parent)
+AvailableChannelsResponseJSON::AvailableChannelsResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 
 }
 
 
-ChannelListResponseJSON::~ChannelListResponseJSON()
+AvailableChannelsResponseJSON::~AvailableChannelsResponseJSON()
 {
 
 }
 
 
-void ChannelListResponseJSON::setChannels(QSharedPointer<Channels> channels)
+void AvailableChannelsResponseJSON::setChannels(QSharedPointer<Channels> channels)
 {
   if (!channels.isNull()) m_channelsContainer=channels;
 }
 
 
-void ChannelListResponseJSON::parseJson(const QByteArray &data)
+void AvailableChannelsResponseJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
   QJson::Parser parser;
@@ -90,7 +90,7 @@ void ChannelListResponseJSON::parseJson(const QByteArray &data)
 }
 
 
-QByteArray ChannelListResponseJSON::getJson() const
+QByteArray AvailableChannelsResponseJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantList channelsList;

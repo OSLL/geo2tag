@@ -12,7 +12,8 @@ INCLUDEPATH += . inc \
 
 # Input
 HEADERS += \
-           inc/ChannelListJSON.h \
+           inc/AvailableChannelsResponseJSON.h \
+           inc/AvailableChannelsRequestJSON.h \
            inc/RSSFeedJSON.h \
            inc/RSSFeedRequestJSON.h \
            inc/SubscribeChannelJSON.h \
@@ -49,7 +50,7 @@ HEADERS += \
            inc/SetDefaultTimeSlotResponseJSON.h
 
 SOURCES += \
-           src/ChannelListJSON.cpp \
+           src/AvailableChannelsResponseJSON.cpp \
            src/RSSFeedJSON.cpp \
            src/RSSFeedRequestJSON.cpp \
            src/SubscribeChannelJSON.cpp \

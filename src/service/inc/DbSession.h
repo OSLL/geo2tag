@@ -86,6 +86,7 @@ namespace common
 
     QByteArray processLoginQuery(const QByteArray&);
     QByteArray processSubscribedChannelsQuery(const QByteArray&);
+    QByteArray processAvailableChannelsQuery(const QByteArray&);
     QByteArray processAddNewMarkQuery(const QByteArray&);
     QByteArray processRssFeedQuery(const QByteArray&);
     QByteArray processSubscribeQuery(const QByteArray&);

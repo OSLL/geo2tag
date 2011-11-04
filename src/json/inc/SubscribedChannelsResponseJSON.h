@@ -1,8 +1,8 @@
 #ifndef SUBSCRIBEDCHANNELSRESPONSEJSON_H
 #define SUBSCRIBEDCHANNELSRESPONSEJSON_H
 
-#include "ChannelListJSON.h"
+#include "AvailableChannelsResponseJSON.h"
 
-typedef ChannelListResponseJSON SubscribedChannelsResponseJSON;
+typedef AvailableChannelsResponseJSON SubscribedChannelsResponseJSON;
 // SUBSCRIBEDCHANNELSRESPONSEJSON_H
 #endif
