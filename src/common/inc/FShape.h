@@ -49,7 +49,7 @@
 class FShape
 {
 public:
-  virtual bool filtrate(const QSharedPointer<DataMark> &mark);
+  virtual bool filtrate(const QSharedPointer<DataMark> &mark) = 0;
 
 }; // class Filter
 
