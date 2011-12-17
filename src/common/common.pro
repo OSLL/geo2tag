@@ -31,7 +31,8 @@ HEADERS += \
     inc/DataChannel.h\
     inc/TimeSlot.h \
     inc/ChannelAction.h\
-		inc/DataMarks.h
+    inc/DataMarks.h \
+    inc/ErrnoTypes.h
 
 SOURCES += \
     src/TimeSlot.cpp \
@@ -40,7 +41,8 @@ SOURCES += \
     src/ChannelAction.cpp \
     src/GpsInfo.cpp \ 
     src/DataMarks.cpp \
-    src/defines.cpp
+    src/defines.cpp \
+    src/ErrnoTypes.cpp
 
 linux: {
     HEADERS += inc/GpsModeller.h

@@ -53,8 +53,9 @@
 class DataMark: public QObject
 {
   Q_OBJECT
-    double m_latitude;
+  double m_latitude;
   double m_longitude;
+  double m_altitude;
 
   QString m_label;
   QString m_description;
@@ -70,7 +71,7 @@ class DataMark: public QObject
   public:
 
     DataMark(double latitude, double longitude, QString label,
-      QString description, QString url, QDateTime time);
+      QString description, QString url, QDateTime time);      // TODO add altitude to constructor
 
     void setUser(QSharedPointer<common::User> user);
 
@@ -88,6 +89,9 @@ class DataMark: public QObject
 
     double getLongitude() const;
     void setLongitude(const double&);
+
+    double getAltitude() const;
+    void setAltitude(const double&);
 
     const QString& getLabel() const;
     void setLabel(const QString&);
