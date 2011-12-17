@@ -45,7 +45,7 @@
 
 #include "Filter.h"
 
-class AltitudeFilter : Filter
+class AltitudeFilter : public Filter
 {
   double m_alt1;
   double m_alt2;

@@ -46,7 +46,7 @@
 #include <QSharedPointer>
 #include "FShape.h"
 
-class FShapeCircle : FShape
+class FShapeCircle : public FShape
 {
   double m_lat;
   double m_lon;

@@ -46,7 +46,7 @@
 #include "Filter.h"
 #include "FShape.h"
 
-class ShapeFilter : Filter
+class ShapeFilter : public Filter
 {
   QSharedPointer<FShape> m_shape;
 

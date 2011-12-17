@@ -46,7 +46,7 @@
 #include <QDateTime>
 #include "Filter.h"
 
-class TimeFilter : Filter
+class TimeFilter : public Filter
 {
   QDateTime m_timeFrom;
   QDateTime m_timeTo;

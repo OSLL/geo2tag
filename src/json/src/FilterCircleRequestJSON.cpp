@@ -42,6 +42,7 @@
 #include "FilterCircleRequestJSON.h"
 #include "JsonUser.h"
 
+
 #ifndef Q_WS_SYMBIAN
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -81,5 +82,12 @@ void FilterCircleRequestJSON::parseJson(const QByteArray&data)
   double latitude = result["latitude"].toDouble(&ok);
   double longitude = result["longitude"].toDouble(&ok);
   double radius = result["radius"].toDouble(&ok);
+
+  m_circle = QSharedPointer<FShape>(new FShapeCircle(latitude, longitude, radius));
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("null", "null", authToken)));
+}
+
+QSharedPointer<FShape> FilterCircleRequestJSON::getCircle()
+{
+  return m_circle;
 }

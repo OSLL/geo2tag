@@ -44,15 +44,20 @@
 #define _Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
 
 #include <QList>
+#include "Filter.h"
 
 class Filtration
 {
-//  QList<>
+  QList<Filter *> m_filters;
 
 public:
   Filtration();
 
   ~Filtration();
+
+  void addFilter(Filter * filter);
+
+  QList<QSharedPointer<DataMark> > filtrate(const QList<QSharedPointer<DataMark> > tags);
 
 }; // class Filtration
 

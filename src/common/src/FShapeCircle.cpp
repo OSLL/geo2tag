@@ -41,7 +41,7 @@
 
 #include "FShapeCircle.h"
 
-FShapeCircle::FShapeCircle(double lat, double lon, double r)
+FShapeCircle::FShapeCircle(double lat, double lon, double r) : FShape()
 {
   m_lat = lat;
   m_lon = lon;

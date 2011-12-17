@@ -47,4 +47,31 @@ Filtration::Filtration()
 
 Filtration::~Filtration()
 {
+  foreach(Filter * filter, m_filters)
+  {
+    delete filter;
+  }
+}
+
+void Filtration::addFilter(Filter * filter)
+{
+  m_filters.append(filter);
+}
+
+QList<QSharedPointer<DataMark> > Filtration::filtrate(const QList<QSharedPointer<DataMark> > tags)
+{
+  QList<QSharedPointer<DataMark> > result;
+  foreach(QSharedPointer<DataMark> tag, tags)
+  {
+    bool b = true;
+    foreach(Filter * filter, m_filters)
+    {
+      b = b & filter->filtrate(tag);
+    }
+    if (b)
+    {
+      result.append(tag);
+    }
+  }
+  return result;
 }
