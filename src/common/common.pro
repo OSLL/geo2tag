@@ -32,7 +32,14 @@ HEADERS += \
     inc/TimeSlot.h \
     inc/ChannelAction.h\
     inc/DataMarks.h \
-    inc/ErrnoTypes.h
+    inc/ErrnoTypes.h \
+    inc/Filtration.h \
+    inc/Filter.h \
+    inc/ShapeFilter.h \
+    inc/TimeFilter.h \
+	inc/AltitudeFilter.h \    
+    inc/FShape.h \
+    inc/FShapeCircle.h
 
 SOURCES += \
     src/TimeSlot.cpp \
@@ -42,7 +49,12 @@ SOURCES += \
     src/GpsInfo.cpp \ 
     src/DataMarks.cpp \
     src/defines.cpp \
-    src/ErrnoTypes.cpp
+    src/ErrnoTypes.cpp \
+    src/Filtration.cpp \
+    src/ShapeFilter.cpp \
+    src/TimeFilter.cpp \
+	src/AltitudeFilter.cpp \    
+    src/FShapeCircle.cpp
 
 linux: {
     HEADERS += inc/GpsModeller.h
