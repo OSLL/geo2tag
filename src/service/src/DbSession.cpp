@@ -91,9 +91,11 @@
 #include "Filter.h"
 #include "TimeFilter.h"
 #include "ShapeFilter.h"
+#include "AltitudeFilter.h"
 
 #include "FilterDefaultResponseJSON.h"
 #include "FilterCircleRequestJSON.h"
+#include "FilterCylinderRequestJSON.h"
 
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
@@ -134,7 +136,7 @@ namespace common
     m_processors.insert("unsubscribe", &DbObjectsCollection::processUnsubscribeQuery);
 
     m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
-
+    m_processors.insert("filterCylinder", &DbObjectsCollection::processFilterCylinderQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -1155,6 +1157,12 @@ namespace common
     return internalProcessFilterQuery(request, data, false);
   }
 
+  QByteArray DbObjectsCollection::processFilterCylinderQuery(const QByteArray& data)
+  {
+    FilterCylinderRequestJSON request;
+    return internalProcessFilterQuery(request, data, true);
+  }
+
   QByteArray DbObjectsCollection::internalProcessFilterQuery(FilterRequestJSON& request,
   const QByteArray& data, bool is3d)
   {
@@ -1175,7 +1183,7 @@ namespace common
     filtration.addFilter(QSharedPointer<Filter>(new TimeFilter(request.getTimeFrom(), request.getTimeTo())));
     if(is3d)
     {
-      // TODO
+      filtration.addFilter(QSharedPointer<Filter>(new AltitudeFilter(request.getAltitude1(), request.getAltitude2())));
     }
     QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
     DataChannels feed;

@@ -102,6 +102,7 @@ namespace common
     QByteArray processSetDefaultTimeSlotMarkQuery(const QByteArray&);
 
     QByteArray processFilterCircleQuery(const QByteArray&);
+    QByteArray processFilterCylinderQuery(const QByteArray&);
 
     QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 

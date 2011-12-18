@@ -124,7 +124,9 @@ void DataMark::setLongitude(const double &lon)
 
 double DataMark::getAltitude() const
 {
-  return m_altitude;
+  // TODO
+//  return m_altitude;
+  return 0.0;
 }
 
 void DataMark::setAltitude(const double& alt)
