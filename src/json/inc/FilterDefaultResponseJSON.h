@@ -30,8 +30,8 @@
  */
 
 /*! ---------------------------------------------------------------
- * \file Filtration.h
- * \brief Header of Filtration
+ * \file FilterDefaultResponseJSON.h
+ * \brief Header of FilterDefaultResponseJSON
  * \todo add comment here
  *
  * File description
@@ -40,26 +40,29 @@
  * ---------------------------------------------------------------- */
 
 
-#ifndef _Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
-#define _Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
+#ifndef _FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_
+#define _FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_
 
-#include <QList>
-#include <QSharedPointer>
-#include "Filter.h"
+#include "JsonSerializer.h"
+#include "DataChannel.h"
 
-class Filtration
+class FilterDefaultResponseJSON : public JsonSerializer
 {
-  QList<QSharedPointer<Filter> > m_filters;
+  DataChannels m_hashMap;
 
 public:
-  Filtration();
+  FilterDefaultResponseJSON(QObject *parent=0);
 
-  ~Filtration();
+  ~FilterDefaultResponseJSON();
 
-  void addFilter(const QSharedPointer<Filter> & filter);
+  const DataChannels& getDataChannels();
 
-  QList<QSharedPointer<DataMark> > filtrate(const QList<QSharedPointer<DataMark> > tags);
+  void setDataChannels(const DataChannels& dataChannels);
 
-}; // class Filtration
+  virtual void parseJson(const QByteArray&);
 
-#endif //_Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
+  virtual QByteArray getJson() const;
+
+}; // class FilterDefaultResponseJSON
+  
+#endif //_FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_

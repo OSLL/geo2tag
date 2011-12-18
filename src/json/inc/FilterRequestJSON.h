@@ -30,8 +30,8 @@
  */
 
 /*! ---------------------------------------------------------------
- * \file Filtration.h
- * \brief Header of Filtration
+ * \file FilterRequestJSON.h
+ * \brief Header of FilterRequestJSON
  * \todo add comment here
  *
  * File description
@@ -40,26 +40,37 @@
  * ---------------------------------------------------------------- */
 
 
-#ifndef _Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
-#define _Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
+#ifndef _FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_
+#define _FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_
 
-#include <QList>
-#include <QSharedPointer>
-#include "Filter.h"
+#include "JsonSerializer.h"
+#include "FShape.h"
 
-class Filtration
+class FilterRequestJSON : public JsonSerializer
 {
-  QList<QSharedPointer<Filter> > m_filters;
+  QSharedPointer<FShape> m_shape;
+  QDateTime m_timeFrom;
+  QDateTime m_timeTo;
+  double m_alt1;
+  double m_alt2;
 
 public:
-  Filtration();
+  FilterRequestJSON(QObject *parent = 0);
+  ~FilterRequestJSON();
 
-  ~Filtration();
+  void setShape(const QSharedPointer<FShape> &shape);
+  QSharedPointer<FShape>& getShape();
 
-  void addFilter(const QSharedPointer<Filter> & filter);
+  void setTimeFrom(QDateTime timeFrom);
+  QDateTime getTimeFrom() const;
 
-  QList<QSharedPointer<DataMark> > filtrate(const QList<QSharedPointer<DataMark> > tags);
+  void setTimeTo(QDateTime timeTo);
+  QDateTime getTimeTo() const;
 
-}; // class Filtration
-
-#endif //_Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
+  void setAltitude1(double alt);
+  void setAltitude2(double alt);
+  double getAltitude1() const;
+  double getAltitude2() const;
+}; // class FilterRequestJSON
+  
+#endif //_FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_

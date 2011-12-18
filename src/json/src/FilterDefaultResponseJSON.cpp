@@ -31,19 +31,20 @@
 
 /*! ---------------------------------------------------------------
  *
- * \file FilterCircleRequestJSON.cpp
- * \brief FilterCircleRequestJSON implementation
+ * \file FilterDefaultResponseJSON.cpp
+ * \brief FilterDefaultResponseJSON implementation
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FilterCircleRequestJSON.h"
-#include "JsonUser.h"
+#include "FilterDefaultResponseJSON.h"
 
+#include <QVariant>
+#include <QDebug>
 
-#ifndef Q_WS_SYMBIAN
+#ifndef Q_OS_SYMBIAN
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #else
@@ -51,38 +52,70 @@
 #include "serializer.h"
 #endif
 
-FilterCircleRequestJSON::FilterCircleRequestJSON(QObject *parent) : FilterRequestJSON(parent)
+#include "User.h"
+#include "Channel.h"
+
+#include "JsonUser.h"
+#include "JsonChannel.h"
+#include "JsonDataMark.h"
+
+FilterDefaultResponseJSON::FilterDefaultResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
+FilterDefaultResponseJSON::~FilterDefaultResponseJSON()
+{
+}
 
-QByteArray FilterCircleRequestJSON::getJson() const
+const DataChannels& FilterDefaultResponseJSON::getDataChannels()
+{
+  return m_hashMap;
+}
+
+void FilterDefaultResponseJSON::setDataChannels(const DataChannels& dataChannels)
+{
+  m_hashMap = dataChannels;
+}
+
+void FilterDefaultResponseJSON::parseJson(const QByteArray&)
 {
   // TODO
-  QJson::Serializer serializer;
-  QVariantMap obj;
-  obj.insert("auth_token", m_usersContainer->at(0)->getToken());
-  return serializer.serialize(obj);
 }
 
-
-void FilterCircleRequestJSON::parseJson(const QByteArray&data)
+QByteArray FilterDefaultResponseJSON::getJson() const
 {
-  clearContainers();
-  QJson::Parser parser;
-  bool ok;
-  QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
-  QString authToken = result["auth_token"].toString();
-  setTimeFrom(QDateTime::fromString(result["time_from"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
-  setTimeTo(QDateTime::fromString(result["time_to"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
-  double latitude = result["latitude"].toDouble(&ok);
-  double longitude = result["longitude"].toDouble(&ok);
-  double radius = result["radius"].toDouble(&ok);
+  QJson::Serializer serializer;
+  QVariantMap obj;
 
-  setShape(QSharedPointer<FShape>(new FShapeCircle(latitude, longitude, radius)));
-  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("null", "null", authToken)));
+  QList<QSharedPointer<Channel> > hashKeys = m_hashMap.uniqueKeys();
+  QVariantList jchannels;
+
+  for(int i=0; i<hashKeys.size(); i++)
+  {
+    QList<QSharedPointer<DataMark> > tags = m_hashMap.values(hashKeys.at(i));
+    QVariantList jtags;
+    QVariantMap jchannel;
+    QVariantMap channel;
+
+    for(int j=0; j<tags.size(); j++)
+    {
+      QSharedPointer<DataMark> tag = tags.at(j);
+      QVariantMap jtag;
+      jtag["title"] = tag->getLabel();
+      jtag["link"] = tag->getUrl();
+      jtag["description"] = tag->getDescription();
+      jtag["latitude"] = tag->getLatitude();
+      jtag["longitude"] = tag->getLongitude();
+      jtag["user"] = tag->getUser()->getLogin();
+      jtag["pubDate"] = tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz");
+      jtags.append(jtag);
+    }
+    channel["items"] = jtags;
+    channel["name"] = hashKeys.at(i)->getName();
+    jchannel["channel"] = channel;
+    jchannels.append(jchannel);
+  }
+  obj["channels"] = jchannels;
+  obj.insert("errno", getErrno());
+  return serializer.serialize(obj);
 }

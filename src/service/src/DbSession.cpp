@@ -87,8 +87,17 @@
 #include "UnsubscribeChannelRequestJSON.h"
 #include "UnsubscribeChannelResponseJSON.h"
 
+#include "Filtration.h"
+#include "Filter.h"
+#include "TimeFilter.h"
+#include "ShapeFilter.h"
+
+#include "FilterDefaultResponseJSON.h"
+#include "FilterCircleRequestJSON.h"
+
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
+#include "ErrnoTypes.h"
 
 #include <QtSql>
 #include <QMap>
@@ -123,6 +132,9 @@ namespace common
     m_processors.insert("setDefaultTimeSlotMark", &DbObjectsCollection::processSetDefaultTimeSlotMarkQuery);
     m_processors.insert("channels", &DbObjectsCollection::processAvailableChannelsQuery);
     m_processors.insert("unsubscribe", &DbObjectsCollection::processUnsubscribeQuery);
+
+    m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
+
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -1136,6 +1148,55 @@ namespace common
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
   }
+
+  QByteArray DbObjectsCollection::processFilterCircleQuery(const QByteArray& data)
+  {
+    FilterCircleRequestJSON request;
+    return internalProcessFilterQuery(request, data, false);
+  }
+
+  QByteArray DbObjectsCollection::internalProcessFilterQuery(FilterRequestJSON& request,
+  const QByteArray& data, bool is3d)
+  {
+    Filtration filtration;
+    FilterDefaultResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    request.parseJson(data);
+    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    if(realUser.isNull())
+    {
+      response.setErrno(WRONG_TOKEN_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+    filtration.addFilter(QSharedPointer<Filter>(new ShapeFilter(request.getShape())));
+    filtration.addFilter(QSharedPointer<Filter>(new TimeFilter(request.getTimeFrom(), request.getTimeTo())));
+    if(is3d)
+    {
+      // TODO
+    }
+    QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
+    DataChannels feed;
+    for(int i = 0; i<channels->size(); i++)
+    {
+      QSharedPointer<Channel> channel = channels->at(i);
+      QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
+      QList<QSharedPointer<DataMark> > filteredTags = filtration.filtrate(tags);
+      //qSort(tags);
+      for(int j = 0; j < filteredTags.size(); j++)
+      {
+        feed.insert(channel, filteredTags.at(j));
+      }
+    }
+    response.setDataChannels(feed);
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
 }                                       // namespace common
 
 

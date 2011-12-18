@@ -48,6 +48,8 @@ HEADERS += \
            inc/SetDefaultTimeSlotMarkResponseJSON.h \
            inc/SetDefaultTimeSlotRequestJSON.h \
            inc/SetDefaultTimeSlotResponseJSON.h \
+           inc/FilterRequestJSON.h \
+           inc/FilterDefaultResponseJSON.h \
            inc/FilterCircleRequestJSON.h
 
 SOURCES += \
@@ -73,6 +75,8 @@ SOURCES += \
            src/AddNewMarkResponseJSON.cpp \
            src/GetTimeSlotMarkResponseJSON.cpp \
            src/SetTimeSlotMarkRequestJSON.cpp \
+           src/FilterRequestJSON.cpp \
+           src/FilterDefaultResponseJSON.cpp \
            src/FilterCircleRequestJSON.cpp
 
 LIBS    +=  -lcommon -lqjson

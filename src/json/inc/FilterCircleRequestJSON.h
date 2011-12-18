@@ -43,22 +43,18 @@
 #ifndef _FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_
 #define _FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_
 
-#include "JsonSerializer.h"
+#include "FilterRequestJSON.h"
 #include "FShape.h"
 #include "FShapeCircle.h"
 
-class FilterCircleRequestJSON: public JsonSerializer
+class FilterCircleRequestJSON: public FilterRequestJSON
 {
-  QSharedPointer<FShape> m_circle;
-
   public:
     FilterCircleRequestJSON(QObject *parent=0);
 
     QByteArray getJson() const;
 
     void parseJson(const QByteArray&);
-
-    QSharedPointer<FShape> getCircle();
 };
 
 
