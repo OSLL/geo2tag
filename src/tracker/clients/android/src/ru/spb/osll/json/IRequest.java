@@ -44,10 +44,13 @@ public interface IRequest {
 		String STATUS = "status";
 		String STATUS_DESCRIPTION = "status_description";
 		String AUTH_TOKEN = "auth_token";
-
+		
+		
+		
 		String OK_STATUS = "Ok";
 		String ERROR_STATUS = "Error";
 
+		String USER_EXTSTS = "User exists!";
 		String CHANNEL_EXTSTS = "Channel exists!";
 	}
 }
