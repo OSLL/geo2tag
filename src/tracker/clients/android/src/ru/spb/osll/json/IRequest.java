@@ -1,11 +1,7 @@
 package ru.spb.osll.json;
 
 public interface IRequest {
-
-	public interface ICommon {
-		String ERRNO = "errno";
-	}
-	
+		
 	public interface ILogin{
 		String REQUEST = "/login";
 		
@@ -65,11 +61,4 @@ public interface IRequest {
 		String ALT2 			= "altitude2";		
 	}
 	
-	public interface ICircleFilter extends ICommon {
-		String REQUEST 			= "/filterCircle";
-		
-		String LATITUDE 		= "latitude";
-		String LONGITUDE 		= "longitude";
-		String RADIUS 			= "radius";
-	}
 }

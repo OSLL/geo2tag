@@ -6,8 +6,6 @@ import org.json.JSONObject;
 import ru.spb.osll.json.JsonBase;
 import android.util.Log;
 
-import static ru.spb.osll.json.IRequest.ICommon.ERRNO;
-
 public class JsonBaseResponse {
 	public final String LOG = JsonBase.LOG; 
 	
@@ -15,7 +13,7 @@ public class JsonBaseResponse {
 	
 	public void parseJson(JSONObject obj){
     	try {
-    		m_errno = obj.getInt(ERRNO);
+    		m_errno = obj.getInt("errno");
 		} catch (JSONException e) {
 			Log.e(LOG, e.getMessage());
 		}

@@ -34,6 +34,12 @@ abstract class JsonFilterBaseRequest extends JsonBaseRequest {
 		m_altitude2 = alt2;
 	}
 
+	public void setAltitudeInterval(double alt1, double alt2) {
+		m_is3d = true;
+		m_altitude1 = alt1;
+		m_altitude2 = alt2;
+	}
+	
 	protected JSONObject getJsonObject() throws JSONException {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(AUTH_TOKEN, m_authToken);
