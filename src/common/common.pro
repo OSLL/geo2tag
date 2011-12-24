@@ -40,6 +40,8 @@ HEADERS += \
     inc/AltitudeFilter.h \    
     inc/FShape.h \
     inc/FShapeCircle.h \
+    inc/FShapePolygon.h \
+    inc/FShapeRectangle.h \
     inc/Region.h
 
 SOURCES += \
@@ -56,6 +58,8 @@ SOURCES += \
     src/TimeFilter.cpp \
     src/AltitudeFilter.cpp \    
     src/FShapeCircle.cpp \
+    src/FShapePolygon.cpp \
+    src/FShapeRectangle.cpp \
     src/Region.cpp 
 
 linux: {

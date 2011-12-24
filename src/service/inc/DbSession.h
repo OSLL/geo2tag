@@ -103,6 +103,7 @@ namespace common
 
     QByteArray processFilterCircleQuery(const QByteArray&);
     QByteArray processFilterCylinderQuery(const QByteArray&);
+    QByteArray processFilterPolygonQuery(const QByteArray&);
 
     QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 

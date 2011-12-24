@@ -96,6 +96,7 @@
 #include "FilterDefaultResponseJSON.h"
 #include "FilterCircleRequestJSON.h"
 #include "FilterCylinderRequestJSON.h"
+#include "FilterPolygonRequestJSON.h"
 
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
@@ -137,6 +138,7 @@ namespace common
 
     m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
     m_processors.insert("filterCylinder", &DbObjectsCollection::processFilterCylinderQuery);
+    m_processors.insert("filterPolygon", &DbObjectsCollection::processFilterPolygonQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -1161,6 +1163,12 @@ namespace common
   {
     FilterCylinderRequestJSON request;
     return internalProcessFilterQuery(request, data, true);
+  }
+
+  QByteArray DbObjectsCollection::processFilterPolygonQuery(const QByteArray& data)
+  {
+    FilterPolygonRequestJSON request;
+    return internalProcessFilterQuery(request, data, false);
   }
 
   QByteArray DbObjectsCollection::internalProcessFilterQuery(FilterRequestJSON& request,

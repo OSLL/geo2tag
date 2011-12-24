@@ -51,7 +51,8 @@ HEADERS += \
            inc/FilterRequestJSON.h \
            inc/FilterDefaultResponseJSON.h \
            inc/FilterCircleRequestJSON.h \ 
-           inc/FilterCylinderRequestJSON.h 
+           inc/FilterCylinderRequestJSON.h \
+           inc/FilterPolygonRequestJSON.h
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \
@@ -79,7 +80,8 @@ SOURCES += \
            src/FilterRequestJSON.cpp \
            src/FilterDefaultResponseJSON.cpp \
            src/FilterCircleRequestJSON.cpp \
-           src/FilterCylinderRequestJSON.cpp
+           src/FilterCylinderRequestJSON.cpp \
+           src/FilterPolygonRequestJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 
