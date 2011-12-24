@@ -30,8 +30,8 @@
  */
 
 /*! ---------------------------------------------------------------
- * \file FShapeRectangle.h
- * \brief Header of FShapeRectangle
+ * \file FilterRectangleRequestJSON.h
+ * \brief Header of FilterRectangleRequestJSON
  * \todo add comment here
  *
  * File description
@@ -40,17 +40,21 @@
  * ---------------------------------------------------------------- */
 
 
-#ifndef _FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
-#define _FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
+#ifndef _FilterRectangleRequestJSON_H_5E249F48_BA3A_4408_A1B9_E4061F5D3B3B_INCLUDED_
+#define _FilterRectangleRequestJSON_H_5E249F48_BA3A_4408_A1B9_E4061F5D3B3B_INCLUDED_
 
-#include "FShapePolygon.h"
+#include "FilterRequestJSON.h"
 
-class FShapeRectangle : public FShapePolygon
+class FilterRectangleRequestJSON : public FilterRequestJSON
 {
 public:
-  FShapeRectangle(double lat1, double lon1, double lat2, double lon2);
+  FilterRectangleRequestJSON(QObject *parent=0);
 
-}; // class FShapeRectangle
+  QByteArray getJson() const;
+
+  void parseJson(const QByteArray&);
+
+}; // class FilterRectangleRequestJSON
   
 
-#endif //_FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
+#endif //_FilterRectangleRequestJSON_H_5E249F48_BA3A_4408_A1B9_E4061F5D3B3B_INCLUDED_
