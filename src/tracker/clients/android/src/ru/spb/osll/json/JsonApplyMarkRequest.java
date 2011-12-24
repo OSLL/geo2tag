@@ -9,7 +9,9 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class JsonApplyMarkRequest extends JsonRequest  implements IRequest.IApplyMark {
+import static ru.spb.osll.json.IRequest.IApplyMark.*; 
+
+public class JsonApplyMarkRequest extends JsonBaseRequest {
 	private String m_authToken;
 	private String m_channel;
 	private String m_title;

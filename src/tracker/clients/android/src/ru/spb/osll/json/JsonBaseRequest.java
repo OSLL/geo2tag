@@ -8,15 +8,15 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public abstract class JsonRequest {
+public abstract class JsonBaseRequest {
 	public String JSON_LOG = JsonBase.LOG;
 
 	private String m_serverUrl;
 
-	public JsonRequest(){
+	public JsonBaseRequest(){
 	}
 
-	public JsonRequest(String serverUrl){
+	public JsonBaseRequest(String serverUrl){
 		m_serverUrl = serverUrl;
 	}
 	

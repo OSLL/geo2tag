@@ -11,7 +11,7 @@ import android.util.Log;
 
 import static ru.spb.osll.json.IRequest.ILogin.*;
 
-public class JsonLoginRequest extends JsonRequest {
+public class JsonLoginRequest extends JsonBaseRequest {
 	private String m_login;
 	private String m_password;
 	private String m_serverUrl;

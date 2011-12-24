@@ -54,4 +54,22 @@ public interface IRequest {
 		String USER_EXTSTS = "Username already exists!";
 		String CHANNEL_EXTSTS = "Channel exists!";
 	}
+	
+	public interface IBaseFilter{
+		String AUTH_TOKEN 		= "auth_token";
+		String TIME_FROM 		= "time_from";
+		String TIME_TO 			= "time_to";
+		
+		String ALT_SHIFT 		= "altitude_shift";
+		String ALT1 			= "altitude1";
+		String ALT2 			= "altitude2";		
+	}
+	
+	public interface ICircleFilter extends ICommon {
+		String REQUEST 			= "/filterCircle";
+		
+		String LATITUDE 		= "latitude";
+		String LONGITUDE 		= "longitude";
+		String RADIUS 			= "radius";
+	}
 }
