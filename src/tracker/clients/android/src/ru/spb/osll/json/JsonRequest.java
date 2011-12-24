@@ -9,22 +9,36 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public abstract class JsonRequest {
-	public static String JSON_LOG = "JsonLog";
+	public String JSON_LOG = JsonBase.LOG;
+
+	private String m_serverUrl;
+
+	public JsonRequest(){
+	}
+
+	public JsonRequest(String serverUrl){
+		m_serverUrl = serverUrl;
+	}
+	
+	public void setServerUrl(String url){
+		m_serverUrl = url;
+	}
+	
+	public String getServerUrl(){
+		return m_serverUrl;
+	}
 	
 	public JSONObject doRequest(){
 		JSONObject resultJSON = null; 
 		try {
 			resultJSON = doRequestInternal(); 
-		} catch (JSONException e) {
-			Log.v(JSON_LOG, e.getMessage());
-		} catch (IOException e) {
-			Log.v(JSON_LOG, e.getMessage());
-		} catch (URISyntaxException e) {
-			Log.v(JSON_LOG, e.getMessage());
-		}	catch (Exception e) {
-			Log.v(JSON_LOG, e.getMessage());
+		} catch (Exception e) {
+			if (e != null && e.getMessage() != null){
+				Log.v(JSON_LOG, e.getMessage());
+			} else {
+				Log.v(JSON_LOG, "unknown error...");
+			}
 		}
-		
 		return resultJSON;
 	}	
 

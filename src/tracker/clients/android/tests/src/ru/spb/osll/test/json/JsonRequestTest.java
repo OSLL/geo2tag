@@ -15,10 +15,11 @@ public class JsonRequestTest extends AndroidTestCase {
 	public static final String LOG = "TEST";
 	
 	// GEO2TAG INSTANCE
-	public final String url = "http://tracks.osll.spb.ru:81/service"; 
+	//public final String url = "http://tracks.osll.spb.ru:81/service"; 
 	
 	// GEO2TAG INSTANCE
 	//public final String url = "http://192.168.0.105:81/service";
+	public final String url = "http://109.124.93.108:81/service";
 	
 	public void testLogin(){
 		final boolean isOnline = TrackerUtil.isOnline(getContext());
@@ -41,6 +42,8 @@ public class JsonRequestTest extends AndroidTestCase {
 			final JSONObject JSONResponse = new JsonAddUserRequest("bac1ca", "test", url).doRequest();
 			assertNotNull(JSONResponse);
 			if (JSONResponse != null) {
+				Log.d(LOG, JSONResponse.toString());
+				
 				String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 				String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
 				boolean success = status.equals(IResponse.OK_STATUS) || statusDescription.equals(IResponse.USER_EXTSTS); 
@@ -59,6 +62,7 @@ public class JsonRequestTest extends AndroidTestCase {
 							"tracker channel", "http://osll.spb.ru", 3000, url).doRequest();
 			assertNotNull(JSONResponse);
 			if (JSONResponse != null) {
+				Log.d(LOG, JSONResponse.toString()); 
 				String status = JsonBase.getString(JSONResponse, IResponse.STATUS);
 				String statusDescription = JsonBase.getString(JSONResponse, IResponse.STATUS_DESCRIPTION);
 				boolean success = status.equals(IResponse.OK_STATUS) || statusDescription.equals(IResponse.CHANNEL_EXTSTS); 

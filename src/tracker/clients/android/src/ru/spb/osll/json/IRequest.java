@@ -1,24 +1,27 @@
 package ru.spb.osll.json;
 
 public interface IRequest {
-	public String BASE_URL = "http://tracklife.ru/service"; // FIXME
 
+	public interface ICommon {
+		String ERRNO = "errno";
+	}
+	
 	public interface ILogin{
-		String REQUEST = "?query=login";
+		String REQUEST = "/login";
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";
 	}
 
 	public interface IAddUser{
-		String REQUEST = "?query=addUser";
+		String REQUEST = "/addUser";
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";
 	}
 
 	public interface IApplyChannel{
-		String REQUEST = "?query=addChannel";
+		String REQUEST = "/addChannel";
 		
 		String AUTH_TOKEN = "auth_token";
 		String NAME = "name";
@@ -28,7 +31,7 @@ public interface IRequest {
 	}
 
 	public interface IApplyMark{
-		String REQUEST = "?query=apply";
+		String REQUEST = "/apply";
 
 		String AUTH_TOKEN = "auth_token";
 		String CHANNEL = "channel";
@@ -45,12 +48,10 @@ public interface IRequest {
 		String STATUS_DESCRIPTION = "status_description";
 		String AUTH_TOKEN = "auth_token";
 		
-		
-		
 		String OK_STATUS = "Ok";
 		String ERROR_STATUS = "Error";
 
-		String USER_EXTSTS = "User exists!";
+		String USER_EXTSTS = "Username already exists!";
 		String CHANNEL_EXTSTS = "Channel exists!";
 	}
 }
