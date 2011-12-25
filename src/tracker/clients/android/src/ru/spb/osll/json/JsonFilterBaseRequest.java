@@ -21,14 +21,15 @@ abstract class JsonFilterBaseRequest extends JsonBaseRequest {
 	private double m_altitude2;
 	private boolean m_is3d = false;
 	
-	public JsonFilterBaseRequest(String authToken, String timeFrom, String timeTo) {
+	public JsonFilterBaseRequest(String authToken, String timeFrom, String timeTo, String serverUrl) {
+		setServerUrl(serverUrl);
 		m_authToken = authToken;
 		m_timeFrom = timeFrom;
 		m_timeTo = timeTo;
 	}
 	
-	public JsonFilterBaseRequest(String authToken, String timeFrom, String timeTo, double alt1, double alt2) {
-		this(authToken, timeFrom, timeTo);
+	public JsonFilterBaseRequest(String authToken, String timeFrom, String timeTo, double alt1, double alt2, String serverUrl) {
+		this(authToken, timeFrom, timeTo, serverUrl);
 		m_is3d = true;
 		m_altitude1 = alt1;
 		m_altitude2 = alt2;

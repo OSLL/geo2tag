@@ -19,7 +19,7 @@ public class JsonRequestTest extends AndroidTestCase {
 	
 	// GEO2TAG INSTANCE
 	//public final String url = "http://192.168.0.105:81/service";
-	public final String url = "http://109.124.93.108:81/service";
+	public final String url = "http://109.124.92.188:81/service";
 	
 	public void testLogin(){
 		final boolean isOnline = TrackerUtil.isOnline(getContext());
@@ -80,7 +80,7 @@ public class JsonRequestTest extends AndroidTestCase {
 		}
 	}
 	
-	public void testCircleFilters() {
+	public void testCircleFilter() {
 		final boolean isOnline = TrackerUtil.isOnline(getContext());
 		assertTrue(isOnline);
 		if (isOnline){
@@ -106,7 +106,7 @@ public class JsonRequestTest extends AndroidTestCase {
 		}
 	}
 	
-	public void testCylinderFilters() {
+	public void testCylinderFilter() {
 		final boolean isOnline = TrackerUtil.isOnline(getContext());
 		assertTrue(isOnline);
 		if (isOnline){
@@ -132,4 +132,118 @@ public class JsonRequestTest extends AndroidTestCase {
 		}
 	}
 
+	public void testRectangleFilter() {
+		final boolean isOnline = TrackerUtil.isOnline(getContext());
+		assertTrue(isOnline);
+		if (isOnline){
+			final JSONObject JSONResponse = new JsonFilterRectangleRequest("MMMMMMMMMM", 0.0,
+				100.0, 0.0, 100.0, "04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url).doRequest();
+			assertNotNull(JSONResponse);
+			if (JSONResponse != null) {
+				Log.d(LOG, JSONResponse.toString()); 
+				JsonFilterResponse r = new JsonFilterResponse();
+				r.parseJson(JSONResponse);
+				assertEquals(r.getErrno(), 0);
+				assertTrue(r.getChannelsData().size() > 0);
+				List<Channel> channels = r.getChannelsData();				
+				for (Channel c : channels) {
+					Log.d(LOG, "" + c.getName());
+					for (Mark m : c.getMarks()) {
+						Log.d(LOG, "" + m);
+					}
+				}
+			} 
+		} else {
+			Log.v(LOG, "client offline");
+		}
+	}
+
+	public void testBoxFilter() {
+		final boolean isOnline = TrackerUtil.isOnline(getContext());
+		assertTrue(isOnline);
+		if (isOnline){
+			final JSONObject JSONResponse = new JsonFilterBoxRequest("MMMMMMMMMM", 0.0,
+				100.0, 0.0, 100.0, -0.1, 0.1, "04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url).doRequest();
+			assertNotNull(JSONResponse);
+			if (JSONResponse != null) {
+				Log.d(LOG, JSONResponse.toString()); 
+				JsonFilterResponse r = new JsonFilterResponse();
+				r.parseJson(JSONResponse);
+				assertEquals(r.getErrno(), 0);
+				assertTrue(r.getChannelsData().size() > 0);
+				List<Channel> channels = r.getChannelsData();				
+				for (Channel c : channels) {
+					Log.d(LOG, "" + c.getName());
+					for (Mark m : c.getMarks()) {
+						Log.d(LOG, "" + m);
+					}
+				}
+			} 
+		} else {
+			Log.v(LOG, "client offline");
+		}
+	}
+
+	public void testPolygonFilter() {
+		final boolean isOnline = TrackerUtil.isOnline(getContext());
+		assertTrue(isOnline);
+		if (isOnline){
+			JsonFilterPolygonRequest filter = new JsonFilterPolygonRequest("MMMMMMMMMM", 
+				"04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url);
+			filter.addPoint(0.0, 0.0);
+			filter.addPoint(70.0, 0.0);
+			filter.addPoint(70.0, 100.0);
+			final JSONObject JSONResponse = filter.doRequest();
+			
+			assertNotNull(JSONResponse);
+			if (JSONResponse != null) {
+				Log.d(LOG, JSONResponse.toString()); 
+				JsonFilterResponse r = new JsonFilterResponse();
+				r.parseJson(JSONResponse);
+				assertEquals(r.getErrno(), 0);
+				assertTrue(r.getChannelsData().size() > 0);
+				List<Channel> channels = r.getChannelsData();				
+				for (Channel c : channels) {
+					Log.d(LOG, "" + c.getName());
+					for (Mark m : c.getMarks()) {
+						Log.d(LOG, "" + m);
+					}
+				}
+			} 
+		} else {
+			Log.v(LOG, "client offline");
+		}
+	}
+
+	public void testFenceFilter() {
+		final boolean isOnline = TrackerUtil.isOnline(getContext());
+		assertTrue(isOnline);
+		if (isOnline){
+			JsonFilterPolygonRequest filter = new JsonFilterFenceRequest("MMMMMMMMMM", 
+				-0.1, 0.1, "04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url);
+			filter.addPoint(0.0, 0.0);
+			filter.addPoint(70.0, 0.0);
+			filter.addPoint(70.0, 100.0);
+			final JSONObject JSONResponse = filter.doRequest();
+			
+			assertNotNull(JSONResponse);
+			if (JSONResponse != null) {
+				Log.d(LOG, JSONResponse.toString()); 
+				JsonFilterResponse r = new JsonFilterResponse();
+				r.parseJson(JSONResponse);
+				assertEquals(r.getErrno(), 0);
+				assertTrue(r.getChannelsData().size() > 0);
+				List<Channel> channels = r.getChannelsData();				
+				for (Channel c : channels) {
+					Log.d(LOG, "" + c.getName());
+					for (Mark m : c.getMarks()) {
+						Log.d(LOG, "" + m);
+					}
+				}
+			} 
+		} else {
+			Log.v(LOG, "client offline");
+		}
+	}
+	
 }

@@ -11,8 +11,7 @@ public class JsonFilterCircleRequest extends JsonFilterBaseRequest {
 	
 	public JsonFilterCircleRequest(String authToken, double lat, 
 		double lon, double rad, String timeFrom, String timeTo, String serverUrl){
-		super(authToken, timeFrom, timeTo);
-		setServerUrl(serverUrl);
+		super(authToken, timeFrom, timeTo, serverUrl);
 		m_lat = lat;
 		m_lon = lon;
 		m_rad = rad;
