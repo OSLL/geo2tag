@@ -98,6 +98,8 @@
 #include "FilterCylinderRequestJSON.h"
 #include "FilterPolygonRequestJSON.h"
 #include "FilterRectangleRequestJSON.h"
+#include "FilterBoxRequestJSON.h"
+#include "FilterFenceRequestJSON.h"
 
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
@@ -141,6 +143,8 @@ namespace common
     m_processors.insert("filterCylinder", &DbObjectsCollection::processFilterCylinderQuery);
     m_processors.insert("filterPolygon", &DbObjectsCollection::processFilterPolygonQuery);
     m_processors.insert("filterRectangle", &DbObjectsCollection::processFilterRectangleQuery);
+    m_processors.insert("filterBox", &DbObjectsCollection::processFilterBoxQuery);
+    m_processors.insert("filterFence", &DbObjectsCollection::processFilterFenceQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -1177,6 +1181,18 @@ namespace common
   {
     FilterRectangleRequestJSON request;
     return internalProcessFilterQuery(request, data, false);
+  }
+
+  QByteArray DbObjectsCollection::processFilterBoxQuery(const QByteArray& data)
+  {
+    FilterBoxRequestJSON request;
+    return internalProcessFilterQuery(request, data, true);
+  }
+
+  QByteArray DbObjectsCollection::processFilterFenceQuery(const QByteArray& data)
+  {
+    FilterFenceRequestJSON request;
+    return internalProcessFilterQuery(request, data, true);
   }
 
   QByteArray DbObjectsCollection::internalProcessFilterQuery(FilterRequestJSON& request,

@@ -105,6 +105,8 @@ namespace common
     QByteArray processFilterCylinderQuery(const QByteArray&);
     QByteArray processFilterPolygonQuery(const QByteArray&);
     QByteArray processFilterRectangleQuery(const QByteArray&);
+    QByteArray processFilterBoxQuery(const QByteArray&);
+    QByteArray processFilterFenceQuery(const QByteArray&);
 
     QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 

@@ -31,15 +31,15 @@
 
 /*! ---------------------------------------------------------------
  *
- * \file FilterCylinderRequestJSON.cpp
- * \brief FilterCylinderRequestJSON implementation
+ * \file FilterFenceRequestJSON.cpp
+ * \brief FilterFenceRequestJSON implementation
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FilterCylinderRequestJSON.h"
+#include "FilterFenceRequestJSON.h"
 
 #ifndef Q_WS_SYMBIAN
 #include <qjson/parser.h>
@@ -49,20 +49,20 @@
 #include "serializer.h"
 #endif
 
-FilterCylinderRequestJSON::FilterCylinderRequestJSON(QObject *parent):
-FilterCircleRequestJSON(parent)
+FilterFenceRequestJSON::FilterFenceRequestJSON(QObject *parent):
+FilterPolygonRequestJSON(parent)
 {
 }
 
-QByteArray FilterCylinderRequestJSON::getJson() const
+QByteArray FilterFenceRequestJSON::getJson() const
 {
   // TODO
-  return FilterCircleRequestJSON::getJson();
+  return FilterPolygonRequestJSON::getJson();
 }
 
-void FilterCylinderRequestJSON::parseJson(const QByteArray& data)
+void FilterFenceRequestJSON::parseJson(const QByteArray& data)
 {
-  FilterCircleRequestJSON::parseJson(data);
+  FilterPolygonRequestJSON::parseJson(data);
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();

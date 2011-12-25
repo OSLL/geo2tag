@@ -30,47 +30,29 @@
  */
 
 /*! ---------------------------------------------------------------
- *
- * \file FilterCylinderRequestJSON.cpp
- * \brief FilterCylinderRequestJSON implementation
+ * \file FilterBoxRequestJSON.h
+ * \brief Header of FilterBoxRequestJSON
+ * \todo add comment here
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FilterCylinderRequestJSON.h"
 
-#ifndef Q_WS_SYMBIAN
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#else
-#include "parser.h"
-#include "serializer.h"
-#endif
+#ifndef _FilterBoxRequestJSON_H_9E72A5DF_66DE_4ACD_A059_E7B239AEABBA_INCLUDED_
+#define _FilterBoxRequestJSON_H_9E72A5DF_66DE_4ACD_A059_E7B239AEABBA_INCLUDED_
 
-FilterCylinderRequestJSON::FilterCylinderRequestJSON(QObject *parent):
-FilterCircleRequestJSON(parent)
+#include "FilterRectangleRequestJSON.h"
+
+class FilterBoxRequestJSON : public FilterRectangleRequestJSON
 {
-}
+public:
+  FilterBoxRequestJSON(QObject *parent=0);
 
-QByteArray FilterCylinderRequestJSON::getJson() const
-{
-  // TODO
-  return FilterCircleRequestJSON::getJson();
-}
+  QByteArray getJson() const;
 
-void FilterCylinderRequestJSON::parseJson(const QByteArray& data)
-{
-  FilterCircleRequestJSON::parseJson(data);
-  QJson::Parser parser;
-  bool ok;
-  QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
-  QVariantMap altitudeShift = result["altitude_shift"].toMap();
-  setAltitude1(altitudeShift["altitude1"].toDouble(&ok));
-  setAltitude2(altitudeShift["altitude2"].toDouble(&ok));
-}
+  void parseJson(const QByteArray&);
+}; // class FilterBoxRequestJSON
+  
+#endif //_FilterBoxRequestJSON_H_9E72A5DF_66DE_4ACD_A059_E7B239AEABBA_INCLUDED_
