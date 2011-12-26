@@ -352,6 +352,10 @@ namespace common
 
     QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
     DataChannels feed;
+
+    double lat1 = request.getLatitude();
+    double lon1 = request.getLongitude();
+
     //        syslog(LOG_INFO, "rssfeed processing: user %s has %d channels subscribed",
     //               realUser->getLogin().toStdString().c_str(), channels->size());
     for(int i = 0; i<channels->size(); i++)
@@ -359,11 +363,14 @@ namespace common
       QSharedPointer<Channel> channel = channels->at(i);
       QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
       qSort(tags);
-      QList<QSharedPointer<DataMark> > last10 = tags.mid(tags.size()>10?tags.size()-10:0, 10);
-      for(int j = 0; j<last10.size(); j++)
+      for(int j = 0; j < tags.size(); j++)
       {
-        //                syslog(LOG_INFO,"rssfeed: adding tag with time: %s", last10.at(j)->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str());
-        feed.insert(channel, last10.at(j));
+        QSharedPointer<DataMark> mark = tags.at(j);
+        double lat2 = mark->getLatitude();
+        double lon2 = mark->getLongitude();
+
+        if ( DataMark::getDistance(lat1, lon1, lat2, lon2) < radius ) 
+           feed.insert(channel, mark);
       }
     }
     RSSFeedResponseJSON response(feed);
