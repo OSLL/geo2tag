@@ -355,7 +355,7 @@ namespace common
 
     double lat1 = request.getLatitude();
     double lon1 = request.getLongitude();
-
+    double radius  = request.getRadius();
     //        syslog(LOG_INFO, "rssfeed processing: user %s has %d channels subscribed",
     //               realUser->getLogin().toStdString().c_str(), channels->size());
     for(int i = 0; i<channels->size(); i++)
