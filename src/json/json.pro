@@ -47,7 +47,15 @@ HEADERS += \
            inc/SetDefaultTimeSlotMarkRequestJSON.h \
            inc/SetDefaultTimeSlotMarkResponseJSON.h \
            inc/SetDefaultTimeSlotRequestJSON.h \
-           inc/SetDefaultTimeSlotResponseJSON.h
+           inc/SetDefaultTimeSlotResponseJSON.h \
+           inc/FilterRequestJSON.h \
+           inc/FilterDefaultResponseJSON.h \
+           inc/FilterCircleRequestJSON.h \ 
+           inc/FilterCylinderRequestJSON.h \
+           inc/FilterPolygonRequestJSON.h \
+           inc/FilterRectangleRequestJSON.h \
+           inc/FilterBoxRequestJSON.h \
+           inc/FilterFenceRequestJSON.h
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \
@@ -71,7 +79,15 @@ SOURCES += \
            src/GetTimeSlotMarkRequestJSON.cpp \
            src/AddNewMarkResponseJSON.cpp \
            src/GetTimeSlotMarkResponseJSON.cpp \
-           src/SetTimeSlotMarkRequestJSON.cpp
+           src/SetTimeSlotMarkRequestJSON.cpp \
+           src/FilterRequestJSON.cpp \
+           src/FilterDefaultResponseJSON.cpp \
+           src/FilterCircleRequestJSON.cpp \
+           src/FilterCylinderRequestJSON.cpp \
+           src/FilterPolygonRequestJSON.cpp \
+           src/FilterRectangleRequestJSON.cpp \
+           src/FilterBoxRequestJSON.cpp \
+           src/FilterFenceRequestJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 

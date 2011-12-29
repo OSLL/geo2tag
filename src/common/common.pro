@@ -31,7 +31,18 @@ HEADERS += \
     inc/DataChannel.h\
     inc/TimeSlot.h \
     inc/ChannelAction.h\
-		inc/DataMarks.h
+    inc/DataMarks.h \
+    inc/ErrnoTypes.h \
+    inc/Filtration.h \
+    inc/Filter.h \
+    inc/ShapeFilter.h \
+    inc/TimeFilter.h \
+    inc/AltitudeFilter.h \    
+    inc/FShape.h \
+    inc/FShapeCircle.h \
+    inc/FShapePolygon.h \
+    inc/FShapeRectangle.h \
+    inc/Region.h
 
 SOURCES += \
     src/TimeSlot.cpp \
@@ -40,20 +51,28 @@ SOURCES += \
     src/ChannelAction.cpp \
     src/GpsInfo.cpp \ 
     src/DataMarks.cpp \
-    src/defines.cpp
+    src/defines.cpp \
+    src/ErrnoTypes.cpp \
+    src/Filtration.cpp \
+    src/ShapeFilter.cpp \
+    src/TimeFilter.cpp \
+    src/AltitudeFilter.cpp \    
+    src/FShapeCircle.cpp \
+    src/FShapePolygon.cpp \
+    src/FShapeRectangle.cpp \
+    src/Region.cpp 
 
 linux: {
     HEADERS += inc/GpsModeller.h
 
     SOURCES += src/GpsModeller.cpp
 
-    QT -= gui
     LIBS += -lxml2
 
     DEFINES += SIMULATE_GPS
 
 
-    INCLUDEPATH += /usr/local/include/libxml2
+    INCLUDEPATH += /usr/include/libxml2
 }
 
 maemo5: {

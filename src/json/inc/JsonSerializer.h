@@ -19,6 +19,8 @@ class JsonSerializer:public QObject
 
     QVariantMap m_jsonTree;
 
+    int m_errno;
+
     QString m_status;
     QString m_statusMessage;
 
@@ -43,6 +45,9 @@ class JsonSerializer:public QObject
 
     const QString& getStatusMessage() const;
     void setStatusMessage(const QString&);
+
+    const int& getErrno() const;
+    void setErrno(const int&);
 
     ~JsonSerializer();
 };

@@ -54,6 +54,7 @@
 #include "TimeSlot.h"
 #include "UpdateThread.h"
 #include "QueryExecutor.h"
+#include "FilterRequestJSON.h"
 
 namespace common
 {
@@ -99,6 +100,15 @@ namespace common
     QByteArray processSetTimeSlotMarkQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotMarkQuery(const QByteArray&);
+
+    QByteArray processFilterCircleQuery(const QByteArray&);
+    QByteArray processFilterCylinderQuery(const QByteArray&);
+    QByteArray processFilterPolygonQuery(const QByteArray&);
+    QByteArray processFilterRectangleQuery(const QByteArray&);
+    QByteArray processFilterBoxQuery(const QByteArray&);
+    QByteArray processFilterFenceQuery(const QByteArray&);
+
+    QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 
     public:
 

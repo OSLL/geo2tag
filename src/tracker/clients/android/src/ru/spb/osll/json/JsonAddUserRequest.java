@@ -9,7 +9,9 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class JsonAddUserRequest extends JsonRequest implements IRequest.IAddUser {
+import static ru.spb.osll.json.IRequest.IAddUser.*; 
+
+public class JsonAddUserRequest extends JsonBaseRequest {
 	private String m_login;
 	private String m_password;
 	private String m_serverUrl;

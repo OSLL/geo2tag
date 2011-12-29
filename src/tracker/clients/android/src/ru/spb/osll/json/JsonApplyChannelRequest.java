@@ -9,7 +9,9 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class JsonApplyChannelRequest extends JsonRequest implements IRequest.IApplyChannel {
+import static ru.spb.osll.json.IRequest.IApplyChannel.*; 
+
+public class JsonApplyChannelRequest extends JsonBaseRequest {
 	private String m_authToken;
 	private String m_name;
 	private String m_description;
