@@ -40,6 +40,12 @@ import java.util.List;
 
 public class Channel {
 	private String name;
+	private String title;
+	private String link;
+	private String description;
+	private String language;
+	private String pubDate;
+	
 	private List<Mark> makrs = new ArrayList<Mark>();
 	
 	public Channel(String name) {
