@@ -41,7 +41,7 @@
 #include <QNetworkConfigurationManager>
 
 #include "LoginQuery.h"
-#include "AddNewMarkQuery.h"
+#include "WriteTagQuery.h"
 
 #include "markshistory.h"
 
@@ -57,7 +57,7 @@ class MeegoClient: public QObject
   QString m_name;
 
   LoginQuery * m_loginQuery;
-  AddNewMarkQuery * m_addNewMarkQuery;
+  WriteTagQuery * m_addNewMarkQuery;
   MarksHistory * m_history;
 
   QSharedPointer<common::User> m_user;

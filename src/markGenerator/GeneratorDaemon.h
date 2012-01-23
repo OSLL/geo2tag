@@ -41,7 +41,7 @@
 #include <QPointF>
 #include <QSharedPointer>
 #include "LoginQuery.h"
-#include "AddNewMarkQuery.h"
+#include "WriteTagQuery.h"
 #include <QFile>
 class GeneratorDaemon: public QThread
 {
@@ -66,7 +66,7 @@ class GeneratorDaemon: public QThread
   LoginQuery * m_loginQuery;
 
   // Query needed to send marks
-  AddNewMarkQuery * m_tagQuery;
+  WriteTagQuery * m_tagQuery;
 
   bool m_isConnected;
   public:

@@ -32,22 +32,70 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef ADDNEWMARKRESPONSEJSON_H
-#define ADDNEWMARKRESPONSEJSON_H
+#include "WriteTagQuery.h"
+#include "defines.h"
+#include "WriteTagRequestJSON.h"
+#include "WriteTagResponseJSON.h"
 
-#include "DefaultResponseJSON.h"
-
-#include "JsonSerializer.h"
-
-class AddNewMarkResponseJSON : public JsonSerializer
+WriteTagQuery::WriteTagQuery(const QSharedPointer<DataMark> &tag, QObject *parent): DefaultQuery(parent), m_tag(tag)
 {
-  Q_OBJECT;
-  public:
-    AddNewMarkResponseJSON(QObject *parent=0);
 
-    QByteArray getJson() const;
+}
 
-    void parseJson(const QByteArray&);
 
-};
-#endif
+WriteTagQuery::WriteTagQuery(QObject *parent): DefaultQuery(parent)
+{
+}
+
+
+void WriteTagQuery::setTag(const QSharedPointer<DataMark> &tag)
+{
+  m_tag = tag;
+}
+
+
+QString WriteTagQuery::getUrl() const
+{
+  return APPLY_HTTP_URL;
+}
+
+
+QByteArray WriteTagQuery::getRequestBody() const
+{
+  WriteTagRequestJSON request;
+  request.addTag(m_tag);
+  return request.getJson();
+}
+
+
+void WriteTagQuery::processReply(QNetworkReply *reply)
+{
+  WriteTagResponseJSON response;
+  response.parseJson(reply->readAll());
+  if(response.getStatus() == "Ok")
+  {
+    Q_EMIT tagAdded();
+  }
+  else
+  {
+    Q_EMIT errorOccured(response.getStatusMessage());
+  }
+}
+
+
+WriteTagQuery::~WriteTagQuery()
+{
+
+}
+
+
+QSharedPointer<DataMark> WriteTagQuery::getTag()
+{
+  return m_tag;
+}
+
+
+const QSharedPointer<DataMark>& WriteTagQuery::getTag() const
+{
+  return m_tag;
+}

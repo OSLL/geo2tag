@@ -32,7 +32,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "AddNewMarkRequestJSON.h"
+#include "WriteTagRequestJSON.h"
 #include "DataMarks.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
@@ -46,12 +46,12 @@
 #include "serializer.h"
 #endif
 
-AddNewMarkRequestJSON::AddNewMarkRequestJSON(QObject *parent) : JsonSerializer(parent)
+WriteTagRequestJSON::WriteTagRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
 
-void AddNewMarkRequestJSON::parseJson(const QByteArray &data)
+void WriteTagRequestJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
   QJson::Parser parser;
@@ -81,7 +81,7 @@ void AddNewMarkRequestJSON::parseJson(const QByteArray &data)
 }
 
 
-QByteArray AddNewMarkRequestJSON::getJson() const
+QByteArray WriteTagRequestJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap request;
