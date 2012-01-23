@@ -32,23 +32,23 @@
 /*! ---------------------------------------------------------------
  * $Id$
  *
- * \file RSSFeedQuery.cpp
- * \brief RSSFeedQuery implementation
+ * \file LoadTagsQuery.cpp
+ * \brief LoadTagsQuery implementation
  *
  * File description
  *
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-#include "RSSFeedQuery.h"
+#include "LoadTagsQuery.h"
 #include "defines.h"
 #include <QDebug>
-#include "RSSFeedJSON.h"
-#include "RSSFeedRequestJSON.h"
+#include "LoadTagsResponseJSON.h"
+#include "LoadTagsRequestJSON.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 
-RSSFeedQuery::RSSFeedQuery(QSharedPointer<common::User> &user,
+LoadTagsQuery::LoadTagsQuery(QSharedPointer<common::User> &user,
 double latitude,
 double longitude,
 double radius,
@@ -61,12 +61,12 @@ m_radius(radius)
 }
 
 
-RSSFeedQuery::RSSFeedQuery(QObject *parent): DefaultQuery(parent)
+LoadTagsQuery::LoadTagsQuery(QObject *parent): DefaultQuery(parent)
 {
 }
 
 
-void RSSFeedQuery::setQuery(QSharedPointer<common::User> &user,
+void LoadTagsQuery::setQuery(QSharedPointer<common::User> &user,
 double latitude,
 double longitude,
 double radius)
@@ -78,29 +78,29 @@ double radius)
 }
 
 
-QString RSSFeedQuery::getUrl() const
+QString LoadTagsQuery::getUrl() const
 {
   return FEED_HTTP_URL;
 }
 
 
-QByteArray RSSFeedQuery::getRequestBody() const
+QByteArray LoadTagsQuery::getRequestBody() const
 {
-  RSSFeedRequestJSON request(m_latitude, m_longitude, m_radius);
+  LoadTagsRequestJSON request(m_latitude, m_longitude, m_radius);
   request.addUser(m_user);
   return request.getJson();
 }
 
 
-void RSSFeedQuery::processReply(QNetworkReply *reply)
+void LoadTagsQuery::processReply(QNetworkReply *reply)
 {
-  RSSFeedResponseJSON response;
+  LoadTagsResponseJSON response;
   response.parseJson(reply->readAll());
   if(response.getStatus() == "Ok")
   {
-    m_hashMap = response.getRSSFeed();
+    m_hashMap = response.getData();
 
-    Q_EMIT rssFeedReceived();
+    Q_EMIT tagsReceived();
   }
   else
   {
@@ -109,13 +109,13 @@ void RSSFeedQuery::processReply(QNetworkReply *reply)
 }
 
 
-const DataChannels& RSSFeedQuery::getRSSFeed() const
+const DataChannels& LoadTagsQuery::getData() const
 {
   return m_hashMap;
 }
 
 
-RSSFeedQuery::~RSSFeedQuery()
+LoadTagsQuery::~LoadTagsQuery()
 {
 
 }

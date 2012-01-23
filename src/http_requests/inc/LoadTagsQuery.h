@@ -31,8 +31,8 @@
 
 /* $Id$ */
 /*!
- * \file RSSFeedQuery.h
- * \brief Header of RSSFeedQuery
+ * \file LoadTagsQuery.h
+ * \brief Header of LoadTagsQuery
  * \todo add comment here
  *
  * File description
@@ -40,8 +40,8 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
-#define _RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
+#ifndef _LoadTagsQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
+#define _LoadTagsQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
 
 #include <QObject>
 #include <QString>
@@ -53,12 +53,12 @@
 #include "DataChannel.h"
 
 /*!
- * RSSFeedQuery class definition.
+ * LoadTagsQuery class definition.
  *
  * The object of this class represents http query to server.
  * This query includes json request to get RSS feed.
  */
-class RSSFeedQuery : public DefaultQuery
+class LoadTagsQuery : public DefaultQuery
 {
   Q_OBJECT
 
@@ -78,30 +78,30 @@ class RSSFeedQuery : public DefaultQuery
 
   public:
 
-    RSSFeedQuery(QSharedPointer<common::User> &user,
+    LoadTagsQuery(QSharedPointer<common::User> &user,
       double latitude,
       double longitude,
       double radius,
       QObject *parent = 0);
 
-    RSSFeedQuery(QObject *parent = 0);
+    LoadTagsQuery(QObject *parent = 0);
 
     void setQuery(QSharedPointer<common::User> &user,
       double latitude,
       double longitude,
       double radius);
 
-    ~RSSFeedQuery();
+    ~LoadTagsQuery();
 
-    const DataChannels& getRSSFeed() const;
+    const DataChannels& getData() const;
 
     Q_SIGNALS:
 
-    void rssFeedReceived();
+    void tagsReceived();
 
-    // class RSSFeedQuery
+    // class LoadTagsQuery
 };
-//_RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
+//_LoadTagsQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
 #endif
 
 /* ===[ End of file $HeadURL$ ]=== */

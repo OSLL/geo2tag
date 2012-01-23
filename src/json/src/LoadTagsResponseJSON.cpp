@@ -32,8 +32,8 @@
 /*! ---------------------------------------------------------------
  * $Id$
  *
- * \file RSSFeedJSON.cpp
- * \brief RSSFeedJSON implementation
+ * \file LoadTagsJSON.cpp
+ * \brief LoadTagsJSON implementation
  *
  * File description
  *
@@ -42,7 +42,7 @@
 
 #include <QVariant>
 #include <QDebug>
-#include "RSSFeedJSON.h"
+#include "LoadTagsResponseJSON.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <qjson/parser.h>
@@ -59,18 +59,18 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 
-RSSFeedResponseJSON::RSSFeedResponseJSON(const DataChannels &hashMap, QObject *parent):
+LoadTagsResponseJSON::LoadTagsResponseJSON(const DataChannels &hashMap, QObject *parent):
 JsonSerializer(parent), m_hashMap(hashMap)
 {
 }
 
 
-RSSFeedResponseJSON::RSSFeedResponseJSON(QObject *parent) : JsonSerializer(parent)
+LoadTagsResponseJSON::LoadTagsResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
 
-void RSSFeedResponseJSON::parseJson(const QByteArray &data)
+void LoadTagsResponseJSON::parseJson(const QByteArray &data)
 {
   //TODO: enable for symbian
   #ifndef  Q_OS_SYMBIAN
@@ -98,7 +98,7 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
     QVariantList markList = channelDesc["items"].toList();
     QString channelName = channelDesc["name"].toString();
 
-    QSharedPointer<Channel> channel(new JsonChannel(channelName,"dummy channel[RSSFeedResponse]"));
+    QSharedPointer<Channel> channel(new JsonChannel(channelName,"dummy channel[LoadTagsResponse]"));
 
     for(int j=0; j<markList.size(); j++)
     {
@@ -131,7 +131,7 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
 }
 
 
-QByteArray RSSFeedResponseJSON::getJson() const
+QByteArray LoadTagsResponseJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj, rss, jchannel;
@@ -171,13 +171,13 @@ QByteArray RSSFeedResponseJSON::getJson() const
 }
 
 
-const DataChannels& RSSFeedResponseJSON::getRSSFeed() const
+const DataChannels& LoadTagsResponseJSON::getData() const
 {
   return m_hashMap;
 }
 
 
-RSSFeedResponseJSON::~RSSFeedResponseJSON()
+LoadTagsResponseJSON::~LoadTagsResponseJSON()
 {
 }
 
