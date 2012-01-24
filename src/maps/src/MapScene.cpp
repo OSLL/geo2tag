@@ -195,7 +195,7 @@ void MapScene::setMarks(DataChannels marks)
 void MapScene::add_mark(QPointF pos, QSharedPointer<DataMark> mark,QSharedPointer<Channel> channel)
 {
   QPointF posForPicture = QPointF(pos.x()-12.0, pos.y()-12.0);
-  QPointF posForText = QPointF(pos.x()-24.0, pos.y()+24.0);
+  //QPointF posForText = QPointF(pos.x()-24.0, pos.y()+24.0);
   QGraphicsPixmapItem * pi = 0;
   QString channel_name = channel->getName();
   if(channel_name == "Fuel prices")

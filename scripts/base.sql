@@ -2,7 +2,7 @@ CREATE SEQUENCE users_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 
 CREATE TABLE users (
   id NUMERIC(9,0) NOT NULL DEFAULT nextval('users_seq'),
-  login VARCHAR(50) NOT NULL,
+  login VARCHAR(50) UNIQUE NOT NULL,
   password VARCHAR(50) NOT NULL,
   token VARCHAR(65) UNIQUE NOT NULL,
   constraint users_pkey primary key (id)
