@@ -32,20 +32,37 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef ADDNEWMARKREQUESTJSON_H
-#define ADDNEWMARKREQUESTJSON_H
+#ifndef WRITETAGQUERY_H
+#define WRITETAGQUERY_H
 
-#include "JsonSerializer.h"
+#include <QObject>
+#include <QString>
+#include "DefaultQuery.h"
+#include "User.h"
+#include "DataMarks.h"
 
-class AddNewMarkRequestJSON : public JsonSerializer
+class WriteTagQuery: public DefaultQuery
 {
+  Q_OBJECT
+
+    QSharedPointer<DataMark> m_tag;
+
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
+  virtual void processReply(QNetworkReply *reply);
+
   public:
+    WriteTagQuery(const QSharedPointer<DataMark> &tag, QObject *parent = 0);
+    WriteTagQuery(QObject *parent = 0);
 
-    AddNewMarkRequestJSON(QObject *parent=0);
+    ~WriteTagQuery();
+    void setTag(const QSharedPointer<DataMark> &tag);
+    QSharedPointer<DataMark> getTag();
+    const QSharedPointer<DataMark>& getTag() const;
 
-    virtual QByteArray getJson() const;
+    Q_SIGNALS:
 
-    virtual void parseJson(const QByteArray&);
+    void tagAdded();
 };
-// ADDNEWMARKREQUESTJSON_H
+// ADDNEWMARKQUERY_H
 #endif

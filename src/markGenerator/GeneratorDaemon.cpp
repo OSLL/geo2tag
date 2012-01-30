@@ -120,8 +120,8 @@ void GeneratorDaemon::onConnected()
     QSharedPointer<Channel> channel(new JsonChannel(m_channelName,"dummy channel"));
     mark->setChannel(channel);
     mark->setUser(m_loginQuery->getUser());
-    qDebug() << "try to create AddNewMarkQuery";
-    m_tagQuery = new AddNewMarkQuery(mark,this);
+    qDebug() << "try to create WriteTagQuery";
+    m_tagQuery = new WriteTagQuery(mark,this);
     qDebug() << m_tagQuery;
     connect(m_tagQuery, SIGNAL(tagAdded()), SLOT(onTagAdded()));
     connect(m_tagQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));

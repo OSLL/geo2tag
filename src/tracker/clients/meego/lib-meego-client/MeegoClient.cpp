@@ -62,7 +62,7 @@ m_authentificated(0)
   m_history = new MarksHistory(this);
   connect(m_history,SIGNAL(isFull()),SLOT(onHistoryFull()));
 
-  m_addNewMarkQuery = new AddNewMarkQuery(this);
+  m_addNewMarkQuery = new WriteTagQuery(this);
   connect(m_addNewMarkQuery,SIGNAL(tagAdded()),SLOT(onMarkAdded()));
   connect(m_addNewMarkQuery, SIGNAL(errorOccured(QString)), SIGNAL(error(QString)));
 }

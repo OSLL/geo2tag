@@ -45,8 +45,8 @@
 #include "LoginRequestJSON.h"
 #include "LoginResponseJSON.h"
 
-#include "AddNewMarkRequestJSON.h"
-#include "AddNewMarkResponseJSON.h"
+#include "WriteTagRequestJSON.h"
+#include "WriteTagResponseJSON.h"
 
 #include "AddUserRequestJSON.h"
 #include "AddUserResponseJSON.h"
@@ -124,7 +124,7 @@ namespace common
   {
 
     m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
-    m_processors.insert("apply", &DbObjectsCollection::processAddNewMarkQuery);
+    m_processors.insert("writeTag", &DbObjectsCollection::processWriteTagQuery);
     m_processors.insert("loadTags", &DbObjectsCollection::processLoadTagsQuery);
     m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
     m_processors.insert("subscribed", &DbObjectsCollection::processSubscribedChannelsQuery);
@@ -256,10 +256,10 @@ namespace common
     return answer;
   }
 
-  QByteArray DbObjectsCollection::processAddNewMarkQuery(const QByteArray &data)
+  QByteArray DbObjectsCollection::processWriteTagQuery(const QByteArray &data)
   {
-    AddNewMarkRequestJSON request;
-    AddNewMarkResponseJSON response;
+    WriteTagRequestJSON request;
+    WriteTagResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
     request.parseJson(data);

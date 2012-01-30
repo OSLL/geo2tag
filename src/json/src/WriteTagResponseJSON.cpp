@@ -34,7 +34,7 @@
 
 #include <QDebug>
 
-#include "AddNewMarkResponseJSON.h"
+#include "WriteTagResponseJSON.h"
 #include "JsonDataMark.h"
 #include "DataMarks.h"
 
@@ -46,12 +46,12 @@
 #include "serializer.h"
 #endif
 
-AddNewMarkResponseJSON::AddNewMarkResponseJSON(QObject *parent) : JsonSerializer(parent)
+WriteTagResponseJSON::WriteTagResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
 
-QByteArray AddNewMarkResponseJSON::getJson() const
+QByteArray WriteTagResponseJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj;
@@ -63,7 +63,7 @@ QByteArray AddNewMarkResponseJSON::getJson() const
 }
 
 
-void AddNewMarkResponseJSON::parseJson(const QByteArray &data)
+void WriteTagResponseJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
 
