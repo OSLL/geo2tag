@@ -186,9 +186,25 @@ namespace common
       m_queryExecutor->connect();
     }
 
-    ProcessMethod method = m_processors.value(queryType);
-    syslog(LOG_INFO,"calling %s processor %s",queryType.toStdString().c_str(),QString(body).toStdString().c_str());
-    return (*this.*method)(body);
+    QList<QString> queries = m_processors.uniqueKeys();
+    for (int i=0;i<queries.size();i++)
+    {
+      if (queryType.compare(queries[i],Qt::CaseInsensitive) == 0)
+      {
+        ProcessMethod method = m_processors.value(queries[i]);
+        syslog(LOG_INFO,"calling %s processor %s",queryType.toStdString().c_str(),QString(body).toStdString().c_str());
+        return (*this.*method)(body);
+      }
+    }
+
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    DefaultResponseJSON response;
+    response.setErrno(INCORRECT_QUERY_NAME_ERROR);
+
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+
   }
 
   QSharedPointer<User> DbObjectsCollection::findUserFromToken(const QSharedPointer<User> &dummyUser) const

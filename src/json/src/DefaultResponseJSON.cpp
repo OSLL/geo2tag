@@ -47,6 +47,7 @@ QByteArray DefaultResponseJSON::getJson() const
   QJson::Serializer serializer;
   QVariantMap obj;
   obj.insert("status", m_status);
+  obj.insert("errno", m_errno);
   obj.insert("status_description", m_statusMessage);
   return serializer.serialize(obj);
 }
