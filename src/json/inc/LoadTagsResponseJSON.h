@@ -29,43 +29,47 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#ifndef RSSFEEDREQUESTJSON_H
-#define RSSFEEDREQUESTJSON_H
+/* $Id$ */
+/*!
+ * \file LoadTagsJSON.h
+ * \brief Header of LoadTagsJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
+#ifndef _LoadTagsResponseJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+#define _LoadTagsResponseJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+
+#include <QMultiHash>
 #include "JsonSerializer.h"
+#include "Channel.h"
+#include "DataMarks.h"
+#include "DataChannel.h"
 
-#include <QString>
-
-class RSSFeedRequestJSON: public JsonSerializer
+class LoadTagsResponseJSON: public JsonSerializer
 {
-  double m_latitude;
-  double m_longitude;
-  double m_radius;
+  // map will contain channels and marks which should be serialized to JSON
+  DataChannels m_hashMap;
 
   public:
-    RSSFeedRequestJSON(double latitude,
-      double longitude,
-      double radius,
-      QObject *parent=0);
+    LoadTagsResponseJSON(const DataChannels &, QObject *parent=0);
 
-    RSSFeedRequestJSON(QObject *parent=0);
-
-    double getLatitude() const;
-    double getLongitude() const;
-    double getRadius() const;
-    QString getAuthToken() const;
-
-    void setLatitude(double latitude);
-    void setLongitude(double longitude);
-    void setRadius(double radius);
+    LoadTagsResponseJSON(QObject *parent=0);
 
     virtual QByteArray getJson() const;
 
     virtual void parseJson(const QByteArray&);
 
-    ~RSSFeedRequestJSON();
+    const DataChannels& getData() const;
 
-    //class RSSFeedRequestJSON
+    ~LoadTagsResponseJSON();
+
+    //class LoadTagsJSON
 };
-// RSSFEEDREQUESTJSON_H
+//_LoadTagsJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 #endif
+
+/* ===[ End of file $HeadURL$ ]=== */

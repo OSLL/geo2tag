@@ -51,8 +51,8 @@
 #include "AddUserRequestJSON.h"
 #include "AddUserResponseJSON.h"
 
-#include "RSSFeedRequestJSON.h"
-#include "RSSFeedJSON.h"
+#include "LoadTagsRequestJSON.h"
+#include "LoadTagsResponseJSON.h"
 
 #include "AddChannelRequestJSON.h"
 #include "AddChannelResponseJSON.h"
@@ -125,7 +125,7 @@ namespace common
 
     m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
     m_processors.insert("apply", &DbObjectsCollection::processAddNewMarkQuery);
-    m_processors.insert("rss", &DbObjectsCollection::processRssFeedQuery);
+    m_processors.insert("loadTags", &DbObjectsCollection::processLoadTagsQuery);
     m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
     m_processors.insert("subscribed", &DbObjectsCollection::processSubscribedChannelsQuery);
     m_processors.insert("addUser", &DbObjectsCollection::processAddUserQuery);
@@ -355,9 +355,9 @@ namespace common
     return answer;
   }
 
-  QByteArray DbObjectsCollection::processRssFeedQuery(const QByteArray &data)
+  QByteArray DbObjectsCollection::processLoadTagsQuery(const QByteArray &data)
   {
-    RSSFeedRequestJSON request;
+    LoadTagsRequestJSON request;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
     request.parseJson(data);
@@ -365,7 +365,7 @@ namespace common
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
     if(realUser.isNull())
     {
-      RSSFeedResponseJSON response;
+      LoadTagsResponseJSON response;
       response.setStatus(error);
       response.setStatusMessage("Wrong authentification key");
       answer.append(response.getJson());
@@ -395,7 +395,7 @@ namespace common
            feed.insert(channel, mark);
       }
     }
-    RSSFeedResponseJSON response(feed);
+    LoadTagsResponseJSON response(feed);
     response.setStatus(ok);
     response.setStatusMessage("feed has been generated");
     answer.append(response.getJson());
