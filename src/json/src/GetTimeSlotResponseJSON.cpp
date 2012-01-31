@@ -55,6 +55,7 @@ QByteArray GetTimeSlotResponseJSON::getJson() const
 
   QSharedPointer<Channel> channel = m_channelsContainer->at(0);
 
+  obj.insert("errno", m_errno);
   obj.insert("timeSlot", channel->getTimeSlot()->getSlot());
   return serializer.serialize(obj);
 }
@@ -73,6 +74,7 @@ void GetTimeSlotResponseJSON::parseJson(const QByteArray &data)
     qFatal("An error occured during parsing json with channel list");
   }
 
+  m_errno = result["errno"].toInt();
   qulonglong slot = result["timeSlot"].toULongLong();
   QSharedPointer<TimeSlot>  timeSlot(new JsonTimeSlot(slot));
   QSharedPointer<Channel> channel(new JsonChannel("unknown", "unknown"));

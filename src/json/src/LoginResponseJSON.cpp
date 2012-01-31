@@ -56,8 +56,7 @@ QByteArray LoginResponseJSON::getJson() const
   QVariantMap obj;
   if(m_usersContainer->size()>0)
     obj.insert("auth_token", m_usersContainer->at(0)->getToken());
-  obj.insert("status", m_status);
-  obj.insert("status_description", m_statusMessage);
+  obj.insert("errno", m_errno);
   return serializer.serialize(obj);
 }
 
@@ -75,8 +74,7 @@ void LoginResponseJSON::parseJson(const QByteArray &data)
     qFatal("An error occured during parsing json with channel list");
   }
 
-  m_status = result["status"].toString();
-  m_statusMessage = result["status_description"].toString();
+  m_errno = result["errno"].toInt();
 
   QString auth_token = result["auth_token"].toString();
   QSharedPointer<common::User> user(new JsonUser("unknown", "unknown", auth_token));

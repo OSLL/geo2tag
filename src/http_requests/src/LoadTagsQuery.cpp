@@ -96,7 +96,7 @@ void LoadTagsQuery::processReply(QNetworkReply *reply)
 {
   LoadTagsResponseJSON response;
   response.parseJson(reply->readAll());
-  if(response.getStatus() == "Ok")
+  if(response.getErrno() == SUCCESS)
   {
     m_hashMap = response.getData();
 
@@ -104,7 +104,7 @@ void LoadTagsQuery::processReply(QNetworkReply *reply)
   }
   else
   {
-    Q_EMIT errorOccured(response.getStatusMessage());
+    Q_EMIT errorOccured(response.getErrno());
   }
 }
 

@@ -46,9 +46,7 @@ QByteArray DefaultResponseJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj;
-  obj.insert("status", m_status);
   obj.insert("errno", m_errno);
-  obj.insert("status_description", m_statusMessage);
   return serializer.serialize(obj);
 }
 
@@ -66,6 +64,5 @@ void DefaultResponseJSON::parseJson(const QByteArray &data)
     qFatal("An error occured during parsing json with channel list");
   }
 
-  m_status = result["status"].toString();
-  m_statusMessage = result["status_description"].toString();
+  m_errno = result["errno"].toInt();
 }

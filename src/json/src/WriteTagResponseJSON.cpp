@@ -57,8 +57,7 @@ QByteArray WriteTagResponseJSON::getJson() const
   QVariantMap obj;
   if (m_tagsContainer->size() > 0)
     obj.insert("mark_id", m_tagsContainer->at(0)->getId());
-  obj.insert("status", m_status);
-  obj.insert("status_description", m_statusMessage);
+  obj.insert("errno", m_errno);
   return serializer.serialize(obj);
 }
 
@@ -76,8 +75,7 @@ void WriteTagResponseJSON::parseJson(const QByteArray &data)
     qFatal("An error occured during parsing json with channel list");
   }
 
-  m_status = result["status"].toString();
-  m_statusMessage = result["status_description"].toString();
+  m_errno = result["errno"].toInt();
 
   qlonglong markId = result["mark_id"].toLongLong();
   JsonDataMark* jsonMark = new JsonDataMark(0,0,"unknown", "unknown", "unknown", QDateTime());

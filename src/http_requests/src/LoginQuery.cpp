@@ -87,7 +87,7 @@ void LoginQuery::processReply(QNetworkReply *reply)
   #ifndef Q_OS_SYMBIAN
   LoginResponseJSON response;
   response.parseJson(reply->readAll());
-  if(response.getStatus() == "Ok")
+  if(response.getErrno() == SUCCESS)
   {
     QSharedPointer<common::User> user = response.getUsers()->at(0);
     m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, user->getToken()));
@@ -96,7 +96,7 @@ void LoginQuery::processReply(QNetworkReply *reply)
   }
   else
   {
-    Q_EMIT errorOccured(response.getStatusMessage());
+    Q_EMIT errorOccured(response.getErrno());
   }
   #endif
 }

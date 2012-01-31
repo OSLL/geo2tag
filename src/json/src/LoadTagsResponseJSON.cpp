@@ -85,8 +85,7 @@ void LoadTagsResponseJSON::parseJson(const QByteArray &data)
     qFatal("An error occured during parsing json with rss feed");
     return;
   }
-  setStatus(result["status"].toString());
-  setStatusMessage(result["status_description"].toString());
+  m_errno = result["errno"].toInt();
   QVariantMap rss = result["rss"].toMap();
   QVariantMap channelVariant = rss["channels"].toMap();
   QVariantList channelsList = channelVariant["items"].toList();
@@ -165,8 +164,7 @@ QByteArray LoadTagsResponseJSON::getJson() const
   jchannel["items"] = jchannels;
   rss["channels"] = jchannel;
   obj["rss"] = rss;
-  obj["status"]=getStatus();
-  obj["status_description"]=getStatusMessage();
+  obj["errno"]= m_errno;
   return serializer.serialize(obj);
 }
 

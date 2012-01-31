@@ -72,13 +72,13 @@ void WriteTagQuery::processReply(QNetworkReply *reply)
 {
   WriteTagResponseJSON response;
   response.parseJson(reply->readAll());
-  if(response.getStatus() == "Ok")
+  if(response.getErrno() == SUCCESS)
   {
     Q_EMIT tagAdded();
   }
   else
   {
-    Q_EMIT errorOccured(response.getStatusMessage());
+    Q_EMIT errorOccured(response.getErrno());
   }
 }
 

@@ -38,7 +38,7 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-
+#include "ErrnoTypes.h"
 class DefaultQuery : public QObject
 {
   Q_OBJECT
@@ -65,6 +65,7 @@ class DefaultQuery : public QObject
     void responseReceived();
 
     void errorOccured(QString);
+    void errorOccured(int);
 };
 // DEFAULTQUERY_H
 #endif

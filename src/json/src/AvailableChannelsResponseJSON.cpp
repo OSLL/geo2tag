@@ -75,7 +75,7 @@ void AvailableChannelsResponseJSON::parseJson(const QByteArray &data)
     qFatal("An error occured during parsing json with channel list");
     return;
   }
-
+  m_errno = result["channels"].toInt();
   QVariantList channels = result["channels"].toList();
   int size = channels.size();
   for (int i = 0; i < size; i++)
@@ -107,6 +107,7 @@ QByteArray AvailableChannelsResponseJSON::getJson() const
 
   QVariantMap channelsMap;
   channelsMap.insert("channels", channelsList);
+  channelsMap.insert("errno", m_errno);
   return serializer.serialize(channelsMap);
 }
 
