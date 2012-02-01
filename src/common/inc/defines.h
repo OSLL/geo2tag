@@ -55,8 +55,8 @@ void setServerPort(int port);
 
 #define SUBSCRIBE_HTTP_URL        getServerUrl()+QString("service/subscribe")
 #define UNSUBSCRIBE_HTTP_URL      getServerUrl()+QString("service/unsubscribe")
-#define APPLY_HTTP_URL            getServerUrl()+QString("service/apply")
-#define FEED_HTTP_URL             getServerUrl()+QString("service/rss")
+#define APPLY_HTTP_URL            getServerUrl()+QString("service/writeTag")
+#define FEED_HTTP_URL             getServerUrl()+QString("service/loadTags")
 #define SUBSCRIBED_LIST_HTTP_URL  getServerUrl()+QString("service/subscribed")
 #define AVAILABLE_LIST_HTTP_URL   getServerUrl()+QString("service/channels")
 #define LOGIN_HTTP_URL            getServerUrl()+QString("service/login")
