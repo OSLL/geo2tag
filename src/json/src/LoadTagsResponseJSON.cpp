@@ -70,7 +70,7 @@ LoadTagsResponseJSON::LoadTagsResponseJSON(QObject *parent) : JsonSerializer(par
 }
 
 
-void LoadTagsResponseJSON::parseJson(const QByteArray &data)
+bool LoadTagsResponseJSON::parseJson(const QByteArray &data)
 {
   //TODO: enable for symbian
   #ifndef  Q_OS_SYMBIAN
@@ -80,12 +80,12 @@ void LoadTagsResponseJSON::parseJson(const QByteArray &data)
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
 
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with rss feed");
-    return;
-  }
-  m_errno = result["errno"].toInt();
+  if (!ok) return false;
+
+  result["errno"].toInt(&ok);
+  if (!ok) return false;
+  m_errno = result["errno"].toInt(&ok);
+
   QVariantMap rss = result["rss"].toMap();
   QVariantMap channelVariant = rss["channels"].toMap();
   QVariantList channelsList = channelVariant["items"].toList();
@@ -106,8 +106,11 @@ void LoadTagsResponseJSON::parseJson(const QByteArray &data)
       QString title = markMap["title"].toString();
       QString link = markMap["link"].toString();
       QString description = markMap["description"].toString();
-      double latitude = markMap["latitude"].toString().toDouble();
-      double longitude = markMap["longitude"].toString().toDouble();
+      double latitude = markMap["latitude"].toString().toDouble(&ok);
+      if (!ok) return false;
+      double longitude = markMap["longitude"].toString().toDouble(&ok);
+      if (!ok) return false;
+
       QString userName = markMap["user"].toString();
       QString timeStr =  markMap["pubDate"].toString();
       QDateTime time = QDateTime::fromString(timeStr, "dd MM yyyy HH:mm:ss.zzz");
@@ -126,6 +129,7 @@ void LoadTagsResponseJSON::parseJson(const QByteArray &data)
       m_hashMap.insert(channel, newMark);
     }
   }
+  return true;
   #endif                                // Q_OS_SYMBIAN
 }
 

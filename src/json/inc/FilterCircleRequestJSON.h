@@ -54,7 +54,7 @@ class FilterCircleRequestJSON: public FilterRequestJSON
 
     QByteArray getJson() const;
 
-    void parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 };
 
 

@@ -51,7 +51,7 @@ QByteArray DefaultResponseJSON::getJson() const
 }
 
 
-void DefaultResponseJSON::parseJson(const QByteArray &data)
+bool DefaultResponseJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
 
@@ -59,10 +59,10 @@ void DefaultResponseJSON::parseJson(const QByteArray &data)
   bool ok;
 
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
+  if (!ok) return false;
 
+  result["errno"].toInt(&ok);
+  if (!ok) return false;
   m_errno = result["errno"].toInt();
+  return true;
 }

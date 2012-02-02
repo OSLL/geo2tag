@@ -56,7 +56,7 @@ LoadTagsRequestJSON::LoadTagsRequestJSON(QObject *parent) :JsonSerializer(parent
 }
 
 
-void LoadTagsRequestJSON::parseJson(const QByteArray &data)
+bool LoadTagsRequestJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
 
@@ -64,17 +64,24 @@ void LoadTagsRequestJSON::parseJson(const QByteArray &data)
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
 
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with rss request");
-    return;
-  }
+  if (!ok) return false;
 
   QString authToken = result["auth_token"].toString();
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("dummyUser[LoadTagsRequest]","dummyPassword",authToken)));
-  m_latitude = result["latitude"].toDouble();
-  m_longitude = result["longitude"].toDouble();
-  m_radius = result["radius"].toDouble();
+
+  result["latitude"].toDouble(&ok);
+  if (!ok) return false;
+  m_latitude = result["latitude"].toDouble(&ok);
+
+  result["longitude"].toDouble(&ok);
+  if (!ok) return false;
+  m_longitude = result["longitude"].toDouble(&ok);
+
+  result["radius"].toDouble(&ok);
+  if (!ok) return false;
+  m_radius = result["radius"].toDouble(&ok);
+
+  return true;
 }
 
 

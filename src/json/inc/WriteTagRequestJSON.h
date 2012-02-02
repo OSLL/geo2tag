@@ -45,7 +45,7 @@ class WriteTagRequestJSON : public JsonSerializer
 
     virtual QByteArray getJson() const;
 
-    virtual void parseJson(const QByteArray&);
+    virtual bool parseJson(const QByteArray&);
 };
 // ADDNEWMARKREQUESTJSON_H
 #endif

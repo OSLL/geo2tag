@@ -59,21 +59,20 @@ QByteArray SetTimeSlotMarkRequestJSON::getJson() const
 }
 
 
-void SetTimeSlotMarkRequestJSON::parseJson(const QByteArray &data)
+bool SetTimeSlotMarkRequestJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-    return;
-  }
+  if (!ok) return false;
 
   QString token = result["auth_token"].toString();
-  qlonglong markId = result["mark_id"].toLongLong();
-  qulonglong timeSlot = result["timeSlot"].toULongLong();
+  qlonglong markId = result["mark_id"].toLongLong(&ok);
+  if (!ok) return false;
+
+  qulonglong timeSlot = result["timeSlot"].toULongLong(&ok);
+  if (!ok) return false;
 
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("unknown","unknown", token)));
 
@@ -82,4 +81,5 @@ void SetTimeSlotMarkRequestJSON::parseJson(const QByteArray &data)
   m_tagsContainer->push_back(QSharedPointer<DataMark> (jsonMark));
 
   m_tagsContainer->at(0)->setTimeSlot(QSharedPointer<TimeSlot>(new JsonTimeSlot(timeSlot)));
+  return true;
 }

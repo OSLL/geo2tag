@@ -67,16 +67,14 @@ QByteArray FilterPolygonRequestJSON::getJson() const
 }
 
 
-void FilterPolygonRequestJSON::parseJson(const QByteArray&data)
+bool FilterPolygonRequestJSON::parseJson(const QByteArray&data)
 {
   clearContainers();
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
+  if (!ok) return false;
+
   QString authToken = result["auth_token"].toString();
   setTimeFrom(QDateTime::fromString(result["time_from"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
   setTimeTo(QDateTime::fromString(result["time_to"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
@@ -87,10 +85,17 @@ void FilterPolygonRequestJSON::parseJson(const QByteArray&data)
   {
     QVariantMap p = polygon.at(i).toMap();
     int number = p["number"].toInt(&ok);
+    if (!ok) return false;
+
     double lat = p["latitude"].toDouble(&ok);
+    if (!ok) return false;
+
     double lon = p["longitude"].toDouble(&ok);
+    if (!ok) return false;
+
     shape->addPoint(number, lat, lon);
   }
   setShape(QSharedPointer<FShape>(shape));
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("null", "null", authToken)));
+  return true;
 }

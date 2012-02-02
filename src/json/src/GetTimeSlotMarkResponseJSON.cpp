@@ -61,7 +61,7 @@ QByteArray GetTimeSlotMarkResponseJSON::getJson() const
 }
 
 
-void GetTimeSlotMarkResponseJSON::parseJson(const QByteArray &data)
+bool GetTimeSlotMarkResponseJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
 
@@ -69,15 +69,17 @@ void GetTimeSlotMarkResponseJSON::parseJson(const QByteArray &data)
   bool ok;
 
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
+  if (!ok) return false;
 
-  m_errno = result["errno"].toInt();
-  qulonglong slot = result["timeSlot"].toULongLong();
+  m_errno = result["errno"].toInt(&ok);
+  if (!ok) return false;
+
+  qulonglong slot = result["timeSlot"].toULongLong(&ok);
+  if (!ok) return false;
+
   QSharedPointer<TimeSlot>  timeSlot(new JsonTimeSlot(slot));
   QSharedPointer<DataMark> mark(new JsonDataMark(0,0,"unknown", "unknown", "unknown", QDateTime()));
   mark->setTimeSlot(timeSlot);
   m_tagsContainer->push_back(mark);
+  return true;
 }

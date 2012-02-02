@@ -44,7 +44,7 @@ class DefaultResponseJSON : public JsonSerializer
 
     QByteArray getJson() const;
 
-    void parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 };
 // DEFAULTRESPONSEJSON_H
 #endif

@@ -61,7 +61,7 @@ class LoadTagsResponseJSON: public JsonSerializer
 
     virtual QByteArray getJson() const;
 
-    virtual void parseJson(const QByteArray&);
+    virtual bool parseJson(const QByteArray&);
 
     const DataChannels& getData() const;
 

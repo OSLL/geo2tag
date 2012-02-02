@@ -62,7 +62,7 @@ QByteArray WriteTagResponseJSON::getJson() const
 }
 
 
-void WriteTagResponseJSON::parseJson(const QByteArray &data)
+bool WriteTagResponseJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
 
@@ -70,16 +70,18 @@ void WriteTagResponseJSON::parseJson(const QByteArray &data)
   bool ok;
 
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
+  if (!ok) return false;
 
+  result["errno"].toInt(&ok);
+  if (!ok) return false;
   m_errno = result["errno"].toInt();
 
-  qlonglong markId = result["mark_id"].toLongLong();
+  qlonglong markId = result["mark_id"].toLongLong(&ok);
+  if (!ok) return false;
+
   JsonDataMark* jsonMark = new JsonDataMark(0,0,"unknown", "unknown", "unknown", QDateTime());
   jsonMark->setId(markId);
   QSharedPointer<DataMark> mark(jsonMark);
   m_tagsContainer->push_back(mark);
+  return true;
 }

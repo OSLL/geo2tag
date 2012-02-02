@@ -51,25 +51,25 @@ WriteTagRequestJSON::WriteTagRequestJSON(QObject *parent) : JsonSerializer(paren
 }
 
 
-void WriteTagRequestJSON::parseJson(const QByteArray &data)
+bool WriteTagRequestJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-    return;
-  }
+  if (!ok) return false;
 
   QString token = result["auth_token"].toString();
   QString channel_name = result["channel"].toString();
   QString title = result["title"].toString();
   QString link = result["link"].toString();
   QString description = result["description"].toString();
-  double longitude = result["longitude"].toDouble();
-  double latitude = result["latitude"].toDouble();
+  double longitude = result["longitude"].toDouble(&ok);
+  if (!ok) return false;
+
+  double latitude = result["latitude"].toDouble(&ok);
+  if (!ok) return false;
+
   QDateTime time = QDateTime::fromString(result["time"].toString(), "dd MM yyyy HH:mm:ss.zzz");
 
   QSharedPointer<common::User>  user(new JsonUser("unknown", "unknown", token));
@@ -78,6 +78,8 @@ void WriteTagRequestJSON::parseJson(const QByteArray &data)
   tag->setChannel(channel);
   tag->setUser(user);
   m_tagsContainer->push_back(tag);
+  
+  return true;
 }
 
 

@@ -52,7 +52,7 @@ public:
 
   QByteArray getJson() const;
 
-  void parseJson(const QByteArray&);
+  bool parseJson(const QByteArray&);
 }; // class FilterBoxRequestJSON
   
 #endif //_FilterBoxRequestJSON_H_9E72A5DF_66DE_4ACD_A059_E7B239AEABBA_INCLUDED_

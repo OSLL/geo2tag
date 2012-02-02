@@ -52,7 +52,7 @@ public:
 
   QByteArray getJson() const;
 
-  void parseJson(const QByteArray&);
+  bool parseJson(const QByteArray&);
 
 }; // class FilterPolygonRequestJSON
   

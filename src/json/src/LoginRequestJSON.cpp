@@ -58,18 +58,17 @@ QByteArray LoginRequestJSON::getJson() const
 }
 
 
-void LoginRequestJSON::parseJson(const QByteArray&data)
+bool LoginRequestJSON::parseJson(const QByteArray&data)
 {
   clearContainers();
 
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
+  if (!ok) return false;
+
   QString login = result["login"].toString();
   QString password = result["password"].toString();
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login,password)));
+  return true;
 }

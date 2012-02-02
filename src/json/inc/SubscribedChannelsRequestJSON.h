@@ -54,7 +54,7 @@ class SubscribedChannelsRequestJSON: public JsonSerializer
     // Three functions below was virtual
     QByteArray getJson() const;
 
-    void parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 
     SubscribedChannelsRequestJSON();
 

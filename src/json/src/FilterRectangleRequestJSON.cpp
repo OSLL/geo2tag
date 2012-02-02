@@ -69,16 +69,13 @@ QByteArray FilterRectangleRequestJSON::getJson() const
 }
 
 
-void FilterRectangleRequestJSON::parseJson(const QByteArray&data)
+bool FilterRectangleRequestJSON::parseJson(const QByteArray&data)
 {
   clearContainers();
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
+  if (!ok) return false;
   QString authToken = result["auth_token"].toString();
   setTimeFrom(QDateTime::fromString(result["time_from"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
   setTimeTo(QDateTime::fromString(result["time_to"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
@@ -86,15 +83,22 @@ void FilterRectangleRequestJSON::parseJson(const QByteArray&data)
   double lat1, lat2, lon1, lon2;
   QVariantMap latData = result["latitude_shift"].toMap();
   lat1 = latData["latitude1"].toDouble(&ok);
+  if (!ok) return false;
+
   lat2 = latData["latitude2"].toDouble(&ok);
+  if (!ok) return false;
 
   QVariantMap lonData = result["longitude_shift"].toMap();
   lon1 = lonData["longitude1"].toDouble(&ok);
+  if (!ok) return false;
+
   lon2 = lonData["longitude2"].toDouble(&ok);
+  if (!ok) return false;
 
   syslog(LOG_INFO, "rect %f ,%f ,%f ,%f ", lat1, lat2, lon2, lon2);
 
   FShapeRectangle * shape = new FShapeRectangle(lat1, lon1, lat2, lon2);
   setShape(QSharedPointer<FShape>(shape));
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("null", "null", authToken)));
+  return true;
 }

@@ -60,17 +60,19 @@ QByteArray FilterBoxRequestJSON::getJson() const
   return FilterRectangleRequestJSON::getJson();
 }
 
-void FilterBoxRequestJSON::parseJson(const QByteArray& data)
+bool FilterBoxRequestJSON::parseJson(const QByteArray& data)
 {
   FilterRectangleRequestJSON::parseJson(data);
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
+  if (!ok) return false;
   QVariantMap altitudeShift = result["altitude_shift"].toMap();
-  setAltitude1(altitudeShift["altitude1"].toDouble(&ok));
+  double alt = altitudeShift["altitude1"].toDouble(&ok);
+  if (!ok)    return false;
+
+  setAltitude1(alt);
+  alt = altitudeShift["altitude2"].toDouble(&ok) ;
+  if (!ok)    return false;  
   setAltitude2(altitudeShift["altitude2"].toDouble(&ok));
 }

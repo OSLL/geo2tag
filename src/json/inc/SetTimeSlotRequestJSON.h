@@ -50,7 +50,7 @@ class SetTimeSlotRequestJSON : public JsonSerializer
 
     QByteArray getJson() const;
 
-    void parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 };
 // _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_
 #endif
