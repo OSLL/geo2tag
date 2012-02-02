@@ -75,4 +75,5 @@ bool FilterBoxRequestJSON::parseJson(const QByteArray& data)
   alt = altitudeShift["altitude2"].toDouble(&ok) ;
   if (!ok)    return false;  
   setAltitude2(altitudeShift["altitude2"].toDouble(&ok));
+  return true;
 }

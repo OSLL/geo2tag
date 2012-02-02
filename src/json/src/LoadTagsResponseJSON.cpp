@@ -178,6 +178,11 @@ const DataChannels& LoadTagsResponseJSON::getData() const
   return m_hashMap;
 }
 
+void LoadTagsResponseJSON::setData(const DataChannels& d)
+{
+  m_hashMap = d ;
+}
+
 
 LoadTagsResponseJSON::~LoadTagsResponseJSON()
 {

@@ -230,7 +230,12 @@ namespace common
     LoginResponseJSON response;
     QByteArray answer;
 
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser;      // Null pointer
@@ -272,7 +277,12 @@ namespace common
     WriteTagResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
     QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
     QSharedPointer<User> dummyUser = dummyTag->getUser();
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -335,7 +345,12 @@ namespace common
     SubscribedChannelsResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
     if(realUser.isNull())
@@ -356,14 +371,19 @@ namespace common
   QByteArray DbObjectsCollection::processLoadTagsQuery(const QByteArray &data)
   {
     LoadTagsRequestJSON request;
+    LoadTagsResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
     if(realUser.isNull())
     {
-      LoadTagsResponseJSON response;
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
@@ -392,7 +412,7 @@ namespace common
            feed.insert(channel, mark);
       }
     }
-    LoadTagsResponseJSON response(feed);
+    response.setData(feed);
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
@@ -406,7 +426,12 @@ namespace common
     SubscribeChannelRequestJSON request;
     SubscribeChannelResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -471,7 +496,12 @@ namespace common
     syslog(LOG_INFO, " AddUserRequestJSON created, now create AddUserResponseJSON ");
     AddUserResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
     // Look for user with the same name
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
@@ -513,7 +543,12 @@ namespace common
     AddChannelRequestJSON request;
     AddChannelResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -570,7 +605,12 @@ namespace common
     GetTimeSlotRequestJSON request;
     GetTimeSlotResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -614,7 +654,12 @@ namespace common
     SetTimeSlotRequestJSON request;
     SetTimeSlotResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -745,7 +790,12 @@ namespace common
     GetTimeSlotMarkRequestJSON request;
     GetTimeSlotMarkResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -789,7 +839,12 @@ namespace common
     SetTimeSlotMarkRequestJSON request;
     SetTimeSlotMarkResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -900,7 +955,12 @@ namespace common
     SetDefaultTimeSlotRequestJSON request;
     SetDefaultTimeSlotResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -964,7 +1024,12 @@ namespace common
     SetDefaultTimeSlotMarkRequestJSON request;
     SetDefaultTimeSlotMarkResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -1027,9 +1092,15 @@ namespace common
   {
     AvailableChannelsRequestJSON request;
     AvailableChannelsResponseJSON response;
+    syslog(LOG_INFO, "processAvailableChannelsQuery - data = %s", data.data());
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
     if(realUser.isNull())
@@ -1051,7 +1122,12 @@ namespace common
     UnsubscribeChannelResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
 
@@ -1140,7 +1216,12 @@ namespace common
     FilterDefaultResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
-    request.parseJson(data);
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+       return answer;
+    }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
     if(realUser.isNull())
