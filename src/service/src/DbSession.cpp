@@ -229,7 +229,7 @@ namespace common
     LoginRequestJSON request;
     LoginResponseJSON response;
     QByteArray answer;
-
+    answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
     if (!request.parseJson(data))
     {
       response.setErrno(INCORRECT_JSON_ERROR);
@@ -255,7 +255,6 @@ namespace common
         else  response.setErrno(INCORRECT_CREDENTIALS_ERROR);
       }
     }
-    answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
     if(realUser.isNull())
     {
       response.setErrno(INCORRECT_CREDENTIALS_ERROR);
