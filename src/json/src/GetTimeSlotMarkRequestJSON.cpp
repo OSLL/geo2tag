@@ -71,7 +71,7 @@ bool GetTimeSlotMarkRequestJSON::parseJson(const QByteArray &data)
   if (!ok) return false;  
 
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("unknown","unknown", token)));
-  JsonDataMark* jsonMark = new JsonDataMark(0,0,"unknown", "unknown", "unknown", QDateTime());
+  JsonDataMark* jsonMark = new JsonDataMark(0,0,0,"unknown", "unknown", "unknown", QDateTime());
   jsonMark->setId(markId);
   m_tagsContainer->push_back(QSharedPointer<DataMark> (jsonMark));
   return true;

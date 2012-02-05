@@ -64,6 +64,8 @@ bool WriteTagRequestJSON::parseJson(const QByteArray &data)
   QString title = result["title"].toString();
   QString link = result["link"].toString();
   QString description = result["description"].toString();
+  double altitude = result["altitude"].toDouble(&ok);
+  if (!ok) return false;
   double longitude = result["longitude"].toDouble(&ok);
   if (!ok) return false;
 
@@ -74,7 +76,8 @@ bool WriteTagRequestJSON::parseJson(const QByteArray &data)
 
   QSharedPointer<common::User>  user(new JsonUser("unknown", "unknown", token));
   QSharedPointer<Channel> channel(new JsonChannel(channel_name, "unknown"));
-  QSharedPointer<DataMark> tag(new JsonDataMark(latitude, longitude, title, description, link, time));
+  
+  QSharedPointer<DataMark> tag(new JsonDataMark(altitude, latitude, longitude, title, description, link, time));
   tag->setChannel(channel);
   tag->setUser(user);
   m_tagsContainer->push_back(tag);
@@ -94,6 +97,7 @@ QByteArray WriteTagRequestJSON::getJson() const
   request.insert("link", mark->getUrl());
   request.insert("description", mark->getDescription());
   request.insert("latitude", mark->getLatitude());
+  request.insert("altitude", mark->getAltitude());
   request.insert("longitude", mark->getLongitude());
   request.insert("time", mark->getTime().toString("dd MM yyyy HH:mm:ss.zzz"));
   return serializer.serialize(request);

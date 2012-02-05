@@ -195,7 +195,7 @@ void UpdateThread::loadTimeSlots(TimeSlots &container)
 void UpdateThread::loadTags(DataMarks &container)
 {
   QSqlQuery query(m_database);
-  query.exec("select id, time, latitude, longitude, label, description, url, user_id from tag order by time;");
+  query.exec("select id, time, altitude, latitude, longitude, label, description, url, user_id from tag order by time;");
   while (query.next())
   {
     qlonglong id = query.record().value("id").toLongLong();
@@ -207,6 +207,7 @@ void UpdateThread::loadTags(DataMarks &container)
     QDateTime time = query.record().value("time").toDateTime().toTimeSpec(Qt::LocalTime);
     //       // syslog(LOG_INFO, "loaded tag with time: %s milliseconds", time;
     qreal latitude = query.record().value("latitude").toReal();
+    qreal altitude = query.record().value("altitude").toReal();
     qreal longitude = query.record().value("longitude").toReal();
     QString label = query.record().value("label").toString();
     QString description = query.record().value("description").toString();
@@ -214,6 +215,7 @@ void UpdateThread::loadTags(DataMarks &container)
     qlonglong userId = query.record().value("user_id").toLongLong();
 
     DbDataMark *newMark = new DbDataMark(id,
+      altitude,
       latitude,
       longitude,
       label,

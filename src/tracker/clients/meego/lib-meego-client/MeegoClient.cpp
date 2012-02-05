@@ -169,7 +169,7 @@ void MeegoClient::track()
   //   double lon=common::GpsInfo::getInstance().getLongitude();
   double lat=30+0.01*(qrand()%100);
   double lon=60+0.01*(qrand()%100);
-  QSharedPointer<DataMark> mark(new JsonDataMark(lat,lon,m_name,
+  QSharedPointer<DataMark> mark(new JsonDataMark(0,lat,lon,m_name,
     "this tag was generated","unknown",QDateTime::currentDateTime()));
 
   QSharedPointer<Channel> channel(new JsonChannel(DEFAULT_CHANNEL,"dummy channel"));

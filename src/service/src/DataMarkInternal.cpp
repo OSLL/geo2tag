@@ -42,6 +42,7 @@
 #include "DataMarkInternal.h"
 
 DbDataMark::DbDataMark(qlonglong id,
+double altitude,
 double latitude,
 double longitude,
 QString label,
@@ -49,7 +50,7 @@ QString description,
 const QString &url,
 const QDateTime &time,
 qlonglong userId):
-DataMark(latitude, longitude, label, description, url, time),
+DataMark(altitude,latitude, longitude, label, description, url, time),
 m_id(id),
 m_userId(userId)
 {

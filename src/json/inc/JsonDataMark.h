@@ -53,7 +53,7 @@ class JsonDataMark: public DataMark
   qlonglong m_userId;
 
   public:
-    JsonDataMark(double latitude, double longitude,
+    JsonDataMark(double altitude, double latitude, double longitude,
       QString label, QString description, const QString& url, const QDateTime& time);
 
     qlonglong getId() const;

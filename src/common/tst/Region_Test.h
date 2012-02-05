@@ -91,8 +91,8 @@ namespace Test
 		m_tstObject->addPoint(POINT3);
 		m_tstObject->addPoint(POINT4);
 
-		QVERIFY(m_tstObject->atRegion(POINT_IN_REGION);
-		QVERIFY(!m_tstObject->atRegion(POINT_OUT_REGION);
+		QVERIFY(m_tstObject->atRegion(POINT_IN_REGION));
+		QVERIFY(!m_tstObject->atRegion(POINT_OUT_REGION));
      
     }
   

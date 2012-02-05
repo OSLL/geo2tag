@@ -13,6 +13,7 @@ CREATE SEQUENCE tags_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 CREATE TABLE tag (
   id NUMERIC(9,0) NOT NULL DEFAULT nextval('tags_seq'),
   time TIMESTAMP NOT NULL DEFAULT (current_timestamp),
+  altitude float NOT NULL,
   latitude float NOT NULL,
   longitude float NOT NULL,
   label VARCHAR(1024) NOT NULL,
@@ -130,14 +131,14 @@ INSERT into users (login, password, token) values ('Kirill', 'test', 'KKKKKKKKKK
 INSERT into users (login, password, token) values ('Mark',   'test', 'MMMMMMMMMM');
 INSERT into users (login, password, token) values ('Yevgeni', 'test', 'YYYYYYYYYY');
 
-INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.166504, 24.841204, 'A', 'Accident at road 51. Time: 15:45, January 2, 2010.', 1, 'http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.163216, 24.859314, 'B', 'Shell 95: 1.299 e', 2, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.166264, 24.859915, 'C', 'Neste Oil diesel: .0989 e', 1, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.163216, 24.859915, 'D', 'Neste 95: 1.294 e', 3, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.162159, 24.739065, 'E', 'CityMarket Iso Omena: Children overalls 50% off', 1, 'http://www.k-citymarket.fi/img/citymarketLogo.gif');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.167433, 24.733486, 'F', 'Prisma Olari: LEGO 20% off', 2, 'http://mw2.google.com/mw-panoramio/photos/thumbnail/5131282.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.173362, 24.829166, 'G', 'Outdoor party place on February 20, 2010', 4, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values(60.178308, 24.848585, 'H', 'Espoo. Cheap hotel.', 2, 'http://mw2.google.com/mw-panoramio/photos/small/8267319.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.166504, 24.841204, 'A', 'Accident at road 51. Time: 15:45, January 2, 2010.', 1, 'http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.163216, 24.859314, 'B', 'Shell 95: 1.299 e', 2, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0,60.166264, 24.859915, 'C', 'Neste Oil diesel: .0989 e', 1, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.163216, 24.859915, 'D', 'Neste 95: 1.294 e', 3, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.162159, 24.739065, 'E', 'CityMarket Iso Omena: Children overalls 50% off', 1, 'http://www.k-citymarket.fi/img/citymarketLogo.gif');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.167433, 24.733486, 'F', 'Prisma Olari: LEGO 20% off', 2, 'http://mw2.google.com/mw-panoramio/photos/thumbnail/5131282.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.173362, 24.829166, 'G', 'Outdoor party place on February 20, 2010', 4, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.178308, 24.848585, 'H', 'Espoo. Cheap hotel.', 2, 'http://mw2.google.com/mw-panoramio/photos/small/8267319.jpg');
 
 INSERT into tags (channel_id, tag_id) values (2, 1);
 INSERT into tags (channel_id, tag_id) values (3, 2);
@@ -161,59 +162,59 @@ INSERT into channelTimeSlot (channel_id, timeSlot_id) values (5, 2);
 INSERT into tagTimeSlot (tag_id, timeSlot_id) values (5, 2);
 INSERT into tagTimeSlot (tag_id, timeSlot_id) values (6, 1);
 
-INSERT into tag(latitude, longitude, label, description, user_id, url) values(59.938994,30.315857, 'Palace Square', 'Russia, St.Petersburg, Palace Square',1 , 'http://www.saint-petersburg.com/images/virtual-tour/alexander-column.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.934024,30.306182,'Saint Isaac''s Cathedral','The dome of St. Isaac’s Cathedral dominates the skyline of St. Petersburg and its gilded cupola can be seen glistening from all over the city.',2,'http://www.saint-petersburg.com/images/virtual-tour/st-isaac.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.933355,30.320253,'Pushkin Museum', 'Alexander Pushkin Museum and Memorial Apartment',3, 'http://www.saint-petersburg.com/images/museums/pushkin-museum-memorial-apartment.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.934538,30.324301,'Kazan Cathedral','Inspired by the Basilica of St. Peters in Rome, the impressively proportioned Cathedral of Our Lady of Kazan was built just after the turn of the 19th century by the Russian architect Andrei Voronikhin.',1, 'http://static.panoramio.com/photos/large/2508969.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.936482,30.302124,'The Bronze Horseman','This impressive equestrian monument was commissioned by Empress Catherine the Great to honor Peter the Great, the founder of the city.',2, 'http://mw2.google.com/mw-panoramio/photos/medium/831744.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.940044,30.32907, 'Church of the Resurrection of Jesus Christ','Church of the Resurrection of Jesus Christ',3,'http://static.panoramio.com/photos/large/46967036.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.935867,30.320229,'Stroganov Palace','The glorious Stroganov Palace is one of the highlights of Nevsky Prospekt, and is being transformed by the Russian Museum into a tribute to one of Russia''s most influential families.',3,'http://static.panoramio.com/photos/large/30746470.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.925657,30.296165,'Mariinsky Theatre','The Mariinsky Theatre is a historic theatre of opera and ballet in Saint Petersburg, Russia.',3, 'http://static.panoramio.com/photos/large/29266433.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.945152,30.371842,'Tauride Garden','Located in the grounds of the Tauride Palace, formerly home to Catherine the Great''s favorite Grigory Potemkin, this park was seriously damaged during the Siege of Leningrad, but has since been restored.', 3, 'http://www.saint-petersburg.com/images/parks/tauride-garden.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0,59.938994,30.315857, 'Palace Square', 'Russia, St.Petersburg, Palace Square',1 , 'http://www.saint-petersburg.com/images/virtual-tour/alexander-column.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.934024,30.306182,'Saint Isaac''s Cathedral','The dome of St. Isaac’s Cathedral dominates the skyline of St. Petersburg and its gilded cupola can be seen glistening from all over the city.',2,'http://www.saint-petersburg.com/images/virtual-tour/st-isaac.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.933355,30.320253,'Pushkin Museum', 'Alexander Pushkin Museum and Memorial Apartment',3, 'http://www.saint-petersburg.com/images/museums/pushkin-museum-memorial-apartment.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.934538,30.324301,'Kazan Cathedral','Inspired by the Basilica of St. Peters in Rome, the impressively proportioned Cathedral of Our Lady of Kazan was built just after the turn of the 19th century by the Russian architect Andrei Voronikhin.',1, 'http://static.panoramio.com/photos/large/2508969.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.936482,30.302124,'The Bronze Horseman','This impressive equestrian monument was commissioned by Empress Catherine the Great to honor Peter the Great, the founder of the city.',2, 'http://mw2.google.com/mw-panoramio/photos/medium/831744.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.940044,30.32907, 'Church of the Resurrection of Jesus Christ','Church of the Resurrection of Jesus Christ',3,'http://static.panoramio.com/photos/large/46967036.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.935867,30.320229,'Stroganov Palace','The glorious Stroganov Palace is one of the highlights of Nevsky Prospekt, and is being transformed by the Russian Museum into a tribute to one of Russia''s most influential families.',3,'http://static.panoramio.com/photos/large/30746470.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.925657,30.296165,'Mariinsky Theatre','The Mariinsky Theatre is a historic theatre of opera and ballet in Saint Petersburg, Russia.',3, 'http://static.panoramio.com/photos/large/29266433.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.945152,30.371842,'Tauride Garden','Located in the grounds of the Tauride Palace, formerly home to Catherine the Great''s favorite Grigory Potemkin, this park was seriously damaged during the Siege of Leningrad, but has since been restored.', 3, 'http://www.saint-petersburg.com/images/parks/tauride-garden.jpg');
 
 
 
 
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.935054,30.329731,'A0','Nevsky Prospekt (Saint Petersburg Metro)', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.935344,30.326276,'A1','Kazansky Bridge Standing below the east colonnade of Kazan Cathedral, the Kazansky Bridge carries Nevsky Prospekt across the Griboedov Canal.', 2, 'http://www.saint-petersburg.com/images/bridges/kazansky-bridge.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.935054,30.329731,'A0','Nevsky Prospekt (Saint Petersburg Metro)', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.935344,30.326276,'A1','Kazansky Bridge Standing below the east colonnade of Kazan Cathedral, the Kazansky Bridge carries Nevsky Prospekt across the Griboedov Canal.', 2, 'http://www.saint-petersburg.com/images/bridges/kazansky-bridge.jpg');
 
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.937107,30.31183,'A2','Nevsky Prospekt,2 ', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.937763,30.313035,'A3','Dvortsovaya pl.,10', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.937107,30.31183,'A2','Nevsky Prospekt,2 ', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.937763,30.313035,'A3','Dvortsovaya pl.,10', 2, '');
 
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.940955,30.311701,'A4','Dvortsovaya Naberezhnaya,30 ', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.942159,30.322859,'A5','Moshkov per.,8', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.935844,30.322167,'A6','Nevsky Prospekt,22', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.935054,30.329731,'A7','Nevsky Prospekt (Saint Petersburg Metro)', 2, '');
-
-
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.933925,30.333441,'B0','Gostiny Dvor(Saint Petersburg Metro)', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.931571,30.329236,'B1','Lomonosov str.,6', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.928345,30.335888,'B2','Lomonosov Bridge ', 2, 'http://www.saint-petersburg.com/images/bridges/lomonosov-bridge.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.93328,30.343269,'B3','Anichkov Bridge ', 2, 'http://www.saint-petersburg.com/images/bridges/anichkov-bridge.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.933925,30.333441,'B4','Gostiny Dvor(Saint Petersburg Metro)', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.940955,30.311701,'A4','Dvortsovaya Naberezhnaya,30 ', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.942159,30.322859,'A5','Moshkov per.,8', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.935844,30.322167,'A6','Nevsky Prospekt,22', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.935054,30.329731,'A7','Nevsky Prospekt (Saint Petersburg Metro)', 2, '');
 
 
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.944528,30.359879,'C0','Chernyshevskaya(Saint Petersburg Metro)', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.945189,30.360972,'C1','Furshatskaya str.', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.945152,30.371842,'C2','Tauride Garden', 2, 'http://www.saint-petersburg.com/images/parks/tauride-garden.jpg');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.94376,30.368825,'C3','Kirochnaya str.', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.944528,30.359879,'C4','Chernyshevskaya(Saint Petersburg Metro)', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.933925,30.333441,'B0','Gostiny Dvor(Saint Petersburg Metro)', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.931571,30.329236,'B1','Lomonosov str.,6', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.928345,30.335888,'B2','Lomonosov Bridge ', 2, 'http://www.saint-petersburg.com/images/bridges/lomonosov-bridge.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.93328,30.343269,'B3','Anichkov Bridge ', 2, 'http://www.saint-petersburg.com/images/bridges/anichkov-bridge.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.933925,30.333441,'B4','Gostiny Dvor(Saint Petersburg Metro)', 2, '');
+
+
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.944528,30.359879,'C0','Chernyshevskaya(Saint Petersburg Metro)', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.945189,30.360972,'C1','Furshatskaya str.', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.945152,30.371842,'C2','Tauride Garden', 2, 'http://www.saint-petersburg.com/images/parks/tauride-garden.jpg');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.94376,30.368825,'C3','Kirochnaya str.', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.944528,30.359879,'C4','Chernyshevskaya(Saint Petersburg Metro)', 2, '');
 
 
 
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.928254,30.345996,'D0','Dostoevskaya(Saint Petersburg Metro)', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.928361,30.34753,'D1','Vladimirsky prosp.', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.932796,30.347069,'D2','Nevsky Prospekt', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.931753,30.345502,'D3','Rubenshtein str.', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.928254,30.345996,'D4','Dostoevskaya(Saint Petersburg Metro)', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.928254,30.345996,'D0','Dostoevskaya(Saint Petersburg Metro)', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.928361,30.34753,'D1','Vladimirsky prosp.', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.932796,30.347069,'D2','Nevsky Prospekt', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.931753,30.345502,'D3','Rubenshtein str.', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.928254,30.345996,'D4','Dostoevskaya(Saint Petersburg Metro)', 2, '');
 
 
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.952021,30.291339,'E0','Sportivnaya(Saint Petersburg Metro)', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.949488,30.286279,'E1','Bolshoi prosp.', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.946049,30.291277,'E2','Naberezhnaya Makarova', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.946382,30.303379,'E3','', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.950229,30.297693,'E4','', 2, '');
-INSERT into tag(latitude, longitude, label, description, user_id, url) values (59.952021,30.291339,'E5','Sportivnaya(Saint Petersburg Metro)', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.952021,30.291339,'E0','Sportivnaya(Saint Petersburg Metro)', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.949488,30.286279,'E1','Bolshoi prosp.', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.946049,30.291277,'E2','Naberezhnaya Makarova', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.946382,30.303379,'E3','', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.950229,30.297693,'E4','', 2, '');
+INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.952021,30.291339,'E5','Sportivnaya(Saint Petersburg Metro)', 2, '');
 
 
 

@@ -56,8 +56,9 @@ const QString& DataMark::getDescription() const
 }
 
 
-DataMark::DataMark(double latitude, double longitude, QString label,
+DataMark::DataMark(double altitude, double latitude, double longitude, QString label,
 QString description, QString url, QDateTime time):
+m_altitude(altitude),
 m_latitude(latitude),
 m_longitude(longitude),
 m_label(label),
@@ -125,8 +126,7 @@ void DataMark::setLongitude(const double &lon)
 double DataMark::getAltitude() const
 {
   // TODO
-//  return m_altitude;
-  return 0.0;
+  return m_altitude;
 }
 
 void DataMark::setAltitude(const double& alt)

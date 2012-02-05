@@ -283,7 +283,10 @@ namespace common
       answer.append(response.getJson());
        return answer;
     }
+
+
     QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
+    syslog(LOG_INFO,"Adding mark with altitude = %f",dummyTag->getAltitude());
     QSharedPointer<User> dummyUser = dummyTag->getUser();
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
 

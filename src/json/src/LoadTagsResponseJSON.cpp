@@ -106,6 +106,8 @@ bool LoadTagsResponseJSON::parseJson(const QByteArray &data)
       QString title = markMap["title"].toString();
       QString link = markMap["link"].toString();
       QString description = markMap["description"].toString();
+      double altitude = markMap["altitude"].toString().toDouble(&ok);
+      if (!ok) return false;
       double latitude = markMap["latitude"].toString().toDouble(&ok);
       if (!ok) return false;
       double longitude = markMap["longitude"].toString().toDouble(&ok);
@@ -119,7 +121,8 @@ bool LoadTagsResponseJSON::parseJson(const QByteArray &data)
       QSharedPointer<common::User> user(new JsonUser(userName));
       m_usersContainer->push_back(user);
 
-      QSharedPointer<JsonDataMark> newMark(new JsonDataMark(latitude,
+      QSharedPointer<JsonDataMark> newMark(new JsonDataMark(altitude,
+        latitude,
         longitude,
         title,
         description,
@@ -156,6 +159,7 @@ QByteArray LoadTagsResponseJSON::getJson() const
       jtag["link"] = tag->getUrl();
       jtag["description"] = tag->getDescription();
       jtag["latitude"] = tag->getLatitude();
+      jtag["altitude"] = tag->getAltitude();
       jtag["longitude"] = tag->getLongitude();
       jtag["user"] = tag->getUser()->getLogin();
       jtag["pubDate"] = tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz");

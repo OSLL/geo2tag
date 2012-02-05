@@ -78,7 +78,7 @@ bool GetTimeSlotMarkResponseJSON::parseJson(const QByteArray &data)
   if (!ok) return false;
 
   QSharedPointer<TimeSlot>  timeSlot(new JsonTimeSlot(slot));
-  QSharedPointer<DataMark> mark(new JsonDataMark(0,0,"unknown", "unknown", "unknown", QDateTime()));
+  QSharedPointer<DataMark> mark(new JsonDataMark(0,0,0,"unknown", "unknown", "unknown", QDateTime()));
   mark->setTimeSlot(timeSlot);
   m_tagsContainer->push_back(mark);
   return true;
