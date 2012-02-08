@@ -41,7 +41,7 @@
 
 #include "Region.h"
 #include <QPolygonF>
-
+namespace common {
 Region::Region()
 {
 }
@@ -80,4 +80,6 @@ bool Region::atRegion(const QSharedPointer<DataMark>& point)
 
 Region::~Region()
 {
+}
+
 }

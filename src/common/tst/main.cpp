@@ -38,21 +38,22 @@
 
 #include <QtTest/QtTest>
 #include <QtCore/QtCore>
-#include <QApplication>
+#include <QCoreApplication>
 
 #include "User_Test.h"
 #include "GpsInfo_Test.h"
 #include "Channel_Test.h"
-
+#include "Region_Test.h"
 int main(int c, char **v)
 {
-  QApplication app(c,v);
+  QCoreApplication app(c,v);
 
   QObject* tests[]=
   {
     new Test::User_Test(&app),
     new Test::GpsInfo_Test(&app),
     new Test::Channel_Test(&app),
+    new Test::Region_Test(&app),
   };
 
   for(size_t i = 0; i<sizeof(tests)/sizeof(QObject*); ++i)
