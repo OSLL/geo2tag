@@ -31,7 +31,7 @@
 
 #include <QVariant>
 #include <QDebug>
-#include "RSSFeedRequestJSON.h"
+#include "LoadTagsRequestJSON.h"
 
 #include "JsonUser.h"
 #include "JsonChannel.h"
@@ -45,18 +45,18 @@
 #include "serializer.h"
 #endif
 
-RSSFeedRequestJSON::RSSFeedRequestJSON(double latitude, double longitude, double radius, QObject *parent):
+LoadTagsRequestJSON::LoadTagsRequestJSON(double latitude, double longitude, double radius, QObject *parent):
 JsonSerializer(parent), m_latitude(latitude), m_longitude(longitude), m_radius(radius)
 {
 }
 
 
-RSSFeedRequestJSON::RSSFeedRequestJSON(QObject *parent) :JsonSerializer(parent)
+LoadTagsRequestJSON::LoadTagsRequestJSON(QObject *parent) :JsonSerializer(parent)
 {
 }
 
 
-void RSSFeedRequestJSON::parseJson(const QByteArray &data)
+bool LoadTagsRequestJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
 
@@ -64,21 +64,28 @@ void RSSFeedRequestJSON::parseJson(const QByteArray &data)
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
 
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with rss request");
-    return;
-  }
+  if (!ok) return false;
 
   QString authToken = result["auth_token"].toString();
-  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("dummyUser[RSSFeedRequest]","dummyPassword",authToken)));
-  m_latitude = result["latitude"].toDouble();
-  m_longitude = result["longitude"].toDouble();
-  m_radius = result["radius"].toDouble();
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("dummyUser[LoadTagsRequest]","dummyPassword",authToken)));
+
+  result["latitude"].toDouble(&ok);
+  if (!ok) return false;
+  m_latitude = result["latitude"].toDouble(&ok);
+
+  result["longitude"].toDouble(&ok);
+  if (!ok) return false;
+  m_longitude = result["longitude"].toDouble(&ok);
+
+  result["radius"].toDouble(&ok);
+  if (!ok) return false;
+  m_radius = result["radius"].toDouble(&ok);
+
+  return true;
 }
 
 
-QByteArray RSSFeedRequestJSON::getJson() const
+QByteArray LoadTagsRequestJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj;
@@ -90,49 +97,49 @@ QByteArray RSSFeedRequestJSON::getJson() const
 }
 
 
-QString RSSFeedRequestJSON::getAuthToken() const
+QString LoadTagsRequestJSON::getAuthToken() const
 {
   return m_usersContainer->at(0)->getToken();
 }
 
 
-double RSSFeedRequestJSON::getLatitude() const
+double LoadTagsRequestJSON::getLatitude() const
 {
   return m_latitude;
 }
 
 
-double RSSFeedRequestJSON::getLongitude() const
+double LoadTagsRequestJSON::getLongitude() const
 {
   return m_longitude;
 }
 
 
-double RSSFeedRequestJSON::getRadius() const
+double LoadTagsRequestJSON::getRadius() const
 {
   return m_radius;
 }
 
 
-void RSSFeedRequestJSON::setLatitude(double latitude)
+void LoadTagsRequestJSON::setLatitude(double latitude)
 {
   m_latitude = latitude;
 }
 
 
-void RSSFeedRequestJSON::setLongitude(double longitude)
+void LoadTagsRequestJSON::setLongitude(double longitude)
 {
   m_longitude = longitude;
 }
 
 
-void RSSFeedRequestJSON::setRadius(double radius)
+void LoadTagsRequestJSON::setRadius(double radius)
 {
   m_radius = radius;
 }
 
 
-RSSFeedRequestJSON::~RSSFeedRequestJSON()
+LoadTagsRequestJSON::~LoadTagsRequestJSON()
 {
 }
 

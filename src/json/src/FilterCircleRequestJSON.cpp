@@ -66,7 +66,7 @@ QByteArray FilterCircleRequestJSON::getJson() const
 }
 
 
-void FilterCircleRequestJSON::parseJson(const QByteArray&data)
+bool FilterCircleRequestJSON::parseJson(const QByteArray&data)
 {
   clearContainers();
   QJson::Parser parser;
@@ -74,15 +74,21 @@ void FilterCircleRequestJSON::parseJson(const QByteArray&data)
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok)
   {
-    qFatal("An error occured during parsing json with channel list");
+    return false;
   }
   QString authToken = result["auth_token"].toString();
   setTimeFrom(QDateTime::fromString(result["time_from"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
   setTimeTo(QDateTime::fromString(result["time_to"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
   double latitude = result["latitude"].toDouble(&ok);
+  if (!ok) return false;
+
   double longitude = result["longitude"].toDouble(&ok);
+  if (!ok) return false;
+
   double radius = result["radius"].toDouble(&ok);
+  if (!ok) return false;
 
   setShape(QSharedPointer<FShape>(new FShapeCircle(latitude, longitude, radius)));
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("null", "null", authToken)));
+  return true;
 }

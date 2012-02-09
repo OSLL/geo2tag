@@ -63,7 +63,7 @@ void MainWindow::onAuthentificated()
 {
   m_status->setText("Authentification succesful");
   m_authentificated = true;
-  QSharedPointer<DataMark> mark(new JsonDataMark(common::GpsInfo::getInstance().getLatitude(),
+  QSharedPointer<DataMark> mark(new JsonDataMark(0,common::GpsInfo::getInstance().getLatitude(),
     common::GpsInfo::getInstance().getLongitude(),"t",
     "this tag was generated","unknown", QDateTime::currentDateTime()));
   QSharedPointer<Channel> channel(new JsonChannel(DEFAULT_CHANNEL,"dummy channel"));

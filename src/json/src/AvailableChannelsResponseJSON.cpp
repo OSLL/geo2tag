@@ -64,7 +64,7 @@ void AvailableChannelsResponseJSON::setChannels(QSharedPointer<Channels> channel
 }
 
 
-void AvailableChannelsResponseJSON::parseJson(const QByteArray &data)
+bool AvailableChannelsResponseJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
   QJson::Parser parser;
@@ -72,10 +72,9 @@ void AvailableChannelsResponseJSON::parseJson(const QByteArray &data)
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok)
   {
-    qFatal("An error occured during parsing json with channel list");
-    return;
+    return false ;
   }
-
+  m_errno = result["channels"].toInt();
   QVariantList channels = result["channels"].toList();
   int size = channels.size();
   for (int i = 0; i < size; i++)
@@ -86,7 +85,7 @@ void AvailableChannelsResponseJSON::parseJson(const QByteArray &data)
     QSharedPointer<Channel> channel(new JsonChannel(name, description));
     m_channelsContainer->push_back(channel);
   }
-
+  return true;
 }
 
 
@@ -107,6 +106,7 @@ QByteArray AvailableChannelsResponseJSON::getJson() const
 
   QVariantMap channelsMap;
   channelsMap.insert("channels", channelsList);
+  channelsMap.insert("errno", m_errno);
   return serializer.serialize(channelsMap);
 }
 

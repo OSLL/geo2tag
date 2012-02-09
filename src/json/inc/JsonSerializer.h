@@ -68,7 +68,7 @@ class JsonSerializer:public QObject
 
     virtual QByteArray getJson() const = 0;
 
-    virtual void parseJson(const QByteArray&) = 0;
+    virtual bool parseJson(const QByteArray&) = 0;
 
     QSharedPointer<DataMarks> getTags() const;
     QSharedPointer<common::Users> getUsers() const;

@@ -43,7 +43,7 @@ class LoginRequestJSON: public JsonSerializer
 
     QByteArray getJson() const;
 
-    void parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 };
 // LOGINREQUESTJSON_H
 #endif

@@ -62,7 +62,7 @@ namespace Test
 			// m_tstObject = new ${CLASS};
     }
     
-		~${CLASS}_Test(QObject *parent =NULL)
+    ~${CLASS}_Test()
     {
   	  // destroying  here
 			// delete m_tstObject;

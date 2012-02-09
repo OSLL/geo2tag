@@ -1,6 +1,6 @@
 include(../../../config.pri)
 
-INCLUDEPATH += ../inc/
+INCLUDEPATH += ../inc/ ../../json/inc/
 
 SOURCES += main.cpp \ 
     ../src/User.cpp \ 
@@ -10,6 +10,7 @@ SOURCES += main.cpp \
     Channel_TestObj.cpp \
     ../src/Channel.cpp \
     ../src/TimeSlot.cpp \
+    ../../json/src/JsonDataMark.cpp \
     ../src/Region.cpp
 HEADERS += User_Test.h \
     ../inc/User.h \
@@ -23,6 +24,7 @@ HEADERS += User_Test.h \
     Region_Test.h \
     ../inc/Channel.h \
     ../inc/TimeSlot.h \
+    ../../json/inc/JsonDataMark.h \
     ../inc/Region.h 
 
 DEFINES += SIMULATE_GPS

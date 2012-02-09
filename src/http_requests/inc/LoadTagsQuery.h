@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  OSLL osll@osll.spb.ru
+ * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,60 +28,80 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*----------------------------------------------------------------- !
- * PROJ: OSLL/geo2tag
+
+/* $Id$ */
+/*!
+ * \file LoadTagsQuery.h
+ * \brief Header of LoadTagsQuery
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-#include <QDebug>
+#ifndef _LoadTagsQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
+#define _LoadTagsQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
 
-#include "AddNewMarkResponseJSON.h"
-#include "JsonDataMark.h"
+#include <QObject>
+#include <QString>
+#include <DefaultQuery.h>
+
 #include "DataMarks.h"
+#include "User.h"
+#include "Channel.h"
+#include "DataChannel.h"
 
-#ifndef Q_WS_SYMBIAN
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#else
-#include "parser.h"
-#include "serializer.h"
+/*!
+ * LoadTagsQuery class definition.
+ *
+ * The object of this class represents http query to server.
+ * This query includes json request to get RSS feed.
+ */
+class LoadTagsQuery : public DefaultQuery
+{
+  Q_OBJECT
+
+    QSharedPointer<common::User> m_user;
+  double m_latitude;
+  double m_longitude;
+  double m_radius;
+
+  DataChannels m_hashMap;
+
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
+
+  private Q_SLOTS:
+
+    virtual void processReply(QNetworkReply *reply);
+
+  public:
+
+    LoadTagsQuery(QSharedPointer<common::User> &user,
+      double latitude,
+      double longitude,
+      double radius,
+      QObject *parent = 0);
+
+    LoadTagsQuery(QObject *parent = 0);
+
+    void setQuery(QSharedPointer<common::User> &user,
+      double latitude,
+      double longitude,
+      double radius);
+
+    ~LoadTagsQuery();
+
+    const DataChannels& getData() const;
+
+    Q_SIGNALS:
+
+    void tagsReceived();
+
+    // class LoadTagsQuery
+};
+//_LoadTagsQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
 #endif
 
-AddNewMarkResponseJSON::AddNewMarkResponseJSON(QObject *parent) : JsonSerializer(parent)
-{
-}
-
-
-QByteArray AddNewMarkResponseJSON::getJson() const
-{
-  QJson::Serializer serializer;
-  QVariantMap obj;
-  if (m_tagsContainer->size() > 0)
-    obj.insert("mark_id", m_tagsContainer->at(0)->getId());
-  obj.insert("status", m_status);
-  obj.insert("status_description", m_statusMessage);
-  return serializer.serialize(obj);
-}
-
-
-void AddNewMarkResponseJSON::parseJson(const QByteArray &data)
-{
-  clearContainers();
-
-  QJson::Parser parser;
-  bool ok;
-
-  QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-  }
-
-  m_status = result["status"].toString();
-  m_statusMessage = result["status_description"].toString();
-
-  qlonglong markId = result["mark_id"].toLongLong();
-  JsonDataMark* jsonMark = new JsonDataMark(0,0,"unknown", "unknown", "unknown", QDateTime());
-  jsonMark->setId(markId);
-  QSharedPointer<DataMark> mark(jsonMark);
-  m_tagsContainer->push_back(mark);
-}
+/* ===[ End of file $HeadURL$ ]=== */

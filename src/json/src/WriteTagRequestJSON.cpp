@@ -32,7 +32,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "AddNewMarkRequestJSON.h"
+#include "WriteTagRequestJSON.h"
 #include "DataMarks.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
@@ -46,42 +46,47 @@
 #include "serializer.h"
 #endif
 
-AddNewMarkRequestJSON::AddNewMarkRequestJSON(QObject *parent) : JsonSerializer(parent)
+WriteTagRequestJSON::WriteTagRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
 
-void AddNewMarkRequestJSON::parseJson(const QByteArray &data)
+bool WriteTagRequestJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with channel list");
-    return;
-  }
+  if (!ok) return false;
 
   QString token = result["auth_token"].toString();
   QString channel_name = result["channel"].toString();
   QString title = result["title"].toString();
   QString link = result["link"].toString();
   QString description = result["description"].toString();
-  double longitude = result["longitude"].toDouble();
-  double latitude = result["latitude"].toDouble();
+  double altitude = result["altitude"].toDouble(&ok);
+  if (!ok) return false;
+  double longitude = result["longitude"].toDouble(&ok);
+  if (!ok) return false;
+
+  double latitude = result["latitude"].toDouble(&ok);
+  if (!ok) return false;
+
   QDateTime time = QDateTime::fromString(result["time"].toString(), "dd MM yyyy HH:mm:ss.zzz");
 
   QSharedPointer<common::User>  user(new JsonUser("unknown", "unknown", token));
   QSharedPointer<Channel> channel(new JsonChannel(channel_name, "unknown"));
-  QSharedPointer<DataMark> tag(new JsonDataMark(latitude, longitude, title, description, link, time));
+  
+  QSharedPointer<DataMark> tag(new JsonDataMark(altitude, latitude, longitude, title, description, link, time));
   tag->setChannel(channel);
   tag->setUser(user);
   m_tagsContainer->push_back(tag);
+  
+  return true;
 }
 
 
-QByteArray AddNewMarkRequestJSON::getJson() const
+QByteArray WriteTagRequestJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap request;
@@ -92,6 +97,7 @@ QByteArray AddNewMarkRequestJSON::getJson() const
   request.insert("link", mark->getUrl());
   request.insert("description", mark->getDescription());
   request.insert("latitude", mark->getLatitude());
+  request.insert("altitude", mark->getAltitude());
   request.insert("longitude", mark->getLongitude());
   request.insert("time", mark->getTime().toString("dd MM yyyy HH:mm:ss.zzz"));
   return serializer.serialize(request);

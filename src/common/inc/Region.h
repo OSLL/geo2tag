@@ -48,7 +48,7 @@
  *
  */
 #include "DataMarks.h"
-
+namespace common{
 class Region
 {
   QSharedPointer<DataMarks> m_points;
@@ -68,5 +68,5 @@ public:
 
 }; // class Region
   
-
+}
 #endif //_Region_H_06756261_C2F3_4279_93DC_8F9FA944B9FF_INCLUDED_

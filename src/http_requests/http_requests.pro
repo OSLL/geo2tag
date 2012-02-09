@@ -15,13 +15,13 @@ INCLUDEPATH += . inc \
 HEADERS += \
            inc/LoginQuery.h \
            inc/DefaultQuery.h \
-           inc/RSSFeedQuery.h \
-           inc/AddNewMarkQuery.h
+           inc/LoadTagsQuery.h \
+           inc/WriteTagQuery.h
 
 #            inc/ApplyMarkQuery.h \
 #           inc/AvailableChannelsListQuery.h \
 #
-#           inc/RSSFeedQuery.h \
+#           inc/LoadTagsQuery.h \
 #           inc/SubscribeChannelQuery.h \
 #           inc/SubscribedChannelsListQuery.h \
 #           inc/UnsubscribeChannelQuery.h \
@@ -30,13 +30,13 @@ HEADERS += \
 SOURCES += \
            src/LoginQuery.cpp \
            src/DefaultQuery.cpp \
-           src/RSSFeedQuery.cpp \
-           src/AddNewMarkQuery.cpp
+           src/LoadTagsQuery.cpp \
+           src/WriteTagQuery.cpp
 
 # src/ApplyMarkQuery.cpp \
 #           src/AvailableChannelsListQuery.cpp \
 #           src/LoginQuery.cpp \
-#           src/RSSFeedQuery.cpp \
+#           src/LoadTagsQuery.cpp \
 #           src/UnsubscribeChannelQuery.cpp \
 #           src/SubscribeChannelQuery.cpp \
 #           src/SubscribedChannelsListQuery.cpp \

@@ -32,21 +32,20 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef GETTIMESLOTRESPONSEJSON_H
-#define GETTIMESLOTRESPONSEJSON_H
+#ifndef WRITETAGREQUESTJSON_H
+#define WRITETAGREQUESTJSON_H
 
 #include "JsonSerializer.h"
 
-class GetTimeSlotResponseJSON : public JsonSerializer
+class WriteTagRequestJSON : public JsonSerializer
 {
-  Q_OBJECT;
   public:
-    GetTimeSlotResponseJSON(QObject *parent=0);
 
-    QByteArray getJson() const;
+    WriteTagRequestJSON(QObject *parent=0);
 
-    bool parseJson(const QByteArray&);
+    virtual QByteArray getJson() const;
 
+    virtual bool parseJson(const QByteArray&);
 };
-// GETTIMESLOTRESPONSEJSON_H
+// ADDNEWMARKREQUESTJSON_H
 #endif

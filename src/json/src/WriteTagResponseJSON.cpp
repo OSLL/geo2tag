@@ -32,20 +32,56 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef ADDNEWMARKREQUESTJSON_H
-#define ADDNEWMARKREQUESTJSON_H
+#include <QDebug>
 
-#include "JsonSerializer.h"
+#include "WriteTagResponseJSON.h"
+#include "JsonDataMark.h"
+#include "DataMarks.h"
 
-class AddNewMarkRequestJSON : public JsonSerializer
-{
-  public:
-
-    AddNewMarkRequestJSON(QObject *parent=0);
-
-    virtual QByteArray getJson() const;
-
-    virtual void parseJson(const QByteArray&);
-};
-// ADDNEWMARKREQUESTJSON_H
+#ifndef Q_WS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
 #endif
+
+WriteTagResponseJSON::WriteTagResponseJSON(QObject *parent) : JsonSerializer(parent)
+{
+}
+
+
+QByteArray WriteTagResponseJSON::getJson() const
+{
+  QJson::Serializer serializer;
+  QVariantMap obj;
+  if (m_tagsContainer->size() > 0)
+    obj.insert("mark_id", m_tagsContainer->at(0)->getId());
+  obj.insert("errno", m_errno);
+  return serializer.serialize(obj);
+}
+
+
+bool WriteTagResponseJSON::parseJson(const QByteArray &data)
+{
+  clearContainers();
+
+  QJson::Parser parser;
+  bool ok;
+
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
+
+  result["errno"].toInt(&ok);
+  if (!ok) return false;
+  m_errno = result["errno"].toInt();
+
+  qlonglong markId = result["mark_id"].toLongLong(&ok);
+  if (!ok) return false;
+
+  JsonDataMark* jsonMark = new JsonDataMark(0,0,0,"unknown", "unknown", "unknown", QDateTime());
+  jsonMark->setId(markId);
+  QSharedPointer<DataMark> mark(jsonMark);
+  m_tagsContainer->push_back(mark);
+  return true;
+}

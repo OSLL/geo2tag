@@ -47,6 +47,6 @@ class GetTimeSlotMarkResponseJSON : public JsonSerializer
 
     QByteArray getJson() const;
 
-    void parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 };
 #endif                                  // _GETTIMESLOTMARKRESPONSEJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_

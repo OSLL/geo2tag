@@ -77,8 +77,9 @@ void FilterDefaultResponseJSON::setDataChannels(const DataChannels& dataChannels
   m_hashMap = dataChannels;
 }
 
-void FilterDefaultResponseJSON::parseJson(const QByteArray&)
+bool FilterDefaultResponseJSON::parseJson(const QByteArray&)
 {
+  return false;
   // TODO
 }
 

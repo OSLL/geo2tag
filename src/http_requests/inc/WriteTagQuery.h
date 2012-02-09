@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
+ * Copyright 2010-2011  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,44 +28,41 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#ifndef RSSFEEDREQUESTJSON_H
-#define RSSFEEDREQUESTJSON_H
+#ifndef WRITETAGQUERY_H
+#define WRITETAGQUERY_H
 
-#include "JsonSerializer.h"
-
+#include <QObject>
 #include <QString>
+#include "DefaultQuery.h"
+#include "User.h"
+#include "DataMarks.h"
 
-class RSSFeedRequestJSON: public JsonSerializer
+class WriteTagQuery: public DefaultQuery
 {
-  double m_latitude;
-  double m_longitude;
-  double m_radius;
+  Q_OBJECT
+
+    QSharedPointer<DataMark> m_tag;
+
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
+  virtual void processReply(QNetworkReply *reply);
 
   public:
-    RSSFeedRequestJSON(double latitude,
-      double longitude,
-      double radius,
-      QObject *parent=0);
+    WriteTagQuery(const QSharedPointer<DataMark> &tag, QObject *parent = 0);
+    WriteTagQuery(QObject *parent = 0);
 
-    RSSFeedRequestJSON(QObject *parent=0);
+    ~WriteTagQuery();
+    void setTag(const QSharedPointer<DataMark> &tag);
+    QSharedPointer<DataMark> getTag();
+    const QSharedPointer<DataMark>& getTag() const;
 
-    double getLatitude() const;
-    double getLongitude() const;
-    double getRadius() const;
-    QString getAuthToken() const;
+    Q_SIGNALS:
 
-    void setLatitude(double latitude);
-    void setLongitude(double longitude);
-    void setRadius(double radius);
-
-    virtual QByteArray getJson() const;
-
-    virtual void parseJson(const QByteArray&);
-
-    ~RSSFeedRequestJSON();
-
-    //class RSSFeedRequestJSON
+    void tagAdded();
 };
-// RSSFEEDREQUESTJSON_H
+// ADDNEWMARKQUERY_H
 #endif

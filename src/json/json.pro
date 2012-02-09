@@ -14,8 +14,8 @@ INCLUDEPATH += . inc \
 HEADERS += \
            inc/AvailableChannelsResponseJSON.h \
            inc/AvailableChannelsRequestJSON.h \
-           inc/RSSFeedJSON.h \
-           inc/RSSFeedRequestJSON.h \
+           inc/LoadTagsResponseJSON.h \
+           inc/LoadTagsRequestJSON.h \
            inc/SubscribeChannelJSON.h \
            inc/UnsubscribeChannelRequestJSON.h \
            inc/JsonUser.h \
@@ -27,8 +27,8 @@ HEADERS += \
            inc/LoginResponseJSON.h \
            inc/AddUserRequestJSON.h \
            inc/AddUserResponseJSON.h \
-           inc/AddNewMarkRequestJSON.h \
-           inc/AddNewMarkResponseJSON.h \
+           inc/WriteTagRequestJSON.h \
+           inc/WriteTagResponseJSON.h \
            inc/SubscribeChannelResponseJSON.h \
            inc/UnsubscribeChannelResponseJSON.h \
            inc/SubscribedChannelsRequestJSON.h \
@@ -59,8 +59,8 @@ HEADERS += \
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \
-           src/RSSFeedJSON.cpp \
-           src/RSSFeedRequestJSON.cpp \
+           src/LoadTagsResponseJSON.cpp \
+           src/LoadTagsRequestJSON.cpp \
            src/SubscribeChannelJSON.cpp \
            src/JsonUser.cpp \
            src/JsonChannel.cpp \
@@ -70,14 +70,14 @@ SOURCES += \
            src/JsonSerializer.cpp \
            src/LoginRequestJSON.cpp \
            src/LoginResponseJSON.cpp \
-           src/AddNewMarkRequestJSON.cpp \
+           src/WriteTagRequestJSON.cpp \
            src/AddChannelRequestJSON.cpp \
            src/GetTimeSlotRequestJSON.cpp \
            src/GetTimeSlotResponseJSON.cpp \
            src/DefaultResponseJSON.cpp \
            src/SetTimeSlotRequestJSON.cpp \
            src/GetTimeSlotMarkRequestJSON.cpp \
-           src/AddNewMarkResponseJSON.cpp \
+           src/WriteTagResponseJSON.cpp \
            src/GetTimeSlotMarkResponseJSON.cpp \
            src/SetTimeSlotMarkRequestJSON.cpp \
            src/FilterRequestJSON.cpp \

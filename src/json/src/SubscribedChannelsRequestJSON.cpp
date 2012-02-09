@@ -63,7 +63,7 @@ SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON(const QSharedPointe
 }
 
 
-void SubscribedChannelsRequestJSON::parseJson(const QByteArray &data)
+bool SubscribedChannelsRequestJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
 
@@ -71,14 +71,13 @@ void SubscribedChannelsRequestJSON::parseJson(const QByteArray &data)
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
 
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with SubscribedChannelsReques");
-    return;
-  }
+  if (!ok) return false;
+  
   QString authToken =    result["auth_token"].toString();
   QSharedPointer<common::User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
   m_usersContainer->push_back(dummyUser);
+
+  return true;
 }
 
 

@@ -32,37 +32,70 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef ADDNEWMARKQUERY_H
-#define ADDNEWMARKQUERY_H
+#include "WriteTagQuery.h"
+#include "defines.h"
+#include "WriteTagRequestJSON.h"
+#include "WriteTagResponseJSON.h"
 
-#include <QObject>
-#include <QString>
-#include "DefaultQuery.h"
-#include "User.h"
-#include "DataMarks.h"
-
-class AddNewMarkQuery: public DefaultQuery
+WriteTagQuery::WriteTagQuery(const QSharedPointer<DataMark> &tag, QObject *parent): DefaultQuery(parent), m_tag(tag)
 {
-  Q_OBJECT
 
-    QSharedPointer<DataMark> m_tag;
+}
 
-  virtual QString getUrl() const;
-  virtual QByteArray getRequestBody() const;
-  virtual void processReply(QNetworkReply *reply);
 
-  public:
-    AddNewMarkQuery(const QSharedPointer<DataMark> &tag, QObject *parent = 0);
-    AddNewMarkQuery(QObject *parent = 0);
+WriteTagQuery::WriteTagQuery(QObject *parent): DefaultQuery(parent)
+{
+}
 
-    ~AddNewMarkQuery();
-    void setTag(const QSharedPointer<DataMark> &tag);
-    QSharedPointer<DataMark> getTag();
-    const QSharedPointer<DataMark>& getTag() const;
 
-    Q_SIGNALS:
+void WriteTagQuery::setTag(const QSharedPointer<DataMark> &tag)
+{
+  m_tag = tag;
+}
 
-    void tagAdded();
-};
-// ADDNEWMARKQUERY_H
-#endif
+
+QString WriteTagQuery::getUrl() const
+{
+  return APPLY_HTTP_URL;
+}
+
+
+QByteArray WriteTagQuery::getRequestBody() const
+{
+  WriteTagRequestJSON request;
+  request.addTag(m_tag);
+  return request.getJson();
+}
+
+
+void WriteTagQuery::processReply(QNetworkReply *reply)
+{
+  WriteTagResponseJSON response;
+  response.parseJson(reply->readAll());
+  if(response.getErrno() == SUCCESS)
+  {
+    Q_EMIT tagAdded();
+  }
+  else
+  {
+    Q_EMIT errorOccured(response.getErrno());
+  }
+}
+
+
+WriteTagQuery::~WriteTagQuery()
+{
+
+}
+
+
+QSharedPointer<DataMark> WriteTagQuery::getTag()
+{
+  return m_tag;
+}
+
+
+const QSharedPointer<DataMark>& WriteTagQuery::getTag() const
+{
+  return m_tag;
+}

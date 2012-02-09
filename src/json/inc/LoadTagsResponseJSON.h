@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  OSLL osll@osll.spb.ru
+ * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,26 +28,49 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*----------------------------------------------------------------- !
+
+/* $Id$ */
+/*!
+ * \file LoadTagsJSON.h
+ * \brief Header of LoadTagsJSON
+ * \todo add comment here
+ *
+ * File description
+ *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef ADDNEWMARKRESPONSEJSON_H
-#define ADDNEWMARKRESPONSEJSON_H
+#ifndef _LoadTagsResponseJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+#define _LoadTagsResponseJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 
-#include "DefaultResponseJSON.h"
-
+#include <QMultiHash>
 #include "JsonSerializer.h"
+#include "Channel.h"
+#include "DataMarks.h"
+#include "DataChannel.h"
 
-class AddNewMarkResponseJSON : public JsonSerializer
+class LoadTagsResponseJSON: public JsonSerializer
 {
-  Q_OBJECT;
+  // map will contain channels and marks which should be serialized to JSON
+  DataChannels m_hashMap;
+
   public:
-    AddNewMarkResponseJSON(QObject *parent=0);
+    LoadTagsResponseJSON(const DataChannels &, QObject *parent=0);
 
-    QByteArray getJson() const;
+    LoadTagsResponseJSON(QObject *parent=0);
 
-    void parseJson(const QByteArray&);
+    virtual QByteArray getJson() const;
 
+    virtual bool parseJson(const QByteArray&);
+
+    const DataChannels& getData() const;
+    void setData(const DataChannels&);
+
+    ~LoadTagsResponseJSON();
+
+    //class LoadTagsJSON
 };
+//_LoadTagsJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 #endif
+
+/* ===[ End of file $HeadURL$ ]=== */

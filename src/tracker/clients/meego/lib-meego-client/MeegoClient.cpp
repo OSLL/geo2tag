@@ -62,7 +62,7 @@ m_authentificated(0)
   m_history = new MarksHistory(this);
   connect(m_history,SIGNAL(isFull()),SLOT(onHistoryFull()));
 
-  m_addNewMarkQuery = new AddNewMarkQuery(this);
+  m_addNewMarkQuery = new WriteTagQuery(this);
   connect(m_addNewMarkQuery,SIGNAL(tagAdded()),SLOT(onMarkAdded()));
   connect(m_addNewMarkQuery, SIGNAL(errorOccured(QString)), SIGNAL(error(QString)));
 }
@@ -169,7 +169,7 @@ void MeegoClient::track()
   //   double lon=common::GpsInfo::getInstance().getLongitude();
   double lat=30+0.01*(qrand()%100);
   double lon=60+0.01*(qrand()%100);
-  QSharedPointer<DataMark> mark(new JsonDataMark(lat,lon,m_name,
+  QSharedPointer<DataMark> mark(new JsonDataMark(0,lat,lon,m_name,
     "this tag was generated","unknown",QDateTime::currentDateTime()));
 
   QSharedPointer<Channel> channel(new JsonChannel(DEFAULT_CHANNEL,"dummy channel"));

@@ -29,79 +29,96 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/* $Id$ */
-/*!
- * \file RSSFeedQuery.h
- * \brief Header of RSSFeedQuery
- * \todo add comment here
+/*! ---------------------------------------------------------------
+ * $Id$
+ *
+ * \file LoadTagsQuery.cpp
+ * \brief LoadTagsQuery implementation
  *
  * File description
  *
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
-#define _RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
+#include "LoadTagsQuery.h"
+#include "defines.h"
+#include <QDebug>
+#include "LoadTagsResponseJSON.h"
+#include "LoadTagsRequestJSON.h"
+#include "JsonDataMark.h"
+#include "JsonUser.h"
 
-#include <QObject>
-#include <QString>
-#include <DefaultQuery.h>
-
-#include "DataMarks.h"
-#include "User.h"
-#include "Channel.h"
-#include "DataChannel.h"
-
-/*!
- * RSSFeedQuery class definition.
- *
- * The object of this class represents http query to server.
- * This query includes json request to get RSS feed.
- */
-class RSSFeedQuery : public DefaultQuery
+LoadTagsQuery::LoadTagsQuery(QSharedPointer<common::User> &user,
+double latitude,
+double longitude,
+double radius,
+QObject *parent): DefaultQuery(parent),
+m_user(user),
+m_latitude(latitude),
+m_longitude(longitude),
+m_radius(radius)
 {
-  Q_OBJECT
+}
 
-    QSharedPointer<common::User> m_user;
-  double m_latitude;
-  double m_longitude;
-  double m_radius;
 
-  DataChannels m_hashMap;
+LoadTagsQuery::LoadTagsQuery(QObject *parent): DefaultQuery(parent)
+{
+}
 
-  virtual QString getUrl() const;
-  virtual QByteArray getRequestBody() const;
 
-  private Q_SLOTS:
+void LoadTagsQuery::setQuery(QSharedPointer<common::User> &user,
+double latitude,
+double longitude,
+double radius)
+{
+  m_user=user;
+  m_latitude=latitude;
+  m_longitude=longitude;
+  m_radius=radius;
+}
 
-    virtual void processReply(QNetworkReply *reply);
 
-  public:
+QString LoadTagsQuery::getUrl() const
+{
+  return FEED_HTTP_URL;
+}
 
-    RSSFeedQuery(QSharedPointer<common::User> &user,
-      double latitude,
-      double longitude,
-      double radius,
-      QObject *parent = 0);
 
-    RSSFeedQuery(QObject *parent = 0);
+QByteArray LoadTagsQuery::getRequestBody() const
+{
+  LoadTagsRequestJSON request(m_latitude, m_longitude, m_radius);
+  request.addUser(m_user);
+  return request.getJson();
+}
 
-    void setQuery(QSharedPointer<common::User> &user,
-      double latitude,
-      double longitude,
-      double radius);
 
-    ~RSSFeedQuery();
+void LoadTagsQuery::processReply(QNetworkReply *reply)
+{
+  LoadTagsResponseJSON response;
+  response.parseJson(reply->readAll());
+  if(response.getErrno() == SUCCESS)
+  {
+    m_hashMap = response.getData();
 
-    const DataChannels& getRSSFeed() const;
+    Q_EMIT tagsReceived();
+  }
+  else
+  {
+    Q_EMIT errorOccured(response.getErrno());
+  }
+}
 
-    Q_SIGNALS:
 
-    void rssFeedReceived();
+const DataChannels& LoadTagsQuery::getData() const
+{
+  return m_hashMap;
+}
 
-    // class RSSFeedQuery
-};
-//_RSSFeedQuery_H_4E23ED0A_8725_4201_B0F2_F58BB68F474D_INCLUDED_
-#endif
+
+LoadTagsQuery::~LoadTagsQuery()
+{
+
+}
+
 
 /* ===[ End of file $HeadURL$ ]=== */

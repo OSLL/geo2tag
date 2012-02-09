@@ -81,7 +81,7 @@ namespace Test
         QSharedPointer<Channel> channel(new JsonChannel("dummy channel","dummy channel"));
         for (int i=0;i<TEST_OBJECT_SIZE;i++)
         {
-          QSharedPointer<DataMark> mark(new JsonDataMark(i,i,"","","",QDateTime::currentDateTime()));
+          QSharedPointer<DataMark> mark(new JsonDataMark(0,i,i,"","","",QDateTime::currentDateTime()));
           mark->setChannel(channel);
           m_history->pushMark(mark);
         }

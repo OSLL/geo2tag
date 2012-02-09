@@ -32,8 +32,8 @@
 /*! ---------------------------------------------------------------
  * $Id$
  *
- * \file RSSFeedJSON.cpp
- * \brief RSSFeedJSON implementation
+ * \file LoadTagsJSON.cpp
+ * \brief LoadTagsJSON implementation
  *
  * File description
  *
@@ -42,7 +42,7 @@
 
 #include <QVariant>
 #include <QDebug>
-#include "RSSFeedJSON.h"
+#include "LoadTagsResponseJSON.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <qjson/parser.h>
@@ -59,18 +59,18 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 
-RSSFeedResponseJSON::RSSFeedResponseJSON(const DataChannels &hashMap, QObject *parent):
+LoadTagsResponseJSON::LoadTagsResponseJSON(const DataChannels &hashMap, QObject *parent):
 JsonSerializer(parent), m_hashMap(hashMap)
 {
 }
 
 
-RSSFeedResponseJSON::RSSFeedResponseJSON(QObject *parent) : JsonSerializer(parent)
+LoadTagsResponseJSON::LoadTagsResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
 
-void RSSFeedResponseJSON::parseJson(const QByteArray &data)
+bool LoadTagsResponseJSON::parseJson(const QByteArray &data)
 {
   //TODO: enable for symbian
   #ifndef  Q_OS_SYMBIAN
@@ -80,13 +80,12 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
 
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with rss feed");
-    return;
-  }
-  setStatus(result["status"].toString());
-  setStatusMessage(result["status_description"].toString());
+  if (!ok) return false;
+
+  result["errno"].toInt(&ok);
+  if (!ok) return false;
+  m_errno = result["errno"].toInt(&ok);
+
   QVariantMap rss = result["rss"].toMap();
   QVariantMap channelVariant = rss["channels"].toMap();
   QVariantList channelsList = channelVariant["items"].toList();
@@ -98,7 +97,7 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
     QVariantList markList = channelDesc["items"].toList();
     QString channelName = channelDesc["name"].toString();
 
-    QSharedPointer<Channel> channel(new JsonChannel(channelName,"dummy channel[RSSFeedResponse]"));
+    QSharedPointer<Channel> channel(new JsonChannel(channelName,"dummy channel[LoadTagsResponse]"));
 
     for(int j=0; j<markList.size(); j++)
     {
@@ -107,8 +106,13 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
       QString title = markMap["title"].toString();
       QString link = markMap["link"].toString();
       QString description = markMap["description"].toString();
-      double latitude = markMap["latitude"].toString().toDouble();
-      double longitude = markMap["longitude"].toString().toDouble();
+      double altitude = markMap["altitude"].toString().toDouble(&ok);
+      if (!ok) return false;
+      double latitude = markMap["latitude"].toString().toDouble(&ok);
+      if (!ok) return false;
+      double longitude = markMap["longitude"].toString().toDouble(&ok);
+      if (!ok) return false;
+
       QString userName = markMap["user"].toString();
       QString timeStr =  markMap["pubDate"].toString();
       QDateTime time = QDateTime::fromString(timeStr, "dd MM yyyy HH:mm:ss.zzz");
@@ -117,7 +121,8 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
       QSharedPointer<common::User> user(new JsonUser(userName));
       m_usersContainer->push_back(user);
 
-      QSharedPointer<JsonDataMark> newMark(new JsonDataMark(latitude,
+      QSharedPointer<JsonDataMark> newMark(new JsonDataMark(altitude,
+        latitude,
         longitude,
         title,
         description,
@@ -127,11 +132,12 @@ void RSSFeedResponseJSON::parseJson(const QByteArray &data)
       m_hashMap.insert(channel, newMark);
     }
   }
+  return true;
   #endif                                // Q_OS_SYMBIAN
 }
 
 
-QByteArray RSSFeedResponseJSON::getJson() const
+QByteArray LoadTagsResponseJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj, rss, jchannel;
@@ -153,6 +159,7 @@ QByteArray RSSFeedResponseJSON::getJson() const
       jtag["link"] = tag->getUrl();
       jtag["description"] = tag->getDescription();
       jtag["latitude"] = tag->getLatitude();
+      jtag["altitude"] = tag->getAltitude();
       jtag["longitude"] = tag->getLongitude();
       jtag["user"] = tag->getUser()->getLogin();
       jtag["pubDate"] = tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz");
@@ -165,19 +172,23 @@ QByteArray RSSFeedResponseJSON::getJson() const
   jchannel["items"] = jchannels;
   rss["channels"] = jchannel;
   obj["rss"] = rss;
-  obj["status"]=getStatus();
-  obj["status_description"]=getStatusMessage();
+  obj["errno"]= m_errno;
   return serializer.serialize(obj);
 }
 
 
-const DataChannels& RSSFeedResponseJSON::getRSSFeed() const
+const DataChannels& LoadTagsResponseJSON::getData() const
 {
   return m_hashMap;
 }
 
+void LoadTagsResponseJSON::setData(const DataChannels& d)
+{
+  m_hashMap = d ;
+}
 
-RSSFeedResponseJSON::~RSSFeedResponseJSON()
+
+LoadTagsResponseJSON::~LoadTagsResponseJSON()
 {
 }
 

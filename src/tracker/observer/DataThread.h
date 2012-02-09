@@ -40,7 +40,7 @@
 #include "MapScene.h"
 
 #include "LoginQuery.h"
-#include "RSSFeedQuery.h"
+#include "LoadTagsQuery.h"
 
 class DataThread : public QThread
 {
@@ -55,7 +55,7 @@ class DataThread : public QThread
   // this field needs because query is asynchronous
   LoginQuery * m_loginQuery;
   // this field needs because query is asynchronous
-  RSSFeedQuery * m_rssQuery;
+  LoadTagsQuery * m_rssQuery;
 
   bool m_isConnected;
   bool m_requestIsSent;

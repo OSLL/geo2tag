@@ -59,7 +59,7 @@ public:
 
   void setDataChannels(const DataChannels& dataChannels);
 
-  virtual void parseJson(const QByteArray&);
+  virtual bool parseJson(const QByteArray&);
 
   virtual QByteArray getJson() const;
 

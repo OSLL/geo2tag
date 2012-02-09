@@ -41,8 +41,9 @@
 
 #include "Region.h"
 #include <QPolygonF>
-
-Region::Region()
+#include <QDebug>
+namespace common {
+Region::Region():m_points(new DataMarks)
 {
 }
 
@@ -71,8 +72,9 @@ bool Region::atRegion(const QSharedPointer<DataMark>& point)
 
   QPolygonF polygon;
   for (int i=0;i<m_points->size();i++)
+  {
     polygon << QPointF(m_points->at(i)->getLatitude(),m_points->at(i)->getLongitude());
-
+  }
   polygon << QPointF(m_points->at(0)->getLatitude(),m_points->at(0)->getLongitude());
   return polygon.containsPoint(QPointF(point->getLatitude(),point->getLongitude()), Qt::OddEvenFill);
 
@@ -80,4 +82,6 @@ bool Region::atRegion(const QSharedPointer<DataMark>& point)
 
 Region::~Region()
 {
+}
+
 }
