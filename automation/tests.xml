@@ -1,10 +1,15 @@
 <tests shelf="TEST">
+	<testcase title="LOGIN">
+		 <pred></pred>
+		 <test>curl -d '{"login":"Mark","password":"test"}'  http://localhost:81/service/login</test>
+		 <post>0</post>
+	</testcase>
 	<testcase title="CIRCLE - SPATIAL FILTER">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "time_from":"04 03 2011 15:33:47.630", "time_to":"31 12 2011 15:33:47.630", "latitude":60.1632, "longitude":24.8593,  "radius":30.0 }' http://localhost:81/service/filterCircle</test>
 		 <post>0</post>
 	</testcase>
-	<testcase title="RECTANGE - SPATIAL FILTER">
+	<testcase title="RECTANGLE - SPATIAL FILTER">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "time_from":"04 03 2011 15:33:47.630", "time_to":"31 12 2011 15:33:47.630", "latitude_shift":{ "latitude1":0.0 ,"latitude2": 100.0}, "longitude_shift":{ "longitude1":0.0 ,"longitude2": 100.0} }' http://localhost:81/service/filterRectangle</test>
 		 <post>0</post>
