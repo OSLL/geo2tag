@@ -46,7 +46,7 @@ then
 fi
 
 test_altitude=$((RANDOM%100)).$((RANDOM%1000));
-echo $test_altitude
+echo "Test alt:$test_altitude"
 response_write_tag_test=`curl -d "{ \"auth_token\" : \"MMMMMMMMMM\", \"channel\" : \"$test_channel\", \"description\" : \"\", \"altitude\" : $test_altitude , \"latitude\" : 0.0,\"link\" : \"\", \"longitude\" : 0.0, \"time\" : \"04 03 2011 15:33:47.630\", \"title\" : \"\" }"  http://localhost:81/service/writeTag`;
 echo "$response_write_tag_test "
 if ! echo $response_write_tag_test | grep -q -s -F "$correct_result"  ;
