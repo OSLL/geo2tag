@@ -1,14 +1,20 @@
 import Qt 4.7
+//import QtQuick 1.0
+
 import QtMobility.location 1.2
-import com.nokia.meego 1.0
+
 
  Item {
      width: 500
      height: 500
 
-     focus : true
-     TitleBar { id: titleBar; z: 5; width: parent.width; height: 40; /*opacity: 0.9*/ }
+    // focus : true
+
+
      RecButton {id: recbutton;width: 100; height: 100;  z:5}
+
+
+
 
      Map {
          id: map

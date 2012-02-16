@@ -1,17 +1,19 @@
 import QtQuick 1.0
 import com.nokia.meego 1.0
-
+//import org.maemo.fremantle 1.0  // for Core components
 Item {
     id:recbutton
     anchors.verticalCenter: parent.verticalCenter
     anchors.verticalCenterOffset: 100
-    Rectangle {
+    Button {
         id: rec
         width: 50
         height: 50
-        color: "red"
+        platformStyle: ButtonStyle{
+            inverted: true}
+      /*  color: "red"
         border.color: "black"
-        radius: 5
+        radius: 5*/
         anchors.left: parent.left
         anchors.leftMargin: 70
         rotation: 45
