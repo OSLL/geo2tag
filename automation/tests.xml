@@ -4,6 +4,46 @@
 		 <test>curl -d '{"login":"Mark","password":"test"}'  http://localhost:81/service/login</test>
 		 <post>0</post>
 	</testcase>
+	<testcase title="ADD USER (user exists)">
+		 <pred></pred>
+		 <test>curl -d "{\"login\":\"Mark\",\"password\":\"test\"}"  http://localhost:81/service/addUser</test>
+		 <post>2</post>
+	</testcase>
+	<testcase title="ADD TAG">
+		 <pred></pred>
+		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "channel":"My channel", "description":"tag", "latitude":60.0, "altitude":30.0, "link":"unknown", "longitude":30.0, "time":"04 03 2011 15:33:47.630", "title":"osll" }'  http://localhost:81/service/writeTag</test>
+		 <post>0</post>
+	</testcase>
+	<testcase title="ADD CHANNEL (channel exists)">
+		 <pred></pred>
+		 <test>curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"name\":\"Fuel prices\", \"description\":\"my new super chanel\", \"url\":\"http://osll.spb.ru\", \"activeRadius\":3000}"  http://tracks.osll.spb.ru:81/service/addChannel</test>
+		 <post>4</post>
+	</testcase>
+	<testcase title="SUBSCRIBE TO CHANNEL">
+		 <pred></pred>
+		 <test>curl -d '{"auth_token":"MMMMMMMMMM","channel":"Empty channel"}' http://localhost:81/service/subscribe</test>
+		 <post>5</post>
+	</testcase>
+	<testcase title="UNSUBSCRIBE TO CHANNEL">
+		 <pred></pred>
+		 <test>curl -d "{\"auth_token\":\"MMMMMMMMMM\",\"channel\":\"Empty channel\"}"  http://localhost:81/service/unsubscribe</test>
+		 <post>11</post>
+	</testcase>
+	<testcase title="SUBSCRIBED CHANNELS">
+		 <pred></pred>
+		 <test>curl -d '{"auth_token":"MMMMMMMMMM"}'  http://localhost:81/service/subscribed</test>
+		 <post>0</post>
+	</testcase>
+	<testcase title="AVAILABLE CHANNELS">
+		 <pred></pred>
+		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "latitude":30.0, "longitude":60.0, "radius":30.0}' http://localhost:81/service/channels</test>
+		 <post>0</post>
+	</testcase>
+	<testcase title="LOAD TAGS">
+		 <pred></pred>
+		 <test>curl -d "{\"auth_token\":\"MMMMMMMMMM\",\"latitude\":30.0, \"longitude\":60.0, \"radius\":30.0}"  http://tracks.osll.spb.ru:81/service/loadTags</test>
+		 <post>0</post>
+	</testcase>
 	<testcase title="CIRCLE - SPATIAL FILTER">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "time_from":"04 03 2011 15:33:47.630", "time_to":"31 12 2011 15:33:47.630", "latitude":60.1632, "longitude":24.8593,  "radius":30.0 }' http://localhost:81/service/filterCircle</test>
