@@ -1,5 +1,6 @@
 /*
  * Copyright 2010-2011  Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,12 +30,8 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/*! ---------------------------------------------------------------
- * PROJ: OSLL/geo2tag
- * ---------------------------------------------------------------- */
 
-
-package ru.spb.osll.exception;
+package ru.spb.osll.GDS.exception;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

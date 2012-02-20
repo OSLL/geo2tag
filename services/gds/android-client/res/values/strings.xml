@@ -3,5 +3,11 @@
 
     <string name="hello">Hello World!</string>
     <string name="app_name">GeoDoctorSearch</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="re_password">Re-enter password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="create_account">Create account</string>
+    <string name="remember_me">Remember me</string>
 
 </resources>
