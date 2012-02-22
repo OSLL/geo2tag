@@ -51,6 +51,12 @@
             </intent-filter>
         </activity>
         
+        <activity android:name="ru.spb.osll.GDS.preferences.SettingsActivity"
+                  android:configChanges="orientation|keyboardHidden"/>
+        
+        <activity android:name="ru.spb.osll.GDS.CreateAccountActivity"
+                  android:configChanges="orientation|keyboardHidden"/>
+        
     </application>
 
 </manifest>

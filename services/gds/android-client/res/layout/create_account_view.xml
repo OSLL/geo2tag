@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
+    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
     
-        
         <TextView 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -14,7 +13,7 @@
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edit_login"
+            android:id="@+id/edit_reg_login"
             android:singleLine="true"
             android:inputType="text" />
         
@@ -26,27 +25,26 @@
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edit_password"
+            android:id="@+id/edit_reg_password"
             android:singleLine="true"
             android:inputType="textPassword" />
         
-        <CheckBox
+        <TextView 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/remember_me_checkbox"
-            android:text="@string/remember_me"/>
+            android:text="@string/re_password" 
+            android:singleLine="true"/>
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_reg_re_password"
+            android:singleLine="true"
+            android:inputType="textPassword" />
         
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/sign_in_button"
-            android:text="@string/sign_in" />
-        
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_account_button"
-            android:text="@string/create_account" />
-        
+            android:id="@+id/register_button"
+            android:text="@string/register" />        
     
 </LinearLayout>

@@ -31,49 +31,40 @@
 
 package ru.spb.osll.GDS;
 
-import ru.spb.osll.GDS.R;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
-import ru.spb.osll.GDS.preferences.Settings;
-import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
+import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 
-public class LoginActivity extends Activity {
-	
+public class CreateAccountActivity extends Activity {
+
 	public static final int SETTINGS_ID = Menu.FIRST;
 	
 	private EditText m_loginEdit;
 	private EditText m_passwordEdit;
-	private CheckBox m_rememberCheck;
-
+	private EditText m_rePasswordEdit;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login_view);
+		setContentView(R.layout.create_account_view);
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		
-		Settings settings = new Settings(this);
-		if (settings.isSettingsEmpty()){
-			settings.setDefaultSettings();
-		}
+		setTitle("Create a new account");
 		
-		m_loginEdit = (EditText) findViewById(R.id.edit_login);
-		m_passwordEdit = (EditText) findViewById(R.id.edit_password);
-		m_rememberCheck = (CheckBox) findViewById(R.id.remember_me_checkbox);
-		
-		initViews();
+		m_loginEdit = (EditText) findViewById(R.id.edit_reg_login);
+		m_passwordEdit = (EditText) findViewById(R.id.edit_reg_password);
+		m_rePasswordEdit = (EditText) findViewById(R.id.edit_reg_re_password);
+
 		initButtons();
-		
 	}
 
 	@Override
@@ -109,44 +100,23 @@ public class LoginActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 	
-	private void initViews() {
-		final SharedPreferences settings = new Settings(this).getPreferences();
-		m_loginEdit.setText(settings.getString(IGDSSettings.LOGIN, "?????"));
-		m_passwordEdit.setText(settings.getString(IGDSSettings.PASSWORD, "?????"));
-		m_rememberCheck.setChecked(settings.getBoolean(IGDSSettings.REMEMBER, false));
-	}
-	
 	private void initButtons() {
-		final Button signInBtn= (Button) findViewById(R.id.sign_in_button);
-		signInBtn.setOnClickListener(new View.OnClickListener() {
+		final Button registerBtn= (Button) findViewById(R.id.register_button);
+		registerBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LoginActivity.this.signIn();
+				CreateAccountActivity.this.register();
 			}
 		});
-		
-		final Button createAccountBtn= (Button) findViewById(R.id.create_account_button);
-		createAccountBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				LoginActivity.this.createAccount();
-			}
-		});
-	}
-	
-	private void signIn() {
-		Log.v(IGDSSettings.LOG, "signing in");
-		
-	}
-	
-	private void createAccount() {
-		Log.v(IGDSSettings.LOG, "creating account");
-		startActivity(new Intent(this, CreateAccountActivity.class));
 	}
 	
 	private void showSettings() {
 		Log.v(IGDSSettings.LOG, "opening settings");
 		startActivity(new Intent(this, SettingsActivity.class));
+	}
+	
+	private void register() {
+		Log.v(IGDSSettings.LOG, "registering");
 	}
 
 }
