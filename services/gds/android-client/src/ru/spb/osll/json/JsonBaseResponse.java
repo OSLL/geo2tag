@@ -54,6 +54,17 @@ public class JsonBaseResponse {
 		}
 	}
 	
+	public static int parseErrno(JSONObject obj) {
+		int errno = -1;
+		try {
+    		errno = obj.getInt("errno");
+		} catch (JSONException e) {
+			Log.e(JsonBase.LOG, e.getMessage());
+		}
+		
+		return errno;
+	}
+	
 	public int getErrno(){
 		return m_errno;
 	}
