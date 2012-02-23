@@ -95,6 +95,7 @@ public class Settings {
 		String GDS_SETTINGS = "gds_settings";
 		
 		String LOG = "GeoDoctorSearch";
+		int ATTEMPTS = 5;
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";

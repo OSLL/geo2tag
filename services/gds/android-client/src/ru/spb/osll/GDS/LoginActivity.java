@@ -31,11 +31,17 @@
 
 package ru.spb.osll.GDS;
 
+import org.json.JSONObject;
+
 import ru.spb.osll.GDS.R;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
+import ru.spb.osll.json.JsonBase;
+import ru.spb.osll.json.JsonBaseResponse;
+import ru.spb.osll.json.JsonLoginRequest;
+import ru.spb.osll.json.IRequest.IResponse;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,10 +53,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 	
 	public static final int SETTINGS_ID = Menu.FIRST;
+	
+	public static final String AUTH_TOKEN = "auth_token";
 	
 	private EditText m_loginEdit;
 	private EditText m_passwordEdit;
@@ -137,6 +146,60 @@ public class LoginActivity extends Activity {
 	private void signIn() {
 		Log.v(IGDSSettings.LOG, "signing in");
 		
+		String login = m_loginEdit.getText().toString();
+		String password = m_passwordEdit.getText().toString();
+		String serverUrl = new Settings(this).getPreferences().getString(
+				IGDSSettings.SERVER_URL, "");
+		String authToken = "";
+		
+		JSONObject JSONResponse = null;
+		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+			JSONResponse = new JsonLoginRequest(login, password, serverUrl).doRequest();
+			if (JSONResponse != null) 
+				break;
+		}
+		if (JSONResponse != null) {
+			int errno = JsonBaseResponse.parseErrno(JSONResponse);
+			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
+				Log.v(IGDSSettings.LOG, "user logged in successfully");
+			} else {
+				handleError(errno);
+				return;
+			}
+			
+			authToken = JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN);
+
+		} else {
+			Log.v(IGDSSettings.LOG, "response failed");
+			Toast.makeText(this, "Connection error",
+					Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		// If remember checkbox is checked then save login and password
+		// else save them as empty
+		// TODO
+		
+		Intent i = new Intent(this, MainActivity.class);
+		i.putExtra(AUTH_TOKEN, authToken);
+		startActivity(i);		
+	}
+	
+	private void handleError(int errno) {
+		if (errno < 0) {
+			Log.v(IGDSSettings.LOG, "bad response received");
+			Toast.makeText(this, "Server error (corrupted response)",
+					Toast.LENGTH_LONG).show();
+		} else if (errno >= IResponse.geo2tagError.values().length) {
+			Log.v(IGDSSettings.LOG, "unknown error");
+			Toast.makeText(this, "Unknown server error",
+					Toast.LENGTH_LONG).show();
+		} else if (errno > 0) {
+			String error = IResponse.geo2tagError.values()[errno].name();
+			Log.v(IGDSSettings.LOG, "error: " + error);
+			Toast.makeText(this, "Error: " + error,
+					Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	private void createAccount() {

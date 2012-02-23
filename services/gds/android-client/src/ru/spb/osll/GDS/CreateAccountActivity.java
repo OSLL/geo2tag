@@ -56,7 +56,6 @@ import android.widget.Toast;
 public class CreateAccountActivity extends Activity {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
-	private final int ATTEMPT = 5;
 	
 	private EditText m_loginEdit;
 	private EditText m_passwordEdit;
@@ -152,7 +151,7 @@ public class CreateAccountActivity extends Activity {
 		
 		// Add user
 		JSONObject JSONResponse = null;
-		for(int i = 0; i < ATTEMPT; i++){
+		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
 			JSONResponse = new JsonAddUserRequest(login, password, serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
@@ -175,7 +174,7 @@ public class CreateAccountActivity extends Activity {
 		
 		// Login
 		JSONResponse = null;
-		for(int i = 0; i < ATTEMPT; i++){
+		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
 			JSONResponse = new JsonLoginRequest(login, password, serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
@@ -200,7 +199,7 @@ public class CreateAccountActivity extends Activity {
 		
 		// Add channel
 		JSONResponse = null;
-		for(int i = 0; i < ATTEMPT; i++){
+		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
 			JSONResponse = new JsonApplyChannelRequest(authToken, login,
 					login + "'s channel", "", 400, serverUrl).doRequest();
 			if (JSONResponse != null) 
