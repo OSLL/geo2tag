@@ -215,7 +215,7 @@ public class MainActivity extends Activity {
 		JSONObject JSONResponse = null;
 		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
 			JSONResponse = new JsonApplyMarkRequest(m_authToken, m_channel, "gds tracker", "",
-					"gds tracker", location.getLatitude(), location.getLongitude(),
+					"gds tracker", location.getLatitude(), location.getLongitude(), 0,
 					getTime(new Date()), serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
