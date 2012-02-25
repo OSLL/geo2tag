@@ -60,6 +60,8 @@ public class LoginActivity extends Activity {
 	public static final int SETTINGS_ID = Menu.FIRST;
 	
 	public static final String AUTH_TOKEN = "auth_token";
+	public static final String LOGIN = "login";
+	public static final String CHANNEL = "channel";
 	
 	private EditText m_loginEdit;
 	private EditText m_passwordEdit;
@@ -148,6 +150,7 @@ public class LoginActivity extends Activity {
 		
 		String login = m_loginEdit.getText().toString();
 		String password = m_passwordEdit.getText().toString();
+		String channel = login;
 		String serverUrl = new Settings(this).getPreferences().getString(
 				IGDSSettings.SERVER_URL, "");
 		String authToken = "";
@@ -182,6 +185,8 @@ public class LoginActivity extends Activity {
 		
 		Intent i = new Intent(this, MainActivity.class);
 		i.putExtra(AUTH_TOKEN, authToken);
+		i.putExtra(LOGIN, login);
+		i.putExtra(CHANNEL, channel);
 		startActivity(i);		
 	}
 	
