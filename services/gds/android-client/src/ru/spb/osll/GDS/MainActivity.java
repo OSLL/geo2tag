@@ -31,10 +31,19 @@
 
 package ru.spb.osll.GDS;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.json.JSONObject;
+
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
+import ru.spb.osll.json.JsonApplyMarkRequest;
+import ru.spb.osll.json.JsonBaseResponse;
+import ru.spb.osll.json.IRequest.IResponse;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -46,8 +55,6 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -58,6 +65,8 @@ public class MainActivity extends Activity {
 	public static final int INTERVAL = 7;
 	
 	private String m_authToken = null;
+	private String m_login = null;
+	private String m_channel = null;
 	private LocationManager m_locationManager;
 	private boolean m_isDeviceReady = false;
 	private Thread m_trackThread;
@@ -72,9 +81,11 @@ public class MainActivity extends Activity {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 		    m_authToken = extras.getString(LoginActivity.AUTH_TOKEN);
+		    m_login = extras.getString(LoginActivity.LOGIN);
+		    m_channel = extras.getString(LoginActivity.CHANNEL); 
 		}
-		if (m_authToken == null) {
-			Log.v(IGDSSettings.LOG, "problem with auth_token extracting");
+		if (m_authToken == null || m_login == null || m_channel == null) {
+			Log.v(IGDSSettings.LOG, "problem with extracting data");
 			Toast.makeText(this, "Can't sign in", Toast.LENGTH_LONG).show();
 			finish();
 			return;
@@ -188,11 +199,63 @@ public class MainActivity extends Activity {
 					Location location = getLocation();
 					Log.v(IGDSSettings.LOG, "coords: " + location.getLatitude()
 							+ ", " + location.getLongitude());
+					
+					sendMark(location);
+					
 					SystemClock.sleep(INTERVAL * 1000);
 				}
 			}
 		});
 		m_trackThread.start();
+	}
+	
+	private void sendMark(Location location) {
+		String serverUrl = new Settings(this).getPreferences().getString(
+				IGDSSettings.SERVER_URL, "");
+		JSONObject JSONResponse = null;
+		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+			JSONResponse = new JsonApplyMarkRequest(m_authToken, m_channel, "gds tracker", "",
+					"gds tracker", location.getLatitude(), location.getLongitude(),
+					getTime(new Date()), serverUrl).doRequest();
+			if (JSONResponse != null) 
+				break;
+		}
+		if (JSONResponse != null) {
+			int errno = JsonBaseResponse.parseErrno(JSONResponse);
+			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
+				Log.v(IGDSSettings.LOG, "Mark sent successfully");
+			} else {
+				handleError(errno);
+				return;
+			}
+		} else {
+			Log.v(IGDSSettings.LOG, "response failed");
+			Toast.makeText(this, "Connection error",
+					Toast.LENGTH_LONG).show();
+			return;
+		}
+	}
+	
+	private void handleError(int errno) {
+		if (errno < 0) {
+			Log.v(IGDSSettings.LOG, "bad response received");
+			Toast.makeText(this, "Server error (corrupted response)",
+					Toast.LENGTH_LONG).show();
+		} else if (errno >= IResponse.geo2tagError.values().length) {
+			Log.v(IGDSSettings.LOG, "unknown error");
+			Toast.makeText(this, "Unknown server error",
+					Toast.LENGTH_LONG).show();
+		} else if (errno > 0) {
+			String error = IResponse.geo2tagError.values()[errno].name();
+			Log.v(IGDSSettings.LOG, "error: " + error);
+			Toast.makeText(this, "Error: " + error,
+					Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	private static DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
+	public static String getTime(Date date){
+		return dateFormat.format(date);
 	}
 
 }
