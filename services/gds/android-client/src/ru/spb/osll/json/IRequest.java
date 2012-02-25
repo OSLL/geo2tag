@@ -62,7 +62,7 @@ public interface IRequest {
 	}
 
 	public interface IApplyMark{
-		String REQUEST = "/apply";
+		String REQUEST = "/writeTag";
 
 		String AUTH_TOKEN = "auth_token";
 		String CHANNEL = "channel";
@@ -72,6 +72,7 @@ public interface IRequest {
 		String LATITUDE = "latitude";
 		String LONGITUDE = "longitude";
 		String TIME = "time";
+		String ALTITUDE = "altitude";
 	}
 	
 	public interface IResponse{
