@@ -25,12 +25,17 @@ MainWindow::MainWindow(QWidget *parent) :
     view->engine()->addPluginPath(QString("/opt/qtm12/plugins"));
 
     client =new Client(this);
-    view->rootContext()->setContextProperty("Client", client);
+ //   view->rootContext()->setContextProperty("Client", client);
+    view->rootContext()->setContextProperty("Main", this);
 
     QObject* rootObject = dynamic_cast<QObject*>(view->rootObject());
     QObject::connect(authAction, SIGNAL(triggered()), rootObject, SLOT(showLoginView()));
     QObject::connect(client, SIGNAL(error(QVariant)), rootObject, SLOT(incorrect(QVariant)));
     QObject::connect(client, SIGNAL(authentificated(QVariant)), rootObject, SLOT(entered(QVariant)));
+
+
+
+
 
 #if defined(Q_WS_MAEMO_5)
     view->setGeometry(QRect(0,0,800,480));
@@ -87,3 +92,22 @@ void MainWindow::pathSettings()
 
 }
 
+void MainWindow::onAuth(QString login, QString pass)
+{
+    client->auth(login, pass);
+}
+
+void MainWindow::trackingOnOff()
+{
+    if (!client->isTracking())
+        if (client->isAuthentificated()) {
+            client->startTrack();
+            emit trackingStarted();
+        }
+        else
+            authAction->trigger();
+    else
+        client->stopTrack();
+
+
+}

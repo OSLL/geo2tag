@@ -11,7 +11,7 @@ import QtMobility.location 1.2
     // focus : true
 
 
-     RecButton {id: recbutton;width: 100; height: 100;  z:5}
+
 
 
 

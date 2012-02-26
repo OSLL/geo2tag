@@ -20,7 +20,7 @@ INCLUDEPATH += . \
 
 HEADERS += ../../../../http_requests/inc/LoginQuery.h \
 ../../../../http_requests/inc/DefaultQuery.h \
-../../../../http_requests/inc/AddNewMarkQuery.h \
+../../../../http_requests/inc/WriteTagQuery.h \
 ../../../../json/inc/JsonSerializer.h \
 ../../../../json/inc/LoginResponseJSON.h \
 ../../../../json/inc/LoginRequestJSON.h \
@@ -28,8 +28,8 @@ HEADERS += ../../../../http_requests/inc/LoginQuery.h \
 ../../../../json/inc/JsonTimeSlot.h \
 ../../../../json/inc/JsonDataMark.h \
 ../../../../json/inc/JsonChannel.h \
-../../../../json/inc/AddNewMarkResponseJSON.h \
-../../../../json/inc/AddNewMarkRequestJSON.h \
+../../../../json/inc/WriteTagResponseJSON.h \
+../../../../json/inc/WriteTagRequestJSON.h \
 ../../../../json/inc/DefaultResponseJSON.h \
 ../../../../common/inc/User.h \
 ../../../../common/inc/TimeSlot.h \
@@ -39,6 +39,7 @@ HEADERS += ../../../../http_requests/inc/LoginQuery.h \
 ../../../../common/inc/defines.h \
 ../../../../common/inc/DataChannel.h \
 ../../../../common/inc/GpsInfo.h \
+../../../../common/inc/GpsModeller.h \
 ../../../../common/inc/MobilityGps.h \
 ../../../../../3rdparty/qjson-0.7.1/src/parser.h \
 ../../../../../3rdparty/qjson-0.7.1/src/serializerrunnable.h \
@@ -53,21 +54,26 @@ HEADERS += ../../../../http_requests/inc/LoginQuery.h \
 ../../../../../3rdparty/qjson-0.7.1/src/stack.hh \
 ../../../../../3rdparty/qjson-0.7.1/src/location.hh \
 ../../../../../3rdparty/qjson-0.7.1/src/position.hh \
-    Client.h
+    Client.h \
+    MarksHistory.h
 
 SOURCES += ../../../../http_requests/src/LoginQuery.cpp \
 ../../../../http_requests/src/DefaultQuery.cpp \
+../../../../http_requests/src/WriteTagQuery.cpp \
 ../../../../common/src/User.cpp \
 ../../../../common/src/TimeSlot.cpp \
 ../../../../common/src/DataMarks.cpp \
 ../../../../common/src/Channel.cpp \
 ../../../../common/src/GpsInfo.cpp \
+../../../../common/src/GpsModeller.cpp \
 ../../../../common/src/MobilityGps.cpp \
 ../../../../common/src/defines.cpp \
 ../../../../json/src/JsonSerializer.cpp \
 ../../../../json/src/LoginResponseJSON.cpp \
 ../../../../json/src/LoginRequestJSON.cpp \
 ../../../../json/src/JsonUser.cpp \
+../../../../json/src/WriteTagResponseJSON.cpp \
+../../../../json/src/WriteTagRequestJSON.cpp \
 ../../../../json/src/JsonDataMark.cpp \
 ../../../../json/src/JsonChannel.cpp \
 ../../../../../3rdparty/qjson-0.7.1/src/serializerrunnable.cpp \
@@ -77,7 +83,8 @@ SOURCES += ../../../../http_requests/src/LoginQuery.cpp \
 ../../../../../3rdparty/qjson-0.7.1/src/parser.cpp \
 ../../../../../3rdparty/qjson-0.7.1/src/json_scanner.cpp \
 ../../../../../3rdparty/qjson-0.7.1/src/json_parser.cc \
-    Client.cpp
+    Client.cpp \
+    MarksHistory.cpp
 
 
 

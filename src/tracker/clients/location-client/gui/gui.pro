@@ -66,7 +66,8 @@ OTHER_FILES += \
     LoginView.qml \
     MapViewer.qml \
     main.qml \
-    NotifyDialog.qml
+    NotifyDialog.qml \
+    RightPanel.qml
 
 maemo5 {
     target.path = /opt/gui/bin

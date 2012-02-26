@@ -28,8 +28,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     
 signals:
-    
+    void trackingStarted();
 public slots:
+    void onAuth(QString login, QString pass);
+    void trackingOnOff();
 private:
     void createMenus();
     void createActions();

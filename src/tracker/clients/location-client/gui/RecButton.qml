@@ -3,25 +3,43 @@ import com.nokia.meego 1.0
 //import org.maemo.fremantle 1.0  // for Core components
 Item {
     id:recbutton
+    signal trackingRequest()
+    property string curStatus: "Rec"
+    property string  prevStatus: "Rec"
+   /* signal startTrack();
+    signal stopTrack();*/
+
     anchors.verticalCenter: parent.verticalCenter
     anchors.verticalCenterOffset: 100
-    Button {
+    Rectangle {
         id: rec
         width: 50
         height: 50
-        platformStyle: ButtonStyle{
-            inverted: true}
-      /*  color: "red"
+
+        color: "red"
         border.color: "black"
-        radius: 5*/
+        border.width: 3
+        radius: 20
         anchors.left: parent.left
         anchors.leftMargin: 70
-        rotation: 45
+        rotation: curStatus=="Stop"? 0: 45
+        MouseArea
+        {
+            anchors.fill: parent
+            onClicked: {if (recbutton.curStatus=="Rec") recbutton.curStatus="unknown"
+            else {
+                recbutton.curStatus="Rec"
+                recbutton.prevStatus="Rec"
+            }
+        recbutton.trackingRequest();
+        }
+        }
+
     }
 
     Text {
         id: buttonLabel
-        text: "REC"
+        text: curStatus=="unknown" ? prevStatus: curStatus
         color: "red"
         anchors.horizontalCenter: rec.horizontalCenter
         font.bold: true
