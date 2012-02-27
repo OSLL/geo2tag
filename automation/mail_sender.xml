@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="Geo2tag" default="send-report" basedir=".">
+	<property name="version" value="0.18" />
+	<!-- =============================== -->
+	<property file="platform_mail.properties" />
+	<property name="geo.dir" value="${env.WEBGEO_HOME}" />
+
+	<!-- SEND REPORT -->
+	<target name="send-report" description="Send mail with reports">
+		<mail mailhost="smtp.gmail.com" mailport="465" ssl="true"
+			user="osll.spb" password="${MailLogger.password}" 
+			subject="${subject}"
+			from="osll.spb@gmail.com"
+			tolist="${MailLogger.success.to}">
+			<message>${subject}</message>
+			<attachments>
+				<fileset dir="${logdir}">
+					<include name="**/*.*" />
+				</fileset>
+			</attachments>
+		</mail>
+	</target>
+</project>

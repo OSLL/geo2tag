@@ -1,9 +1,44 @@
+/*
+ * Copyright 2010-2011  OSLL osll@osll.spb.ru
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * 3. The name of the author may not be used to endorse or promote
+ *    products derived from this software without specific prior written
+ *    permission.
+ *
+ * The advertising clause requiring mention in adverts must never be included.
+ */
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
+
 #include <syslog.h>
 #include <QCryptographicHash>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QVariant>
+#include <QString>
 #include "QueryExecutor.h"
 
 #include "DataMarkInternal.h"
@@ -78,10 +113,14 @@ const QString QueryExecutor::generateNewToken(const QString& login,const QString
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
   bool result;
-  QSqlQuery newTagQuery(m_database);
   qlonglong newId = nextTagKey();
-  newTagQuery.prepare("insert into tag (latitude, longitude, label, description, url, user_id, time, id) "
-    "         values(:latitude,:longitude,:label,:description,:url,:user_id,:time,:id);");
+
+  syslog(LOG_INFO, "%s", QString("insertNewTag-start-").append(QString::number(newId)).toStdString().c_str());
+
+  QSqlQuery newTagQuery(m_database);
+  newTagQuery.prepare("insert into tag (altitude , latitude, longitude, label, description, url, user_id, time, id) "
+    "         values(:altitude,:latitude,:longitude,:label,:description,:url,:user_id,:time,:id);");
+  newTagQuery.bindValue(":altitude", tag->getAltitude());
   newTagQuery.bindValue(":latitude", tag->getLatitude());
   newTagQuery.bindValue(":longitude", tag->getLongitude());
   newTagQuery.bindValue(":label", tag->getLabel().isEmpty()? "New Mark" : tag->getLabel());
@@ -92,32 +131,42 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
   newTagQuery.bindValue(":id", newId);
 
   QSqlQuery putTagToChannelQuery(m_database);
+
   putTagToChannelQuery.prepare("insert into tags (tag_id,channel_id) values(:tag_id,:channel_id);");
   putTagToChannelQuery.bindValue(":tag_id",newId);
   putTagToChannelQuery.bindValue(":channel_id",tag->getChannel()->getId());
 
   m_database.transaction();
 
+
   result = newTagQuery.exec();
   if(!result)
   {
     m_database.rollback();
+    syslog(LOG_INFO, "Rollback for NewTag sql query");
     return QSharedPointer<DataMark>(NULL);
   }
+
   result = putTagToChannelQuery.exec();
   if(!result)
   {
     m_database.rollback();
+    syslog(LOG_INFO, "Rollback for putTagToChannel sql query");
     return QSharedPointer<DataMark>(NULL);
   }
 
   m_database.commit();
 
+
   QSharedPointer<DataMark> t(
-    new DbDataMark(newId,tag->getLatitude(),tag->getLongitude(),tag->getLabel(),
-    tag->getDescription(),tag->getUrl(),tag->getTime(),tag->getUser()->getId()));
+    new DbDataMark(newId, tag->getAltitude(), tag->getLatitude(), 
+                   tag->getLongitude(), tag->getLabel(),
+                   tag->getDescription(), tag->getUrl(),
+                   tag->getTime(), tag->getUser()->getId()));
   t->setUser(tag->getUser());
   t->setChannel(tag->getChannel());
+
+
   return t;
 }
 
@@ -387,6 +436,30 @@ bool QueryExecutor::deleteMarkTimeSlot(const QSharedPointer<DataMark>& tag)
   else
   {
     syslog(LOG_INFO,"Commit for deleteMarkTimeSlot sql query");
+    m_database.commit();
+  }
+  return result;
+}
+
+bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel)
+{
+  bool result;
+  QSqlQuery deleteSubscribtion(m_database);
+  deleteSubscribtion.prepare("delete from subscribe where channel_id = :channel_id AND user_id = :user_id;");
+  deleteSubscribtion.bindValue(":channel_id",channel->getId());
+  deleteSubscribtion.bindValue(":user_id",user->getId());
+  syslog(LOG_INFO,"Unsubscribing %s (Id = %lld) for %s (Id = %lld)",user->getLogin().toStdString().c_str(),user->getId(),
+    channel->getName().toStdString().c_str(),channel->getId());
+
+  m_database.transaction();
+  result=deleteSubscribtion.exec();
+  if(!result)
+  {
+    syslog(LOG_INFO,"Rollback for unsubscribeChannel sql query");
+    m_database.rollback();
+  }else
+  {
+    syslog(LOG_INFO,"Commit for unsubscribeChannel sql query");
     m_database.commit();
   }
   return result;

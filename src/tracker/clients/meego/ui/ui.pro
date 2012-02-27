@@ -39,3 +39,5 @@ unix:!symbian {
     target.path = /opt/usr/bin
     INSTALLS += target
 }
+
+

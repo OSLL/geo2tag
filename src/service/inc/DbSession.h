@@ -46,7 +46,7 @@
 #include <QtSql>
 #include <QThread>
 #include <QMap>
-#include </usr/include/qt4/QtSql/qsql_psql.h>
+//#include </usr/include/qt4/QtSql/qsql_psql.h>
 #include "DataMarks.h"
 #include "Channel.h"
 #include "DataChannel.h"
@@ -54,6 +54,7 @@
 #include "TimeSlot.h"
 #include "UpdateThread.h"
 #include "QueryExecutor.h"
+#include "FilterRequestJSON.h"
 
 namespace common
 {
@@ -86,9 +87,11 @@ namespace common
 
     QByteArray processLoginQuery(const QByteArray&);
     QByteArray processSubscribedChannelsQuery(const QByteArray&);
-    QByteArray processAddNewMarkQuery(const QByteArray&);
-    QByteArray processRssFeedQuery(const QByteArray&);
+    QByteArray processAvailableChannelsQuery(const QByteArray&);
+    QByteArray processWriteTagQuery(const QByteArray&);
+    QByteArray processLoadTagsQuery(const QByteArray&);
     QByteArray processSubscribeQuery(const QByteArray&);
+    QByteArray processUnsubscribeQuery(const QByteArray&);
     QByteArray processAddUserQuery(const QByteArray&);
     QByteArray processAddChannelQuery(const QByteArray&);
     QByteArray processGetTimeSlotQuery(const QByteArray&);
@@ -97,6 +100,15 @@ namespace common
     QByteArray processSetTimeSlotMarkQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotMarkQuery(const QByteArray&);
+
+    QByteArray processFilterCircleQuery(const QByteArray&);
+    QByteArray processFilterCylinderQuery(const QByteArray&);
+    QByteArray processFilterPolygonQuery(const QByteArray&);
+    QByteArray processFilterRectangleQuery(const QByteArray&);
+    QByteArray processFilterBoxQuery(const QByteArray&);
+    QByteArray processFilterFenceQuery(const QByteArray&);
+
+    QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 
     public:
 

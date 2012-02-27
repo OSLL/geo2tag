@@ -1,3 +1,37 @@
+/*
+ * Copyright 2010-2011  OSLL osll@osll.spb.ru
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * 3. The name of the author may not be used to endorse or promote
+ *    products derived from this software without specific prior written
+ *    permission.
+ *
+ * The advertising clause requiring mention in adverts must never be included.
+ */
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
+
 #include <QDebug>
 #include <sstream>
 #include <syslog.h>
@@ -73,12 +107,19 @@ QMap<QString, QString> parseQuery(const QString& string)
   return map;
 }
 
-
-QByteArray Server::process(const QString& query, const QByteArray &data)
+QString Server::extractRESTQuery()
 {
-  QMap<QString, QString> queryParameters = parseQuery(query);
+  QString query_string(FCGX_GetParam("PATH_INFO", m_cgi.envp));
+// remove first simbol - slash
+  return query_string.right(query_string.size()-1);
+}
+
+QByteArray Server::process( const QByteArray &data)
+{
+//  QMap<QString, QString> queryParameters = parseQuery(query);
   common::DbObjectsCollection &dboc = common::DbObjectsCollection::getInstance();
-  QByteArray result = dboc.process(queryParameters.value("query"), data);
+//  QByteArray result = dboc.process(queryParameters.value("query"), data);
+  QByteArray result = dboc.process(extractRESTQuery(), data);
   return result;
 }
 
@@ -114,7 +155,7 @@ void Server::run()
     QByteArray queryBody, response;
     extractIncomingData(m_cgi,queryString,queryBody);
     syslog(LOG_INFO, "query: %s", queryString.toStdString().c_str());
-    response = process(queryString, queryBody);
+    response = process( queryBody);
     int written = FCGX_PutStr(response.data(), response.size(), m_cgi.out);
     if(written != response.size())
     {

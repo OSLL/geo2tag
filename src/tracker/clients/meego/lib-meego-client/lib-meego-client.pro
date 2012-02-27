@@ -21,7 +21,7 @@ INCLUDEPATH += . \
 HEADERS += MeegoClient.h \
 ../../../../http_requests/inc/LoginQuery.h \
 ../../../../http_requests/inc/DefaultQuery.h \
-../../../../http_requests/inc/AddNewMarkQuery.h \
+../../../../http_requests/inc/WriteTagQuery.h \
 ../../../../json/inc/JsonSerializer.h \
 ../../../../json/inc/LoginResponseJSON.h \
 ../../../../json/inc/LoginRequestJSON.h \
@@ -29,8 +29,8 @@ HEADERS += MeegoClient.h \
 ../../../../json/inc/JsonTimeSlot.h \
 ../../../../json/inc/JsonDataMark.h \
 ../../../../json/inc/JsonChannel.h \
-../../../../json/inc/AddNewMarkResponseJSON.h \
-../../../../json/inc/AddNewMarkRequestJSON.h \
+../../../../json/inc/WriteTagResponseJSON.h \
+../../../../json/inc/WriteTagRequestJSON.h \
 ../../../../json/inc/DefaultResponseJSON.h \
 ../../../../common/inc/User.h \
 ../../../../common/inc/TimeSlot.h \
@@ -59,7 +59,7 @@ HEADERS += MeegoClient.h \
 SOURCES += MeegoClient.cpp \
 ../../../../http_requests/src/LoginQuery.cpp \
 ../../../../http_requests/src/DefaultQuery.cpp \
-../../../../http_requests/src/AddNewMarkQuery.cpp \
+../../../../http_requests/src/WriteTagQuery.cpp \
 ../../../../common/src/User.cpp \
 ../../../../common/src/TimeSlot.cpp \
 ../../../../common/src/DataMarks.cpp \
@@ -71,8 +71,8 @@ SOURCES += MeegoClient.cpp \
 ../../../../json/src/LoginResponseJSON.cpp \
 ../../../../json/src/LoginRequestJSON.cpp \
 ../../../../json/src/JsonUser.cpp \
-../../../../json/src/AddNewMarkResponseJSON.cpp \
-../../../../json/src/AddNewMarkRequestJSON.cpp \
+../../../../json/src/WriteTagResponseJSON.cpp \
+../../../../json/src/WriteTagRequestJSON.cpp \
 ../../../../json/src/JsonDataMark.cpp \
 ../../../../json/src/JsonChannel.cpp \
 ../../../../../3rdparty/qjson-0.7.1/src/serializerrunnable.cpp \

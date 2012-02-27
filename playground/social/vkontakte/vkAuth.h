@@ -1,9 +1,6 @@
 #ifndef VKAUTH_H
 #define VKAUTH_H
 #include <QWebView>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
 
 class vkAuth:public QWebView
 {
@@ -13,15 +10,15 @@ class vkAuth:public QWebView
     QUrl url;
     int expires;
     QString userId;
-    QNetworkAccessManager manager;
-    QNetworkReply *reply;
+
   public:
-    vkAuth(QString appid, QWebView *parent=0);
+    vkAuth(QString appid, QWidget *parent=0);
     QString & getToken();
     QString getUserId();
-
+    signals:
+    void success(const QString &token, const QString &userId, int expires);
   private slots:
     void slotChanged(const QUrl & url);
-    void getReplyFinished();
+
 };
 #endif                                  // VKAUTH_H

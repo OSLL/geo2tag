@@ -70,7 +70,7 @@ const QSharedPointer<common::User> &user, QObject *parent) : JsonSerializer(pare
 
 }*/
 
-void SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
+bool SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
 {
   clearContainers();
 
@@ -78,11 +78,8 @@ void SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
 
-  if (!ok)
-  {
-    qFatal("An error occured during parsing json with rss feed");
-    return;
-  }
+  if (!ok) return false;
+
   QString channelLabel = result["channel"].toString();
   QString authToken =    result["auth_token"].toString();
 
@@ -90,6 +87,8 @@ void SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
   m_channelsContainer->push_back(dummyChannel);
   QSharedPointer<common::User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
   m_usersContainer->push_back(dummyUser);
+  
+  return true;
 }
 
 

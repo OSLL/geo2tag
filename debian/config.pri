@@ -1,5 +1,6 @@
 CONFIG += debug
 
+
 #CONFIG += maemo5
 
 SOURCE_DIR = $$PWD

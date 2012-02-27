@@ -43,13 +43,14 @@
 
 qlonglong JsonDataMark::globalTagId = 0;
 
-JsonDataMark::JsonDataMark(double latitude,
+JsonDataMark::JsonDataMark(double altitude,
+double latitude,
 double longitude,
 QString label,
 QString description,
 const QString &url,
 const QDateTime &time):
-DataMark(latitude, longitude, label, description, url, time),
+DataMark(altitude, latitude, longitude, label, description, url, time),
 m_id(globalTagId++)
 {
 }

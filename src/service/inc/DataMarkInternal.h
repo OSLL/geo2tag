@@ -54,7 +54,7 @@ class DbDataMark: public DataMark
   qlonglong m_userId;
 
   public:
-    DbDataMark(qlonglong id, double latitude, double longitude,
+    DbDataMark(qlonglong id, double altitude, double latitude, double longitude,
       QString label, QString description, const QString& url, const QDateTime& time,
       qlonglong userId);
 

@@ -12,9 +12,10 @@ INCLUDEPATH += . inc \
 
 # Input
 HEADERS += \
-           inc/ChannelListJSON.h \
-           inc/RSSFeedJSON.h \
-           inc/RSSFeedRequestJSON.h \
+           inc/AvailableChannelsResponseJSON.h \
+           inc/AvailableChannelsRequestJSON.h \
+           inc/LoadTagsResponseJSON.h \
+           inc/LoadTagsRequestJSON.h \
            inc/SubscribeChannelJSON.h \
            inc/UnsubscribeChannelRequestJSON.h \
            inc/JsonUser.h \
@@ -26,10 +27,10 @@ HEADERS += \
            inc/LoginResponseJSON.h \
            inc/AddUserRequestJSON.h \
            inc/AddUserResponseJSON.h \
-           inc/AddNewMarkRequestJSON.h \
-           inc/AddNewMarkResponseJSON.h \
+           inc/WriteTagRequestJSON.h \
+           inc/WriteTagResponseJSON.h \
            inc/SubscribeChannelResponseJSON.h \
-           inc/UnsubscribeChannelResponse.h \
+           inc/UnsubscribeChannelResponseJSON.h \
            inc/SubscribedChannelsRequestJSON.h \
            inc/SubscribedChannelsResponseJSON.h \
            inc/AddChannelRequestJSON.h \
@@ -46,12 +47,20 @@ HEADERS += \
            inc/SetDefaultTimeSlotMarkRequestJSON.h \
            inc/SetDefaultTimeSlotMarkResponseJSON.h \
            inc/SetDefaultTimeSlotRequestJSON.h \
-           inc/SetDefaultTimeSlotResponseJSON.h
+           inc/SetDefaultTimeSlotResponseJSON.h \
+           inc/FilterRequestJSON.h \
+           inc/FilterDefaultResponseJSON.h \
+           inc/FilterCircleRequestJSON.h \ 
+           inc/FilterCylinderRequestJSON.h \
+           inc/FilterPolygonRequestJSON.h \
+           inc/FilterRectangleRequestJSON.h \
+           inc/FilterBoxRequestJSON.h \
+           inc/FilterFenceRequestJSON.h
 
 SOURCES += \
-           src/ChannelListJSON.cpp \
-           src/RSSFeedJSON.cpp \
-           src/RSSFeedRequestJSON.cpp \
+           src/AvailableChannelsResponseJSON.cpp \
+           src/LoadTagsResponseJSON.cpp \
+           src/LoadTagsRequestJSON.cpp \
            src/SubscribeChannelJSON.cpp \
            src/JsonUser.cpp \
            src/JsonChannel.cpp \
@@ -61,16 +70,24 @@ SOURCES += \
            src/JsonSerializer.cpp \
            src/LoginRequestJSON.cpp \
            src/LoginResponseJSON.cpp \
-           src/AddNewMarkRequestJSON.cpp \
+           src/WriteTagRequestJSON.cpp \
            src/AddChannelRequestJSON.cpp \
            src/GetTimeSlotRequestJSON.cpp \
            src/GetTimeSlotResponseJSON.cpp \
            src/DefaultResponseJSON.cpp \
            src/SetTimeSlotRequestJSON.cpp \
            src/GetTimeSlotMarkRequestJSON.cpp \
-           src/AddNewMarkResponseJSON.cpp \
+           src/WriteTagResponseJSON.cpp \
            src/GetTimeSlotMarkResponseJSON.cpp \
-           src/SetTimeSlotMarkRequestJSON.cpp
+           src/SetTimeSlotMarkRequestJSON.cpp \
+           src/FilterRequestJSON.cpp \
+           src/FilterDefaultResponseJSON.cpp \
+           src/FilterCircleRequestJSON.cpp \
+           src/FilterCylinderRequestJSON.cpp \
+           src/FilterPolygonRequestJSON.cpp \
+           src/FilterRectangleRequestJSON.cpp \
+           src/FilterBoxRequestJSON.cpp \
+           src/FilterFenceRequestJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 
