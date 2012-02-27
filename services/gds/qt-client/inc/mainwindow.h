@@ -8,6 +8,7 @@
 
 #include "GDSService.h"
 #include "LoginWidget.h"
+#include "MainWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -33,6 +34,10 @@ public:
     // Note that this will only have an effect on Symbian and Fremantle.
     void setOrientation(ScreenOrientation orientation);
     void showExpanded();
+
+public slots:
+    void onLoginSignedIn(const QString& authToken);
+    void onMainSignedOut();
 
 private:
     void initGUI();

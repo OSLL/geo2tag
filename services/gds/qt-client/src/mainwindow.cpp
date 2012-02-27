@@ -9,10 +9,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     m_stackedWidget = new QStackedWidget(this);
     m_loginWidget = new LoginWidget(this);
+    m_mainWidget = new MainWidget(this);
 
     initGUI();
 
     m_GDSService = QSharedPointer<GDSService>(new GDSService());
+
+    connect(m_loginWidget, SIGNAL(signedIn(QString)),
+            this, SLOT(onLoginSignedIn(QString)));
 
     qDebug() << "MainWindow created";
 }
@@ -26,7 +30,18 @@ void MainWindow::initGUI()
 {
     this->setCentralWidget(m_stackedWidget);
     m_stackedWidget->addWidget(m_loginWidget);
+    m_stackedWidget->addWidget(m_mainWidget);
 
+}
+
+void MainWindow::onLoginSignedIn(const QString &authToken)
+{
+    m_stackedWidget->setCurrentWidget(m_mainWidget);
+    m_mainWidget->signIn(authToken);
+}
+
+void MainWindow::onMainSignedOut()
+{
 }
 
 void MainWindow::setOrientation(ScreenOrientation orientation)
@@ -82,3 +97,7 @@ void MainWindow::showExpanded()
     show();
 #endif
 }
+
+
+
+

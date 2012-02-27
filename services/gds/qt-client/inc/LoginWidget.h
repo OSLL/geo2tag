@@ -24,7 +24,7 @@ public:
     explicit LoginWidget(QWidget *parent = 0);
 
 signals:
-    void signedIn(const QString& auth_token);
+    void signedIn(const QString& authToken);
     void settingsRequested();
 
 public slots:
