@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Name=HelloWorld
+Exec=/usr/bin/single-instance /opt/HelloWorld/bin/HelloWorld
+Icon=/usr/share/icons/hicolor/80x80/apps/HelloWorld80.png
+X-Window-Icon=
+X-HildonDesk-ShowInToolbar=true
+X-Osso-Type=application/x-executable
