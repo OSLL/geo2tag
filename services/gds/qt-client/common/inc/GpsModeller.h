@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,65 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*  */
+/*!
+ * \file GpsModeller.h
+ * \brief Header of GpsModeller
+ *
+ *  PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
+#define _GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include <QDateTime>
+#include <QString>
+#include <QThread>
+#include "GpsInfo.h"
+#include "defines.h"
+
+// This file maybe used only if SIMULATE_GPS is turned on
+#ifdef SIMULATE_GPS
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+namespace common
 {
+  /*!
+   * Class description. May use HTML formatting
+   *
+   */
+  class GpsModeller: public Gps, private QThread
+  {
+    double m_longitude;
+    double m_latitude;
+
+    QDateTime begin;
+    QDateTime currentModellerTime;
+
+    xmlDoc *m_doc;
+
+    void searchElement(xmlNode *node);
+
+    void run();
+
+    public:
+      GpsModeller(const QString &gpxFile=GPS_MODELLER_FILE);
+
+      virtual double getLongitude() const;
+
+      virtual double getLatitude() const;
+
+      ~GpsModeller();
+      // class GpsModeller
+  };
+
+  // namespace common
 }
 
-void GDSService::startTracking()
-{
-}
 
-void GDSService::stopTracking()
-{
-}
+// SIMULATE_GPS
+#endif
+//_GpsModeller_H_DA9EFC5F_CC89_4791_A371_C1ACB86BFC8B_INCLUDED_
+#endif
 
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
-}
+/* ===[ End of file  ]=== */

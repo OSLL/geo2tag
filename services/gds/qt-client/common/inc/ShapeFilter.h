@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,34 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file ShapeFilter.h
+ * \brief Header of ShapeFilter
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _ShapeFilter_H_9AD98461_22F5_4885_9FAA_2575F66F4DC6_INCLUDED_
+#define _ShapeFilter_H_9AD98461_22F5_4885_9FAA_2575F66F4DC6_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "Filter.h"
+#include "FShape.h"
 
-bool GDSService::isTracking()
+class ShapeFilter : public Filter
 {
-    return false;
-}
+  QSharedPointer<FShape> m_shape;
 
-void GDSService::settingsUpdated()
-{
-}
+public:
+  ShapeFilter(const QSharedPointer<FShape> &shape);
+
+  ~ShapeFilter();
+
+  bool filtrate(const QSharedPointer<DataMark> &mark);
+
+}; // class ShapeFilter
+
+#endif //_ShapeFilter_H_9AD98461_22F5_4885_9FAA_2575F66F4DC6_INCLUDED_

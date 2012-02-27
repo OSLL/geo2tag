@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,36 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ *
+ * \file FShapePolygon.cpp
+ * \brief FShapePolygon implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "FShapePolygon.h"
+#include <QPolygonF>
+
+FShapePolygon::FShapePolygon() : FShape()
 {
 }
 
-void GDSService::startTracking()
+void FShapePolygon::addPoint(int idx, double lat, double lon)
 {
+  m_points.insert(idx, QPointF(lat, lon));
 }
 
-void GDSService::stopTracking()
+bool FShapePolygon::filtrate(const QSharedPointer<DataMark> &mark)
 {
-}
+  if (m_points.size() == 0) return false;
 
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
+  QPolygonF polygon;
+  for (int i = 0; i < m_points.size(); i++){
+    polygon << m_points.at(i);
+  }
+  polygon << m_points.at(0);
+  return polygon.containsPoint(QPointF(mark->getLatitude(), mark->getLongitude()), Qt::OddEvenFill);
 }

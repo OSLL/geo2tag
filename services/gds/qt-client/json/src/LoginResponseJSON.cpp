@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010-2011  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,55 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#include <QDebug>
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#ifndef Q_WS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
+
+#include "LoginResponseJSON.h"
+#include "JsonUser.h"
+
+LoginResponseJSON::LoginResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
-void GDSService::startTracking()
+
+QByteArray LoginResponseJSON::getJson() const
 {
+  QJson::Serializer serializer;
+  QVariantMap obj;
+  if(m_usersContainer->size()>0)
+    obj.insert("auth_token", m_usersContainer->at(0)->getToken());
+  obj.insert("errno", m_errno);
+  return serializer.serialize(obj);
 }
 
-void GDSService::stopTracking()
-{
-}
 
-bool GDSService::isTracking()
+bool LoginResponseJSON::parseJson(const QByteArray &data)
 {
-    return false;
-}
+  clearContainers();
 
-void GDSService::settingsUpdated()
-{
+  QJson::Parser parser;
+  bool ok;
+
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
+
+  result["errno"].toInt(&ok);
+  if (!ok) return false;
+  m_errno = result["errno"].toInt(&ok);
+
+  QString auth_token = result["auth_token"].toString();
+  QSharedPointer<common::User> user(new JsonUser("unknown", "unknown", auth_token));
+  m_usersContainer->push_back(user);
+  return true;
 }

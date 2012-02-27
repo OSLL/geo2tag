@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,43 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*! ---------------------------------------------------------------
+ *
+ *
+ * \file Picture.cpp
+ * \brief Picture implementation
+ *
+ * File description
+ *
+ *  PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#include "Picture.h"
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+namespace common
 {
-}
+  Picture::Picture(const QVector<char>& data): m_data(data)
+  {
+  }
 
-void GDSService::startTracking()
-{
-}
+  Picture::Picture(const Picture &p):m_data(p.m_data)
+  {
+  }
 
-void GDSService::stopTracking()
-{
-}
+  Picture::Picture(const QImage &image):QImage(image), m_data()
+  {
+  }
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+  Picture::Type Picture::getType() const
+  {
+    return UNKNOWN;
+  }
 
-void GDSService::settingsUpdated()
-{
-}
+  Picture::~Picture()
+  {
+
+  }
+}                                       // namespace common
+
+
+/* ===[ End of file  ]=== */

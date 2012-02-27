@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,38 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*!
+ * \file JsonChannel.h
+ * \brief Header of JsonChannel
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
+#define _JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "Channel.h"
+
+class JsonChannel: public Channel
 {
-}
+  static qlonglong globalChannelId;
+  qlonglong m_id;
 
-void GDSService::startTracking()
-{
-}
+  public:
+    JsonChannel(const QString &name,
+      const QString &description,
+      const QString &url="");
 
-void GDSService::stopTracking()
-{
-}
+    qlonglong getId() const;
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+    void setId(qlonglong id);
 
-void GDSService::settingsUpdated()
-{
-}
+    virtual ~JsonChannel();
+};
+//_JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
+#endif
+
+/* ===[ End of file ]=== */

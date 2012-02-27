@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,48 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*!
+ * \file TimeSlot.h
+ * \brief Header of TimeSlot
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
+#define _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include <QString>
+#include <QVector>
+#include <QSharedPointer>
+#include <QDateTime>
+
+#include "ConcurrentVector.h"
+
+class TimeSlot: public QObject
 {
-}
+  Q_OBJECT
 
-void GDSService::startTracking()
-{
-}
+    qulonglong m_slot;                  // time slot
 
-void GDSService::stopTracking()
-{
-}
+  public:
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+    TimeSlot(const qulonglong &slot);
 
-void GDSService::settingsUpdated()
-{
-}
+    virtual qlonglong getId() const;
+
+    const qulonglong& getSlot() const;
+    void setSlot(const qulonglong& slot);
+
+    virtual ~TimeSlot();
+
+    //class TimeSlot
+};
+
+typedef ConcurrentVector<TimeSlot> TimeSlots;
+
+// _TIMESLOT_H_55a1fda3_1617_4417_a9a2_fdaf7d12f71f_INCLUDED
+#endif
+
+/* ===[ End of file ]=== */

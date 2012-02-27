@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,30 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ *
+ * \file TimeFilter.cpp
+ * \brief TimeFilter implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "TimeFilter.h"
+
+TimeFilter::TimeFilter(QDateTime timeFrom, QDateTime timeTo) : Filter()
+{
+  m_timeFrom = timeFrom;
+  m_timeTo = timeTo;
+}
+
+TimeFilter::~TimeFilter()
 {
 }
 
-void GDSService::startTracking()
+bool TimeFilter::filtrate(const QSharedPointer<DataMark> &mark)
 {
-}
-
-void GDSService::stopTracking()
-{
-}
-
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
+  QDateTime time = mark->getTime();
+  return m_timeFrom <= time && time <= m_timeTo;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,29 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*!
+ * \file SetTimeSlotRequestJSON.h
+ * \brief Header of SetTimeSlotRequestJSON
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_
+#define _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "JsonSerializer.h"
+
+class SetTimeSlotRequestJSON : public JsonSerializer
 {
-}
+  Q_OBJECT;
+  public:
+    SetTimeSlotRequestJSON(QObject *parent=0);
 
-void GDSService::startTracking()
-{
-}
+    QByteArray getJson() const;
 
-void GDSService::stopTracking()
-{
-}
-
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
-}
+    bool parseJson(const QByteArray&);
+};
+// _SETTIMESLOTREQUESTJSON_H_9fd41672_9db4_4e18_b098_cbce406e641b_INCLUDED_
+#endif

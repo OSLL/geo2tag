@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,48 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file FilterRequestJSON.h
+ * \brief Header of FilterRequestJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_
+#define _FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "JsonSerializer.h"
+#include "FShape.h"
 
-bool GDSService::isTracking()
+class FilterRequestJSON : public JsonSerializer
 {
-    return false;
-}
+  QSharedPointer<FShape> m_shape;
+  QDateTime m_timeFrom;
+  QDateTime m_timeTo;
+  double m_alt1;
+  double m_alt2;
 
-void GDSService::settingsUpdated()
-{
-}
+public:
+  FilterRequestJSON(QObject *parent = 0);
+  ~FilterRequestJSON();
+
+  void setShape(const QSharedPointer<FShape> &shape);
+  QSharedPointer<FShape>& getShape();
+
+  void setTimeFrom(QDateTime timeFrom);
+  QDateTime getTimeFrom() const;
+
+  void setTimeTo(QDateTime timeTo);
+  QDateTime getTimeTo() const;
+
+  void setAltitude1(double alt);
+  void setAltitude2(double alt);
+  double getAltitude1() const;
+  double getAltitude2() const;
+}; // class FilterRequestJSON
+  
+#endif //_FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_

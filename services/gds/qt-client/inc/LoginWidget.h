@@ -5,11 +5,15 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QPushButton>
+#include "LoginQuery.h"
 
 class LoginWidget : public QWidget
 {
     Q_OBJECT
 
+    LoginQuery *m_loginQuery;
+
+    // GUI
     QLineEdit *m_loginEdit;
     QLineEdit *m_passwordEdit;
     QCheckBox *m_rememberCheck;
@@ -20,12 +24,15 @@ public:
     explicit LoginWidget(QWidget *parent = 0);
 
 signals:
-    void signedIn();
+    void signedIn(const QString& auth_token);
     void settingsRequested();
 
 public slots:
     void onSignInClicked();
     void onCreateAccountClicked();
+    void onLoginConnected();
+    void onLoginError(int errno);
+    void onLoginNetworkError(QString);
 
 private:
     void initGUI();

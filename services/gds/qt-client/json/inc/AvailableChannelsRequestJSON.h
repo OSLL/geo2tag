@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,22 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file AvailableChannelsRequestJSON.h
+ * \brief Header of AvailableChannelsRequestJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_
+#define _AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "LoadTagsRequestJSON.h"
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+typedef LoadTagsRequestJSON AvailableChannelsRequestJSON;
 
-void GDSService::settingsUpdated()
-{
-}
+#endif //_AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_

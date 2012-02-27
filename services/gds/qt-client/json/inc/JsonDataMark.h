@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,43 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*!
+ * \file JsonDataMark.h
+ * \brief Header of JsonDataMark
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+#define _JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "DataMarks.h"
+
+class JsonDataMark: public DataMark
 {
-}
 
-void GDSService::startTracking()
-{
-}
+  static qlonglong globalTagId;
+  //!< Tag's identifier
+  qlonglong m_id;
 
-void GDSService::stopTracking()
-{
-}
+  //!< Assotiated user's identifier for the tag
+  qlonglong m_userId;
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+  public:
+    JsonDataMark(double altitude, double latitude, double longitude,
+      QString label, QString description, const QString& url, const QDateTime& time);
 
-void GDSService::settingsUpdated()
-{
-}
+    qlonglong getId() const;
+
+    qlonglong getUserId() const;
+
+    void setId(qlonglong id);
+
+    virtual ~JsonDataMark();
+};
+//_JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
+#endif
+
+/* ===[ End of file ]=== */

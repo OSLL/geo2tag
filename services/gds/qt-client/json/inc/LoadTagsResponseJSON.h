@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -29,26 +29,48 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/* $Id$ */
+/*!
+ * \file LoadTagsJSON.h
+ * \brief Header of LoadTagsJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
+#ifndef _LoadTagsResponseJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+#define _LoadTagsResponseJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 
-void GDSService::startTracking()
-{
-}
+#include <QMultiHash>
+#include "JsonSerializer.h"
+#include "Channel.h"
+#include "DataMarks.h"
+#include "DataChannel.h"
 
-void GDSService::stopTracking()
+class LoadTagsResponseJSON: public JsonSerializer
 {
-}
+  // map will contain channels and marks which should be serialized to JSON
+  DataChannels m_hashMap;
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+  public:
+    LoadTagsResponseJSON(const DataChannels &, QObject *parent=0);
 
-void GDSService::settingsUpdated()
-{
-}
+    LoadTagsResponseJSON(QObject *parent=0);
+
+    virtual QByteArray getJson() const;
+
+    virtual bool parseJson(const QByteArray&);
+
+    const DataChannels& getData() const;
+    void setData(const DataChannels&);
+
+    ~LoadTagsResponseJSON();
+
+    //class LoadTagsJSON
+};
+//_LoadTagsJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
+#endif
+
+/* ===[ End of file $HeadURL$ ]=== */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,37 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*!
+ * \file JsonUser.h
+ * \brief Header of JsonUser
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+#define _JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include <QMutex>
+#include "User.h"
+
+/*!
+ *
+ */
+class JsonUser: public common::User
 {
-}
+  static qlonglong globalUserId;
+  qlonglong m_id;
 
-void GDSService::startTracking()
-{
-}
+  public:
+    JsonUser(const QString& login, const QString& pass = "unknown", const QString& token = "unknown");
 
-void GDSService::stopTracking()
-{
-}
+    qlonglong getId() const;
+    void setId(qlonglong);
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+    ~JsonUser();
+    // class JsonUser
+};
+//_JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+#endif
 
-void GDSService::settingsUpdated()
-{
-}
+/* ===[ End of file ]=== */

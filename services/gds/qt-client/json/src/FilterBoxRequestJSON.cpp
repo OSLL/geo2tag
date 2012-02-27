@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,51 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ *
+ * \file FilterBoxRequestJSON.cpp
+ * \brief FilterBoxRequestJSON implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "FilterBoxRequestJSON.h"
+
+#ifndef Q_WS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
+
+FilterBoxRequestJSON::FilterBoxRequestJSON(QObject *parent):
+FilterRectangleRequestJSON(parent)
 {
 }
 
-void GDSService::startTracking()
+QByteArray FilterBoxRequestJSON::getJson() const
 {
+  // TODO
+  return FilterRectangleRequestJSON::getJson();
 }
 
-void GDSService::stopTracking()
+bool FilterBoxRequestJSON::parseJson(const QByteArray& data)
 {
-}
+  FilterRectangleRequestJSON::parseJson(data);
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
+  QVariantMap altitudeShift = result["altitude_shift"].toMap();
+  double alt = altitudeShift["altitude1"].toDouble(&ok);
+  if (!ok)    return false;
 
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
+  setAltitude1(alt);
+  alt = altitudeShift["altitude2"].toDouble(&ok) ;
+  if (!ok)    return false;  
+  setAltitude2(altitudeShift["altitude2"].toDouble(&ok));
+  return true;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,44 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file Region.h
+ * \brief Header of Region
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _Region_H_06756261_C2F3_4279_93DC_8F9FA944B9FF_INCLUDED_
+#define _Region_H_06756261_C2F3_4279_93DC_8F9FA944B9FF_INCLUDED_
 
-void GDSService::stopTracking()
+ /*!
+ * Class description. May use HTML formatting
+ *
+ */
+#include "DataMarks.h"
+namespace common{
+class Region
 {
-}
+  QSharedPointer<DataMarks> m_points;
+public:
+  Region();
+  Region(const QSharedPointer<DataMarks>& points);
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+  const QSharedPointer<DataMarks>& getPoints() const;
+  void setPoints(const QSharedPointer<DataMarks>& points);
 
-void GDSService::settingsUpdated()
-{
+  void addPoint(const QSharedPointer<DataMark>& point);
+
+  bool atRegion(const QSharedPointer<DataMark>& point) ;
+
+  ~Region();
+  
+
+}; // class Region
+  
 }
+#endif //_Region_H_06756261_C2F3_4279_93DC_8F9FA944B9FF_INCLUDED_

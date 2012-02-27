@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010-2011  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,45 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef DEFAULTQUERY_H
+#define DEFAULTQUERY_H
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include "ErrnoTypes.h"
+class DefaultQuery : public QObject
 {
-}
+  Q_OBJECT
+    protected:
+    QNetworkAccessManager *m_manager;
+    QString m_url;
 
-void GDSService::startTracking()
-{
-}
+    virtual QString getUrl() const = 0;
+    virtual QByteArray getRequestBody() const = 0;
+    virtual void processReply(QNetworkReply *reply) = 0;
 
-void GDSService::stopTracking()
-{
-}
+  protected Q_SLOTS:
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+    void process(QNetworkReply *reply);
 
-void GDSService::settingsUpdated()
-{
-}
+    void handleError();
+
+  public:
+    DefaultQuery(QObject *parent = 0);
+    void setUrl(const QString& url);
+    void doRequest();
+
+    Q_SIGNALS:
+
+    void responseReceived();
+
+    void errorOccured(QString);
+    void errorOccured(int);
+};
+// DEFAULTQUERY_H
+#endif

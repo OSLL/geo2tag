@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,33 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file FilterCircleRequestJSON.h
+ * \brief Header of FilterCircleRequestJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_
+#define _FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "FilterRequestJSON.h"
+#include "FShape.h"
+#include "FShapeCircle.h"
 
-bool GDSService::isTracking()
+class FilterCircleRequestJSON: public FilterRequestJSON
 {
-    return false;
-}
+  public:
+    FilterCircleRequestJSON(QObject *parent=0);
 
-void GDSService::settingsUpdated()
-{
-}
+    QByteArray getJson() const;
+
+    bool parseJson(const QByteArray&);
+};
+
+
+#endif //_FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_

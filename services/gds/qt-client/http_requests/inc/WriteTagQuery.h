@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010-2011  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,41 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef WRITETAGQUERY_H
+#define WRITETAGQUERY_H
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include <QObject>
+#include <QString>
+#include "DefaultQuery.h"
+#include "User.h"
+#include "DataMarks.h"
+
+class WriteTagQuery: public DefaultQuery
 {
-}
+  Q_OBJECT
 
-void GDSService::startTracking()
-{
-}
+    QSharedPointer<DataMark> m_tag;
 
-void GDSService::stopTracking()
-{
-}
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
+  virtual void processReply(QNetworkReply *reply);
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+  public:
+    WriteTagQuery(const QSharedPointer<DataMark> &tag, QObject *parent = 0);
+    WriteTagQuery(QObject *parent = 0);
 
-void GDSService::settingsUpdated()
-{
-}
+    ~WriteTagQuery();
+    void setTag(const QSharedPointer<DataMark> &tag);
+    QSharedPointer<DataMark> getTag();
+    const QSharedPointer<DataMark>& getTag() const;
+
+    Q_SIGNALS:
+
+    void tagAdded();
+};
+// ADDNEWMARKQUERY_H
+#endif

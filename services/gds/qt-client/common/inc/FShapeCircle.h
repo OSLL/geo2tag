@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,34 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file FShapeCircle.h
+ * \brief Header of FShapeCircle
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _FShapeCircle_H_685324AD_3719_4618_BE1B_F0221ABB524D_INCLUDED_
+#define _FShapeCircle_H_685324AD_3719_4618_BE1B_F0221ABB524D_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include <QSharedPointer>
+#include "FShape.h"
 
-bool GDSService::isTracking()
+class FShapeCircle : public FShape
 {
-    return false;
-}
+  double m_lat;
+  double m_lon;
+  double m_radius;
 
-void GDSService::settingsUpdated()
-{
-}
+public:
+  FShapeCircle(double lat, double lon, double r);
+  ~FShapeCircle();
+  bool filtrate(const QSharedPointer<DataMark> &mark);
+
+}; // class FShapeCircle
+  
+#endif //_FShapeCircle_H_685324AD_3719_4618_BE1B_F0221ABB524D_INCLUDED_

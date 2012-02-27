@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,45 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*  */
+/*!
+ * \file DefaultException.h
+ * \brief Header of DefaultException
+ *
+ *  PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _DefaultException_H_B503B3CC_1500_4544_8732_F56CD8A9F61B_INCLUDED_
+#define _DefaultException_H_B503B3CC_1500_4544_8732_F56CD8A9F61B_INCLUDED_
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include <QString>
+
+namespace exception
 {
+  /*!
+   * Default exception. All exception will be ingerited from this one
+   */
+  class DefaultException
+  {
+    public:
+      DefaultException();
+
+      virtual QString getDescription() const=0;
+
+      virtual ~DefaultException();
+
+    private:
+      DefaultException(const DefaultException& obj);
+      DefaultException& operator=(const DefaultException& obj);
+
+      // class DefaultException
+  };
+
+  // namespace exception
 }
 
-void GDSService::startTracking()
-{
-}
 
-void GDSService::stopTracking()
-{
-}
+//_DefaultException_H_B503B3CC_1500_4544_8732_F56CD8A9F61B_INCLUDED_
+#endif
 
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
-}
+/* ===[ End of file  ]=== */

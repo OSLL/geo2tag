@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,59 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ *
+ * \file Region.cpp
+ * \brief Region implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "Region.h"
+#include <QPolygonF>
+#include <QDebug>
+namespace common {
+Region::Region():m_points(new DataMarks)
 {
 }
 
-void GDSService::startTracking()
+Region::Region(const QSharedPointer<DataMarks>& points):m_points(points)
 {
 }
 
-void GDSService::stopTracking()
+const QSharedPointer<DataMarks>&Region::getPoints() const
+{
+  return m_points;
+}
+
+void Region::setPoints(const QSharedPointer<DataMarks>& points)
+{
+  m_points = points;
+}
+
+void Region::addPoint(const QSharedPointer<DataMark>& point)
+{
+  m_points->push_back(point);
+}
+
+bool Region::atRegion(const QSharedPointer<DataMark>& point)
+{
+  if (m_points.isNull() || m_points->size() == 0) return false;
+
+  QPolygonF polygon;
+  for (int i=0;i<m_points->size();i++)
+  {
+    polygon << QPointF(m_points->at(i)->getLatitude(),m_points->at(i)->getLongitude());
+  }
+  polygon << QPointF(m_points->at(0)->getLatitude(),m_points->at(0)->getLongitude());
+  return polygon.containsPoint(QPointF(point->getLatitude(),point->getLongitude()), Qt::OddEvenFill);
+
+}
+
+Region::~Region()
 {
 }
 
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
 }

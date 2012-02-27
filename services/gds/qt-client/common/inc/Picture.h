@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,54 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*  */
+/*!
+ * \file Picture.h
+ * \brief Header of Picture
+ *
+ *  PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
+#define _Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include <QVector>
+#include <QImage>
+
+namespace common
 {
+  /*!
+   * common picture. binary data + some meta information
+   */
+  class Picture : public QImage
+  {
+    QVector<char> m_data;
+    public:
+
+      Picture(const Picture&);
+      Picture(const QImage&);
+
+      enum Type
+      {
+        PNG = 0,
+        UNKNOWN
+      };
+
+      virtual Type getType() const;
+
+      virtual ~Picture();
+
+    protected:
+      Picture(const QVector<char>& data);
+
+      // class Picture
+  };
+
+  // namespace common
 }
 
-void GDSService::startTracking()
-{
-}
 
-void GDSService::stopTracking()
-{
-}
+//_Picture_H_86992429_0AAF_42A5_9706_B8DDACCE6103_INCLUDED_
+#endif
 
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
-}
+/* ===[ End of file  ]=== */

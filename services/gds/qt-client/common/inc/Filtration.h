@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,37 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file Filtration.h
+ * \brief Header of Filtration
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
+#define _Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include <QList>
+#include <QSharedPointer>
+#include "Filter.h"
 
-bool GDSService::isTracking()
+class Filtration
 {
-    return false;
-}
+  QList<QSharedPointer<Filter> > m_filters;
 
-void GDSService::settingsUpdated()
-{
-}
+public:
+  Filtration();
+
+  ~Filtration();
+
+  void addFilter(const QSharedPointer<Filter> & filter);
+
+  QList<QSharedPointer<DataMark> > filtrate(const QList<QSharedPointer<DataMark> > tags);
+
+}; // class Filtration
+
+#endif //_Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_

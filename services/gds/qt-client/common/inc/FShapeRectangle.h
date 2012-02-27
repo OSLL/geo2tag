@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,28 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file FShapeRectangle.h
+ * \brief Header of FShapeRectangle
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
+#define _FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "FShapePolygon.h"
 
-bool GDSService::isTracking()
+class FShapeRectangle : public FShapePolygon
 {
-    return false;
-}
+public:
+  FShapeRectangle(double lat1, double lon1, double lat2, double lon2);
 
-void GDSService::settingsUpdated()
-{
-}
+}; // class FShapeRectangle
+  
+
+#endif //_FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_

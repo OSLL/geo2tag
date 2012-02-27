@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,35 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file AltitudeFilter.h
+ * \brief Header of AltitudeFilter
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _AltitudeFilter_H_89C1C268_7B22_4E8A_B078_B4C7EC6FA5D6_INCLUDED_
+#define _AltitudeFilter_H_89C1C268_7B22_4E8A_B078_B4C7EC6FA5D6_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "Filter.h"
 
-bool GDSService::isTracking()
+class AltitudeFilter : public Filter
 {
-    return false;
-}
+  double m_alt1;
+  double m_alt2;
 
-void GDSService::settingsUpdated()
-{
-}
+public:
+  AltitudeFilter(double alt1, double alt2);
+
+  ~AltitudeFilter();
+
+  bool filtrate(const QSharedPointer<DataMark> &mark);
+
+}; // class AltitudeFilter
+  
+
+#endif //_AltitudeFilter_H_89C1C268_7B22_4E8A_B078_B4C7EC6FA5D6_INCLUDED_

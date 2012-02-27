@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -29,26 +29,43 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+#ifndef LOADTAGSREQUESTJSON_H
+#define LOADTAGSREQUESTJSON_H
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
+#include "JsonSerializer.h"
 
-void GDSService::startTracking()
-{
-}
+#include <QString>
 
-void GDSService::stopTracking()
+class LoadTagsRequestJSON: public JsonSerializer
 {
-}
+  double m_latitude;
+  double m_longitude;
+  double m_radius;
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+  public:
+    LoadTagsRequestJSON(double latitude,
+      double longitude,
+      double radius,
+      QObject *parent=0);
 
-void GDSService::settingsUpdated()
-{
-}
+    LoadTagsRequestJSON(QObject *parent=0);
+
+    double getLatitude() const;
+    double getLongitude() const;
+    double getRadius() const;
+    QString getAuthToken() const;
+
+    void setLatitude(double latitude);
+    void setLongitude(double longitude);
+    void setRadius(double radius);
+
+    virtual QByteArray getJson() const;
+
+    virtual bool parseJson(const QByteArray&);
+
+    ~LoadTagsRequestJSON();
+
+    //class LoadTagsRequestJSON
+};
+// LOADTAGSREQUESTJSON_H
+#endif
