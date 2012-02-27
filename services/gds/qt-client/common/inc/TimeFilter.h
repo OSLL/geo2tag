@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,36 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file TimeFilter.h
+ * \brief Header of TimeFilter
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _TimeFilter_H_6FEC6059_BB09_4A0A_BED5_E017346722CD_INCLUDED_
+#define _TimeFilter_H_6FEC6059_BB09_4A0A_BED5_E017346722CD_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include <QDateTime>
+#include "Filter.h"
 
-bool GDSService::isTracking()
+class TimeFilter : public Filter
 {
-    return false;
-}
+  QDateTime m_timeFrom;
+  QDateTime m_timeTo;
 
-void GDSService::settingsUpdated()
-{
-}
+public:
+  TimeFilter(QDateTime timeFrom, QDateTime timeTo);
+
+  ~TimeFilter();
+
+  bool filtrate(const QSharedPointer<DataMark> &mark);
+
+}; // class TimeFilter
+  
+
+#endif //_TimeFilter_H_6FEC6059_BB09_4A0A_BED5_E017346722CD_INCLUDED_

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,16 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*!
+ * \file SetDefaultTimeSlotResponseJSON.h
+ * \brief Header of SetDefaultTimeSlotResponseJSON
+ *
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _SETDEFAULTTIMESLOTRESPONSEJSON_H_3d4dc66e_e09a_49cc_bfe5_b8437d28dac9_
+#define _SETDEFAULTTIMESLOTRESPONSEJSON_H_3d4dc66e_e09a_49cc_bfe5_b8437d28dac9_
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
+#include "DefaultResponseJSON.h"
 
-void GDSService::startTracking()
-{
-}
-
-void GDSService::stopTracking()
-{
-}
-
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
-}
+typedef DefaultResponseJSON SetDefaultTimeSlotResponseJSON;
+#endif                                  // _SETDEFAULTTIMESLOTRESPONSEJSON_H_3d4dc66e_e09a_49cc_bfe5_b8437d28dac9_

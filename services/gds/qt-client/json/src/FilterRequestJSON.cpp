@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,71 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ *
+ * \file FilterRequestJSON.cpp
+ * \brief FilterRequestJSON implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "FilterRequestJSON.h"
+
+FilterRequestJSON::FilterRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
-void GDSService::startTracking()
+FilterRequestJSON::~FilterRequestJSON()
 {
 }
 
-void GDSService::stopTracking()
+void FilterRequestJSON::setShape(const QSharedPointer<FShape> &shape)
 {
+  m_shape = shape;
+}
+QSharedPointer<FShape>& FilterRequestJSON::getShape()
+{
+  return m_shape;
 }
 
-bool GDSService::isTracking()
+void FilterRequestJSON::setTimeFrom(QDateTime timeFrom)
 {
-    return false;
+  m_timeFrom = timeFrom;
 }
 
-void GDSService::settingsUpdated()
+QDateTime FilterRequestJSON::getTimeFrom() const
 {
+  return m_timeFrom;
+}
+
+void FilterRequestJSON::setTimeTo(QDateTime timeTo)
+{
+  m_timeTo = timeTo;
+}
+
+QDateTime FilterRequestJSON::getTimeTo() const
+{
+  return m_timeTo;
+}
+
+void FilterRequestJSON::setAltitude1(double alt)
+{
+  m_alt1 = alt;
+}
+
+void FilterRequestJSON::setAltitude2(double alt)
+{
+  m_alt2 = alt;
+}
+
+double FilterRequestJSON::getAltitude1() const
+{
+  return m_alt1;
+}
+
+double FilterRequestJSON::getAltitude2() const
+{
+  return m_alt2;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010-2011  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,48 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "GetTimeSlotRequestJSON.h"
+#include "DataMarks.h"
+#include "JsonChannel.h"
+#include "JsonDataMark.h"
+#include "JsonUser.h"
+
+GetTimeSlotRequestJSON::GetTimeSlotRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
-void GDSService::startTracking()
+
+QByteArray GetTimeSlotRequestJSON::getJson() const
 {
+  QJson::Serializer serializer;
+  QVariantMap request;
+
+  request.insert("auth_token", m_usersContainer->at(0)->getToken());
+  request.insert("channel", m_channelsContainer->at(0)->getName());
+
+  return serializer.serialize(request);
 }
 
-void GDSService::stopTracking()
-{
-}
 
-bool GDSService::isTracking()
+bool GetTimeSlotRequestJSON::parseJson(const QByteArray &data)
 {
-    return false;
-}
+  clearContainers();
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
 
-void GDSService::settingsUpdated()
-{
+  QString token = result["auth_token"].toString();
+  QString channel = result["channel"].toString();
+
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("unknown","unknown", token)));
+  m_channelsContainer->push_back(QSharedPointer<Channel> (new JsonChannel(channel, "unknown")));
+  return true;
 }

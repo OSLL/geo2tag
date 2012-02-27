@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow
     // GUI
     QStackedWidget *m_stackedWidget;
     LoginWidget *m_loginWidget;
+    MainWidget *m_mainWidget;
 
 public:
     enum ScreenOrientation {

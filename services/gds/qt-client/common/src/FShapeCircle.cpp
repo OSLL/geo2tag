@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,32 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ *
+ * \file FShapeCircle.cpp
+ * \brief FShapeCircle implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "FShapeCircle.h"
+
+FShapeCircle::FShapeCircle(double lat, double lon, double r) : FShape()
+{
+  m_lat = lat;
+  m_lon = lon;
+  m_radius = r;
+}
+
+FShapeCircle::~FShapeCircle()
 {
 }
 
-void GDSService::startTracking()
+bool FShapeCircle::filtrate(const QSharedPointer<DataMark> &mark)
 {
-}
-
-void GDSService::stopTracking()
-{
-}
-
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
+  double lat = mark->getLatitude();
+  double lon = mark->getLongitude();
+  return DataMark::getDistance(m_lat, m_lon, lat, lon) <= m_radius;
 }

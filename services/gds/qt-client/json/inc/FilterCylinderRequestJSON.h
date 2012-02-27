@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,31 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file FilterCylinderRequestJSON.h
+ * \brief Header of FilterCylinderRequestJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _FilterCylinderRequestJSON_H_2F9582EA_1673_4B92_AB6B_54610840CA88_INCLUDED_
+#define _FilterCylinderRequestJSON_H_2F9582EA_1673_4B92_AB6B_54610840CA88_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "FilterCircleRequestJSON.h"
 
-bool GDSService::isTracking()
+class FilterCylinderRequestJSON : public FilterCircleRequestJSON
 {
-    return false;
-}
+public:
+  FilterCylinderRequestJSON(QObject *parent=0);
 
-void GDSService::settingsUpdated()
-{
-}
+  QByteArray getJson() const;
+
+  bool parseJson(const QByteArray&);
+
+}; // class FilterCylinderRequestJSON
+
+#endif //_FilterCylinderRequestJSON_H_2F9582EA_1673_4B92_AB6B_54610840CA88_INCLUDED_

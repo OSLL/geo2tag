@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -29,26 +29,38 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/* $Id$ */
+/*!
+ * \file SubscribedChannelsRequestJSON.h
+ * \brief Header of SubscribedChannelsRequestJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
+#ifndef _SubscribedChannelsJSON_H_INCLUDED_
+#define _SubscribedChannelsJSON_H_INCLUDED_
 
-void GDSService::startTracking()
-{
-}
+#include "JsonSerializer.h"
+#include "User.h"
 
-void GDSService::stopTracking()
+class SubscribedChannelsRequestJSON: public JsonSerializer
 {
-}
+  public:
+    SubscribedChannelsRequestJSON(const QSharedPointer<common::User> &user);
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+    // Three functions below was virtual
+    QByteArray getJson() const;
 
-void GDSService::settingsUpdated()
-{
-}
+    bool parseJson(const QByteArray&);
+
+    SubscribedChannelsRequestJSON();
+
+    // class SubscribedChannelsJSON
+};
+//_SubscribedChannelsJSON_H_INCLUDED_
+#endif
+
+/* ===[ End of file $HeadURL$ ]=== */

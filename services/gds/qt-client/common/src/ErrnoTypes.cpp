@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,34 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ *
+ * \file ErrnoTypes.cpp
+ * \brief ErrnoTypes implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
+#include "ErrnoTypes.h"
+#include <QString>
 
-void GDSService::startTracking()
+const QString getErrorByCode(int error)
 {
-}
 
-void GDSService::stopTracking()
-{
-}
-
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
+  switch (error)
+  {
+    case SUCCESS: return "SUCCESS";
+    case WRONG_TOKEN_ERROR: return "WRONG_TOKEN_ERROR";
+    case USER_ALREADY_EXIST_ERROR: return "USER_ALREADY_EXIST_ERROR";
+    case USER_DOES_NOT_EXIST_ERROR: return "USER_DOES_NOT_EXIST_ERROR";
+    case CHANNEL_ALREADY_EXIST_ERROR: return "CHANNEL_ALREADY_EXIST_ERROR";
+    case CHANNEL_DOES_NOT_EXIST_ERROR: return "CHANNEL_DOES_NOT_EXIST_ERROR";
+    case INTERNAL_DB_ERROR: return "INTERNAL_DB_ERROR";
+    case INCORRECT_QUERY_NAME_ERROR: return "INCORRECT_QUERY_NAME_ERROR";
+    case INCORRECT_JSON_ERROR: return "INCORRECT_JSON_ERROR";
+    case UNKNOWN_ERROR: return "UNKNOWN_ERROR";
+  }
+  return "UNDEFINED_ERROR";
 }

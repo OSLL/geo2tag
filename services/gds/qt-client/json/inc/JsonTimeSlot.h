@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,27 +28,36 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*!
+ * \file JsonTimeSlot.h
+ * \brief Header of JsonTimeSlot
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include "GDSService.h"
+#ifndef _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
+#define _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "TimeSlot.h"
+
+class JsonTimeSlot: public TimeSlot
 {
-}
+  static qlonglong globalTimeSlotId;
+  qlonglong m_id;
 
-void GDSService::startTracking()
-{
-}
+  public:
+    JsonTimeSlot(const qulonglong &slot);
 
-void GDSService::stopTracking()
-{
-}
+    qlonglong getId() const;
 
-bool GDSService::isTracking()
-{
-    return false;
-}
+    void setId(qlonglong id);
 
-void GDSService::settingsUpdated()
-{
-}
+    ~JsonTimeSlot();
+};
+// _JSONTIMESLOT_H_0bc54747_6146_4834_a7ec_71e7be1c01f3_INCLUDED
+#endif
+
+/* ===[ End of file ]=== */

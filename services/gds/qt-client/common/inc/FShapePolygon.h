@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,34 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file FShapePolygon.h
+ * \brief Header of FShapePolygon
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _FShapePolygon_H_A08ADAEE_DA07_4E75_A64D_F4F86290B7D1_INCLUDED_
+#define _FShapePolygon_H_A08ADAEE_DA07_4E75_A64D_F4F86290B7D1_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "FShape.h"
+#include <QPointF>
 
-bool GDSService::isTracking()
+class FShapePolygon : public FShape
 {
-    return false;
-}
+  QList<QPointF> m_points;
 
-void GDSService::settingsUpdated()
-{
-}
+public:
+  FShapePolygon();
+
+  void addPoint(int idx, double lat, double lon);
+
+  bool filtrate(const QSharedPointer<DataMark> &mark);
+
+}; // class FShapePolygon
+
+#endif //_FShapePolygon_H_A08ADAEE_DA07_4E75_A64D_F4F86290B7D1_INCLUDED_

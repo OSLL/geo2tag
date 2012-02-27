@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,22 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ *
+ * \file FShapeRectangle.cpp
+ * \brief FShapeRectangle implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
+#include "FShapeRectangle.h"
 
-void GDSService::startTracking()
+FShapeRectangle::FShapeRectangle(double lat1, double lon1, double lat2, double lon2) : FShapePolygon()
 {
-}
-
-void GDSService::stopTracking()
-{
-}
-
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
+  addPoint(0, lat1, lon1);
+  addPoint(1, lat1, lon2);
+  addPoint(2, lat2, lon2);
+  addPoint(3, lat2, lon1);
 }

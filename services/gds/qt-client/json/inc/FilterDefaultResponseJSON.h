@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,40 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file FilterDefaultResponseJSON.h
+ * \brief Header of FilterDefaultResponseJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_
+#define _FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "JsonSerializer.h"
+#include "DataChannel.h"
 
-bool GDSService::isTracking()
+class FilterDefaultResponseJSON : public JsonSerializer
 {
-    return false;
-}
+  DataChannels m_hashMap;
 
-void GDSService::settingsUpdated()
-{
-}
+public:
+  FilterDefaultResponseJSON(QObject *parent=0);
+
+  ~FilterDefaultResponseJSON();
+
+  const DataChannels& getDataChannels();
+
+  void setDataChannels(const DataChannels& dataChannels);
+
+  virtual bool parseJson(const QByteArray&);
+
+  virtual QByteArray getJson() const;
+
+}; // class FilterDefaultResponseJSON
+  
+#endif //_FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_

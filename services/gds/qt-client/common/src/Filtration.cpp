@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,45 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ *
+ * \file Filtration.cpp
+ * \brief Filtration implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
+#include "Filtration.h"
+
+Filtration::Filtration()
 {
 }
 
-void GDSService::startTracking()
+Filtration::~Filtration()
 {
 }
 
-void GDSService::stopTracking()
+void Filtration::addFilter(const QSharedPointer<Filter> & filter)
 {
+  m_filters.append(filter);
 }
 
-bool GDSService::isTracking()
+QList<QSharedPointer<DataMark> > Filtration::filtrate(const QList<QSharedPointer<DataMark> > tags)
 {
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
+  QList<QSharedPointer<DataMark> > result;
+  foreach(QSharedPointer<DataMark> tag, tags)
+  {
+    bool b = true;
+    foreach(QSharedPointer<Filter> filter, m_filters)
+    {
+      b = b & filter->filtrate(tag);
+    }
+    if (b)
+    {
+      result.append(tag);
+    }
+  }
+  return result;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,31 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file FilterFenceRequestJSON.h
+ * \brief Header of FilterFenceRequestJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _FilterFenceRequestJSON_H_EC467DA6_1C50_47E2_8EC9_87CDDD60EC1F_INCLUDED_
+#define _FilterFenceRequestJSON_H_EC467DA6_1C50_47E2_8EC9_87CDDD60EC1F_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "FilterPolygonRequestJSON.h"
 
-bool GDSService::isTracking()
+class FilterFenceRequestJSON : public FilterPolygonRequestJSON
 {
-    return false;
-}
+public:
+  FilterFenceRequestJSON(QObject *parent=0);
 
-void GDSService::settingsUpdated()
-{
-}
+  QByteArray getJson() const;
+
+  bool parseJson(const QByteArray&);
+
+}; // class FilterFenceRequestJSON
+  
+#endif //_FilterFenceRequestJSON_H_EC467DA6_1C50_47E2_8EC9_87CDDD60EC1F_INCLUDED_

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,32 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file FilterRectangleRequestJSON.h
+ * \brief Header of FilterRectangleRequestJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
 
-void GDSService::startTracking()
-{
-}
+#ifndef _FilterRectangleRequestJSON_H_5E249F48_BA3A_4408_A1B9_E4061F5D3B3B_INCLUDED_
+#define _FilterRectangleRequestJSON_H_5E249F48_BA3A_4408_A1B9_E4061F5D3B3B_INCLUDED_
 
-void GDSService::stopTracking()
-{
-}
+#include "FilterRequestJSON.h"
 
-bool GDSService::isTracking()
+class FilterRectangleRequestJSON : public FilterRequestJSON
 {
-    return false;
-}
+public:
+  FilterRectangleRequestJSON(QObject *parent=0);
 
-void GDSService::settingsUpdated()
-{
-}
+  QByteArray getJson() const;
+
+  bool parseJson(const QByteArray&);
+
+}; // class FilterRectangleRequestJSON
+  
+
+#endif //_FilterRectangleRequestJSON_H_5E249F48_BA3A_4408_A1B9_E4061F5D3B3B_INCLUDED_

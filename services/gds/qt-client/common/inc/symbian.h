@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,26 +29,26 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#include "GDSService.h"
+/*! ---------------------------------------------------------------
+ * \file symbian.h
+ * \brief Header of symbian
+ * \todo add comment here
+ *
+ * linux API stubs on Symbian
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-GDSService::GDSService(QObject *parent) :
-    QObject(parent)
-{
-}
+#ifndef _symbian_H_B050ADA3_17AA_483B_A8CF_7A678519D725_INCLUDED_
+#define _symbian_H_B050ADA3_17AA_483B_A8CF_7A678519D725_INCLUDED_
 
-void GDSService::startTracking()
+namespace
 {
-}
+  const int LOG_INFO = 0;
+  void syslog(int priority, const char *format, ...)
+  {
 
-void GDSService::stopTracking()
-{
-}
+  }
 
-bool GDSService::isTracking()
-{
-    return false;
-}
-
-void GDSService::settingsUpdated()
-{
-}
+}                                       // namespace
+#endif                                  //_symbian_H_B050ADA3_17AA_483B_A8CF_7A678519D725_INCLUDED_
