@@ -9,10 +9,9 @@
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
-private:
+  Q_OBJECT
+    private:
     QMenu *menu;
-
 
     QAction *shedulerAction;
     QAction *trackingAction;
@@ -22,23 +21,19 @@ private:
     QDeclarativeView* view;
     Client *client;
 
-
-
-public:
+  public:
     explicit MainWindow(QWidget *parent = 0);
-    
-signals:
-    
-public slots:
-private:
+
+    signals:
+
+  public slots:
+  private:
     void createMenus();
     void createActions();
-private slots:
+  private slots:
     void shedulerSettings();
     void trackingSettings();
     void pathSettings();
 
-    
 };
-
-#endif // MAINWINDOW_H
+#endif                                  // MAINWINDOW_H

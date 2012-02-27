@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
 #define _Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
 
@@ -51,15 +50,14 @@ class Filtration
 {
   QList<QSharedPointer<Filter> > m_filters;
 
-public:
-  Filtration();
+  public:
+    Filtration();
 
-  ~Filtration();
+    ~Filtration();
 
-  void addFilter(const QSharedPointer<Filter> & filter);
+    void addFilter(const QSharedPointer<Filter> & filter);
 
-  QList<QSharedPointer<DataMark> > filtrate(const QList<QSharedPointer<DataMark> > tags);
+    QList<QSharedPointer<DataMark> > filtrate(const QList<QSharedPointer<DataMark> > tags);
 
-}; // class Filtration
-
-#endif //_Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_
+};                                      // class Filtration
+#endif                                  //_Filtration_H_A12E4622_FC1F_4AA0_8E00_D4E6B6E36300_INCLUDED_

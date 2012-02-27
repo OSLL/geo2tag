@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FilterCylinderRequestJSON_H_2F9582EA_1673_4B92_AB6B_54610840CA88_INCLUDED_
 #define _FilterCylinderRequestJSON_H_2F9582EA_1673_4B92_AB6B_54610840CA88_INCLUDED_
 
@@ -47,13 +46,12 @@
 
 class FilterCylinderRequestJSON : public FilterCircleRequestJSON
 {
-public:
-  FilterCylinderRequestJSON(QObject *parent=0);
+  public:
+    FilterCylinderRequestJSON(QObject *parent=0);
 
-  QByteArray getJson() const;
+    QByteArray getJson() const;
 
-  bool parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 
-}; // class FilterCylinderRequestJSON
-
-#endif //_FilterCylinderRequestJSON_H_2F9582EA_1673_4B92_AB6B_54610840CA88_INCLUDED_
+};                                      // class FilterCylinderRequestJSON
+#endif                                  //_FilterCylinderRequestJSON_H_2F9582EA_1673_4B92_AB6B_54610840CA88_INCLUDED_

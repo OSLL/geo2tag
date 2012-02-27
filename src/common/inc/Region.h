@@ -39,34 +39,33 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _Region_H_06756261_C2F3_4279_93DC_8F9FA944B9FF_INCLUDED_
 #define _Region_H_06756261_C2F3_4279_93DC_8F9FA944B9FF_INCLUDED_
 
- /*!
+/*!
  * Class description. May use HTML formatting
  *
  */
 #include "DataMarks.h"
-namespace common{
-class Region
+namespace common
 {
-  QSharedPointer<DataMarks> m_points;
-public:
-  Region();
-  Region(const QSharedPointer<DataMarks>& points);
+  class Region
+  {
+    QSharedPointer<DataMarks> m_points;
+    public:
+      Region();
+      Region(const QSharedPointer<DataMarks>& points);
 
-  const QSharedPointer<DataMarks>& getPoints() const;
-  void setPoints(const QSharedPointer<DataMarks>& points);
+      const QSharedPointer<DataMarks>& getPoints() const;
+      void setPoints(const QSharedPointer<DataMarks>& points);
 
-  void addPoint(const QSharedPointer<DataMark>& point);
+      void addPoint(const QSharedPointer<DataMark>& point);
 
-  bool atRegion(const QSharedPointer<DataMark>& point) ;
+      bool atRegion(const QSharedPointer<DataMark>& point) ;
 
-  ~Region();
-  
+      ~Region();
 
-}; // class Region
-  
+  };                                    // class Region
+
 }
-#endif //_Region_H_06756261_C2F3_4279_93DC_8F9FA944B9FF_INCLUDED_
+#endif                                  //_Region_H_06756261_C2F3_4279_93DC_8F9FA944B9FF_INCLUDED_

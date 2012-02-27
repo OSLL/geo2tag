@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_
 #define _FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_
 
@@ -56,6 +55,4 @@ class FilterCircleRequestJSON: public FilterRequestJSON
 
     bool parseJson(const QByteArray&);
 };
-
-
-#endif //_FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_
+#endif                                  //_FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_

@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _Filter_H_F1B0F887_FC25_4557_B002_AC962387F3F9_INCLUDED_
 #define _Filter_H_F1B0F887_FC25_4557_B002_AC962387F3F9_INCLUDED_
 
@@ -48,9 +47,8 @@
 
 class Filter
 {
-public:
-  virtual bool filtrate(const QSharedPointer<DataMark> &mark) = 0;
+  public:
+    virtual bool filtrate(const QSharedPointer<DataMark> &mark) = 0;
 
-}; // class Filter
-
-#endif //_Filter_H_F1B0F887_FC25_4557_B002_AC962387F3F9_INCLUDED_
+};                                      // class Filter
+#endif                                  //_Filter_H_F1B0F887_FC25_4557_B002_AC962387F3F9_INCLUDED_

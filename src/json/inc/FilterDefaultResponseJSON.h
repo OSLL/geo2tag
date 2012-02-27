@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_
 #define _FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_
 
@@ -50,19 +49,18 @@ class FilterDefaultResponseJSON : public JsonSerializer
 {
   DataChannels m_hashMap;
 
-public:
-  FilterDefaultResponseJSON(QObject *parent=0);
+  public:
+    FilterDefaultResponseJSON(QObject *parent=0);
 
-  ~FilterDefaultResponseJSON();
+    ~FilterDefaultResponseJSON();
 
-  const DataChannels& getDataChannels();
+    const DataChannels& getDataChannels();
 
-  void setDataChannels(const DataChannels& dataChannels);
+    void setDataChannels(const DataChannels& dataChannels);
 
-  virtual bool parseJson(const QByteArray&);
+    virtual bool parseJson(const QByteArray&);
 
-  virtual QByteArray getJson() const;
+    virtual QByteArray getJson() const;
 
-}; // class FilterDefaultResponseJSON
-  
-#endif //_FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_
+};                                      // class FilterDefaultResponseJSON
+#endif                                  //_FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_

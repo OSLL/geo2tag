@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FShapePolygon_H_A08ADAEE_DA07_4E75_A64D_F4F86290B7D1_INCLUDED_
 #define _FShapePolygon_H_A08ADAEE_DA07_4E75_A64D_F4F86290B7D1_INCLUDED_
 
@@ -50,13 +49,12 @@ class FShapePolygon : public FShape
 {
   QList<QPointF> m_points;
 
-public:
-  FShapePolygon();
+  public:
+    FShapePolygon();
 
-  void addPoint(int idx, double lat, double lon);
+    void addPoint(int idx, double lat, double lon);
 
-  bool filtrate(const QSharedPointer<DataMark> &mark);
+    bool filtrate(const QSharedPointer<DataMark> &mark);
 
-}; // class FShapePolygon
-
-#endif //_FShapePolygon_H_A08ADAEE_DA07_4E75_A64D_F4F86290B7D1_INCLUDED_
+};                                      // class FShapePolygon
+#endif                                  //_FShapePolygon_H_A08ADAEE_DA07_4E75_A64D_F4F86290B7D1_INCLUDED_

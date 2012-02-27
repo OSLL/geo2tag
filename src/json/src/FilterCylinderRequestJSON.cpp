@@ -54,11 +54,13 @@ FilterCircleRequestJSON(parent)
 {
 }
 
+
 QByteArray FilterCylinderRequestJSON::getJson() const
 {
   // TODO
   return FilterCircleRequestJSON::getJson();
 }
+
 
 bool FilterCylinderRequestJSON::parseJson(const QByteArray& data)
 {
@@ -67,14 +69,14 @@ bool FilterCylinderRequestJSON::parseJson(const QByteArray& data)
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok)    return false;
-  
+
   QVariantMap altitudeShift = result["altitude_shift"].toMap();
   double alt = altitudeShift["altitude1"].toDouble(&ok);
   if (!ok)    return false;
 
   setAltitude1(alt);
   alt = altitudeShift["altitude2"].toDouble(&ok) ;
-  if (!ok)    return false;  
+  if (!ok)    return false;
   setAltitude2(altitudeShift["altitude2"].toDouble(&ok));
   return true;
 }

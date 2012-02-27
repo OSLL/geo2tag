@@ -8,23 +8,22 @@
 
 #include "LoginQuery.h"
 
-
 class Client : public QObject
 {
-    Q_OBJECT
-private:
-  bool m_authentificated;
+  Q_OBJECT
+    private:
+    bool m_authentificated;
 
-  QString m_lastError;
+    QString m_lastError;
 
-  LoginQuery * m_loginQuery;
+    LoginQuery * m_loginQuery;
 
-  QSharedPointer<common::User> m_user;
-  QNetworkConfigurationManager * m_netManager;
+    QSharedPointer<common::User> m_user;
+    QNetworkConfigurationManager * m_netManager;
 
-  void pause(int msecs);
+    void pause(int msecs);
 
-public:
+  public:
     explicit Client(QObject *parent = 0);
     // stub for authentification mechanizm
 
@@ -32,17 +31,15 @@ public:
     QString getLastError();
     bool isOnline();
 
-private slots:
+  private slots:
     void onError(QString error);
     void onError(int err);
     void onAuthentificated();
-signals:
+    signals:
     void error(QVariant error);
     void authentificated(QVariant);
-public slots:
+  public slots:
     void auth(QString user, QString pass);
 
-    
 };
-
-#endif // CLIENT_H
+#endif                                  // CLIENT_H

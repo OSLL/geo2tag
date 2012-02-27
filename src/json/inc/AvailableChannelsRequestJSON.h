@@ -39,12 +39,10 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_
 #define _AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_
 
 #include "LoadTagsRequestJSON.h"
 
 typedef LoadTagsRequestJSON AvailableChannelsRequestJSON;
-
-#endif //_AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_
+#endif                                  //_AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_

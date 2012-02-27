@@ -42,7 +42,6 @@
 #include "FilterCircleRequestJSON.h"
 #include "JsonUser.h"
 
-
 #ifndef Q_WS_SYMBIAN
 #include <qjson/parser.h>
 #include <qjson/serializer.h>

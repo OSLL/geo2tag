@@ -63,25 +63,30 @@ FilterDefaultResponseJSON::FilterDefaultResponseJSON(QObject *parent) : JsonSeri
 {
 }
 
+
 FilterDefaultResponseJSON::~FilterDefaultResponseJSON()
 {
 }
+
 
 const DataChannels& FilterDefaultResponseJSON::getDataChannels()
 {
   return m_hashMap;
 }
 
+
 void FilterDefaultResponseJSON::setDataChannels(const DataChannels& dataChannels)
 {
   m_hashMap = dataChannels;
 }
+
 
 bool FilterDefaultResponseJSON::parseJson(const QByteArray&)
 {
   return false;
   // TODO
 }
+
 
 QByteArray FilterDefaultResponseJSON::getJson() const
 {

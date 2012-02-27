@@ -123,16 +123,19 @@ void DataMark::setLongitude(const double &lon)
   m_longitude = lon;
 }
 
+
 double DataMark::getAltitude() const
 {
   // TODO
   return m_altitude;
 }
 
+
 void DataMark::setAltitude(const double& alt)
 {
   m_altitude = alt;
 }
+
 
 const QString& DataMark::getLabel() const
 {

@@ -45,14 +45,17 @@ Filtration::Filtration()
 {
 }
 
+
 Filtration::~Filtration()
 {
 }
+
 
 void Filtration::addFilter(const QSharedPointer<Filter> & filter)
 {
   m_filters.append(filter);
 }
+
 
 QList<QSharedPointer<DataMark> > Filtration::filtrate(const QList<QSharedPointer<DataMark> > tags)
 {

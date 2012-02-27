@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FShapeCircle_H_685324AD_3719_4618_BE1B_F0221ABB524D_INCLUDED_
 #define _FShapeCircle_H_685324AD_3719_4618_BE1B_F0221ABB524D_INCLUDED_
 
@@ -52,11 +51,10 @@ class FShapeCircle : public FShape
   double m_lon;
   double m_radius;
 
-public:
-  FShapeCircle(double lat, double lon, double r);
-  ~FShapeCircle();
-  bool filtrate(const QSharedPointer<DataMark> &mark);
+  public:
+    FShapeCircle(double lat, double lon, double r);
+    ~FShapeCircle();
+    bool filtrate(const QSharedPointer<DataMark> &mark);
 
-}; // class FShapeCircle
-  
-#endif //_FShapeCircle_H_685324AD_3719_4618_BE1B_F0221ABB524D_INCLUDED_
+};                                      // class FShapeCircle
+#endif                                  //_FShapeCircle_H_685324AD_3719_4618_BE1B_F0221ABB524D_INCLUDED_

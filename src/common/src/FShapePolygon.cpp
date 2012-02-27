@@ -46,17 +46,20 @@ FShapePolygon::FShapePolygon() : FShape()
 {
 }
 
+
 void FShapePolygon::addPoint(int idx, double lat, double lon)
 {
   m_points.insert(idx, QPointF(lat, lon));
 }
+
 
 bool FShapePolygon::filtrate(const QSharedPointer<DataMark> &mark)
 {
   if (m_points.size() == 0) return false;
 
   QPolygonF polygon;
-  for (int i = 0; i < m_points.size(); i++){
+  for (int i = 0; i < m_points.size(); i++)
+  {
     polygon << m_points.at(i);
   }
   polygon << m_points.at(0);

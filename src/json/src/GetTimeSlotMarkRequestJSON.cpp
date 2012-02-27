@@ -68,7 +68,7 @@ bool GetTimeSlotMarkRequestJSON::parseJson(const QByteArray &data)
 
   QString token = result["auth_token"].toString();
   qlonglong markId = result["mark_id"].toLongLong(&ok);
-  if (!ok) return false;  
+  if (!ok) return false;
 
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("unknown","unknown", token)));
   JsonDataMark* jsonMark = new JsonDataMark(0,0,0,"unknown", "unknown", "unknown", QDateTime());

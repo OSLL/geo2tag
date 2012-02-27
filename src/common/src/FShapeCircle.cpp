@@ -48,9 +48,11 @@ FShapeCircle::FShapeCircle(double lat, double lon, double r) : FShape()
   m_radius = r;
 }
 
+
 FShapeCircle::~FShapeCircle()
 {
 }
+
 
 bool FShapeCircle::filtrate(const QSharedPointer<DataMark> &mark)
 {

@@ -14,19 +14,17 @@
 #define DEFAULT_CHANNEL "default"
 
 Client::Client(QObject *parent) :
-    QObject(parent)
+QObject(parent)
 {
-    m_loginQuery = new LoginQuery(this);
-    connect(m_loginQuery, SIGNAL(connected()), SLOT(onAuthentificated()));
-    connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
+  m_loginQuery = new LoginQuery(this);
+  connect(m_loginQuery, SIGNAL(connected()), SLOT(onAuthentificated()));
+  connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
 
-    connect(m_loginQuery, SIGNAL(errorOccured(int)),SLOT(onError(int)));
+  connect(m_loginQuery, SIGNAL(errorOccured(int)),SLOT(onError(int)));
 
-
-    m_netManager = new QNetworkConfigurationManager(this);
+  m_netManager = new QNetworkConfigurationManager(this);
 
 }
-
 
 
 void Client::auth(QString user, QString pass)
@@ -36,12 +34,10 @@ void Client::auth(QString user, QString pass)
 }
 
 
-
-
 void Client::onError(QString err)
 {
 
-    emit error(QVariant(err));
+  emit error(QVariant(err));
   m_lastError = err;
   if(!m_authentificated)
   {
@@ -57,13 +53,14 @@ void Client::onError(QString err)
   }
 }
 
+
 void Client::onError(int err)
 {
-    if (err==INCORRECT_CREDENTIALS_ERROR)
-    {
-        emit error(QVariant("Incorrect login or password"));
+  if (err==INCORRECT_CREDENTIALS_ERROR)
+  {
+    emit error(QVariant("Incorrect login or password"));
 
-    }
+  }
 }
 
 
@@ -94,10 +91,10 @@ void Client::onAuthentificated()
   emit authentificated(QVariant(m_user->getLogin()));
 }
 
+
 void Client::pause(int msecs)
 {
   QEventLoop eventLoop;
   QTimer::singleShot(msecs, &eventLoop, SLOT(quit()));
   eventLoop.exec();
 }
-

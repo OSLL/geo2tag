@@ -138,7 +138,6 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
 
   m_database.transaction();
 
-
   result = newTagQuery.exec();
   if(!result)
   {
@@ -157,15 +156,13 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
 
   m_database.commit();
 
-
   QSharedPointer<DataMark> t(
-    new DbDataMark(newId, tag->getAltitude(), tag->getLatitude(), 
-                   tag->getLongitude(), tag->getLabel(),
-                   tag->getDescription(), tag->getUrl(),
-                   tag->getTime(), tag->getUser()->getId()));
+    new DbDataMark(newId, tag->getAltitude(), tag->getLatitude(),
+    tag->getLongitude(), tag->getLabel(),
+    tag->getDescription(), tag->getUrl(),
+    tag->getTime(), tag->getUser()->getId()));
   t->setUser(tag->getUser());
   t->setChannel(tag->getChannel());
-
 
   return t;
 }
@@ -440,6 +437,7 @@ bool QueryExecutor::deleteMarkTimeSlot(const QSharedPointer<DataMark>& tag)
   }
   return result;
 }
+
 
 bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel)
 {

@@ -47,9 +47,11 @@ TimeFilter::TimeFilter(QDateTime timeFrom, QDateTime timeTo) : Filter()
   m_timeTo = timeTo;
 }
 
+
 TimeFilter::~TimeFilter()
 {
 }
+
 
 bool TimeFilter::filtrate(const QSharedPointer<DataMark> &mark)
 {
