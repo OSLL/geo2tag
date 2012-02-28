@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World!</string>
+    <string name="app_name">GeoDoctorSearch</string>
+    
+    <!-- LoginActivity -->
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="re_password">Re-enter password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="create_account">Create account</string>
+    <string name="remember_me">Remember me</string>
+    <string name="menu_settings">Settings</string>
+    <string name="register">Register</string>
+    
+    <!-- MainActivity -->
+    <string name="menu_sign_out">Sign out</string>
+    
+    <!-- settings -->
+    <string name="channel">Channel</string>
+    <string name="key">Key</string>
+    <string name="server_address">Geo2Tag server</string>
+    <string name="time_request">Time between ticks</string>
+    <string name="radius">Radius</string>
+    <string name="uri">Uri</string>
+    
+    <!-- CheckBox -->
+    <string name="checkbox_hide_on_start">Hide tracker on start</string>
+    <string name="checkbox_show_tick_toast">Show tick toast</string>
+    
+    <!-- buttons -->
+    <string name="btnOk">Ok</string>
+    <string name="btnCancel">Cancel</string>
+    <string name="btnStart">Start Tracker</string>
+    <string name="btnStop">Stop Tracker</string>
+    <string name="btnSettings">Settings</string>
+    <string name="btnHide">Hide</string>
+
+</resources>
