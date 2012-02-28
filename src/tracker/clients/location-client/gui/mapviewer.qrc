@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>RecButton.qml</file>
+        <file>LoginView.qml</file>
+        <file>MapViewer.qml</file>
+        <file>main.qml</file>
+        <file>NotifyDialog.qml</file>
+        <file>RightPanel.qml</file>
+        <file>images/strip.png</file>
+    </qresource>
+</RCC>

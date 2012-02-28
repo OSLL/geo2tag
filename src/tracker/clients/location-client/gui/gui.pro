@@ -60,9 +60,7 @@ RESOURCES += \
      mapviewer.qrc
 OTHER_FILES += \
     RecButton.qml\
-    images/quit.png \
-    images/titlebar.png \
-    images/titlebar.sci \
+    images/strip.png \
     LoginView.qml \
     MapViewer.qml \
     main.qml \
