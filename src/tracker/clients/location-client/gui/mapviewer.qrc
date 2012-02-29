@@ -7,5 +7,6 @@
         <file>NotifyDialog.qml</file>
         <file>RightPanel.qml</file>
         <file>images/strip.png</file>
+        <file>RightPanelContent.qml</file>
     </qresource>
 </RCC>

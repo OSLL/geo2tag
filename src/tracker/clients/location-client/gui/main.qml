@@ -22,7 +22,7 @@ Flickable {
     MapViewer {id:map; z:-1; width: parent.width; height: parent.height}
     RecButton {id: recbutton;width: 100; height: 100;  z:5}
     NotifyDialog{id: notifyDialog}
-    RightPanel{id:rightPanel}
+    RightPanel{id:rightPanel; z:5}
     Connections { target: login; onAuthrequest: auth(log, pass)}
     Connections {target: recbutton; onTrackingRequest: tracking() }
     Connections {target: Main; onTrackingStarted: {recbutton.curStatus="Stop"; recbutton.prevStatus="Stop"} }

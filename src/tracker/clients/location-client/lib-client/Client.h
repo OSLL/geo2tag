@@ -10,6 +10,7 @@
 #include "LoginQuery.h"
 #include "WriteTagQuery.h"
 #include "MarksHistory.h"
+//#include "SubscribeChannelQuery.h"
 
 
 class Client : public QObject
@@ -22,6 +23,7 @@ private:
   QTimer * m_timer;
 
   WriteTagQuery * m_addNewMarkQuery;
+ // SubscribeChannelQuery *m_subscribeChannelQuery;
   MarksHistory * m_history;
 
   QString m_lastError;
