@@ -507,6 +507,7 @@ namespace common
     {
       if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
       {
+        response.addUser(dummyUser);
         response.setErrno(USER_ALREADY_EXIST_ERROR);
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
@@ -528,6 +529,7 @@ namespace common
     m_usersContainer->push_back(addedUser);
     m_updateThread->unlockWriting();
 
+    response.addUser(addedUser);
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
