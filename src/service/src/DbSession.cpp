@@ -507,7 +507,6 @@ namespace common
     {
       if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
       {
-        response.addUser(dummyUser);
         response.setErrno(USER_ALREADY_EXIST_ERROR);
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
