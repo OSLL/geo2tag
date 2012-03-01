@@ -3,6 +3,7 @@
 #include <QtCore/QCoreApplication>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QMenuBar>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,18 +12,36 @@ MainWindow::MainWindow(QWidget *parent)
     m_loginWidget = new LoginWidget(this);
     m_mainWidget = new MainWidget(this);
 
+    createActions();
+    createMenus();
     initGUI();
 
     m_GDSService = QSharedPointer<GDSService>(new GDSService());
 
     connect(m_loginWidget, SIGNAL(signedIn(QString)),
-            this, SLOT(onLoginSignedIn(QString)));
+            this, SLOT(onLoginSignedIn(QString)));;
 
     qDebug() << "MainWindow created";
 }
 
 MainWindow::~MainWindow()
 {
+
+}
+
+void MainWindow::createActions()
+{
+    m_settingsAction = new QAction("Settings", this);
+    m_signOutAction = new QAction("Sign out", this);
+    connect(m_settingsAction, SIGNAL(triggered()),
+            this, SLOT(testHideLogout()));
+}
+
+void MainWindow::createMenus()
+{
+    m_menu = menuBar()->addMenu("Menu");
+    m_menu->addAction(m_settingsAction);
+    m_menu->addAction(m_signOutAction);
 
 }
 
@@ -96,6 +115,11 @@ void MainWindow::showExpanded()
 #else
     show();
 #endif
+}
+
+void MainWindow::testHideLogout()
+{
+    m_signOutAction->setVisible(false);
 }
 
 

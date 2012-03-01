@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QStackedWidget>
 #include <QSharedPointer>
+#include <QMenuBar>
 
 #include "GDSService.h"
 #include "LoginWidget.h"
@@ -20,6 +21,10 @@ class MainWindow : public QMainWindow
     QStackedWidget *m_stackedWidget;
     LoginWidget *m_loginWidget;
     MainWidget *m_mainWidget;
+    QMenuBar *m_menuBar;
+    QMenu *m_menu;
+    QAction *m_settingsAction;
+    QAction *m_signOutAction;
 
 public:
     enum ScreenOrientation {
@@ -39,7 +44,11 @@ public slots:
     void onLoginSignedIn(const QString& authToken);
     void onMainSignedOut();
 
+    void testHideLogout();
+
 private:
+    void createActions();
+    void createMenus();
     void initGUI();
 };
 
