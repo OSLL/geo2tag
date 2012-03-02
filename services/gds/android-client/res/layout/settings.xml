@@ -16,6 +16,19 @@
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
 			>
+			
+		    <TextView 
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/server_address"        	
+	        	android:singleLine="true"/>
+			<EditText
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/edit_server_address"
+				android:singleLine="true"
+				android:inputType="text" />
+		    
 	        <TextView 
 	        	android:layout_width="fill_parent"
 	        	android:layout_height="wrap_content"
@@ -60,17 +73,6 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/edit_key"
-				android:singleLine="true"/>
-
-	        <TextView 
-	        	android:layout_width="fill_parent"
-	        	android:layout_height="wrap_content"
-	        	android:text="@string/server_address"        	
-	        	android:singleLine="true"/>
-			<EditText
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/edit_server_address"
 				android:singleLine="true"/>
 
 	        <TextView 
