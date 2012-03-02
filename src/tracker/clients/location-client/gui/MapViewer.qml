@@ -1,15 +1,30 @@
 import Qt 4.7
 //import QtQuick 1.0
 
+
 import QtMobility.location 1.2
 
 
  Item {
      width: 500
      height: 500
+     function getPosition(){
+     //    positionSource.active=true
+         console.debug(positionSource.position.coordinate.latitude)
+         map.center=positionSource.position.coordinate
+         map.zoomLevel=15
+         circle.center=positionSource.position.coordinate
+         circle.radius=10
+      //   positionSource.active=false
+     }
 
     // focus : true
+     PositionSource {
+         id: positionSource
+      //   updateInterval: 1000
+         active: true
 
+     }
 
 
 
@@ -25,10 +40,11 @@ import QtMobility.location 1.2
          size.width: parent.width
          size.height: parent.height
          zoomLevel: 7
-         center: Coordinate {
+         mapType: Map.StreetMap
+       /*  center: positionSource.position.coordinate /*Coordinate {
              latitude: 60
              longitude: 30
-         }
+         }*/
 
 
 

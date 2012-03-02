@@ -4,19 +4,21 @@ import com.nokia.meego 1.0
 Item {
     id:recbutton
     signal trackingRequest()
+    signal getPosition()
     property string curStatus: "Rec"
     property string  prevStatus: "Rec"
+    property string color: "red"
    /* signal startTrack();
     signal stopTrack();*/
 
     anchors.verticalCenter: parent.verticalCenter
-    anchors.verticalCenterOffset: 100
+    anchors.verticalCenterOffset: 30
     Rectangle {
         id: rec
         width: 50
         height: 50
 
-        color: "red"
+        color: recbutton.color=="red" ? "red" : "green"
         border.color: "black"
         border.width: 3
         radius: 20
@@ -26,13 +28,19 @@ Item {
         MouseArea
         {
             anchors.fill: parent
-            onClicked: {if (recbutton.curStatus=="Rec") recbutton.curStatus="unknown"
-            else {
-                recbutton.curStatus="Rec"
-                recbutton.prevStatus="Rec"
+            onClicked: {
+                if (recbutton.color == "red") {
+                   if (recbutton.curStatus=="Rec") recbutton.curStatus="unknown"
+                   else {
+                       recbutton.curStatus="Rec"
+                       recbutton.prevStatus="Rec"
+                   }
+                   recbutton.trackingRequest()
+                }
+                else
+                    recbutton.getPosition();
             }
-        recbutton.trackingRequest();
-        }
+
         }
 
     }
@@ -40,7 +48,7 @@ Item {
     Text {
         id: buttonLabel
         text: curStatus=="unknown" ? prevStatus: curStatus
-        color: "red"
+        color: recbutton.color=="red" ? "red" : "green"
         anchors.horizontalCenter: rec.horizontalCenter
         font.bold: true
 
