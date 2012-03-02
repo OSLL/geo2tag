@@ -95,11 +95,14 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		Log.v(IGDSSettings.LOG, "LoginActivity onPause");
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Log.v(IGDSSettings.LOG, "LoginActivity onResume");
+		initViews();
 	}
 	
 	@Override
@@ -121,10 +124,16 @@ public class LoginActivity extends Activity {
     }
 	
 	private void initViews() {
-		final SharedPreferences settings = new Settings(this).getPreferences();
-		m_loginEdit.setText(settings.getString(IGDSSettings.LOGIN, "?????"));
-		m_passwordEdit.setText(settings.getString(IGDSSettings.PASSWORD, "?????"));
-		m_rememberCheck.setChecked(settings.getBoolean(IGDSSettings.REMEMBER, false));
+		Settings settings = new Settings(this);
+		if (settings.isRememberMe()) {
+			m_loginEdit.setText(settings.getLogin());
+			m_passwordEdit.setText(settings.getPassword());
+			m_rememberCheck.setChecked(true);
+		} else {
+			m_loginEdit.setText("");
+			m_passwordEdit.setText("");
+			m_rememberCheck.setChecked(false);
+		}
 	}
 	
 	private void initButtons() {
@@ -151,8 +160,10 @@ public class LoginActivity extends Activity {
 		String login = m_loginEdit.getText().toString();
 		String password = m_passwordEdit.getText().toString();
 		String channel = login;
-		String serverUrl = new Settings(this).getPreferences().getString(
-				IGDSSettings.SERVER_URL, "");
+		Settings settings = new Settings(this);
+		String serverUrl = settings.getServerUrl();
+		//String serverUrl = new Settings(this).getPreferences().getString(
+		//		IGDSSettings.SERVER_URL, "");
 		String authToken = "";
 		
 		JSONObject JSONResponse = null;
@@ -179,9 +190,13 @@ public class LoginActivity extends Activity {
 			return;
 		}
 		
-		// If remember checkbox is checked then save login and password
-		// else save them as empty
-		// TODO
+		if (m_rememberCheck.isChecked()) {
+			settings.setLogin(m_loginEdit.getText().toString());
+			settings.setPassword(m_passwordEdit.getText().toString());
+			settings.setRememberMe(true);
+		} else {
+			settings.setRememberMe(false);
+		}
 		
 		Intent i = new Intent(this, MainActivity.class);
 		i.putExtra(AUTH_TOKEN, authToken);
