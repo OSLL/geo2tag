@@ -95,7 +95,7 @@ HEADERS += \
     ../../../../3rdparty/qjson-0.7.1/src/stack.hh \
     ../../../../3rdparty/qjson-0.7.1/src/location.hh \
     ../../../../3rdparty/qjson-0.7.1/src/position.hh \
-    ../../../common/inc/ErrnoTypes.h
+
 OTHER_FILES += \
     qml/RecButton.qml\
     qml/images/strip.png \
