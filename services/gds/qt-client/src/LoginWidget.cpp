@@ -33,6 +33,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDebug>
+#include <QMessageBox>
 #include "defines.h"
 
 
@@ -41,6 +42,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
 {
     m_loginEdit = new QLineEdit(this);
     m_passwordEdit = new QLineEdit(this);
+    m_passwordEdit->setEchoMode(QLineEdit::Password);
     m_rememberCheck = new QCheckBox("Remember me", this);
     m_signInButton = new QPushButton("Sign in", this);
     m_createAccountButton = new QPushButton("Create account", this);
@@ -48,8 +50,6 @@ LoginWidget::LoginWidget(QWidget *parent) :
     initGUI();
 
     m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
-    // TODO read settings!!!
-    m_loginQuery->setUrl(LOGIN_HTTP_URL);
 
     connect(m_signInButton, SIGNAL(clicked()),
              this, SLOT(onSignInClicked()));
@@ -61,6 +61,19 @@ LoginWidget::LoginWidget(QWidget *parent) :
             this, SLOT(onLoginError(int)));
     connect(m_loginQuery, SIGNAL(errorOccured(QString)),
             this, SLOT(onLoginNetworkError(QString)));
+}
+
+void LoginWidget::fill()
+{
+    if (m_settings.isRememberMe()) {
+        m_loginEdit->setText(m_settings.getLogin());
+        m_passwordEdit->setText(m_settings.getPassword());
+        m_rememberCheck->setChecked(true);
+    } else {
+        m_loginEdit->setText("");
+        m_passwordEdit->setText("");
+        m_rememberCheck->setChecked(false);
+    }
 }
 
 void LoginWidget::initGUI()
@@ -75,8 +88,6 @@ void LoginWidget::initGUI()
     mainLayout->addWidget(m_createAccountButton);
     mainLayout->addStretch();
     this->setLayout(mainLayout);
-
-    m_passwordEdit->setEchoMode(QLineEdit::Password);
 }
 
 void LoginWidget::onSignInClicked()
@@ -85,12 +96,14 @@ void LoginWidget::onSignInClicked()
     QString login = m_loginEdit->text();
     QString password = m_passwordEdit->text();
     m_loginQuery->setQuery(login, password);
+    m_loginQuery->setUrl(m_settings.getServerUrl());
     m_loginQuery->doRequest();
 }
 
 void LoginWidget::onCreateAccountClicked()
 {
     qDebug() << "creating account";
+    emit createAccountRequested();
 }
 
 void LoginWidget::onLoginConnected()
@@ -98,17 +111,29 @@ void LoginWidget::onLoginConnected()
     qDebug() << "logged in";
     QString auth_token = m_loginQuery->getUser()->getToken();
     qDebug() << "token: " << auth_token;
+    // TODO check remember and save if neede
+    if (m_rememberCheck->checkState()) {
+        m_settings.setLogin(m_loginEdit->text());
+        m_settings.setPassword(m_passwordEdit->text());
+        m_settings.setRememberMe(true);
+    } else {
+        m_settings.setLogin("");
+        m_settings.setPassword("");
+        m_settings.setRememberMe(false);
+    }
     emit signedIn(auth_token);
 }
 
 void LoginWidget::onLoginError(int errno)
 {
     qDebug() << "login error, errno = " << errno;
+    QMessageBox::information(this, "Geo Doctor Search","Internal error: code " + QString("%1").arg(errno));
 }
 
 void LoginWidget::onLoginNetworkError(QString error)
 {
     qDebug() << "Network error: " << error;
+    QMessageBox::information(this, "Geo Doctor Search","Network error");
 }
 
 

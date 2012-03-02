@@ -1,5 +1,6 @@
 #include "inc/MainWidget.h"
 #include <QVBoxLayout>
+#include <QDebug>
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)

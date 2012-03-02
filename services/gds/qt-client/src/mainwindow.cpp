@@ -8,9 +8,16 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    if (m_settings.isSettingsEmpty()) {
+        m_settings.setDefaultSettings();
+    }
+
     m_stackedWidget = new QStackedWidget(this);
     m_loginWidget = new LoginWidget(this);
+    m_loginWidget->fill();
+    m_createAccountWidget = new CreateAccountWidget(this);
     m_mainWidget = new MainWidget(this);
+    m_settingsWidget = new SettingsWidget(this);
 
     createActions();
     createMenus();
@@ -19,7 +26,15 @@ MainWindow::MainWindow(QWidget *parent)
     m_GDSService = QSharedPointer<GDSService>(new GDSService());
 
     connect(m_loginWidget, SIGNAL(signedIn(QString)),
-            this, SLOT(onLoginSignedIn(QString)));;
+            this, SLOT(onLoginSignedIn(QString)));
+    connect(m_loginWidget, SIGNAL(createAccountRequested()),
+            this, SLOT(onCreateAccountRequested()));
+    connect(m_createAccountWidget, SIGNAL(finished()),
+            this, SLOT(onCreateAccountFinished()));
+    connect(m_settingsWidget, SIGNAL(saved()),
+            this, SLOT(onSettingsSaved()));
+    connect(m_settingsWidget, SIGNAL(cancelled()),
+            this, SLOT(onSettingsCancelled()));
 
     qDebug() << "MainWindow created";
 }
@@ -33,8 +48,12 @@ void MainWindow::createActions()
 {
     m_settingsAction = new QAction("Settings", this);
     m_signOutAction = new QAction("Sign out", this);
+    m_signOutAction->setVisible(false);
+    m_isSignedIn = false;
     connect(m_settingsAction, SIGNAL(triggered()),
-            this, SLOT(testHideLogout()));
+            this, SLOT(onSettingsAction()));
+    connect(m_signOutAction, SIGNAL(triggered()),
+            this, SLOT(onSignOutAction()));
 }
 
 void MainWindow::createMenus()
@@ -49,7 +68,9 @@ void MainWindow::initGUI()
 {
     this->setCentralWidget(m_stackedWidget);
     m_stackedWidget->addWidget(m_loginWidget);
+    m_stackedWidget->addWidget(m_createAccountWidget);
     m_stackedWidget->addWidget(m_mainWidget);
+    m_stackedWidget->addWidget(m_settingsWidget);
 
 }
 
@@ -57,10 +78,51 @@ void MainWindow::onLoginSignedIn(const QString &authToken)
 {
     m_stackedWidget->setCurrentWidget(m_mainWidget);
     m_mainWidget->signIn(authToken);
+    m_signOutAction->setVisible(true);
+    m_isSignedIn = true;
 }
 
-void MainWindow::onMainSignedOut()
+void MainWindow::onCreateAccountRequested()
 {
+    m_stackedWidget->setCurrentWidget(m_createAccountWidget);
+}
+
+void MainWindow::onCreateAccountFinished()
+{
+    m_stackedWidget->setCurrentWidget(m_loginWidget);
+}
+
+void MainWindow::onSettingsSaved()
+{
+    if (m_isSignedIn) {
+        m_stackedWidget->setCurrentWidget(m_mainWidget);
+    } else {
+        m_stackedWidget->setCurrentWidget(m_loginWidget);
+    }
+}
+
+void MainWindow::onSettingsCancelled()
+{
+    if (m_isSignedIn) {
+        m_stackedWidget->setCurrentWidget(m_mainWidget);
+    } else {
+        m_stackedWidget->setCurrentWidget(m_loginWidget);
+    }
+}
+
+void MainWindow::onSettingsAction()
+{
+    m_settingsWidget->fill();
+    m_stackedWidget->setCurrentWidget(m_settingsWidget);
+}
+
+void MainWindow::onSignOutAction()
+{
+    m_mainWidget->signOut();
+    m_loginWidget->fill();
+    m_stackedWidget->setCurrentWidget(m_loginWidget);
+    m_isSignedIn = false;
+    m_signOutAction->setVisible(false);
 }
 
 void MainWindow::setOrientation(ScreenOrientation orientation)
@@ -115,11 +177,6 @@ void MainWindow::showExpanded()
 #else
     show();
 #endif
-}
-
-void MainWindow::testHideLogout()
-{
-    m_signOutAction->setVisible(false);
 }
 
 

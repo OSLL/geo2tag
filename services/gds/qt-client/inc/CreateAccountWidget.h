@@ -1,3 +1,5 @@
+#ifndef CREATEACCOUNTWIDGET_H
+#define CREATEACCOUNTWIDGET_H
 /*
  * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
  *
@@ -29,48 +31,47 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#ifndef LOGINWIDGET_H
-#define LOGINWIDGET_H
-
 #include <QWidget>
 #include <QLineEdit>
-#include <QCheckBox>
 #include <QPushButton>
-#include "LoginQuery.h"
-#include "Settings.h"
 
-class LoginWidget : public QWidget
+
+class CreateAccountWidget : public QWidget
 {
     Q_OBJECT
 
-    Settings m_settings;
-    LoginQuery *m_loginQuery;
+    QString m_login;
+    QString m_password;
+    QString m_authToken;
 
     // GUI
     QLineEdit *m_loginEdit;
     QLineEdit *m_passwordEdit;
-    QCheckBox *m_rememberCheck;
-    QPushButton *m_signInButton;
-    QPushButton *m_createAccountButton;
+    QLineEdit *m_rePasswordEdit;
+    QPushButton *m_registerButton;
+    QPushButton *m_cancelButton;
+
 
 public:
-    explicit LoginWidget(QWidget *parent = 0);
-    void fill();
-
+    explicit CreateAccountWidget(QWidget *parent = 0);
+    
 signals:
-    void signedIn(const QString& authToken);
-    void createAccountRequested();
-
+    void finished();
+    
 public slots:
-    void onSignInClicked();
-    void onCreateAccountClicked();
-    void onLoginConnected();
-    void onLoginError(int errno);
-    void onLoginNetworkError(QString);
+    void onRegisterClicked();
+    void onCancelClicked();
+    //void onUserAdded();
+    //void onLoginConnected();
+    //void onChannelAdded();
+
+    void onLogicError(int errno);
+    void onNetworkError(QString error);
+
 
 private:
     void initGUI();
-
+    
 };
 
-#endif // LOGINWIDGET_H
+#endif // CREATEACCOUNTWIDGET_H

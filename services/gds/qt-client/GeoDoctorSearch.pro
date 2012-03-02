@@ -27,12 +27,18 @@ SOURCES += src/main.cpp \
     src/mainwindow.cpp \
     src/GDSService.cpp \
     src/LoginWidget.cpp \
-    src/MainWidget.cpp
+    src/MainWidget.cpp \
+    src/CreateAccountWidget.cpp \
+    src/Settings.cpp \
+    src/SettingsWidget.cpp
 HEADERS += inc/defines.h \
     inc/mainwindow.h \
     inc/GDSService.h \
     inc/LoginWidget.h \
-    inc/MainWidget.h
+    inc/MainWidget.h \
+    inc/CreateAccountWidget.h \
+    inc/Settings.h \
+    inc/SettingsWidget.h
 
 # qsjon library
 SOURCES += ../../../3rdparty/qjson-0.7.1/src/serializerrunnable.cpp \
