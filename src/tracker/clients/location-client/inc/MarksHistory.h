@@ -23,4 +23,4 @@ class MarksHistory : public QObject
   public slots:
 
 };
-#endif // MARKSHISTORY_H
+#endif                                  // MARKSHISTORY_H

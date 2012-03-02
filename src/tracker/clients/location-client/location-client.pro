@@ -1,12 +1,15 @@
 QML_IMPORT_PATH = qml
 TARGET = location-client
 TEMPLATE=app
+
+QT += declarative network
+##kkvDEFINES += Q_WS_SYMBIAN
+
+
 CONFIG += mobility network debug
 CONFIG += qdeclarative-boostable
 MOBILITY += location
-LIBS+= -lQtLocation
-QT += declarative network
-DEFINES += Q_WS_SYMBIAN
+
 
 VERSION = 0.0.1
 INSTALLS += location-client
@@ -91,7 +94,8 @@ HEADERS += \
     ../../../../3rdparty/qjson-0.7.1/src/json_parser.hh \
     ../../../../3rdparty/qjson-0.7.1/src/stack.hh \
     ../../../../3rdparty/qjson-0.7.1/src/location.hh \
-    ../../../../3rdparty/qjson-0.7.1/src/position.hh
+    ../../../../3rdparty/qjson-0.7.1/src/position.hh \
+    ../../../common/inc/ErrnoTypes.h
 OTHER_FILES += \
     qml/RecButton.qml\
     qml/images/strip.png \
@@ -112,7 +116,14 @@ OTHER_FILES += \
     qtc_packaging/debian_fremantle/copyright \
     qtc_packaging/debian_fremantle/control \
     qtc_packaging/debian_fremantle/compat \
-    qtc_packaging/debian_fremantle/changelog
+    qtc_packaging/debian_fremantle/changelog \
+    qtc_packaging/debian_harmattan/rules \
+    qtc_packaging/debian_harmattan/README \
+    qtc_packaging/debian_harmattan/manifest.aegis \
+    qtc_packaging/debian_harmattan/copyright \
+    qtc_packaging/debian_harmattan/control \
+    qtc_packaging/debian_harmattan/compat \
+    qtc_packaging/debian_harmattan/changelog
 
 maemo5 {
     target.path = /opt/bin

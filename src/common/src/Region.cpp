@@ -42,46 +42,47 @@
 #include "Region.h"
 #include <QPolygonF>
 #include <QDebug>
-namespace common {
-Region::Region():m_points(new DataMarks)
+namespace common
 {
-}
-
-Region::Region(const QSharedPointer<DataMarks>& points):m_points(points)
-{
-}
-
-const QSharedPointer<DataMarks>&Region::getPoints() const
-{
-  return m_points;
-}
-
-void Region::setPoints(const QSharedPointer<DataMarks>& points)
-{
-  m_points = points;
-}
-
-void Region::addPoint(const QSharedPointer<DataMark>& point)
-{
-  m_points->push_back(point);
-}
-
-bool Region::atRegion(const QSharedPointer<DataMark>& point)
-{
-  if (m_points.isNull() || m_points->size() == 0) return false;
-
-  QPolygonF polygon;
-  for (int i=0;i<m_points->size();i++)
+  Region::Region():m_points(new DataMarks)
   {
-    polygon << QPointF(m_points->at(i)->getLatitude(),m_points->at(i)->getLongitude());
   }
-  polygon << QPointF(m_points->at(0)->getLatitude(),m_points->at(0)->getLongitude());
-  return polygon.containsPoint(QPointF(point->getLatitude(),point->getLongitude()), Qt::OddEvenFill);
 
-}
+  Region::Region(const QSharedPointer<DataMarks>& points):m_points(points)
+  {
+  }
 
-Region::~Region()
-{
-}
+  const QSharedPointer<DataMarks>&Region::getPoints() const
+  {
+    return m_points;
+  }
+
+  void Region::setPoints(const QSharedPointer<DataMarks>& points)
+  {
+    m_points = points;
+  }
+
+  void Region::addPoint(const QSharedPointer<DataMark>& point)
+  {
+    m_points->push_back(point);
+  }
+
+  bool Region::atRegion(const QSharedPointer<DataMark>& point)
+  {
+    if (m_points.isNull() || m_points->size() == 0) return false;
+
+    QPolygonF polygon;
+    for (int i=0;i<m_points->size();i++)
+    {
+      polygon << QPointF(m_points->at(i)->getLatitude(),m_points->at(i)->getLongitude());
+    }
+    polygon << QPointF(m_points->at(0)->getLatitude(),m_points->at(0)->getLongitude());
+    return polygon.containsPoint(QPointF(point->getLatitude(),point->getLongitude()), Qt::OddEvenFill);
+
+  }
+
+  Region::~Region()
+  {
+  }
 
 }

@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _ShapeFilter_H_9AD98461_22F5_4885_9FAA_2575F66F4DC6_INCLUDED_
 #define _ShapeFilter_H_9AD98461_22F5_4885_9FAA_2575F66F4DC6_INCLUDED_
 
@@ -50,13 +49,12 @@ class ShapeFilter : public Filter
 {
   QSharedPointer<FShape> m_shape;
 
-public:
-  ShapeFilter(const QSharedPointer<FShape> &shape);
+  public:
+    ShapeFilter(const QSharedPointer<FShape> &shape);
 
-  ~ShapeFilter();
+    ~ShapeFilter();
 
-  bool filtrate(const QSharedPointer<DataMark> &mark);
+    bool filtrate(const QSharedPointer<DataMark> &mark);
 
-}; // class ShapeFilter
-
-#endif //_ShapeFilter_H_9AD98461_22F5_4885_9FAA_2575F66F4DC6_INCLUDED_
+};                                      // class ShapeFilter
+#endif                                  //_ShapeFilter_H_9AD98461_22F5_4885_9FAA_2575F66F4DC6_INCLUDED_

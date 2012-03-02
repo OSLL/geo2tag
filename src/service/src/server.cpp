@@ -107,18 +107,20 @@ QMap<QString, QString> parseQuery(const QString& string)
   return map;
 }
 
+
 QString Server::extractRESTQuery()
 {
   QString query_string(FCGX_GetParam("PATH_INFO", m_cgi.envp));
-// remove first simbol - slash
+  // remove first simbol - slash
   return query_string.right(query_string.size()-1);
 }
 
+
 QByteArray Server::process( const QByteArray &data)
 {
-//  QMap<QString, QString> queryParameters = parseQuery(query);
+  //  QMap<QString, QString> queryParameters = parseQuery(query);
   common::DbObjectsCollection &dboc = common::DbObjectsCollection::getInstance();
-//  QByteArray result = dboc.process(queryParameters.value("query"), data);
+  //  QByteArray result = dboc.process(queryParameters.value("query"), data);
   QByteArray result = dboc.process(extractRESTQuery(), data);
   return result;
 }

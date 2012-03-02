@@ -12,28 +12,27 @@
 #include "MarksHistory.h"
 //#include "SubscribeChannelQuery.h"
 
-
 class Client : public QObject
 {
-    Q_OBJECT
-private:
-  int m_trackInterval;
-  bool m_authentificated;
+  Q_OBJECT
+    private:
+    int m_trackInterval;
+    bool m_authentificated;
 
-  QTimer * m_timer;
+    QTimer * m_timer;
 
-  WriteTagQuery * m_addNewMarkQuery;
- // SubscribeChannelQuery *m_subscribeChannelQuery;
-  MarksHistory * m_history;
+    WriteTagQuery * m_addNewMarkQuery;
+    // SubscribeChannelQuery *m_subscribeChannelQuery;
+    MarksHistory * m_history;
 
-  QString m_lastError;
-  LoginQuery * m_loginQuery;
-  QSharedPointer<common::User> m_user;
-  QNetworkConfigurationManager * m_netManager;
+    QString m_lastError;
+    LoginQuery * m_loginQuery;
+    QSharedPointer<common::User> m_user;
+    QNetworkConfigurationManager * m_netManager;
 
-  void pause(int msecs);
+    void pause(int msecs);
 
-public:
+  public:
     explicit Client(QObject *parent = 0);
     // stub for authentification mechanizm
 
@@ -43,17 +42,17 @@ public:
     void sendHistory();
     bool isTracking();
 
-private slots:
+  private slots:
     void onError(QString error);
     void onError(int err);
     void onAuthentificated();
     void onMarkAdded();
     void track();
-signals:
+    signals:
     void error(QVariant error);
     void authentificated(QVariant);
     void authRequest();
-public slots:
+  public slots:
     void auth(QString user, QString pass);
     void startTrack();
     void stopTrack();
@@ -66,7 +65,5 @@ public slots:
     // When history is full
     void onHistoryFull();
 
-    
 };
-
-#endif // CLIENT_H
+#endif                                  // CLIENT_H

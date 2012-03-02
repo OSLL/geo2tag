@@ -54,11 +54,13 @@ FilterPolygonRequestJSON(parent)
 {
 }
 
+
 QByteArray FilterFenceRequestJSON::getJson() const
 {
   // TODO
   return FilterPolygonRequestJSON::getJson();
 }
+
 
 bool FilterFenceRequestJSON::parseJson(const QByteArray& data)
 {
@@ -74,7 +76,7 @@ bool FilterFenceRequestJSON::parseJson(const QByteArray& data)
 
   setAltitude1(alt);
   alt = altitudeShift["altitude2"].toDouble(&ok) ;
-  if (!ok)    return false;  
+  if (!ok)    return false;
   setAltitude2(altitudeShift["altitude2"].toDouble(&ok));
   return true;
 }

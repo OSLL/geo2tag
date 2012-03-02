@@ -45,53 +45,65 @@ FilterRequestJSON::FilterRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
+
 FilterRequestJSON::~FilterRequestJSON()
 {
 }
+
 
 void FilterRequestJSON::setShape(const QSharedPointer<FShape> &shape)
 {
   m_shape = shape;
 }
+
+
 QSharedPointer<FShape>& FilterRequestJSON::getShape()
 {
   return m_shape;
 }
+
 
 void FilterRequestJSON::setTimeFrom(QDateTime timeFrom)
 {
   m_timeFrom = timeFrom;
 }
 
+
 QDateTime FilterRequestJSON::getTimeFrom() const
 {
   return m_timeFrom;
 }
+
 
 void FilterRequestJSON::setTimeTo(QDateTime timeTo)
 {
   m_timeTo = timeTo;
 }
 
+
 QDateTime FilterRequestJSON::getTimeTo() const
 {
   return m_timeTo;
 }
+
 
 void FilterRequestJSON::setAltitude1(double alt)
 {
   m_alt1 = alt;
 }
 
+
 void FilterRequestJSON::setAltitude2(double alt)
 {
   m_alt2 = alt;
 }
 
+
 double FilterRequestJSON::getAltitude1() const
 {
   return m_alt1;
 }
+
 
 double FilterRequestJSON::getAltitude2() const
 {

@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FilterPolygonRequestJSON_H_C15883FE_A483_44F2_B574_5D55BC854269_INCLUDED_
 #define _FilterPolygonRequestJSON_H_C15883FE_A483_44F2_B574_5D55BC854269_INCLUDED_
 
@@ -47,13 +46,12 @@
 
 class FilterPolygonRequestJSON : public FilterRequestJSON
 {
-public:
-  FilterPolygonRequestJSON(QObject *parent=0);
+  public:
+    FilterPolygonRequestJSON(QObject *parent=0);
 
-  QByteArray getJson() const;
+    QByteArray getJson() const;
 
-  bool parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 
-}; // class FilterPolygonRequestJSON
-  
-#endif //_FilterPolygonRequestJSON_H_C15883FE_A483_44F2_B574_5D55BC854269_INCLUDED_
+};                                      // class FilterPolygonRequestJSON
+#endif                                  //_FilterPolygonRequestJSON_H_C15883FE_A483_44F2_B574_5D55BC854269_INCLUDED_

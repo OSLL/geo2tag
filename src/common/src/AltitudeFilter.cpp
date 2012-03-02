@@ -47,9 +47,11 @@ AltitudeFilter::AltitudeFilter(double alt1, double alt2) : Filter ()
   m_alt2 = alt2;
 }
 
+
 AltitudeFilter::~AltitudeFilter()
 {
 }
+
 
 bool AltitudeFilter::filtrate(const QSharedPointer<DataMark> &mark)
 {

@@ -46,9 +46,11 @@ ShapeFilter::ShapeFilter(const QSharedPointer<FShape> &shape) : Filter()
   m_shape = shape;
 }
 
+
 ShapeFilter::~ShapeFilter()
 {
 }
+
 
 bool ShapeFilter::filtrate(const QSharedPointer<DataMark> &mark)
 {

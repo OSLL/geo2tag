@@ -46,8 +46,8 @@
 
 // QtMobility API headers
 // Location
-#include <qgeopositioninfosource.h>
-#include <qgeopositioninfo.h>
+#include <QGeoPositionInfoSource>
+#include <QGeoPositionInfo>
 
 // QtMobility namespace
 QTM_USE_NAMESPACE

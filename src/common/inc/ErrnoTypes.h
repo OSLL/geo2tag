@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _ErrnoTypes_H_9465846A_3F83_4512_8C8B_EE2A40A357F9_INCLUDED_
 #define _ErrnoTypes_H_9465846A_3F83_4512_8C8B_EE2A40A357F9_INCLUDED_
 
@@ -67,5 +66,4 @@ enum geo2tagError
 };
 
 const QString getErrorByCode(int error);
-
-#endif //_ErrnoTypes_H_9465846A_3F83_4512_8C8B_EE2A40A357F9_INCLUDED_
+#endif                                  //_ErrnoTypes_H_9465846A_3F83_4512_8C8B_EE2A40A357F9_INCLUDED_

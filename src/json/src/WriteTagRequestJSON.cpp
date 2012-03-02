@@ -76,12 +76,12 @@ bool WriteTagRequestJSON::parseJson(const QByteArray &data)
 
   QSharedPointer<common::User>  user(new JsonUser("unknown", "unknown", token));
   QSharedPointer<Channel> channel(new JsonChannel(channel_name, "unknown"));
-  
+
   QSharedPointer<DataMark> tag(new JsonDataMark(altitude, latitude, longitude, title, description, link, time));
   tag->setChannel(channel);
   tag->setUser(user);
   m_tagsContainer->push_back(tag);
-  
+
   return true;
 }
 

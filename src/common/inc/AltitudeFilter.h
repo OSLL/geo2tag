@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _AltitudeFilter_H_89C1C268_7B22_4E8A_B078_B4C7EC6FA5D6_INCLUDED_
 #define _AltitudeFilter_H_89C1C268_7B22_4E8A_B078_B4C7EC6FA5D6_INCLUDED_
 
@@ -50,14 +49,12 @@ class AltitudeFilter : public Filter
   double m_alt1;
   double m_alt2;
 
-public:
-  AltitudeFilter(double alt1, double alt2);
+  public:
+    AltitudeFilter(double alt1, double alt2);
 
-  ~AltitudeFilter();
+    ~AltitudeFilter();
 
-  bool filtrate(const QSharedPointer<DataMark> &mark);
+    bool filtrate(const QSharedPointer<DataMark> &mark);
 
-}; // class AltitudeFilter
-  
-
-#endif //_AltitudeFilter_H_89C1C268_7B22_4E8A_B078_B4C7EC6FA5D6_INCLUDED_
+};                                      // class AltitudeFilter
+#endif                                  //_AltitudeFilter_H_89C1C268_7B22_4E8A_B078_B4C7EC6FA5D6_INCLUDED_

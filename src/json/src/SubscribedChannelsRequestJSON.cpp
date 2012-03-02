@@ -72,7 +72,7 @@ bool SubscribedChannelsRequestJSON::parseJson(const QByteArray &data)
   QVariantMap result = parser.parse(data, &ok).toMap();
 
   if (!ok) return false;
-  
+
   QString authToken =    result["auth_token"].toString();
   QSharedPointer<common::User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
   m_usersContainer->push_back(dummyUser);

@@ -234,7 +234,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
@@ -280,9 +280,8 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
-
 
     QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
     syslog(LOG_INFO,"Adding mark with altitude = %f",dummyTag->getAltitude());
@@ -325,16 +324,13 @@ namespace common
       return answer;
     }
 
-    
     m_updateThread->lockWriting();
     m_tagsContainer->push_back(realTag);
     m_dataChannelsMap->insert(realChannel, realTag);
     m_updateThread->unlockWriting();
 
-
     response.setErrno(SUCCESS);
     response.addTag(realTag);
-
 
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
@@ -351,7 +347,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -380,7 +376,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -410,8 +406,8 @@ namespace common
         double lat2 = mark->getLatitude();
         double lon2 = mark->getLongitude();
 
-        if ( DataMark::getDistance(lat1, lon1, lat2, lon2) < radius ) 
-           feed.insert(channel, mark);
+        if ( DataMark::getDistance(lat1, lon1, lat2, lon2) < radius )
+          feed.insert(channel, mark);
       }
     }
     response.setData(feed);
@@ -432,7 +428,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
@@ -502,7 +498,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
     // Look for user with the same name
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
@@ -549,7 +545,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
@@ -611,7 +607,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
@@ -660,7 +656,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
@@ -796,7 +792,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
@@ -845,7 +841,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
@@ -961,7 +957,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
@@ -1030,7 +1026,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
@@ -1101,7 +1097,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -1128,7 +1124,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
@@ -1212,7 +1208,7 @@ namespace common
   }
 
   QByteArray DbObjectsCollection::internalProcessFilterQuery(FilterRequestJSON& request,
-  const QByteArray& data, bool is3d)
+    const QByteArray& data, bool is3d)
   {
     Filtration filtration;
     FilterDefaultResponseJSON response;
@@ -1222,7 +1218,7 @@ namespace common
     {
       response.setErrno(INCORRECT_JSON_ERROR);
       answer.append(response.getJson());
-       return answer;
+      return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);

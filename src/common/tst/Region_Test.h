@@ -36,7 +36,6 @@
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-
 #include <QObject>
 #include <QtTest/QtTest>
 #include <QSignalSpy>
@@ -60,38 +59,37 @@ namespace Test
   {
     Q_OBJECT;
 
-  
-  public:
-    Region_Test(QObject *parent =0) : QObject(parent)
-    {
-    }
-    
-  
-  private slots:
-  
-    void test1()
-    {
-		common::Region *  m_tstObject = new common::Region(); // Object for testing
+    public:
+      Region_Test(QObject *parent =0) : QObject(parent)
+      {
+      }
 
-		QSharedPointer<DataMark> p1(new JsonDataMark(0.,0.,0.,"","","",QDateTime::currentDateTime()));
-		QSharedPointer<DataMark> p2(new JsonDataMark(0.,1000.,0.,"","","",QDateTime::currentDateTime()));
-		QSharedPointer<DataMark> p3(new JsonDataMark(0.,1000.,1000.,"","","",QDateTime::currentDateTime()));
-		QSharedPointer<DataMark> p4(new JsonDataMark(0.,0.,1000.,"","","",QDateTime::currentDateTime()));
+    private slots:
 
-//		m_tstObject->addPoint(QSharedPointer<DataMark>(new JsonDataMark(0.,0.,0.,"","","",QDateTime::currentDateTime())));
-//		m_tstObject->addPoint(QSharedPointer<DataMark>(new JsonDataMark(1000.,0.,0.,"","","",QDateTime::currentDateTime())));
-//		m_tstObject->addPoint(QSharedPointer<DataMark>(new JsonDataMark(1000.,1000.,0.,"","","",QDateTime::currentDateTime())));
-//		m_tstObject->addPoint(QSharedPointer<DataMark>(new JsonDataMark(0.,1000.,0.,"","","",QDateTime::currentDateTime())));
+      void test1()
+      {
+                                        // Object for testing
+        common::Region *  m_tstObject = new common::Region();
 
-		m_tstObject->addPoint(p1);
-		m_tstObject->addPoint(p2);
-		m_tstObject->addPoint(p3);
-		m_tstObject->addPoint(p4);
-		QVERIFY(m_tstObject->atRegion(POINT_IN_REGION));
-		QVERIFY(!m_tstObject->atRegion(POINT_OUT_REGION));
-     
-    }
-  
-  }; // class Region_Test
+        QSharedPointer<DataMark> p1(new JsonDataMark(0.,0.,0.,"","","",QDateTime::currentDateTime()));
+        QSharedPointer<DataMark> p2(new JsonDataMark(0.,1000.,0.,"","","",QDateTime::currentDateTime()));
+        QSharedPointer<DataMark> p3(new JsonDataMark(0.,1000.,1000.,"","","",QDateTime::currentDateTime()));
+        QSharedPointer<DataMark> p4(new JsonDataMark(0.,0.,1000.,"","","",QDateTime::currentDateTime()));
 
-} // end of namespace Test
+        //		m_tstObject->addPoint(QSharedPointer<DataMark>(new JsonDataMark(0.,0.,0.,"","","",QDateTime::currentDateTime())));
+        //		m_tstObject->addPoint(QSharedPointer<DataMark>(new JsonDataMark(1000.,0.,0.,"","","",QDateTime::currentDateTime())));
+        //		m_tstObject->addPoint(QSharedPointer<DataMark>(new JsonDataMark(1000.,1000.,0.,"","","",QDateTime::currentDateTime())));
+        //		m_tstObject->addPoint(QSharedPointer<DataMark>(new JsonDataMark(0.,1000.,0.,"","","",QDateTime::currentDateTime())));
+
+        m_tstObject->addPoint(p1);
+        m_tstObject->addPoint(p2);
+        m_tstObject->addPoint(p3);
+        m_tstObject->addPoint(p4);
+        QVERIFY(m_tstObject->atRegion(POINT_IN_REGION));
+        QVERIFY(!m_tstObject->atRegion(POINT_OUT_REGION));
+
+      }
+
+  };                                    // class Region_Test
+
+}                                       // end of namespace Test

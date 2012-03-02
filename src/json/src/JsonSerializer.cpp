@@ -115,6 +115,7 @@ void JsonSerializer::setStatusMessage(const QString &s)
   m_statusMessage = s;
 }
 
+
 const int& JsonSerializer::getErrno() const
 {
   return m_errno;
@@ -125,4 +126,3 @@ void JsonSerializer::setErrno(const int &s)
 {
   m_errno = s;
 }
-

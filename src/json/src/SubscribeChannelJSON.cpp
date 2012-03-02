@@ -87,7 +87,7 @@ bool SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
   m_channelsContainer->push_back(dummyChannel);
   QSharedPointer<common::User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
   m_usersContainer->push_back(dummyUser);
-  
+
   return true;
 }
 

@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_
 #define _FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_
 
@@ -54,23 +53,22 @@ class FilterRequestJSON : public JsonSerializer
   double m_alt1;
   double m_alt2;
 
-public:
-  FilterRequestJSON(QObject *parent = 0);
-  ~FilterRequestJSON();
+  public:
+    FilterRequestJSON(QObject *parent = 0);
+    ~FilterRequestJSON();
 
-  void setShape(const QSharedPointer<FShape> &shape);
-  QSharedPointer<FShape>& getShape();
+    void setShape(const QSharedPointer<FShape> &shape);
+    QSharedPointer<FShape>& getShape();
 
-  void setTimeFrom(QDateTime timeFrom);
-  QDateTime getTimeFrom() const;
+    void setTimeFrom(QDateTime timeFrom);
+    QDateTime getTimeFrom() const;
 
-  void setTimeTo(QDateTime timeTo);
-  QDateTime getTimeTo() const;
+    void setTimeTo(QDateTime timeTo);
+    QDateTime getTimeTo() const;
 
-  void setAltitude1(double alt);
-  void setAltitude2(double alt);
-  double getAltitude1() const;
-  double getAltitude2() const;
-}; // class FilterRequestJSON
-  
-#endif //_FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_
+    void setAltitude1(double alt);
+    void setAltitude2(double alt);
+    double getAltitude1() const;
+    double getAltitude2() const;
+};                                      // class FilterRequestJSON
+#endif                                  //_FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_

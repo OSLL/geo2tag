@@ -39,6 +39,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "ErrnoTypes.h"
+
 class DefaultQuery : public QObject
 {
   Q_OBJECT

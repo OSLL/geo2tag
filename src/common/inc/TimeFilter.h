@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _TimeFilter_H_6FEC6059_BB09_4A0A_BED5_E017346722CD_INCLUDED_
 #define _TimeFilter_H_6FEC6059_BB09_4A0A_BED5_E017346722CD_INCLUDED_
 
@@ -51,14 +50,12 @@ class TimeFilter : public Filter
   QDateTime m_timeFrom;
   QDateTime m_timeTo;
 
-public:
-  TimeFilter(QDateTime timeFrom, QDateTime timeTo);
+  public:
+    TimeFilter(QDateTime timeFrom, QDateTime timeTo);
 
-  ~TimeFilter();
+    ~TimeFilter();
 
-  bool filtrate(const QSharedPointer<DataMark> &mark);
+    bool filtrate(const QSharedPointer<DataMark> &mark);
 
-}; // class TimeFilter
-  
-
-#endif //_TimeFilter_H_6FEC6059_BB09_4A0A_BED5_E017346722CD_INCLUDED_
+};                                      // class TimeFilter
+#endif                                  //_TimeFilter_H_6FEC6059_BB09_4A0A_BED5_E017346722CD_INCLUDED_

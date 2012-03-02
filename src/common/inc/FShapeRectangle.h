@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
 #define _FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
 
@@ -47,10 +46,8 @@
 
 class FShapeRectangle : public FShapePolygon
 {
-public:
-  FShapeRectangle(double lat1, double lon1, double lat2, double lon2);
+  public:
+    FShapeRectangle(double lat1, double lon1, double lat2, double lon2);
 
-}; // class FShapeRectangle
-  
-
-#endif //_FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
+};                                      // class FShapeRectangle
+#endif                                  //_FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
