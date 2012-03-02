@@ -1,5 +1,5 @@
 QML_IMPORT_PATH = qml
-TARGET = ThereAndHere
+TARGET = location-client
 TEMPLATE=app
 CONFIG += mobility network debug
 CONFIG += qdeclarative-boostable
@@ -9,6 +9,7 @@ QT += declarative network
 DEFINES += Q_WS_SYMBIAN
 
 VERSION = 0.0.1
+INSTALLS += location-client
 DEPENDPATH += .
 INCLUDEPATH += . inc \
                  src \
@@ -99,13 +100,25 @@ OTHER_FILES += \
     qml/main.qml \
     qml/NotifyDialog.qml \
     qml/RightPanel.qml \
-    images/strip.png
+    images/strip.png \
+    qtc_packaging/debian_fremantle/rules \
+    qtc_packaging/debian_fremantle/README \
+    qtc_packaging/debian_fremantle/copyright \
+    qtc_packaging/debian_fremantle/control \
+    qtc_packaging/debian_fremantle/compat \
+    qtc_packaging/debian_fremantle/changelog \
+    qtc_packaging/debian_fremantle/rules \
+    qtc_packaging/debian_fremantle/README \
+    qtc_packaging/debian_fremantle/copyright \
+    qtc_packaging/debian_fremantle/control \
+    qtc_packaging/debian_fremantle/compat \
+    qtc_packaging/debian_fremantle/changelog
 
 maemo5 {
-    target.path = /opt/gui/bin
+    target.path = /opt/bin
     INSTALLS += target
 }
-symbian:{
+symbian {
     TARGET = ThereAndHere
 #    TARGET.UID3=0x2004234A
 
@@ -122,7 +135,7 @@ symbian:{
 }
 contains(TEMPLATE,.*lib):DEFINES += QT_SHARED
 contains(MEEGO_EDITION,harmattan) {
-    target.path = /opt/gui/bin
+    target.path = /opt/bin
     INSTALLS += target
 }
 

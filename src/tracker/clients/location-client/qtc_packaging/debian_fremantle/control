@@ -1,0 +1,15 @@
+Source: location-client
+Section: user/hidden
+Priority: optional
+Maintainer: Regina <regina@unknown>
+Build-Depends: debhelper (>= 5), libqt4-dev
+Standards-Version: 3.7.3
+Homepage: <insert the upstream URL, if relevant>
+
+Package: location-client
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: 
+ <insert long description, indented with spaces>
+XB-Maemo-Display-Name: location-client
+XB-Maemo-Icon-26: 

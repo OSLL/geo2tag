@@ -1,4 +1,5 @@
 import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
+
 import com.nokia.meego 1.0
 //import QtMobility.location 1.2
 //import org.maemo.fremantle 1.0  // for Core components
