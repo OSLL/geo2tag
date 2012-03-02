@@ -3,10 +3,13 @@
 
 #include <QWidget>
 #include <QLabel>
+#include "Settings.h"
 
 class MainWidget : public QWidget
 {
     Q_OBJECT
+
+    Settings m_settings;
 
     QLabel *m_label;
 

@@ -85,7 +85,9 @@ QByteArray LoginQuery::getRequestBody() const
 void LoginQuery::processReply(QNetworkReply *reply)
 {
   LoginResponseJSON response;
-  response.parseJson(reply->readAll());
+  if (!response.parseJson(reply->readAll())) {
+      return;
+  }
   if(response.getErrno() == SUCCESS)
   {
     QSharedPointer<common::User> user = response.getUsers()->at(0);
@@ -104,6 +106,11 @@ void LoginQuery::setQuery(const QString& login, const QString& password)
 {
   m_login=login;
   m_password=password;
+}
+
+void LoginQuery::setUrl(const QString &url)
+{
+    DefaultQuery::setUrl(url + LOGIN_HTTP_URL);
 }
 
 

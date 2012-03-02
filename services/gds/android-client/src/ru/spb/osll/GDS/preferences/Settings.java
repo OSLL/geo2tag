@@ -85,6 +85,26 @@ public class Settings {
 					"loadFromXMLFile - exception: " + e.getMessage());
 		}
 	}
+	
+	public String getLogin() {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    return prefs.getString(IGDSSettings.LOGIN, "");
+	}
+	
+	public void setLogin(String login) {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    prefs.edit().putString(IGDSSettings.LOGIN, login).commit();
+	}
+	
+	public String getPassword() {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    return prefs.getString(IGDSSettings.LOGIN, "");
+	}
+	
+	public void setPassword(String login) {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    prefs.edit().putString(IGDSSettings.LOGIN, login).commit();
+	}
 
 	
 	public static SharedPreferences getPreferences(Context c){

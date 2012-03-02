@@ -80,6 +80,8 @@ class LoginQuery: public DefaultQuery
 
     void setQuery(const QString& login, const QString& password);
 
+    void setUrl(const QString &url);
+
     QSharedPointer<common::User> getUser() const;
 
     ~LoginQuery();

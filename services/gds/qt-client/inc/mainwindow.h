@@ -9,18 +9,25 @@
 
 #include "GDSService.h"
 #include "LoginWidget.h"
+#include "CreateAccountWidget.h"
 #include "MainWidget.h"
+#include "SettingsWidget.h"
+#include "Settings.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
     QSharedPointer<GDSService> m_GDSService;
+    bool m_isSignedIn;
+    Settings m_settings;
 
     // GUI
     QStackedWidget *m_stackedWidget;
     LoginWidget *m_loginWidget;
+    CreateAccountWidget *m_createAccountWidget;
     MainWidget *m_mainWidget;
+    SettingsWidget *m_settingsWidget;
     QMenuBar *m_menuBar;
     QMenu *m_menu;
     QAction *m_settingsAction;
@@ -42,9 +49,13 @@ public:
 
 public slots:
     void onLoginSignedIn(const QString& authToken);
-    void onMainSignedOut();
+    void onCreateAccountRequested();
+    void onCreateAccountFinished();
+    void onSettingsSaved();
+    void onSettingsCancelled();
 
-    void testHideLogout();
+    void onSettingsAction();
+    void onSignOutAction();
 
 private:
     void createActions();
