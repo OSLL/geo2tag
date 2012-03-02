@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     createActions();
 
     createMenus();
-    const QString mainQmlApp = QLatin1String("qrc:///main.qml");
+    const QString mainQmlApp = QLatin1String("qrc:///qml/main.qml");
     view =new QDeclarativeView(this);
 
     view->setSource(QUrl(mainQmlApp));

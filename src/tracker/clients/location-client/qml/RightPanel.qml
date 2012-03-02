@@ -31,7 +31,7 @@ Rectangle {
 
     BorderImage {
         id: name
-        source: ":images/strip.png"
+        source: ":../images/strip.png"
         width: 20; height: parent.height
 
     }
