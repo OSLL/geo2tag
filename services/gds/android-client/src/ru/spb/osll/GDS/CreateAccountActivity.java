@@ -197,7 +197,7 @@ public class CreateAccountActivity extends Activity {
 			return;
 		}
 		
-		// Add channel
+		// Add channel for tracking
 		JSONResponse = null;
 		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
 			JSONResponse = new JsonApplyChannelRequest(authToken, login,
