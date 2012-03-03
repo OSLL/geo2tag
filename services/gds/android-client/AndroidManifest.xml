@@ -45,6 +45,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         
+        <uses-library android:name="com.google.android.maps"/>
+        
         <activity android:name=".LoginActivity"
                   android:label="@string/app_name">
             <intent-filter>
@@ -61,6 +63,13 @@
         
         <activity android:name="ru.spb.osll.GDS.MainActivity"
                   android:configChanges="orientation|keyboardHidden"/>
+        
+        <activity android:name="MapTabActivity" android:label="@string/map_tab_name">
+            <intent-filter>
+                <category android:name="android.intent.category.EMBED"></category>
+                <action android:name="android.intent.action.MAIN"></action>
+            </intent-filter>
+        </activity>
         
     </application>
 

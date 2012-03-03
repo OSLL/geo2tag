@@ -37,6 +37,8 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
+import com.google.android.maps.MapView;
+
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
@@ -45,6 +47,7 @@ import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBaseResponse;
 import ru.spb.osll.json.IRequest.IResponse;
 import android.app.Activity;
+import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -55,9 +58,15 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends TabActivity {
 	
 	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final int SIGNOUT_ID = Menu.FIRST + 1;
@@ -70,6 +79,7 @@ public class MainActivity extends Activity {
 	private LocationManager m_locationManager;
 	private boolean m_isDeviceReady = false;
 	private Thread m_trackThread;
+	private TabHost m_TabHost;
 	
 	
 	@Override
@@ -77,6 +87,16 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+		
+	    m_TabHost = getTabHost();
+	    m_TabHost.addTab(m_TabHost.newTabSpec("tab1").setIndicator("SOS").setContent(R.id.sos_tab));
+	    TabSpec tabSpec = m_TabHost.newTabSpec("tab2");
+	    tabSpec.setIndicator("Map");
+	    Context ctx = this.getApplicationContext();
+	    Intent i = new Intent(ctx, MapTabActivity.class);
+	    tabSpec.setContent(i);
+	    m_TabHost.addTab(tabSpec);		
+	    m_TabHost.setCurrentTab(1);
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -94,6 +114,8 @@ public class MainActivity extends Activity {
 		m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 		getLocation();
+		
+		
 	}
 
 	@Override
