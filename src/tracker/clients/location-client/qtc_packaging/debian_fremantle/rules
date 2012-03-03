@@ -28,7 +28,7 @@ build-stamp: configure-stamp
 
 	# Add here commands to compile the package.
 	# $(MAKE) # Uncomment this line for use without Qt Creator
-	#docbook-to-man debian/.sgml > location-client.1
+	#docbook-to-man debian/location-client.sgml > location-client.1
 
 	touch $@
 
@@ -48,8 +48,8 @@ install: build
 	dh_clean -k 
 	dh_installdirs
 
-	# Add here commands to install the package into debian/.
-        $(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/location-client install
+	# Add here commands to install the package into debian/location-client.
+	$(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/location-client install
 
 
 # Build architecture-independent files here.
