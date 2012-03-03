@@ -3,7 +3,7 @@ TARGET = location-client
 TEMPLATE=app
 
 QT += declarative network
-##kkvDEFINES += Q_WS_SYMBIAN
+DEFINES += Q_WS_SYMBIAN
 
 
 CONFIG += mobility network debug
@@ -128,6 +128,12 @@ OTHER_FILES += \
 maemo5 {
     target.path = /opt/bin
     INSTALLS += target
+INCLUDEPATH += . inc \
+                 src \
+               ../../../http_requests/inc \
+               ../../../json/inc \
+               ../../../../3rdparty/qjson-0.7.1/src/ \
+               ../../../common/inc
 }
 symbian {
     TARGET = ThereAndHere
