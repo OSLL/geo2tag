@@ -43,6 +43,7 @@ import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
+import ru.spb.osll.GDS.tracking.TrackingManager;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBaseResponse;
 import ru.spb.osll.json.IRequest.IResponse;
@@ -80,6 +81,7 @@ public class MainActivity extends TabActivity {
 	private boolean m_isDeviceReady = false;
 	private Thread m_trackThread;
 	private TabHost m_TabHost;
+	private TrackingManager m_trackingManager;
 	
 	
 	@Override
@@ -111,9 +113,11 @@ public class MainActivity extends TabActivity {
 			return;
 		}
 		
-		m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		getLocation();
+		m_trackingManager = new TrackingManager(m_authToken, m_channel);
+		
+		//m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		//m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		//getLocation();
 		
 		
 	}
