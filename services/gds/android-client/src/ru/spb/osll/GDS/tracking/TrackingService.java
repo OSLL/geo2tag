@@ -1,7 +1,5 @@
 package ru.spb.osll.GDS.tracking;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.json.JSONObject;
@@ -9,6 +7,7 @@ import org.json.JSONObject;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
+import ru.spb.osll.GDS.utils.GDSUtil;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBaseResponse;
 import ru.spb.osll.json.IRequest.IResponse;
@@ -24,7 +23,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
 public class TrackingService extends Service {
 	
@@ -70,7 +68,7 @@ public class TrackingService extends Service {
 		}
 		if (m_authToken == null || m_channel == null) {
 			Log.v(TrackingManager.LOG, "problem with extracting data");
-			//Toast.makeText(this, "Can't sign in", Toast.LENGTH_LONG).show();
+			broadcastError("Failed to start tracking");
 			stopSelf();
 			return;
 		}
@@ -81,8 +79,9 @@ public class TrackingService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.v(TrackingManager.LOG, "TrackingService destroy");
-		
 		super.onDestroy();
+	
+		stopTracking();		
 		m_locationManager.removeUpdates(m_locationListener);
 		unregisterReceiver(m_internalReceiver);
 	}
@@ -158,7 +157,7 @@ public class TrackingService extends Service {
 		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
 			JSONResponse = new JsonApplyMarkRequest(m_authToken, m_channel, "gds tracker", "",
 					"gds tracker", location.getLatitude(), location.getLongitude(), 0,
-					getTime(new Date()), serverUrl).doRequest();
+					GDSUtil.getTime(new Date()), serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
 		}
@@ -166,14 +165,14 @@ public class TrackingService extends Service {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
 				Log.v(TrackingManager.LOG, "Mark sent successfully");
+				broadcastMarkSent(location);
 			} else {
 				handleError(errno);
 				return;
 			}
 		} else {
 			Log.v(TrackingManager.LOG, "response failed");
-			Toast.makeText(this, "Connection error",
-					Toast.LENGTH_LONG).show();
+			broadcastError("Failed to send location");
 			return;
 		}
 	}
@@ -181,24 +180,16 @@ public class TrackingService extends Service {
 	private void handleError(int errno) {
 		if (errno < 0) {
 			Log.v(TrackingManager.LOG, "bad response received");
-			Toast.makeText(this, "Server error (corrupted response)",
-					Toast.LENGTH_LONG).show();
 		} else if (errno >= IResponse.geo2tagError.values().length) {
 			Log.v(TrackingManager.LOG, "unknown error");
-			Toast.makeText(this, "Unknown server error",
-					Toast.LENGTH_LONG).show();
 		} else if (errno > 0) {
 			String error = IResponse.geo2tagError.values()[errno].name();
 			Log.v(TrackingManager.LOG, "error: " + error);
-			Toast.makeText(this, "Error: " + error,
-					Toast.LENGTH_LONG).show();
 		}
+		broadcastError("Failed to send location");
 	}
 	
-	private static DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
-	public static String getTime(Date date){
-		return dateFormat.format(date);
-	}	
+	
 	
 	public class InternalReceiver extends BroadcastReceiver {
 		public static final String ACTION 	= "osll.gds.tracking.internal";
@@ -226,6 +217,20 @@ public class TrackingService extends Service {
 				break;
 			}
 		}
+	}
+	
+	private void broadcastError(String error) {
+		Intent intent = new Intent(TrackingReceiver.ACTION_TRACKING);
+		intent.putExtra(TrackingReceiver.TYPE_OPERATION, TrackingReceiver.TYPE_ERROR);
+		intent.putExtra(TrackingReceiver.ERROR, error);
+		sendBroadcast(intent);
+	}
+	
+	private void broadcastMarkSent(Location location) {
+		Intent intent = new Intent(TrackingReceiver.ACTION_TRACKING);
+		intent.putExtra(TrackingReceiver.TYPE_OPERATION, TrackingReceiver.TYPE_MARK_SENT);
+		intent.putExtra(TrackingReceiver.LONLAT,  GDSUtil.convertLocation(location));
+		sendBroadcast(intent);
 	}
 
 }

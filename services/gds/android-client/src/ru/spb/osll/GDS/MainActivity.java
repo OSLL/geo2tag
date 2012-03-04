@@ -31,37 +31,21 @@
 
 package ru.spb.osll.GDS;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.json.JSONObject;
-
-import com.google.android.maps.MapView;
-
 import ru.spb.osll.GDS.exception.ExceptionHandler;
-import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.GDS.tracking.TrackingManager;
-import ru.spb.osll.json.JsonApplyMarkRequest;
-import ru.spb.osll.json.JsonBaseResponse;
-import ru.spb.osll.json.IRequest.IResponse;
-import android.app.Activity;
+import ru.spb.osll.GDS.tracking.TrackingReceiver;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
@@ -77,11 +61,11 @@ public class MainActivity extends TabActivity {
 	private String m_authToken = null;
 	private String m_login = null;
 	private String m_channel = null;
-	private LocationManager m_locationManager;
-	private boolean m_isDeviceReady = false;
-	private Thread m_trackThread;
 	private TabHost m_TabHost;
 	private TrackingManager m_trackingManager;
+	private Button m_trackingButton;
+	private TextView m_logView;
+	private TextView m_statusView;
 	
 	
 	@Override
@@ -89,6 +73,7 @@ public class MainActivity extends TabActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+		registerReceiver(m_trackingReceiver, new IntentFilter(TrackingReceiver.ACTION_TRACKING));
 		
 	    m_TabHost = getTabHost();
 	    m_TabHost.addTab(m_TabHost.newTabSpec("tab1").setIndicator("SOS").setContent(R.id.sos_tab));
@@ -98,8 +83,21 @@ public class MainActivity extends TabActivity {
 	    Intent i = new Intent(ctx, MapTabActivity.class);
 	    tabSpec.setContent(i);
 	    m_TabHost.addTab(tabSpec);		
-	    m_TabHost.setCurrentTab(1);
-		
+	    m_TabHost.setCurrentTab(0);
+	    m_TabHost.addTab(m_TabHost.newTabSpec("tab3").setIndicator("Tracking").setContent(R.id.tracking_tab));
+	    m_trackingButton = (Button) findViewById(R.id.tracking_button);
+	    m_trackingButton.setText("Start tracking");
+	    m_trackingButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MainActivity.this.changeTrackingMode();
+			}
+		});
+		m_logView = (TextView) findViewById(R.id.tracking_log);
+		m_statusView = (TextView) findViewById(R.id.tracking_status);
+		m_statusView.setText("Tracking stoped");
+	    
+	    
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 		    m_authToken = extras.getString(LoginActivity.AUTH_TOKEN);
@@ -114,17 +112,12 @@ public class MainActivity extends TabActivity {
 		}
 		
 		m_trackingManager = new TrackingManager(m_authToken, m_channel);
-		
-		//m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		//m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		//getLocation();
-		
-		
+			
 	}
 
 	@Override
 	protected void onDestroy() {
-		stopTracking();
+		unregisterReceiver(m_trackingReceiver);
 		super.onDestroy();
 	}
 
@@ -159,6 +152,52 @@ public class MainActivity extends TabActivity {
         return super.onOptionsItemSelected(item);
     }
 	
+	private TrackingReceiver m_trackingReceiver = new TrackingReceiver() {
+		@Override
+		public void onMarkSent(String lonlat) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					m_statusView.setText("Tracking started");
+					m_trackingButton.setText("Stop tracking");
+				}
+			});
+			appendToLogView("send mark: " + lonlat);
+		}
+		@Override
+		public void onErrorOccured(String error) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					checkTrackingMode();
+				}
+			});
+			appendToLogView(error);
+		}
+	};
+	
+	private void changeTrackingMode() {
+		if (m_trackingManager.isTracking(this)) {
+			m_trackingManager.stopTracking(this);
+			m_statusView.setText("Tracking stoped");
+			m_trackingButton.setText("Start tracking");
+		} else {
+			m_trackingManager.startTracking(this);
+			m_statusView.setText("Starting tracking...");
+			m_trackingButton.setText("Stop tracking");
+		}
+	}
+	
+	private void checkTrackingMode() {
+		if (m_trackingManager.isTracking(this)) {
+			m_statusView.setText("Tracking stoped");
+			m_trackingButton.setText("Start tracking");
+		} else {
+			m_trackingManager.startTracking(this);
+			m_trackingButton.setText("Stop tracking");
+		}
+	}
+	
 	private void showSettings() {
 		Log.v(IGDSSettings.LOG, "opening settings");
 		startActivity(new Intent(this, SettingsActivity.class));
@@ -170,118 +209,34 @@ public class MainActivity extends TabActivity {
 		
 	}
 	
-	public Location getLocation() {
-		Location location = null;
-		String provider = LocationManager.NETWORK_PROVIDER;
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-		if (locationManager != null) {
-			if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				provider = LocationManager.GPS_PROVIDER;
-			}
-			location = locationManager.getLastKnownLocation(provider);
+	
+	
+	private static int lineCount = 0;
+	private static final int maxLines = 20;
+	public void appendToLogView(final String mess){
+		if (lineCount > maxLines){
+			clearLogView();
+			lineCount = 0;
 		}
-		return location;
+		appendToLogViewInternal(mess);
+		lineCount++;
 	}
-	
-	protected void onLocationDeviceStatusChanged(boolean isReady) {
-		Log.v(IGDSSettings.LOG, "onLocationDeviceStatusChanged: " + isReady);
-		if (isReady) {
-			startTracking();
-		} else {
-			stopTracking();
-		}
-	}
-	
-	private LocationListener locationListener = new LocationListener() {
-		public void onLocationChanged(Location location) {
-			if (!m_isDeviceReady && location != null){
-				m_isDeviceReady = true;
-				onLocationDeviceStatusChanged(true);
-			} else if (m_isDeviceReady && location == null) {
-				m_isDeviceReady = false;
-				onLocationDeviceStatusChanged(false);
-			}
-		}
-		public void onStatusChanged(String provider, int status, Bundle extras) {}
-		public void onProviderEnabled(String provider) {}
-		public void onProviderDisabled(String provider) {}
-	};
-	
-	protected void stopTracking(){
-		if (m_trackThread != null){
-			m_trackThread.interrupt();
-		}
-	}
-	
-	protected void startTracking(){
-		if (m_trackThread != null){
-			m_trackThread.interrupt();
-		}
-		m_trackThread = new Thread(new Runnable() {
+	private void appendToLogViewInternal(final String mess){
+		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				while (!Thread.currentThread().isInterrupted()){
-					Location location = getLocation();
-					Log.v(IGDSSettings.LOG, "coords: " + location.getLatitude()
-							+ ", " + location.getLongitude());
-					
-					sendMark(location);
-					
-					SystemClock.sleep(INTERVAL * 1000);
-				}
+				m_logView.append("\n" + mess);
 			}
 		});
-		m_trackThread.start();
 	}
-	
-	private void sendMark(Location location) {
-		String serverUrl = new Settings(this).getPreferences().getString(
-				IGDSSettings.SERVER_URL, "");
-		JSONObject JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
-			JSONResponse = new JsonApplyMarkRequest(m_authToken, m_channel, "gds tracker", "",
-					"gds tracker", location.getLatitude(), location.getLongitude(), 0,
-					getTime(new Date()), serverUrl).doRequest();
-			if (JSONResponse != null) 
-				break;
-		}
-		if (JSONResponse != null) {
-			int errno = JsonBaseResponse.parseErrno(JSONResponse);
-			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				Log.v(IGDSSettings.LOG, "Mark sent successfully");
-			} else {
-				handleError(errno);
-				return;
+
+	private void clearLogView(){
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				m_logView.setText("");
 			}
-		} else {
-			Log.v(IGDSSettings.LOG, "response failed");
-			Toast.makeText(this, "Connection error",
-					Toast.LENGTH_LONG).show();
-			return;
-		}
-	}
-	
-	private void handleError(int errno) {
-		if (errno < 0) {
-			Log.v(IGDSSettings.LOG, "bad response received");
-			Toast.makeText(this, "Server error (corrupted response)",
-					Toast.LENGTH_LONG).show();
-		} else if (errno >= IResponse.geo2tagError.values().length) {
-			Log.v(IGDSSettings.LOG, "unknown error");
-			Toast.makeText(this, "Unknown server error",
-					Toast.LENGTH_LONG).show();
-		} else if (errno > 0) {
-			String error = IResponse.geo2tagError.values()[errno].name();
-			Log.v(IGDSSettings.LOG, "error: " + error);
-			Toast.makeText(this, "Error: " + error,
-					Toast.LENGTH_LONG).show();
-		}
-	}
-	
-	private static DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
-	public static String getTime(Date date){
-		return dateFormat.format(date);
+		});
 	}
 
 }
