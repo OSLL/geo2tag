@@ -36,12 +36,8 @@
 package ru.spb.osll.GDS.preferences;
 
 import ru.spb.osll.GDS.R;
-//import ru.spb.osll.gui.RadioButtonDialog;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
-//import ru.spb.osll.utils.TrackerUtil;
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -49,7 +45,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class SettingsActivity extends Activity implements IGDSSettings {
 	

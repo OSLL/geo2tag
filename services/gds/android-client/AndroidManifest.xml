@@ -64,12 +64,17 @@
         <activity android:name="ru.spb.osll.GDS.MainActivity"
                   android:configChanges="orientation|keyboardHidden"/>
         
-        <activity android:name="MapTabActivity" android:label="@string/map_tab_name">
+        <activity android:name=".MapTabActivity" android:label="@string/map_tab_name">
             <intent-filter>
                 <category android:name="android.intent.category.EMBED"></category>
                 <action android:name="android.intent.action.MAIN"></action>
             </intent-filter>
         </activity>
+        
+        <service
+            android:enabled="true"
+            android:name=".tracking.TrackingService"
+            android:process=":tracking"></service>
         
     </application>
 

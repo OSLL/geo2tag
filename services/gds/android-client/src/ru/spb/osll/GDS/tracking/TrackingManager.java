@@ -1,6 +1,6 @@
 package ru.spb.osll.GDS.tracking;
 
-import ru.spb.osll.GDS.MainActivity;
+import ru.spb.osll.GDS.utils.GDSUtil;
 import android.content.Context;
 import android.content.Intent;
 
@@ -40,7 +40,7 @@ public class TrackingManager {
 	}
 	
 	public boolean isTracking(Context c) {
-		return false;
+		return GDSUtil.isServiceRunning(c, TrackingService.class.getName());
 	}
 
 }
