@@ -75,6 +75,13 @@ public interface IRequest {
 		String ALTITUDE = "altitude";
 	}
 	
+	public interface ISubscribeChannel {
+		String REQUEST = "/service/subscribe";
+		
+		String AUTH_TOKEN = "auth_token";
+		String CHANNEL = "channel";
+	}
+	
 	public interface IResponse{
 		String STATUS = "status";
 		String STATUS_DESCRIPTION = "status_description";

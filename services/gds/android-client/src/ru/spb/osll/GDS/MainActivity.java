@@ -31,16 +31,30 @@
 
 package ru.spb.osll.GDS;
 
+import java.util.Date;
+
+import org.json.JSONObject;
+
 import ru.spb.osll.GDS.exception.ExceptionHandler;
+import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.GDS.tracking.TrackingManager;
 import ru.spb.osll.GDS.tracking.TrackingReceiver;
+import ru.spb.osll.GDS.utils.GDSUtil;
+import ru.spb.osll.json.JsonApplyMarkRequest;
+import ru.spb.osll.json.JsonBaseResponse;
+import ru.spb.osll.json.IRequest.IResponse;
+import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +72,7 @@ public class MainActivity extends TabActivity {
 	
 	public static final int INTERVAL = 7;
 	
+	private Settings m_settings;
 	private String m_authToken = null;
 	private String m_login = null;
 	private String m_channel = null;
@@ -66,6 +81,7 @@ public class MainActivity extends TabActivity {
 	private Button m_trackingButton;
 	private TextView m_logView;
 	private TextView m_statusView;
+	private ProgressDialog m_progress;
 	
 	
 	@Override
@@ -75,8 +91,17 @@ public class MainActivity extends TabActivity {
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		registerReceiver(m_trackingReceiver, new IntentFilter(TrackingReceiver.ACTION_TRACKING));
 		
+		m_settings = new Settings(this);
+		
 	    m_TabHost = getTabHost();
 	    m_TabHost.addTab(m_TabHost.newTabSpec("tab1").setIndicator("SOS").setContent(R.id.sos_tab));
+	    ((Button) findViewById(R.id.sos_button)).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				sos();
+			}
+		});
+	    
 	    TabSpec tabSpec = m_TabHost.newTabSpec("tab2");
 	    tabSpec.setIndicator("Map");
 	    Context ctx = this.getApplicationContext();
@@ -96,7 +121,9 @@ public class MainActivity extends TabActivity {
 		m_logView = (TextView) findViewById(R.id.tracking_log);
 		m_statusView = (TextView) findViewById(R.id.tracking_status);
 		m_statusView.setText("Tracking stoped");
-	    
+		
+		startService(new Intent(this, LocationService.class));	 
+		Location location = LocationService.getLocation(MainActivity.this);
 	    
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -110,13 +137,13 @@ public class MainActivity extends TabActivity {
 			finish();
 			return;
 		}
-		
 		m_trackingManager = new TrackingManager(m_authToken, m_channel);
 			
 	}
 
 	@Override
 	protected void onDestroy() {
+		stopService(new Intent(this, LocationService.class));
 		unregisterReceiver(m_trackingReceiver);
 		super.onDestroy();
 	}
@@ -151,6 +178,58 @@ public class MainActivity extends TabActivity {
        
         return super.onOptionsItemSelected(item);
     }
+	
+	private void sos() {
+		m_progress = ProgressDialog.show(this, "SOS", "Sending SOS", true, false);
+		Thread thread = new Thread(new Thread() {
+			@Override
+			public void run() {
+				SystemClock.sleep(2 * 1000);
+				Log.v(IGDSSettings.LOG, "SOS thread started");
+				Location location = LocationService.getLocation(MainActivity.this);
+				while (location == null) {
+					Log.v(IGDSSettings.LOG, "can't get location, trying again...");
+					SystemClock.sleep(2 * 1000);
+					location = LocationService.getLocation(MainActivity.this);
+				}
+				Log.v(IGDSSettings.LOG, "location determined! sending location...");
+				String serverUrl = m_settings.getServerUrl();
+				JSONObject JSONResponse = null;
+				for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+					JSONResponse = new JsonApplyMarkRequest(m_authToken, "Events", "SOS", "",
+							"SOS", location.getLatitude(), location.getLongitude(), 0,
+							GDSUtil.getTime(new Date()), serverUrl).doRequest();
+					if (JSONResponse != null) 
+						break;
+				}
+				if (JSONResponse != null) {
+					int errno = JsonBaseResponse.parseErrno(JSONResponse);
+					if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
+						Log.v(IGDSSettings.LOG, "Mark sent successfully");
+						//broadcastMarkSent(location);
+					} else {
+						//handleError(errno);
+						return;
+					}
+				} else {
+					Log.v(TrackingManager.LOG, "response failed");
+					//broadcastError("Failed to send location");
+					return;
+				}
+				m_handler.sendEmptyMessage(0);
+			}
+		});
+		thread.start();
+	}
+	
+	private Handler m_handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+        	m_progress.dismiss();
+        	Log.v(IGDSSettings.LOG, "SOS have been sent!");
+            Toast.makeText(MainActivity.this, "SOS have been sent!", Toast.LENGTH_LONG).show();
+        }
+	};
 	
 	private TrackingReceiver m_trackingReceiver = new TrackingReceiver() {
 		@Override

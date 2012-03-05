@@ -76,6 +76,12 @@
             android:name=".tracking.TrackingService"
             android:process=":tracking"></service>
         
+        <service
+            android:enabled="true"
+            android:name=".LocationService"
+            android:process=":location_service"></service>
+        
+        
     </application>
 
 </manifest>

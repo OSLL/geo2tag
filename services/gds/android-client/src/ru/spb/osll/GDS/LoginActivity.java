@@ -44,7 +44,6 @@ import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.IRequest.IResponse;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -167,7 +166,7 @@ public class LoginActivity extends Activity {
 		String authToken = "";
 		
 		JSONObject JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+		for(int i = 0; i < 1; i++){
 			JSONResponse = new JsonLoginRequest(login, password, serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
