@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  OSLL osll@osll.spb.ru
+ * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,58 +28,67 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*----------------------------------------------------------------- !
+
+/*! ---------------------------------------------------------------
+ *
+ * \file TrackThread.cpp
+ * \brief TrackThread implementation
+ *
+ * File description
+ *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#include "TrackThread.h"
 #include <QDebug>
-#include <QNetworkConfiguration>
-#include "DefaultQuery.h"
-#include "defines.h"
+#include "ErrnoTypes.h"
+#include <QEventLoop>
+#include <QDateTime>
 
-#ifndef Q_OS_SYMBIAN
-#include <syslog.h>
-#else
-#include "symbian.h"
-#endif
+int TrackThread::m_counter=0;
 
-DefaultQuery::DefaultQuery(QObject *parent): QObject(parent),
-m_manager(new QNetworkAccessManager(parent))
+TrackThread::TrackThread(const QSharedPointer<DataMark> &tag)
 {
-  connect(m_manager, SIGNAL(finished(QNetworkReply*)),this, SLOT(process(QNetworkReply*)));
-  connect(m_manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(handleError()));
+  m_track = new WriteTagQuery(tag);
+  connect(this,SIGNAL(doRequest()),this, SLOT(sendRequest()));
+  connect(m_track,SIGNAL(tagAdded()),this, SLOT(responseRecieved()));
+  connect(m_track,SIGNAL(errorOccured(int)),this, SLOT(responseRecieved()));
+//  m_track->moveToThread(this);
+}
+
+TrackThread::~TrackThread()
+{
+  delete m_track;
+}
+
+void TrackThread::run()
+{
+  
+ emit doRequest();
+ exec();
+}
+
+int TrackThread::getCounter() 
+{
+  return m_counter;
+}
+
+void TrackThread::incCounter()
+{
+  m_counter++;
 }
 
 
-void DefaultQuery::doRequest()
+void TrackThread::sendRequest()
 {
-  QNetworkRequest request;
 
-  QUrl url(getUrl());
-  url.setPort(getServerPort());
-  request.setUrl(url);
-
-//  qDebug() << "doing post to" << url << " with body: " << getRequestBody();
-  syslog(LOG_INFO,"posting http request to %s with body %s",url.toString().toStdString().c_str(),QString(getRequestBody()).toStdString().c_str());
-  QNetworkReply *reply = m_manager->post(request, getRequestBody());
+  incCounter();
   m_sendTime = QDateTime::currentDateTime();
-  connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(handleError()));
+  m_track->doRequest();
 }
 
-
-void DefaultQuery::process(QNetworkReply *reply)
+void TrackThread::responseRecieved()
 {
-  processReply(reply);
-}
-
-int DefaultQuery::getErrno() const
-{
-  return m_errno;
-}
-
-
-void DefaultQuery::handleError()
-{
-  syslog(LOG_INFO,"Network error occured while sending request");
-  Q_EMIT errorOccured("network error occcured");
+  qDebug() << getCounter() << " " << m_sendTime.msecsTo(QDateTime::currentDateTime()) << " " << m_track->getErrno();
+  emit doRequest();
 }

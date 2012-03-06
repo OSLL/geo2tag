@@ -91,6 +91,7 @@ void LoginQuery::processReply(QNetworkReply *reply)
   {
     QSharedPointer<common::User> user = response.getUsers()->at(0);
     m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, user->getToken()));
+    m_errno = response.getErrno();
     syslog(LOG_INFO,"!!connected!");
     Q_EMIT connected();
   }

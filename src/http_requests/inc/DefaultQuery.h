@@ -38,6 +38,7 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QDateTime>
 #include "ErrnoTypes.h"
 
 class DefaultQuery : public QObject
@@ -50,6 +51,9 @@ class DefaultQuery : public QObject
     virtual QByteArray getRequestBody() const = 0;
     virtual void processReply(QNetworkReply *reply) = 0;
 
+    QDateTime m_sendTime;
+    int m_errno;
+
   protected Q_SLOTS:
 
     void process(QNetworkReply *reply);
@@ -61,6 +65,7 @@ class DefaultQuery : public QObject
 
     void doRequest();
 
+    int getErrno() const;
     Q_SIGNALS:
 
     void responseReceived();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  OSLL osll@osll.spb.ru
+ * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,58 +28,61 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*----------------------------------------------------------------- !
+
+/*! ---------------------------------------------------------------
+ * \file LoginThread.h
+ * \brief Header of LoginThread
+ * \todo add comment here
+ *
+ * File description
+ *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include <QDebug>
-#include <QNetworkConfiguration>
-#include "DefaultQuery.h"
-#include "defines.h"
 
-#ifndef Q_OS_SYMBIAN
-#include <syslog.h>
-#else
-#include "symbian.h"
-#endif
+#ifndef _LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
+#define _LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
 
-DefaultQuery::DefaultQuery(QObject *parent): QObject(parent),
-m_manager(new QNetworkAccessManager(parent))
+ /*!
+ * Class description. May use HTML formatting
+ * Logic - send request, increment m_counter, recieve response, count delay, 
+ */
+#include <QThread>
+#include "LoginQuery.h"
+
+class LoginThread: public QThread
 {
-  connect(m_manager, SIGNAL(finished(QNetworkReply*)),this, SLOT(process(QNetworkReply*)));
-  connect(m_manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(handleError()));
-}
+  Q_OBJECT;
+
+  static int m_counter;
+
+  LoginQuery * m_startSession;
+
+  QDateTime m_sendTime;
 
 
-void DefaultQuery::doRequest()
-{
-  QNetworkRequest request;
+public:
+  LoginThread();
 
-  QUrl url(getUrl());
-  url.setPort(getServerPort());
-  request.setUrl(url);
+  ~LoginThread();  
 
-//  qDebug() << "doing post to" << url << " with body: " << getRequestBody();
-  syslog(LOG_INFO,"posting http request to %s with body %s",url.toString().toStdString().c_str(),QString(getRequestBody()).toStdString().c_str());
-  QNetworkReply *reply = m_manager->post(request, getRequestBody());
-  m_sendTime = QDateTime::currentDateTime();
-  connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(handleError()));
-}
+  void run();
+ 
+  static int getCounter() ;
+  static void incCounter() ;
 
+signals:
+ 
+  void doRequest();
 
-void DefaultQuery::process(QNetworkReply *reply)
-{
-  processReply(reply);
-}
-
-int DefaultQuery::getErrno() const
-{
-  return m_errno;
-}
+public slots:
+  
+  void sendRequest();
+  void responseRecieved();
+  
 
 
-void DefaultQuery::handleError()
-{
-  syslog(LOG_INFO,"Network error occured while sending request");
-  Q_EMIT errorOccured("network error occcured");
-}
+}; // class LoginThread
+  
+
+#endif //_LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
