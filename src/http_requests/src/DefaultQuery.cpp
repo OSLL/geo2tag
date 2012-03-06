@@ -81,5 +81,6 @@ int DefaultQuery::getErrno() const
 void DefaultQuery::handleError()
 {
   syslog(LOG_INFO,"Network error occured while sending request");
+  m_errno = NETWORK_ERROR;
   Q_EMIT errorOccured("network error occcured");
 }

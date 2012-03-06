@@ -87,11 +87,11 @@ void LoginQuery::processReply(QNetworkReply *reply)
   #ifndef Q_OS_SYMBIAN
   LoginResponseJSON response;
   response.parseJson(reply->readAll());
+  m_errno = response.getErrno();
   if(response.getErrno() == SUCCESS)
   {
     QSharedPointer<common::User> user = response.getUsers()->at(0);
     m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, user->getToken()));
-    m_errno = response.getErrno();
     syslog(LOG_INFO,"!!connected!");
     Q_EMIT connected();
   }

@@ -67,7 +67,7 @@ void setServerPort(int port);
 #define CONFIG_FILE               "/usr/share/wikigps/wikigps.conf"
 
 #define DEFAULT_RADIUS            30
-#define DEFAULT_USER_NAME         "tracker"
+#define DEFAULT_USER_NAME         "Mark"
 #define DEFAULT_USER_PASSWORD     "test"
 #define DEFAULT_CHANNEL     "default"
 #define DEFAULT_TOKEN             "2154086390Ivan1128557755"
