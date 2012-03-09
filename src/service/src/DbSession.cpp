@@ -528,6 +528,7 @@ namespace common
     m_usersContainer->push_back(addedUser);
     m_updateThread->unlockWriting();
 
+    response.addUser(addedUser);
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
