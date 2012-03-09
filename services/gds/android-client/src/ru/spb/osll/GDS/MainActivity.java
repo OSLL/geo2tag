@@ -92,6 +92,18 @@ public class MainActivity extends TabActivity {
 		registerReceiver(m_trackingReceiver, new IntentFilter(TrackingReceiver.ACTION_TRACKING));
 		
 		m_settings = new Settings(this);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+		    m_authToken = extras.getString(LoginActivity.AUTH_TOKEN);
+		    m_login = extras.getString(LoginActivity.LOGIN);
+		    m_channel = extras.getString(LoginActivity.CHANNEL); 
+		}
+		if (m_authToken == null || m_login == null || m_channel == null) {
+			Log.v(IGDSSettings.LOG, "problem with extracting data");
+			Toast.makeText(this, "Can't sign in", Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
 		
 	    m_TabHost = getTabHost();
 	    m_TabHost.addTab(m_TabHost.newTabSpec("tab1").setIndicator("SOS").setContent(R.id.sos_tab));
@@ -106,6 +118,7 @@ public class MainActivity extends TabActivity {
 	    tabSpec.setIndicator("Map");
 	    Context ctx = this.getApplicationContext();
 	    Intent i = new Intent(ctx, MapTabActivity.class);
+		i.putExtra(LoginActivity.AUTH_TOKEN, m_authToken);	
 	    tabSpec.setContent(i);
 	    m_TabHost.addTab(tabSpec);		
 	    m_TabHost.setCurrentTab(0);
@@ -123,20 +136,8 @@ public class MainActivity extends TabActivity {
 		m_statusView.setText("Tracking stoped");
 		
 		startService(new Intent(this, LocationService.class));	 
-		Location location = LocationService.getLocation(MainActivity.this);
+		LocationService.getLocation(MainActivity.this);
 	    
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-		    m_authToken = extras.getString(LoginActivity.AUTH_TOKEN);
-		    m_login = extras.getString(LoginActivity.LOGIN);
-		    m_channel = extras.getString(LoginActivity.CHANNEL); 
-		}
-		if (m_authToken == null || m_login == null || m_channel == null) {
-			Log.v(IGDSSettings.LOG, "problem with extracting data");
-			Toast.makeText(this, "Can't sign in", Toast.LENGTH_LONG).show();
-			finish();
-			return;
-		}
 		m_trackingManager = new TrackingManager(m_authToken, m_channel);
 			
 	}

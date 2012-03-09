@@ -81,6 +81,11 @@
             android:name=".LocationService"
             android:process=":location_service"></service>
         
+        <service
+            android:enabled="true"
+            android:name=".events.EventsService"
+            android:process=":events_service"></service>
+        
         
     </application>
 

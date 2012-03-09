@@ -63,7 +63,7 @@ public class JsonFilterCircleRequest extends JsonFilterBaseRequest {
 
 	@Override
 	protected String getRequest() {
-		return "/filterCircle";
+		return "/service/filterCircle";
 	}
 
 }
