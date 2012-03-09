@@ -31,22 +31,22 @@ public class OSMWidget extends BaseMapWidget {
 		MapOptions defaultMapOptions = new MapOptions();
 		m_mapWidget = new MapWidget("100%", "650px", defaultMapOptions);
 
-		OSM osm_1 = OSM.Osmarender("Osmarender"); 
-		osm_1.setIsBaseLayer(true);
+//		OSM osm1 = OSM.Osmarender("Osmarender"); 
+//		osm1.setIsBaseLayer(true);
 
-		OSM osm_2 = OSM.Mapnik("Mapnik"); 
-		osm_2.setIsBaseLayer(true);
+		OSM osm2 = OSM.Mapnik("Mapnik"); 
+		osm2.setIsBaseLayer(true);
 
-		OSM osm_3 = OSM.CycleMap("CycleMap");
-		osm_3.setIsBaseLayer(true);
+		OSM osm3 = OSM.CycleMap("CycleMap");
+		osm3.setIsBaseLayer(true);
 
 //		OSM osm_4 = OSM.Maplint("Maplint");
 //		osm_4.setIsBaseLayer(true);
 
 		final Map map = m_mapWidget.getMap();
-		map.addLayer(osm_1);
-		map.addLayer(osm_2);
-		map.addLayer(osm_3);
+//		map.addLayer(osm1);
+		map.addLayer(osm2);
+		map.addLayer(osm3);
 //		map.addLayer(osm_4);
 
 		map.addControl(new LayerSwitcher());
