@@ -35,7 +35,10 @@
 
 package ru.spb.osll.objects;
 
-public class Mark {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Mark implements Parcelable {
 	private long id;
 	private String authToken;
 	private String channel;
@@ -47,6 +50,10 @@ public class Mark {
 	private double altitude;
 	private String time;
 	private String user;
+	
+	public Mark() {
+		
+	}
 	
 	public String getUser() {
 		return user;
@@ -120,5 +127,51 @@ public class Mark {
 				+ channel + "\n, title=" + title + "\n, link=" + link
 				+ "\n, description=" + description + "\n, latitude=" + latitude
 				+ "\n, longitude=" + longitude + "\n, time=" + time + "]";
+	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeLong(id);
+		dest.writeString(authToken);
+		dest.writeString(channel);
+		dest.writeString(title);
+		dest.writeString(link);
+		dest.writeString(description);
+		dest.writeDouble(latitude);
+		dest.writeDouble(longitude);
+		dest.writeDouble(altitude);
+		dest.writeString(time);
+		dest.writeString(user);
 	}	
+	
+	// this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<Mark> CREATOR = new Parcelable.Creator<Mark>() {
+        public Mark createFromParcel(Parcel in) {
+            return new Mark(in);
+        }
+
+        public Mark[] newArray(int size) {
+            return new Mark[size];
+        }
+    };
+
+    // example constructor that takes a Parcel and gives you an object populated with it's values
+    private Mark(Parcel in) {
+    	id = in.readLong();
+    	authToken = in.readString();
+    	channel = in.readString();
+    	title = in.readString();
+    	link = in.readString();
+    	description = in.readString();
+    	latitude = in.readDouble();
+    	longitude = in.readDouble();
+    	altitude = in.readDouble();
+    	time = in.readString();
+    	user = in.readString();
+    }
 }
