@@ -40,6 +40,7 @@
  * ---------------------------------------------------------------- */
 
 #include <syslog.h>
+#include <stdlib.h>
 #include "DbSession.h"
 
 #include "LoginRequestJSON.h"
@@ -1255,6 +1256,19 @@ namespace common
     return answer;
   }
 
+  void DbObjectsCollection::processSendConfirmationLetter(const QString &address)
+  {
+      QSettings settings(QSettings::SystemScope,"osll","libs");
+      if (settings.value("mail_subject").toString().isEmpty()) {
+          settings.setValue("mail_subject", "Registration confirmation");
+      }
+      syslog(LOG_INFO, "Process registration confirmation is started... ");
+      QString subject = settings.value("mail_subject").toString();
+      QString body = "'This will go into the body of the mail.'";
+      QString command = "echo " + body + " | mail -s '" + subject + "' " + address;
+      system(command.toStdString().c_str());
+      syslog(LOG_INFO, "Process registration confirmation finished... ");
+  }
 }                                       // namespace common
 
 
