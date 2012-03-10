@@ -72,14 +72,18 @@ bool LoadTagsRequestJSON::parseJson(const QByteArray &data)
   result["latitude"].toDouble(&ok);
   if (!ok) return false;
   m_latitude = result["latitude"].toDouble(&ok);
+  if ((m_latitude < 0) or (m_latitude > 90)) return false;
+ 
 
   result["longitude"].toDouble(&ok);
   if (!ok) return false;
   m_longitude = result["longitude"].toDouble(&ok);
+  if ((m_longitude < 0) or (m_longitude > 180)) return false;
 
   result["radius"].toDouble(&ok);
   if (!ok) return false;
   m_radius = result["radius"].toDouble(&ok);
+  if (m_radius < 0) return false;
 
   return true;
 }
