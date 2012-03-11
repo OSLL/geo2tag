@@ -182,7 +182,7 @@ public class MainActivity extends TabActivity {
 	
 	private void sos() {
 		m_progress = ProgressDialog.show(this, "SOS", "Sending SOS", true, false);
-		Thread thread = new Thread(new Thread() {
+		Thread thread = new Thread() {
 			@Override
 			public void run() {
 				SystemClock.sleep(2 * 1000);
@@ -219,7 +219,7 @@ public class MainActivity extends TabActivity {
 				}
 				m_handler.sendEmptyMessage(0);
 			}
-		});
+		};
 		thread.start();
 	}
 	
