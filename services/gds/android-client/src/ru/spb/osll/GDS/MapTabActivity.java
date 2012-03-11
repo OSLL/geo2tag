@@ -1,10 +1,14 @@
 package ru.spb.osll.GDS;
 
+import java.util.List;
+
 import ru.spb.osll.GDS.events.EventsManager;
 import ru.spb.osll.GDS.events.EventsReceiver;
+import ru.spb.osll.GDS.maps.EventsItemizedOverlay;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.objects.Mark;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,12 +16,14 @@ import android.widget.Toast;
 
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
 
 public class MapTabActivity extends MapActivity {
 	
 	EventsManager m_eventsManager;
 	String m_authToken;
 	MapView m_mapView;
+	EventsItemizedOverlay m_eventsOverlay;
 	
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -38,8 +44,13 @@ public class MapTabActivity extends MapActivity {
 		registerReceiver(m_eventsReceiver, new IntentFilter(EventsReceiver.ACTION_EVENTS));
 		
 		m_mapView = (MapView) findViewById(R.id.mapview);
-		m_mapView.setVisibility(View.GONE);
+		//m_mapView.setVisibility(View.GONE);
 		m_mapView.setBuiltInZoomControls(true);
+		
+		List<Overlay> mapOverlays = m_mapView.getOverlays();
+		Drawable eventDrawable = this.getResources().getDrawable(R.drawable.event64);
+		m_eventsOverlay = new EventsItemizedOverlay(eventDrawable, this);
+		mapOverlays.add(m_eventsOverlay);
 	    
 	    m_eventsManager = new EventsManager();
 	    m_eventsManager.setData(m_authToken);
@@ -67,6 +78,7 @@ public class MapTabActivity extends MapActivity {
 					for (Mark mark : marks) {
 						Log.v(IGDSSettings.LOG, mark.toString());
 					}
+					m_eventsOverlay.setEvents(marks);
 				}
 			});
 		}

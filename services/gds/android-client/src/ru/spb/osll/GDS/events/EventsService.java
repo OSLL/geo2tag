@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import ru.spb.osll.GDS.LocationService;
+import ru.spb.osll.GDS.R;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
@@ -22,9 +23,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.util.Log;
 
 public class EventsService extends Service {
@@ -33,6 +36,7 @@ public class EventsService extends Service {
 	private Thread m_eventsThread;
 	private InternalReceiver m_internalReceiver = new InternalReceiver();
 	private Settings m_settings;
+	private MediaPlayer m_sirenPlayer;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -42,11 +46,11 @@ public class EventsService extends Service {
 	@Override
 	public void onCreate() {
 		Log.v(EventsManager.LOG, "EventsService create");
-		
 		super.onCreate();
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
 		m_settings = new Settings(this);
+		m_sirenPlayer = MediaPlayer.create(this, R.raw.siren);
 		registerReceiver(m_internalReceiver, new IntentFilter(InternalReceiver.ACTION));
 		LocationService.getLocation(this);
 	}
@@ -76,6 +80,7 @@ public class EventsService extends Service {
 		super.onDestroy();
 		stopEventsTread();
 		unregisterReceiver(m_internalReceiver);
+		m_sirenPlayer.release();
 	}
 	
 	protected void stopEventsTread(){
@@ -108,6 +113,13 @@ public class EventsService extends Service {
 		m_eventsThread.start();
 	}
 	
+	private Thread m_alertThread = new Thread() {
+		@Override
+		public void run() {
+			EventsService.this.m_sirenPlayer.start();
+		}
+	};
+	
 	private void requestEvents(Location location) {
 		String serverUrl = m_settings.getServerUrl();
 		JSONObject JSONResponse = null;
@@ -135,6 +147,30 @@ public class EventsService extends Service {
 				List<Channel> channels = response.getChannelsData();
 				for (Channel channel : channels) {
 					if (channel.getName().compareTo("Events") == 0) {
+						// TODO: check that only if new events we call alert
+						//m_alertThread.start();
+						Thread alertThread = new Thread() {
+							@Override
+							public void run() {
+								// long[] pattern = {0, 500, 500, 500, 500, 500};
+					            // Start the vibration
+					            // Vibrator vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+					            // vibrator.vibrate(pattern, -1);
+								MediaPlayer player = MediaPlayer.create(EventsService.this,
+										R.raw.siren);
+								player.start();
+								while (player.isPlaying()) {
+									try {
+										Thread.sleep(player.getDuration() + 500);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+								}
+								player.release();
+								player = null;
+							}
+						};
+						alertThread.start();
 						broadcastEvents(channel);
 					}
 				}
