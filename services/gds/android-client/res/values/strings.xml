@@ -16,6 +16,8 @@
     
     <!-- MainActivity -->
     <string name="menu_sign_out">Sign out</string>
+    <string name="map_tab_name">Events map</string>
+    <string name="sos">SOS</string>
     
     <!-- settings -->
     <string name="channel">Channel</string>

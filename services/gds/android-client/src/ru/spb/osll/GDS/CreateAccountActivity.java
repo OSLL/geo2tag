@@ -42,6 +42,7 @@ import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonBaseResponse;
 import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.json.JsonLoginRequest;
+import ru.spb.osll.json.JsonSubscribeRequest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -151,7 +152,7 @@ public class CreateAccountActivity extends Activity {
 		
 		// Add user
 		JSONObject JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+		for(int i = 0; i < 1; i++){
 			JSONResponse = new JsonAddUserRequest(login, password, serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
@@ -197,7 +198,7 @@ public class CreateAccountActivity extends Activity {
 			return;
 		}
 		
-		// Add channel
+		// Add channel for tracking
 		JSONResponse = null;
 		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
 			JSONResponse = new JsonApplyChannelRequest(authToken, login,
@@ -213,6 +214,50 @@ public class CreateAccountActivity extends Activity {
 				handleError(errno);
 				return;
 			}
+		} else {
+			Log.v(IGDSSettings.LOG, "response failed");
+			Toast.makeText(this, "Connection error",
+					Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		// Subscribe to tracking channel
+		JSONResponse = null;
+		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+			JSONResponse = new JsonSubscribeRequest(authToken, login, serverUrl).doRequest();
+			if (JSONResponse != null) 
+				break;
+		}
+		if (JSONResponse != null) {
+			int errno = JsonBaseResponse.parseErrno(JSONResponse);
+			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
+				Log.v(IGDSSettings.LOG, "Subscribed to tracking channel");
+			} else {
+				handleError(errno);
+				return;
+			}
+		} else {
+			Log.v(IGDSSettings.LOG, "response failed");
+			Toast.makeText(this, "Connection error",
+					Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		// Subscribe to Events channel (for doctors)
+		JSONResponse = null;
+		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+			JSONResponse = new JsonSubscribeRequest(authToken, "Events", serverUrl).doRequest();
+			if (JSONResponse != null) 
+				break;
+		}
+		if (JSONResponse != null) {
+			int errno = JsonBaseResponse.parseErrno(JSONResponse);
+			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
+				Log.v(IGDSSettings.LOG, "Subscribed to Events channel");
+			} else {
+				handleError(errno);
+				return;
+			}
 			success = true;
 		} else {
 			Log.v(IGDSSettings.LOG, "response failed");
@@ -221,12 +266,12 @@ public class CreateAccountActivity extends Activity {
 			return;
 		}
 		
+		
 		if (success) {
 			Toast.makeText(this, "Account has been created!",
 					Toast.LENGTH_LONG).show();
 			finish();
-		}
-		
+		}		
 	}
 	
 	private void handleError(int errno) {

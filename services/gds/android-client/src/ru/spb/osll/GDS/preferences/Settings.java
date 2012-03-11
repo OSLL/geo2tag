@@ -85,6 +85,46 @@ public class Settings {
 					"loadFromXMLFile - exception: " + e.getMessage());
 		}
 	}
+	
+	public String getLogin() {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    return prefs.getString(IGDSSettings.LOGIN, "");
+	}
+	
+	public void setLogin(String login) {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    prefs.edit().putString(IGDSSettings.LOGIN, login).commit();
+	}
+	
+	public String getPassword() {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    return prefs.getString(IGDSSettings.PASSWORD, "");
+	}
+	
+	public void setPassword(String password) {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    prefs.edit().putString(IGDSSettings.PASSWORD, password).commit();
+	}
+	
+	public boolean isRememberMe() {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    return prefs.getBoolean(IGDSSettings.REMEMBER, false);
+	}
+	
+	public void setRememberMe(boolean status) {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    prefs.edit().putBoolean(IGDSSettings.REMEMBER, status).commit();
+	}
+	
+	public String getServerUrl() {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    return prefs.getString(IGDSSettings.SERVER_URL, "");
+	}
+	
+	public void setServerUrl(String serverUrl) {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    prefs.edit().putString(IGDSSettings.SERVER_URL, serverUrl).commit();
+	}
 
 	
 	public static SharedPreferences getPreferences(Context c){

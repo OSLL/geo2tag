@@ -38,21 +38,21 @@ package ru.spb.osll.json;
 public interface IRequest {
 		
 	public interface ILogin{
-		String REQUEST = "/login";
+		String REQUEST = "/service/login";
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";
 	}
 
 	public interface IAddUser{
-		String REQUEST = "/addUser";
+		String REQUEST = "/service/addUser";
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";
 	}
 
 	public interface IApplyChannel{
-		String REQUEST = "/addChannel";
+		String REQUEST = "/service/addChannel";
 		
 		String AUTH_TOKEN = "auth_token";
 		String NAME = "name";
@@ -62,7 +62,7 @@ public interface IRequest {
 	}
 
 	public interface IApplyMark{
-		String REQUEST = "/apply";
+		String REQUEST = "/service/writeTag";
 
 		String AUTH_TOKEN = "auth_token";
 		String CHANNEL = "channel";
@@ -72,6 +72,14 @@ public interface IRequest {
 		String LATITUDE = "latitude";
 		String LONGITUDE = "longitude";
 		String TIME = "time";
+		String ALTITUDE = "altitude";
+	}
+	
+	public interface ISubscribeChannel {
+		String REQUEST = "/service/subscribe";
+		
+		String AUTH_TOKEN = "auth_token";
+		String CHANNEL = "channel";
 	}
 	
 	public interface IResponse{

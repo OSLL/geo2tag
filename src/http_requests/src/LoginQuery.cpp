@@ -87,6 +87,7 @@ void LoginQuery::processReply(QNetworkReply *reply)
   #ifndef Q_OS_SYMBIAN
   LoginResponseJSON response;
   response.parseJson(reply->readAll());
+  m_errno = response.getErrno();
   if(response.getErrno() == SUCCESS)
   {
     QSharedPointer<common::User> user = response.getUsers()->at(0);

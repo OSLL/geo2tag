@@ -55,11 +55,13 @@ public class JsonApplyMarkRequest extends JsonBaseRequest {
 	private String m_description;
 	private double m_latitude;
 	private double m_longitude;
+	private double m_altitude;
 	private String m_time;
 	private String m_serverUrl;
 	
 	public JsonApplyMarkRequest(String authToken, String channel, String title, String link,
-			String description, double latitude, double longitude, String time, String serverUrl){
+			String description, double latitude, double longitude, double altitude,
+			String time, String serverUrl){
 		m_authToken = authToken;
 		m_channel = channel;
 		m_title = title;
@@ -67,6 +69,7 @@ public class JsonApplyMarkRequest extends JsonBaseRequest {
 		m_description = description;
 		m_latitude = latitude;
 		m_longitude = longitude;
+		m_altitude = altitude;
 		m_time = time;
 		m_serverUrl = serverUrl;
 	}
@@ -83,6 +86,7 @@ public class JsonApplyMarkRequest extends JsonBaseRequest {
 		jsonObject.put(DESCRIPTION, m_description);
 		jsonObject.put(LATITUDE, m_latitude);
 		jsonObject.put(LONGITUDE, m_longitude);
+		jsonObject.put(ALTITUDE, m_altitude);
 		jsonObject.put(TIME, m_time);
 		Log.v(JSON_LOG, jsonObject.toString());
 		

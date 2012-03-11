@@ -46,6 +46,7 @@
 #include <QtSql>
 #include <QThread>
 #include <QMap>
+#include <QSettings>
 //#include </usr/include/qt4/QtSql/qsql_psql.h>
 #include "DataMarks.h"
 #include "Channel.h"
@@ -110,6 +111,8 @@ namespace common
 
     QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 
+    static void processSendConfirmationLetter(const QString&);
+
     public:
 
       static DbObjectsCollection& getInstance();
@@ -129,7 +132,6 @@ namespace common
 }
 
 
-//_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
-#endif
+#endif //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
 
 /* ===[ End of file ]=== */

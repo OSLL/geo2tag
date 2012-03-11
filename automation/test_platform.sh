@@ -57,6 +57,7 @@ fi
 
 
 response_altitude_test=`curl -d "{\"auth_token\":\"MMMMMMMMMM\",\"latitude\":0.0, \"longitude\":0.0, \"radius\":10.0}"  http://localhost:81/service/loadTags`;
+echo "Alt test - $response_altitude_test "
 if ! echo $response_altitude_test | grep -q -s -F "$test_altitude"  ;
 then
         echo "Fail at altitude test"
