@@ -1,36 +1,60 @@
 import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
-import com.nokia.meego 1.0
+//import com.nokia.meego 1.0
 //import org.maemo.fremantle 1.0  // for Core components
+import com.nokia.symbian 1.1
 
-Sheet {
+/*Sheet*/CommonDialog {
     id: sheet
+    property string acceptButtonText: "Log in"
 
     signal authrequest(string log, string pass)
     signal signrequest(string log, string pass)
     function notify(error) {sheet.open(); notifyDialog.notify(error)}
-    //function login_handler(){}
     function logout_handler(){login=""; sheet.open(); sheet.state="Log in"}
     state: "Log in"
 
     property string login: ""
-    acceptButtonText: "Log in"
-    rejectButtonText: "Cancel"
+    titleText: "Authorization"
+    buttons: ToolBar {
+                     id: buttons
+                     width: parent.width
+                     height: privateStyle.toolBarHeightLandscape + 2 * platformStyle.paddingSmall
 
-    content: Flickable {
+                     tools: Row {
+                         anchors.centerIn: parent
+                         spacing: platformStyle.paddingMedium
+
+                         ToolButton {
+
+                             text: acceptButtonText
+                             width: (buttons.width - 3 * platformStyle.paddingMedium) / 2
+                             onClicked: sheet.accept()
+                         }
+
+                         ToolButton {
+
+                             text: "Cancel"
+                             width: (buttons.width - 3 * platformStyle.paddingMedium) / 2
+                             onClicked: sheet.reject()
+                         }
+                     }
+                 }
+  /*  acceptButtonText: "Log in"
+    rejectButtonText: "Cancel"*/
+
+    content: Flickable{
         anchors.fill: parent
+
         anchors.leftMargin: 10
         anchors.rightMargin:  10
-        anchors.topMargin: 10
+        anchors.topMargin: 30
+        anchors.top: parent.top
         contentWidth: col2.width
         contentHeight: col2.height
         anchors.horizontalCenter: parent.horizontalCenter
         flickableDirection: Flickable.VerticalFlick
         Column {
             id: col2
-   /*         anchors.top: parent.top
-            anchors.leftMargin: 10
-            anchors.rightMargin:  10
-            anchors.topMargin: 10*/
             spacing: 10
             Grid{
                 id: form
@@ -79,7 +103,6 @@ Sheet {
                 id: signRow
                 spacing: 10
                 visible: true
-                anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 Text {
                     id: regText

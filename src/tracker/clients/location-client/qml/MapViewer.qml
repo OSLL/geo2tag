@@ -9,19 +9,19 @@ import QtMobility.location 1.2
      width: 500
      height: 500
      function getPosition(){
-     //    positionSource.active=true
+         positionSource.active=true
          console.debug(positionSource.position.coordinate.latitude)
          map.center=positionSource.position.coordinate
          map.zoomLevel=15
          circle.center=positionSource.position.coordinate
          circle.radius=10
-      //   positionSource.active=false
+       //  positionSource.active=false
      }
 
     // focus : true
      PositionSource {
          id: positionSource
-      //   updateInterval: 1000
+         updateInterval: 1000
          active: true
 
      }

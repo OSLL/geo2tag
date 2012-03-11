@@ -1,7 +1,8 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.1
-import com.nokia.meego 1.0
+//import com.nokia.meego 1.0
 //import org.maemo.fremantle 1.0
+import com.nokia.symbian 1.1
 Rectangle {
     id:panel
     x:parent.width - 50

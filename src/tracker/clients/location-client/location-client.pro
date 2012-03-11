@@ -1,6 +1,10 @@
-QML_IMPORT_PATH = qml
+#QML_IMPORT_PATH = qml
 TARGET = location-client
 TEMPLATE=app
+OBJECTS_DIR = obj
+MOC_DIR = moc
+INCLUDEPATH += $$MOC_DIR
+CONFIG += qt-components
 
 QT += declarative network
 DEFINES += Q_WS_SYMBIAN
@@ -82,6 +86,8 @@ HEADERS += \
     ../../../common/inc/GpsInfo.h \
     ../../../common/inc/GpsModeller.h \
     ../../../common/inc/MobilityGps.h \
+    ../../../common/inc/ErrnoTypes.h \
+    ../../../common/inc/symbian.h \
     ../../../../3rdparty/qjson-0.7.1/src/parser.h \
     ../../../../3rdparty/qjson-0.7.1/src/serializerrunnable.h \
     ../../../../3rdparty/qjson-0.7.1/src/serializer.h \
@@ -98,7 +104,6 @@ HEADERS += \
 
 OTHER_FILES += \
     qml/RecButton.qml\
-    qml/images/strip.png \
     qml/LoginView.qml \
     qml/MapViewer.qml \
     qml/main.qml \
@@ -130,18 +135,22 @@ INCLUDEPATH += . inc \
                ../../../common/inc
 }
 symbian {
-    TARGET = ThereAndHere
-#    TARGET.UID3=0x2004234A
 
-    DEFINES += SYMBIAN_OS
-
-    TARGET.CAPABILITY += ReadUserData
-    TARGET.CAPABILITY += WriteUserData
-
+  #  TARGET.UID3=0x2004234A
+    DEFINES+= Q_WS_SYMBIAN
+    TARGET.CAPABILITY = NetworkServices \
+                    Location \
+                    ReadUserData \
+                    WriteUserData \
+                    LocalServices \
+                    UserEnvironment
 
 #    vendorinfo = \
 #    "%{\"Regina Dorokhova\"}" \
 #    ":\"\""
+#    baseFiles.sources = qml\\*.qml
+#    baseFiles.path = !:\\private\\2004234A
+#    DEPLOYMENT+=baseFiles
 
 }
 contains(TEMPLATE,.*lib):DEFINES += QT_SHARED
