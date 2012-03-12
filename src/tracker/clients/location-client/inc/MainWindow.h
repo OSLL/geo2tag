@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow
     void trackingStarted();
   public slots:
     void onAuth(QString login, QString pass);
+    void onReg(QString login, QString pass);
     void trackingOnOff();
   private:
     void createMenus();

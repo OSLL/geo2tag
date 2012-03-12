@@ -23,8 +23,12 @@ m_authentificated(0)
   m_loginQuery = new LoginQuery(this);
   connect(m_loginQuery, SIGNAL(connected()), SLOT(onAuthentificated()));
   connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
-
   connect(m_loginQuery, SIGNAL(errorOccured(int)),SLOT(onError(int)));
+
+  m_addUserQuery = new AddUserQuery(this);
+  connect(m_addUserQuery, SIGNAL(connected()), SLOT(onRegistered()));
+  connect(m_addUserQuery, SIGNAL(errorOccured(int)),SLOT(onError(int)));
+
   m_netManager = new QNetworkConfigurationManager(this);
 
   m_history = new MarksHistory(this);
@@ -41,6 +45,12 @@ void Client::auth(QString user, QString pass)
 {
   m_loginQuery->setQuery(user,pass);
   m_loginQuery->doRequest();
+}
+
+void Client::registration(QString user, QString pass)
+{
+    m_addUserQuery->setQuery(user,pass);
+    m_addUserQuery->doRequest();
 }
 
 
@@ -67,10 +77,11 @@ void Client::onError(QString err)
 void Client::onError(int err)
 {
   if (err==INCORRECT_CREDENTIALS_ERROR)
-  {
     emit error(QVariant("Incorrect login or password"));
+  else
+      if (err==USER_ALREADY_EXIST_ERROR)
+          emit error(QVariant("User with that name already exist"));
 
-  }
 }
 
 
@@ -109,6 +120,14 @@ void Client::onAuthentificated()
   m_user =  m_loginQuery->getUser();
   m_authentificated = true;
   emit authentificated(QVariant(m_user->getLogin()));
+}
+
+void Client::onRegistered()
+{
+    qDebug() << "Registered " <<  m_addUserQuery->getUser()->getToken();
+    m_user =  m_addUserQuery->getUser();
+    m_authentificated = true;
+    emit authentificated(QVariant(m_user->getLogin()));
 }
 
 

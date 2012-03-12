@@ -8,6 +8,7 @@ import com.nokia.symbian 1.1
 Flickable {
     function showLoginView() {login.open(); }
     function auth(log, pass){ console.debug("try auth"); Main.onAuth(log,pass)}
+    function reg(log, pass) {console.debug("try sign up"); Main.onReg(log, pass)}
     function incorrect(err){login.notify(err);}
     function entered(name) {login.login=name; login.state="Log out"; notifyDialog.notify("Authorization is successfull");
         if (recbutton.curStatus=="unknown") {
@@ -27,6 +28,7 @@ Flickable {
     NotifyDialog{id: notifyDialog}
     RightPanel{id:rightPanel; z:5}
     Connections { target: login; onAuthrequest: auth(log, pass)}
+    Connections {target: login; onSignrequest: reg(log,pass)}
     Connections {target: recbutton; onTrackingRequest: tracking() }
     Connections {target: Main; onTrackingStarted: {recbutton.curStatus="Stop"; recbutton.prevStatus="Stop"} }
     Connections {target: herebutton; onGetPosition: getPosition() }

@@ -91,6 +91,12 @@ void MainWindow::onAuth(QString login, QString pass)
   client->auth(login, pass);
 }
 
+void MainWindow::onReg(QString login, QString pass)
+{
+  client->registration(login, pass);
+}
+
+
 
 void MainWindow::trackingOnOff()
 {

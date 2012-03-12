@@ -35,6 +35,7 @@ SOURCES += \
     ../../../http_requests/src/LoginQuery.cpp \
     ../../../http_requests/src/DefaultQuery.cpp \
     ../../../http_requests/src/WriteTagQuery.cpp \
+    ../../../http_requests/src/AddUserQuery.cpp \
     ../../../common/src/User.cpp \
     ../../../common/src/TimeSlot.cpp \
     ../../../common/src/DataMarks.cpp \
@@ -66,9 +67,12 @@ HEADERS += \
     ../../../http_requests/inc/LoginQuery.h \
     ../../../http_requests/inc/DefaultQuery.h \
     ../../../http_requests/inc/WriteTagQuery.h \
+    ../../../http_requests/inc/AddUserQuery.h \
     ../../../json/inc/JsonSerializer.h \
     ../../../json/inc/LoginResponseJSON.h \
     ../../../json/inc/LoginRequestJSON.h \
+    ../../../json/inc/AddUserRequestJSON.h \
+    ../../../json/inc/AddUserResponseJSON.h \
     ../../../json/inc/JsonUser.h \
     ../../../json/inc/JsonTimeSlot.h \
     ../../../json/inc/JsonDataMark.h \

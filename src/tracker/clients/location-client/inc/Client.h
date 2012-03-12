@@ -8,6 +8,7 @@
 #include <QTimer>
 
 #include "LoginQuery.h"
+#include "AddUserQuery.h"
 #include "WriteTagQuery.h"
 #include "MarksHistory.h"
 //#include "SubscribeChannelQuery.h"
@@ -27,6 +28,7 @@ class Client : public QObject
 
     QString m_lastError;
     LoginQuery * m_loginQuery;
+    AddUserQuery * m_addUserQuery;
     QSharedPointer<common::User> m_user;
     QNetworkConfigurationManager * m_netManager;
 
@@ -46,6 +48,7 @@ class Client : public QObject
     void onError(QString error);
     void onError(int err);
     void onAuthentificated();
+    void onRegistered();
     void onMarkAdded();
     void track();
     signals:
@@ -54,6 +57,7 @@ class Client : public QObject
     void authRequest();
   public slots:
     void auth(QString user, QString pass);
+    void registration(QString user, QString pass);
     void startTrack();
     void stopTrack();
     // Network going down|up
