@@ -43,25 +43,25 @@ import com.nokia.symbian 1.1
     rejectButtonText: "Cancel"*/
 
     content: Flickable{
-        anchors.fill: parent
 
-        anchors.leftMargin: 10
-        anchors.rightMargin:  10
+        anchors.fill: parent
         anchors.topMargin: 30
+        anchors.rightMargin: 10
         anchors.top: parent.top
         contentWidth: col2.width
         contentHeight: col2.height
         anchors.horizontalCenter: parent.horizontalCenter
         flickableDirection: Flickable.VerticalFlick
         Column {
+            anchors.fill: parent
             id: col2
-            spacing: 10
+            spacing: 25
             Grid{
                 id: form
                 visible: true
                 columns: 2
-                spacing: 20
-                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 5
+          //      anchors.horizontalCenter: parent.horizontalCenter
 
                 Text{
                     text: "Login:"
@@ -69,6 +69,8 @@ import com.nokia.symbian 1.1
 
                 TextField{
                      id: loginField
+                     width: 150
+
                  }
 
                 Text{
@@ -77,6 +79,7 @@ import com.nokia.symbian 1.1
 
                 TextField{
                      id: passField
+                     width: 150
                      echoMode: TextInput.Password
                 }
 
@@ -90,6 +93,7 @@ import com.nokia.symbian 1.1
                      id: confirmField
                      echoMode: TextInput.Password
                      visible: false
+                     width: 150
                 }
             }
             Text {
@@ -101,9 +105,9 @@ import com.nokia.symbian 1.1
 
             Row {
                 id: signRow
-                spacing: 10
+                //spacing: 10
                 visible: true
-                anchors.right: parent.right
+                //anchors.right: parent.right
                 Text {
                     id: regText
                     visible: true
