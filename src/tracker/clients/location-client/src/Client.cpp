@@ -38,6 +38,14 @@ m_authentificated(0)
   connect(m_addNewMarkQuery,SIGNAL(tagAdded()),SLOT(onMarkAdded()));
   //  connect(m_addNewMarkQuery, SIGNAL(errorOccured(QString)), SIGNAL(error(QString)));
 
+  m_applyChannelQuery = new ApplyChannelQuery(this);
+  connect(m_applyChannelQuery, SIGNAL(channelAdded(QSharedPointer<Channel>)),SLOT(subscribeChannel(QSharedPointer<Channel>)));
+  connect(m_applyChannelQuery, SIGNAL(errorOccured(int)), SLOT(onError(int)));
+
+  m_subscribeChannelQuery = new SubscribeChannelQuery(this);
+  connect(m_subscribeChannelQuery,SIGNAL(channelSubscribed(QSharedPointer<Channel>)),SLOT(onChannelSubscribed(QSharedPointer<Channel>)));
+  connect(m_subscribeChannelQuery, SIGNAL(errorOccured(int)), SLOT(onError(int)));
+
 }
 
 
@@ -76,6 +84,7 @@ void Client::onError(QString err)
 
 void Client::onError(int err)
 {
+    qDebug()<<"err="<<err;
   if (err==INCORRECT_CREDENTIALS_ERROR)
     emit error(QVariant("Incorrect login or password"));
   else
@@ -124,11 +133,30 @@ void Client::onAuthentificated()
 
 void Client::onRegistered()
 {
+
+
     qDebug() << "Registered " <<  m_addUserQuery->getUser()->getToken();
     m_user =  m_addUserQuery->getUser();
+    QSharedPointer<Channel> channel = QSharedPointer<Channel>(new Channel(m_user->getLogin(),m_user->getLogin() + "'s channel"));
+    channel->setRadius(40000000);
+    m_applyChannelQuery->setQuery(channel, m_user);
+    m_applyChannelQuery->doRequest();
     m_authentificated = true;
-    emit authentificated(QVariant(m_user->getLogin()));
+  //  emit authentificated(QVariant(m_user->getLogin()));
 }
+void Client::subscribeChannel(QSharedPointer<Channel> channel)
+{
+    qDebug()<<"channel: "<<channel->getName();
+    m_subscribeChannelQuery->setQuery(channel, m_user);
+    m_subscribeChannelQuery->doRequest();
+}
+
+void Client::onChannelSubscribed(QSharedPointer<Channel> channel)
+{
+    qDebug()<<"Channel is subscribed";
+    m_channels.insert(channel,"");
+}
+
 
 
 void Client::pause(int msecs)
@@ -151,7 +179,7 @@ void Client::startTrack()
 
 void Client::onMarkAdded()
 {
-
+    qDebug()<<"Mark added";
 }
 
 
@@ -165,7 +193,7 @@ void Client::track()
   QSharedPointer<DataMark> mark(new JsonDataMark(0,lat,lon,"m_name",
     "this tag was generated","unknown",QDateTime::currentDateTime()));
 
-  QSharedPointer<Channel> channel(new JsonChannel(DEFAULT_CHANNEL,"dummy channel"));
+  QSharedPointer<Channel> channel(new JsonChannel(m_user->getLogin(),""));
   mark->setChannel(channel);
   m_history->pushMark(mark);
 }

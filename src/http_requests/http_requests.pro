@@ -17,7 +17,9 @@ HEADERS += \
            inc/DefaultQuery.h \
            inc/LoadTagsQuery.h \
            inc/WriteTagQuery.h \
-    inc/AddUserQuery.h
+           inc/AddUserQuery.h \
+           inc/ApplyChannelQuery.h \
+           inc/SubscribeChannelQuery.h
 
 #            inc/ApplyMarkQuery.h \
 #           inc/AvailableChannelsListQuery.h \
@@ -33,7 +35,9 @@ SOURCES += \
            src/DefaultQuery.cpp \
            src/LoadTagsQuery.cpp \
            src/WriteTagQuery.cpp \
-    src/AddUserQuery.cpp
+           src/AddUserQuery.cpp \
+           src/ApplyChannelQuery.cpp \
+    src/SubscribeChannelQuery.cpp
 
 # src/ApplyMarkQuery.cpp \
 #           src/AvailableChannelsListQuery.cpp \

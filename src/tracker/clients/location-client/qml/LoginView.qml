@@ -160,7 +160,7 @@ import com.nokia.symbian 1.1
              },
              State {
                  name: "Sign up"
-                 PropertyChanges { target: signRow; visible: true}
+                 PropertyChanges { target: signRow; visible: false}
                  PropertyChanges { target: loginnedText; visible: false}
                  PropertyChanges { target: confirmText; visible: true}
                  PropertyChanges { target: confirmField; visible: true}

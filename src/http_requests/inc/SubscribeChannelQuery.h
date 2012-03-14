@@ -51,21 +51,13 @@
 #include "User.h"
 #include <QSharedPointer>
 
-namespace GUI
-{
-  /*!
-   * SubscribeChannelQuery class definition.
-   *
-   * The object of this class represents http query to server.
-   * This query includes json request to subscribe channel.
-   *
-   */
+
   class SubscribeChannelQuery: public DefaultQuery
   {
     Q_OBJECT
 
-      QSharedPointer<User> m_user;
     QSharedPointer<Channel> m_channel;
+    QSharedPointer<common::User> m_user;
     QString m_status;
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
@@ -78,21 +70,20 @@ namespace GUI
 
       SubscribeChannelQuery(QObject *parent = 0);
 
-      SubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
+      SubscribeChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user, QObject *parent = 0);
 
-      void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
+      void setQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user);
 
       ~SubscribeChannelQuery();
 
       const QString& getStatus() const;
 
       Q_SIGNALS:
-      void responseReceived();
+      void channelSubscribed(QSharedPointer<Channel> channel);
 
       // class SubscribeChannelQuery
   };
-  // namespace GUI
-}
+
 
 
 //_SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_

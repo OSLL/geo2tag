@@ -6,12 +6,15 @@
 #include <QString>
 #include <QNetworkConfigurationManager>
 #include <QTimer>
+#include <QMap>
 
 #include "LoginQuery.h"
 #include "AddUserQuery.h"
 #include "WriteTagQuery.h"
 #include "MarksHistory.h"
-//#include "SubscribeChannelQuery.h"
+#include "ApplyChannelQuery.h"
+#include "SubscribeChannelQuery.h"
+#include "Channel.h"
 
 class Client : public QObject
 {
@@ -23,7 +26,8 @@ class Client : public QObject
     QTimer * m_timer;
 
     WriteTagQuery * m_addNewMarkQuery;
-    // SubscribeChannelQuery *m_subscribeChannelQuery;
+    SubscribeChannelQuery *m_subscribeChannelQuery;
+    ApplyChannelQuery *m_applyChannelQuery;
     MarksHistory * m_history;
 
     QString m_lastError;
@@ -31,6 +35,7 @@ class Client : public QObject
     AddUserQuery * m_addUserQuery;
     QSharedPointer<common::User> m_user;
     QNetworkConfigurationManager * m_netManager;
+    QMap<QSharedPointer<Channel>, QString> m_channels;
 
     void pause(int msecs);
 
@@ -58,6 +63,8 @@ class Client : public QObject
   public slots:
     void auth(QString user, QString pass);
     void registration(QString user, QString pass);
+    void subscribeChannel(QSharedPointer<Channel> m_channel);
+    void onChannelSubscribed(QSharedPointer<Channel> m_channel);
     void startTrack();
     void stopTrack();
     // Network going down|up

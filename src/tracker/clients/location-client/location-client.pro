@@ -36,6 +36,8 @@ SOURCES += \
     ../../../http_requests/src/DefaultQuery.cpp \
     ../../../http_requests/src/WriteTagQuery.cpp \
     ../../../http_requests/src/AddUserQuery.cpp \
+    ../../../http_requests/src/ApplyChannelQuery.cpp \
+    ../../../http_requests/src/SubscribeChannelQuery.cpp \
     ../../../common/src/User.cpp \
     ../../../common/src/TimeSlot.cpp \
     ../../../common/src/DataMarks.cpp \
@@ -47,6 +49,9 @@ SOURCES += \
     ../../../json/src/JsonSerializer.cpp \
     ../../../json/src/LoginResponseJSON.cpp \
     ../../../json/src/LoginRequestJSON.cpp \
+    ../../../json/src/SubscribeChannelJSON.cpp \
+    ../../../json/src/AddChannelRequestJSON.cpp \
+    ../../../json/src/DefaultResponseJSON.cpp \
     ../../../json/src/JsonUser.cpp \
     ../../../json/src/WriteTagResponseJSON.cpp \
     ../../../json/src/WriteTagRequestJSON.cpp \
@@ -68,9 +73,15 @@ HEADERS += \
     ../../../http_requests/inc/DefaultQuery.h \
     ../../../http_requests/inc/WriteTagQuery.h \
     ../../../http_requests/inc/AddUserQuery.h \
+    ../../../http_requests/inc/ApplyChannelQuery.h \
+    ../../../http_requests/inc/SubscribeChannelQuery.h \
     ../../../json/inc/JsonSerializer.h \
     ../../../json/inc/LoginResponseJSON.h \
     ../../../json/inc/LoginRequestJSON.h \
+    ../../../json/inc/AddChannelResponseJSON.h \
+    ../../../json/inc/AddChannelRequestJSON.h \
+    ../../../json/inc/SubscribeChannelResponseJSON.h \
+    ../../../json/inc/SubscribeChannelJSON.h \
     ../../../json/inc/AddUserRequestJSON.h \
     ../../../json/inc/AddUserResponseJSON.h \
     ../../../json/inc/JsonUser.h \
