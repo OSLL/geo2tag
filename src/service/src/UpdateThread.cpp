@@ -315,7 +315,7 @@ void UpdateThread::checkTmpUsers()
     QSqlQuery checkQuery(m_database);
     QSqlQuery deleteQuery(m_database);
     syslog(LOG_INFO,"checkTmpUsers query is running now...");
-    bool result = checkQuery.exec("select id from signups where (now() - datetime) >= INTERVAL '2 days';");
+    checkQuery.exec("select id from signups where (now() - datetime) >= INTERVAL '2 days';");
     while (checkQuery.next()) {
         qlonglong id = checkQuery.value(0).toLongLong();
         deleteQuery.prepare("delete from signups where id = :id;");
