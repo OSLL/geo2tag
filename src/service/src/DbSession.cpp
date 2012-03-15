@@ -127,7 +127,7 @@ namespace common
   {
 
     m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
-    m_processors.insert("registerUser", &DbObjectsCollection::processRegisterUserQuery);
+    //m_processors.insert("registerUser", &DbObjectsCollection::processRegisterUserQuery);
     m_processors.insert("writeTag", &DbObjectsCollection::processWriteTagQuery);
     m_processors.insert("loadTags", &DbObjectsCollection::processLoadTagsQuery);
     m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
@@ -228,12 +228,11 @@ namespace common
     return realUser;
   }
 
-  QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
+/*  QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
   {
     //RegisterUserRequestJSON request;
     //RegisterUserResponseJSON response;
     QByteArray answer;
-    syslog(LOG_INFO, "OK!");
 
     //QSharedPointer<common::User> found = m_queryExecutor->isTmpUserExists(QSharedPointer<User>(new User("Alex", "test")));
     //syslog(LOG_INFO, found->getLogin().toStdString().c_str());
@@ -242,7 +241,7 @@ namespace common
     //m_queryExecutor->insertNewTmpUser(QSharedPointer<User>(new User("dummy2", "dummy")), "dumm2@e.f");
     //m_queryExecutor->deleteTmpUser(QSharedPointer<User>(new User("dummy2", "dummy")));
     return answer;
-  }
+  }*/
 
   QByteArray DbObjectsCollection::processLoginQuery(const QByteArray &data)
   {
