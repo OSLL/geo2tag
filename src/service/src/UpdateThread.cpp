@@ -322,8 +322,13 @@ void UpdateThread::checkTmpUsers()
         deleteQuery.bindValue(":id", id);
         syslog(LOG_INFO,"Deleting: %s", deleteQuery.lastQuery().toStdString().c_str());
         m_database.transaction();
-        deleteQuery.exec();
-        //bool result = deleteQuery.exec();
-        //if(result) syslog(LOG_INFO, "OK");
+        bool result = deleteQuery.exec();
+        if(!result) {
+            syslog(LOG_INFO,"Rollback for DeleteTmpUser sql query");
+            m_database.rollback();
+        } else {
+            syslog(LOG_INFO,"Commit for DeleteTmpUser sql query");
+            m_database.commit();
+        }
     }
 }
