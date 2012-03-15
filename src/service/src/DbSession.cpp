@@ -241,7 +241,6 @@ namespace common
 
     //m_queryExecutor->insertNewTmpUser(QSharedPointer<User>(new User("dummy2", "dummy")), "dumm2@e.f");
     //m_queryExecutor->deleteTmpUser(QSharedPointer<User>(new User("dummy2", "dummy")));
-
     return answer;
   }
 

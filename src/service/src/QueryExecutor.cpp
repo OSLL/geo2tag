@@ -212,7 +212,7 @@ QSharedPointer<common::User> QueryExecutor::isTmpUserExists(const QSharedPointer
         m_database.rollback();
         return QSharedPointer<common::User>(NULL);
     } else {
-        syslog(LOG_INFO,"Commit for NewUser sql query");
+        syslog(LOG_INFO,"Commit for SelectTmpUser sql query");
         m_database.commit();
     }
     if (query.next()) {

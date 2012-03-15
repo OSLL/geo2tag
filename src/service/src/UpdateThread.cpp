@@ -84,6 +84,7 @@ void UpdateThread::run()
     Channels    channelsContainer(*m_channelsContainer);
     TimeSlots   timeSlotsContainer(*m_timeSlotsContainer);
 
+    checkTmpUsers(); // New!
     loadUsers(usersContainer);
     loadTags(tagsContainer);
     loadChannels(channelsContainer);
@@ -307,4 +308,22 @@ void UpdateThread::updateReflections(DataMarks &tags, common::Users &users, Chan
     }
   }
 
+}
+
+void UpdateThread::checkTmpUsers()
+{
+    QSqlQuery checkQuery(m_database);
+    QSqlQuery deleteQuery(m_database);
+    syslog(LOG_INFO,"checkTmpUsers query is running now...");
+    bool result = checkQuery.exec("select id from signups where (now() - datetime) >= INTERVAL '2 days';");
+    while (checkQuery.next()) {
+        qlonglong id = checkQuery.value(0).toLongLong();
+        deleteQuery.prepare("delete from signups where id = :id;");
+        deleteQuery.bindValue(":id", id);
+        syslog(LOG_INFO,"Deleting: %s", deleteQuery.lastQuery().toStdString().c_str());
+        m_database.transaction();
+        deleteQuery.exec();
+        //bool result = deleteQuery.exec();
+        //if(result) syslog(LOG_INFO, "OK");
+    }
 }

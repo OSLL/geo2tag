@@ -66,9 +66,11 @@ class UpdateThread: public QThread
   void loadTimeSlots(TimeSlots &);
   void updateReflections(DataMarks&, common::Users&, Channels&, TimeSlots&);
 
+
   void run();
 
   public:
+void checkTmpUsers();
     UpdateThread(
       const QSqlDatabase &db,
       const QSharedPointer<DataMarks>& tags,
