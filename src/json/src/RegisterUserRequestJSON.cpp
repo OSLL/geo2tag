@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,41 +28,47 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
- * \file JsonUser.cpp
- * \brief JsonUser implementation
- *
- * PROJ: OSLL/geoblog
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#include "RegisterUserRequestJSON.h"
 #include "JsonUser.h"
 
-qlonglong JsonUser::globalUserId = 0;
+#ifndef Q_WS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
-JsonUser::JsonUser(const QString &login,
-const QString& pass,
-const QString& email,
-const QString& token): common::User(login,pass,email), m_id(globalUserId++)
-{
-  setToken(token);
-}
-
-
-qlonglong JsonUser::getId() const
-{
-  return m_id;
-}
-
-
-void JsonUser::setId(qlonglong id)
-{
-  m_id = id;
-}
-
-
-JsonUser::~JsonUser()
+RegisterUserRequestJSON::RegisterUserRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
+QByteArray RegisterUserRequestJSON::getJson() const
+{
+    QJson::Serializer serializer;
+    QVariantMap obj;
+    obj.insert("email", m_usersContainer->at(0)->getEmail());
+    obj.insert("login", m_usersContainer->at(0)->getLogin());
+    obj.insert("password", m_usersContainer->at(0)->getPassword());
+    return serializer.serialize(obj);
+}
 
-/* ===[ End of file ]=== */
+bool RegisterUserRequestJSON::parseJson(const QByteArray &data)
+{
+    clearContainers();
+
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if (!ok) return false;
+
+    QString email = result["email"].toString();
+    QString login = result["login"].toString();
+    QString password = result["password"].toString();
+    m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login, password, email)));
+    return true;
+}
