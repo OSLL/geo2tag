@@ -197,6 +197,94 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
   return newChannel;
 }
 
+QSharedPointer<common::User> QueryExecutor::isTmpUserExists(const QSharedPointer<common::User> &user)
+{
+    bool result;
+    QSqlQuery query(m_database);
+    query.prepare("select id, email, login, password, registration_token from signups where login = :login;");
+    query.bindValue(":login",user->getLogin());
+    syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
+
+    m_database.transaction();
+    result = query.exec();
+    if(!result) {
+        syslog(LOG_INFO,"Rollback for SelectTmpUser sql query");
+        m_database.rollback();
+        return QSharedPointer<common::User>(NULL);
+    } else {
+        syslog(LOG_INFO,"Commit for NewUser sql query");
+        m_database.commit();
+    }
+    if (query.next()) {
+        syslog(LOG_INFO,"Match found.");
+        qlonglong id = query.value(0).toLongLong();
+        QString email = query.value(1).toString();
+        QString login = query.value(2).toString();
+        QString password = query.value(3).toString();
+        QString token = query.value(4).toString();
+        return QSharedPointer<DbUser>(new DbUser(login, password, id, token));
+    } else {
+        syslog(LOG_INFO,"No matching users.");
+        return QSharedPointer<common::User>(NULL);
+    }
+}
+
+bool QueryExecutor::deleteTmpUser(const QSharedPointer<common::User> &user)
+{
+    bool result;
+    QSqlQuery deleteSignupQuery(m_database);
+    deleteSignupQuery.prepare("delete from signups where login = :login;");
+    deleteSignupQuery.bindValue(":login",user->getLogin() );
+    syslog(LOG_INFO,"Deleting: %s", deleteSignupQuery.lastQuery().toStdString().c_str());
+
+    m_database.transaction();
+    result = deleteSignupQuery.exec();
+    if(!result) {
+      syslog(LOG_INFO,"Rollback for deleteSignup sql query");
+      m_database.rollback();
+    } else {
+      syslog(LOG_INFO,"Commit for deleteSignup sql query");
+      m_database.commit();
+    }
+    return result;
+}
+
+bool QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user, const QString &email)
+{
+    bool result;
+    QSqlQuery newSignupQuery(m_database);
+    syslog(LOG_INFO, "OK!");
+    qlonglong newId = nextUserKey();
+    syslog(LOG_INFO,"Generating token for new signup, %s : %s",user->getLogin().toStdString().c_str()
+                                                            ,user->getPassword().toStdString().c_str());
+    QString newToken = generateNewToken(user->getLogin(),user->getPassword());
+    newSignupQuery.prepare("insert into signups (id,email,login,password,registration_token,sent) values(:id,:email,:login,:password,:r_token,:sent);");
+    newSignupQuery.bindValue(":id", newId);
+    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
+    newSignupQuery.bindValue(":email", email);
+    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
+    newSignupQuery.bindValue(":login", user->getLogin());
+    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
+    newSignupQuery.bindValue(":password", user->getPassword());
+    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
+    newSignupQuery.bindValue(":r_token", newToken);
+    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
+    newSignupQuery.bindValue(":sent", FALSE);
+    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
+
+    m_database.transaction();
+    result = newSignupQuery.exec();
+    if(!result) {
+      syslog(LOG_INFO,"Rollback for NewSignup sql query");
+      m_database.rollback();
+      return QSharedPointer<common::User>(NULL);
+    } else {
+      syslog(LOG_INFO,"Commit for NewSignup sql query");
+      m_database.commit();
+    }
+    QSharedPointer<DbUser> newUser(new DbUser(user->getLogin(),user->getPassword(),newId,newToken));
+    return newUser;
+}
 
 QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<common::User>& user)
 {
