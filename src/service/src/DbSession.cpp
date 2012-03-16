@@ -127,7 +127,7 @@ namespace common
   {
 
     m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
-    //m_processors.insert("registerUser", &DbObjectsCollection::processRegisterUserQuery);
+    m_processors.insert("registerUser", &DbObjectsCollection::processRegisterUserQuery);
     m_processors.insert("writeTag", &DbObjectsCollection::processWriteTagQuery);
     m_processors.insert("loadTags", &DbObjectsCollection::processLoadTagsQuery);
     m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
@@ -228,20 +228,42 @@ namespace common
     return realUser;
   }
 
-  /*QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
+  QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
   {
-    //RegisterUserRequestJSON request;
-    //RegisterUserResponseJSON response;
+    RegisterUserRequestJSON request;
+    RegisterUserResponseJSON response;
     QByteArray answer;
+    answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    if (!request.parseJson(data)) {
+        response.setErrno(INCORRECT_JSON_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+    QSharedPointer<User> newTmpUser = request.getUsers()->at(0);
+    QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+    for(int i=0; i<currentUsers.size(); i++)
+    {
+      if(currentUsers.at(i)->getLogin() == newTmpUser->getLogin())
+      {
+        response.setErrno(USER_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+      }
+    }
+    if(m_queryExecutor->isTmpUserExists(newTmpUser)) {
+        response.setErrno(TMP_USER_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
 
-    //QSharedPointer<common::User> found = m_queryExecutor->isTmpUserExists(QSharedPointer<User>(new User("Alex", "test")));
-    //syslog(LOG_INFO, found->getLogin().toStdString().c_str());
-    //syslog(LOG_INFO, found->getPassword().toStdString().c_str());
+    m_queryExecutor->insertNewTmpUser(newTmpUser);
 
-    //m_queryExecutor->insertNewTmpUser(QSharedPointer<User>(new User("dummy2", "dummy")), "dumm2@e.f");
-    //m_queryExecutor->deleteTmpUser(QSharedPointer<User>(new User("dummy2", "dummy")));
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
-  }*/
+  }
 
   QByteArray DbObjectsCollection::processLoginQuery(const QByteArray &data)
   {

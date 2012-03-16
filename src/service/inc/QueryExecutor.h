@@ -67,7 +67,7 @@ class QueryExecutor : public QObject
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     QSharedPointer<common::User> isTmpUserExists(const QSharedPointer<common::User> &user); // New!
     bool                     deleteTmpUser(const QSharedPointer<common::User> &user);        // New!
-    bool                     insertNewTmpUser(const QSharedPointer<common::User> &user, const QString &email); // New!
+    bool                     insertNewTmpUser(const QSharedPointer<common::User> &user); // New!
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
     QSharedPointer<common::User>    insertNewUser(const QSharedPointer<common::User>&);
     QSharedPointer<Channel>  insertNewChannel(const QSharedPointer<Channel>&);

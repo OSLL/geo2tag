@@ -240,7 +240,7 @@ bool QueryExecutor::deleteTmpUser(const QSharedPointer<common::User> &user)
     return result;
 }
 
-bool QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user, const QString &email)
+bool QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
 {
     bool result;
     QSqlQuery newSignupQuery(m_database);
@@ -252,7 +252,7 @@ bool QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user, c
     newSignupQuery.prepare("insert into signups (id,email,login,password,registration_token,sent) values(:id,:email,:login,:password,:r_token,:sent);");
     newSignupQuery.bindValue(":id", newId);
     syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
-    newSignupQuery.bindValue(":email", email);
+    newSignupQuery.bindValue(":email", user->getEmail());
     syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
     newSignupQuery.bindValue(":login", user->getLogin());
     syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
