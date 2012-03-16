@@ -228,7 +228,7 @@ namespace common
     return realUser;
   }
 
-/*  QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
+  /*QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
   {
     //RegisterUserRequestJSON request;
     //RegisterUserResponseJSON response;

@@ -199,22 +199,13 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
 
 QSharedPointer<common::User> QueryExecutor::isTmpUserExists(const QSharedPointer<common::User> &user)
 {
-    bool result;
     QSqlQuery query(m_database);
     query.prepare("select id, email, login, password, registration_token from signups where login = :login;");
     query.bindValue(":login",user->getLogin());
     syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
 
-    m_database.transaction();
-    result = query.exec();
-    if(!result) {
-        syslog(LOG_INFO,"Rollback for SelectTmpUser sql query");
-        m_database.rollback();
-        return QSharedPointer<common::User>(NULL);
-    } else {
-        syslog(LOG_INFO,"Commit for SelectTmpUser sql query");
-        m_database.commit();
-    }
+    query.exec();
+
     if (query.next()) {
         syslog(LOG_INFO,"Match found.");
         qlonglong id = query.value(0).toLongLong();

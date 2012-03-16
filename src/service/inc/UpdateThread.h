@@ -49,7 +49,7 @@ class UpdateThread: public QThread
 {
   Q_OBJECT
 
-    QSharedPointer<Channels>     m_channelsContainer;
+  QSharedPointer<Channels>     m_channelsContainer;
   QSharedPointer<DataMarks>    m_tagsContainer;
   QSharedPointer<common::Users>        m_usersContainer;
   QSharedPointer<TimeSlots>    m_timeSlotsContainer;

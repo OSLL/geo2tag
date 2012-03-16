@@ -35,6 +35,7 @@
 #include <syslog.h>
 #include <QDebug>
 #include "UpdateThread.h"
+#include "defines.h"
 
 UpdateThread::UpdateThread(const QSqlDatabase &db,
 const QSharedPointer<DataMarks> &tags,
@@ -315,7 +316,11 @@ void UpdateThread::checkTmpUsers()
     QSqlQuery checkQuery(m_database);
     QSqlQuery deleteQuery(m_database);
     syslog(LOG_INFO,"checkTmpUsers query is running now...");
-    checkQuery.exec("select id from signups where (now() - datetime) >= INTERVAL '2 days';");
+    QString strQuery;
+    strQuery.append("select id from signups where (now() - datetime) >= INTERVAL '");
+    strQuery.append(DEFAULT_TMP_USER_TIMELIFE);
+    strQuery.append("';");
+    checkQuery.exec(strQuery.toStdString().c_str());
     while (checkQuery.next()) {
         qlonglong id = checkQuery.value(0).toLongLong();
         deleteQuery.prepare("delete from signups where id = :id;");

@@ -72,6 +72,8 @@ void setServerPort(int port);
 #define DEFAULT_CHANNEL     "default"
 #define DEFAULT_TOKEN             "2154086390Ivan1128557755"
 
+#define DEFAULT_TMP_USER_TIMELIFE  "2 days"
+
 #define TRACKER_TAG_LABEL   "tracker's tag"
 
 #define DEFAULT_LATITUDE   ((double) 59.91446)
