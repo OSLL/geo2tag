@@ -62,6 +62,7 @@ class QueryExecutor : public QObject
     qlonglong nextTimeSlotKey() const;
 
     const QString generateNewToken(const QString& login,const QString& password) const;
+    const QString generateNewToken(const QString& email, const QString& login,const QString& password) const;
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);

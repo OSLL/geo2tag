@@ -257,7 +257,12 @@ namespace common
         return answer;
     }
 
-    m_queryExecutor->insertNewTmpUser(newTmpUser);
+    if(!m_queryExecutor->insertNewTmpUser(newTmpUser)) {
+        response.setErrno(INTERNAL_DB_ERROR);
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+    }
 
     response.setErrno(SUCCESS);
     answer.append(response.getJson());

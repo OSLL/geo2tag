@@ -109,6 +109,16 @@ const QString QueryExecutor::generateNewToken(const QString& login,const QString
   return result;
 }
 
+const QString QueryExecutor::generateNewToken(const QString& email, const QString& login,const QString& password) const
+{
+  QString log=login+password+email;
+  QByteArray toHash(log.toUtf8());
+  toHash=QCryptographicHash::hash(log.toUtf8(),QCryptographicHash::Md5);
+  QString result(toHash.toHex());
+  syslog(LOG_INFO,"TOken = %s",result.toStdString().c_str());
+  return result;
+}
+
 
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
@@ -248,7 +258,7 @@ bool QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
     qlonglong newId = nextUserKey();
     syslog(LOG_INFO,"Generating token for new signup, %s : %s",user->getLogin().toStdString().c_str()
                                                             ,user->getPassword().toStdString().c_str());
-    QString newToken = generateNewToken(user->getLogin(),user->getPassword());
+    QString newToken = generateNewToken(user->getEmail(), user->getLogin(),user->getPassword());
     newSignupQuery.prepare("insert into signups (id,email,login,password,registration_token,sent) values(:id,:email,:login,:password,:r_token,:sent);");
     newSignupQuery.bindValue(":id", newId);
     syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
@@ -268,13 +278,12 @@ bool QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
     if(!result) {
       syslog(LOG_INFO,"Rollback for NewSignup sql query");
       m_database.rollback();
-      return QSharedPointer<common::User>(NULL);
+      return false;
     } else {
       syslog(LOG_INFO,"Commit for NewSignup sql query");
       m_database.commit();
     }
-    QSharedPointer<DbUser> newUser(new DbUser(user->getLogin(),user->getPassword(),newId,newToken));
-    return newUser;
+    return true;
 }
 
 QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<common::User>& user)
