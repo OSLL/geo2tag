@@ -59,6 +59,7 @@ void setServerPort(int port);
 #define FEED_HTTP_URL             getServerUrl()+QString("service/loadTags")
 #define SUBSCRIBED_LIST_HTTP_URL  getServerUrl()+QString("service/subscribed")
 #define AVAILABLE_LIST_HTTP_URL   getServerUrl()+QString("service/channels")
+#define REGISTER_USER_HTTP_URL    getServerUrl()+QString("service/registerUser")
 #define LOGIN_HTTP_URL            getServerUrl()+QString("service/login")
 #define APPLY_CHANNEL_HTTP_URL    getServerUrl()+QString("service/addChannel")
 #define ADD_USER_HTTP_URL         getServerUrl()+QString("service/addUser")

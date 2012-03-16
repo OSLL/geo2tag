@@ -16,7 +16,8 @@ HEADERS += \
            inc/LoginQuery.h \
            inc/DefaultQuery.h \
            inc/LoadTagsQuery.h \
-           inc/WriteTagQuery.h
+           inc/WriteTagQuery.h \
+    inc/RegisterUserQuery.h
 
 #            inc/ApplyMarkQuery.h \
 #           inc/AvailableChannelsListQuery.h \
@@ -31,7 +32,8 @@ SOURCES += \
            src/LoginQuery.cpp \
            src/DefaultQuery.cpp \
            src/LoadTagsQuery.cpp \
-           src/WriteTagQuery.cpp
+           src/WriteTagQuery.cpp \
+    src/RegisterUserQuery.cpp
 
 # src/ApplyMarkQuery.cpp \
 #           src/AvailableChannelsListQuery.cpp \
