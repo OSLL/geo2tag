@@ -1,5 +1,3 @@
-
-
 INCLUDEPATH = ../inc/ ../../common/inc/ \
               ../../json/inc/ \
 

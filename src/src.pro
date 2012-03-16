@@ -31,3 +31,6 @@ linux: {
 	     maps \
              tracker/observer
 }
+
+SUBDIRS += \
+    http_requests/tst_http_requests
