@@ -15,6 +15,7 @@
 #include <QObject>
 #include <QTest>
 #include "../inc/RegisterUserQuery.h"
+#include "../inc/LoginQuery.h"
 
 namespace Test
 {
@@ -23,13 +24,8 @@ namespace Test
     {
         Q_OBJECT
 
-        bool m_ok;
-
     private slots:
         void response();
-
-    public slots:
-        void ok();
 
     };  // class Test_RegisterUserQuery
 } // namespace Test

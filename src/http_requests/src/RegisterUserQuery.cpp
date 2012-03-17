@@ -62,9 +62,9 @@ RegisterUserQuery::RegisterUserQuery(QObject *parent)
 
 QString RegisterUserQuery::getUrl() const
 {
-    const QString str = "http://localhost:80/service/registerUser";
-    return str;
-    //return REGISTER_USER_HTTP_URL;
+    //const QString str = "http://localhost:80/service/registerUser";
+    //return str;
+    return REGISTER_USER_HTTP_URL;
 }
 
 QByteArray RegisterUserQuery::getRequestBody() const
@@ -78,14 +78,17 @@ QByteArray RegisterUserQuery::getRequestBody() const
 void RegisterUserQuery::processReply(QNetworkReply *reply)
 {
     #ifndef Q_OS_SYMBIAN
+    qDebug("I'm in!");
     RegisterUserResponseJSON response;
     response.parseJson(reply->readAll());
     if (response.getErrno() == SUCCESS) {
         QSharedPointer<common::User> user = response.getUsers()->at(0);
         m_user = QSharedPointer<common::User>(new JsonUser(m_email, m_login, m_password, user->getToken()));
         syslog(LOG_INFO,"!!connected!");
+        qDebug("!!connected!");
         Q_EMIT connected();
     } else {
+        qDebug("!!errorOccured!");
         Q_EMIT errorOccured(response.getErrno());
     }
     #endif

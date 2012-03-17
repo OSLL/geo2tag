@@ -9,10 +9,13 @@
  * PROJ: OSLL/geo2tag
  * ------------------------------------------------------------------------ */
 
+#include <QCoreApplication>
 #include "Test_RegisterUserQuery.h"
 
-int main()
+int main(int argc, char *argv[])
 {
+    QCoreApplication app(argc, argv);
+
     QObject *tests[] =
     {
         new Test::Test_RegisterUserQuery

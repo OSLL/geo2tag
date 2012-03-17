@@ -20,23 +20,18 @@ namespace Test
     void Test_RegisterUserQuery::response()
     {
         RegisterUserQuery query(this);
-        m_ok = false;
-        QString email = "dummy@test.org";
-        QString login = "Dummy";
+        bool m_ok = false;
+        QString email = "email5@test1.org";
+        QString login = "Matt";
         QString password = "test";
         query.setQuery(email, login, password);
         query.doRequest();
         connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
-        //QTest::qSleep(1000);
-        //waitForSignal(&query, SIGNAL(errorOccured(QString)), 1000);
+        m_ok = waitForSignal(&query, SIGNAL(errorOccured(int)), 1000);
+        if (!m_ok)
+            m_ok = waitForSignal(&query, SIGNAL(connected()), 1000);
+        QCOMPARE(m_ok , true);
 
-        //QCOMPARE(m_ok , true);
-
-    }
-
-    void Test_RegisterUserQuery::ok()
-    {
-        m_ok = true;
     }
 
 } // end of namespace Test
