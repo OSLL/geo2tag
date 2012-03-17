@@ -9,6 +9,7 @@ SOURCES += \
     ../../json/src/JsonSerializer.cpp \
     ../../json/src/RegisterUserRequestJSON.cpp \
     ../../json/src/RegisterUserResponseJSON.cpp \
+    ../../common/src/signals.cpp \
     Test_RegisterUserQuery.cpp
 
 HEADERS += \
@@ -18,6 +19,7 @@ HEADERS += \
     ../../json/inc/JsonSerializer.h \
     ../../json/inc/RegisterUserRequestJSON.h \
     ../../json/inc/RegisterUserResponseJSON.h \
+    ../../common/inc/signals.h \
     Test_RegisterUserQuery.h
 
 CONFIG += qtestlib

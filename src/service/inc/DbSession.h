@@ -109,6 +109,8 @@ namespace common
     QByteArray processFilterBoxQuery(const QByteArray&);
     QByteArray processFilterFenceQuery(const QByteArray&);
 
+    void processSendConfirmationLetter(const QString &address);
+
     QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 
     public:
