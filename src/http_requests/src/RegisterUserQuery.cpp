@@ -62,7 +62,9 @@ RegisterUserQuery::RegisterUserQuery(QObject *parent)
 
 QString RegisterUserQuery::getUrl() const
 {
-    return REGISTER_USER_HTTP_URL;
+    const QString str = "http://localhost:80/service/registerUser";
+    return str;
+    //return REGISTER_USER_HTTP_URL;
 }
 
 QByteArray RegisterUserQuery::getRequestBody() const

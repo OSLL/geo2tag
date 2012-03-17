@@ -125,8 +125,7 @@ namespace common
       DbObjectsCollection(const DbObjectsCollection& obj);
       DbObjectsCollection& operator=(const DbObjectsCollection& obj);
 
-      // class DbSession
-  };
+  }; // class DbSession
 
   // namespace common
 }
