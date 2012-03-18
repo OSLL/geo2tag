@@ -86,6 +86,7 @@ namespace common
     QSharedPointer<User> findUserFromToken(const QSharedPointer<User>&) const;
 
     QByteArray processRegisterUserQuery(const QByteArray&);
+    //QByteArray processConfirmRegistrationQuery(const QString &registrationToken);
     QByteArray processLoginQuery(const QByteArray&);
     QByteArray processSubscribedChannelsQuery(const QByteArray&);
     QByteArray processAvailableChannelsQuery(const QByteArray&);

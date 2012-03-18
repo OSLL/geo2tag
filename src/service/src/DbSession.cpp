@@ -268,6 +268,7 @@ namespace common
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
+
   }
 
   QByteArray DbObjectsCollection::processLoginQuery(const QByteArray &data)

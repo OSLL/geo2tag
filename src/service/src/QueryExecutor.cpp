@@ -286,6 +286,70 @@ bool QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
     return true;
 }
 
+bool QueryExecutor::doesRegistrationTokenExist(const QString &token)
+{
+    QSqlQuery query(m_database);
+    syslog(LOG_INFO, "Checking of user existence in signups by token: %s", token.toStdString().c_str());
+
+    query.prepare("select id from signups where registration_token = :token;");
+    query.bindValue(":token", token);
+    syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
+    query.exec();
+
+    if (query.next()) {
+        syslog(LOG_INFO,"Match found.");
+        return true;
+    } else {
+        syslog(LOG_INFO,"No matching users.");
+        return false;
+    }
+}
+
+bool QueryExecutor::insertTmpUserIntoUsers(const QString &token)
+{
+    QSqlQuery checkQuery(m_database);
+    syslog(LOG_INFO, "Checking of user existence in signups by token: %s", token.toStdString().c_str());
+
+    checkQuery.prepare("select email, login, password from signups where registration_token = :token;");
+    checkQuery.bindValue(":token", token);
+    syslog(LOG_INFO,"Selecting: %s", checkQuery.lastQuery().toStdString().c_str());
+    checkQuery.exec();
+
+    if (checkQuery.next()) {
+        syslog(LOG_INFO,"Match found.");
+        QString email = checkQuery.value(0).toString();
+        QString login = checkQuery.value(1).toString();
+        QString password = checkQuery.value(2).toString();
+        const QSharedPointer<common::User> newUser(new common::User(login, password, email));
+        if (!insertNewUser(newUser))
+            return false;
+        return true;
+    } else {
+        syslog(LOG_INFO,"No matching users.");
+        return false;
+    }
+}
+
+bool QueryExecutor::deleteTmpUser(const QString &token)
+{
+    bool result;
+    QSqlQuery deleteSignupQuery(m_database);
+    deleteSignupQuery.prepare("delete from signups where registration_token = :token;");
+    deleteSignupQuery.bindValue(":token", token);
+    syslog(LOG_INFO,"Deleting: %s", deleteSignupQuery.lastQuery().toStdString().c_str());
+
+    m_database.transaction();
+    result = deleteSignupQuery.exec();
+    if(!result) {
+      syslog(LOG_INFO,"Rollback for deleteSignup sql query");
+      m_database.rollback();
+    } else {
+      syslog(LOG_INFO,"Commit for deleteSignup sql query");
+      m_database.commit();
+    }
+    return result;
+}
+
 QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<common::User>& user)
 {
   bool result;
