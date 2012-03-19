@@ -46,6 +46,7 @@
 #include <QDateTime>
 
 int TrackThread::m_counter=0;
+int TrackThread::m_number_of_requests=0;
 
 TrackThread::TrackThread(const QSharedPointer<DataMark> &tag)
 {
@@ -82,13 +83,14 @@ void TrackThread::incCounter()
 void TrackThread::sendRequest()
 {
 
-  incCounter();
   m_sendTime = QDateTime::currentDateTime();
   m_track->doRequest();
 }
 
 void TrackThread::responseRecieved()
 {
+  incCounter();
   qDebug() << getCounter() << " " << m_sendTime.msecsTo(QDateTime::currentDateTime()) << " " << m_track->getErrno();
+  if (m_counter == m_number_of_requests ) exit();
   emit doRequest();
 }

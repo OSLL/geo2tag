@@ -57,6 +57,7 @@ class TrackThread: public QThread
   QSharedPointer<DataMark> m_tag;
 
 public:
+  static int m_number_of_requests;
   TrackThread(const QSharedPointer<DataMark> &tag);
   ~TrackThread();
 

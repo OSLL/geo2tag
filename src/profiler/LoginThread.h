@@ -62,6 +62,7 @@ class LoginThread: public QThread
 
 
 public:
+  static int m_number_of_requests; 
   LoginThread();
 
   ~LoginThread();  

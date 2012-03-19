@@ -46,6 +46,7 @@
 #include "defines.h"
 
 int LoginThread::m_counter=0;
+int LoginThread::m_number_of_requests=-1;
 
 LoginThread::LoginThread()
 {
@@ -76,21 +77,9 @@ void LoginThread::incCounter()
   m_counter++;
 }
 
-/*QString LoginThread::getSt() 
-{
-    QNetworkRequest request = QNetworkRequest(QUrl("https://auth.airomo.com/v1/tickets/"+m_tgt));
-    QNetworkAccessManager *manager = new QNetworkAccessManager();
-    QEventLoop loop;
-    QNetworkReply *reply = manager->post(request, "service=http://geo.airomo.com/");
-    connect(reply,SIGNAL(readyRead()),&loop,SLOT(quit()));
-    loop.exec();
-    return reply->readAll();
-}*/
-
 void LoginThread::sendRequest()
 {
 
-  incCounter();
   srand(time(NULL));
   m_startSession->setQuery(DEFAULT_USER_NAME,DEFAULT_USER_PASSWORD);
   m_sendTime = QDateTime::currentDateTime();
@@ -99,6 +88,8 @@ void LoginThread::sendRequest()
 
 void LoginThread::responseRecieved()
 {
+  incCounter();
   qDebug() << getCounter() << " " << m_sendTime.msecsTo(QDateTime::currentDateTime()) << " " << m_startSession->getErrno();
+  if (m_counter == m_number_of_requests ) exit();
   emit doRequest();
 }
