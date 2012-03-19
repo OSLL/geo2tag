@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,41 +28,49 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
- * \file JsonUser.cpp
- * \brief JsonUser implementation
- *
- * PROJ: OSLL/geoblog
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#include <QDebug>
+
+#ifndef Q_WS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
+
+#include "RegisterUserResponseJSON.h"
 #include "JsonUser.h"
 
-qlonglong JsonUser::globalUserId = 0;
-
-JsonUser::JsonUser(const QString &login,
-const QString& pass,
-const QString& email,
-const QString& token): common::User(login,pass,email), m_id(globalUserId++)
-{
-  setToken(token);
-}
-
-
-qlonglong JsonUser::getId() const
-{
-  return m_id;
-}
-
-
-void JsonUser::setId(qlonglong id)
-{
-  m_id = id;
-}
-
-
-JsonUser::~JsonUser()
+RegisterUserResponseJSON::RegisterUserResponseJSON(QObject *parent)
+    : JsonSerializer(parent)
 {
 }
 
+QByteArray RegisterUserResponseJSON::getJson() const
+{
+    QJson::Serializer serializer;
+    QVariantMap obj;
+    obj.insert("errno", m_errno);
+    return serializer.serialize(obj);
+}
 
-/* ===[ End of file ]=== */
+bool RegisterUserResponseJSON::parseJson(const QByteArray &data)
+{
+    //clearContainers();
+    QJson::Parser parser;
+    bool ok;
+
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if (!ok) return false;
+
+    result["errno"].toInt(&ok);
+    if (!ok) return false;
+    m_errno = result["errno"].toInt(&ok);
+
+    return true;
+}
+

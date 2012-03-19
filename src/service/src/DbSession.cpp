@@ -46,6 +46,9 @@
 #include "LoginRequestJSON.h"
 #include "LoginResponseJSON.h"
 
+#include "RegisterUserRequestJSON.h"
+#include "RegisterUserResponseJSON.h"
+
 #include "WriteTagRequestJSON.h"
 #include "WriteTagResponseJSON.h"
 
@@ -108,6 +111,7 @@
 
 #include <QtSql>
 #include <QMap>
+#include <QRegExp>
 
 namespace common
 {
@@ -125,6 +129,7 @@ namespace common
   {
 
     m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
+    m_processors.insert("registerUser", &DbObjectsCollection::processRegisterUserQuery);
     m_processors.insert("writeTag", &DbObjectsCollection::processWriteTagQuery);
     m_processors.insert("loadTags", &DbObjectsCollection::processLoadTagsQuery);
     m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
@@ -146,6 +151,8 @@ namespace common
     m_processors.insert("filterRectangle", &DbObjectsCollection::processFilterRectangleQuery);
     m_processors.insert("filterBox", &DbObjectsCollection::processFilterBoxQuery);
     m_processors.insert("filterFence", &DbObjectsCollection::processFilterFenceQuery);
+//  Here also should be something like
+//  m_processors.insert("confirmRegistration-*", &DbObjectsCollection::processFilterFenceQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -198,6 +205,18 @@ namespace common
       }
     }
 
+    // Extra code for extracting token from url !
+    QRegExp rx("confirmRegistration-([a-zA-Z0-9]+)");
+    if (rx.exactMatch(queryType)) {
+        syslog(LOG_INFO, "Pattern matched!");
+        const QString token = rx.cap(1);
+        ProcessMethodWithStr method = &DbObjectsCollection::processConfirmRegistrationQuery;
+        return (*this.*method)(token);
+    } else {
+        syslog(LOG_INFO, "Pattern not matched!");
+    }
+    // end of extra code !
+
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
     DefaultResponseJSON response;
     response.setErrno(INCORRECT_QUERY_NAME_ERROR);
@@ -223,6 +242,69 @@ namespace common
       }
     }
     return realUser;
+  }
+
+  QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
+  {
+    RegisterUserRequestJSON request;
+    RegisterUserResponseJSON response;
+    QByteArray answer;
+    answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    if (!request.parseJson(data)) {
+        response.setErrno(INCORRECT_JSON_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+    QSharedPointer<User> newTmpUser = request.getUsers()->at(0);
+    QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+    for(int i=0; i<currentUsers.size(); i++)
+    {
+      if(currentUsers.at(i)->getLogin() == newTmpUser->getLogin())
+      {
+        response.setErrno(USER_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+      }
+    }
+    if(m_queryExecutor->isTmpUserExists(newTmpUser)) {
+        response.setErrno(TMP_USER_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+
+    if(!m_queryExecutor->insertNewTmpUser(newTmpUser)) {
+        response.setErrno(INTERNAL_DB_ERROR);
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+    }
+
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+
+  }
+
+  QByteArray DbObjectsCollection::processConfirmRegistrationQuery(const QString &registrationToken)
+  {
+    QByteArray answer;
+    answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    //syslog(LOG_INFO, "Confirming!");
+    bool tokenExists = m_queryExecutor->doesRegistrationTokenExist(registrationToken);
+    if (!tokenExists) {
+        answer.append("Given token doesn't exist!");
+        return answer;
+    }
+    // Token exists!
+    if (m_queryExecutor->insertTmpUserIntoUsers(registrationToken)) {
+        m_queryExecutor->deleteTmpUser(registrationToken);
+        answer.append("Congratulations!");
+    } else {
+        answer.append("Attempt of inserting user has failed!");
+    }
+    return answer;
   }
 
   QByteArray DbObjectsCollection::processLoginQuery(const QByteArray &data)

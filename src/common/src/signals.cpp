@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010 OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,41 +28,29 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
- * \file JsonUser.cpp
- * \brief JsonUser implementation
+
+/*!
+ * \file defines.h
+ * \brief
  *
- * PROJ: OSLL/geoblog
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "JsonUser.h"
+#include "signals.h"
 
-qlonglong JsonUser::globalUserId = 0;
-
-JsonUser::JsonUser(const QString &login,
-const QString& pass,
-const QString& email,
-const QString& token): common::User(login,pass,email), m_id(globalUserId++)
+bool waitForSignal(QObject *sender, const char *signal, int timeout )
 {
-  setToken(token);
+  QEventLoop loop;
+  QTimer timer;
+  timer.setInterval(timeout);
+  timer.setSingleShot(true);
+
+  loop.connect(sender, signal, SLOT(quit()));
+  loop.connect(&timer, SIGNAL(timeout()), SLOT(quit()));
+
+  timer.start();
+  loop.exec();
+  return timer.isActive();
 }
-
-
-qlonglong JsonUser::getId() const
-{
-  return m_id;
-}
-
-
-void JsonUser::setId(qlonglong id)
-{
-  m_id = id;
-}
-
-
-JsonUser::~JsonUser()
-{
-}
-
-
-/* ===[ End of file ]=== */

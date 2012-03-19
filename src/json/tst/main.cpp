@@ -42,15 +42,24 @@
 
 // Test headers
 #include "JsonUser_Test.h"
+#include "Test_RegisterUserRequestJSON.h"
+#include "Test_RegisterUserResponseJSON.h"
 
-int main(int c, char **v)
+int main(int argc, char **argv)
 {
-  QApplication app(c,v);
+    //QApplication app(argc, argv);
 
-  Test::JsonUser_Test test;
-  QTest::qExec(&test);
+    QObject *tests[] =
+    {
+        new Test::JsonUser_Test(),
+        new Test::Test_RegisterUserRequestJSON(),
+        new Test::Test_RegisterUserResponseJSON()
+    };
 
-  return 0;
+    for (int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
+        QTest::qExec(tests[i]);
+    }
+    return 0;//app.exec();
 }
 
 

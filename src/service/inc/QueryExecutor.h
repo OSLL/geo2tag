@@ -62,9 +62,16 @@ class QueryExecutor : public QObject
     qlonglong nextTimeSlotKey() const;
 
     const QString generateNewToken(const QString& login,const QString& password) const;
+    const QString generateNewToken(const QString& email, const QString& login,const QString& password) const;
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
+    QSharedPointer<common::User> isTmpUserExists(const QSharedPointer<common::User> &user); // for User Registration
+    bool                     deleteTmpUser(const QSharedPointer<common::User> &user);       // for User Registration
+    bool                     insertNewTmpUser(const QSharedPointer<common::User> &user);    // for User Registration
+    bool                     doesRegistrationTokenExist(const QString &token);              // for Request Confirmation
+    bool                     insertTmpUserIntoUsers(const QString &token);                 // for Request Confirmation
+    bool                     deleteTmpUser(const QString &token);                           // for Request Confirmation
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
     QSharedPointer<common::User>    insertNewUser(const QSharedPointer<common::User>&);
     QSharedPointer<Channel>  insertNewChannel(const QSharedPointer<Channel>&);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,41 +28,46 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
- * \file JsonUser.cpp
- * \brief JsonUser implementation
- *
- * PROJ: OSLL/geoblog
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "JsonUser.h"
+#ifndef REGISTERUSERQUERY_H
+#define REGISTERUSERQUERY_H
 
-qlonglong JsonUser::globalUserId = 0;
+#include <QObject>
+#include <QString>
+#include "DefaultQuery.h"
+#include "User.h"
 
-JsonUser::JsonUser(const QString &login,
-const QString& pass,
-const QString& email,
-const QString& token): common::User(login,pass,email), m_id(globalUserId++)
+class RegisterUserQuery : public DefaultQuery
 {
-  setToken(token);
-}
+    Q_OBJECT
 
+    QString m_email;
+    QString m_login;
+    QString m_password;
 
-qlonglong JsonUser::getId() const
-{
-  return m_id;
-}
+    QSharedPointer<common::User> m_user;
 
+    virtual QString getUrl() const;
+    virtual QByteArray getRequestBody() const;
 
-void JsonUser::setId(qlonglong id)
-{
-  m_id = id;
-}
+private Q_SLOTS:
 
+    virtual void processReply(QNetworkReply *reply);
 
-JsonUser::~JsonUser()
-{
-}
+public:
 
+    RegisterUserQuery(const QString& email, const QString& login, const QString& password, QObject *parent = 0);
+    RegisterUserQuery(QObject *parent = 0);
+    void setQuery(const QString& email, const QString& login, const QString& password);
+    QSharedPointer<common::User> getUser() const;
+    ~RegisterUserQuery();
 
-/* ===[ End of file ]=== */
+Q_SIGNALS:
+
+    void connected();
+}; // Class RegisterUserQuery
+
+#endif // REGISTERUSERQUERY_H

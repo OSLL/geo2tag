@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,41 +28,24 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
- * \file JsonUser.cpp
- * \brief JsonUser implementation
- *
- * PROJ: OSLL/geoblog
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "JsonUser.h"
+#ifndef REGISTERUSERRESPONSEJSON_H
+#define REGISTERUSERRESPONSEJSON_H
 
-qlonglong JsonUser::globalUserId = 0;
+#include "JsonSerializer.h"
 
-JsonUser::JsonUser(const QString &login,
-const QString& pass,
-const QString& email,
-const QString& token): common::User(login,pass,email), m_id(globalUserId++)
+class RegisterUserResponseJSON : public JsonSerializer
 {
-  setToken(token);
-}
+    Q_OBJECT
+public:
+    RegisterUserResponseJSON(QObject *parent = 0);
 
+    QByteArray getJson() const;
 
-qlonglong JsonUser::getId() const
-{
-  return m_id;
-}
+    bool parseJson(const QByteArray &);
+};
 
-
-void JsonUser::setId(qlonglong id)
-{
-  m_id = id;
-}
-
-
-JsonUser::~JsonUser()
-{
-}
-
-
-/* ===[ End of file ]=== */
+#endif // REGISTERUSERRESPONSEJSON_H

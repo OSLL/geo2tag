@@ -1,3 +1,16 @@
+CREATE SEQUENCE signup_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
+
+CREATE TABLE signups (
+  id NUMERIC(9,0) NOT NULL DEFAULT nextval('signup_seq'),
+  datetime TIMESTAMP NOT NULL DEFAULT now(),  
+  email VARCHAR(50) UNIQUE NOT NULL,
+  login VARCHAR(50) UNIQUE NOT NULL,
+  password VARCHAR(50) NOT NULL,
+  registration_token VARCHAR(65) UNIQUE NOT NULL,
+  sent BOOLEAN NOT NULL DEFAULT FALSE,
+  constraint signup_requests_pkey primary key (id)
+);
+
 CREATE SEQUENCE users_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 
 CREATE TABLE users (
@@ -125,6 +138,11 @@ INSERT into channel (name, description, url) values ('Public announcements', 'Th
 INSERT into channel (name, description, url) values ('Fuel prices', 'This is free channel where you can post/read the fuel prices around your current location.', '');
 INSERT into channel (name, description, url) values ('Sales', 'This is free channel where you can post/read sales advertisements', '');
 INSERT into channel (name, description, url) values ('My channel', 'This is free channel where you and your friends can post/read your tags', '');
+
+INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email1@test1.org', 'Alex', 'test', 'AAAAAAAAAA', FALSE);
+INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email2@test2.org', 'Kate', 'test', 'KKKKKKKKKK', FALSE);
+INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email3@test3.org', 'Mary', 'test', 'MMMMMMMMMM', FALSE);
+INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email4@test4.org', 'David', 'test', 'DDDDDDDDDD', FALSE);
 
 INSERT into users (login, password, token) values ('Paul',   'test', 'PPPPPPPPPP');
 INSERT into users (login, password, token) values ('Kirill', 'test', 'KKKKKKKKKK');

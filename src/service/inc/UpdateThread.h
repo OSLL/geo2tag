@@ -49,7 +49,7 @@ class UpdateThread: public QThread
 {
   Q_OBJECT
 
-    QSharedPointer<Channels>     m_channelsContainer;
+  QSharedPointer<Channels>     m_channelsContainer;
   QSharedPointer<DataMarks>    m_tagsContainer;
   QSharedPointer<common::Users>        m_usersContainer;
   QSharedPointer<TimeSlots>    m_timeSlotsContainer;
@@ -66,9 +66,15 @@ class UpdateThread: public QThread
   void loadTimeSlots(TimeSlots &);
   void updateReflections(DataMarks&, common::Users&, Channels&, TimeSlots&);
 
+  void checkTmpUsers();
+
+  void sendConfirmationLetter(const QString &, const QString &);
+
   void run();
 
   public:
+
+
     UpdateThread(
       const QSqlDatabase &db,
       const QSharedPointer<DataMarks>& tags,
