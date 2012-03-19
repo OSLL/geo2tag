@@ -34,6 +34,7 @@
 
 #include <syslog.h>
 #include <QDebug>
+#include <QSettings>
 #include "UpdateThread.h"
 #include "defines.h"
 
@@ -316,6 +317,19 @@ void UpdateThread::checkTmpUsers()
     QSqlQuery checkQuery(m_database);
     QSqlQuery deleteQuery(m_database);
     syslog(LOG_INFO,"checkTmpUsers query is running now...");
+    // Sending emails to new users
+    checkQuery.exec("select id, email, registration_token from signups where sent = false;");
+    while (checkQuery.next()) {
+        qlonglong id = checkQuery.value(0).toLongLong();
+        QString email = checkQuery.value(1).toString();
+        QString token = checkQuery.value(2).toString();
+        sendConfirmationLetter(email, token);
+        checkQuery.prepare("update signups set sent = true where id = :id;");
+        checkQuery.bindValue(":id", id);
+        checkQuery.exec();
+    }
+
+    // Deleting old signups
     QString strQuery;
     strQuery.append("select id from signups where (now() - datetime) >= INTERVAL '");
     strQuery.append(DEFAULT_TMP_USER_TIMELIFE);
@@ -336,4 +350,22 @@ void UpdateThread::checkTmpUsers()
             m_database.commit();
         }
     }
+}
+
+void UpdateThread::sendConfirmationLetter(const QString &address, const QString &token)
+{
+    QSettings settings(QSettings::SystemScope,"osll","libs");
+    if (settings.value("mail_subject").toString().isEmpty()) {
+        settings.setValue("mail_subject", "Registration confirmation");
+    }
+    syslog(LOG_INFO, "Process registration confirmation is started... ");
+    QString subject = settings.value("mail_subject").toString();
+    QString body = "'This will go into the body of the mail.'";
+    body.append("To confirm registration, please, go to this link: ");
+    body.append(DEFAULT_SERVER);
+    body.append("service/confirmRegistration-");
+    body.append(token);
+    QString command = "echo " + body + " | mail -s '" + subject + "' " + address;
+    system(command.toStdString().c_str());
+    syslog(LOG_INFO, "Process registration confirmation finished... ");
 }
