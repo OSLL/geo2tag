@@ -15,6 +15,7 @@ CREATE SEQUENCE users_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 
 CREATE TABLE users (
   id NUMERIC(9,0) NOT NULL DEFAULT nextval('users_seq'),
+  email VARCHAR(50) UNIQUE NOT NULL DEFAULT 'unknown',
   login VARCHAR(50) UNIQUE NOT NULL,
   password VARCHAR(50) NOT NULL,
   token VARCHAR(65) UNIQUE NOT NULL,
@@ -144,10 +145,10 @@ INSERT into signups (datetime, email, login, password, registration_token, sent)
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email3@test3.org', 'Mary', 'test', 'MMMMMMMMMM', FALSE);
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email4@test4.org', 'David', 'test', 'DDDDDDDDDD', FALSE);
 
-INSERT into users (login, password, token) values ('Paul',   'test', 'PPPPPPPPPP');
-INSERT into users (login, password, token) values ('Kirill', 'test', 'KKKKKKKKKK');
-INSERT into users (login, password, token) values ('Mark',   'test', 'MMMMMMMMMM');
-INSERT into users (login, password, token) values ('Yevgeni', 'test', 'YYYYYYYYYY');
+INSERT into users (email, login, password, token) values ('paul@test.org', 'Paul',   'test', 'PPPPPPPPPP');
+INSERT into users (email, login, password, token) values ('kirill@test.org', 'Kirill', 'test', 'KKKKKKKKKK');
+INSERT into users (email, login, password, token) values ('mark@test.org', 'Mark',   'test', 'MMMMMMMMMM');
+INSERT into users (email, login, password, token) values ('yevgeni@test.org', 'Yevgeni', 'test', 'YYYYYYYYYY');
 
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.166504, 24.841204, 'A', 'Accident at road 51. Time: 15:45, January 2, 2010.', 1, 'http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif');
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.163216, 24.859314, 'B', 'Shell 95: 1.299 e', 2, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');

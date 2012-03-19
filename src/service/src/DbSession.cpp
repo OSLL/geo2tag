@@ -587,7 +587,7 @@ namespace common
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
     for(int i=0; i<currentUsers.size(); i++)
     {
-      if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
+      if(currentUsers.at(i)->getLogin() == dummyUser->getLogin() || currentUsers.at(i)->getEmail() == dummyUser->getEmail())
       {
         response.setErrno(USER_ALREADY_EXIST_ERROR);
         answer.append(response.getJson());
