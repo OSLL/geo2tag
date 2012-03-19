@@ -1338,7 +1338,7 @@ namespace common
     return answer;
   }
 
-  void DbObjectsCollection::processSendConfirmationLetter(const QString &address)
+/*  void DbObjectsCollection::processSendConfirmationLetter(const QString &address)
   {
       QSettings settings(QSettings::SystemScope,"osll","libs");
       if (settings.value("mail_subject").toString().isEmpty()) {
@@ -1350,7 +1350,7 @@ namespace common
       QString command = "echo " + body + " | mail -s '" + subject + "' " + address;
       system(command.toStdString().c_str());
       syslog(LOG_INFO, "Process registration confirmation finished... ");
-  }
+  }*/
 }                                       // namespace common
 
 

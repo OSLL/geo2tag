@@ -112,11 +112,11 @@ namespace common
     QByteArray processFilterBoxQuery(const QByteArray&);
     QByteArray processFilterFenceQuery(const QByteArray&);
 
-    void processSendConfirmationLetter(const QString &address);
+//    void processSendConfirmationLetter(const QString &address);
 
     QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 
-    static void processSendConfirmationLetter(const QString&);
+//    static void processSendConfirmationLetter(const QString&);
 
     public:
 
