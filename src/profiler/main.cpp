@@ -8,6 +8,7 @@
 #include <QCoreApplication>
 #include "ThreadCleaner.h"
 
+
 // Usage 
 /* ./profiler @number_of_iterations@ @method@ @token@ @channel@ 
  @number_of_iterations@ - number of iterations that should be performed(or -1 if it should work till infinity);
