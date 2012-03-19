@@ -3,6 +3,7 @@
 #include <time.h>
 #include <QDebug>
 #include "JsonUser.h"
+#include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include <QCoreApplication>
 #include "ThreadCleaner.h"
@@ -29,6 +30,8 @@ int main(int argc,char** argv)
     {
       QSharedPointer<DataMark> tag(new JsonDataMark(0.0,0.0,0.0,"","","",QDateTime::currentDateTime()));
       QSharedPointer<common::User> user(new JsonUser("","",argv[2]));
+      QSharedPointer<Channel> channel(new JsonChannel(argv[3],"",""));
+      tag->setChannel(channel);
       tag->setUser(user);
       for (int i=0;i<4;i++)
       {
