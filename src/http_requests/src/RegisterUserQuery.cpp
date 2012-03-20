@@ -69,7 +69,7 @@ QString RegisterUserQuery::getUrl() const
 
 QByteArray RegisterUserQuery::getRequestBody() const
 {
-    QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, m_email));
+    QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, "unknown",m_email));
     RegisterUserRequestJSON request;
     request.addUser(dummyUser);
     return request.getJson();
@@ -83,7 +83,7 @@ void RegisterUserQuery::processReply(QNetworkReply *reply)
     response.parseJson(reply->readAll());
     if (response.getErrno() == SUCCESS) {
         QSharedPointer<common::User> user = response.getUsers()->at(0);
-        m_user = QSharedPointer<common::User>(new JsonUser(m_email, m_login, m_password, user->getToken()));
+        m_user = QSharedPointer<common::User>(new JsonUser( m_login, m_password, user->getToken(),m_email));
         syslog(LOG_INFO,"!!connected!");
         qDebug("!!connected!");
         Q_EMIT connected();
