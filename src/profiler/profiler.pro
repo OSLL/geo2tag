@@ -14,9 +14,10 @@ CONFIG += debug network thread
 QMAKE_CXXFLAGS += -g3
 
 # Input
-HEADERS += ProfilerThread.h LoginThread.h TrackThread.h \
+HEADERS += ProfilerThread.h LoginThread.h TrackThread.h LoadTagsThread.h \
 ../http_requests/inc/DefaultQuery.h \
 ../http_requests/inc/WriteTagQuery.h \
+../http_requests/inc/LoadTagsQuery.h \
 ../http_requests/inc/LoginQuery.h \
 ../common/inc/User.h \
 ../common/inc/Channel.h \
@@ -29,6 +30,8 @@ HEADERS += ProfilerThread.h LoginThread.h TrackThread.h \
 ../json/inc/LoginResponseJSON.h \
 ../json/inc/WriteTagRequestJSON.h \
 ../json/inc/WriteTagResponseJSON.h \
+../json/inc/LoadTagsRequestJSON.h \
+../json/inc/LoadTagsResponseJSON.h \
 ../json/inc/JsonUser.h \
 ../json/inc/JsonDataMark.h \
 ../json/inc/JsonChannel.h \
@@ -36,7 +39,7 @@ HEADERS += ProfilerThread.h LoginThread.h TrackThread.h \
 ../json/inc/JsonSerializer.h \
 ../json/inc/DefaultResponseJSON.h 
 
-SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp \
+SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp LoadTagsThread.cpp \
 ../common/src/User.cpp \
 ../common/src/Channel.cpp \
 ../common/src/TimeSlot.cpp \
@@ -46,10 +49,13 @@ SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp \
 ../http_requests/src/DefaultQuery.cpp \
 ../http_requests/src/WriteTagQuery.cpp \
 ../http_requests/src/LoginQuery.cpp \
+../http_requests/src/LoadTagsQuery.cpp \
 ../json/src/LoginRequestJSON.cpp \
 ../json/src/LoginResponseJSON.cpp \
 ../json/src/WriteTagRequestJSON.cpp \
 ../json/src/WriteTagResponseJSON.cpp \
+../json/src/LoadTagsRequestJSON.cpp \
+../json/src/LoadTagsResponseJSON.cpp \
 ../json/src/JsonChannel.cpp \
 ../json/src/JsonTimeSlot.cpp \
 ../json/src/JsonDataMark.cpp \

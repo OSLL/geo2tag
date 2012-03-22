@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,8 +30,8 @@
  */
 
 /*! ---------------------------------------------------------------
- * \file LoginThread.h
- * \brief Header of LoginThread
+ * \file LoadTagsThread.h
+ * \brief Header of LoadTagsThread
  * \todo add comment here
  *
  * File description
@@ -40,24 +40,25 @@
  * ---------------------------------------------------------------- */
 
 
-#ifndef _LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
-#define _LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
+#ifndef _LoadTagsThread_H_5CA4CB3D_0FCD_45EE_8A20_BF2A49175E75_INCLUDED_
+#define _LoadTagsThread_H_5CA4CB3D_0FCD_45EE_8A20_BF2A49175E75_INCLUDED_
 
  /*!
  * Class description. May use HTML formatting
- * Logic - send request, increment m_counter, recieve response, count delay, 
+ *
  */
 #include "ProfilerThread.h"
+#include "User.h"
+#include <QSharedPointer>
 
-class LoginThread: public ProfilerThread
+class LoadTagsThread: public ProfilerThread
 {
   Q_OBJECT;
-
 public:
-  LoginThread();
-  ~LoginThread();
+  LoadTagsThread(QSharedPointer<common::User> user);
 
-}; // class LoginThread
+  ~LoadTagsThread();
+}; // class LoadTagsThread
   
 
-#endif //_LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
+#endif //_LoadTagsThread_H_5CA4CB3D_0FCD_45EE_8A20_BF2A49175E75_INCLUDED_

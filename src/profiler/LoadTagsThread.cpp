@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,34 +30,26 @@
  */
 
 /*! ---------------------------------------------------------------
- * \file LoginThread.h
- * \brief Header of LoginThread
- * \todo add comment here
+ *
+ * \file LoadTagsThread.cpp
+ * \brief LoadTagsThread implementation
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#include "LoadTagsThread.h"
+#include "LoadTagsQuery.h"
+#include "defines.h"
 
-#ifndef _LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
-#define _LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
-
- /*!
- * Class description. May use HTML formatting
- * Logic - send request, increment m_counter, recieve response, count delay, 
- */
-#include "ProfilerThread.h"
-
-class LoginThread: public ProfilerThread
+LoadTagsThread::LoadTagsThread(QSharedPointer<common::User> user)
 {
-  Q_OBJECT;
+  m_query = new LoadTagsQuery(user,DEFAULT_LATITUDE,DEFAULT_LONGITUDE,(double)DEFAULT_RADIUS);
+  connect(m_query,SIGNAL(tagsReceived()),this, SLOT(responseRecieved()));
+  setConnections();
+}
 
-public:
-  LoginThread();
-  ~LoginThread();
-
-}; // class LoginThread
-  
-
-#endif //_LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
+LoadTagsThread::~LoadTagsThread()
+{
+}
