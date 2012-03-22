@@ -14,7 +14,7 @@ CONFIG += debug network thread
 QMAKE_CXXFLAGS += -g3
 
 # Input
-HEADERS += LoginThread.h TrackThread.h ThreadCleaner.h \
+HEADERS += ProfilerThread.h LoginThread.h TrackThread.h \
 ../http_requests/inc/DefaultQuery.h \
 ../http_requests/inc/WriteTagQuery.h \
 ../http_requests/inc/LoginQuery.h \
@@ -36,7 +36,7 @@ HEADERS += LoginThread.h TrackThread.h ThreadCleaner.h \
 ../json/inc/JsonSerializer.h \
 ../json/inc/DefaultResponseJSON.h 
 
-SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ThreadCleaner.cpp \
+SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp \
 ../common/src/User.cpp \
 ../common/src/Channel.cpp \
 ../common/src/TimeSlot.cpp \

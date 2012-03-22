@@ -1,12 +1,13 @@
 #include "LoginThread.h"
 #include "TrackThread.h"
+#include "ProfilerThread.h"
 #include <time.h>
 #include <QDebug>
 #include "JsonUser.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include <QCoreApplication>
-#include "ThreadCleaner.h"
+//#include "ThreadCleaner.h"
 
 
 // Usage 
@@ -25,10 +26,10 @@ int main(int argc,char** argv)
   {
     QEventLoop loop;
     int number_of_op = QString(argv[1]).toInt();
+    ProfilerThread::m_number_of_requests = number_of_op;
     if (QString(argv[2]) == "login") //perform login testing
     {
       srand ( time(NULL) );
-      LoginThread::m_number_of_requests = number_of_op;
       for (int i=0;i<4;i++)
       {
 	LoginThread * thread = new LoginThread();
@@ -43,7 +44,6 @@ int main(int argc,char** argv)
       QSharedPointer<Channel> channel(new JsonChannel(argv[4],"",""));
       tag->setChannel(channel);
       tag->setUser(user);
-      TrackThread::m_number_of_requests = number_of_op;
       for (int i=0;i<4;i++)
       {
 	TrackThread * thread = new TrackThread(tag);

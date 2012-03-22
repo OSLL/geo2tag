@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,42 +30,67 @@
  */
 
 /*! ---------------------------------------------------------------
- * \file ThreadCleaner.h
- * \brief Header of ThreadCleaner
- * \todo add comment here
+ *
+ * \file ProfilerThread.cpp
+ * \brief ProfilerThread implementation
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#include "ProfilerThread.h"
+#include "ErrnoTypes.h"
+#include <QDebug>
+#include <QEventLoop>
+#include "defines.h"
 
-#ifndef _ThreadCleaner_H_36ABAEB2_DCC0_44DC_9392_0D05AD58C65B_INCLUDED_
-#define _ThreadCleaner_H_36ABAEB2_DCC0_44DC_9392_0D05AD58C65B_INCLUDED_
+int ProfilerThread::m_counter=0;
+int ProfilerThread::m_number_of_requests=0;
 
- /*!
- * Class description. May use HTML formatting
- *
- */
-
-#include <QObject>
-
-class ThreadCleaner:public QObject
+ProfilerThread::ProfilerThread()
 {
-  Q_OBJECT;
-public:
-  ThreadCleaner(QObject * parent=0):QObject(parent)
-  {
-  }
+}
 
-  ~ThreadCleaner()
-  {
-  }
+void ProfilerThread::setConnections()
+{
+  connect(this,SIGNAL(doRequest()),this, SLOT(sendRequest()));
+  connect(m_query,SIGNAL(errorOccured(int)),this, SLOT(responseRecieved()));
+}
 
-public slots: 
-  void killSender();  
+ProfilerThread::~ProfilerThread()
+{
+  delete m_query;
+}
 
-}; // class ThreadCleaner
+void ProfilerThread::run()
+{
+ emit doRequest();
+ exec();
+}
 
+int ProfilerThread::getCounter() 
+{
+  return m_counter;
+}
 
-#endif //_ThreadCleaner_H_36ABAEB2_DCC0_44DC_9392_0D05AD58C65B_INCLUDED_
+void ProfilerThread::incCounter()
+{
+  m_counter++;
+}
+
+void ProfilerThread::sendRequest()
+{
+
+  srand(time(NULL));
+  m_sendTime = QDateTime::currentDateTime();
+  m_query->doRequest();
+}
+
+void ProfilerThread::responseRecieved()
+{
+  incCounter();
+  qDebug() << getCounter() << " " << m_sendTime.msecsTo(QDateTime::currentDateTime()) << " " << m_query->getErrno();
+  if (m_counter == m_number_of_requests ) exit();
+  emit doRequest();
+}

@@ -85,7 +85,6 @@ QByteArray LoginQuery::getRequestBody() const
 void LoginQuery::processReply(QNetworkReply *reply)
 {
   #ifndef Q_OS_SYMBIAN
-  qDebug("OK!");
   LoginResponseJSON response;
   response.parseJson(reply->readAll());
   m_errno = response.getErrno();

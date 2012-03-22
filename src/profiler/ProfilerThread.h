@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,23 +30,56 @@
  */
 
 /*! ---------------------------------------------------------------
- *
- * \file ThreadCleaner.cpp
- * \brief ThreadCleaner implementation
+ * \file ProfilerThread.h
+ * \brief Header of ProfilerThread
+ * \todo add comment here
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "ThreadCleaner.h"
-#include <QDebug>
 
-void ThreadCleaner::killSender()
+#ifndef _ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_
+#define _ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_
+
+ /*!
+ * Class description. May use HTML formatting
+ *
+ */
+
+#include <QThread>
+#include "DefaultQuery.h"
+
+class ProfilerThread: public QThread
 {
-  qDebug() <<"ThreadCleaner::killSender()";
-  if (sender()){
-    delete (sender());
-    qDebug() << "deleted";
-  }
-}
+  Q_OBJECT;
+
+  static int m_counter;
+  QDateTime m_sendTime;
+  void run();
+public:
+  static int m_number_of_requests; 
+  ProfilerThread();
+  ~ProfilerThread();
+  
+  DefaultQuery * m_query; 
+  void setConnections();
+
+ 
+  static int getCounter() ;
+  static void incCounter() ;
+
+signals:
+ 
+  void doRequest();
+
+public slots:
+  
+  void sendRequest();
+  void responseRecieved();
+
+}; // class ProfilerThread
+  
+
+#endif //_ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_
