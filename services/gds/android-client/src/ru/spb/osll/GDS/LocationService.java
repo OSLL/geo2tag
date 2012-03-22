@@ -35,6 +35,7 @@
 
 package ru.spb.osll.GDS;
 
+import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -54,7 +55,9 @@ public class LocationService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.v(LOG, "location service create");
+		if (IGDSSettings.DEBUG) {
+			Log.v(LOG, "location service create");
+		}
 	
 		myLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
@@ -63,13 +66,17 @@ public class LocationService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		Log.v(LOG, "location service start");
+		if (IGDSSettings.DEBUG) {
+			Log.v(LOG, "location service start");
+		}
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.v(LOG, "location service destroy");
+		if (IGDSSettings.DEBUG) {
+			Log.v(LOG, "location service destroy");
+		}
 		myLocationManager.removeUpdates(locationListener);
 	}
 
@@ -81,12 +88,16 @@ public class LocationService extends Service {
 	private LocationListener locationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
 			if (location != null){
-				Log.v(LOG, "onLocationChanged  " + location.toString());
+				if (IGDSSettings.DEBUG) {
+					Log.v(LOG, "onLocationChanged  " + location.toString());
+				}
 			}
 		}
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
-			Log.v(LOG, "onStatusChanged " + provider + " " + status + " " + extras);
+			if (IGDSSettings.DEBUG) {
+				Log.v(LOG, "onStatusChanged " + provider + " " + status + " " + extras);
+			}
 		}
 
 		public void onProviderEnabled(String provider) {

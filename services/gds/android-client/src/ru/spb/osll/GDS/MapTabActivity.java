@@ -35,7 +35,9 @@ public class MapTabActivity extends MapActivity {
 		    m_authToken = extras.getString(LoginActivity.AUTH_TOKEN);
 		}
 		if (m_authToken == null) {
-			Log.v(IGDSSettings.LOG, "problem with extracting data in MapTabActivity");
+			if (IGDSSettings.DEBUG) {
+				Log.v(IGDSSettings.LOG, "problem with extracting data in MapTabActivity");
+			}
 			Toast.makeText(this, "Can't create events tab", Toast.LENGTH_LONG).show();
 			finish();
 			return;
@@ -76,7 +78,9 @@ public class MapTabActivity extends MapActivity {
 				@Override
 				public void run() {
 					for (Mark mark : marks) {
-						Log.v(IGDSSettings.LOG, mark.toString());
+						if (IGDSSettings.DEBUG) {
+							Log.v(IGDSSettings.LOG, mark.toString());
+						}
 					}
 					m_eventsOverlay.setEvents(marks);
 				}
