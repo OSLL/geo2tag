@@ -45,7 +45,9 @@ public class EventsService extends Service {
 	
 	@Override
 	public void onCreate() {
-		Log.v(EventsManager.LOG, "EventsService create");
+		if (IGDSSettings.DEBUG) {
+			Log.v(EventsManager.LOG, "EventsService create");
+		}
 		super.onCreate();
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
@@ -57,7 +59,9 @@ public class EventsService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		Log.v(EventsManager.LOG, "EventsService start");
+		if (IGDSSettings.DEBUG) {
+			Log.v(EventsManager.LOG, "EventsService start");
+		}
 		super.onStart(intent, startId);
 		
 		Bundle extras =intent.getExtras();
@@ -65,7 +69,9 @@ public class EventsService extends Service {
 		    m_authToken = extras.getString(EventsManager.AUTH_TOKEN);
 		}
 		if (m_authToken == null) {
-			Log.v(EventsManager.LOG, "problem with extracting data");
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "problem with extracting data");
+			}
 			broadcastError("Failed to start tracking");
 			stopSelf();
 			return;
@@ -76,7 +82,9 @@ public class EventsService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Log.v(EventsManager.LOG, "EventsService destroy");
+		if (IGDSSettings.DEBUG) {
+			Log.v(EventsManager.LOG, "EventsService destroy");
+		}
 		super.onDestroy();
 		stopEventsTread();
 		unregisterReceiver(m_internalReceiver);
@@ -99,10 +107,14 @@ public class EventsService extends Service {
 				while (!Thread.currentThread().isInterrupted()){
 					Location location = LocationService.getLocation(EventsService.this);
 					if (location == null) {
-						Log.v(EventsManager.LOG, "can't get location");
+						if (IGDSSettings.DEBUG) {
+							Log.v(EventsManager.LOG, "can't get location");
+						}
 					} else {
-						Log.v(EventsManager.LOG, "coords: " + location.getLatitude()
-								+ ", " + location.getLongitude());
+						if (IGDSSettings.DEBUG) {
+							Log.v(EventsManager.LOG, "coords: " + location.getLatitude()
+									+ ", " + location.getLongitude());
+						}
 						requestEvents(location);
 					}
 					
@@ -141,7 +153,9 @@ public class EventsService extends Service {
 		if (JSONResponse != null) {
 			int errno = JsonFilterResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				Log.v(EventsManager.LOG, "Events received successfully");
+				if (IGDSSettings.DEBUG) {
+					Log.v(EventsManager.LOG, "Events received successfully");
+				}
 				JsonFilterResponse response = new JsonFilterResponse();
 				response.parseJson(JSONResponse);
 				List<Channel> channels = response.getChannelsData();
@@ -179,7 +193,9 @@ public class EventsService extends Service {
 				return;
 			}
 		} else {
-			Log.v(EventsManager.LOG, "response failed");
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "response failed");
+			}
 			broadcastError("Failed to send location");
 			return;
 		}
@@ -187,12 +203,18 @@ public class EventsService extends Service {
 	
 	private void handleError(int errno) {
 		if (errno < 0) {
-			Log.v(EventsManager.LOG, "bad response received");
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "bad response received");
+			}
 		} else if (errno >= IResponse.geo2tagError.values().length) {
-			Log.v(EventsManager.LOG, "unknown error");
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "unknown error");
+			}
 		} else if (errno > 0) {
 			String error = IResponse.geo2tagError.values()[errno].name();
-			Log.v(EventsManager.LOG, "error: " + error);
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "error: " + error);
+			}
 		}
 		broadcastError("Failed to send location");
 	}

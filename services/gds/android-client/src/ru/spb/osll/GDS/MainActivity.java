@@ -99,7 +99,9 @@ public class MainActivity extends TabActivity {
 		    m_channel = extras.getString(LoginActivity.CHANNEL); 
 		}
 		if (m_authToken == null || m_login == null || m_channel == null) {
-			Log.v(IGDSSettings.LOG, "problem with extracting data");
+			if (IGDSSettings.DEBUG) {
+				Log.v(IGDSSettings.LOG, "problem with extracting data");
+			}
 			Toast.makeText(this, "Can't sign in", Toast.LENGTH_LONG).show();
 			finish();
 			return;
@@ -186,14 +188,20 @@ public class MainActivity extends TabActivity {
 			@Override
 			public void run() {
 				SystemClock.sleep(2 * 1000);
-				Log.v(IGDSSettings.LOG, "SOS thread started");
+				if (IGDSSettings.DEBUG) {
+					Log.v(IGDSSettings.LOG, "SOS thread started");
+				}
 				Location location = LocationService.getLocation(MainActivity.this);
 				while (location == null) {
-					Log.v(IGDSSettings.LOG, "can't get location, trying again...");
+					if (IGDSSettings.DEBUG) {
+						Log.v(IGDSSettings.LOG, "can't get location, trying again...");
+					}
 					SystemClock.sleep(2 * 1000);
 					location = LocationService.getLocation(MainActivity.this);
 				}
-				Log.v(IGDSSettings.LOG, "location determined! sending location...");
+				if (IGDSSettings.DEBUG) {
+					Log.v(IGDSSettings.LOG, "location determined! sending location...");
+				}
 				String serverUrl = m_settings.getServerUrl();
 				JSONObject JSONResponse = null;
 				for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
@@ -206,14 +214,18 @@ public class MainActivity extends TabActivity {
 				if (JSONResponse != null) {
 					int errno = JsonBaseResponse.parseErrno(JSONResponse);
 					if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-						Log.v(IGDSSettings.LOG, "Mark sent successfully");
+						if (IGDSSettings.DEBUG) {
+							Log.v(IGDSSettings.LOG, "Mark sent successfully");
+						}
 						//broadcastMarkSent(location);
 					} else {
 						//handleError(errno);
 						return;
 					}
 				} else {
-					Log.v(TrackingManager.LOG, "response failed");
+					if (IGDSSettings.DEBUG) {
+						Log.v(TrackingManager.LOG, "response failed");
+					}
 					//broadcastError("Failed to send location");
 					return;
 				}
@@ -227,7 +239,9 @@ public class MainActivity extends TabActivity {
         @Override
         public void handleMessage(Message msg) {
         	m_progress.dismiss();
-        	Log.v(IGDSSettings.LOG, "SOS have been sent!");
+        	if (IGDSSettings.DEBUG) {
+        		Log.v(IGDSSettings.LOG, "SOS have been sent!");
+        	}
             Toast.makeText(MainActivity.this, "SOS have been sent!", Toast.LENGTH_LONG).show();
         }
 	};
@@ -279,17 +293,19 @@ public class MainActivity extends TabActivity {
 	}
 	
 	private void showSettings() {
-		Log.v(IGDSSettings.LOG, "opening settings");
+		if (IGDSSettings.DEBUG) {
+			Log.v(IGDSSettings.LOG, "opening settings");
+		}
 		startActivity(new Intent(this, SettingsActivity.class));
 	}
 	
 	private void signOut() {
-		Log.v(IGDSSettings.LOG, "signing out");
+		if (IGDSSettings.DEBUG) {
+			Log.v(IGDSSettings.LOG, "signing out");
+		}
 		finish();
 		
 	}
-	
-	
 	
 	private static int lineCount = 0;
 	private static final int maxLines = 20;
