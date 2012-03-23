@@ -2,7 +2,9 @@ package ru.spb.osll.GDS.events;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONObject;
 
@@ -37,6 +39,7 @@ public class EventsService extends Service {
 	private InternalReceiver m_internalReceiver = new InternalReceiver();
 	private Settings m_settings;
 	private MediaPlayer m_sirenPlayer;
+	private Set<Long> m_events_ids = new HashSet<Long>();
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -125,13 +128,6 @@ public class EventsService extends Service {
 		m_eventsThread.start();
 	}
 	
-	private Thread m_alertThread = new Thread() {
-		@Override
-		public void run() {
-			EventsService.this.m_sirenPlayer.start();
-		}
-	};
-	
 	private void requestEvents(Location location) {
 		String serverUrl = m_settings.getServerUrl();
 		JSONObject JSONResponse = null;
@@ -161,31 +157,53 @@ public class EventsService extends Service {
 				List<Channel> channels = response.getChannelsData();
 				for (Channel channel : channels) {
 					if (channel.getName().compareTo("Events") == 0) {
-						// TODO: check that only if new events we call alert
-						//m_alertThread.start();
-						Thread alertThread = new Thread() {
-							@Override
-							public void run() {
-								// long[] pattern = {0, 500, 500, 500, 500, 500};
-					            // Start the vibration
-					            // Vibrator vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-					            // vibrator.vibrate(pattern, -1);
-								MediaPlayer player = MediaPlayer.create(EventsService.this,
-										R.raw.siren);
-								player.start();
-								while (player.isPlaying()) {
-									try {
-										Thread.sleep(player.getDuration() + 500);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
+
+						// are there new identificators?
+						boolean new_ids = false;
+						
+						// are some identificators expired?
+						boolean expired_ids = false;
+						
+						// Set of new identificators
+						Set<Long> events_ids_new = new HashSet<Long>();
+						
+						for (Mark mark : channel.getMarks()) {
+							events_ids_new.add(mark.getId());
+							if (!m_events_ids.contains(mark.getId()))
+								new_ids = true;
+						}
+						if (!events_ids_new.containsAll(m_events_ids))
+							expired_ids = true;
+						
+						if (new_ids) {
+							Thread alertThread = new Thread() {
+								@Override
+								public void run() {
+									// long[] pattern = {0, 500, 500, 500, 500, 500};
+						            // Start the vibration
+						            // Vibrator vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+						            // vibrator.vibrate(pattern, -1);
+									MediaPlayer player = MediaPlayer.create(EventsService.this,
+											R.raw.siren);
+									player.start();
+									while (player.isPlaying()) {
+										try {
+											Thread.sleep(player.getDuration() + 500);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
 									}
+									player.release();
+									player = null;
 								}
-								player.release();
-								player = null;
-							}
-						};
-						alertThread.start();
-						broadcastEvents(channel);
+							};
+							alertThread.start();
+						}
+						
+						if (new_ids || expired_ids) {
+							m_events_ids = events_ids_new;
+							broadcastEvents(channel);
+						}
 					}
 				}
 			} else {

@@ -67,7 +67,7 @@ public class JsonFilterResponse extends JsonBaseResponse {
 					
 					Mark mark = new Mark();
 					mark.setChannel(channelName);
-					//mark.setId(jmark.getLong("id"));
+					mark.setId(jmark.getLong("id"));
 					mark.setUser(jmark.getString("user"));
 					mark.setTitle(jmark.getString("title"));
 					mark.setLink(jmark.getString("link"));
