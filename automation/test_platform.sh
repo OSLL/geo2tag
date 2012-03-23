@@ -4,9 +4,10 @@ correct_result='"errno" : 0';
 
 test_channel="test_$RANDOM";
 
+sleep 15s
+
 response_add_channel=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"name\":\"$test_channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel`;
 echo "$response_add_channel"
-sleep 10s
 if ! echo $response_add_channel | grep -q -s -F "$correct_result"  ;
 then
 	echo "Fail at addChannel test"
