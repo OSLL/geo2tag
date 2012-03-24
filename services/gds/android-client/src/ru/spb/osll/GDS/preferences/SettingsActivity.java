@@ -55,7 +55,7 @@ public class SettingsActivity extends Activity implements IGDSSettings {
 	
 		setTitle("GeoDoctorSearch settings");
 		initializeFields();
-		initializeTimeTickBtn();
+		//initializeTimeTickBtn();
 		
 		Button btnOk = (Button) findViewById(R.id.button_ok);
 		btnOk.setOnClickListener(new View.OnClickListener() {
@@ -78,41 +78,40 @@ public class SettingsActivity extends Activity implements IGDSSettings {
 	
 	private int m_timeTick;
 	private void initializeFields(){
-		initField(LOGIN, R.id.edit_login);
-		initField(PASSWORD, R.id.edit_password);
-		initField(CHANNEL, R.id.edit_channel);
-		initField(CHANNEL_KEY, R.id.edit_key);
+		//initField(LOGIN, R.id.edit_login);
+		//initField(PASSWORD, R.id.edit_password);
+		//initField(CHANNEL, R.id.edit_channel);
+		//initField(CHANNEL_KEY, R.id.edit_key);
 		initField(SERVER_URL, R.id.edit_server_address);
 		
-		initCheckBox(IS_HIDE_APP, R.id.checkbox_hide);
-		initCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick);
+		//initCheckBox(IS_HIDE_APP, R.id.checkbox_hide);
+		//initCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick);
 	}
 	
-	private void initializeTimeTickBtn(){
-		m_timeTick = new Settings(this).getPreferences().getInt(TIME_TICK, 0);
-
-		Button btnTick = (Button) findViewById(R.id.button_settings_tick);
-		btnTick.setText(Integer.toString(m_timeTick));
-		btnTick.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//new TimeTickDialog(SettingsActivity.this, getIdx(m_timeTick)).show();
-			}
-		});
-
-	}
+//	private void initializeTimeTickBtn(){
+//		m_timeTick = new Settings(this).getPreferences().getInt(TIME_TICK, 0);
+//
+//		Button btnTick = (Button) findViewById(R.id.button_settings_tick);
+//		btnTick.setText(Integer.toString(m_timeTick));
+//		btnTick.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				//new TimeTickDialog(SettingsActivity.this, getIdx(m_timeTick)).show();
+//			}
+//		});
+//	}
 	
 	private void savePreferences(){
 		Editor prefEditor = new Settings(this).getPreferencesEditor();
-		saveField(LOGIN, R.id.edit_login, prefEditor);
-		saveField(PASSWORD, R.id.edit_password, prefEditor);
-		saveField(CHANNEL, R.id.edit_channel, prefEditor);
-		saveField(CHANNEL_KEY, R.id.edit_key, prefEditor);
-		saveField(SERVER_URL, R.id.edit_server_address, prefEditor);
+		//saveField(LOGIN, R.id.edit_login, prefEditor);
+		//saveField(PASSWORD, R.id.edit_password, prefEditor);
+		//saveField(CHANNEL, R.id.edit_channel, prefEditor);
+		//saveField(CHANNEL_KEY, R.id.edit_key, prefEditor);
+		//saveField(SERVER_URL, R.id.edit_server_address, prefEditor);
 		prefEditor.putInt(TIME_TICK, m_timeTick);
 		
-		saveCheckBox(IS_HIDE_APP, R.id.checkbox_hide, prefEditor);
-		saveCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick, prefEditor);
+		//saveCheckBox(IS_HIDE_APP, R.id.checkbox_hide, prefEditor);
+		//saveCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick, prefEditor);
 		
 		prefEditor.commit();
 	}
