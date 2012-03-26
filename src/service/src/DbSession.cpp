@@ -382,7 +382,7 @@ namespace common
 
     QSharedPointer<Channel> dummyChannel = dummyTag->getChannel();
     QSharedPointer<Channel> realChannel;// Null pointer
-    QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+    QVector<QSharedPointer<Channel> > currentChannels = realUser->getSubscribedChannels()->vector();
 
     for(int i=0; i<currentChannels.size(); i++)
     {
@@ -392,8 +392,8 @@ namespace common
       }
     }
 
-    bool channelSubscribed = m_queryExecutor->isChannelSubscribed(dummyChannel, realUser);
-    if(realChannel.isNull() || !channelSubscribed)
+    //bool channelSubscribed = m_queryExecutor->isChannelSubscribed(dummyChannel, realUser);
+    if(realChannel.isNull())
     {
       response.setErrno(CHANNEL_NOT_SUBCRIBED_ERROR);
       answer.append(response.getJson());

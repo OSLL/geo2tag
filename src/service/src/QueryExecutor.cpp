@@ -618,39 +618,11 @@ bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,
 bool QueryExecutor::isChannelSubscribed(QSharedPointer<Channel> &channel, QSharedPointer<common::User> &user)
 {
     QSqlQuery query(m_database);
-    qlonglong channel_id = 0,
-              user_id = 0;
     syslog(LOG_INFO, "Checking of subscription of user %s to channel %s...", user->getToken().toStdString().c_str(), channel->getName().toStdString().c_str());
 
-    query.prepare("select id from channel where name = :name;");
-    query.bindValue(":name", channel->getName());
-    syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
-    query.exec();
-
-    if (query.next()) {
-        syslog(LOG_INFO,"Channel found in channel table.");
-        channel_id = query.value(0).toLongLong();
-    } else {
-        syslog(LOG_INFO,"No matching channels.");
-        return false;
-    }
-
-    query.prepare("select id from users where token = :token;");
-    query.bindValue(":name", user->getToken());
-    syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
-    query.exec();
-
-    if (query.next()) {
-        syslog(LOG_INFO,"User found in user table.");
-        user_id = query.value(0).toLongLong();
-    } else {
-        syslog(LOG_INFO,"No matching users.");
-        return false;
-    }
-
-    query.prepare("select * from subscribe where channel_id = :channel_id AND user_id = :user_id");
-    query.bindValue(":channel_id", channel_id);
-    query.bindValue(":user_id", user_id);
+    query.prepare("select * from users inner join subscribe on users.id = subscribe.user_id inner join channel on channel.id = subscribe.channel_id where name = :channel_name AND token = :token;");
+    query.bindValue(":channel_name", channel->getName());
+    query.bindValue(":token", user->getToken());
     syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
     query.exec();
 
