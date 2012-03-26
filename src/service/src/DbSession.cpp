@@ -105,6 +105,8 @@
 #include "FilterBoxRequestJSON.h"
 #include "FilterFenceRequestJSON.h"
 
+#include "ErrnoInfoResponseJSON.h"
+
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
 #include "ErrnoTypes.h"
@@ -145,6 +147,7 @@ namespace common
     m_processors.insert("channels", &DbObjectsCollection::processAvailableChannelsQuery);
     m_processors.insert("unsubscribe", &DbObjectsCollection::processUnsubscribeQuery);
 
+    m_processors.insert("errnoInfo", &DbObjectsCollection::processGetErrnoInfo);
     m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
     m_processors.insert("filterCylinder", &DbObjectsCollection::processFilterCylinderQuery);
     m_processors.insert("filterPolygon", &DbObjectsCollection::processFilterPolygonQuery);
@@ -1332,6 +1335,17 @@ namespace common
       }
     }
     response.setDataChannels(feed);
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
+  QByteArray DbObjectsCollection::processGetErrnoInfo(const QByteArray& data)
+  {
+    ErrnoInfoResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
