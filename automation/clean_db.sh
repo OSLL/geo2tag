@@ -35,7 +35,7 @@ then
 else
 	status="fail"
 fi
-
+sleep 10s
 #TEST
 if ${dir_automation}/test_platform.sh >> ${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 then
@@ -51,7 +51,8 @@ curl -d '{"auth_token":"82dfa68f508feb7f6139327cdb837e69","channel":"default"}' 
 
 #SEND EMAIL
 cd ${dir_automation}
-ant -f mail_sender.xml -Dsubject "geo2tag-platform night build($status) ${AIROMO_FLAG}: build, test, deploy reports " -Dlogdir "platform_logs"
+test_summary=`cat ${dir_log}/test_summary.log `;
+ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform night build ${AIROMO_FLAG}: build, test, deploy reports " -Dmessage "$test_summary" -Dlogdir "platform_logs"
 
 #CLEAN LOGS
 echo "" > ${dir_log}/build.log.txt
@@ -59,4 +60,4 @@ echo "" > ${dir_log}/deploy.log.txt
 echo "" > ${dir_log}/test.log.txt
 
 #CLEAN DB ON THE FEDORA MACHINE
-${dir_automation}/clean_remote.sh
+#${dir_automation}/clean_remote.sh
