@@ -49,8 +49,10 @@ then
 fi
 
 test_altitude=$((RANDOM%100)).$((RANDOM%1000));
+test_time=`date +'%d %m %Y %H:%M:%S.300'`;
+echo "test time = $test_time"
 echo "Test alt:$test_altitude"
-response_write_tag_test=`curl -d "{ \"auth_token\" : \"MMMMMMMMMM\", \"channel\" : \"$test_channel\", \"description\" : \"\", \"altitude\" : $test_altitude , \"latitude\" : 0.0,\"link\" : \"\", \"longitude\" : 0.0, \"time\" : \"04 03 2011 15:33:47.630\", \"title\" : \"\" }"  http://localhost:81/service/writeTag`;
+response_write_tag_test=`curl -d "{ \"auth_token\" : \"MMMMMMMMMM\", \"channel\" : \"$test_channel\", \"description\" : \"\", \"altitude\" : $test_altitude , \"latitude\" : 0.0,\"link\" : \"\", \"longitude\" : 0.0, \"time\" : \"$test_time\", \"title\" : \"\" }"  http://localhost:81/service/writeTag`;
 echo "$response_write_tag_test "
 if ! echo $response_write_tag_test | grep -q -s -F "$correct_result"  ;
 then
@@ -58,6 +60,7 @@ then
         exit 1
 fi
 
+sleep 15s
 
 response_altitude_test=`curl -d "{\"auth_token\":\"MMMMMMMMMM\",\"latitude\":0.0, \"longitude\":0.0, \"radius\":10.0}"  http://localhost:81/service/loadTags`;
 echo "Alt test - $response_altitude_test "
