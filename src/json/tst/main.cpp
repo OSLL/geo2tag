@@ -44,6 +44,7 @@
 #include "JsonUser_Test.h"
 #include "Test_RegisterUserRequestJSON.h"
 #include "Test_RegisterUserResponseJSON.h"
+#include "Test_AvailableChannelsResponseJSON.h"
 
 int main(int argc, char **argv)
 {
@@ -53,7 +54,8 @@ int main(int argc, char **argv)
     {
         new Test::JsonUser_Test(),
         new Test::Test_RegisterUserRequestJSON(),
-        new Test::Test_RegisterUserResponseJSON()
+        new Test::Test_RegisterUserResponseJSON(),
+//        new Test::Test_AvailableChannelsResponseJSON()
     };
 
     for (int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {

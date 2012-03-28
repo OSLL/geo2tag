@@ -614,3 +614,23 @@ bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,
   }
   return result;
 }
+
+bool QueryExecutor::isChannelSubscribed(QSharedPointer<Channel> &channel, QSharedPointer<common::User> &user)
+{
+    QSqlQuery query(m_database);
+    syslog(LOG_INFO, "Checking of subscription of user %s to channel %s...", user->getToken().toStdString().c_str(), channel->getName().toStdString().c_str());
+
+    query.prepare("select * from users inner join subscribe on users.id = subscribe.user_id inner join channel on channel.id = subscribe.channel_id where name = :channel_name AND token = :token;");
+    query.bindValue(":channel_name", channel->getName());
+    query.bindValue(":token", user->getToken());
+    syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
+    query.exec();
+
+    if (query.next()) {
+        syslog(LOG_INFO,"Subscription found.");
+        return true;
+    } else {
+        syslog(LOG_INFO,"No matching subscription.");
+        return false;
+    }
+}
