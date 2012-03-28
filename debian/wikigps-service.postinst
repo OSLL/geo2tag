@@ -24,10 +24,10 @@ then
 # If user want to replace - replace and keep his file
 elif [[ -n "`diff $pg_hba_us $pg_hba_pos`"  ]]
 then
-	echo "Replace $pg_hba_pos [y/n] ?"
+	echo "Replace $pg_hba_pos (if your are installing Geo2Tag for the first time type or you are not sure Y) [Y/n] ?"
 	read answ
 	echo "Answer is $answ"
-	if [[ "$answ" == "y"  ]]
+	if [[ "$answ" == "y" ]] || [[ "$answ" == "Y" ]]
 	then
 		sudo cp "$pg_hba_pos" "$pg_hba_pos.backup"
 		sudo cp "$pg_hba_us" "$pg_hba_pos"

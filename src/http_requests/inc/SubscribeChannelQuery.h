@@ -66,7 +66,6 @@ namespace GUI
 
       QSharedPointer<User> m_user;
     QSharedPointer<Channel> m_channel;
-    QString m_status;
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
 
