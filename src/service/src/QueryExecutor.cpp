@@ -210,8 +210,9 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
 QSharedPointer<common::User> QueryExecutor::isTmpUserExists(const QSharedPointer<common::User> &user)
 {
     QSqlQuery query(m_database);
-    query.prepare("select id, email, login, password, registration_token from signups where login = :login;");
+    query.prepare("select id, email, login, password, registration_token from signups where login = :login or email = :email;");
     query.bindValue(":login",user->getLogin());
+    query.bindValue(":email",user->getEmail());
     syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
 
     query.exec();

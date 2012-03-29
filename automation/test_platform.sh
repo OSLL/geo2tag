@@ -78,5 +78,12 @@ then
         exit 1
 fi
 
+response_575_bug=`curl -d "{\"email\":\"email1@test1.org\", \"login\":\"Vasja\",\"password\":\"VasjaPWD\"}"  http://localhost:81/service/registerUser`;
+correct_result_575="{ \"errno\" : 17 }";
+if ! echo $response_575_bug | grep -q -s -F "$correct_result_575"  ;
+then
+        echo "Fail at bug_575 test"
+        exit 1
+fi
 
 echo "Succes"
