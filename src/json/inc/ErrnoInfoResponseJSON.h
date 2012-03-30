@@ -1,5 +1,5 @@
 /*
- * Copyright 2012    
+ * Copyright 2012 bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

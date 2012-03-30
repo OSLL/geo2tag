@@ -53,7 +53,6 @@ SOURCES += \
     src/GpsInfo.cpp \ 
     src/DataMarks.cpp \
     src/defines.cpp \
-    src/ErrnoTypes.cpp \
     src/Filtration.cpp \
     src/ShapeFilter.cpp \
     src/TimeFilter.cpp \

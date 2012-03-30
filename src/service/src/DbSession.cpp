@@ -1341,7 +1341,7 @@ namespace common
     return answer;
   }
 
-  QByteArray DbObjectsCollection::processGetErrnoInfo(const QByteArray& data)
+  QByteArray DbObjectsCollection::processGetErrnoInfo(const QByteArray&)
   {
     ErrnoInfoResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");

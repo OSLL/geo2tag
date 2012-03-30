@@ -1,5 +1,5 @@
 /*
- * Copyright 2012    
+ * Copyright 2012 bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -47,19 +47,32 @@
 #include "serializer.h"
 #endif
 #include "ErrnoInfoResponseJSON.h"
+#include "ErrnoTypes.h"
+
+#include <syslog.h>
+#include <QList>
 
 ErrnoInfoResponseJSON::ErrnoInfoResponseJSON(QObject *parent = 0)
 {
-
 }
 
 QByteArray ErrnoInfoResponseJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj;
-  QVariantMap errnoInfo;
-  errnoInfo.insert("SUCCESS", 0);
-  errnoInfo.insert("BADDDDD", 1);
+  QVariantList errnoInfo;
+
+  QMap<int, QString> emap = Errno::initErrnoMap();
+  QList<int> keys = emap.keys();
+
+  for (int i = 0; i < keys.size(); i++)
+  {
+    int key = keys.at(i);
+    QVariantMap infoItem;
+    infoItem.insert("errno", key);
+    infoItem.insert("value", emap.value(key));
+    errnoInfo.append(infoItem);
+  }
 
   obj.insert("errno_info", errnoInfo);
   obj.insert("errno", getErrno());
@@ -68,5 +81,6 @@ QByteArray ErrnoInfoResponseJSON::getJson() const
 
 bool ErrnoInfoResponseJSON::parseJson(const QByteArray&)
 {
+  //not used in this case
   return false;
 }
