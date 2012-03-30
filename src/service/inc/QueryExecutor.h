@@ -82,6 +82,8 @@ class QueryExecutor : public QObject
     bool                     changeMarkTimeSlot(const QSharedPointer<DataMark>&, const QSharedPointer<TimeSlot>&);
     bool                     deleteChannelTimeSlot(const QSharedPointer<Channel>&);
     bool                     deleteMarkTimeSlot(const QSharedPointer<DataMark>&);
+    bool                     isChannelSubscribed(QSharedPointer<Channel>&, QSharedPointer<common::User>&);
+
 
     signals:
 

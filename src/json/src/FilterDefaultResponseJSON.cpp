@@ -107,6 +107,7 @@ QByteArray FilterDefaultResponseJSON::getJson() const
     {
       QSharedPointer<DataMark> tag = tags.at(j);
       QVariantMap jtag;
+      jtag["id"] = tag->getId();
       jtag["title"] = tag->getLabel();
       jtag["link"] = tag->getUrl();
       jtag["description"] = tag->getDescription();

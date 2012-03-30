@@ -17,14 +17,12 @@ HEADERS += \
            inc/DefaultQuery.h \
            inc/LoadTagsQuery.h \
            inc/WriteTagQuery.h \
-    inc/RegisterUserQuery.h
+           inc/RegisterUserQuery.h \
+           inc/AvailableChannelsQuery.h \
+           inc/SubscribedChannelsQuery.h 
 
 #            inc/ApplyMarkQuery.h \
-#           inc/AvailableChannelsListQuery.h \
-#
-#           inc/LoadTagsQuery.h \
 #           inc/SubscribeChannelQuery.h \
-#           inc/SubscribedChannelsListQuery.h \
 #           inc/UnsubscribeChannelQuery.h \
 
 
@@ -33,7 +31,8 @@ SOURCES += \
            src/DefaultQuery.cpp \
            src/LoadTagsQuery.cpp \
            src/WriteTagQuery.cpp \
-    src/RegisterUserQuery.cpp
+           src/SubscribedChannelsQuery.cpp \
+           src/RegisterUserQuery.cpp
 
 # src/ApplyMarkQuery.cpp \
 #           src/AvailableChannelsListQuery.cpp \
@@ -41,7 +40,6 @@ SOURCES += \
 #           src/LoadTagsQuery.cpp \
 #           src/UnsubscribeChannelQuery.cpp \
 #           src/SubscribeChannelQuery.cpp \
-#           src/SubscribedChannelsListQuery.cpp \
 
 
 LIBS    +=  -lcommon -lqjson

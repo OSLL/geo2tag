@@ -28,7 +28,7 @@
 				android:id="@+id/edit_server_address"
 				android:singleLine="true"
 				android:inputType="text" />
-		    
+<!-- this options will be deleted soon
 	        <TextView 
 	        	android:layout_width="fill_parent"
 	        	android:layout_height="wrap_content"
@@ -95,6 +95,7 @@
 				android:layout_height="wrap_content"
 				android:id="@+id/checkbox_hide"
 				android:text="@string/checkbox_hide_on_start"/>
+-->
 		</LinearLayout>
     </ScrollView>
 

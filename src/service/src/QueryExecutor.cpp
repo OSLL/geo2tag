@@ -210,8 +210,9 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
 QSharedPointer<common::User> QueryExecutor::isTmpUserExists(const QSharedPointer<common::User> &user)
 {
     QSqlQuery query(m_database);
-    query.prepare("select id, email, login, password, registration_token from signups where login = :login;");
+    query.prepare("select id, email, login, password, registration_token from signups where login = :login or email = :email;");
     query.bindValue(":login",user->getLogin());
+    query.bindValue(":email",user->getEmail());
     syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
 
     query.exec();
@@ -613,4 +614,24 @@ bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,
     m_database.commit();
   }
   return result;
+}
+
+bool QueryExecutor::isChannelSubscribed(QSharedPointer<Channel> &channel, QSharedPointer<common::User> &user)
+{
+    QSqlQuery query(m_database);
+    syslog(LOG_INFO, "Checking of subscription of user %s to channel %s...", user->getToken().toStdString().c_str(), channel->getName().toStdString().c_str());
+
+    query.prepare("select * from users inner join subscribe on users.id = subscribe.user_id inner join channel on channel.id = subscribe.channel_id where name = :channel_name AND token = :token;");
+    query.bindValue(":channel_name", channel->getName());
+    query.bindValue(":token", user->getToken());
+    syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
+    query.exec();
+
+    if (query.next()) {
+        syslog(LOG_INFO,"Subscription found.");
+        return true;
+    } else {
+        syslog(LOG_INFO,"No matching subscription.");
+        return false;
+    }
 }

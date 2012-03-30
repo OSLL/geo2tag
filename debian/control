@@ -39,7 +39,7 @@ Description: WikiGPS observer
 #
 Package: wikigps-service
 Architecture: i386 amd64
-Depends: lighttpd, postgresql, wikigps-libs, libpq5, libfcgi0ldbl, mailutils, ssmtp
+Depends: lighttpd, postgresql-8.4, postgresql-client-8.4, wikigps-libs, libpq5, libfcgi0ldbl, mailutils, ssmtp
 Description: Geo2tag webservice
 
 Package: wikigps-service-standalone

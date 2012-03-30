@@ -81,8 +81,10 @@ public class Settings {
 			xmlreader.setContentHandler(new ConfigFeedParser(configEditor));
 			xmlreader.parse(is);
 		} catch (Exception e) {
-			Log.v(m_context.getString(R.string.app_name),
+			if (IGDSSettings.DEBUG) {
+				Log.v(m_context.getString(R.string.app_name),
 					"loadFromXMLFile - exception: " + e.getMessage());
+			}
 		}
 	}
 	
@@ -133,6 +135,8 @@ public class Settings {
 	
 	public interface IGDSSettings{
 		String GDS_SETTINGS = "gds_settings";
+		
+		boolean DEBUG = true;
 		
 		String LOG = "GeoDoctorSearch";
 		int ATTEMPTS = 5;

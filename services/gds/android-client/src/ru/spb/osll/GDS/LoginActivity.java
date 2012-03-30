@@ -94,13 +94,17 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.v(IGDSSettings.LOG, "LoginActivity onPause");
+		if (IGDSSettings.DEBUG) {
+			Log.v(IGDSSettings.LOG, "LoginActivity onPause");
+		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.v(IGDSSettings.LOG, "LoginActivity onResume");
+		if (IGDSSettings.DEBUG) {
+			Log.v(IGDSSettings.LOG, "LoginActivity onResume");
+		}
 		initViews();
 	}
 	
@@ -154,7 +158,9 @@ public class LoginActivity extends Activity {
 	}
 	
 	private void signIn() {
-		Log.v(IGDSSettings.LOG, "signing in");
+		if (IGDSSettings.DEBUG) {
+			Log.v(IGDSSettings.LOG, "signing in");
+		}
 		
 		String login = m_loginEdit.getText().toString();
 		String password = m_passwordEdit.getText().toString();
@@ -174,7 +180,9 @@ public class LoginActivity extends Activity {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				Log.v(IGDSSettings.LOG, "user logged in successfully");
+				if (IGDSSettings.DEBUG) {
+					Log.v(IGDSSettings.LOG, "user logged in successfully");
+				}
 			} else {
 				handleError(errno);
 				return;
@@ -183,7 +191,9 @@ public class LoginActivity extends Activity {
 			authToken = JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN);
 
 		} else {
-			Log.v(IGDSSettings.LOG, "response failed");
+			if (IGDSSettings.DEBUG) {
+				Log.v(IGDSSettings.LOG, "response failed");
+			}
 			Toast.makeText(this, "Connection error",
 					Toast.LENGTH_LONG).show();
 			return;
@@ -206,28 +216,38 @@ public class LoginActivity extends Activity {
 	
 	private void handleError(int errno) {
 		if (errno < 0) {
-			Log.v(IGDSSettings.LOG, "bad response received");
+			if (IGDSSettings.DEBUG) {
+				Log.v(IGDSSettings.LOG, "bad response received");
+			}
 			Toast.makeText(this, "Server error (corrupted response)",
 					Toast.LENGTH_LONG).show();
 		} else if (errno >= IResponse.geo2tagError.values().length) {
-			Log.v(IGDSSettings.LOG, "unknown error");
+			if (IGDSSettings.DEBUG) {
+				Log.v(IGDSSettings.LOG, "unknown error");
+			}
 			Toast.makeText(this, "Unknown server error",
 					Toast.LENGTH_LONG).show();
 		} else if (errno > 0) {
 			String error = IResponse.geo2tagError.values()[errno].name();
-			Log.v(IGDSSettings.LOG, "error: " + error);
+			if (IGDSSettings.DEBUG) {
+				Log.v(IGDSSettings.LOG, "error: " + error);
+			}
 			Toast.makeText(this, "Error: " + error,
 					Toast.LENGTH_LONG).show();
 		}
 	}
 	
 	private void createAccount() {
-		Log.v(IGDSSettings.LOG, "creating account");
+		if (IGDSSettings.DEBUG) {
+			Log.v(IGDSSettings.LOG, "creating account");
+		}
 		startActivity(new Intent(this, CreateAccountActivity.class));
 	}
 	
 	private void showSettings() {
-		Log.v(IGDSSettings.LOG, "opening settings");
+		if (IGDSSettings.DEBUG) {
+			Log.v(IGDSSettings.LOG, "opening settings");
+		}
 		startActivity(new Intent(this, SettingsActivity.class));
 	}
 

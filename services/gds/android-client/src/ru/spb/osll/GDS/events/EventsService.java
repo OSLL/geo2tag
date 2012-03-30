@@ -2,11 +2,14 @@ package ru.spb.osll.GDS.events;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONObject;
 
 import ru.spb.osll.GDS.LocationService;
+import ru.spb.osll.GDS.R;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
@@ -22,9 +25,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.util.Log;
 
 public class EventsService extends Service {
@@ -33,6 +38,8 @@ public class EventsService extends Service {
 	private Thread m_eventsThread;
 	private InternalReceiver m_internalReceiver = new InternalReceiver();
 	private Settings m_settings;
+	private MediaPlayer m_sirenPlayer;
+	private Set<Long> m_events_ids = new HashSet<Long>();
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -41,19 +48,23 @@ public class EventsService extends Service {
 	
 	@Override
 	public void onCreate() {
-		Log.v(EventsManager.LOG, "EventsService create");
-		
+		if (IGDSSettings.DEBUG) {
+			Log.v(EventsManager.LOG, "EventsService create");
+		}
 		super.onCreate();
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
 		m_settings = new Settings(this);
+		m_sirenPlayer = MediaPlayer.create(this, R.raw.siren);
 		registerReceiver(m_internalReceiver, new IntentFilter(InternalReceiver.ACTION));
 		LocationService.getLocation(this);
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		Log.v(EventsManager.LOG, "EventsService start");
+		if (IGDSSettings.DEBUG) {
+			Log.v(EventsManager.LOG, "EventsService start");
+		}
 		super.onStart(intent, startId);
 		
 		Bundle extras =intent.getExtras();
@@ -61,7 +72,9 @@ public class EventsService extends Service {
 		    m_authToken = extras.getString(EventsManager.AUTH_TOKEN);
 		}
 		if (m_authToken == null) {
-			Log.v(EventsManager.LOG, "problem with extracting data");
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "problem with extracting data");
+			}
 			broadcastError("Failed to start tracking");
 			stopSelf();
 			return;
@@ -72,10 +85,13 @@ public class EventsService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Log.v(EventsManager.LOG, "EventsService destroy");
+		if (IGDSSettings.DEBUG) {
+			Log.v(EventsManager.LOG, "EventsService destroy");
+		}
 		super.onDestroy();
 		stopEventsTread();
 		unregisterReceiver(m_internalReceiver);
+		m_sirenPlayer.release();
 	}
 	
 	protected void stopEventsTread(){
@@ -94,10 +110,14 @@ public class EventsService extends Service {
 				while (!Thread.currentThread().isInterrupted()){
 					Location location = LocationService.getLocation(EventsService.this);
 					if (location == null) {
-						Log.v(EventsManager.LOG, "can't get location");
+						if (IGDSSettings.DEBUG) {
+							Log.v(EventsManager.LOG, "can't get location");
+						}
 					} else {
-						Log.v(EventsManager.LOG, "coords: " + location.getLatitude()
-								+ ", " + location.getLongitude());
+						if (IGDSSettings.DEBUG) {
+							Log.v(EventsManager.LOG, "coords: " + location.getLatitude()
+									+ ", " + location.getLongitude());
+						}
 						requestEvents(location);
 					}
 					
@@ -129,13 +149,61 @@ public class EventsService extends Service {
 		if (JSONResponse != null) {
 			int errno = JsonFilterResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				Log.v(EventsManager.LOG, "Events received successfully");
+				if (IGDSSettings.DEBUG) {
+					Log.v(EventsManager.LOG, "Events received successfully");
+				}
 				JsonFilterResponse response = new JsonFilterResponse();
 				response.parseJson(JSONResponse);
 				List<Channel> channels = response.getChannelsData();
 				for (Channel channel : channels) {
 					if (channel.getName().compareTo("Events") == 0) {
-						broadcastEvents(channel);
+
+						// are there new identificators?
+						boolean new_ids = false;
+						
+						// are some identificators expired?
+						boolean expired_ids = false;
+						
+						// Set of new identificators
+						Set<Long> events_ids_new = new HashSet<Long>();
+						
+						for (Mark mark : channel.getMarks()) {
+							events_ids_new.add(mark.getId());
+							if (!m_events_ids.contains(mark.getId()))
+								new_ids = true;
+						}
+						if (!events_ids_new.containsAll(m_events_ids))
+							expired_ids = true;
+						
+						if (new_ids) {
+							Thread alertThread = new Thread() {
+								@Override
+								public void run() {
+									// long[] pattern = {0, 500, 500, 500, 500, 500};
+						            // Start the vibration
+						            // Vibrator vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+						            // vibrator.vibrate(pattern, -1);
+									MediaPlayer player = MediaPlayer.create(EventsService.this,
+											R.raw.siren);
+									player.start();
+									while (player.isPlaying()) {
+										try {
+											Thread.sleep(player.getDuration() + 500);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									}
+									player.release();
+									player = null;
+								}
+							};
+							alertThread.start();
+						}
+						
+						if (new_ids || expired_ids) {
+							m_events_ids = events_ids_new;
+							broadcastEvents(channel);
+						}
 					}
 				}
 			} else {
@@ -143,7 +211,9 @@ public class EventsService extends Service {
 				return;
 			}
 		} else {
-			Log.v(EventsManager.LOG, "response failed");
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "response failed");
+			}
 			broadcastError("Failed to send location");
 			return;
 		}
@@ -151,12 +221,18 @@ public class EventsService extends Service {
 	
 	private void handleError(int errno) {
 		if (errno < 0) {
-			Log.v(EventsManager.LOG, "bad response received");
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "bad response received");
+			}
 		} else if (errno >= IResponse.geo2tagError.values().length) {
-			Log.v(EventsManager.LOG, "unknown error");
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "unknown error");
+			}
 		} else if (errno > 0) {
 			String error = IResponse.geo2tagError.values()[errno].name();
-			Log.v(EventsManager.LOG, "error: " + error);
+			if (IGDSSettings.DEBUG) {
+				Log.v(EventsManager.LOG, "error: " + error);
+			}
 		}
 		broadcastError("Failed to send location");
 	}

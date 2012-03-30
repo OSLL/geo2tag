@@ -247,6 +247,8 @@ namespace common
     return realUser;
   }
 
+
+
   QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
   {
     RegisterUserRequestJSON request;
@@ -383,7 +385,7 @@ namespace common
 
     QSharedPointer<Channel> dummyChannel = dummyTag->getChannel();
     QSharedPointer<Channel> realChannel;// Null pointer
-    QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+    QVector<QSharedPointer<Channel> > currentChannels = realUser->getSubscribedChannels()->vector();
 
     for(int i=0; i<currentChannels.size(); i++)
     {
@@ -392,6 +394,8 @@ namespace common
         realChannel = currentChannels.at(i);
       }
     }
+
+    //bool channelSubscribed = m_queryExecutor->isChannelSubscribed(dummyChannel, realUser);
     if(realChannel.isNull())
     {
       response.setErrno(CHANNEL_NOT_SUBCRIBED_ERROR);
@@ -1352,19 +1356,6 @@ namespace common
     return answer;
   }
 
-/*  void DbObjectsCollection::processSendConfirmationLetter(const QString &address)
-  {
-      QSettings settings(QSettings::SystemScope,"osll","libs");
-      if (settings.value("mail_subject").toString().isEmpty()) {
-          settings.setValue("mail_subject", "Registration confirmation");
-      }
-      syslog(LOG_INFO, "Process registration confirmation is started... ");
-      QString subject = settings.value("mail_subject").toString();
-      QString body = "'This will go into the body of the mail.'";
-      QString command = "echo " + body + " | mail -s '" + subject + "' " + address;
-      system(command.toStdString().c_str());
-      syslog(LOG_INFO, "Process registration confirmation finished... ");
-  }*/
 }                                       // namespace common
 
 

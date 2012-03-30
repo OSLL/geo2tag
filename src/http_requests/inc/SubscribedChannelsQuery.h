@@ -31,8 +31,8 @@
 
 /* $Id$ */
 /*!
- * \file SubscribedChannelsListQuery.h
- * \brief Header of SubscribedChannelsListQuery
+ * \file SubscribedChannelsQuery.h
+ * \brief Header of SubscribedChannelsQuery
  * \todo add comment here
  *
  * File description
@@ -40,8 +40,8 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _SubscribedChannelsListQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
-#define _SubscribedChannelsListQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
+#ifndef _SubscribedChannelsQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
+#define _SubscribedChannelsQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
 
 #include <QObject>
 #include <QString>
@@ -51,20 +51,18 @@
 #include "Channel.h"
 #include "User.h"
 
-namespace GUI
-{
   /*!
-   * SubscribedChannelsListQuery class definition.
+   * SubscribedChannelsQuery class definition.
    *
    * The object of this class represents http query to server.
    * This query includes json request for list of subscribed channels.
    *
    */
-  class SubscribedChannelsListQuery : public DefaultQuery
+  class SubscribedChannelsQuery : public DefaultQuery
   {
     Q_OBJECT
 
-      QSharedPointer<User> m_user;
+      QSharedPointer<common::User> m_user;
     QSharedPointer<Channels> m_channels;
 
     virtual QString getUrl() const;
@@ -76,26 +74,24 @@ namespace GUI
 
     public:
 
-      SubscribedChannelsListQuery(QObject *parent = 0);
+      SubscribedChannelsQuery(QObject *parent = 0);
 
-      SubscribedChannelsListQuery(QSharedPointer<User> user, QObject *parent = 0);
+      SubscribedChannelsQuery(QSharedPointer<common::User> user, QObject *parent = 0);
 
-      ~SubscribedChannelsListQuery();
+      ~SubscribedChannelsQuery();
 
       const QSharedPointer<Channels>& getChannels() const;
+      void setQuery(QSharedPointer<common::User>&);
 
       Q_SIGNALS:
 
       void responseReceived();
 
-      // class SubscribedChannelsListQuery
+      // class SubscribedChannelsQuery
   };
 
-  // namespace GUI
-}
 
-
-//_SubscribedChannelsListQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
+//_SubscribedChannelsQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
 #endif
 
 /* ===[ End of file $HeadURL$ ]=== */
