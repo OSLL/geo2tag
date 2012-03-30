@@ -2,7 +2,7 @@
 <project name="Geo2tag" default="build" basedir=".">
 	<property name="version" value="0.18" />
 	<!-- =============================== -->
-	
+	<!-- test edit -->
 	<property file="local.properties" />
 	<property file="mail.properties" />
 	<!-- Arguments to gwtc and devmode targets -->
