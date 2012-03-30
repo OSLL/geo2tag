@@ -52,6 +52,14 @@ namespace common
   {
   }
 
+  User::User(const QString &name, const QString &passw, const QString &email)
+      : m_login(name),
+        m_password(passw),
+        m_email(email),
+        m_channels(new Channels())
+  {
+  }
+
   qlonglong User::getId() const
   {
     // Database is not contain 0 in sequences, see scripts/base.sql
@@ -82,6 +90,11 @@ namespace common
   const QString& User::getPassword() const
   {
     return m_password;
+  }
+
+  const QString& User::getEmail() const
+  {
+    return m_email;
   }
 
   const QSharedPointer<Channels> User::getSubscribedChannels() const

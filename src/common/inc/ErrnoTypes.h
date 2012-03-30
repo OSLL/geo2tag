@@ -43,27 +43,61 @@
 #define _ErrnoTypes_H_9465846A_3F83_4512_8C8B_EE2A40A357F9_INCLUDED_
 
 #include <QString>
+#include <QMap>
+#include <QString>
 
-enum geo2tagError
+#define SUCCESS                             0
+#define WRONG_TOKEN_ERROR                   1
+#define USER_ALREADY_EXIST_ERROR            2
+#define USER_DOES_NOT_EXIST_ERROR           3
+#define CHANNEL_ALREADY_EXIST_ERROR         4
+#define CHANNEL_DOES_NOT_EXIST_ERROR        5
+#define SUBSCRIPTION_ALREADY_EXIST          6
+#define INTERNAL_DB_ERROR                   7
+#define INCORRECT_QUERY_NAME_ERROR          8
+#define INCORRECT_JSON_ERROR                9
+#define INCORRECT_CREDENTIALS_ERROR         10
+#define CHANNEL_NOT_SUBCRIBED_ERROR         11
+#define CHANNEL_ALREADY_SUBSCRIBED_ERROR    12
+#define TAG_DOES_NOT_EXIST_ERROR            13
+#define TAG_ALREADY_EXIST_ERROR             14
+#define NULL_TIMESLOT_ERROR                 15
+#define UNKNOWN_ERROR                       16
+#define TMP_USER_ALREADY_EXIST_ERROR        17
+#define NETWORK_ERROR                       18
+
+
+class Errno
 {
-  SUCCESS ,
-  WRONG_TOKEN_ERROR ,
-  USER_ALREADY_EXIST_ERROR ,
-  USER_DOES_NOT_EXIST_ERROR ,
-  CHANNEL_ALREADY_EXIST_ERROR ,
-  CHANNEL_DOES_NOT_EXIST_ERROR ,
-  SUBSCRIPTION_ALREADY_EXIST ,
-  INTERNAL_DB_ERROR ,
-  INCORRECT_QUERY_NAME_ERROR ,
-  INCORRECT_JSON_ERROR ,
-  INCORRECT_CREDENTIALS_ERROR ,
-  CHANNEL_NOT_SUBCRIBED_ERROR ,
-  CHANNEL_ALREADY_SUBSCRIBED_ERROR ,
-  TAG_DOES_NOT_EXIST_ERROR ,
-  TAG_ALREADY_EXIST_ERROR ,
-  NULL_TIMESLOT_ERROR ,
-  NETWORK_ERROR,
-  UNKNOWN_ERROR
+public:
+  static QMap<int,QString> initErrnoMap()
+  {
+    QMap<int, QString> emap;
+
+    /*
+     * After adding new error code, please fill item in this map
+     */
+    emap.insert(SUCCESS                            ,"SUCCESS");                         // 0
+    emap.insert(WRONG_TOKEN_ERROR                  ,"WRONG_TOKEN_ERROR");               // 1
+    emap.insert(USER_ALREADY_EXIST_ERROR           ,"USER_ALREADY_EXIST_ERROR");        // 2
+    emap.insert(USER_DOES_NOT_EXIST_ERROR          ,"USER_DOES_NOT_EXIST_ERROR");       // 3
+    emap.insert(CHANNEL_ALREADY_EXIST_ERROR        ,"CHANNEL_ALREADY_EXIST_ERROR");     // 4
+    emap.insert(CHANNEL_DOES_NOT_EXIST_ERROR       ,"CHANNEL_DOES_NOT_EXIST_ERROR");    // 5
+    emap.insert(SUBSCRIPTION_ALREADY_EXIST         ,"SUBSCRIPTION_ALREADY_EXIST");      // 6
+    emap.insert(INTERNAL_DB_ERROR                  ,"INTERNAL_DB_ERROR");               // 7
+    emap.insert(INCORRECT_QUERY_NAME_ERROR         ,"INCORRECT_QUERY_NAME_ERROR");      // 8
+    emap.insert(INCORRECT_JSON_ERROR               ,"INCORRECT_JSON_ERROR");            // 9
+    emap.insert(INCORRECT_CREDENTIALS_ERROR        ,"INCORRECT_CREDENTIALS_ERROR");     // 10
+    emap.insert(CHANNEL_NOT_SUBCRIBED_ERROR        ,"CHANNEL_NOT_SUBCRIBED_ERROR");     // 11
+    emap.insert(CHANNEL_ALREADY_SUBSCRIBED_ERROR   ,"CHANNEL_ALREADY_SUBSCRIBED_ERROR");// 12
+    emap.insert(TAG_DOES_NOT_EXIST_ERROR           ,"TAG_DOES_NOT_EXIST_ERROR");        // 13
+    emap.insert(TAG_ALREADY_EXIST_ERROR            ,"TAG_ALREADY_EXIST_ERROR");         // 14
+    emap.insert(NULL_TIMESLOT_ERROR                ,"NULL_TIMESLOT_ERROR");             // 15
+    emap.insert(UNKNOWN_ERROR                      ,"UNKNOWN_ERROR");                   // 16
+    emap.insert(TMP_USER_ALREADY_EXIST_ERROR       ,"TMP_USER_ALREADY_EXIST_ERROR");    // 17
+    emap.insert(NETWORK_ERROR                      ,"NETWORK_ERROR");                   // 18
+    return emap;
+  }
 };
 
 const QString getErrorByCode(int error);

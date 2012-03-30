@@ -42,7 +42,8 @@ HEADERS += \
     inc/FShapeCircle.h \
     inc/FShapePolygon.h \
     inc/FShapeRectangle.h \
-    inc/Region.h
+    inc/Region.h \
+    inc/signals.h
 
 SOURCES += \
     src/TimeSlot.cpp \
@@ -52,7 +53,6 @@ SOURCES += \
     src/GpsInfo.cpp \ 
     src/DataMarks.cpp \
     src/defines.cpp \
-    src/ErrnoTypes.cpp \
     src/Filtration.cpp \
     src/ShapeFilter.cpp \
     src/TimeFilter.cpp \
@@ -60,7 +60,8 @@ SOURCES += \
     src/FShapeCircle.cpp \
     src/FShapePolygon.cpp \
     src/FShapeRectangle.cpp \
-    src/Region.cpp 
+    src/Region.cpp \ 
+    src/signals.cpp
 
 linux: {
     HEADERS += inc/GpsModeller.h

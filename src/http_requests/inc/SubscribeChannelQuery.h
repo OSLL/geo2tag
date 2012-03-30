@@ -58,7 +58,6 @@
 
     QSharedPointer<Channel> m_channel;
     QSharedPointer<common::User> m_user;
-    QString m_status;
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
 

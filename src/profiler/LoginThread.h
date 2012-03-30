@@ -47,40 +47,15 @@
  * Class description. May use HTML formatting
  * Logic - send request, increment m_counter, recieve response, count delay, 
  */
-#include <QThread>
-#include "LoginQuery.h"
+#include "ProfilerThread.h"
 
-class LoginThread: public QThread
+class LoginThread: public ProfilerThread
 {
   Q_OBJECT;
 
-  static int m_counter;
-
-  LoginQuery * m_startSession;
-
-  QDateTime m_sendTime;
-
-
 public:
   LoginThread();
-
-  ~LoginThread();  
-
-  void run();
- 
-  static int getCounter() ;
-  static void incCounter() ;
-
-signals:
- 
-  void doRequest();
-
-public slots:
-  
-  void sendRequest();
-  void responseRecieved();
-  
-
+  ~LoginThread();
 
 }; // class LoginThread
   

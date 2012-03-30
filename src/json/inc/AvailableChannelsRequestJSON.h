@@ -42,7 +42,7 @@
 #ifndef _AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_
 #define _AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_
 
-#include "LoadTagsRequestJSON.h"
+#include "SubscribedChannelsRequestJSON.h"
 
-typedef LoadTagsRequestJSON AvailableChannelsRequestJSON;
+typedef SubscribedChannelsRequestJSON AvailableChannelsRequestJSON;
 #endif                                  //_AvailableChannelsRequestJSON_H_7CBD5C34_52BD_4C16_9D44_C09AC85BD6EB_INCLUDED_

@@ -41,7 +41,8 @@ qlonglong JsonUser::globalUserId = 0;
 
 JsonUser::JsonUser(const QString &login,
 const QString& pass,
-const QString& token): common::User(login,pass), m_id(globalUserId++)
+const QString& token,
+const QString& email): common::User(login,pass,email), m_id(globalUserId++)
 {
   setToken(token);
 }

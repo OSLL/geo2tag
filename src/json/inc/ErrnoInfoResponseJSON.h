@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
+ * Copyright 2012 bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,23 +30,30 @@
  */
 
 /*! ---------------------------------------------------------------
- *
- * \file ThreadCleaner.cpp
- * \brief ThreadCleaner implementation
+ * \file ErrnoInfoResponseJSON.h
+ * \brief Header of ErrnoInfoResponseJSON
+ * \todo add comment here
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "ThreadCleaner.h"
-#include <QDebug>
 
-void ThreadCleaner::killSender()
+#ifndef _ErrnoInfoResponseJSON_H_914A0FC5_A5EE_448E_9420_1F8B15C1C17E_INCLUDED_
+#define _ErrnoInfoResponseJSON_H_914A0FC5_A5EE_448E_9420_1F8B15C1C17E_INCLUDED_
+
+#include "JsonSerializer.h"
+
+class ErrnoInfoResponseJSON : public JsonSerializer
 {
-  qDebug() <<"ThreadCleaner::killSender()";
-  if (sender()){
-    delete (sender());
-    qDebug() << "deleted";
-  }
-}
+  public:
+    ErrnoInfoResponseJSON(QObject *parent = 0);
+
+    virtual QByteArray getJson() const;
+
+    virtual bool parseJson(const QByteArray&);
+
+}; // class ErrnoInfoResponseJSON
+
+#endif //_ErrnoInfoResponseJSON_H_914A0FC5_A5EE_448E_9420_1F8B15C1C17E_INCLUDED_

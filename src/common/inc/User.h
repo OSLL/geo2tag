@@ -51,8 +51,9 @@ namespace common
   class User: public QObject
   {
     Q_OBJECT
-      QString m_login;
+    QString m_login;
     QString m_password;
+    QString m_email;
 
     QString m_result;
     QString m_token;
@@ -66,6 +67,7 @@ namespace common
     public:
 
       User(const QString& name, const QString& passw);
+      User(const QString &name, const QString &passw, const QString &email);
 
       virtual qlonglong getId() const;
 
@@ -75,6 +77,7 @@ namespace common
 
       const QString& getLogin() const;
       const QString& getPassword() const;
+      const QString& getEmail() const;
       const QString& getToken() const;
       const QSharedPointer<Channels> getSubscribedChannels() const;
 

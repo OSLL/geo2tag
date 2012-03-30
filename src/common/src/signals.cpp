@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  bac1ca  bac1ca89@gmail.com
+ * Copyright 2010 OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,34 +29,28 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/*! ---------------------------------------------------------------
- *
- * \file ErrnoTypes.cpp
- * \brief ErrnoTypes implementation
+/*!
+ * \file defines.h
+ * \brief
  *
  * File description
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "ErrnoTypes.h"
-#include <QString>
+#include "signals.h"
 
-const QString getErrorByCode(int error)
+bool waitForSignal(QObject *sender, const char *signal, int timeout )
 {
+  QEventLoop loop;
+  QTimer timer;
+  timer.setInterval(timeout);
+  timer.setSingleShot(true);
 
-  switch (error)
-  {
-    case SUCCESS: return "SUCCESS";
-    case WRONG_TOKEN_ERROR: return "WRONG_TOKEN_ERROR";
-    case USER_ALREADY_EXIST_ERROR: return "USER_ALREADY_EXIST_ERROR";
-    case USER_DOES_NOT_EXIST_ERROR: return "USER_DOES_NOT_EXIST_ERROR";
-    case CHANNEL_ALREADY_EXIST_ERROR: return "CHANNEL_ALREADY_EXIST_ERROR";
-    case CHANNEL_DOES_NOT_EXIST_ERROR: return "CHANNEL_DOES_NOT_EXIST_ERROR";
-    case INTERNAL_DB_ERROR: return "INTERNAL_DB_ERROR";
-    case INCORRECT_QUERY_NAME_ERROR: return "INCORRECT_QUERY_NAME_ERROR";
-    case INCORRECT_JSON_ERROR: return "INCORRECT_JSON_ERROR";
-    case UNKNOWN_ERROR: return "UNKNOWN_ERROR";
-  }
-  return "UNDEFINED_ERROR";
+  loop.connect(sender, signal, SLOT(quit()));
+  loop.connect(&timer, SIGNAL(timeout()), SLOT(quit()));
+
+  timer.start();
+  loop.exec();
+  return timer.isActive();
 }

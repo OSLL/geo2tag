@@ -45,50 +45,14 @@
 #include <QEventLoop>
 #include <QDateTime>
 
-int TrackThread::m_counter=0;
 
 TrackThread::TrackThread(const QSharedPointer<DataMark> &tag)
 {
-  m_track = new WriteTagQuery(tag);
-  connect(this,SIGNAL(doRequest()),this, SLOT(sendRequest()));
-  connect(m_track,SIGNAL(tagAdded()),this, SLOT(responseRecieved()));
-  connect(m_track,SIGNAL(errorOccured(int)),this, SLOT(responseRecieved()));
-//  m_track->moveToThread(this);
+  m_query = new WriteTagQuery(tag);
+  connect(m_query,SIGNAL(tagAdded()),this, SLOT(responseRecieved()));
+  setConnections();
 }
 
 TrackThread::~TrackThread()
 {
-  delete m_track;
-}
-
-void TrackThread::run()
-{
-  
- emit doRequest();
- exec();
-}
-
-int TrackThread::getCounter() 
-{
-  return m_counter;
-}
-
-void TrackThread::incCounter()
-{
-  m_counter++;
-}
-
-
-void TrackThread::sendRequest()
-{
-
-  incCounter();
-  m_sendTime = QDateTime::currentDateTime();
-  m_track->doRequest();
-}
-
-void TrackThread::responseRecieved()
-{
-  qDebug() << getCounter() << " " << m_sendTime.msecsTo(QDateTime::currentDateTime()) << " " << m_track->getErrno();
-  emit doRequest();
 }

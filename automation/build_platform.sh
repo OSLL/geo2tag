@@ -80,7 +80,7 @@ then
 		cp ${dir_geo2tag}/automation/test_platform.sh ${dir_automation}
 		cd ${dir_automation}
 		ls
-		dpkg -i wikigps-libs_* wikigps-service_* >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
+		echo "n" | dpkg -i wikigps-libs_* wikigps-service_* >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 
 		#TEST
                 test_result=`${dir_automation}/test_platform.sh`;
@@ -101,7 +101,7 @@ then
 			status="fail";
 			cd "${dir_backup}"
 			echo "Restore backup" >> ${dir_log}/test.log.txt
-			dpkg -i `ls .` >> ${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
+			echo "n" | dpkg -i `ls .` >> ${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 		fi
 	fi
 else 

@@ -43,39 +43,17 @@
 #ifndef _TrackThread_H_59663E9E_76FF_4254_873A_08F920EDA64B_INCLUDED_
 #define _TrackThread_H_59663E9E_76FF_4254_873A_08F920EDA64B_INCLUDED_
 
-#include <QThread>
+#include "ProfilerThread.h"
 #include "WriteTagQuery.h"
 
-class TrackThread: public QThread
+class TrackThread: public ProfilerThread
 {
   Q_OBJECT;
-  static int m_counter;
-
-  WriteTagQuery * m_track;
-
-  QDateTime m_sendTime;
   QSharedPointer<DataMark> m_tag;
 
 public:
   TrackThread(const QSharedPointer<DataMark> &tag);
   ~TrackThread();
-
-  void run();
- 
-  static int getCounter() ;
-  static void incCounter() ;
-
-
-signals:
- 
-  void doRequest();
-
-public slots:
-  
-  void sendRequest();
-  void responseRecieved();
-
-
 }; // class TrackThread
 
 #endif //_TrackThread_H_59663E9E_76FF_4254_873A_08F920EDA64B_INCLUDED_

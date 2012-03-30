@@ -10,15 +10,35 @@ fi
 sudo -u postgres createuser -s geo2tag
 sudo -u postgres createdb -O geo2tag geo2tag
 sudo -u postgres psql --command="GRANT ALL privileges on database geo2tag to geo2tag;"
-sudo cp /opt/geo2tag/pg_hba.conf `find /etc/postgresql -name pg_hba.conf`
-#sudo `find /etc/init.d/ -name "postgres*"` restart
-sudo /etc/init.d/postgresql restart
+pg_hba_pos=`find /etc/postgresql -name pg_hba.conf`;
+pg_hba_us="/opt/geo2tag/pg_hba.conf";
+#is_pg_hba_diffs=`diff /opt/geo2tag/pg_hba.conf $pg_hba_pos`;
+# if more than one pg_hba.conf found
+if [[ "`echo $pg_hba_pos | wc -w`" != "1" ]]
+then
+
+	echo "You have more than one (or no) pg_hba.conf or multiple versions of Postgres installed .  Use $pg_hba_us as example to configure your pg_hba.conf"
+
+# if content of user pg_hba.conf differs from us
+# ask him does he want to replace it
+# If user want to replace - replace and keep his file
+elif [[ -n "`diff $pg_hba_us $pg_hba_pos`"  ]]
+then
+	echo "Replace $pg_hba_pos (if your are installing Geo2Tag for the first time type or you are not sure Y) [Y/n] ?"
+	read answ
+	echo "Answer is $answ"
+	if [[ "$answ" == "y" ]] || [[ "$answ" == "Y" ]]
+	then
+		sudo cp "$pg_hba_pos" "$pg_hba_pos.backup"
+		sudo cp "$pg_hba_us" "$pg_hba_pos"
+		sudo /etc/init.d/postgresql restart
+	else
+		echo "Use $pg_hba_us as example to configure your pg_hba.conf" 
+	fi
+fi
 psql geo2tag -U geo2tag < /opt/geo2tag/base.sql
 echo "sudo -u postgres psql --command=\"ALTER USER"
 sudo -u postgres psql --command="ALTER USER geo2tag WITH PASSWORD 'geo2tag';"
-#sudo `find /etc/init.d/ -name "postgres*"` restart
 sudo /etc/init.d/postgresql restart
-#cat /opt/geo2tag/odbc.ini >> /etc/odbc.ini
-#cat /opt/geo2tag/odbcinst.ini >> /etc/odbcinst.ini
 sudo /etc/init.d/lighttpd restart;
 

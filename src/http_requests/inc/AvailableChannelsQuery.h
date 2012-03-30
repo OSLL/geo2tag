@@ -31,8 +31,8 @@
 
 /* $Id$ */
 /*!
- * \file AvailableChannelsListQuery.h
- * \brief Header of AvailableChannelsListQuery
+ * \file AvailableChannelsQuery.h
+ * \brief Header of AvailableChannelsQuery
  * \todo add comment here
  *
  * File description
@@ -40,78 +40,30 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _AvailableChannelsListQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
-#define _AvailableChannelsListQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
+#ifndef _AvailableChannelsQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
+#define _AvailableChannelsQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
 
-#include <QObject>
-#include <QString>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-
-#include "Channel.h"
-
-namespace GUI
-{
+#include "SubscribedChanneslQuery.h"
+#include "defines.h"
   /*!
-   * AvailableChannelsListQuery class definition.
+   * AvailableChannelsQuery class definition.
    *
    * The object of this class represents http query to server.
    * This query includes json request for list of available channels.
    *
    */
-  class AvailableChannelsListQuery : public QObject
-  {
-    Q_OBJECT
 
-      private:
-      QNetworkAccessManager *manager;
+class AvailableChannelsQuery: public SubscribedChanneslQuery
+{
 
-      /* Url of th request */
-      QString httpQuery;
+    virtual QString getUrl() const
+    {
+	return AVAILABLE_LIST_HTTP_URL;
+    }
 
-      /* Body of the request */
-      QString jsonQuery;
-
-    public:
-
-      AvailableChannelsListQuery(QObject *parent = 0);
-
-      AvailableChannelsListQuery(QString auth_token, qreal latitude,
-        qreal longitude, qreal radius,
-        QObject *parent = 0);
-
-      void setQuery(QString auth_token, qreal latitude,
-        qreal longitude, qreal radius);
-
-      ~AvailableChannelsListQuery();
-
-      const QString& getHttpQuery();
-      const QString& getJsonQuery();
-
-      void doRequest();
-
-      Q_SIGNALS:
-      void responseReceived(QSharedPointer<Channels>& channels);
-
-    private Q_SLOTS:
-      void onManagerFinished(QNetworkReply *reply);
-      void onReplyError(QNetworkReply::NetworkError);
-      void onManagerSslErrors();
-
-    private:
-
-      /* \todo Do we need next constructor and overloaded operator? */
-      AvailableChannelsListQuery(const AvailableChannelsListQuery& obj);
-      AvailableChannelsListQuery& operator=(const AvailableChannelsListQuery& obj);
-
-      // class AvailableChannelsListQuery
-  };
-
-  // namespace GUI
 }
 
-
-//_AvailableChannelsListQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
+//_AvailableChannelsQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
 #endif
 
 /* ===[ End of file $HeadURL$ ]=== */

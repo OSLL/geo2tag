@@ -40,65 +40,17 @@
  * ---------------------------------------------------------------- */
 
 #include "LoginThread.h"
-#include "ErrnoTypes.h"
-#include <QDebug>
-#include <QEventLoop>
+#include "LoginQuery.h"
 #include "defines.h"
-
-int LoginThread::m_counter=0;
 
 LoginThread::LoginThread()
 {
-  m_startSession = new LoginQuery();
-  connect(this,SIGNAL(doRequest()),this, SLOT(sendRequest()));
-  connect(m_startSession,SIGNAL(connected()),this, SLOT(responseRecieved()));
-  connect(m_startSession,SIGNAL(errorOccured(int)),this, SLOT(responseRecieved()));
+  m_query = new LoginQuery();
+  dynamic_cast<LoginQuery*>(m_query)->setQuery(DEFAULT_USER_NAME,DEFAULT_USER_PASSWORD);
+  connect(m_query,SIGNAL(connected()),this, SLOT(responseRecieved()));
+  setConnections();
 }
 
 LoginThread::~LoginThread()
 {
-  delete m_startSession;
-}
-
-void LoginThread::run()
-{
- emit doRequest();
- exec();
-}
-
-int LoginThread::getCounter() 
-{
-  return m_counter;
-}
-
-void LoginThread::incCounter()
-{
-  m_counter++;
-}
-
-/*QString LoginThread::getSt() 
-{
-    QNetworkRequest request = QNetworkRequest(QUrl("https://auth.airomo.com/v1/tickets/"+m_tgt));
-    QNetworkAccessManager *manager = new QNetworkAccessManager();
-    QEventLoop loop;
-    QNetworkReply *reply = manager->post(request, "service=http://geo.airomo.com/");
-    connect(reply,SIGNAL(readyRead()),&loop,SLOT(quit()));
-    loop.exec();
-    return reply->readAll();
-}*/
-
-void LoginThread::sendRequest()
-{
-
-  incCounter();
-  srand(time(NULL));
-  m_startSession->setQuery(DEFAULT_USER_NAME,DEFAULT_USER_PASSWORD);
-  m_sendTime = QDateTime::currentDateTime();
-  m_startSession->doRequest();
-}
-
-void LoginThread::responseRecieved()
-{
-  qDebug() << getCounter() << " " << m_sendTime.msecsTo(QDateTime::currentDateTime()) << " " << m_startSession->getErrno();
-  emit doRequest();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,44 +28,47 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-
-/*! ---------------------------------------------------------------
- * \file ThreadCleaner.h
- * \brief Header of ThreadCleaner
- * \todo add comment here
- *
- * File description
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#include "RegisterUserRequestJSON.h"
+#include "JsonUser.h"
 
-#ifndef _ThreadCleaner_H_36ABAEB2_DCC0_44DC_9392_0D05AD58C65B_INCLUDED_
-#define _ThreadCleaner_H_36ABAEB2_DCC0_44DC_9392_0D05AD58C65B_INCLUDED_
+#ifndef Q_WS_SYMBIAN
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
- /*!
- * Class description. May use HTML formatting
- *
- */
-
-#include <QObject>
-
-class ThreadCleaner:public QObject
+RegisterUserRequestJSON::RegisterUserRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
-  Q_OBJECT;
-public:
-  ThreadCleaner(QObject * parent=0):QObject(parent)
-  {
-  }
+}
 
-  ~ThreadCleaner()
-  {
-  }
+QByteArray RegisterUserRequestJSON::getJson() const
+{
+    QJson::Serializer serializer;
+    QVariantMap obj;
+    obj.insert("email", m_usersContainer->at(0)->getEmail());
+    obj.insert("login", m_usersContainer->at(0)->getLogin());
+    obj.insert("password", m_usersContainer->at(0)->getPassword());
+    return serializer.serialize(obj);
+}
 
-public slots: 
-  void killSender();  
+bool RegisterUserRequestJSON::parseJson(const QByteArray &data)
+{
+    clearContainers();
 
-}; // class ThreadCleaner
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if (!ok) return false;
 
-
-#endif //_ThreadCleaner_H_36ABAEB2_DCC0_44DC_9392_0D05AD58C65B_INCLUDED_
+    QString email = result["email"].toString();
+    QString login = result["login"].toString();
+    QString password = result["password"].toString();
+    m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login, password, "unknown",email)));
+    return true;
+}

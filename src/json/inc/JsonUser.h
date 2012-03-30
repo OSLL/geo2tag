@@ -50,7 +50,10 @@ class JsonUser: public common::User
   qlonglong m_id;
 
   public:
-    JsonUser(const QString& login, const QString& pass = "unknown", const QString& token = "unknown");
+    JsonUser(const QString& login,
+             const QString& pass = "unknown",
+             const QString& token = "unknown",
+             const QString& email = "unknown");
 
     qlonglong getId() const;
     void setId(qlonglong);

@@ -43,7 +43,9 @@ public class TrackingService extends Service {
 	
 	@Override
 	public void onCreate() {
-		Log.v(TrackingManager.LOG, "TrackingService create");
+		if (IGDSSettings.DEBUG) {
+			Log.v(TrackingManager.LOG, "TrackingService create");
+		}
 		
 		super.onCreate();
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
@@ -57,7 +59,9 @@ public class TrackingService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		Log.v(TrackingManager.LOG, "TrackingService start");
+		if (IGDSSettings.DEBUG) {
+			Log.v(TrackingManager.LOG, "TrackingService start");
+		}
 		super.onStart(intent, startId);
 		m_isDeviceReady = false; // TODO check device
 		
@@ -67,7 +71,9 @@ public class TrackingService extends Service {
 		    m_channel = extras.getString(TrackingManager.CHANNEL); 
 		}
 		if (m_authToken == null || m_channel == null) {
-			Log.v(TrackingManager.LOG, "problem with extracting data");
+			if (IGDSSettings.DEBUG) {
+				Log.v(TrackingManager.LOG, "problem with extracting data");
+			}
 			broadcastError("Failed to start tracking");
 			stopSelf();
 			return;
@@ -78,7 +84,9 @@ public class TrackingService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Log.v(TrackingManager.LOG, "TrackingService destroy");
+		if (IGDSSettings.DEBUG) {
+			Log.v(TrackingManager.LOG, "TrackingService destroy");
+		}
 		super.onDestroy();
 	
 		stopTracking();		
@@ -116,7 +124,9 @@ public class TrackingService extends Service {
 	}
 	
 	protected void onLocationDeviceStatusChanged(boolean isReady) {
-		Log.v(TrackingManager.LOG, "onLocationDeviceStatusChanged: " + isReady);
+		if (IGDSSettings.DEBUG) {
+			Log.v(TrackingManager.LOG, "onLocationDeviceStatusChanged: " + isReady);
+		}
 		if (isReady) {
 			startTracking();
 		} else {
@@ -139,8 +149,10 @@ public class TrackingService extends Service {
 			public void run() {
 				while (!Thread.currentThread().isInterrupted()){
 					Location location = getLocation();
-					Log.v(TrackingManager.LOG, "coords: " + location.getLatitude()
+					if (IGDSSettings.DEBUG) {
+						Log.v(TrackingManager.LOG, "coords: " + location.getLatitude()
 							+ ", " + location.getLongitude());
+					}
 					
 					sendMark(location);
 					
@@ -164,14 +176,18 @@ public class TrackingService extends Service {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				Log.v(TrackingManager.LOG, "Mark sent successfully");
+				if (IGDSSettings.DEBUG) {
+					Log.v(TrackingManager.LOG, "Mark sent successfully");
+				}
 				broadcastMarkSent(location);
 			} else {
 				handleError(errno);
 				return;
 			}
 		} else {
-			Log.v(TrackingManager.LOG, "response failed");
+			if (IGDSSettings.DEBUG) {
+				Log.v(TrackingManager.LOG, "response failed");
+			}
 			broadcastError("Failed to send location");
 			return;
 		}
@@ -179,12 +195,18 @@ public class TrackingService extends Service {
 	
 	private void handleError(int errno) {
 		if (errno < 0) {
-			Log.v(TrackingManager.LOG, "bad response received");
+			if (IGDSSettings.DEBUG) {
+				Log.v(TrackingManager.LOG, "bad response received");
+			}
 		} else if (errno >= IResponse.geo2tagError.values().length) {
-			Log.v(TrackingManager.LOG, "unknown error");
+			if (IGDSSettings.DEBUG) {
+				Log.v(TrackingManager.LOG, "unknown error");
+			}
 		} else if (errno > 0) {
 			String error = IResponse.geo2tagError.values()[errno].name();
-			Log.v(TrackingManager.LOG, "error: " + error);
+			if (IGDSSettings.DEBUG) {
+				Log.v(TrackingManager.LOG, "error: " + error);
+			}
 		}
 		broadcastError("Failed to send location");
 	}

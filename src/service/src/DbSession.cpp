@@ -46,6 +46,9 @@
 #include "LoginRequestJSON.h"
 #include "LoginResponseJSON.h"
 
+#include "RegisterUserRequestJSON.h"
+#include "RegisterUserResponseJSON.h"
+
 #include "WriteTagRequestJSON.h"
 #include "WriteTagResponseJSON.h"
 
@@ -102,12 +105,15 @@
 #include "FilterBoxRequestJSON.h"
 #include "FilterFenceRequestJSON.h"
 
+#include "ErrnoInfoResponseJSON.h"
+
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
 #include "ErrnoTypes.h"
 
 #include <QtSql>
 #include <QMap>
+#include <QRegExp>
 
 namespace common
 {
@@ -125,6 +131,7 @@ namespace common
   {
 
     m_processors.insert("login", &DbObjectsCollection::processLoginQuery);
+    m_processors.insert("registerUser", &DbObjectsCollection::processRegisterUserQuery);
     m_processors.insert("writeTag", &DbObjectsCollection::processWriteTagQuery);
     m_processors.insert("loadTags", &DbObjectsCollection::processLoadTagsQuery);
     m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
@@ -140,12 +147,15 @@ namespace common
     m_processors.insert("channels", &DbObjectsCollection::processAvailableChannelsQuery);
     m_processors.insert("unsubscribe", &DbObjectsCollection::processUnsubscribeQuery);
 
+    m_processors.insert("errnoInfo", &DbObjectsCollection::processGetErrnoInfo);
     m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
     m_processors.insert("filterCylinder", &DbObjectsCollection::processFilterCylinderQuery);
     m_processors.insert("filterPolygon", &DbObjectsCollection::processFilterPolygonQuery);
     m_processors.insert("filterRectangle", &DbObjectsCollection::processFilterRectangleQuery);
     m_processors.insert("filterBox", &DbObjectsCollection::processFilterBoxQuery);
     m_processors.insert("filterFence", &DbObjectsCollection::processFilterFenceQuery);
+//  Here also should be something like
+//  m_processors.insert("confirmRegistration-*", &DbObjectsCollection::processFilterFenceQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -198,6 +208,18 @@ namespace common
       }
     }
 
+    // Extra code for extracting token from url !
+    QRegExp rx("confirmRegistration-([a-zA-Z0-9]+)");
+    if (rx.exactMatch(queryType)) {
+        syslog(LOG_INFO, "Pattern matched!");
+        const QString token = rx.cap(1);
+        ProcessMethodWithStr method = &DbObjectsCollection::processConfirmRegistrationQuery;
+        return (*this.*method)(token);
+    } else {
+        syslog(LOG_INFO, "Pattern not matched!");
+    }
+    // end of extra code !
+
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
     DefaultResponseJSON response;
     response.setErrno(INCORRECT_QUERY_NAME_ERROR);
@@ -223,6 +245,71 @@ namespace common
       }
     }
     return realUser;
+  }
+
+
+
+  QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
+  {
+    RegisterUserRequestJSON request;
+    RegisterUserResponseJSON response;
+    QByteArray answer;
+    answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    if (!request.parseJson(data)) {
+        response.setErrno(INCORRECT_JSON_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+    QSharedPointer<User> newTmpUser = request.getUsers()->at(0);
+    QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+    for(int i=0; i<currentUsers.size(); i++)
+    {
+      if(currentUsers.at(i)->getLogin() == newTmpUser->getLogin())
+      {
+        response.setErrno(USER_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+      }
+    }
+    if(m_queryExecutor->isTmpUserExists(newTmpUser)) {
+        response.setErrno(TMP_USER_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+
+    if(!m_queryExecutor->insertNewTmpUser(newTmpUser)) {
+        response.setErrno(INTERNAL_DB_ERROR);
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+    }
+
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+
+  }
+
+  QByteArray DbObjectsCollection::processConfirmRegistrationQuery(const QString &registrationToken)
+  {
+    QByteArray answer;
+    answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    //syslog(LOG_INFO, "Confirming!");
+    bool tokenExists = m_queryExecutor->doesRegistrationTokenExist(registrationToken);
+    if (!tokenExists) {
+        answer.append("Given token doesn't exist!");
+        return answer;
+    }
+    // Token exists!
+    if (m_queryExecutor->insertTmpUserIntoUsers(registrationToken)) {
+        m_queryExecutor->deleteTmpUser(registrationToken);
+        answer.append("Congratulations!");
+    } else {
+        answer.append("Attempt of inserting user has failed!");
+    }
+    return answer;
   }
 
   QByteArray DbObjectsCollection::processLoginQuery(const QByteArray &data)
@@ -298,7 +385,7 @@ namespace common
 
     QSharedPointer<Channel> dummyChannel = dummyTag->getChannel();
     QSharedPointer<Channel> realChannel;// Null pointer
-    QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+    QVector<QSharedPointer<Channel> > currentChannels = realUser->getSubscribedChannels()->vector();
 
     for(int i=0; i<currentChannels.size(); i++)
     {
@@ -307,6 +394,8 @@ namespace common
         realChannel = currentChannels.at(i);
       }
     }
+
+    //bool channelSubscribed = m_queryExecutor->isChannelSubscribed(dummyChannel, realUser);
     if(realChannel.isNull())
     {
       response.setErrno(CHANNEL_NOT_SUBCRIBED_ERROR);
@@ -1256,19 +1345,17 @@ namespace common
     return answer;
   }
 
-  void DbObjectsCollection::processSendConfirmationLetter(const QString &address)
+  QByteArray DbObjectsCollection::processGetErrnoInfo(const QByteArray&)
   {
-      QSettings settings(QSettings::SystemScope,"osll","libs");
-      if (settings.value("mail_subject").toString().isEmpty()) {
-          settings.setValue("mail_subject", "Registration confirmation");
-      }
-      syslog(LOG_INFO, "Process registration confirmation is started... ");
-      QString subject = settings.value("mail_subject").toString();
-      QString body = "'This will go into the body of the mail.'";
-      QString command = "echo " + body + " | mail -s '" + subject + "' " + address;
-      system(command.toStdString().c_str());
-      syslog(LOG_INFO, "Process registration confirmation finished... ");
+    ErrnoInfoResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
   }
+
 }                                       // namespace common
 
 

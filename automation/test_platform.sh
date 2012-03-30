@@ -4,7 +4,10 @@ correct_result='"errno" : 0';
 
 test_channel="test_$RANDOM";
 
+sleep 15s
+
 response_add_channel=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"name\":\"$test_channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel`;
+echo "$response_add_channel"
 if ! echo $response_add_channel | grep -q -s -F "$correct_result"  ;
 then
 	echo "Fail at addChannel test"
@@ -46,8 +49,10 @@ then
 fi
 
 test_altitude=$((RANDOM%100)).$((RANDOM%1000));
+test_time=`date +'%d %m %Y %H:%M:%S.300'`;
+echo "test time = $test_time"
 echo "Test alt:$test_altitude"
-response_write_tag_test=`curl -d "{ \"auth_token\" : \"MMMMMMMMMM\", \"channel\" : \"$test_channel\", \"description\" : \"\", \"altitude\" : $test_altitude , \"latitude\" : 0.0,\"link\" : \"\", \"longitude\" : 0.0, \"time\" : \"04 03 2011 15:33:47.630\", \"title\" : \"\" }"  http://localhost:81/service/writeTag`;
+response_write_tag_test=`curl -d "{ \"auth_token\" : \"MMMMMMMMMM\", \"channel\" : \"$test_channel\", \"description\" : \"\", \"altitude\" : $test_altitude , \"latitude\" : 0.0,\"link\" : \"\", \"longitude\" : 0.0, \"time\" : \"$test_time\", \"title\" : \"\" }"  http://localhost:81/service/writeTag`;
 echo "$response_write_tag_test "
 if ! echo $response_write_tag_test | grep -q -s -F "$correct_result"  ;
 then
@@ -55,6 +60,7 @@ then
         exit 1
 fi
 
+sleep 15s
 
 response_altitude_test=`curl -d "{\"auth_token\":\"MMMMMMMMMM\",\"latitude\":0.0, \"longitude\":0.0, \"radius\":10.0}"  http://localhost:81/service/loadTags`;
 echo "Alt test - $response_altitude_test "
@@ -72,5 +78,12 @@ then
         exit 1
 fi
 
+response_575_bug=`curl -d "{\"email\":\"email1@test1.org\", \"login\":\"Vasja\",\"password\":\"VasjaPWD\"}"  http://localhost:81/service/registerUser`;
+correct_result_575="{ \"errno\" : 17 }";
+if ! echo $response_575_bug | grep -q -s -F "$correct_result_575"  ;
+then
+        echo "Fail at bug_575 test"
+        exit 1
+fi
 
 echo "Succes"
