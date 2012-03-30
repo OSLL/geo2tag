@@ -52,7 +52,7 @@
 #include <syslog.h>
 #include <QList>
 
-ErrnoInfoResponseJSON::ErrnoInfoResponseJSON(QObject *parent = 0)
+ErrnoInfoResponseJSON::ErrnoInfoResponseJSON(QObject *parent = 0): JsonSerializer(parent)
 {
 }
 
