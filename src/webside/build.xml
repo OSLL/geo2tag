@@ -19,7 +19,7 @@
 		<fileset dir="war/WEB-INF/lib" includes="**/*.jar" />
 	</path>
 
-	<!-- Configure path to Tomcat -->
+	<!--  Configure path to Tomcat -->
 	<property environment="env" />
 	<property name="tom.dir" value="${env.CATALINA_HOME}" />
 	<property name="geo.dir" value="${env.WEBGEO_HOME}" />
