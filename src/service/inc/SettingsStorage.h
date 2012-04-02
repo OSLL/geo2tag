@@ -45,7 +45,7 @@
 class SettingsStorage
 {
 private:
-    QString filename_;
+    QString m_filename;
 
 public:
     SettingsStorage(const QString& filename);

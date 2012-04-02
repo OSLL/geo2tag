@@ -29,7 +29,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*! --------------------------------------------------------------------------
- * \file   SettingStorage.cpp
+ * \file   SettingsStorage.cpp
  * \brief  Implementation of SettingStorage Class
  *
  * PROJ: OSLL/geo2tag
@@ -40,27 +40,25 @@
 #include <QString>
 #include <QVariant>
 #include <QSettings>
-#include <QFile>
-#include <QTextStream>
 
 SettingsStorage::SettingsStorage(const QString &filename)
-    : filename_(filename)
+    : m_filename(filename)
 {
 }
 
 QString SettingsStorage::getFileName()
 {
-    return filename_;
+    return m_filename;
 }
 
 void SettingsStorage::setFileName(const QString &filename)
 {
-    filename_ = filename;
+    m_filename = filename;
 }
 
 void SettingsStorage::setValue(const QString &key, const QVariant &value, const QString &group)
 {
-    QSettings settings(filename_, QSettings::IniFormat);
+    QSettings settings(m_filename, QSettings::IniFormat);
     settings.beginGroup(group);
     settings.setValue(key, value);
     settings.endGroup();
@@ -68,7 +66,7 @@ void SettingsStorage::setValue(const QString &key, const QVariant &value, const 
 
 QVariant SettingsStorage::getValue(const QString &key, const QVariant &defaultValue)
 {
-    QSettings settings(filename_, QSettings::IniFormat);
+    QSettings settings(m_filename, QSettings::IniFormat);
     QVariant value = settings.value(key, defaultValue);
     return value;
 }
