@@ -36,6 +36,7 @@
 #include <QDebug>
 #include <QSettings>
 #include "UpdateThread.h"
+#include "SettingsStorage.h"
 #include "defines.h"
 
 UpdateThread::UpdateThread(const QSqlDatabase &db,
@@ -80,13 +81,14 @@ void UpdateThread::run()
       QThread::msleep(1000);
       continue;
     }
+
     qDebug() << "connected...";
     common::Users       usersContainer(*m_usersContainer);
     DataMarks   tagsContainer(*m_tagsContainer);
     Channels    channelsContainer(*m_channelsContainer);
     TimeSlots   timeSlotsContainer(*m_timeSlotsContainer);
 
-    checkTmpUsers(); // New!
+    checkTmpUsers();
     loadUsers(usersContainer);
     loadTags(tagsContainer);
     loadChannels(channelsContainer);
@@ -354,17 +356,19 @@ void UpdateThread::checkTmpUsers()
 
 void UpdateThread::sendConfirmationLetter(const QString &address, const QString &token)
 {
-    QSettings settings(QSettings::SystemScope,"osll","libs");
-    if (settings.value("mail_subject").toString().isEmpty()) {
-        settings.setValue("mail_subject", "Registration confirmation");
-    }
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString subject = storage.getValue("Mail_Settings/subject", QVariant(DEFAULT_EMAIL_SUBJECT)).toString();
+    QString body = storage.getValue("Mail_Settings/body", QVariant(DEFAULT_EMAIL_BODY)).toString();
     syslog(LOG_INFO, "Process registration confirmation is started... ");
-    QString subject = settings.value("mail_subject").toString();
-    QString body = "'This will go into the body of the mail.'";
-    body.append("To confirm registration, please, go to this link: ");
+    body.append(" To confirm registration, please, go to this link: ");
     body.append(DEFAULT_SERVER);
     body.append("service/confirmRegistration-");
     body.append(token);
+    syslog(LOG_INFO, "Setting storage: %s", storage.getFileName().toStdString().c_str());
+    syslog(LOG_INFO, "Email: %s", address.toStdString().c_str());
+    syslog(LOG_INFO, "Token: %s", token.toStdString().c_str());
+    syslog(LOG_INFO, "Subject: %s",subject.toStdString().c_str());
+    syslog(LOG_INFO, "Body: %s", body.toStdString().c_str());
     QString command = "echo " + body + " | mail -s '" + subject + "' " + address;
     system(command.toStdString().c_str());
     syslog(LOG_INFO, "Process registration confirmation finished... ");
