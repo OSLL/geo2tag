@@ -42,7 +42,8 @@ DefaultQuery::DefaultQuery(QObject *parent): QObject(parent),
     m_url(DEFAULT_URL)
 {
   connect(m_manager, SIGNAL(finished(QNetworkReply*)),this, SLOT(process(QNetworkReply*)));
-  connect(m_manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(handleError()));
+  connect(m_manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
+          this, SLOT(handleError()));
 }
 
 void DefaultQuery::setUrl(const QString &url)
@@ -71,5 +72,5 @@ void DefaultQuery::process(QNetworkReply *reply)
 void DefaultQuery::handleError()
 {
   qDebug() << "Network error occured while sending request";
-  Q_EMIT errorOccured("network error occcured");
+  Q_EMIT networkErrorOccured("network error");
 }

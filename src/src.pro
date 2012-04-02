@@ -23,7 +23,8 @@ maemo5: {
 linux: {
   SUBDIRS += common
   SUBDIRS += \
-             json json/tst \
+             json \
+             #json/tst \
              http_requests \
              service \
 	     tracker/clients/meego/tst \
@@ -32,5 +33,5 @@ linux: {
              tracker/observer
 }
 
-SUBDIRS += \
-    http_requests/tst_http_requests
+#SUBDIRS += \
+#    http_requests/tst_http_requests

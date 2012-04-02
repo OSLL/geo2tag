@@ -104,7 +104,7 @@ void LoadTagsQuery::processReply(QNetworkReply *reply)
   }
   else
   {
-    Q_EMIT errorOccured(response.getErrno());
+    Q_EMIT errorOccured(getErrnoDescription(response.getErrno()));
   }
 }
 

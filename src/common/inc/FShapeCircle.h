@@ -54,6 +54,11 @@ class FShapeCircle : public FShape
   public:
     FShapeCircle(double lat, double lon, double r);
     ~FShapeCircle();
+
+    double getLatitude() const;
+    double getLongitude() const;
+    double getRadius() const;
+
     bool filtrate(const QSharedPointer<DataMark> &mark);
 
 };                                      // class FShapeCircle

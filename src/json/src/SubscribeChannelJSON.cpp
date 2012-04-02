@@ -40,17 +40,24 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#include "SubscribeChannelJSON.h"
+
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
 #include <QVariant>
 #include <QVariantMap>
 
-#include "SubscribeChannelJSON.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 #include <syslog.h>
+
 SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
   syslog(LOG_INFO,"SubscribeChannelRequestJSON::SubscribeChannelRequestJSON()");

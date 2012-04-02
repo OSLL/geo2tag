@@ -60,6 +60,12 @@ QString WriteTagQuery::getUrl() const
 }
 
 
+void WriteTagQuery::setUrl(const QString &url)
+{
+    DefaultQuery::setUrl(url + APPLY_HTTP_URL);
+}
+
+
 QByteArray WriteTagQuery::getRequestBody() const
 {
   WriteTagRequestJSON request;
@@ -78,7 +84,7 @@ void WriteTagQuery::processReply(QNetworkReply *reply)
   }
   else
   {
-    Q_EMIT errorOccured(response.getErrno());
+    Q_EMIT errorOccured(getErrnoDescription(response.getErrno()));
   }
 }
 

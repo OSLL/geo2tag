@@ -9,6 +9,7 @@
 #define PASSWORD "password"
 #define REMEMBER "remember"
 #define SERVER_URL "server_url"
+#define AUTH_TOKEN "auth_token"
 
 class Settings
 {
@@ -27,6 +28,8 @@ public:
     void setPassword(const QString& password);
     bool isRememberMe();
     void setRememberMe(bool status);
+    QString getAuthToken();
+    void setAuthToken(const QString& password);
 
     QString getServerUrl();
     void setServerUrl(const QString& serverUrl);
