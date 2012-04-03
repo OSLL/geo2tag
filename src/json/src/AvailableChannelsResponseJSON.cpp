@@ -74,7 +74,7 @@ bool AvailableChannelsResponseJSON::parseJson(const QByteArray &data)
   {
     return false ;
   }
-  m_errno = result["channels"].toInt();
+  m_errno = result["errno"].toInt();
   QVariantList channels = result["channels"].toList();
   int size = channels.size();
   for (int i = 0; i < size; i++)
