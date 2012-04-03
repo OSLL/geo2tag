@@ -1,3 +1,34 @@
+/*
+ * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * 3. The name of the author may not be used to endorse or promote
+ *    products derived from this software without specific prior written
+ *    permission.
+ *
+ * The advertising clause requiring mention in adverts must never be included.
+ */
+
 #include "inc/EventsService.h"
 #include <QDebug>
 #include <QTimer>
@@ -11,20 +42,12 @@ EventsService::EventsService(LocationManager *locationManager, QObject *parent) 
     QObject(parent),
     m_locationManager(locationManager),
     m_filterCircleQuery(0)
-    //m_loadTagsQuery(0)
 {
 }
 
 void EventsService::startService(QString name, QString password, QString authToken, QString serverUrl)
 {
     qDebug() << "EventsService::startService " << this->thread()->currentThreadId();
-
-    //if (m_loadTagsQuery != 0)
-    //    m_loadTagsQuery->deleteLater();
-
-    //m_loadTagsQuery = new LoadTagsQuery(this);
-    //connect(m_loadTagsQuery, SIGNAL(tagsReceived()), this, SLOT(onTagsReceived()));
-    //connect(m_loadTagsQuery, SIGNAL(errorOccured(QString)), this, SLOT(onError(QString)));
 
     if (m_filterCircleQuery != 0)
         m_filterCircleQuery->deleteLater();
@@ -34,7 +57,6 @@ void EventsService::startService(QString name, QString password, QString authTok
     connect(m_filterCircleQuery, SIGNAL(errorOccured(QString)), this, SLOT(onError(QString)));
 
     m_user = QSharedPointer<JsonUser>(new JsonUser(name, password, authToken));
-    //m_loadTagsQuery->setUrl(serverUrl + FEED_HTTP_URL);
     m_filterCircleQuery->setUrl(serverUrl + FILTER_CIRCLE_HTTP_URL);
 
     requestEvents();
@@ -49,9 +71,6 @@ void EventsService::requestEvents()
     qDebug() << "EventsService::requestEvents";
     QGeoPositionInfo info = m_locationManager->getInfo();
     if (info.isValid()) {
-        //m_loadTagsQuery->setQuery(m_user, info.coordinate().latitude(),
-        //                          info.coordinate().longitude(), EVENTS_RADIUS);
-
         QDateTime currentTime = QDateTime::currentDateTimeUtc();
 
         // just for sure that all newest events will be received
@@ -62,8 +81,8 @@ void EventsService::requestEvents()
         m_filterCircleQuery->setQuery(m_user, info.coordinate().latitude(),
                                       info.coordinate().longitude(), EVENTS_RADIUS,
                                       timeFrom, timeTo);
+
         qDebug() << "do events service request";
-        //m_loadTagsQuery->doRequest();
         m_filterCircleQuery->doRequest();
     } else {
         qDebug() << "invalid geo info, waitin and trying again";
@@ -74,7 +93,6 @@ void EventsService::requestEvents()
 void EventsService::onTagsReceived()
 {
     qDebug() << "EventsService::onTagsReceived";
-    //DataChannels data = m_loadTagsQuery->getData();
     DataChannels data = m_filterCircleQuery->getData();
     QList<QSharedPointer<Channel> > channels = data.keys();
     Events events;

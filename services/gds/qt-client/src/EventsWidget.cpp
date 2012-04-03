@@ -8,10 +8,10 @@
 
 EventsWidget::EventsWidget(LocationManager *locationManager, QWidget *parent) :
     QWidget(parent),
-    m_eventIcon(":/data/event64.png"),
-    m_eventOffset(-32, -32),
     m_locationManager(locationManager),
-    m_eventsService(locationManager)
+    m_eventsService(locationManager),
+    m_eventIcon(":/data/event64.png"),
+    m_eventOffset(-32, -32)
 {
     m_serviceProvider = new QGeoServiceProvider("nokia");
     if (m_serviceProvider->error() != QGeoServiceProvider::NoError) {

@@ -21,7 +21,7 @@ void MainWidget::initGUI()
     this->addTab(m_trackingWidget, "Tracking");
 }
 
-void MainWidget::signIn(const QString &authToken)
+void MainWidget::signIn(const QString & /*authToken*/)
 {
     m_eventsWidget->startEventsService();
     if (m_shouldStartTracking) {

@@ -20,7 +20,7 @@
 #define SUBSCRIBED_LIST_HTTP_URL  QString(DEFAULT_URL)+QString("service/subscribed")
 #define AVAILABLE_LIST_HTTP_URL   QString(DEFAULT_URL)+QString("service/channels")
 #define LOGIN_HTTP_URL            "/service/login"
-#define ADD_CHANNEL_HTTP_URL    "/service/addChannel"
+#define ADD_CHANNEL_HTTP_URL      "/service/addChannel"
 #define ADD_USER_HTTP_URL         "/service/addUser"
 #define REGISTER_USER_HTTP_URL    "/service/addUser"
 #define FILTER_CIRCLE_HTTP_URL    "/service/filterCircle"

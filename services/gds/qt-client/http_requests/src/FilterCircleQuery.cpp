@@ -120,5 +120,4 @@ const DataChannels& FilterCircleQuery::getData() const
 
 FilterCircleQuery::~FilterCircleQuery()
 {
-
 }

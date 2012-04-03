@@ -1,5 +1,3 @@
-#ifndef CREATEACCOUNTWIDGET_H
-#define CREATEACCOUNTWIDGET_H
 /*
  * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
  *
@@ -30,6 +28,9 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+
+#ifndef CREATEACCOUNTWIDGET_H
+#define CREATEACCOUNTWIDGET_H
 
 #include <QWidget>
 #include <QLineEdit>
