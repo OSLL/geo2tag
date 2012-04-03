@@ -37,6 +37,7 @@
 
 TrackingService::TrackingService(LocationManager *locationManager, QObject *parent) :
     QObject(parent),
+    m_writeTagQuery(0),
     m_locationManager(locationManager)
 {
     m_dataMark = QSharedPointer<DataMark>(
