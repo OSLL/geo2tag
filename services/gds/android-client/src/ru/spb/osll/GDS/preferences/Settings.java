@@ -89,6 +89,16 @@ public class Settings {
 		}
 	}
 	
+	public String getAuthToken() {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+		return prefs.getString(IGDSSettings.AUTH_TOKEN, "");
+	}
+	
+	public void setAuthToken(String authToken) {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    prefs.edit().putString(IGDSSettings.AUTH_TOKEN, authToken).commit();
+	}
+	
 	public String getLogin() {
 		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
 	    return prefs.getString(IGDSSettings.LOGIN, "");
@@ -137,6 +147,7 @@ public class Settings {
 	public interface IGDSSettings{
 		String GDS_SETTINGS = "gds_settings";
 		
+		String AUTH_TOKEN = "auth_token";
 		String LOGIN = "login";
 		String PASSWORD = "password";
 		String REMEMBER = "remember";

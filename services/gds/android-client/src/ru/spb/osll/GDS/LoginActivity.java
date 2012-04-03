@@ -225,9 +225,10 @@ public class LoginActivity extends Activity {
 			}
 		}
 		
+		settings.setLogin(m_loginEdit.getText().toString());
+		settings.setPassword(m_passwordEdit.getText().toString());
+		settings.setAuthToken(authToken);
 		if (m_rememberCheck.isChecked()) {
-			settings.setLogin(m_loginEdit.getText().toString());
-			settings.setPassword(m_passwordEdit.getText().toString());
 			settings.setRememberMe(true);
 		} else {
 			settings.setRememberMe(false);

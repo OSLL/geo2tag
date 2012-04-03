@@ -121,7 +121,7 @@ public class MainActivity extends TabActivity {
 		i.putExtra(GDSUtil.AUTH_TOKEN, m_authToken);	
 	    tabSpec.setContent(i);
 	    m_TabHost.addTab(tabSpec);		
-	    m_TabHost.setCurrentTab(0);
+	    m_TabHost.setCurrentTab(1);
 	    m_TabHost.addTab(m_TabHost.newTabSpec("tab3").setIndicator("Tracking").setContent(R.id.tracking_tab));
 	    m_trackingButton = (Button) findViewById(R.id.tracking_button);
 	    m_trackingButton.setText("Start tracking");
