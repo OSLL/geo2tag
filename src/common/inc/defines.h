@@ -53,6 +53,8 @@ void setServerPort(int port);
 // "demo"
 #define SETTINGS_STORAGE_FILENAME "/opt/geo2tag/geo2tag.conf"
 
+#define GEO2TAG_VERSION "0.16"
+
 #define DATABASE_NAME "geo2tag"
 
 #define SUBSCRIBE_HTTP_URL        getServerUrl()+QString("service/subscribe")

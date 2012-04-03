@@ -61,12 +61,12 @@ QByteArray VersionResponseJSON::getJson() const
   QJson::Serializer serializer;
   QVariantMap obj;
 
-  obj.insert("", errnoInfo);
+  obj.insert("errno", m_errno);
   if (getErrno()== SUCCESS) obj.insert("version", m_version);
   return serializer.serialize(obj);
 }
 
-bool VersionResponseJSON::parseJson(const QByteArray&)
+bool VersionResponseJSON::parseJson(const QByteArray& data)
 {
   clearContainers();
   QJson::Parser parser;

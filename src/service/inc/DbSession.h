@@ -104,6 +104,7 @@ namespace common
     QByteArray processSetTimeSlotMarkQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotQuery(const QByteArray&);
     QByteArray processSetDefaultTimeSlotMarkQuery(const QByteArray&);
+    QByteArray processVersionQuery(const QByteArray&);
 
     QByteArray processGetErrnoInfo(const QByteArray&);
 
