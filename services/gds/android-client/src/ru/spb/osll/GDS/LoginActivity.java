@@ -38,6 +38,7 @@ import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
+import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonBaseResponse;
 import ru.spb.osll.json.JsonLoginRequest;
@@ -197,6 +198,36 @@ public class LoginActivity extends Activity {
 			Toast.makeText(this, "Connection error",
 					Toast.LENGTH_LONG).show();
 			return;
+		}
+		
+		// Add Events channel
+		JSONResponse = null;
+		for (int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+			JSONResponse = new JsonApplyChannelRequest(authToken, "Events",
+					"Channel with Events", "", 40000, serverUrl).doRequest();
+			if (JSONResponse != null) 
+				break;
+		}
+		if (JSONResponse != null) {
+			int errno = JsonBaseResponse.parseErrno(JSONResponse);
+			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
+				if (IGDSSettings.DEBUG) {
+					Log.v(IGDSSettings.LOG, "Channel Events added successfully");
+				}
+			} else if (errno == IResponse.geo2tagError.
+					CHANNEL_ALREADY_EXIST_ERROR.ordinal()) {
+				if (IGDSSettings.DEBUG) {
+					Log.v(IGDSSettings.LOG, "Channel Events already exists");
+				}
+			}
+			else {
+				handleError(errno);
+				return;
+			}
+		} else {
+			if (IGDSSettings.DEBUG) {
+				Log.v(IGDSSettings.LOG, "response failed");
+			}
 		}
 		
 		if (m_rememberCheck.isChecked()) {

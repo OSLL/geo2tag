@@ -203,6 +203,36 @@ public class CreateAccountActivity extends Activity {
 			return;
 		}
 		
+		// Add Events channel
+		JSONResponse = null;
+		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+			JSONResponse = new JsonApplyChannelRequest(authToken, "Events",
+					"Channel with Events", "", 40000, serverUrl).doRequest();
+			if (JSONResponse != null) 
+				break;
+		}
+		if (JSONResponse != null) {
+			int errno = JsonBaseResponse.parseErrno(JSONResponse);
+			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
+				if (IGDSSettings.DEBUG) {
+					Log.v(IGDSSettings.LOG, "Channel Events added successfully");
+				}
+			} else if (errno == IResponse.geo2tagError.
+					            CHANNEL_ALREADY_EXIST_ERROR.ordinal()) {
+				if (IGDSSettings.DEBUG) {
+					Log.v(IGDSSettings.LOG, "Channel Events already exists");
+				}
+			}
+			else {
+				handleError(errno);
+				return;
+			}
+		} else {
+			if (IGDSSettings.DEBUG) {
+				Log.v(IGDSSettings.LOG, "response failed");
+			}
+		}
+		
 		// Add channel for tracking
 		JSONResponse = null;
 		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
@@ -215,7 +245,7 @@ public class CreateAccountActivity extends Activity {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
 				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "Channel added successfully");
+					Log.v(IGDSSettings.LOG, "Channel for tracking added successfully");
 				}
 			} else {
 				handleError(errno);
