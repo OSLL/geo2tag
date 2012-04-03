@@ -65,8 +65,8 @@ class DefaultQuery : public QObject
 
     void responseReceived();
 
+    void networkErrorOccured(QString);
     void errorOccured(QString);
-    void errorOccured(int);
 };
 // DEFAULTQUERY_H
 #endif

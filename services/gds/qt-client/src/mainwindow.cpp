@@ -58,10 +58,14 @@ void MainWindow::createActions()
 
 void MainWindow::createMenus()
 {
+#if defined(Q_OS_SYMBIAN) ||  defined(Q_WS_SIMULATOR)
+    menuBar()->addAction(m_settingsAction);
+    menuBar()->addAction(m_signOutAction);
+#else
     m_menu = menuBar()->addMenu("Menu");
     m_menu->addAction(m_settingsAction);
     m_menu->addAction(m_signOutAction);
-
+#endif
 }
 
 void MainWindow::initGUI()
@@ -77,8 +81,8 @@ void MainWindow::initGUI()
 void MainWindow::onLoginSignedIn(const QString &authToken)
 {
     m_stackedWidget->setCurrentWidget(m_mainWidget);
-    m_mainWidget->signIn(authToken);
     m_signOutAction->setVisible(true);
+    m_mainWidget->signIn(authToken);
     m_isSignedIn = true;
 }
 
@@ -170,7 +174,14 @@ void MainWindow::setOrientation(ScreenOrientation orientation)
 
 void MainWindow::showExpanded()
 {
-#if defined(Q_OS_SYMBIAN) || defined(Q_WS_SIMULATOR)
+#if defined(Q_OS_SYMBIAN)
+    Qt::WindowFlags flags = windowFlags();
+    //flags |= Qt::WindowSoftkeysVisibleHint;
+    //flags &= ~Qt::WindowSoftkeysRespondHint;
+    flags |= Qt::WindowSoftkeysRespondHint;
+    setWindowFlags(flags); // Hides visible window
+    showFullScreen();
+#elif defined(Q_WS_SIMULATOR)
     showFullScreen();
 #elif defined(Q_WS_MAEMO_5)
     showMaximized();

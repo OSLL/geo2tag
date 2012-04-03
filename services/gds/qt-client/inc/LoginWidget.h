@@ -65,8 +65,7 @@ public slots:
     void onSignInClicked();
     void onCreateAccountClicked();
     void onLoginConnected();
-    void onLoginError(int errno);
-    void onLoginNetworkError(QString);
+    void onError(QString error);
 
 private:
     void initGUI();

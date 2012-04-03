@@ -57,10 +57,10 @@ LoginWidget::LoginWidget(QWidget *parent) :
             this, SLOT(onCreateAccountClicked()));
     connect(m_loginQuery, SIGNAL(connected()),
             this, SLOT(onLoginConnected()));
-    connect(m_loginQuery, SIGNAL(errorOccured(int)),
-            this, SLOT(onLoginError(int)));
     connect(m_loginQuery, SIGNAL(errorOccured(QString)),
-            this, SLOT(onLoginNetworkError(QString)));
+            this, SLOT(onError(QString)));
+    connect(m_loginQuery, SIGNAL(networkErrorOccured(QString)),
+            this, SLOT(onError(QString)), Qt::QueuedConnection);
 }
 
 void LoginWidget::fill()
@@ -121,19 +121,14 @@ void LoginWidget::onLoginConnected()
         m_settings.setPassword("");
         m_settings.setRememberMe(false);
     }
+    m_settings.setAuthToken(auth_token);
     emit signedIn(auth_token);
 }
 
-void LoginWidget::onLoginError(int errno)
+void LoginWidget::onError(QString error)
 {
-    qDebug() << "login error, errno = " << errno;
-    QMessageBox::information(this, "Geo Doctor Search","Internal error: code " + QString("%1").arg(errno));
-}
-
-void LoginWidget::onLoginNetworkError(QString error)
-{
-    qDebug() << "Network error: " << error;
-    QMessageBox::information(this, "Geo Doctor Search","Network error");
+    qDebug() << "login error: " << error;
+    QMessageBox::information(this, "Error", error);
 }
 
 

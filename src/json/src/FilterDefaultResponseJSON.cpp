@@ -44,7 +44,7 @@
 #include <QVariant>
 #include <QDebug>
 
-#ifndef Q_OS_SYMBIAN
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #else
@@ -81,10 +81,69 @@ void FilterDefaultResponseJSON::setDataChannels(const DataChannels& dataChannels
 }
 
 
-bool FilterDefaultResponseJSON::parseJson(const QByteArray&)
+bool FilterDefaultResponseJSON::parseJson(const QByteArray& data)
 {
-  return false;
-  // TODO
+    clearContainers();
+
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
+
+    if (!ok) return false;
+
+    result["errno"].toInt(&ok);
+    if (!ok) return false;
+    m_errno = result["errno"].toInt(&ok);
+
+    //QVariantMap channelVariant = result["channels"].toMap();
+    QVariantList channelsList = result["channels"].toList();
+    int size = channelsList.size();
+
+    for (int i = 0; i < size; i++)
+    {
+        QVariantMap channelDesc = channelsList.at(i).toMap();
+        QVariantMap channelInternal = channelDesc["channel"].toMap();
+        QVariantList markList = channelInternal["items"].toList();
+        QString channelName = channelInternal["name"].toString();
+
+        QSharedPointer<Channel> channel(new JsonChannel(channelName,"dummy channel[LoadTagsResponse]"));
+
+        for(int j=0; j<markList.size(); j++)
+        {
+            QVariantMap markMap = markList.at(j).toMap();
+
+            int id = markMap["id"].toInt();
+            QString title = markMap["title"].toString();
+            QString link = markMap["link"].toString();
+            QString description = markMap["description"].toString();
+            double altitude = markMap["altitude"].toString().toDouble(&ok);
+            if (!ok) return false;
+            double latitude = markMap["latitude"].toString().toDouble(&ok);
+            if (!ok) return false;
+            double longitude = markMap["longitude"].toString().toDouble(&ok);
+            if (!ok) return false;
+
+            QString userName = markMap["user"].toString();
+            QString timeStr =  markMap["pubDate"].toString();
+            QDateTime time = QDateTime::fromString(timeStr, "dd MM yyyy HH:mm:ss.zzz");
+
+            QVector<QSharedPointer<common::User> > v = m_usersContainer->vector();
+            QSharedPointer<common::User> user(new JsonUser(userName));
+            m_usersContainer->push_back(user);
+
+            QSharedPointer<JsonDataMark> newMark(new JsonDataMark(altitude,
+                                                                  latitude,
+                                                                  longitude,
+                                                                  title,
+                                                                  description,
+                                                                  link,
+                                                                  time));
+            newMark->setId(id);
+            newMark->setUser(user);
+            m_hashMap.insert(channel, newMark);
+        }
+    }
+    return true;
 }
 
 

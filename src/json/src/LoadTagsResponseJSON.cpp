@@ -44,7 +44,7 @@
 #include <QDebug>
 #include "LoadTagsResponseJSON.h"
 
-#ifndef Q_OS_SYMBIAN
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #else
@@ -72,8 +72,6 @@ LoadTagsResponseJSON::LoadTagsResponseJSON(QObject *parent) : JsonSerializer(par
 
 bool LoadTagsResponseJSON::parseJson(const QByteArray &data)
 {
-  //TODO: enable for symbian
-  #ifndef  Q_OS_SYMBIAN
   clearContainers();
 
   QJson::Parser parser;
@@ -133,7 +131,6 @@ bool LoadTagsResponseJSON::parseJson(const QByteArray &data)
     }
   }
   return true;
-  #endif                                // Q_OS_SYMBIAN
 }
 
 
