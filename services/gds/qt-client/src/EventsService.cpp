@@ -118,8 +118,26 @@ void EventsService::onTagsReceived()
     }
 
     if (found) {
-        // check them that new received
-        emit eventsReceived(events);
+        bool newEvents = false;
+        bool expiredEvents = false;
+        QSet<int> newEventsIds;
+        foreach (QSharedPointer<DataMark> event, events) {
+            int id = event->getId();
+            qDebug() << "id: " << id;
+            newEventsIds.insert(id);
+            if (!m_eventsIds.contains(id))
+                newEvents = true;
+        }
+        if (!newEventsIds.contains(m_eventsIds)) {
+            expiredEvents = true;
+        }
+        if (newEvents) {
+            // play alert
+        }
+        if (newEvents || expiredEvents) {
+            m_eventsIds = newEventsIds;
+            emit eventsReceived(events);
+        }
     }
 
     QTimer::singleShot(5 * 1000, this, SLOT(requestEvents()));
