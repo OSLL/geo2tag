@@ -42,6 +42,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     qDebug() << "MainWindow destructor";
+#if defined(Q_OS_SYMBIAN) ||  defined(Q_WS_SIMULATOR)
+    menuBar()->removeAction(m_settingsAction);
+    menuBar()->removeAction(m_signOutAction);
+    menuBar()->removeAction(m_exitAction);
+#endif
 }
 
 void MainWindow::createActions()
