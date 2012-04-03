@@ -63,6 +63,7 @@ class MainWindow : public QMainWindow
     QMenu *m_menu;
     QAction *m_settingsAction;
     QAction *m_signOutAction;
+    QAction *m_exitAction;
 
 public:
     enum ScreenOrientation {
@@ -87,6 +88,7 @@ public slots:
 
     void onSettingsAction();
     void onSignOutAction();
+    void onExitAction();
 
 private:
     void createActions();

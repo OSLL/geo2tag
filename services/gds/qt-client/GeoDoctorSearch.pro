@@ -21,7 +21,7 @@ symbian:TARGET.CAPABILITY += NetworkServices Location
 symbian:ICON = gds_icon.png
 
 CONFIG += mobility
-MOBILITY += location
+MOBILITY += location multimedia
 
 INCLUDEPATH += . inc
 

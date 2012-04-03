@@ -48,12 +48,15 @@ void MainWindow::createActions()
 {
     m_settingsAction = new QAction("Settings", this);
     m_signOutAction = new QAction("Sign out", this);
+    m_exitAction = new QAction("Exit", this);
     m_signOutAction->setVisible(false);
     m_isSignedIn = false;
     connect(m_settingsAction, SIGNAL(triggered()),
             this, SLOT(onSettingsAction()));
     connect(m_signOutAction, SIGNAL(triggered()),
             this, SLOT(onSignOutAction()));
+    connect(m_exitAction, SIGNAL(triggered()),
+            this, SLOT(onExitAction()));
 }
 
 void MainWindow::createMenus()
@@ -61,10 +64,12 @@ void MainWindow::createMenus()
 #if defined(Q_OS_SYMBIAN) ||  defined(Q_WS_SIMULATOR)
     menuBar()->addAction(m_settingsAction);
     menuBar()->addAction(m_signOutAction);
+    menuBar()->addAction(m_exitAction);
 #else
     m_menu = menuBar()->addMenu("Menu");
     m_menu->addAction(m_settingsAction);
     m_menu->addAction(m_signOutAction);
+    m_menu->addAction(m_exitAction);
 #endif
 }
 
@@ -127,6 +132,11 @@ void MainWindow::onSignOutAction()
     m_stackedWidget->setCurrentWidget(m_loginWidget);
     m_isSignedIn = false;
     m_signOutAction->setVisible(false);
+}
+
+void MainWindow::onExitAction()
+{
+    qApp->exit();
 }
 
 void MainWindow::setOrientation(ScreenOrientation orientation)

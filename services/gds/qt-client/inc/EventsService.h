@@ -36,9 +36,12 @@
 #include <QSet>
 #include <QList>
 #include <QSharedPointer>
+#include <QMediaPlayer>
 #include "LocationManager.h"
 #include "FilterCircleQuery.h"
 #include "User.h"
+
+QTM_USE_NAMESPACE
 
 typedef QList<QSharedPointer<DataMark> > Events;
 Q_DECLARE_METATYPE(Events)
@@ -51,9 +54,11 @@ class EventsService : public QObject
     FilterCircleQuery *m_filterCircleQuery;
     QSharedPointer<common::User> m_user;
     QSet<int> m_eventsIds;
+    QMediaPlayer *m_mediaPlayer;
 
 public:
     explicit EventsService(LocationManager *locationManager, QObject *parent = 0);
+    ~EventsService();
 
 public slots:
     void requestEvents();

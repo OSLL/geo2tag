@@ -43,6 +43,14 @@ EventsService::EventsService(LocationManager *locationManager, QObject *parent) 
     m_locationManager(locationManager),
     m_filterCircleQuery(0)
 {
+    m_mediaPlayer = new QMediaPlayer(this);
+    m_mediaPlayer->setMedia(QUrl::fromLocalFile(":/data/siren.wav"));
+    m_mediaPlayer->setVolume(50);
+}
+
+EventsService::~EventsService()
+{
+    //delete m_mediaPlayer;
 }
 
 void EventsService::startService(QString name, QString password, QString authToken, QString serverUrl)
@@ -133,6 +141,10 @@ void EventsService::onTagsReceived()
         }
         if (newEvents) {
             // play alert
+            m_mediaPlayer->stop();
+            qDebug() << "start player";
+            m_mediaPlayer->play();
+            qDebug() << "player finished";
         }
         if (newEvents || expiredEvents) {
             m_eventsIds = newEventsIds;
