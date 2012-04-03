@@ -119,16 +119,15 @@ void LoginWidget::onLoginConnected()
     m_addEventsChannelQuery->setUrl(m_settings.getServerUrl());
     m_addEventsChannelQuery->doRequest();
 
+    m_settings.setLogin(m_loginEdit->text());
+    m_settings.setPassword(m_passwordEdit->text());
+    m_settings.setAuthToken(auth_token);
     if (m_rememberCheck->checkState()) {
-        m_settings.setLogin(m_loginEdit->text());
-        m_settings.setPassword(m_passwordEdit->text());
         m_settings.setRememberMe(true);
     } else {
-        m_settings.setLogin("");
-        m_settings.setPassword("");
         m_settings.setRememberMe(false);
     }
-    m_settings.setAuthToken(auth_token);
+
     emit signedIn(auth_token);
 }
 
