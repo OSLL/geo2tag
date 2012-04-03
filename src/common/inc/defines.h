@@ -51,7 +51,7 @@ void setServerPort(int port);
 #define DEFAULT_PORT 81
 
 // "demo"
-#define SETTINGS_STORAGE_FILENAME "/opt/geo2tag/settings.conf"
+#define SETTINGS_STORAGE_FILENAME "/opt/geo2tag/geo2tag.conf"
 
 #define DATABASE_NAME "geo2tag"
 
