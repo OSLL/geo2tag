@@ -50,6 +50,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
     initGUI();
 
     m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
+    m_addEventsChannelQuery = new AddChannelQuery(this);
 
     connect(m_signInButton, SIGNAL(clicked()),
              this, SLOT(onSignInClicked()));
@@ -111,7 +112,13 @@ void LoginWidget::onLoginConnected()
     qDebug() << "logged in";
     QString auth_token = m_loginQuery->getUser()->getToken();
     qDebug() << "token: " << auth_token;
-    // TODO check remember and save if neede
+
+    QSharedPointer<Channel> eventsChannel =
+            QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "Channel with events", ""));
+    m_addEventsChannelQuery->setQuery(m_loginQuery->getUser(), eventsChannel);
+    m_addEventsChannelQuery->setUrl(m_settings.getServerUrl());
+    m_addEventsChannelQuery->doRequest();
+
     if (m_rememberCheck->checkState()) {
         m_settings.setLogin(m_loginEdit->text());
         m_settings.setPassword(m_passwordEdit->text());

@@ -51,6 +51,7 @@ CreateAccountWidget::CreateAccountWidget(QWidget *parent) :
 
     initGUI();
 
+    m_addEventsChannelQuery = new AddChannelQuery(this);
     m_registerQuery = new RegisterUserQuery(this);
     m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
     m_addChannelQuery = new AddChannelQuery(this);
@@ -161,7 +162,14 @@ void CreateAccountWidget::onUserAdded()
 
 void CreateAccountWidget::onLoggedIn()
 {
-    qDebug() << "User logged in, token: " << m_loginQuery->getUser()->getToken();;
+    qDebug() << "User logged in, token: " << m_loginQuery->getUser()->getToken();
+
+    QSharedPointer<Channel> eventsChannel =
+            QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "Channel with events", ""));
+    m_addEventsChannelQuery->setQuery(m_loginQuery->getUser(), eventsChannel);
+    m_addEventsChannelQuery->setUrl(m_settings.getServerUrl());
+    m_addEventsChannelQuery->doRequest();
+
     QSharedPointer<Channel> channel =
             QSharedPointer<Channel>(new Channel(m_login, m_login + "'s channel", ""));
     m_addChannelQuery->setQuery(m_loginQuery->getUser(), channel);

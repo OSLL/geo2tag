@@ -50,6 +50,7 @@ class CreateAccountWidget : public QWidget
     QString m_authToken;
 
     Settings m_settings;
+    AddChannelQuery *m_addEventsChannelQuery;
     RegisterUserQuery *m_registerQuery;
     LoginQuery *m_loginQuery;
     AddChannelQuery *m_addChannelQuery;

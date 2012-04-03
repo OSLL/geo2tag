@@ -38,6 +38,7 @@
 #include <QPushButton>
 #include "LoginQuery.h"
 #include "Settings.h"
+#include "AddChannelQuery.h"
 
 class LoginWidget : public QWidget
 {
@@ -45,6 +46,7 @@ class LoginWidget : public QWidget
 
     Settings m_settings;
     LoginQuery *m_loginQuery;
+    AddChannelQuery *m_addEventsChannelQuery;
 
     // GUI
     QLineEdit *m_loginEdit;
