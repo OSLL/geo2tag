@@ -11,6 +11,7 @@
 #define EVENTS_CHANNEL              "Events"
 #define EVENTS_RADIUS               30
 #define RELEVANT_PERIOD_IN_HOURS    240
+#define NOT_RECEIVE_OWN_EVENTS      true
 
 #define SUBSCRIBE_HTTP_URL        "/service/subscribe"
 #define UNSUBSCRIBE_HTTP_URL      QString(DEFAULT_URL)+QString("service/unsubscribe")

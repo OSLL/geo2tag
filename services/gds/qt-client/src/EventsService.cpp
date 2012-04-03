@@ -87,6 +87,18 @@ void EventsService::onTagsReceived()
             break;
         }
     }
+
+    if (!NOT_RECEIVE_OWN_EVENTS) {
+        QMutableListIterator<QSharedPointer<DataMark> > iter(events);
+        while (iter.hasNext()) {
+            QSharedPointer<DataMark> event = iter.next();
+            qDebug() << event->getUser()->getLogin();
+            if (event->getUser()->getLogin() == m_user->getLogin()) {
+                iter.remove();
+            }
+        }
+    }
+
     if (found) {
         // check them that new received
         emit eventsReceived(events);
