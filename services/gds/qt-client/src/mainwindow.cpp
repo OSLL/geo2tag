@@ -191,9 +191,9 @@ void MainWindow::showExpanded()
 {
 #if defined(Q_OS_SYMBIAN)
     Qt::WindowFlags flags = windowFlags();
-    //flags |= Qt::WindowSoftkeysVisibleHint;
-    //flags &= ~Qt::WindowSoftkeysRespondHint;
-    flags |= Qt::WindowSoftkeysRespondHint;
+    flags |= Qt::WindowSoftkeysVisibleHint;
+    flags &= ~Qt::WindowSoftkeysRespondHint;
+    //flags |= Qt::WindowSoftkeysRespondHint;
     setWindowFlags(flags); // Hides visible window
     showFullScreen();
 #elif defined(Q_WS_SIMULATOR)

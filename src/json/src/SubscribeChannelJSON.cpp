@@ -56,11 +56,16 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
+
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <syslog.h>
+#endif
 
 SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
   syslog(LOG_INFO,"SubscribeChannelRequestJSON::SubscribeChannelRequestJSON()");
+#endif
 }
 
 

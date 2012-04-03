@@ -26,6 +26,6 @@
 #define FILTER_CIRCLE_HTTP_URL    "/service/filterCircle"
 
 #include <QString>
-QString getErrnoDescription(int errno);
+QString getErrnoDescription(int err);
 
 #endif

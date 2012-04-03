@@ -1,9 +1,9 @@
 #include "defines.h"
 #include "ErrnoTypes.h"
 
-QString getErrnoDescription(int errno)
+QString getErrnoDescription(int err)
 {
-    switch (errno) {
+    switch (err) {
     case SUCCESS: return "";
     case WRONG_TOKEN_ERROR: return "Wrong authorization";
     case USER_ALREADY_EXIST_ERROR: return "User already exists";

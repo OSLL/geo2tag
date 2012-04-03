@@ -18,7 +18,7 @@ symbian:TARGET.UID3 = 0xE6691141
 # Allow network access on Symbian
 symbian:TARGET.CAPABILITY += NetworkServices Location
 
-symbian:ICON = gds_icon.png
+symbian:ICON = gds_icon
 
 CONFIG += mobility
 MOBILITY += location multimedia

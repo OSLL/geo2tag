@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QFile>
+#include <QDesktopServices>
 
 int main(int argc, char *argv[])
 {
