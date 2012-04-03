@@ -8,12 +8,11 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
+import ru.spb.osll.GDS.GDSUtil;
 import ru.spb.osll.GDS.LocationService;
 import ru.spb.osll.GDS.R;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
-import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
-import ru.spb.osll.GDS.utils.GDSUtil;
 import ru.spb.osll.json.IRequest.IResponse;
 import ru.spb.osll.json.JsonFilterCircleRequest;
 import ru.spb.osll.json.JsonFilterResponse;
@@ -48,7 +47,7 @@ public class EventsService extends Service {
 	
 	@Override
 	public void onCreate() {
-		if (IGDSSettings.DEBUG) {
+		if (GDSUtil.DEBUG) {
 			Log.v(EventsManager.LOG, "EventsService create");
 		}
 		super.onCreate();
@@ -62,17 +61,17 @@ public class EventsService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		if (IGDSSettings.DEBUG) {
+		if (GDSUtil.DEBUG) {
 			Log.v(EventsManager.LOG, "EventsService start");
 		}
 		super.onStart(intent, startId);
 		
 		Bundle extras =intent.getExtras();
 		if (extras != null) {
-		    m_authToken = extras.getString(EventsManager.AUTH_TOKEN);
+		    m_authToken = extras.getString(GDSUtil.AUTH_TOKEN);
 		}
 		if (m_authToken == null) {
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(EventsManager.LOG, "problem with extracting data");
 			}
 			broadcastError("Failed to start tracking");
@@ -85,7 +84,7 @@ public class EventsService extends Service {
 
 	@Override
 	public void onDestroy() {
-		if (IGDSSettings.DEBUG) {
+		if (GDSUtil.DEBUG) {
 			Log.v(EventsManager.LOG, "EventsService destroy");
 		}
 		super.onDestroy();
@@ -110,18 +109,18 @@ public class EventsService extends Service {
 				while (!Thread.currentThread().isInterrupted()){
 					Location location = LocationService.getLocation(EventsService.this);
 					if (location == null) {
-						if (IGDSSettings.DEBUG) {
+						if (GDSUtil.DEBUG) {
 							Log.v(EventsManager.LOG, "can't get location");
 						}
 					} else {
-						if (IGDSSettings.DEBUG) {
+						if (GDSUtil.DEBUG) {
 							Log.v(EventsManager.LOG, "coords: " + location.getLatitude()
 									+ ", " + location.getLongitude());
 						}
 						requestEvents(location);
 					}
 					
-					SystemClock.sleep(EventsManager.INTERVAL * 1000);
+					SystemClock.sleep(GDSUtil.EVENTS_INTERVAL * 1000);
 				}
 			}
 		});
@@ -131,17 +130,17 @@ public class EventsService extends Service {
 	private void requestEvents(Location location) {
 		String serverUrl = m_settings.getServerUrl();
 		JSONObject JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+		for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			calendar.add(Calendar.YEAR, 1); // just in case
 			String timeTo = GDSUtil.getTime(calendar.getTime());
 			calendar.add(Calendar.YEAR, -1); // return current date
-			calendar.add(Calendar.HOUR, - EventsManager.RELEVANT_PERIOD_IN_HOURS);
+			calendar.add(Calendar.HOUR, - GDSUtil.RELEVANT_PERIOD_IN_HOURS);
 			String timeFrom = GDSUtil.getTime(calendar.getTime());
 			JSONResponse = new JsonFilterCircleRequest(m_authToken,
 					location.getLatitude(), location.getLongitude(),
-					EventsManager.RADIUS, timeFrom, timeTo,
+					GDSUtil.EVENTS_RADIUS, timeFrom, timeTo,
 					serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
@@ -149,7 +148,7 @@ public class EventsService extends Service {
 		if (JSONResponse != null) {
 			int errno = JsonFilterResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				if (IGDSSettings.DEBUG) {
+				if (GDSUtil.DEBUG) {
 					Log.v(EventsManager.LOG, "Events received successfully");
 				}
 				JsonFilterResponse response = new JsonFilterResponse();
@@ -211,7 +210,7 @@ public class EventsService extends Service {
 				return;
 			}
 		} else {
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(EventsManager.LOG, "response failed");
 			}
 			broadcastError("Failed to send location");
@@ -221,16 +220,16 @@ public class EventsService extends Service {
 	
 	private void handleError(int errno) {
 		if (errno < 0) {
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(EventsManager.LOG, "bad response received");
 			}
 		} else if (errno >= IResponse.geo2tagError.values().length) {
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(EventsManager.LOG, "unknown error");
 			}
 		} else if (errno > 0) {
 			String error = IResponse.geo2tagError.values()[errno].name();
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(EventsManager.LOG, "error: " + error);
 			}
 		}

@@ -38,10 +38,8 @@ import org.json.JSONObject;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
-import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.GDS.tracking.TrackingManager;
 import ru.spb.osll.GDS.tracking.TrackingReceiver;
-import ru.spb.osll.GDS.utils.GDSUtil;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBaseResponse;
 import ru.spb.osll.json.IRequest.IResponse;
@@ -94,13 +92,13 @@ public class MainActivity extends TabActivity {
 		m_settings = new Settings(this);
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-		    m_authToken = extras.getString(LoginActivity.AUTH_TOKEN);
-		    m_login = extras.getString(LoginActivity.LOGIN);
-		    m_channel = extras.getString(LoginActivity.CHANNEL); 
+		    m_authToken = extras.getString(GDSUtil.AUTH_TOKEN);
+		    m_login = extras.getString(GDSUtil.LOGIN);
+		    m_channel = extras.getString(GDSUtil.CHANNEL); 
 		}
 		if (m_authToken == null || m_login == null || m_channel == null) {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "problem with extracting data");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "problem with extracting data");
 			}
 			Toast.makeText(this, "Can't sign in", Toast.LENGTH_LONG).show();
 			finish();
@@ -120,7 +118,7 @@ public class MainActivity extends TabActivity {
 	    tabSpec.setIndicator("Map");
 	    Context ctx = this.getApplicationContext();
 	    Intent i = new Intent(ctx, MapTabActivity.class);
-		i.putExtra(LoginActivity.AUTH_TOKEN, m_authToken);	
+		i.putExtra(GDSUtil.AUTH_TOKEN, m_authToken);	
 	    tabSpec.setContent(i);
 	    m_TabHost.addTab(tabSpec);		
 	    m_TabHost.setCurrentTab(0);
@@ -188,23 +186,23 @@ public class MainActivity extends TabActivity {
 			@Override
 			public void run() {
 				SystemClock.sleep(2 * 1000);
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "SOS thread started");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "SOS thread started");
 				}
 				Location location = LocationService.getLocation(MainActivity.this);
 				while (location == null) {
-					if (IGDSSettings.DEBUG) {
-						Log.v(IGDSSettings.LOG, "can't get location, trying again...");
+					if (GDSUtil.DEBUG) {
+						Log.v(GDSUtil.LOG, "can't get location, trying again...");
 					}
 					SystemClock.sleep(2 * 1000);
 					location = LocationService.getLocation(MainActivity.this);
 				}
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "location determined! sending location...");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "location determined! sending location...");
 				}
 				String serverUrl = m_settings.getServerUrl();
 				JSONObject JSONResponse = null;
-				for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+				for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
 					JSONResponse = new JsonApplyMarkRequest(m_authToken, "Events", "SOS", "",
 							"SOS", location.getLatitude(), location.getLongitude(), 0,
 							GDSUtil.getTime(new Date()), serverUrl).doRequest();
@@ -214,8 +212,8 @@ public class MainActivity extends TabActivity {
 				if (JSONResponse != null) {
 					int errno = JsonBaseResponse.parseErrno(JSONResponse);
 					if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-						if (IGDSSettings.DEBUG) {
-							Log.v(IGDSSettings.LOG, "Mark sent successfully");
+						if (GDSUtil.DEBUG) {
+							Log.v(GDSUtil.LOG, "Mark sent successfully");
 						}
 						//broadcastMarkSent(location);
 					} else {
@@ -223,7 +221,7 @@ public class MainActivity extends TabActivity {
 						return;
 					}
 				} else {
-					if (IGDSSettings.DEBUG) {
+					if (GDSUtil.DEBUG) {
 						Log.v(TrackingManager.LOG, "response failed");
 					}
 					//broadcastError("Failed to send location");
@@ -239,8 +237,8 @@ public class MainActivity extends TabActivity {
         @Override
         public void handleMessage(Message msg) {
         	m_progress.dismiss();
-        	if (IGDSSettings.DEBUG) {
-        		Log.v(IGDSSettings.LOG, "SOS have been sent!");
+        	if (GDSUtil.DEBUG) {
+        		Log.v(GDSUtil.LOG, "SOS have been sent!");
         	}
             Toast.makeText(MainActivity.this, "SOS have been sent!", Toast.LENGTH_LONG).show();
         }
@@ -293,15 +291,15 @@ public class MainActivity extends TabActivity {
 	}
 	
 	private void showSettings() {
-		if (IGDSSettings.DEBUG) {
-			Log.v(IGDSSettings.LOG, "opening settings");
+		if (GDSUtil.DEBUG) {
+			Log.v(GDSUtil.LOG, "opening settings");
 		}
 		startActivity(new Intent(this, SettingsActivity.class));
 	}
 	
 	private void signOut() {
-		if (IGDSSettings.DEBUG) {
-			Log.v(IGDSSettings.LOG, "signing out");
+		if (GDSUtil.DEBUG) {
+			Log.v(GDSUtil.LOG, "signing out");
 		}
 		finish();
 		

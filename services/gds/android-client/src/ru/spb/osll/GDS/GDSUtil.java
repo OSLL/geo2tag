@@ -1,4 +1,4 @@
-package ru.spb.osll.GDS.utils;
+package ru.spb.osll.GDS;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,7 +10,25 @@ import android.content.Context;
 import android.location.Location;
 
 public class GDSUtil {
-	private static DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
+	
+	private GDSUtil() {}
+	
+	public static final boolean DEBUG = true;
+	public static final String LOG = "GeoDoctorSearch";
+	public static final int ATTEMPTS = 5;
+	
+	public static final String AUTH_TOKEN = "auth_token";
+	public static final String LOGIN = "login";
+	public static final String CHANNEL = "channel";
+	
+	public static final String EVENTS_CHANNEL = "Events";
+	public static final int EVENTS_INTERVAL = 15;
+	public static final int EVENTS_RADIUS = 30;
+	public static final int RELEVANT_PERIOD_IN_HOURS = 240;
+	public static final int TRACKING_INTERVAL = 15;
+	
+	
+	private static final DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
 	public static String getTime(Date date){
 		return dateFormat.format(date);
 	}

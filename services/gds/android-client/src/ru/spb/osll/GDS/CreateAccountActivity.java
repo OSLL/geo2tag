@@ -56,7 +56,7 @@ import android.widget.Toast;
 
 public class CreateAccountActivity extends Activity {
 
-	public static final int SETTINGS_ID = Menu.FIRST;
+	private static final int SETTINGS_ID = Menu.FIRST;
 	
 	private EditText m_loginEdit;
 	private EditText m_passwordEdit;
@@ -157,8 +157,8 @@ public class CreateAccountActivity extends Activity {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "user added successfully");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "user added successfully");
 				}
 			} else {
 				handleError(errno);
@@ -166,8 +166,8 @@ public class CreateAccountActivity extends Activity {
 			}
 
 		} else {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "response failed");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "response failed");
 			}
 			Toast.makeText(this, "Connection error",
 					Toast.LENGTH_LONG).show();
@@ -176,7 +176,7 @@ public class CreateAccountActivity extends Activity {
 		
 		// Login
 		JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+		for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
 			JSONResponse = new JsonLoginRequest(login, password, serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
@@ -184,8 +184,8 @@ public class CreateAccountActivity extends Activity {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "user logged in successfully");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "user logged in successfully");
 				}
 			} else {
 				handleError(errno);
@@ -195,8 +195,8 @@ public class CreateAccountActivity extends Activity {
 			authToken = JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN);
 
 		} else {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "response failed");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "response failed");
 			}
 			Toast.makeText(this, "Connection error",
 					Toast.LENGTH_LONG).show();
@@ -205,7 +205,7 @@ public class CreateAccountActivity extends Activity {
 		
 		// Add Events channel
 		JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+		for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
 			JSONResponse = new JsonApplyChannelRequest(authToken, "Events",
 					"Channel with Events", "", 40000, serverUrl).doRequest();
 			if (JSONResponse != null) 
@@ -214,13 +214,13 @@ public class CreateAccountActivity extends Activity {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "Channel Events added successfully");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "Channel Events added successfully");
 				}
 			} else if (errno == IResponse.geo2tagError.
 					            CHANNEL_ALREADY_EXIST_ERROR.ordinal()) {
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "Channel Events already exists");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "Channel Events already exists");
 				}
 			}
 			else {
@@ -228,14 +228,14 @@ public class CreateAccountActivity extends Activity {
 				return;
 			}
 		} else {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "response failed");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "response failed");
 			}
 		}
 		
 		// Add channel for tracking
 		JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+		for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
 			JSONResponse = new JsonApplyChannelRequest(authToken, login,
 					login + "'s channel", "", 400, serverUrl).doRequest();
 			if (JSONResponse != null) 
@@ -244,16 +244,16 @@ public class CreateAccountActivity extends Activity {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "Channel for tracking added successfully");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "Channel for tracking added successfully");
 				}
 			} else {
 				handleError(errno);
 				return;
 			}
 		} else {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "response failed");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "response failed");
 			}
 			Toast.makeText(this, "Connection error",
 					Toast.LENGTH_LONG).show();
@@ -262,7 +262,7 @@ public class CreateAccountActivity extends Activity {
 		
 		// Subscribe to tracking channel
 		JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+		for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
 			JSONResponse = new JsonSubscribeRequest(authToken, login, serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
@@ -270,16 +270,16 @@ public class CreateAccountActivity extends Activity {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "Subscribed to tracking channel");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "Subscribed to tracking channel");
 				}
 			} else {
 				handleError(errno);
 				return;
 			}
 		} else {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "response failed");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "response failed");
 			}
 			Toast.makeText(this, "Connection error",
 					Toast.LENGTH_LONG).show();
@@ -288,7 +288,7 @@ public class CreateAccountActivity extends Activity {
 		
 		// Subscribe to Events channel (for doctors)
 		JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+		for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
 			JSONResponse = new JsonSubscribeRequest(authToken, "Events", serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
@@ -296,8 +296,8 @@ public class CreateAccountActivity extends Activity {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "Subscribed to Events channel");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "Subscribed to Events channel");
 				}
 			} else {
 				handleError(errno);
@@ -305,8 +305,8 @@ public class CreateAccountActivity extends Activity {
 			}
 			success = true;
 		} else {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "response failed");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "response failed");
 			}
 			Toast.makeText(this, "Connection error",
 					Toast.LENGTH_LONG).show();
@@ -322,21 +322,21 @@ public class CreateAccountActivity extends Activity {
 	
 	private void handleError(int errno) {
 		if (errno < 0) {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "bad response received");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "bad response received");
 			}
 			Toast.makeText(this, "Server error (corrupted response)",
 					Toast.LENGTH_LONG).show();
 		} else if (errno >= IResponse.geo2tagError.values().length) {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "unknown error");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "unknown error");
 			}
 			Toast.makeText(this, "Unknown server error",
 					Toast.LENGTH_LONG).show();
 		} else if (errno > 0) {
 			String error = IResponse.geo2tagError.values()[errno].name();
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "error: " + error);
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "error: " + error);
 			}
 			Toast.makeText(this, "Error: " + error,
 					Toast.LENGTH_LONG).show();
