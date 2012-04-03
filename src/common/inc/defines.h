@@ -67,6 +67,7 @@ void setServerPort(int port);
 #define LOGIN_HTTP_URL            getServerUrl()+QString("service/login")
 #define APPLY_CHANNEL_HTTP_URL    getServerUrl()+QString("service/addChannel")
 #define ADD_USER_HTTP_URL         getServerUrl()+QString("service/addUser")
+#define VERSION_HTTP_URL          getServerUrl()+QString("service/version")
 
 #define GPS_MODELLER_FILE         "/usr/share/wikigps/helsinki.gpx"
 #define CONFIG_FILE               "/usr/share/wikigps/wikigps.conf"

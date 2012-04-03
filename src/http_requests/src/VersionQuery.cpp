@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -29,60 +29,55 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/* $Id$ */
-/*!
- * \file SubscribeChannelQuery.h
- * \brief Header of SubscribeChannelQuery
- * \todo add comment here
+/*! ---------------------------------------------------------------
+ *
+ * \file VersionQuery.cpp
+ * \brief VersionQuery implementation
  *
  * File description
  *
- * PROJ: geo2tag
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
-#define _SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
+#include "VersionQuery.h"
+#include "ErrnoTypes.h"
+#include "defines.h"
+#include "VersionResponseJSON.h"
 
-#include <QObject>
-#include <QString>
-#include "DefaultQuery.h"
-#include "User.h"
+QString VersionQuery::getUrl() const
+{
+	return VERSION_HTTP_URL;
+}
 
+QByteArray VersionQuery::getRequestBody() const
+{
+	return QByteArray();
+}
 
-  class SubscribeChannelQuery: public DefaultQuery
+void VersionQuery::processReply(QNetworkReply *reply)
+{
+  VersionResponseJSON response;
+  response.parseJson(reply->readAll());
+  m_errno = response.getErrno();
+  if(response.getErrno() == SUCCESS)
   {
-    Q_OBJECT
+    Q_EMIT responseRecieved();
+  }
+  else
+  {
+    Q_EMIT errorOccured(response.getErrno());
+  }
+}
 
-    QSharedPointer<Channel> m_channel;
-    QSharedPointer<common::User> m_user;
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
+VersionQuery::VersionQuery(QObject *parent )
+{
+}
 
-    private Q_SLOTS:
+const QString& VersionQuery::getVersion() const
+{
+	return m_version;
+}
 
-      virtual void processReply(QNetworkReply *reply);
-
-    public:
-
-      SubscribeChannelQuery(QObject *parent = 0);
-
-      SubscribeChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user, QObject *parent = 0);
-
-      void setQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user);
-
-      ~SubscribeChannelQuery();
-
-      const QString& getStatus() const;
-
-      Q_SIGNALS:
-      void channelSubscribed(QSharedPointer<Channel> channel);
-
-      // class SubscribeChannelQuery
-  };
-
-
-
-//_SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
-#endif
-
-/* ===[ End of file $HeadURL$ ]=== */
+VersionQuery::~VersionQuery()
+{
+}

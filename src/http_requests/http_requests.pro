@@ -22,7 +22,8 @@ HEADERS += \
            inc/SubscribeChannelQuery.h \
            inc/RegisterUserQuery.h \
            inc/AvailableChannelsQuery.h \
-           inc/SubscribedChannelsQuery.h 
+           inc/SubscribedChannelsQuery.h \
+	   inc/VersionQuery.h 
 
 
 #            inc/ApplyMarkQuery.h \
@@ -37,9 +38,10 @@ SOURCES += \
            src/WriteTagQuery.cpp \
            src/AddUserQuery.cpp \
            src/ApplyChannelQuery.cpp \
-          src/SubscribeChannelQuery.cpp \
+           src/SubscribeChannelQuery.cpp \
            src/SubscribedChannelsQuery.cpp \
-           src/RegisterUserQuery.cpp
+           src/RegisterUserQuery.cpp \ 
+	   src/VersionQuery.cpp
 
 
 # src/ApplyMarkQuery.cpp \

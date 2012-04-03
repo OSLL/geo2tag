@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -29,60 +29,57 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/* $Id$ */
-/*!
- * \file SubscribeChannelQuery.h
- * \brief Header of SubscribeChannelQuery
+/*! ---------------------------------------------------------------
+ * \file VersionQuery.h
+ * \brief Header of VersionQuery
  * \todo add comment here
  *
  * File description
  *
- * PROJ: geo2tag
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
-#define _SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
 
+#ifndef _VersionQuery_H_52287A2A_5A63_4D8A_9885_DE97CAC4C5BA_INCLUDED_
+#define _VersionQuery_H_52287A2A_5A63_4D8A_9885_DE97CAC4C5BA_INCLUDED_
+
+ /*!
+ * Class description. May use HTML formatting
+ *
+ */
 #include <QObject>
 #include <QString>
 #include "DefaultQuery.h"
 #include "User.h"
 
 
-  class SubscribeChannelQuery: public DefaultQuery
-  {
-    Q_OBJECT
+class VersionQuery: public DefaultQuery
+{
+  Q_OBJECT
 
-    QSharedPointer<Channel> m_channel;
-    QSharedPointer<common::User> m_user;
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
 
-    private Q_SLOTS:
+  QString m_version;
 
-      virtual void processReply(QNetworkReply *reply);
+  private Q_SLOTS:
 
-    public:
+    virtual void processReply(QNetworkReply *reply);
 
-      SubscribeChannelQuery(QObject *parent = 0);
+  public:
 
-      SubscribeChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user, QObject *parent = 0);
+    VersionQuery(QObject *parent = 0);
 
-      void setQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user);
+    const QString& getVersion() const;
 
-      ~SubscribeChannelQuery();
-
-      const QString& getStatus() const;
-
-      Q_SIGNALS:
-      void channelSubscribed(QSharedPointer<Channel> channel);
-
-      // class SubscribeChannelQuery
-  };
+    ~VersionQuery();
 
 
+    Q_SIGNALS:
+    void responseRecieved();
 
-//_SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
-#endif
+    // class VersionQuery
+};
 
-/* ===[ End of file $HeadURL$ ]=== */
+
+#endif //_VersionQuery_H_52287A2A_5A63_4D8A_9885_DE97CAC4C5BA_INCLUDED_
