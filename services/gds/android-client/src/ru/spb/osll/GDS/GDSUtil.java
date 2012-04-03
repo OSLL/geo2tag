@@ -16,6 +16,7 @@ public class GDSUtil {
 	public static final boolean DEBUG = true;
 	public static final String LOG = "GeoDoctorSearch";
 	public static final int ATTEMPTS = 5;
+	public static final boolean NOT_RECEIVE_OWN_EVENTS = false;
 	
 	public static final String AUTH_TOKEN = "auth_token";
 	public static final String LOGIN = "login";

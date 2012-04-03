@@ -3,6 +3,7 @@ package ru.spb.osll.GDS.events;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -156,6 +157,19 @@ public class EventsService extends Service {
 				List<Channel> channels = response.getChannelsData();
 				for (Channel channel : channels) {
 					if (channel.getName().compareTo("Events") == 0) {
+						
+						if (GDSUtil.NOT_RECEIVE_OWN_EVENTS) {
+							Iterator<Mark> iter = channel.getMarks().iterator();
+							String login = m_settings.getLogin();
+							Log.v(EventsManager.LOG, "my login: " + login);
+							while (iter.hasNext()) {
+								Mark mark = iter.next();
+								Log.v(EventsManager.LOG, "Mark login: " + mark.getUser());
+								if (login.compareTo(mark.getUser()) == 0) {
+									iter.remove();
+								}
+							}
+						}
 
 						// are there new identificators?
 						boolean new_ids = false;
