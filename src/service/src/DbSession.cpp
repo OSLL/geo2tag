@@ -276,7 +276,14 @@ namespace common
         return answer;
       }
     }
-    if(m_queryExecutor->isTmpUserExists(newTmpUser)) {
+
+    if(m_queryExecutor->doesUserWithGivenEmailExist(newTmpUser)) {
+        response.setErrno(EMAIL_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+
+    if(m_queryExecutor->doesTmpUserExist(newTmpUser)) {
         response.setErrno(TMP_USER_ALREADY_EXIST_ERROR);
         answer.append(response.getJson());
         return answer;

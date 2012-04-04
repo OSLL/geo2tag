@@ -207,7 +207,7 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
   return newChannel;
 }
 
-QSharedPointer<common::User> QueryExecutor::isTmpUserExists(const QSharedPointer<common::User> &user)
+QSharedPointer<common::User> QueryExecutor::doesTmpUserExist(const QSharedPointer<common::User> &user)
 {
     QSqlQuery query(m_database);
     query.prepare("select id, email, login, password, registration_token from signups where login = :login or email = :email;");
@@ -228,6 +228,25 @@ QSharedPointer<common::User> QueryExecutor::isTmpUserExists(const QSharedPointer
     } else {
         syslog(LOG_INFO,"No matching users.");
         return QSharedPointer<common::User>(NULL);
+    }
+}
+
+bool QueryExecutor::doesUserWithGivenEmailExist(const QSharedPointer<common::User> &user)
+{
+    QSqlQuery query(m_database);
+    syslog(LOG_INFO, "Checking of user existence in users by email: %s", user->getEmail().toStdString().c_str());
+
+    query.prepare("select id from users where email = :email;");
+    query.bindValue(":email", user->getEmail());
+    syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
+    query.exec();
+
+    if (query.next()) {
+        syslog(LOG_INFO,"Match found.");
+        return true;
+    } else {
+        syslog(LOG_INFO,"No matching users.");
+        return false;
     }
 }
 
@@ -360,8 +379,10 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
     ,user->getPassword().toStdString().c_str());
   QString newToken = generateNewToken(user->getLogin(),user->getPassword());
   //  syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
-  newUserQuery.prepare("insert into users (id,login,password,token) values(:id,:login,:password,:a_t);");
+  newUserQuery.prepare("insert into users (id,email,login,password,token) values(:id,:email,:login,:password,:a_t);");
   newUserQuery.bindValue(":id",newId);
+  syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
+  newUserQuery.bindValue(":email",user->getEmail());
   syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
   newUserQuery.bindValue(":login",user->getLogin());
   syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
