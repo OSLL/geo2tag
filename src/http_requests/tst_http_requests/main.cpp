@@ -11,6 +11,7 @@
 
 #include <QCoreApplication>
 #include "Test_RegisterUserQuery.h"
+#include "VersionQuery_Test.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +19,8 @@ int main(int argc, char *argv[])
 
     QObject *tests[] =
     {
-        new Test::Test_RegisterUserQuery
+        new Test::Test_RegisterUserQuery,
+	new Test::VersionQuery_Test
     };
 
     for (int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
