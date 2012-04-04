@@ -69,7 +69,7 @@ void VersionQuery::processReply(QNetworkReply *reply)
   }
 }
 
-VersionQuery::VersionQuery(QObject *parent )
+VersionQuery::VersionQuery(QObject *parent ): DefaultQuery(parent)
 {
 }
 
