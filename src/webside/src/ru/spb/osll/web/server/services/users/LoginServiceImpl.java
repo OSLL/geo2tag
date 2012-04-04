@@ -7,18 +7,26 @@ import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.server.db.Users;
 import ru.spb.osll.web.server.Session;
+import ru.spb.osll.web.server.json.JsonBase;
+import ru.spb.osll.web.server.json.JsonLoginRequest;
+import org.json.JSONObject;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet
 	implements LoginService, Session.HasSession {
-
+	private String m_authToken;
+	private String AUTH_TOKEN = "auth_token";
 	@Override
 	public User login(User user) throws IllegalArgumentException {
-		final User standart = Users.Instance().select(user.getLogin());
-		if (standart != null && standart.getPassword().equals(user.getPassword())){
-			user = standart;
+		JSONObject JSONResponse = null;
+		JSONResponse = new JsonLoginRequest(user.getLogin(),
+				user.getPassword(), JsonBase.getServerUrl()).doRequest();
+
+		if (JSONResponse != null) {
+			m_authToken = JsonBase.getString(JSONResponse, AUTH_TOKEN);
+			user.setToken(m_authToken);
 			user.setStatus(Response.STATUS_SUCCES);
 			Session.Instance().addValue(this, USER_ID, user.getId());
 		} else {
