@@ -66,7 +66,8 @@ class QueryExecutor : public QObject
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
-    QSharedPointer<common::User> isTmpUserExists(const QSharedPointer<common::User> &user); // for User Registration
+    QSharedPointer<common::User> doesTmpUserExist(const QSharedPointer<common::User> &user); // for User Registration
+    bool                     doesUserWithGivenEmailExist(const QSharedPointer<common::User> &user);
     bool                     deleteTmpUser(const QSharedPointer<common::User> &user);       // for User Registration
     bool                     insertNewTmpUser(const QSharedPointer<common::User> &user);    // for User Registration
     bool                     doesRegistrationTokenExist(const QString &token);              // for Request Confirmation
