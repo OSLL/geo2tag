@@ -54,7 +54,7 @@ void TrackingService::startTracking(QString name, QString password, QString auth
     m_writeTagQuery = new WriteTagQuery(this);
     m_writeTagQuery->setTag(m_dataMark);
     connect(m_writeTagQuery, SIGNAL(tagAdded()), this, SLOT(onMarkSent()));
-    connect(m_writeTagQuery, SIGNAL(errorOccured(int)), this, SLOT(onErrorOccured(int)));
+    connect(m_writeTagQuery, SIGNAL(errorOccured(QString)), this, SLOT(onError(QString)));
 
     m_user = QSharedPointer<JsonUser>(new JsonUser(name, password, authToken));
     m_channel = QSharedPointer<Channel>(new Channel(name, name + "'s channel", ""));
