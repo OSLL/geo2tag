@@ -17,6 +17,7 @@ void Settings::setDefaultSettings()
     setPassword(DEFAULT_USER_PASSWORD);
     setRememberMe(DEFAULT_REMEMBER);
     setServerUrl(DEFAULT_URL);
+    setAuthToken(DEFAULT_TOKEN);
     m_settings.setValue(SETTINGS_STATUS, false);
 }
 
@@ -48,6 +49,16 @@ bool Settings::isRememberMe()
 void Settings::setRememberMe(bool status)
 {
     m_settings.setValue(REMEMBER, status);
+}
+
+QString Settings::getAuthToken()
+{
+    return m_settings.value(AUTH_TOKEN, "").toString();
+}
+
+void Settings::setAuthToken(const QString &authToken)
+{
+    m_settings.setValue(AUTH_TOKEN, authToken);
 }
 
 QString Settings::getServerUrl()

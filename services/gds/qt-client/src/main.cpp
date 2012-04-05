@@ -3,6 +3,8 @@
 #include <QtGui/QApplication>
 #include <QDebug>
 #include <QSettings>
+#include <QFile>
+#include <QDesktopServices>
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +16,15 @@ int main(int argc, char *argv[])
  #endif
 
     QApplication app(argc, argv);
+
+    QFile file(":/data/SliderStyleSheet.qss");
+    if (!file.open(QFile::ReadOnly)) {
+        qDebug() << "can't find style file";
+        return 0;
+    }
+    QString StyleSheet = QLatin1String(file.readAll());
+
+    qApp->setStyleSheet(StyleSheet);
 
     MainWindow mainWindow;
     mainWindow.setOrientation(MainWindow::ScreenOrientationAuto);

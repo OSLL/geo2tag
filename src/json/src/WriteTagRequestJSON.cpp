@@ -38,7 +38,7 @@
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 
-#ifndef Q_WS_SYMBIAN
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #else

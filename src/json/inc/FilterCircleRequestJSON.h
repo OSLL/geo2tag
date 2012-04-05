@@ -48,10 +48,18 @@
 
 class FilterCircleRequestJSON: public FilterRequestJSON
 {
+    double m_latitude;
+    double m_longitude;
+    double m_radius;
   public:
     FilterCircleRequestJSON(QObject *parent=0);
 
     QByteArray getJson() const;
+
+    void setShape(const QSharedPointer<FShapeCircle> &shape);
+    double getLatitude() const;
+    double getLongitude() const;
+    double getRadius() const;
 
     bool parseJson(const QByteArray&);
 };

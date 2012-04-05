@@ -59,6 +59,7 @@ class WriteTagQuery: public DefaultQuery
     void setTag(const QSharedPointer<DataMark> &tag);
     QSharedPointer<DataMark> getTag();
     const QSharedPointer<DataMark>& getTag() const;
+    void setUrl(const QString &url);
 
     Q_SIGNALS:
 

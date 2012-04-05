@@ -49,12 +49,6 @@
 #include "LoginRequestJSON.h"
 #include "LoginResponseJSON.h"
 
-#ifndef Q_OS_SYMBIAN
-#include <syslog.h>
-#else
-#include "symbian.h"
-#endif
-
 LoginQuery::LoginQuery(const QString &login, const QString &password, QObject *parent):
 DefaultQuery(parent), m_login(login), m_password(password)
 {
@@ -92,12 +86,11 @@ void LoginQuery::processReply(QNetworkReply *reply)
   {
     QSharedPointer<common::User> user = response.getUsers()->at(0);
     m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, user->getToken()));
-    syslog(LOG_INFO,"!!connected!");
     Q_EMIT connected();
   }
   else
   {
-    Q_EMIT errorOccured(response.getErrno());
+    Q_EMIT errorOccured(getErrnoDescription(response.getErrno()));
   }
 }
 

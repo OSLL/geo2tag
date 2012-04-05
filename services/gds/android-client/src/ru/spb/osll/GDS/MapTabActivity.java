@@ -5,7 +5,6 @@ import java.util.List;
 import ru.spb.osll.GDS.events.EventsManager;
 import ru.spb.osll.GDS.events.EventsReceiver;
 import ru.spb.osll.GDS.maps.EventsItemizedOverlay;
-import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.objects.Mark;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
@@ -32,11 +31,11 @@ public class MapTabActivity extends MapActivity {
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-		    m_authToken = extras.getString(LoginActivity.AUTH_TOKEN);
+		    m_authToken = extras.getString(GDSUtil.AUTH_TOKEN);
 		}
 		if (m_authToken == null) {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "problem with extracting data in MapTabActivity");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "problem with extracting data in MapTabActivity");
 			}
 			Toast.makeText(this, "Can't create events tab", Toast.LENGTH_LONG).show();
 			finish();
@@ -78,8 +77,8 @@ public class MapTabActivity extends MapActivity {
 				@Override
 				public void run() {
 					for (Mark mark : marks) {
-						if (IGDSSettings.DEBUG) {
-							Log.v(IGDSSettings.LOG, mark.toString());
+						if (GDSUtil.DEBUG) {
+							Log.v(GDSUtil.LOG, mark.toString());
 						}
 					}
 					m_eventsOverlay.setEvents(marks);

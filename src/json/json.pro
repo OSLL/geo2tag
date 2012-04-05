@@ -56,9 +56,10 @@ HEADERS += \
            inc/FilterRectangleRequestJSON.h \
            inc/FilterBoxRequestJSON.h \
            inc/FilterFenceRequestJSON.h \
-    inc/RegisterUserRequestJSON.h \
-    inc/RegisterUserResponseJSON.h \
-    inc/ErrnoInfoResponseJSON.h
+           inc/RegisterUserRequestJSON.h \
+           inc/RegisterUserResponseJSON.h \
+           inc/ErrnoInfoResponseJSON.h \
+	   inc/VersionResponseJSON.h 
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \
@@ -91,9 +92,10 @@ SOURCES += \
            src/FilterRectangleRequestJSON.cpp \
            src/FilterBoxRequestJSON.cpp \
            src/FilterFenceRequestJSON.cpp \
-    src/RegisterUserRequestJSON.cpp \
-    src/RegisterUserResponseJSON.cpp \
-    src/ErrnoInfoResponseJSON.cpp
+           src/RegisterUserRequestJSON.cpp \
+           src/RegisterUserResponseJSON.cpp \
+           src/ErrnoInfoResponseJSON.cpp \
+	   src/VersionResponseJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 

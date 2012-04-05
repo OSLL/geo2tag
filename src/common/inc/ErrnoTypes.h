@@ -65,6 +65,7 @@
 #define UNKNOWN_ERROR                       16
 #define TMP_USER_ALREADY_EXIST_ERROR        17
 #define NETWORK_ERROR                       18
+#define EMAIL_ALREADY_EXIST_ERROR           19
 
 
 class Errno
@@ -96,6 +97,7 @@ public:
     emap.insert(UNKNOWN_ERROR                      ,"UNKNOWN_ERROR");                   // 16
     emap.insert(TMP_USER_ALREADY_EXIST_ERROR       ,"TMP_USER_ALREADY_EXIST_ERROR");    // 17
     emap.insert(NETWORK_ERROR                      ,"NETWORK_ERROR");                   // 18
+    emap.insert(EMAIL_ALREADY_EXIST_ERROR          ,"EMAIL_ALREADY_EXIST_ERROR");       // 19
     return emap;
   }
 };

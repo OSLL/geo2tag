@@ -20,17 +20,13 @@ namespace Test
     void Test_RegisterUserQuery::response()
     {
         RegisterUserQuery query(this);
-        bool m_ok = false;
         QString email = "email5@test1.org";
-        QString login = "Matt";
+        QString login = "Mark";
         QString password = "test";
         query.setQuery(email, login, password);
         query.doRequest();
-        connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
-        m_ok = waitForSignal(&query, SIGNAL(errorOccured(int)), 1000);
-        if (!m_ok)
-            m_ok = waitForSignal(&query, SIGNAL(connected()), 1000);
-        QCOMPARE(m_ok , true);
+        //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
+        QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 1000));
 
     }
 

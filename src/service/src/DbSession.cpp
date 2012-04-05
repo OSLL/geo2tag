@@ -41,6 +41,7 @@
 
 #include <syslog.h>
 #include <stdlib.h>
+#include "defines.h"
 #include "DbSession.h"
 
 #include "LoginRequestJSON.h"
@@ -107,6 +108,8 @@
 
 #include "ErrnoInfoResponseJSON.h"
 
+#include "VersionResponseJSON.h"
+
 #include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
 #include "ErrnoTypes.h"
@@ -146,6 +149,7 @@ namespace common
     m_processors.insert("setDefaultTimeSlotMark", &DbObjectsCollection::processSetDefaultTimeSlotMarkQuery);
     m_processors.insert("channels", &DbObjectsCollection::processAvailableChannelsQuery);
     m_processors.insert("unsubscribe", &DbObjectsCollection::processUnsubscribeQuery);
+    m_processors.insert("version", &DbObjectsCollection::processVersionQuery);
 
     m_processors.insert("errnoInfo", &DbObjectsCollection::processGetErrnoInfo);
     m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
@@ -272,7 +276,14 @@ namespace common
         return answer;
       }
     }
-    if(m_queryExecutor->isTmpUserExists(newTmpUser)) {
+
+    if(m_queryExecutor->doesUserWithGivenEmailExist(newTmpUser)) {
+        response.setErrno(EMAIL_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+
+    if(m_queryExecutor->doesTmpUserExist(newTmpUser)) {
         response.setErrno(TMP_USER_ALREADY_EXIST_ERROR);
         answer.append(response.getJson());
         return answer;
@@ -1351,6 +1362,18 @@ namespace common
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
     response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
+  QByteArray DbObjectsCollection::processVersionQuery(const QByteArray&)
+  {
+    VersionResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    response.setErrno(SUCCESS);
+    response.setVersion(GEO2TAG_VERSION);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;

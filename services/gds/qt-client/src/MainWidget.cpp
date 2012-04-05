@@ -3,24 +3,39 @@
 #include <QDebug>
 
 MainWidget::MainWidget(QWidget *parent) :
-    QWidget(parent)
+    QTabWidget(parent),
+    m_shouldStartTracking(false)
 {
-    m_label = new QLabel("Hello, World!", this);
+    m_locationManager = new LocationManager(this);
+    m_sosWidget = new SosWidget(m_locationManager, this);
+    m_trackingWidget = new TrackingWidget(m_locationManager, this);
+    m_eventsWidget = new EventsWidget(m_locationManager, this);
 
     initGUI();
 }
 
 void MainWidget::initGUI()
 {
-    QVBoxLayout *layout = new QVBoxLayout();
-    this->setLayout(layout);
-    layout->addWidget(m_label);
+    this->addTab(m_sosWidget, "SOS");
+    this->addTab(m_eventsWidget, "Events");
+    this->addTab(m_trackingWidget, "Tracking");
 }
 
-void MainWidget::signIn(const QString &authToken)
+void MainWidget::signIn(const QString & /*authToken*/)
 {
+    m_eventsWidget->startEventsService();
+    if (m_shouldStartTracking) {
+        m_trackingWidget->startTracking();
+    }
 }
 
 void MainWidget::signOut()
 {
+    m_eventsWidget->stopEventsService();
+    if (m_trackingWidget->isTracking()) {
+        m_shouldStartTracking = true;
+    } else {
+        m_shouldStartTracking = false;
+    }
+    m_trackingWidget->stopTracking();
 }

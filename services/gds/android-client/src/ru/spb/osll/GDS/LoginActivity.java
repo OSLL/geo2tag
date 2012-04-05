@@ -36,8 +36,8 @@ import org.json.JSONObject;
 import ru.spb.osll.GDS.R;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
-import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
+import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonBase;
 import ru.spb.osll.json.JsonBaseResponse;
 import ru.spb.osll.json.JsonLoginRequest;
@@ -57,10 +57,6 @@ import android.widget.Toast;
 public class LoginActivity extends Activity {
 	
 	public static final int SETTINGS_ID = Menu.FIRST;
-	
-	public static final String AUTH_TOKEN = "auth_token";
-	public static final String LOGIN = "login";
-	public static final String CHANNEL = "channel";
 	
 	private EditText m_loginEdit;
 	private EditText m_passwordEdit;
@@ -94,16 +90,16 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		if (IGDSSettings.DEBUG) {
-			Log.v(IGDSSettings.LOG, "LoginActivity onPause");
+		if (GDSUtil.DEBUG) {
+			Log.v(GDSUtil.LOG, "LoginActivity onPause");
 		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (IGDSSettings.DEBUG) {
-			Log.v(IGDSSettings.LOG, "LoginActivity onResume");
+		if (GDSUtil.DEBUG) {
+			Log.v(GDSUtil.LOG, "LoginActivity onResume");
 		}
 		initViews();
 	}
@@ -158,8 +154,8 @@ public class LoginActivity extends Activity {
 	}
 	
 	private void signIn() {
-		if (IGDSSettings.DEBUG) {
-			Log.v(IGDSSettings.LOG, "signing in");
+		if (GDSUtil.DEBUG) {
+			Log.v(GDSUtil.LOG, "signing in");
 		}
 		
 		String login = m_loginEdit.getText().toString();
@@ -180,8 +176,8 @@ public class LoginActivity extends Activity {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				if (IGDSSettings.DEBUG) {
-					Log.v(IGDSSettings.LOG, "user logged in successfully");
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "user logged in successfully");
 				}
 			} else {
 				handleError(errno);
@@ -191,46 +187,77 @@ public class LoginActivity extends Activity {
 			authToken = JsonBase.getString(JSONResponse, IResponse.AUTH_TOKEN);
 
 		} else {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "response failed");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "response failed");
 			}
 			Toast.makeText(this, "Connection error",
 					Toast.LENGTH_LONG).show();
 			return;
 		}
 		
+		// Add Events channel
+		JSONResponse = null;
+		for (int i = 0; i < GDSUtil.ATTEMPTS; i++){
+			JSONResponse = new JsonApplyChannelRequest(authToken, "Events",
+					"Channel with Events", "", 40000, serverUrl).doRequest();
+			if (JSONResponse != null) 
+				break;
+		}
+		if (JSONResponse != null) {
+			int errno = JsonBaseResponse.parseErrno(JSONResponse);
+			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "Channel Events added successfully");
+				}
+			} else if (errno == IResponse.geo2tagError.
+					CHANNEL_ALREADY_EXIST_ERROR.ordinal()) {
+				if (GDSUtil.DEBUG) {
+					Log.v(GDSUtil.LOG, "Channel Events already exists");
+				}
+			}
+			else {
+				handleError(errno);
+				return;
+			}
+		} else {
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "response failed");
+			}
+		}
+		
+		settings.setLogin(m_loginEdit.getText().toString());
+		settings.setPassword(m_passwordEdit.getText().toString());
+		settings.setAuthToken(authToken);
 		if (m_rememberCheck.isChecked()) {
-			settings.setLogin(m_loginEdit.getText().toString());
-			settings.setPassword(m_passwordEdit.getText().toString());
 			settings.setRememberMe(true);
 		} else {
 			settings.setRememberMe(false);
 		}
 		
 		Intent i = new Intent(this, MainActivity.class);
-		i.putExtra(AUTH_TOKEN, authToken);
-		i.putExtra(LOGIN, login);
-		i.putExtra(CHANNEL, channel);
+		i.putExtra(GDSUtil.AUTH_TOKEN, authToken);
+		i.putExtra(GDSUtil.LOGIN, login);
+		i.putExtra(GDSUtil.CHANNEL, channel);
 		startActivity(i);		
 	}
 	
 	private void handleError(int errno) {
 		if (errno < 0) {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "bad response received");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "bad response received");
 			}
 			Toast.makeText(this, "Server error (corrupted response)",
 					Toast.LENGTH_LONG).show();
 		} else if (errno >= IResponse.geo2tagError.values().length) {
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "unknown error");
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "unknown error");
 			}
 			Toast.makeText(this, "Unknown server error",
 					Toast.LENGTH_LONG).show();
 		} else if (errno > 0) {
 			String error = IResponse.geo2tagError.values()[errno].name();
-			if (IGDSSettings.DEBUG) {
-				Log.v(IGDSSettings.LOG, "error: " + error);
+			if (GDSUtil.DEBUG) {
+				Log.v(GDSUtil.LOG, "error: " + error);
 			}
 			Toast.makeText(this, "Error: " + error,
 					Toast.LENGTH_LONG).show();
@@ -238,15 +265,15 @@ public class LoginActivity extends Activity {
 	}
 	
 	private void createAccount() {
-		if (IGDSSettings.DEBUG) {
-			Log.v(IGDSSettings.LOG, "creating account");
+		if (GDSUtil.DEBUG) {
+			Log.v(GDSUtil.LOG, "creating account");
 		}
 		startActivity(new Intent(this, CreateAccountActivity.class));
 	}
 	
 	private void showSettings() {
-		if (IGDSSettings.DEBUG) {
-			Log.v(IGDSSettings.LOG, "opening settings");
+		if (GDSUtil.DEBUG) {
+			Log.v(GDSUtil.LOG, "opening settings");
 		}
 		startActivity(new Intent(this, SettingsActivity.class));
 	}

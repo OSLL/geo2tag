@@ -41,27 +41,41 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-
+    qDebug() << "MainWindow destructor";
+#if defined(Q_OS_SYMBIAN) ||  defined(Q_WS_SIMULATOR)
+    menuBar()->removeAction(m_settingsAction);
+    menuBar()->removeAction(m_signOutAction);
+    menuBar()->removeAction(m_exitAction);
+#endif
 }
 
 void MainWindow::createActions()
 {
     m_settingsAction = new QAction("Settings", this);
     m_signOutAction = new QAction("Sign out", this);
+    m_exitAction = new QAction("Exit", this);
     m_signOutAction->setVisible(false);
     m_isSignedIn = false;
     connect(m_settingsAction, SIGNAL(triggered()),
             this, SLOT(onSettingsAction()));
     connect(m_signOutAction, SIGNAL(triggered()),
             this, SLOT(onSignOutAction()));
+    connect(m_exitAction, SIGNAL(triggered()),
+            this, SLOT(onExitAction()));
 }
 
 void MainWindow::createMenus()
 {
+#if defined(Q_OS_SYMBIAN) ||  defined(Q_WS_SIMULATOR)
+    menuBar()->addAction(m_settingsAction);
+    menuBar()->addAction(m_signOutAction);
+    menuBar()->addAction(m_exitAction);
+#else
     m_menu = menuBar()->addMenu("Menu");
     m_menu->addAction(m_settingsAction);
     m_menu->addAction(m_signOutAction);
-
+    m_menu->addAction(m_exitAction);
+#endif
 }
 
 void MainWindow::initGUI()
@@ -77,8 +91,8 @@ void MainWindow::initGUI()
 void MainWindow::onLoginSignedIn(const QString &authToken)
 {
     m_stackedWidget->setCurrentWidget(m_mainWidget);
-    m_mainWidget->signIn(authToken);
     m_signOutAction->setVisible(true);
+    m_mainWidget->signIn(authToken);
     m_isSignedIn = true;
 }
 
@@ -123,6 +137,11 @@ void MainWindow::onSignOutAction()
     m_stackedWidget->setCurrentWidget(m_loginWidget);
     m_isSignedIn = false;
     m_signOutAction->setVisible(false);
+}
+
+void MainWindow::onExitAction()
+{
+    qApp->exit();
 }
 
 void MainWindow::setOrientation(ScreenOrientation orientation)
@@ -170,7 +189,14 @@ void MainWindow::setOrientation(ScreenOrientation orientation)
 
 void MainWindow::showExpanded()
 {
-#if defined(Q_OS_SYMBIAN) || defined(Q_WS_SIMULATOR)
+#if defined(Q_OS_SYMBIAN)
+    Qt::WindowFlags flags = windowFlags();
+    flags |= Qt::WindowSoftkeysVisibleHint;
+    flags &= ~Qt::WindowSoftkeysRespondHint;
+    //flags |= Qt::WindowSoftkeysRespondHint;
+    setWindowFlags(flags); // Hides visible window
+    showFullScreen();
+#elif defined(Q_WS_SIMULATOR)
     showFullScreen();
 #elif defined(Q_WS_MAEMO_5)
     showMaximized();

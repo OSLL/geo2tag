@@ -1,5 +1,3 @@
-#include "inc/CreateAccountWidget.h"
-#include <QDebug>
 /*
  * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
  *
@@ -31,10 +29,14 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
+#include "inc/CreateAccountWidget.h"
+#include <QDebug>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
+#include "defines.h"
+#include "JsonUser.h"
 
 CreateAccountWidget::CreateAccountWidget(QWidget *parent) :
     QWidget(parent)
@@ -49,10 +51,47 @@ CreateAccountWidget::CreateAccountWidget(QWidget *parent) :
 
     initGUI();
 
+    m_addEventsChannelQuery = new AddChannelQuery(this);
+    m_registerQuery = new RegisterUserQuery(this);
+    m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
+    m_addChannelQuery = new AddChannelQuery(this);
+    m_subscribeTracking = new SubscribeChannelQuery(this);
+    m_subscribeEvents = new SubscribeChannelQuery(this);
+
     connect(m_registerButton, SIGNAL(clicked()),
             this, SLOT(onRegisterClicked()));
     connect(m_cancelButton, SIGNAL(clicked()),
             this, SLOT(onCancelClicked()));
+    connect(m_registerQuery, SIGNAL(connected()),
+            this, SLOT(onUserAdded()));
+    connect(m_registerQuery, SIGNAL(errorOccured(QString)),
+            this, SLOT(onError(QString)));
+    connect(m_registerQuery, SIGNAL(networkErrorOccured(QString)),
+            this, SLOT(onError(QString)), Qt::QueuedConnection);
+    connect(m_loginQuery, SIGNAL(connected()),
+            this, SLOT(onLoggedIn()));
+    connect(m_loginQuery, SIGNAL(errorOccured(QString)),
+            this, SLOT(onError(QString)));
+    connect(m_loginQuery, SIGNAL(networkErrorOccured(QString)),
+            this, SLOT(onError(QString)), Qt::QueuedConnection);
+    connect(m_addChannelQuery, SIGNAL(channelAdded()),
+            this, SLOT(onChannelAdded()));
+    connect(m_addChannelQuery, SIGNAL(errorOccured(QString)),
+            this, SLOT(onError(QString)));
+    connect(m_addChannelQuery, SIGNAL(networkErrorOccured(QString)),
+            this, SLOT(onError(QString)), Qt::QueuedConnection);
+    connect(m_subscribeTracking, SIGNAL(subscribed()),
+            this, SLOT(onTrackingSubscribed()));
+    connect(m_subscribeTracking, SIGNAL(errorOccured(QString)),
+            this, SLOT(onError(QString)));
+    connect(m_subscribeTracking, SIGNAL(networkErrorOccured(QString)),
+            this, SLOT(onError(QString)), Qt::QueuedConnection);
+    connect(m_subscribeEvents, SIGNAL(subscribed()),
+            this, SLOT(onEventsSubscribed()));
+    connect(m_subscribeEvents, SIGNAL(errorOccured(QString)),
+            this, SLOT(onError(QString)));
+    connect(m_subscribeEvents, SIGNAL(networkErrorOccured(QString)),
+            this, SLOT(onError(QString)), Qt::QueuedConnection);
 }
 
 void CreateAccountWidget::initGUI()
@@ -68,6 +107,7 @@ void CreateAccountWidget::initGUI()
     btnsLayout->addWidget(m_registerButton);
     btnsLayout->addWidget(m_cancelButton);
     mainLayout->addLayout(btnsLayout);
+    mainLayout->addStretch();
     this->setLayout(mainLayout);
 }
 
@@ -92,25 +132,73 @@ void CreateAccountWidget::onRegisterClicked()
         return;
     }
 
-    // do add user request
+    m_registerQuery->setQuery("no email", m_login, m_password);
+    m_registerQuery->setUrl(m_settings.getServerUrl() + ADD_USER_HTTP_URL);
+    m_registerQuery->doRequest();
 
-    emit finished();
 }
+
+
 
 void CreateAccountWidget::onCancelClicked()
 {
-    qDebug() << "register clicked";
+    qDebug() << "cancel clicked";
     emit finished();
 }
 
-void CreateAccountWidget::onLogicError(int errno)
+void CreateAccountWidget::onError(QString error)
 {
-    qDebug() << "login error, errno = " << errno;
-    QMessageBox::information(this, "Geo Doctor Search","Internal error: code " + errno);
+    qDebug() << "create account error: " << error;
+    QMessageBox::information(this, "Error", error);
 }
 
-void CreateAccountWidget::onNetworkError(QString error)
+void CreateAccountWidget::onUserAdded()
 {
-    qDebug() << "Network error: " << error;
-    QMessageBox::information(this, "Geo Doctor Search","Network error");
+    qDebug() << "User added";
+    m_loginQuery->setQuery(m_login, m_password);
+    m_loginQuery->setUrl(m_settings.getServerUrl());
+    m_loginQuery->doRequest();
+}
+
+void CreateAccountWidget::onLoggedIn()
+{
+    qDebug() << "User logged in, token: " << m_loginQuery->getUser()->getToken();
+
+    QSharedPointer<Channel> eventsChannel =
+            QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "Channel with events", ""));
+    m_addEventsChannelQuery->setQuery(m_loginQuery->getUser(), eventsChannel);
+    m_addEventsChannelQuery->setUrl(m_settings.getServerUrl());
+    m_addEventsChannelQuery->doRequest();
+
+    QSharedPointer<Channel> channel =
+            QSharedPointer<Channel>(new Channel(m_login, m_login + "'s channel", ""));
+    m_addChannelQuery->setQuery(m_loginQuery->getUser(), channel);
+    m_addChannelQuery->setUrl(m_settings.getServerUrl());
+    m_addChannelQuery->doRequest();
+}
+
+void CreateAccountWidget::onChannelAdded()
+{
+    qDebug() << "Channel added";
+    m_subscribeTracking->setQuery(m_loginQuery->getUser(),
+                                  m_addChannelQuery->getChannel());
+    m_subscribeTracking->setUrl(m_settings.getServerUrl());
+    m_subscribeTracking->doRequest();
+}
+
+void CreateAccountWidget::onTrackingSubscribed()
+{
+    qDebug() << "Tracking subscribed";
+    QSharedPointer<Channel> eventsChannel =
+            QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, ""));
+    m_subscribeEvents->setQuery(m_loginQuery->getUser(),
+                                  eventsChannel);
+    m_subscribeEvents->setUrl(m_settings.getServerUrl());
+    m_subscribeEvents->doRequest();
+}
+
+void CreateAccountWidget::onEventsSubscribed()
+{
+    qDebug() << "Events subscribed";
+    emit finished();
 }

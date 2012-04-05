@@ -38,6 +38,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import ru.spb.osll.GDS.GDSUtil;
 import ru.spb.osll.GDS.R;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -81,11 +82,21 @@ public class Settings {
 			xmlreader.setContentHandler(new ConfigFeedParser(configEditor));
 			xmlreader.parse(is);
 		} catch (Exception e) {
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(m_context.getString(R.string.app_name),
 					"loadFromXMLFile - exception: " + e.getMessage());
 			}
 		}
+	}
+	
+	public String getAuthToken() {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+		return prefs.getString(IGDSSettings.AUTH_TOKEN, "");
+	}
+	
+	public void setAuthToken(String authToken) {
+		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+	    prefs.edit().putString(IGDSSettings.AUTH_TOKEN, authToken).commit();
 	}
 	
 	public String getLogin() {
@@ -136,11 +147,7 @@ public class Settings {
 	public interface IGDSSettings{
 		String GDS_SETTINGS = "gds_settings";
 		
-		boolean DEBUG = true;
-		
-		String LOG = "GeoDoctorSearch";
-		int ATTEMPTS = 5;
-		
+		String AUTH_TOKEN = "auth_token";
 		String LOGIN = "login";
 		String PASSWORD = "password";
 		String REMEMBER = "remember";

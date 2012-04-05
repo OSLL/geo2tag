@@ -32,10 +32,15 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
+#include "DefaultResponseJSON.h"
+
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
-
-#include "DefaultResponseJSON.h"
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
 DefaultResponseJSON::DefaultResponseJSON(QObject *parent) : JsonSerializer(parent)
 {

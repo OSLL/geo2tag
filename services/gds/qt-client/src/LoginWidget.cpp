@@ -50,6 +50,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
     initGUI();
 
     m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
+    m_addEventsChannelQuery = new AddChannelQuery(this);
 
     connect(m_signInButton, SIGNAL(clicked()),
              this, SLOT(onSignInClicked()));
@@ -57,10 +58,10 @@ LoginWidget::LoginWidget(QWidget *parent) :
             this, SLOT(onCreateAccountClicked()));
     connect(m_loginQuery, SIGNAL(connected()),
             this, SLOT(onLoginConnected()));
-    connect(m_loginQuery, SIGNAL(errorOccured(int)),
-            this, SLOT(onLoginError(int)));
     connect(m_loginQuery, SIGNAL(errorOccured(QString)),
-            this, SLOT(onLoginNetworkError(QString)));
+            this, SLOT(onError(QString)));
+    connect(m_loginQuery, SIGNAL(networkErrorOccured(QString)),
+            this, SLOT(onError(QString)), Qt::QueuedConnection);
 }
 
 void LoginWidget::fill()
@@ -111,29 +112,29 @@ void LoginWidget::onLoginConnected()
     qDebug() << "logged in";
     QString auth_token = m_loginQuery->getUser()->getToken();
     qDebug() << "token: " << auth_token;
-    // TODO check remember and save if neede
+
+    QSharedPointer<Channel> eventsChannel =
+            QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "Channel with events", ""));
+    m_addEventsChannelQuery->setQuery(m_loginQuery->getUser(), eventsChannel);
+    m_addEventsChannelQuery->setUrl(m_settings.getServerUrl());
+    m_addEventsChannelQuery->doRequest();
+
+    m_settings.setLogin(m_loginEdit->text());
+    m_settings.setPassword(m_passwordEdit->text());
+    m_settings.setAuthToken(auth_token);
     if (m_rememberCheck->checkState()) {
-        m_settings.setLogin(m_loginEdit->text());
-        m_settings.setPassword(m_passwordEdit->text());
         m_settings.setRememberMe(true);
     } else {
-        m_settings.setLogin("");
-        m_settings.setPassword("");
         m_settings.setRememberMe(false);
     }
+
     emit signedIn(auth_token);
 }
 
-void LoginWidget::onLoginError(int errno)
+void LoginWidget::onError(QString error)
 {
-    qDebug() << "login error, errno = " << errno;
-    QMessageBox::information(this, "Geo Doctor Search","Internal error: code " + QString("%1").arg(errno));
-}
-
-void LoginWidget::onLoginNetworkError(QString error)
-{
-    qDebug() << "Network error: " << error;
-    QMessageBox::information(this, "Geo Doctor Search","Network error");
+    qDebug() << "login error: " << error;
+    QMessageBox::information(this, "Error", error);
 }
 
 

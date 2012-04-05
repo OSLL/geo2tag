@@ -5,7 +5,10 @@ include(../../config.pri)
 TARGET = ../lib/common
 target.path = /usr/lib
 
-INSTALLS += target
+INSTALLS += target geo2tag_conf
+
+geo2tag_conf.files=geo2tag.conf
+geo2tag_conf.path=/opt/geo2tag
 
 DEPENDPATH += . \
     inc \

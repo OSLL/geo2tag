@@ -4,10 +4,9 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
+import ru.spb.osll.GDS.GDSUtil;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
-import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
-import ru.spb.osll.GDS.utils.GDSUtil;
 import ru.spb.osll.json.JsonApplyMarkRequest;
 import ru.spb.osll.json.JsonBaseResponse;
 import ru.spb.osll.json.IRequest.IResponse;
@@ -26,8 +25,6 @@ import android.util.Log;
 
 public class TrackingService extends Service {
 	
-	public static final int INTERVAL = 7;
-	
 	private String m_authToken = null;
 	private String m_channel = null;
 	private LocationManager m_locationManager;
@@ -43,7 +40,7 @@ public class TrackingService extends Service {
 	
 	@Override
 	public void onCreate() {
-		if (IGDSSettings.DEBUG) {
+		if (GDSUtil.DEBUG) {
 			Log.v(TrackingManager.LOG, "TrackingService create");
 		}
 		
@@ -59,7 +56,7 @@ public class TrackingService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		if (IGDSSettings.DEBUG) {
+		if (GDSUtil.DEBUG) {
 			Log.v(TrackingManager.LOG, "TrackingService start");
 		}
 		super.onStart(intent, startId);
@@ -67,11 +64,11 @@ public class TrackingService extends Service {
 		
 		Bundle extras =intent.getExtras();
 		if (extras != null) {
-		    m_authToken = extras.getString(TrackingManager.AUTH_TOKEN);
-		    m_channel = extras.getString(TrackingManager.CHANNEL); 
+		    m_authToken = extras.getString(GDSUtil.AUTH_TOKEN);
+		    m_channel = extras.getString(GDSUtil.CHANNEL); 
 		}
 		if (m_authToken == null || m_channel == null) {
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(TrackingManager.LOG, "problem with extracting data");
 			}
 			broadcastError("Failed to start tracking");
@@ -84,7 +81,7 @@ public class TrackingService extends Service {
 
 	@Override
 	public void onDestroy() {
-		if (IGDSSettings.DEBUG) {
+		if (GDSUtil.DEBUG) {
 			Log.v(TrackingManager.LOG, "TrackingService destroy");
 		}
 		super.onDestroy();
@@ -124,7 +121,7 @@ public class TrackingService extends Service {
 	}
 	
 	protected void onLocationDeviceStatusChanged(boolean isReady) {
-		if (IGDSSettings.DEBUG) {
+		if (GDSUtil.DEBUG) {
 			Log.v(TrackingManager.LOG, "onLocationDeviceStatusChanged: " + isReady);
 		}
 		if (isReady) {
@@ -149,14 +146,14 @@ public class TrackingService extends Service {
 			public void run() {
 				while (!Thread.currentThread().isInterrupted()){
 					Location location = getLocation();
-					if (IGDSSettings.DEBUG) {
+					if (GDSUtil.DEBUG) {
 						Log.v(TrackingManager.LOG, "coords: " + location.getLatitude()
 							+ ", " + location.getLongitude());
 					}
 					
 					sendMark(location);
 					
-					SystemClock.sleep(INTERVAL * 1000);
+					SystemClock.sleep(GDSUtil.TRACKING_INTERVAL * 1000);
 				}
 			}
 		});
@@ -166,7 +163,7 @@ public class TrackingService extends Service {
 	private void sendMark(Location location) {
 		String serverUrl = m_settings.getServerUrl();
 		JSONObject JSONResponse = null;
-		for(int i = 0; i < IGDSSettings.ATTEMPTS; i++){
+		for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
 			JSONResponse = new JsonApplyMarkRequest(m_authToken, m_channel, "gds tracker", "",
 					"gds tracker", location.getLatitude(), location.getLongitude(), 0,
 					GDSUtil.getTime(new Date()), serverUrl).doRequest();
@@ -176,7 +173,7 @@ public class TrackingService extends Service {
 		if (JSONResponse != null) {
 			int errno = JsonBaseResponse.parseErrno(JSONResponse);
 			if (errno == IResponse.geo2tagError.SUCCESS.ordinal()) {
-				if (IGDSSettings.DEBUG) {
+				if (GDSUtil.DEBUG) {
 					Log.v(TrackingManager.LOG, "Mark sent successfully");
 				}
 				broadcastMarkSent(location);
@@ -185,7 +182,7 @@ public class TrackingService extends Service {
 				return;
 			}
 		} else {
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(TrackingManager.LOG, "response failed");
 			}
 			broadcastError("Failed to send location");
@@ -195,16 +192,16 @@ public class TrackingService extends Service {
 	
 	private void handleError(int errno) {
 		if (errno < 0) {
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(TrackingManager.LOG, "bad response received");
 			}
 		} else if (errno >= IResponse.geo2tagError.values().length) {
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(TrackingManager.LOG, "unknown error");
 			}
 		} else if (errno > 0) {
 			String error = IResponse.geo2tagError.values()[errno].name();
-			if (IGDSSettings.DEBUG) {
+			if (GDSUtil.DEBUG) {
 				Log.v(TrackingManager.LOG, "error: " + error);
 			}
 		}

@@ -51,6 +51,10 @@ void setServerPort(int port);
 #define DEFAULT_PORT 81
 
 // "demo"
+#define SETTINGS_STORAGE_FILENAME "/opt/geo2tag/geo2tag.conf"
+
+#define GEO2TAG_VERSION "0.16"
+
 #define DATABASE_NAME "geo2tag"
 
 #define SUBSCRIBE_HTTP_URL        getServerUrl()+QString("service/subscribe")
@@ -63,6 +67,7 @@ void setServerPort(int port);
 #define LOGIN_HTTP_URL            getServerUrl()+QString("service/login")
 #define APPLY_CHANNEL_HTTP_URL    getServerUrl()+QString("service/addChannel")
 #define ADD_USER_HTTP_URL         getServerUrl()+QString("service/addUser")
+#define VERSION_HTTP_URL          getServerUrl()+QString("service/version")
 
 #define GPS_MODELLER_FILE         "/usr/share/wikigps/helsinki.gpx"
 #define CONFIG_FILE               "/usr/share/wikigps/wikigps.conf"
@@ -81,6 +86,10 @@ void setServerPort(int port);
 #define DEFAULT_LONGITUDE  ((double) 30.489442)
 
 #define TRACKER_MSECS_TIMEOUT 500
+
+// for email settings
+#define DEFAULT_EMAIL_SUBJECT "Registration confirmation"
+#define DEFAULT_EMAIL_BODY    "This will go into the body of the mail."
 
 #ifndef Q_WS_SYMBIAN
 extern uint qHash(const QPoint & p);

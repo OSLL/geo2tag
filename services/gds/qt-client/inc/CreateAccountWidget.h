@@ -1,5 +1,3 @@
-#ifndef CREATEACCOUNTWIDGET_H
-#define CREATEACCOUNTWIDGET_H
 /*
  * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
  *
@@ -31,10 +29,17 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
+#ifndef CREATEACCOUNTWIDGET_H
+#define CREATEACCOUNTWIDGET_H
+
 #include <QWidget>
 #include <QLineEdit>
 #include <QPushButton>
-
+#include "LoginQuery.h"
+#include "RegisterUserQuery.h"
+#include "Settings.h"
+#include "AddChannelQuery.h"
+#include "SubscribeChannelQuery.h"
 
 class CreateAccountWidget : public QWidget
 {
@@ -43,6 +48,15 @@ class CreateAccountWidget : public QWidget
     QString m_login;
     QString m_password;
     QString m_authToken;
+
+    Settings m_settings;
+    AddChannelQuery *m_addEventsChannelQuery;
+    RegisterUserQuery *m_registerQuery;
+    LoginQuery *m_loginQuery;
+    AddChannelQuery *m_addChannelQuery;
+    SubscribeChannelQuery *m_subscribeTracking;
+    SubscribeChannelQuery *m_subscribeEvents;
+
 
     // GUI
     QLineEdit *m_loginEdit;
@@ -61,13 +75,13 @@ signals:
 public slots:
     void onRegisterClicked();
     void onCancelClicked();
-    //void onUserAdded();
-    //void onLoginConnected();
-    //void onChannelAdded();
+    void onUserAdded();
+    void onLoggedIn();
+    void onChannelAdded();
+    void onTrackingSubscribed();
+    void onEventsSubscribed();
 
-    void onLogicError(int errno);
-    void onNetworkError(QString error);
-
+    void onError(QString error);
 
 private:
     void initGUI();

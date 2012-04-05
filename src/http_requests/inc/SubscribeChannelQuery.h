@@ -45,11 +45,8 @@
 
 #include <QObject>
 #include <QString>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include "DefaultQuery.h"
 #include "User.h"
-#include <QSharedPointer>
 
 
   class SubscribeChannelQuery: public DefaultQuery
