@@ -7,5 +7,6 @@
         <file>qml/main.qml</file>
         <file>qml/RecButton.qml</file>
         <file>qml/MapViewer.qml</file>
+        <file>qml/TrackingSettingsView.qml</file>
     </qresource>
 </RCC>

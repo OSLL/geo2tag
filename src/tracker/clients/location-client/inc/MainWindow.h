@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow
     void onAuth(QString login, QString pass);
     void onReg(QString login, QString pass);
     void trackingOnOff();
+    void changeSettings(int track_interval,bool permission);
   private:
     void createMenus();
     void createActions();
@@ -37,6 +38,7 @@ class MainWindow : public QMainWindow
     void shedulerSettings();
     void trackingSettings();
     void pathSettings();
+
 
 };
 #endif                                  // MAINWINDOW_H

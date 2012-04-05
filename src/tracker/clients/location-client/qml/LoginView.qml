@@ -14,7 +14,7 @@ import com.nokia.symbian 1.1
     state: "Log in"
 
     property string login: ""
-    titleText: "Authorization"
+    titleText: state=="Sign up"? "Registration":"Authorization"
     buttons: ToolBar {
                      id: buttons
                      width: parent.width
@@ -72,6 +72,15 @@ import com.nokia.symbian 1.1
                      width: 150
 
                  }
+                Text{
+                     id: emailText
+                     text: "e-mail:"
+                }
+
+                TextField{
+                     id: emailField
+                     width: 150
+                }
 
                 Text{
                      text: "Password:"
@@ -126,12 +135,17 @@ import com.nokia.symbian 1.1
     }
         onAccepted: {if (state == "Log in") {
                 if (loginField.text.length==0 || passField.text.length==0)
-                    sheet.notify("The login or password isn't entered")
-                else  sheet.authrequest(loginField.text,passField.text)
+                    sheet.notify("Not all neccessary data was entered")
+                else
+                    sheet.authrequest(loginField.text,passField.text)
+
             }
             else if (state == "Sign up") {
-                if (loginField.text.length==0 || passField.text.length==0 || confirmField==0)
-                    sheet.notify("Not all data is entered")
+                if (loginField.text.length==0 || passField.text.length==0 || confirmField==0 || emailField.text.length==0)
+                    sheet.notify("Not all data was entered")
+                else
+                    if (emailField.text.indexOf("@")==-1)
+                        sheet.notify("The entered e-mail isn't correct")
                 else if (passField.text==confirmField.text)
                     sheet.signrequest(loginField.text,passField.text)
                 else sheet.notify("Password is not confirm")
@@ -152,6 +166,8 @@ import com.nokia.symbian 1.1
                  PropertyChanges { target: loginnedText; visible: false}
                  PropertyChanges { target: confirmText; visible: false}
                  PropertyChanges { target: confirmField; visible: false}
+                 PropertyChanges { target: emailText; visible: false}
+                 PropertyChanges { target: emailField; visible: false}
                  PropertyChanges { target: sheet; acceptButtonText: "Log in"}
 
              },
@@ -168,6 +184,8 @@ import com.nokia.symbian 1.1
                  PropertyChanges { target: loginnedText; visible: false}
                  PropertyChanges { target: confirmText; visible: true}
                  PropertyChanges { target: confirmField; visible: true}
+                 PropertyChanges { target: emailText; visible: true}
+                 PropertyChanges { target: emailField; visible: true}
                  PropertyChanges { target: sheet; acceptButtonText: "Sign up"}}
 
 

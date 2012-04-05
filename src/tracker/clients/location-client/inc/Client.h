@@ -22,6 +22,7 @@ class Client : public QObject
     private:
     int m_trackInterval;
     bool m_authentificated;
+    bool m_trackingPermitted;
 
     QTimer * m_timer;
 
@@ -48,6 +49,9 @@ class Client : public QObject
     bool isOnline();
     void sendHistory();
     bool isTracking();
+    void setHistoryLimit(int sec);
+    void setPermission(bool permission);
+    bool isTrackingPermitted();
 
   private slots:
     void onError(QString error);

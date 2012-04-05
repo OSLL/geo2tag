@@ -7,6 +7,7 @@ import com.nokia.symbian 1.1
 
 Flickable {
     function showLoginView() {login.open(); }
+    function showTrackSettings() {trackSettings.open()}
     function auth(log, pass){ console.debug("try auth"); Main.onAuth(log,pass)}
     function reg(log, pass) {console.debug("try sign up"); Main.onReg(log, pass)}
     function incorrect(err){login.notify(err);}
@@ -18,9 +19,9 @@ Flickable {
             recbutton.prevStatus=recbutton.curStatus}
     function tracking() {Main.trackingOnOff();}
     function getPosition() {map.getPosition()}
-    width: 500
-    height: 500
-    LoginView {id: login; width: parent.width; height: parent.height}
+
+    LoginView {id: login;/* width:parent.width; height: parent.height; */anchors.fill: parent}
+    TrackingSettingsView {id: trackSettings; width:parent.width; height: parent.height;  }
    //Rectangle {color:"cyan";  width: parent.width; height: parent.height}
     MapViewer {id:map; z:-1; width: parent.width; height: parent.height}
     RecButton {id: recbutton;width: 100; height: 100;  z:5}
@@ -32,5 +33,6 @@ Flickable {
     Connections {target: recbutton; onTrackingRequest: tracking() }
     Connections {target: Main; onTrackingStarted: {recbutton.curStatus="Stop"; recbutton.prevStatus="Stop"} }
     Connections {target: herebutton; onGetPosition: getPosition() }
+    Connections {target: trackSettings; onSettingschanged: Main.changeSettings(interval, permission)}
 
 }

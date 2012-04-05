@@ -63,7 +63,8 @@ SOURCES += \
     ../../../../3rdparty/qjson-0.7.1/src/parserrunnable.cpp \
     ../../../../3rdparty/qjson-0.7.1/src/parser.cpp \
     ../../../../3rdparty/qjson-0.7.1/src/json_scanner.cpp \
-    ../../../../3rdparty/qjson-0.7.1/src/json_parser.cc
+    ../../../../3rdparty/qjson-0.7.1/src/json_parser.cc \
+    src/Settings.cpp
 
 HEADERS += \
     inc/MainWindow.h \
@@ -116,6 +117,7 @@ HEADERS += \
     ../../../../3rdparty/qjson-0.7.1/src/stack.hh \
     ../../../../3rdparty/qjson-0.7.1/src/location.hh \
     ../../../../3rdparty/qjson-0.7.1/src/position.hh \
+    inc/Settings.h
 
 OTHER_FILES += \
     qml/RecButton.qml\
@@ -124,6 +126,7 @@ OTHER_FILES += \
     qml/main.qml \
     qml/NotifyDialog.qml \
     qml/RightPanel.qml \
+    qml/TrackingSettingsView.qml \
     images/strip.png \
     qtc_packaging/debian_harmattan/rules \
     qtc_packaging/debian_harmattan/README \
@@ -137,7 +140,8 @@ OTHER_FILES += \
     qtc_packaging/debian_fremantle/copyright \
     qtc_packaging/debian_fremantle/control \
     qtc_packaging/debian_fremantle/compat \
-    qtc_packaging/debian_fremantle/changelog
+    qtc_packaging/debian_fremantle/changelog \
+    qml/TrackingSettingsView.qml
 
 maemo5 {
     target.path = /opt/bin

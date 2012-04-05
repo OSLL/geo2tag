@@ -6,8 +6,8 @@ import QtMobility.location 1.2
 
 
  Item {
-     width: 500
-     height: 500
+   /*  width: 500
+     height: 500*/
      function getPosition(){
          positionSource.active=true
          console.debug(positionSource.position.coordinate.latitude)

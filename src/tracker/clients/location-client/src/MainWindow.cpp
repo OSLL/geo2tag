@@ -4,10 +4,12 @@
 #include <QGraphicsObject>
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent)
 {
+
   QWidget *centralWidget = new QWidget(this);
   setCentralWidget(centralWidget);
   createActions();
@@ -30,6 +32,8 @@ QMainWindow(parent)
   QObject::connect(client, SIGNAL(error(QVariant)), rootObject, SLOT(incorrect(QVariant)));
   QObject::connect(client, SIGNAL(authentificated(QVariant)), rootObject, SLOT(entered(QVariant)));
 
+  QObject::connect(trackingAction, SIGNAL(triggered()), rootObject, SLOT(showTrackSettings()));
+
   #if defined(Q_WS_MAEMO_5)
   view->setGeometry(QRect(0,0,800,480));
   view->showFullScreen();
@@ -43,6 +47,8 @@ QMainWindow(parent)
   QVBoxLayout *mainLayout = new QVBoxLayout();
   mainLayout->addWidget(view);
   centralWidget->setLayout(mainLayout);
+
+
 
 }
 
@@ -110,5 +116,13 @@ void MainWindow::trackingOnOff()
     authAction->trigger();
   else
     client->stopTrack();
+
+}
+
+void MainWindow::changeSettings(int track_interval, bool permission)
+{
+
+    client->setHistoryLimit(track_interval);
+    client->setPermission(permission);
 
 }

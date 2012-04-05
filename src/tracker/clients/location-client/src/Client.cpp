@@ -8,6 +8,7 @@
 
 #include <QTimer>
 #include <QVariant>
+#include "Settings.h"
 
 // Interval for different requests
 #define PAUSE_INTERVAL 250
@@ -15,7 +16,7 @@
 
 Client::Client(QObject *parent) :
 QObject(parent),m_trackInterval(5),
-m_authentificated(0)
+    m_authentificated(0), m_trackingPermitted(Settings::getInstance().getPermission())
 {
   m_timer = new QTimer(this);
   connect(m_timer, SIGNAL(timeout()), SLOT(track()));
@@ -33,6 +34,7 @@ m_authentificated(0)
 
   m_history = new MarksHistory(this);
   connect(m_history,SIGNAL(isFull()),SLOT(onHistoryFull()));
+  m_history->setHistoryLimit(Settings::getInstance().getTimeInterval()/m_trackInterval);
 
   m_addNewMarkQuery = new WriteTagQuery(this);
   connect(m_addNewMarkQuery,SIGNAL(tagAdded()),SLOT(onMarkAdded()));
@@ -46,8 +48,25 @@ m_authentificated(0)
   connect(m_subscribeChannelQuery,SIGNAL(channelSubscribed(QSharedPointer<Channel>)),SLOT(onChannelSubscribed(QSharedPointer<Channel>)));
   connect(m_subscribeChannelQuery, SIGNAL(errorOccured(int)), SLOT(onError(int)));
 
+  if (Settings::getInstance().isHavingAuthData())
+      auth(Settings::getInstance().getLogin(),Settings::getInstance().getPassword());
+
 }
 
+void Client::setPermission(bool permission)
+{
+    m_trackingPermitted = permission;
+    if ((permission) && (!isTracking()))
+        startTrack();
+    else
+        if ((!permission) && (isTracking()))
+            stopTrack();
+}
+
+bool Client::isTrackingPermitted()
+{
+    return m_trackingPermitted;
+}
 
 void Client::auth(QString user, QString pass)
 {
@@ -126,7 +145,10 @@ void Client::sendHistory()
 void Client::onAuthentificated()
 {
   qDebug() << "Authentificated " <<  m_loginQuery->getUser()->getToken();
+
   m_user =  m_loginQuery->getUser();
+  Settings::getInstance().setLogin(m_user->getLogin());
+  Settings::getInstance().setLogin(m_user->getPassword());
   m_authentificated = true;
   emit authentificated(QVariant(m_user->getLogin()));
 }
@@ -236,4 +258,10 @@ void Client::stopTrack()
 {
   if (m_timer->isActive()) m_timer->stop();
   if (isOnline() && isAuthentificated() && !m_history->isEmpty()) sendHistory();
+}
+
+void Client::setHistoryLimit(int sec)
+{
+    m_history->setHistoryLimit(sec/m_trackInterval);
+
 }
