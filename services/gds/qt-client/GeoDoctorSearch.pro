@@ -4,7 +4,7 @@
 # dir1.source = mydir
 DEPLOYMENTFOLDERS = # file1 dir1
 
-QT += network
+QT += network phonon
 
 symbian:TARGET.UID3 = 0xE6691141
 

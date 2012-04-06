@@ -10,6 +10,7 @@
 #define DEFAULT_LOCATION_TIMEOUT    10
 #define EVENTS_CHANNEL              "Events"
 #define EVENTS_RADIUS               30
+#define DEFAULT_EVENTS_PERIOD       15
 #define RELEVANT_PERIOD_IN_HOURS    240
 #define NOT_RECEIVE_OWN_EVENTS      true
 
