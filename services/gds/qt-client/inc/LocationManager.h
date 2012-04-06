@@ -43,8 +43,10 @@ class LocationManager : public QObject
 {
     Q_OBJECT
 
-    QGeoPositionInfoSource *m_source;
-    QGeoPositionInfo m_info;
+    QGeoPositionInfoSource *m_satelliteSource;
+    QGeoPositionInfoSource *m_nonSatelliteSource;
+    QGeoPositionInfo m_satelliteInfo;
+    QGeoPositionInfo m_nonSatelliteInfo;
     QMutex m_infoMutex;
 
 public:
@@ -56,7 +58,8 @@ public:
 signals:
 
 public slots:
-    void positionUpdated(const QGeoPositionInfo &info);
+    void satellitePositionUpdated(const QGeoPositionInfo &info);
+    void nonSatellitePositionUpdated(const QGeoPositionInfo &info);
 
 };
 

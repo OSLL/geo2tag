@@ -55,6 +55,7 @@ class MainWidget : public QTabWidget
 
 public:
     explicit MainWidget(QWidget *parent = 0);
+    ~MainWidget();
 
 signals:
 

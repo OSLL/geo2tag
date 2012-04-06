@@ -36,10 +36,10 @@
 #include <QSet>
 #include <QList>
 #include <QSharedPointer>
-#include <QMediaPlayer>
 #include "LocationManager.h"
 #include "FilterCircleQuery.h"
 #include "User.h"
+#include <phonon>
 
 QTM_USE_NAMESPACE
 
@@ -54,7 +54,7 @@ class EventsService : public QObject
     FilterCircleQuery *m_filterCircleQuery;
     QSharedPointer<common::User> m_user;
     QSet<int> m_eventsIds;
-    QMediaPlayer *m_mediaPlayer;
+    Phonon::MediaObject *m_mediaPlayer;
 
 public:
     explicit EventsService(LocationManager *locationManager, QObject *parent = 0);
