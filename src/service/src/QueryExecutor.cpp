@@ -40,7 +40,7 @@
 #include <QVariant>
 #include <QString>
 #include "QueryExecutor.h"
-
+#include "JsonUser.h"
 #include "DataMarkInternal.h"
 #include "UserInternal.h"
 #include "ChannelInternal.h"
@@ -270,7 +270,7 @@ bool QueryExecutor::deleteTmpUser(const QSharedPointer<common::User> &user)
     return result;
 }
 
-bool QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
+QSharedPointer<common::User> QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
 {
     bool result;
     QSqlQuery newSignupQuery(m_database);
@@ -298,12 +298,13 @@ bool QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
     if(!result) {
       syslog(LOG_INFO,"Rollback for NewSignup sql query");
       m_database.rollback();
-      return false;
+      return QSharedPointer<common::User>(NULL);
     } else {
       syslog(LOG_INFO,"Commit for NewSignup sql query");
       m_database.commit();
     }
-    return true;
+    QSharedPointer<common::User> tmpUser(new JsonUser(user->getLogin(),user->getPassword(),newToken,user->getEmail()));
+    return tmpUser;
 }
 
 bool QueryExecutor::doesRegistrationTokenExist(const QString &token)

@@ -48,7 +48,7 @@ class RegisterUserQuery : public DefaultQuery
     QString m_login;
     QString m_password;
 
-    QSharedPointer<common::User> m_user;
+    QString m_confirmUrl;
 
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
@@ -62,7 +62,7 @@ public:
     RegisterUserQuery(const QString& email, const QString& login, const QString& password, QObject *parent = 0);
     RegisterUserQuery(QObject *parent = 0);
     void setQuery(const QString& email, const QString& login, const QString& password);
-    QSharedPointer<common::User> getUser() const;
+    const QString& getConfirmUrl() const;
     ~RegisterUserQuery();
 
 Q_SIGNALS:

@@ -36,7 +36,7 @@
 
 #include "RegisterUserQuery.h"
 #include "defines.h"
-
+#include "ErrnoTypes.h"
 #include "JsonUser.h"
 #include "RegisterUserRequestJSON.h"
 #include "RegisterUserResponseJSON.h"
@@ -75,6 +75,12 @@ QByteArray RegisterUserQuery::getRequestBody() const
     return request.getJson();
 }
 
+
+const QString& RegisterUserQuery::getConfirmUrl() const
+{
+	return m_confirmUrl;
+}
+
 void RegisterUserQuery::processReply(QNetworkReply *reply)
 {
     #ifndef Q_OS_SYMBIAN
@@ -82,8 +88,7 @@ void RegisterUserQuery::processReply(QNetworkReply *reply)
     RegisterUserResponseJSON response;
     response.parseJson(reply->readAll());
     if (response.getErrno() == SUCCESS) {
-        QSharedPointer<common::User> user = response.getUsers()->at(0);
-        m_user = QSharedPointer<common::User>(new JsonUser( m_login, m_password, user->getToken(),m_email));
+	m_confirmUrl = response.getConfirmUrl();
         syslog(LOG_INFO,"!!connected!");
         qDebug("!!connected!");
         Q_EMIT connected();
@@ -101,10 +106,6 @@ void RegisterUserQuery::setQuery(const QString &email, const QString &login, con
     m_password = password;
 }
 
-QSharedPointer<common::User> RegisterUserQuery::getUser() const
-{
-    return m_user;
-}
 
 RegisterUserQuery::~RegisterUserQuery()
 {

@@ -69,7 +69,7 @@ class QueryExecutor : public QObject
     QSharedPointer<common::User> doesTmpUserExist(const QSharedPointer<common::User> &user); // for User Registration
     bool                     doesUserWithGivenEmailExist(const QSharedPointer<common::User> &user);
     bool                     deleteTmpUser(const QSharedPointer<common::User> &user);       // for User Registration
-    bool                     insertNewTmpUser(const QSharedPointer<common::User> &user);    // for User Registration
+    QSharedPointer<common::User>  insertNewTmpUser(const QSharedPointer<common::User> &user);    // for User Registration
     bool                     doesRegistrationTokenExist(const QString &token);              // for Request Confirmation
     bool                     insertTmpUserIntoUsers(const QString &token);                 // for Request Confirmation
     bool                     deleteTmpUser(const QString &token);                           // for Request Confirmation
