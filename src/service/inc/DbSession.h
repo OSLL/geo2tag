@@ -46,7 +46,6 @@
 #include <QtSql>
 #include <QThread>
 #include <QMap>
-#include <QSettings>
 //#include </usr/include/qt4/QtSql/qsql_psql.h>
 #include "DataMarks.h"
 #include "Channel.h"

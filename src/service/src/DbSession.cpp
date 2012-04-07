@@ -42,6 +42,7 @@
 #include <syslog.h>
 #include <stdlib.h>
 #include "defines.h"
+#include "SettingsStorage.h"
 #include "DbSession.h"
 
 #include "LoginRequestJSON.h"
@@ -1380,8 +1381,11 @@ namespace common
     VersionResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString version = storage.getValue("General_Settings/geo2tag_version").toString();
+
     response.setErrno(SUCCESS);
-    response.setVersion(GEO2TAG_VERSION);
+    response.setVersion(version);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
