@@ -605,6 +605,7 @@ namespace common
     // Look for user with the same name
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+
     for(int i=0; i<currentUsers.size(); i++)
     {
       if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
