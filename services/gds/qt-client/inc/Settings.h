@@ -10,6 +10,7 @@
 #define REMEMBER "remember"
 #define SERVER_URL "server_url"
 #define AUTH_TOKEN "auth_token"
+#define DESCRIPTION "description"
 
 class Settings
 {
@@ -31,6 +32,8 @@ public:
     QString getAuthToken();
     void setAuthToken(const QString& password);
 
+    QString getDescription();
+    void setDescription(const QString& description);
     QString getServerUrl();
     void setServerUrl(const QString& serverUrl);
 

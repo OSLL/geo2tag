@@ -148,8 +148,10 @@ void EventsService::onTagsReceived()
             }
             qDebug() << "start player";
             using namespace Phonon;
+#ifdef Q_OS_SYMBIAN
             m_mediaPlayer = createPlayer(MusicCategory, MediaSource(":/data/siren.wav"));
             m_mediaPlayer->play();
+#endif
             qDebug() << "player finished";
         }
         if (newEvents || expiredEvents) {

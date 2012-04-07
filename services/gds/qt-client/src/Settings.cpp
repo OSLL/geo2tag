@@ -70,3 +70,13 @@ void Settings::setServerUrl(const QString &serverUrl)
 {
     m_settings.setValue(SERVER_URL, serverUrl);
 }
+
+QString Settings::getDescription()
+{
+    return m_settings.value(DESCRIPTION, "").toString();
+}
+
+void Settings::setDescription(const QString &description)
+{
+    m_settings.setValue(DESCRIPTION, description);
+}

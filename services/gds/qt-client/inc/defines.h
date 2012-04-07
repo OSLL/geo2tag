@@ -13,6 +13,7 @@
 #define DEFAULT_EVENTS_PERIOD       15
 #define RELEVANT_PERIOD_IN_HOURS    240
 #define NOT_RECEIVE_OWN_EVENTS      true
+#define DEFAULT_SOS_PERIOD          10
 
 #define SUBSCRIBE_HTTP_URL        "/service/subscribe"
 #define UNSUBSCRIBE_HTTP_URL      QString(DEFAULT_URL)+QString("service/unsubscribe")

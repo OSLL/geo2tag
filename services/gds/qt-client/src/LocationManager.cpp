@@ -55,7 +55,7 @@ void LocationManager::satellitePositionUpdated(const QtMobility::QGeoPositionInf
 {
     m_infoMutex.lock();
     m_satelliteInfo = info;
-    qDebug() << "Satellite position updated:" << m_satelliteInfo;
+    //qDebug() << "Satellite position updated:" << m_satelliteInfo;
     m_infoMutex.unlock();
 }
 
@@ -63,7 +63,7 @@ void LocationManager::nonSatellitePositionUpdated(const QtMobility::QGeoPosition
 {
     m_infoMutex.lock();
     m_nonSatelliteInfo = info;
-    qDebug() << "Non satellite position updated:" << m_nonSatelliteInfo;
+    //qDebug() << "Non satellite position updated:" << m_nonSatelliteInfo;
     m_infoMutex.unlock();
 }
 

@@ -6,6 +6,7 @@
 SettingsWidget::SettingsWidget(QWidget *parent) :
     QWidget(parent)
 {
+    m_description = new QTextEdit(this);
     m_serverUrlEdit = new QLineEdit(this);
     m_okButton = new QPushButton("Ok", this);
     m_cancelButton = new QPushButton("Cancel", this);
@@ -21,6 +22,9 @@ SettingsWidget::SettingsWidget(QWidget *parent) :
 void SettingsWidget::initGUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout();
+    mainLayout->addWidget(new QLabel("User description:", this));
+    //m_description->setMinimumHeight();
+    mainLayout->addWidget(m_description);
     mainLayout->addWidget(new QLabel("Server URL", this));
     mainLayout->addWidget(m_serverUrlEdit);
     QHBoxLayout *btnsLayout = new QHBoxLayout();
@@ -33,11 +37,13 @@ void SettingsWidget::initGUI()
 
 void SettingsWidget::fill()
 {
+    m_description->setText(m_settings.getDescription());
     m_serverUrlEdit->setText(m_settings.getServerUrl());
 }
 
 void SettingsWidget::onOkClicked()
 {
+    m_settings.setDescription(m_description->toPlainText());
     m_settings.setServerUrl(m_serverUrlEdit->text());
     emit saved();
 }
