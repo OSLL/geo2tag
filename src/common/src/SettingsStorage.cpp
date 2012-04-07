@@ -74,3 +74,4 @@ QVariant SettingsStorage::getValue(const QString &key, const QVariant &defaultVa
 SettingsStorage::~SettingsStorage()
 {
 }
+
