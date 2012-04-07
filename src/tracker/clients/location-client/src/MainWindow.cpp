@@ -33,6 +33,7 @@ QMainWindow(parent)
   QObject::connect(client, SIGNAL(authentificated(QVariant)), rootObject, SLOT(entered(QVariant)));
 
   QObject::connect(trackingAction, SIGNAL(triggered()), rootObject, SLOT(showTrackSettings()));
+  connect(client, SIGNAL(registrationRequestConfirm()),rootObject,SLOT(showNotify()));
 
   #if defined(Q_WS_MAEMO_5)
   view->setGeometry(QRect(0,0,800,480));
@@ -97,9 +98,9 @@ void MainWindow::onAuth(QString login, QString pass)
   client->auth(login, pass);
 }
 
-void MainWindow::onReg(QString login, QString pass)
+void MainWindow::onReg(const QString &email, const QString &login, const QString &pass)
 {
-  client->registration(login, pass);
+  client->registration(email, login, pass);
 }
 
 
@@ -125,4 +126,9 @@ void MainWindow::changeSettings(int track_interval, bool permission)
     client->setHistoryLimit(track_interval);
     client->setPermission(permission);
 
+}
+
+void MainWindow::onSubscribe(const QString &channelName)
+{
+    client->subscribeChannel(channelName);
 }

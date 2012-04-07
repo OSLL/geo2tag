@@ -28,9 +28,10 @@ class MainWindow : public QMainWindow
     void trackingStarted();
   public slots:
     void onAuth(QString login, QString pass);
-    void onReg(QString login, QString pass);
+    void onReg(const QString &email, const QString &login, const QString &pass);
     void trackingOnOff();
     void changeSettings(int track_interval,bool permission);
+    void onSubscribe(const QString &channelName);
   private:
     void createMenus();
     void createActions();

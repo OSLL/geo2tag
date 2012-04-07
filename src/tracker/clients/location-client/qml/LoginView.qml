@@ -8,7 +8,7 @@ import com.nokia.symbian 1.1
     property string acceptButtonText: "Log in"
 
     signal authrequest(string log, string pass)
-    signal signrequest(string log, string pass)
+    signal signrequest(string email, string log, string pass)
     function notify(error) {sheet.open(); notifyDialog.notify(error)}
     function logout_handler(){login=""; sheet.open(); sheet.state="Log in"}
     state: "Log in"
@@ -147,7 +147,7 @@ import com.nokia.symbian 1.1
                     if (emailField.text.indexOf("@")==-1)
                         sheet.notify("The entered e-mail isn't correct")
                 else if (passField.text==confirmField.text)
-                    sheet.signrequest(loginField.text,passField.text)
+                    sheet.signrequest(emailField,loginField.text,passField.text)
                 else sheet.notify("Password is not confirm")
             }
             else

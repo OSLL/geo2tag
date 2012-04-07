@@ -35,9 +35,11 @@ SOURCES += \
     ../../../http_requests/src/LoginQuery.cpp \
     ../../../http_requests/src/DefaultQuery.cpp \
     ../../../http_requests/src/WriteTagQuery.cpp \
-    ../../../http_requests/src/AddUserQuery.cpp \
+    ../../../http_requests/src/RegisterUserQuery.cpp \
+    ../../../http_requests/src/LoadTagsQuery.cpp \
     ../../../http_requests/src/ApplyChannelQuery.cpp \
     ../../../http_requests/src/SubscribeChannelQuery.cpp \
+    ../../../http_requests/src/SubscribedChannelsQuery.cpp \
     ../../../common/src/User.cpp \
     ../../../common/src/TimeSlot.cpp \
     ../../../common/src/DataMarks.cpp \
@@ -50,11 +52,17 @@ SOURCES += \
     ../../../json/src/LoginResponseJSON.cpp \
     ../../../json/src/LoginRequestJSON.cpp \
     ../../../json/src/SubscribeChannelJSON.cpp \
+    ../../../json/src/SubscribedChannelsRequestJSON.cpp \
+    ../../../json/src/AvailableChannelsResponseJSON.cpp \
     ../../../json/src/AddChannelRequestJSON.cpp \
     ../../../json/src/DefaultResponseJSON.cpp \
     ../../../json/src/JsonUser.cpp \
     ../../../json/src/WriteTagResponseJSON.cpp \
     ../../../json/src/WriteTagRequestJSON.cpp \
+    ../../../json/src/RegisterUserResponseJSON.cpp \
+    ../../../json/src/RegisterUserRequestJSON.cpp \
+    ../../../json/src/LoadTagsResponseJSON.cpp \
+    ../../../json/src/LoadTagsRequestJSON.cpp \
     ../../../json/src/JsonDataMark.cpp \
     ../../../json/src/JsonChannel.cpp \
     ../../../../3rdparty/qjson-0.7.1/src/serializerrunnable.cpp \
@@ -64,7 +72,9 @@ SOURCES += \
     ../../../../3rdparty/qjson-0.7.1/src/parser.cpp \
     ../../../../3rdparty/qjson-0.7.1/src/json_scanner.cpp \
     ../../../../3rdparty/qjson-0.7.1/src/json_parser.cc \
-    src/Settings.cpp
+    src/Settings.cpp \
+    src/Contact.cpp \
+    src/ContactModel.cpp
 
 HEADERS += \
     inc/MainWindow.h \
@@ -73,9 +83,11 @@ HEADERS += \
     ../../../http_requests/inc/LoginQuery.h \
     ../../../http_requests/inc/DefaultQuery.h \
     ../../../http_requests/inc/WriteTagQuery.h \
-    ../../../http_requests/inc/AddUserQuery.h \
+    ../../../http_requests/inc/RegisterUserQuery.h \
+    ../../../http_requests/inc/LoadTagsQuery.h \
     ../../../http_requests/inc/ApplyChannelQuery.h \
     ../../../http_requests/inc/SubscribeChannelQuery.h \
+    ../../../http_requests/inc/SubscribedChannelsQuery.h \
     ../../../json/inc/JsonSerializer.h \
     ../../../json/inc/LoginResponseJSON.h \
     ../../../json/inc/LoginRequestJSON.h \
@@ -83,8 +95,13 @@ HEADERS += \
     ../../../json/inc/AddChannelRequestJSON.h \
     ../../../json/inc/SubscribeChannelResponseJSON.h \
     ../../../json/inc/SubscribeChannelJSON.h \
-    ../../../json/inc/AddUserRequestJSON.h \
-    ../../../json/inc/AddUserResponseJSON.h \
+    ../../../json/inc/SubscribedChannelsResponseJSON.h \
+    ../../../json/inc/SubscribedChannelsRequestJSON.h \
+    ../../../json/inc/AvailableChannelsResponseJSON.h \
+    ../../../json/inc/RegisterUserRequestJSON.h \
+    ../../../json/inc/RegisterUserResponseJSON.h \
+    ../../../json/inc/LoadTagsRequestJSON.h \
+    ../../../json/inc/LoadTagsResponseJSON.h \
     ../../../json/inc/JsonUser.h \
     ../../../json/inc/JsonTimeSlot.h \
     ../../../json/inc/JsonDataMark.h \
@@ -117,7 +134,9 @@ HEADERS += \
     ../../../../3rdparty/qjson-0.7.1/src/stack.hh \
     ../../../../3rdparty/qjson-0.7.1/src/location.hh \
     ../../../../3rdparty/qjson-0.7.1/src/position.hh \
-    inc/Settings.h
+    inc/Settings.h \
+    inc/Contact.h \
+    inc/ContactModel.h
 
 OTHER_FILES += \
     qml/RecButton.qml\

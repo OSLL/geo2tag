@@ -9,12 +9,14 @@
 #include <QMap>
 
 #include "LoginQuery.h"
-#include "AddUserQuery.h"
+#include "RegisterUserQuery.h"
 #include "WriteTagQuery.h"
 #include "MarksHistory.h"
 #include "ApplyChannelQuery.h"
 #include "SubscribeChannelQuery.h"
 #include "Channel.h"
+#include "ContactModel.h"
+#include "SubscribedChannelsQuery.h"
 
 class Client : public QObject
 {
@@ -33,10 +35,13 @@ class Client : public QObject
 
     QString m_lastError;
     LoginQuery * m_loginQuery;
-    AddUserQuery * m_addUserQuery;
+    RegisterUserQuery * m_RegisterUserQuery;
     QSharedPointer<common::User> m_user;
     QNetworkConfigurationManager * m_netManager;
     QMap<QSharedPointer<Channel>, QString> m_channels;
+    ContactModel * m_contactModel;
+    SubscribedChannelsQuery *m_subscibedChannelsQuery;
+
 
     void pause(int msecs);
 
@@ -60,14 +65,15 @@ class Client : public QObject
     void onRegistered();
     void onMarkAdded();
     void track();
-    signals:
+ signals:
     void error(QVariant error);
     void authentificated(QVariant);
     void authRequest();
+    void registrationRequestConfirm();
   public slots:
     void auth(QString user, QString pass);
-    void registration(QString user, QString pass);
-    void subscribeChannel(QSharedPointer<Channel> m_channel);
+    void registration(const QString &email,const QString& user, const QString& pass);
+    void subscribeChannel(const QString &channel/*QSharedPointer<Channel> m_channel*/);
     void onChannelSubscribed(QSharedPointer<Channel> m_channel);
     void startTrack();
     void stopTrack();
@@ -79,6 +85,8 @@ class Client : public QObject
     void sendLastCoordinate();
     // When history is full
     void onHistoryFull();
+
+    void constructContactModel();
 
 };
 #endif                                  // CLIENT_H

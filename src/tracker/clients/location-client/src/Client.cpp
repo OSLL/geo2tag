@@ -21,14 +21,16 @@ QObject(parent),m_trackInterval(5),
   m_timer = new QTimer(this);
   connect(m_timer, SIGNAL(timeout()), SLOT(track()));
 
+  m_contactModel = new ContactModel(this);
+
   m_loginQuery = new LoginQuery(this);
   connect(m_loginQuery, SIGNAL(connected()), SLOT(onAuthentificated()));
   connect(m_loginQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));
   connect(m_loginQuery, SIGNAL(errorOccured(int)),SLOT(onError(int)));
 
-  m_addUserQuery = new AddUserQuery(this);
-  connect(m_addUserQuery, SIGNAL(connected()), SLOT(onRegistered()));
-  connect(m_addUserQuery, SIGNAL(errorOccured(int)),SLOT(onError(int)));
+  m_RegisterUserQuery = new RegisterUserQuery(this);
+  connect(m_RegisterUserQuery, SIGNAL(connected()), SLOT(onRegistered()));
+  connect(m_RegisterUserQuery, SIGNAL(errorOccured(int)),SLOT(onError(int)));
 
   m_netManager = new QNetworkConfigurationManager(this);
 
@@ -41,12 +43,16 @@ QObject(parent),m_trackInterval(5),
   //  connect(m_addNewMarkQuery, SIGNAL(errorOccured(QString)), SIGNAL(error(QString)));
 
   m_applyChannelQuery = new ApplyChannelQuery(this);
-  connect(m_applyChannelQuery, SIGNAL(channelAdded(QSharedPointer<Channel>)),SLOT(subscribeChannel(QSharedPointer<Channel>)));
+  //connect(m_applyChannelQuery, SIGNAL(channelAdded(QSharedPointer<Channel>)),SLOT(subscribeChannel(QSharedPointer<Channel>)));
   connect(m_applyChannelQuery, SIGNAL(errorOccured(int)), SLOT(onError(int)));
 
   m_subscribeChannelQuery = new SubscribeChannelQuery(this);
   connect(m_subscribeChannelQuery,SIGNAL(channelSubscribed(QSharedPointer<Channel>)),SLOT(onChannelSubscribed(QSharedPointer<Channel>)));
   connect(m_subscribeChannelQuery, SIGNAL(errorOccured(int)), SLOT(onError(int)));
+
+  m_subscibedChannelsQuery = new SubscribedChannelsQuery(this);
+  connect(m_subscibedChannelsQuery,SIGNAL(responseReceived()),SLOT(constructContactModel()));
+  connect(m_subscibedChannelsQuery,SIGNAL(errorOccured(int)), SLOT(onError(int)));
 
   if (Settings::getInstance().isHavingAuthData())
       auth(Settings::getInstance().getLogin(),Settings::getInstance().getPassword());
@@ -74,10 +80,10 @@ void Client::auth(QString user, QString pass)
   m_loginQuery->doRequest();
 }
 
-void Client::registration(QString user, QString pass)
+void Client::registration(const QString &email, const QString &user, const QString &pass)
 {
-    m_addUserQuery->setQuery(user,pass);
-    m_addUserQuery->doRequest();
+    m_RegisterUserQuery->setQuery(email, user,pass);
+    m_RegisterUserQuery->doRequest();
 }
 
 
@@ -150,26 +156,32 @@ void Client::onAuthentificated()
   Settings::getInstance().setLogin(m_user->getLogin());
   Settings::getInstance().setLogin(m_user->getPassword());
   m_authentificated = true;
-  emit authentificated(QVariant(m_user->getLogin()));
+
+
+  m_subscibedChannelsQuery->setQuery(m_user);
+  m_subscibedChannelsQuery->doRequest();
+   emit authentificated(QVariant(m_user->getLogin()));
 }
 
 void Client::onRegistered()
 {
 
 
-    qDebug() << "Registered " <<  m_addUserQuery->getUser()->getToken();
-    m_user =  m_addUserQuery->getUser();
-    QSharedPointer<Channel> channel = QSharedPointer<Channel>(new Channel(m_user->getLogin(),m_user->getLogin() + "'s channel"));
+    qDebug() << "Registered " <<  m_RegisterUserQuery->getUser()->getToken();
+    m_user =  m_RegisterUserQuery->getUser();
+    emit registrationRequestConfirm();
+   /* QSharedPointer<Channel> channel = QSharedPointer<Channel>(new Channel(m_user->getLogin(),m_user->getLogin() + "'s channel"));
     channel->setRadius(40000000);
     m_applyChannelQuery->setQuery(channel, m_user);
     m_applyChannelQuery->doRequest();
-    m_authentificated = true;
+    m_authentificated = true;*/
   //  emit authentificated(QVariant(m_user->getLogin()));
 }
-void Client::subscribeChannel(QSharedPointer<Channel> channel)
+void Client::subscribeChannel(const QString &channel)
 {
-    qDebug()<<"channel: "<<channel->getName();
-    m_subscribeChannelQuery->setQuery(channel, m_user);
+    QSharedPointer<Channel> m_channel = QSharedPointer<Channel>(new Channel(channel,channel));
+    qDebug()<<"channel: "<<m_channel->getName();
+    m_subscribeChannelQuery->setQuery(m_channel, m_user);
     m_subscribeChannelQuery->doRequest();
 }
 
@@ -264,4 +276,10 @@ void Client::setHistoryLimit(int sec)
 {
     m_history->setHistoryLimit(sec/m_trackInterval);
 
+}
+
+void Client::constructContactModel()
+{
+    if (m_subscibedChannelsQuery->getChannels()->size()==0)
+    qDebug()<<"Empty Subscribed lists!";
 }
