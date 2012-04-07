@@ -44,10 +44,22 @@
 
 #include "RegisterUserResponseJSON.h"
 #include "JsonUser.h"
+#include "ErrnoTypes.h"
 
 RegisterUserResponseJSON::RegisterUserResponseJSON(QObject *parent)
     : JsonSerializer(parent)
 {
+}
+
+void RegisterUserResponseJSON::setConfirmUrl(const QString& url)
+{
+    m_confirmUrl = url;
+}
+
+
+const QString& RegisterUserResponseJSON::getConfirmUrl() const
+{
+    return m_confirmUrl;
 }
 
 QByteArray RegisterUserResponseJSON::getJson() const
@@ -55,6 +67,7 @@ QByteArray RegisterUserResponseJSON::getJson() const
     QJson::Serializer serializer;
     QVariantMap obj;
     obj.insert("errno", m_errno);
+    if (m_errno == SUCCESS) obj.insert("confirmUrl", m_confirmUrl);
     return serializer.serialize(obj);
 }
 
@@ -70,6 +83,7 @@ bool RegisterUserResponseJSON::parseJson(const QByteArray &data)
     result["errno"].toInt(&ok);
     if (!ok) return false;
     m_errno = result["errno"].toInt(&ok);
+    m_confirmUrl = result["confirmUrl"].toString();
 
     return true;
 }

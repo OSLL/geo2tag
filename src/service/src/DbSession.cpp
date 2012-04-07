@@ -288,8 +288,8 @@ namespace common
         answer.append(response.getJson());
         return answer;
     }
-
-    if(!m_queryExecutor->insertNewTmpUser(newTmpUser)) {
+    newTmpUser = m_queryExecutor->insertNewTmpUser(newTmpUser);
+    if(newTmpUser.isNull()) {
         response.setErrno(INTERNAL_DB_ERROR);
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
@@ -297,6 +297,7 @@ namespace common
     }
 
     response.setErrno(SUCCESS);
+    response.setConfirmUrl(QString(DEFAULT_SERVER)+QString("service/confirmRegistration-")+newTmpUser->getToken());
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
