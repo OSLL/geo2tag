@@ -616,6 +616,12 @@ namespace common
       }
     }
 
+    if(m_queryExecutor->doesUserWithGivenEmailExist(dummyUser)) {
+        response.setErrno(EMAIL_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+
     syslog(LOG_INFO, "Sending sql request for AddUser");
     QSharedPointer<User> addedUser = m_queryExecutor->insertNewUser(dummyUser);
     if(!addedUser)

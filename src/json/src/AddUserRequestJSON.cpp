@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,25 +32,43 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef ADDUSERREQUESTJSON_H
-#define ADDUSERREQUESTJSON_H
+#include "AddUserRequestJSON.h"
+#include "JsonUser.h"
 
-#include "LoginRequestJSON.h"
-
-//typedef LoginRequestJSON AddUserRequestJSON;
-
-class AddUserRequestJSON : public JsonSerializer
-{
-public:
-    AddUserRequestJSON(QObject *parent=0);
-
-    QByteArray getJson() const;
-
-    bool parseJson(const QByteArray&);
-};
-
-
-
-
-// ADDUSERREQUESTJSON_H
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
 #endif
+
+AddUserRequestJSON::AddUserRequestJSON(QObject *parent) : JsonSerializer(parent)
+{
+}
+
+QByteArray AddUserRequestJSON::getJson() const
+{
+    QJson::Serializer serializer;
+    QVariantMap obj;
+    obj.insert("email", m_usersContainer->at(0)->getEmail());
+    obj.insert("login", m_usersContainer->at(0)->getLogin());
+    obj.insert("password", m_usersContainer->at(0)->getPassword());
+    return serializer.serialize(obj);
+}
+
+bool AddUserRequestJSON::parseJson(const QByteArray &data)
+{
+    clearContainers();
+
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if (!ok) return false;
+
+    QString email = result["email"].toString();
+    QString login = result["login"].toString();
+    QString password = result["password"].toString();
+    m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login, password, "unknown",email)));
+    return true;
+}
