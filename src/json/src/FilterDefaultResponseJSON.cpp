@@ -126,6 +126,7 @@ bool FilterDefaultResponseJSON::parseJson(const QByteArray& data)
             QString userName = markMap["user"].toString();
             QString timeStr =  markMap["pubDate"].toString();
             QDateTime time = QDateTime::fromString(timeStr, "dd MM yyyy HH:mm:ss.zzz");
+            time.setTimeSpec(Qt::UTC);
 
             QVector<QSharedPointer<common::User> > v = m_usersContainer->vector();
             QSharedPointer<common::User> user(new JsonUser(userName));
