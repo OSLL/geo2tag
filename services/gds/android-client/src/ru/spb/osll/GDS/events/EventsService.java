@@ -29,7 +29,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.util.Log;
 
 public class EventsService extends Service {

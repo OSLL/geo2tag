@@ -36,15 +36,12 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
-import android.content.SharedPreferences.Editor;
-
 public class ConfigFeedParser extends DefaultHandler implements IXMLSettings {
-	private Editor m_configEditor;
 	private StringBuffer m_sb;
+	private Settings m_settings;
 	
-	public ConfigFeedParser(Editor configEditor) {
-		m_configEditor = configEditor;
+	public ConfigFeedParser(Settings settings) {
+		m_settings = settings;
 	}
 	
 	@Override
@@ -57,27 +54,27 @@ public class ConfigFeedParser extends DefaultHandler implements IXMLSettings {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		super.endElement(uri, localName, qName);
 		if (localName.equals(config)){
-			m_configEditor.commit();
+
 		} else if (localName.equals(login)){
-    		m_configEditor.putString(IGDSSettings.LOGIN, m_sb.toString());
+			//m_settings.setLogin(m_sb.toString());
     	} else if (localName.equals(password)){
-    		m_configEditor.putString(IGDSSettings.PASSWORD, m_sb.toString());
+    		//m_settings.setPassword(m_sb.toString());
     	} else if (localName.equals(remember)){
-    		m_configEditor.putBoolean(IGDSSettings.REMEMBER, Boolean.parseBoolean(m_sb.toString()));
+    		m_settings.setRememberMe(Boolean.parseBoolean(m_sb.toString()));
     	} else if (localName.equals(channel)){
-    		m_configEditor.putString(IGDSSettings.CHANNEL, m_sb.toString());
+ 
     	} else if (localName.equals(key)){
-    		m_configEditor.putString(IGDSSettings.CHANNEL_KEY, m_sb.toString());
+
     	} else if (localName.equals(server_url)){
-    		m_configEditor.putString(IGDSSettings.SERVER_URL, m_sb.toString());
+    		m_settings.setServerUrl(m_sb.toString());
     	} else if (localName.equals(time_tick)){
-    		m_configEditor.putInt(IGDSSettings.TIME_TICK, Integer.parseInt(m_sb.toString()));
+    		//m_configEditor.putInt(IGDSSettings.TIME_TICK, Integer.parseInt(m_sb.toString()));
     	} else if (localName.equals(show_tick)){
-    		boolean val = m_sb.toString().equals("true") ? true : false; 
-    		m_configEditor.putBoolean(IGDSSettings.IS_SHOW_TICKS, val);
+    		//boolean val = m_sb.toString().equals("true") ? true : false; 
+    		//m_configEditor.putBoolean(IGDSSettings.IS_SHOW_TICKS, val);
     	} else if (localName.equals(hide_app)){
-    		boolean val = m_sb.toString().equals("true") ? true : false; 
-    		m_configEditor.putBoolean(IGDSSettings.IS_HIDE_APP, val);
+    		//boolean val = m_sb.toString().equals("true") ? true : false; 
+    		//m_configEditor.putBoolean(IGDSSettings.IS_HIDE_APP, val);
     	} 
 	}
 

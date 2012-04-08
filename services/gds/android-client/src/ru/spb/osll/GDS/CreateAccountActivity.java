@@ -35,7 +35,6 @@ import org.json.JSONObject;
 import ru.spb.osll.GDS.exception.ExceptionHandler;
 import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.GDS.preferences.SettingsActivity;
-import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
 import ru.spb.osll.json.JsonAddUserRequest;
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonBase;
@@ -129,8 +128,7 @@ public class CreateAccountActivity extends Activity {
 		String login = m_loginEdit.getText().toString();
 		String password = m_passwordEdit.getText().toString();
 		String re_password = m_rePasswordEdit.getText().toString();
-		String serverUrl = new Settings(this).getPreferences().getString(
-				IGDSSettings.SERVER_URL, "");
+		String serverUrl = new Settings(this).getServerUrl();
 		String authToken = "";
 		
 		// Check fields

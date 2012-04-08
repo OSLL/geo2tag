@@ -202,9 +202,10 @@ public class MainActivity extends TabActivity {
 				}
 				String serverUrl = m_settings.getServerUrl();
 				JSONObject JSONResponse = null;
+				String description = m_settings.getDescription();
 				for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
 					JSONResponse = new JsonApplyMarkRequest(m_authToken, "Events", "SOS", "",
-							"SOS", location.getLatitude(), location.getLongitude(), 0,
+							description, location.getLatitude(), location.getLongitude(), 0,
 							GDSUtil.getTime(new Date()), serverUrl).doRequest();
 					if (JSONResponse != null) 
 						break;
