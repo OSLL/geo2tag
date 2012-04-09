@@ -160,7 +160,8 @@ OTHER_FILES += \
     qtc_packaging/debian_fremantle/control \
     qtc_packaging/debian_fremantle/compat \
     qtc_packaging/debian_fremantle/changelog \
-    qml/TrackingSettingsView.qml
+    qml/TrackingSettingsView.qml \
+    qml/ContactList.qml
 
 maemo5 {
     target.path = /opt/bin

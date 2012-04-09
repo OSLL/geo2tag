@@ -5,11 +5,13 @@
 
 class Contact: public QObject
 {
+    Q_OBJECT
 private:
     QSharedPointer<Channel> m_channel;
     QString m_customName;
 public:
-    Contact(QObject* parent);
+    Contact(QObject* parent=0);
+    Contact(QSharedPointer<Channel>,const QString &customName, QObject *parent=0);
     QString getChannelName() const;
     QString getCustomName() const;
     void setChannel(QSharedPointer<Channel> channel);

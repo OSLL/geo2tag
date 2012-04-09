@@ -5,9 +5,10 @@
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
 #include <QDebug>
+ #include <QtDeclarative>
 
 MainWindow::MainWindow(QWidget *parent) :
-QMainWindow(parent)
+    QMainWindow(parent),contactModel(parent)
 {
 
   QWidget *centralWidget = new QWidget(this);
@@ -17,15 +18,28 @@ QMainWindow(parent)
   createMenus();
   const QString mainQmlApp = QLatin1String("qrc:///qml/main.qml");
   view =new QDeclarativeView(this);
+  view->rootContext()->setContextProperty("Main", this);
+  view->rootContext()->setContextProperty("contactModel", &contactModel);
 
   view->setSource(QUrl(mainQmlApp));
   view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
   view->engine()->addImportPath(QString("/opt/qtm12/imports"));
   view->engine()->addPluginPath(QString("/opt/qtm12/plugins"));
 
-  client =new Client(this);
+
+  //contactModel = new ContactModel(this);
+  contactModel.addContact(QSharedPointer<Contact>(new Contact(QSharedPointer<Channel>(new Channel("red","red")), "Regina")));
+  contactModel.addContact(QSharedPointer<Contact>(new Contact(QSharedPointer<Channel>(new Channel("werf54","red")), "Mother")));
+
+  client =new Client(&contactModel, this);
   //   view->rootContext()->setContextProperty("Client", client);
-  view->rootContext()->setContextProperty("Main", this);
+
+
+  //qmlRegisterType<ContactModel>();
+
+
+  //
+    //
 
   QObject* rootObject = dynamic_cast<QObject*>(view->rootObject());
   QObject::connect(authAction, SIGNAL(triggered()), rootObject, SLOT(showLoginView()));
@@ -130,5 +144,6 @@ void MainWindow::changeSettings(int track_interval, bool permission)
 
 void MainWindow::onSubscribe(const QString &channelName)
 {
+    if (client->isAuthentificated())
     client->subscribeChannel(channelName);
 }

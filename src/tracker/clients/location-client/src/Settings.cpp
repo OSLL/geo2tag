@@ -31,6 +31,16 @@ int Settings::getTimeInterval()
     return instance.value("timeinterval",60).toInt();
 }
 
+QString Settings::getCustomName(const QString &channelName)
+{
+    return instance.value(channelName,channelName).toString();
+}
+
+void Settings::setCustomName(const QString &channelName, const QString &customName)
+{
+    instance.setValue(channelName, customName);
+}
+
 void Settings::setLogin(const QString &login)
 {
     instance.setValue("login",login);

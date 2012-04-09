@@ -13,6 +13,7 @@ Rectangle {
     opacity: 0.7
     height: parent.height
 
+
     Row
     {
         id:content
@@ -43,10 +44,16 @@ Rectangle {
 
 }
 
+
+    ContactList {id: contactList; anchors.topMargin:content.height; anchors.leftMargin: border.width; anchors.fill: parent; opacity: parent.opacity}
+
+
     BorderImage {
-        id: name
+        id: border
         source: ":../images/strip.png"
         width: 20; height: parent.height
+
+
 
 
     }
@@ -60,10 +67,7 @@ Rectangle {
   //  RightPanelContent{id:content; z:5; }
 
     NotifyDialog {id:notify}
-    ListModel{
-        id: contactmodel
 
-    }
 
 
 }

@@ -4,6 +4,7 @@ import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 //import QtMobility.location 1.2
 //import org.maemo.fremantle 1.0  // for Core components
 import com.nokia.symbian 1.1
+//import com.mycompany.qmlcomponents 1.0
 
 Flickable {
     function showLoginView() {login.open(); }
@@ -38,5 +39,6 @@ Flickable {
     Connections {target: herebutton; onGetPosition: getPosition() }
     Connections {target: trackSettings; onSettingschanged: Main.changeSettings(interval, permission)}
     Connections {target: rightPanel; onRequestToSubscribe:Main.onSubscribe(channel)}
+
 
 }

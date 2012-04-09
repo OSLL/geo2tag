@@ -8,5 +8,6 @@
         <file>qml/RecButton.qml</file>
         <file>qml/MapViewer.qml</file>
         <file>qml/TrackingSettingsView.qml</file>
+        <file>qml/ContactList.qml</file>
     </qresource>
 </RCC>

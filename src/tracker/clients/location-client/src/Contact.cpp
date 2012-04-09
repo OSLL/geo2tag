@@ -1,6 +1,12 @@
 #include "Contact.h"
+Contact::Contact(QObject *parent)
+{
 
-Contact::Contact(QObject *parent): QObject(parent) {
+}
+
+Contact::Contact(QSharedPointer<Channel> channel, const QString &customName, QObject *parent): QObject(parent) {
+    m_channel=channel;
+    m_customName=customName;
 
 }
 

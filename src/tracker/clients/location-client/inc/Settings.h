@@ -14,6 +14,8 @@ public:
     static Settings& getInstance();
     QString getLogin();
     QString getPassword();
+    QString getCustomName(const QString &channelName);
+    void setCustomName(const QString &channelName, const QString &customName);
     bool getPermission();
     int getTimeInterval();
     void setLogin(const QString &login);

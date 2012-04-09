@@ -46,7 +46,7 @@ class Client : public QObject
     void pause(int msecs);
 
   public:
-    explicit Client(QObject *parent = 0);
+    explicit Client(ContactModel* contactModel, QObject *parent = 0);
     // stub for authentification mechanizm
 
     bool isAuthentificated();

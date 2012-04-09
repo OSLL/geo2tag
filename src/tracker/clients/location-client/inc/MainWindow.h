@@ -6,6 +6,7 @@
 #include <QAction>
 #include <QDeclarativeView>
 #include "Client.h"
+#include "ContactModel.h"
 
 class MainWindow : public QMainWindow
 {
@@ -20,6 +21,7 @@ class MainWindow : public QMainWindow
 
     QDeclarativeView* view;
     Client *client;
+    ContactModel contactModel;
 
   public:
     explicit MainWindow(QWidget *parent = 0);

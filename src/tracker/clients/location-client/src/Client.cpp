@@ -14,14 +14,15 @@
 #define PAUSE_INTERVAL 250
 #define DEFAULT_CHANNEL "default"
 
-Client::Client(QObject *parent) :
+Client::Client(ContactModel *contactModel, QObject *parent) :
 QObject(parent),m_trackInterval(5),
-    m_authentificated(0), m_trackingPermitted(Settings::getInstance().getPermission())
+    m_authentificated(0), m_trackingPermitted(Settings::getInstance().getPermission()),
+    m_contactModel(contactModel)
 {
   m_timer = new QTimer(this);
   connect(m_timer, SIGNAL(timeout()), SLOT(track()));
 
-  m_contactModel = new ContactModel(this);
+
 
   m_loginQuery = new LoginQuery(this);
   connect(m_loginQuery, SIGNAL(connected()), SLOT(onAuthentificated()));
@@ -167,8 +168,8 @@ void Client::onRegistered()
 {
 
 
-    qDebug() << "Registered " <<  m_RegisterUserQuery->getUser()->getToken();
-    m_user =  m_RegisterUserQuery->getUser();
+    qDebug() << "Registered " <<  m_RegisterUserQuery->getConfirmUrl();
+
     emit registrationRequestConfirm();
    /* QSharedPointer<Channel> channel = QSharedPointer<Channel>(new Channel(m_user->getLogin(),m_user->getLogin() + "'s channel"));
     channel->setRadius(40000000);
@@ -189,6 +190,8 @@ void Client::onChannelSubscribed(QSharedPointer<Channel> channel)
 {
     qDebug()<<"Channel is subscribed";
     m_channels.insert(channel,"");
+    m_contactModel->addContact(QSharedPointer<Contact>(new Contact(channel,channel->getName())));
+    Settings::getInstance().setCustomName(channel->getName(),channel->getName());
 }
 
 
@@ -280,6 +283,8 @@ void Client::setHistoryLimit(int sec)
 
 void Client::constructContactModel()
 {
-    if (m_subscibedChannelsQuery->getChannels()->size()==0)
-    qDebug()<<"Empty Subscribed lists!";
+    for (int i=0;i<m_subscibedChannelsQuery->getChannels()->size();i++)
+        m_contactModel->addContact(QSharedPointer<Contact>(new Contact(m_subscibedChannelsQuery->getChannels()->at(i),
+                                                                       Settings::getInstance().getCustomName(m_subscibedChannelsQuery->getChannels()->at(i)->getName()))));
+
 }
