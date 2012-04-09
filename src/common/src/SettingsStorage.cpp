@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,29 +28,50 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*----------------------------------------------------------------- !
+/*! --------------------------------------------------------------------------
+ * \file   SettingsStorage.cpp
+ * \brief  Implementation of SettingStorage Class
+ *
  * PROJ: OSLL/geo2tag
- * ---------------------------------------------------------------- */
+ * --------------------------------------------------------------------------- */
 
-#ifndef ADDUSERREQUESTJSON_H
-#define ADDUSERREQUESTJSON_H
+#include "SettingsStorage.h"
 
-#include "LoginRequestJSON.h"
+#include <QString>
+#include <QVariant>
+#include <QSettings>
 
-//typedef LoginRequestJSON AddUserRequestJSON;
-
-class AddUserRequestJSON : public JsonSerializer
+SettingsStorage::SettingsStorage(const QString &filename)
+    : m_filename(filename)
 {
-public:
-    AddUserRequestJSON(QObject *parent=0);
+}
 
-    QByteArray getJson() const;
+QString SettingsStorage::getFileName()
+{
+    return m_filename;
+}
 
-    bool parseJson(const QByteArray&);
-};
+void SettingsStorage::setFileName(const QString &filename)
+{
+    m_filename = filename;
+}
 
+void SettingsStorage::setValue(const QString &key, const QVariant &value, const QString &group)
+{
+    QSettings settings(m_filename, QSettings::IniFormat);
+    settings.beginGroup(group);
+    settings.setValue(key, value);
+    settings.endGroup();
+}
 
+QVariant SettingsStorage::getValue(const QString &key, const QVariant &defaultValue)
+{
+    QSettings settings(m_filename, QSettings::IniFormat);
+    QVariant value = settings.value(key, defaultValue);
+    return value;
+}
 
+SettingsStorage::~SettingsStorage()
+{
+}
 
-// ADDUSERREQUESTJSON_H
-#endif

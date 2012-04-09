@@ -28,49 +28,47 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! --------------------------------------------------------------------------
- * \file   SettingsStorage.cpp
- * \brief  Implementation of SettingStorage Class
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
- * --------------------------------------------------------------------------- */
+ * ---------------------------------------------------------------- */
 
-#include "SettingsStorage.h"
+#include "AddUserRequestJSON.h"
+#include "JsonUser.h"
 
-#include <QString>
-#include <QVariant>
-#include <QSettings>
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
-SettingsStorage::SettingsStorage(const QString &filename)
-    : m_filename(filename)
+AddUserRequestJSON::AddUserRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
-QString SettingsStorage::getFileName()
+QByteArray AddUserRequestJSON::getJson() const
 {
-    return m_filename;
+    QJson::Serializer serializer;
+    QVariantMap obj;
+    obj.insert("email", m_usersContainer->at(0)->getEmail());
+    obj.insert("login", m_usersContainer->at(0)->getLogin());
+    obj.insert("password", m_usersContainer->at(0)->getPassword());
+    return serializer.serialize(obj);
 }
 
-void SettingsStorage::setFileName(const QString &filename)
+bool AddUserRequestJSON::parseJson(const QByteArray &data)
 {
-    m_filename = filename;
-}
+    clearContainers();
 
-void SettingsStorage::setValue(const QString &key, const QVariant &value, const QString &group)
-{
-    QSettings settings(m_filename, QSettings::IniFormat);
-    settings.beginGroup(group);
-    settings.setValue(key, value);
-    settings.endGroup();
-}
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if (!ok) return false;
 
-QVariant SettingsStorage::getValue(const QString &key, const QVariant &defaultValue)
-{
-    QSettings settings(m_filename, QSettings::IniFormat);
-    QVariant value = settings.value(key, defaultValue);
-    return value;
-}
-
-SettingsStorage::~SettingsStorage()
-{
+    QString email = result["email"].toString();
+    QString login = result["login"].toString();
+    QString password = result["password"].toString();
+    m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login, password, "unknown",email)));
+    return true;
 }

@@ -95,7 +95,8 @@ SOURCES += \
            src/RegisterUserRequestJSON.cpp \
            src/RegisterUserResponseJSON.cpp \
            src/ErrnoInfoResponseJSON.cpp \
-	   src/VersionResponseJSON.cpp
+	   src/VersionResponseJSON.cpp \
+    src/AddUserRequestJSON.cpp
 
 LIBS    +=  -lcommon -lqjson
 

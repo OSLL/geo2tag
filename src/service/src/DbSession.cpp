@@ -42,6 +42,7 @@
 #include <syslog.h>
 #include <stdlib.h>
 #include "defines.h"
+#include "SettingsStorage.h"
 #include "DbSession.h"
 
 #include "LoginRequestJSON.h"
@@ -605,6 +606,7 @@ namespace common
     // Look for user with the same name
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+
     for(int i=0; i<currentUsers.size(); i++)
     {
       if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
@@ -614,6 +616,12 @@ namespace common
         syslog(LOG_INFO, "answer: %s", answer.data());
         return answer;
       }
+    }
+
+    if(m_queryExecutor->doesUserWithGivenEmailExist(dummyUser)) {
+        response.setErrno(EMAIL_ALREADY_EXIST_ERROR);
+        answer.append(response.getJson());
+        return answer;
     }
 
     syslog(LOG_INFO, "Sending sql request for AddUser");
@@ -1373,8 +1381,11 @@ namespace common
     VersionResponseJSON response;
     QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
 
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString version = storage.getValue("General_Settings/geo2tag_version").toString();
+
     response.setErrno(SUCCESS);
-    response.setVersion(GEO2TAG_VERSION);
+    response.setVersion(version);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;

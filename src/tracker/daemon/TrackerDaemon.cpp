@@ -50,6 +50,7 @@
 #endif
 
 #include "defines.h"
+#include "SettingsStorage.h"
 
 #define DAEMON_PORT 34243
 
@@ -108,8 +109,11 @@ void TrackerDaemon::run()
 
   qDebug() << "Read from QSettings " << login << " ,"<< password << " ," <<m_channelName;
 
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+  QString tracker_tag_label = storage.getValue("Tracker_Settings/tracker_tag_label").toString();
+
   if(m_visibleName.isEmpty())
-    m_visibleName = TRACKER_TAG_LABEL;
+    m_visibleName = tracker_tag_label;
 
   if(login.isEmpty())
     login = DEFAULT_USER_NAME;

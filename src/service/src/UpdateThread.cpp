@@ -333,8 +333,12 @@ void UpdateThread::checkTmpUsers()
 
     // Deleting old signups
     QString strQuery;
+
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString timelife = storage.getValue("Registration_Settings/tmp_user_timelife", QVariant(DEFAULT_TMP_USER_TIMELIFE)).toString();
+
     strQuery.append("select id from signups where (now() - datetime) >= INTERVAL '");
-    strQuery.append(DEFAULT_TMP_USER_TIMELIFE);
+    strQuery.append(timelife);
     strQuery.append("';");
     checkQuery.exec(strQuery.toStdString().c_str());
     while (checkQuery.next()) {
