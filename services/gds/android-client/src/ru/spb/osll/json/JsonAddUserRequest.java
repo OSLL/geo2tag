@@ -49,11 +49,13 @@ import static ru.spb.osll.json.IRequest.IAddUser.*;
 public class JsonAddUserRequest extends JsonBaseRequest {
 	private String m_login;
 	private String m_password;
+	private String m_email;
 	private String m_serverUrl;
 	
-	public JsonAddUserRequest(String login, String password, String serverUrl){
+	public JsonAddUserRequest(String login, String password, String email, String serverUrl){
 		m_login = login;
 		m_password = password;
+		m_email = email;
 		m_serverUrl = serverUrl;
 	}
 
@@ -63,6 +65,7 @@ public class JsonAddUserRequest extends JsonBaseRequest {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(LOGIN, m_login);
 		jsonObject.put(PASSWORD, m_password);
+		jsonObject.put(EMAIL, m_email);
 		Log.v(JSON_LOG, jsonObject.toString());
 		return JsonBase.instance().doRequest(jsonObject, new URI(m_serverUrl + REQUEST));
 	}

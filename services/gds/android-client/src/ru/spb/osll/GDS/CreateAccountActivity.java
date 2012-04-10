@@ -148,7 +148,7 @@ public class CreateAccountActivity extends Activity {
 		// Add user
 		JSONObject JSONResponse = null;
 		for(int i = 0; i < 1; i++){
-			JSONResponse = new JsonAddUserRequest(login, password, serverUrl).doRequest();
+			JSONResponse = new JsonAddUserRequest(login, password, login, serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;
 		}
