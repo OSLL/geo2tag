@@ -32,7 +32,7 @@ public class GDSUtil {
 	public static final int RELEVANT_PERIOD_IN_HOURS = 240;
 	public static final int TRACKING_INTERVAL = 15;
 	
-	private static final String DATE_FORMAT = "dd MM yyyy HH:MM:ss.SSS";
+	private static final String DATE_FORMAT = "dd MM yyyy HH:mm:ss.SSS";
 	private static final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 	private static final DateFormat dateUtcFormat;
 	static {

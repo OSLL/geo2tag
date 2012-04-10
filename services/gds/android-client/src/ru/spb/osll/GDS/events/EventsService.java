@@ -131,7 +131,6 @@ public class EventsService extends Service {
 		String serverUrl = m_settings.getServerUrl();
 		JSONObject JSONResponse = null;
 		for(int i = 0; i < GDSUtil.ATTEMPTS; i++) {
-			Log.v(EventsManager.LOG, "date: " + (new Date()).toString());
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			calendar.add(Calendar.YEAR, 1); // just in case
@@ -139,8 +138,6 @@ public class EventsService extends Service {
 			calendar.add(Calendar.YEAR, -1); // return current date
 			calendar.add(Calendar.HOUR, - GDSUtil.RELEVANT_PERIOD_IN_HOURS);
 			String timeFrom = GDSUtil.getUtcTime(calendar.getTime());
-			Log.v(EventsManager.LOG, "from: " + timeFrom.toString());
-			Log.v(EventsManager.LOG, "to: " + timeTo.toString());
 			JSONResponse = new JsonFilterCircleRequest(m_authToken,
 					location.getLatitude(), location.getLongitude(),
 					GDSUtil.EVENTS_RADIUS, timeFrom, timeTo,
@@ -158,8 +155,7 @@ public class EventsService extends Service {
 				response.parseJson(JSONResponse);
 				List<Channel> channels = response.getChannelsData();
 				for (Channel channel : channels) {
-					if (channel.getName().compareTo("Events") == 0) {
-						
+					if (channel.getName().compareTo("Events") == 0) {	
 						if (GDSUtil.NOT_RECEIVE_OWN_EVENTS) {
 							Iterator<Mark> iter = channel.getMarks().iterator();
 							String login = m_settings.getLogin();
