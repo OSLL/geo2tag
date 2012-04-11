@@ -57,6 +57,7 @@ class QueryExecutor : public QObject
     bool connect();
 
     qlonglong nextUserKey() const;
+    qlonglong nextSessionKey() const;
     qlonglong nextChannelKey() const;
     qlonglong nextTagKey() const;
     qlonglong nextTimeSlotKey() const;
@@ -66,13 +67,16 @@ class QueryExecutor : public QObject
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
-    QSharedPointer<common::User> doesTmpUserExist(const QSharedPointer<common::User> &user); // for User Registration
+    QSharedPointer<common::User> doesTmpUserExist(const QSharedPointer<common::User> &user);
     bool                     doesUserWithGivenEmailExist(const QSharedPointer<common::User> &user);
-    bool                     deleteTmpUser(const QSharedPointer<common::User> &user);       // for User Registration
-    QSharedPointer<common::User>  insertNewTmpUser(const QSharedPointer<common::User> &user);    // for User Registration
-    bool                     doesRegistrationTokenExist(const QString &token);              // for Request Confirmation
-    bool                     insertTmpUserIntoUsers(const QString &token);                 // for Request Confirmation
-    bool                     deleteTmpUser(const QString &token);                           // for Request Confirmation
+    bool                     deleteTmpUser(const QSharedPointer<common::User> &user);
+    QSharedPointer<common::User>  insertNewTmpUser(const QSharedPointer<common::User> &user);
+    bool                     doesRegistrationTokenExist(const QString &token);
+    bool                     insertTmpUserIntoUsers(const QString &token);
+    bool                     deleteTmpUser(const QString &token);
+    bool                     insertNewSession(const QSharedPointer<common::User>& user);      // for Sessions
+    bool                     doesSessionExist(const QSharedPointer<common::User>& user);      // for Sessions
+    bool                     updateSessionForUser(const QSharedPointer<common::User>& user);  // for Sessions
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
     QSharedPointer<common::User>    insertNewUser(const QSharedPointer<common::User>&);
     QSharedPointer<Channel>  insertNewChannel(const QSharedPointer<Channel>&);

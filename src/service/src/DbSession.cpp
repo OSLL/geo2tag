@@ -366,6 +366,14 @@ namespace common
       response.addUser(realUser);
     }
 
+    if (!m_queryExecutor->doesSessionExist(realUser)) {
+        syslog(LOG_INFO, "Session doesn't exist. Inserting new session...");
+        m_queryExecutor->insertNewSession(realUser);
+    } else {
+        syslog(LOG_INFO, "Session has already existed. Updating session...");
+        m_queryExecutor->updateSessionForUser(realUser);
+    }
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;

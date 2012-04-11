@@ -89,6 +89,7 @@ void UpdateThread::run()
     TimeSlots   timeSlotsContainer(*m_timeSlotsContainer);
 
     checkTmpUsers();
+    checkSessions();
     loadUsers(usersContainer);
     loadTags(tagsContainer);
     loadChannels(channelsContainer);
@@ -353,6 +354,48 @@ void UpdateThread::checkTmpUsers()
             m_database.rollback();
         } else {
             syslog(LOG_INFO,"Commit for DeleteTmpUser sql query");
+            m_database.commit();
+        }
+    }
+}
+
+void UpdateThread::checkSessions()
+{
+    QSqlQuery query(m_database);
+    QString strQuery;
+    syslog(LOG_INFO,"checkSessions query is running now...");
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString livelimit = storage.getValue("General_Settings/user_life_limit", QVariant(DEFAULT_USER_LIFELIMIT)).toString();
+    strQuery.append("select id, login from sessions where (now() - last_access_time) >= INTERVAL '");
+    strQuery.append(livelimit);
+    strQuery.append("';");
+    query.exec(strQuery.toStdString().c_str());
+    while (query.next()) {
+        QString id = query.value(0).toString();
+        QString login = query.value(1).toString();
+        query.prepare("delete from sessions where id = :id;");
+        query.bindValue(":id", id);
+        syslog(LOG_INFO,"Deleting: %s", query.lastQuery().toStdString().c_str());
+        m_database.transaction();
+        bool result = query.exec();
+        if(!result) {
+            syslog(LOG_INFO,"Rollback for DeleteSession sql query");
+            m_database.rollback();
+            return;
+        } else {
+            syslog(LOG_INFO,"Commit for DeleteSession sql query");
+            m_database.commit();
+        }
+        query.prepare("delete from users where login = :login;");
+        query.bindValue(":login", login);
+        syslog(LOG_INFO,"Deleting: %s", query.lastQuery().toStdString().c_str());
+        m_database.transaction();
+        result = query.exec();
+        if(!result) {
+            syslog(LOG_INFO,"Rollback for DeleteUser sql query");
+            m_database.rollback();
+        } else {
+            syslog(LOG_INFO,"Commit for DeleteUser sql query");
             m_database.commit();
         }
     }

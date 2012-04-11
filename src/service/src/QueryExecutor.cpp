@@ -86,6 +86,11 @@ qlonglong QueryExecutor::nextUserKey() const
   return nextKey("users_seq");
 }
 
+qlonglong QueryExecutor::nextSessionKey() const
+{
+    return nextKey("sessions_seq");
+}
+
 
 qlonglong QueryExecutor::nextChannelKey() const
 {
@@ -371,6 +376,70 @@ bool QueryExecutor::deleteTmpUser(const QString &token)
     return result;
 }
 
+bool QueryExecutor::insertNewSession(const QSharedPointer<common::User> &user)
+{
+    QSqlQuery insertQuery(m_database);
+    qlonglong newId = nextSessionKey();
+    insertQuery.prepare("insert into sessions(id, login, token, last_access_time) values(:id, :login, :token, now());");
+    insertQuery.bindValue(":id", newId);
+    syslog(LOG_INFO,"Sending: %s",insertQuery.lastQuery().toStdString().c_str());
+    insertQuery.bindValue(":login", user->getLogin());
+    syslog(LOG_INFO,"Sending: %s",insertQuery.lastQuery().toStdString().c_str());
+    insertQuery.bindValue(":token", user->getToken());
+    syslog(LOG_INFO,"Sending: %s",insertQuery.lastQuery().toStdString().c_str());
+    m_database.transaction();
+    bool result = insertQuery.exec();
+    if(!result) {
+        syslog(LOG_INFO,"Rollback for NewSession sql query");
+        m_database.rollback();
+        return false;
+    } else {
+        syslog(LOG_INFO,"Commit for NewSession sql query");
+        m_database.commit();
+        return true;
+    }
+}
+
+bool QueryExecutor::doesSessionExist(const QSharedPointer<common::User> &user)
+{
+    QSqlQuery query(m_database);
+    syslog(LOG_INFO, "Checking of session existence in sessions by login: %s", user->getLogin().toStdString().c_str());
+
+    query.prepare("select id from sessions where login = :login;");
+    query.bindValue(":login", user->getLogin());
+    syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
+    query.exec();
+
+    if (query.next()) {
+        syslog(LOG_INFO,"Match found.");
+        return true;
+    } else {
+        syslog(LOG_INFO,"No matching session.");
+        return false;
+    }
+}
+
+bool QueryExecutor::updateSessionForUser(const QSharedPointer<common::User> &user)
+{
+    QSqlQuery updateQuery(m_database);
+    syslog(LOG_INFO, "Updating session for user with login: %s", user->getLogin().toStdString().c_str());
+
+    updateQuery.prepare("update sessions set last_access_time = now() where login = :login;");
+    updateQuery.bindValue(":login", user->getLogin());
+    syslog(LOG_INFO,"Sending: %s",updateQuery.lastQuery().toStdString().c_str());
+    m_database.transaction();
+    bool result = updateQuery.exec();
+    if (!result) {
+        syslog(LOG_INFO,"Rollback for UpdateSession sql query");
+        m_database.rollback();
+        return false;
+    } else {
+        syslog(LOG_INFO,"Commit for UpdateSession sql query");
+        m_database.commit();
+        return true;
+    }
+}
+
 QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<common::User>& user)
 {
   bool result;
@@ -380,7 +449,7 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
     ,user->getPassword().toStdString().c_str());
   QString newToken = generateNewToken(user->getLogin(),user->getPassword());
   //  syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
-  newUserQuery.prepare("insert into users (id,email,login,password,token) values(:id,:email,:login,:password,:a_t);");
+  newUserQuery.prepare("insert into users(id,email,login,password,token) values(:id,:email,:login,:password,:a_t);");
   newUserQuery.bindValue(":id",newId);
   syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
   newUserQuery.bindValue(":email",user->getEmail());
@@ -404,6 +473,7 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
     m_database.commit();
   }
   QSharedPointer<DbUser> newUser(new DbUser(user->getLogin(),user->getPassword(),newId,newToken));
+  insertNewSession(newUser);
   return newUser;
 }
 

@@ -22,6 +22,16 @@ CREATE TABLE users (
   constraint users_pkey primary key (id)
 );
 
+CREATE SEQUENCE sessions_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
+
+CREATE TABLE sessions (
+  id NUMERIC(9,0) NOT NULL DEFAULT nextval('sessions_seq'),
+  login VARCHAR(50) NOT NULL,
+  token VARCHAR(65) NOT NULL,
+  last_access_time TIMESTAMP NOT NULL DEFAULT now(),
+  constraint sessions_pkey primary key (id)
+);
+
 CREATE SEQUENCE tags_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 
 CREATE TABLE tag (
