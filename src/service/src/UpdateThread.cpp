@@ -366,13 +366,13 @@ void UpdateThread::checkSessions()
     syslog(LOG_INFO,"checkSessions query is running now...");
     SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
     QString livelimit = storage.getValue("General_Settings/user_life_limit", QVariant(DEFAULT_USER_LIFELIMIT)).toString();
-    strQuery.append("select id, login from sessions where (now() - last_access_time) >= INTERVAL '");
+    strQuery.append("select id, user_id from sessions where (now() - last_access_time) >= INTERVAL '");
     strQuery.append(livelimit);
     strQuery.append("';");
     query.exec(strQuery.toStdString().c_str());
     while (query.next()) {
-        QString id = query.value(0).toString();
-        QString login = query.value(1).toString();
+        qlonglong id = query.value(0).toLongLong();
+        qlonglong userId = query.value(1).toLongLong();
         query.prepare("delete from sessions where id = :id;");
         query.bindValue(":id", id);
         syslog(LOG_INFO,"Deleting: %s", query.lastQuery().toStdString().c_str());
@@ -386,8 +386,8 @@ void UpdateThread::checkSessions()
             syslog(LOG_INFO,"Commit for DeleteSession sql query");
             m_database.commit();
         }
-        query.prepare("delete from users where login = :login;");
-        query.bindValue(":login", login);
+        query.prepare("delete from users where id = :id;");
+        query.bindValue(":id", userId);
         syslog(LOG_INFO,"Deleting: %s", query.lastQuery().toStdString().c_str());
         m_database.transaction();
         result = query.exec();

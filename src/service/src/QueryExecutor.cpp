@@ -124,6 +124,15 @@ const QString QueryExecutor::generateNewToken(const QString& email, const QStrin
   return result;
 }
 
+const QString QueryExecutor::generateNewToken(const QString& email, const QString& login,const QString& password,const QString& token) const
+{
+  QString log=login+password+email+token;
+  QByteArray toHash(log.toUtf8());
+  toHash=QCryptographicHash::hash(log.toUtf8(),QCryptographicHash::Md5);
+  QString result(toHash.toHex());
+  syslog(LOG_INFO,"TOken = %s",result.toStdString().c_str());
+  return result;
+}
 
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
@@ -283,7 +292,7 @@ QSharedPointer<common::User> QueryExecutor::insertNewTmpUser(const QSharedPointe
     qlonglong newId = nextUserKey();
     syslog(LOG_INFO,"Generating token for new signup, %s : %s",user->getLogin().toStdString().c_str()
                                                             ,user->getPassword().toStdString().c_str());
-    QString newToken = generateNewToken(user->getEmail(), user->getLogin(),user->getPassword());
+    QString newToken = generateNewToken(user->getEmail(), user->getLogin(), user->getPassword(), user->getToken());
     newSignupQuery.prepare("insert into signups (id,email,login,password,registration_token,sent) values(:id,:email,:login,:password,:r_token,:sent);");
     newSignupQuery.bindValue(":id", newId);
     syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
@@ -378,14 +387,30 @@ bool QueryExecutor::deleteTmpUser(const QString &token)
 
 bool QueryExecutor::insertNewSession(const QSharedPointer<common::User> &user)
 {
+    QSqlQuery checkQuery(m_database);
+    qlonglong userId;
+    syslog(LOG_INFO, "Checking of user existence in users by login: %s", user->getLogin().toStdString().c_str());
+    checkQuery.prepare("select id from users where login = :login;");
+    checkQuery.bindValue(":login", user->getLogin());
+    checkQuery.exec();
+
+    if (checkQuery.next()) {
+        syslog(LOG_INFO,"Match found.");
+        userId = checkQuery.value(0).toLongLong();
+    } else {
+        syslog(LOG_INFO,"No matching users.");
+        return false;
+    }
+
     QSqlQuery insertQuery(m_database);
     qlonglong newId = nextSessionKey();
-    insertQuery.prepare("insert into sessions(id, login, token, last_access_time) values(:id, :login, :token, now());");
+    QString sessionToken = generateNewToken(user->getEmail(), user->getLogin(), user->getToken());
+    insertQuery.prepare("insert into sessions(id, user_id, session_token, last_access_time) values(:id, :login, :token, now());");
     insertQuery.bindValue(":id", newId);
     syslog(LOG_INFO,"Sending: %s",insertQuery.lastQuery().toStdString().c_str());
-    insertQuery.bindValue(":login", user->getLogin());
+    insertQuery.bindValue(":user_id", userId);
     syslog(LOG_INFO,"Sending: %s",insertQuery.lastQuery().toStdString().c_str());
-    insertQuery.bindValue(":token", user->getToken());
+    insertQuery.bindValue(":session_token", sessionToken);
     syslog(LOG_INFO,"Sending: %s",insertQuery.lastQuery().toStdString().c_str());
     m_database.transaction();
     bool result = insertQuery.exec();
@@ -402,11 +427,25 @@ bool QueryExecutor::insertNewSession(const QSharedPointer<common::User> &user)
 
 bool QueryExecutor::doesSessionExist(const QSharedPointer<common::User> &user)
 {
-    QSqlQuery query(m_database);
-    syslog(LOG_INFO, "Checking of session existence in sessions by login: %s", user->getLogin().toStdString().c_str());
+    QSqlQuery checkQuery(m_database);
+    qlonglong userId;
+    syslog(LOG_INFO, "Checking of user existence in users by login: %s", user->getLogin().toStdString().c_str());
+    checkQuery.prepare("select id from users where login = :login;");
+    checkQuery.bindValue(":login", user->getLogin());
+    checkQuery.exec();
 
-    query.prepare("select id from sessions where login = :login;");
-    query.bindValue(":login", user->getLogin());
+    if (checkQuery.next()) {
+        syslog(LOG_INFO,"Match found.");
+        userId = checkQuery.value(0).toLongLong();
+    } else {
+        syslog(LOG_INFO,"No matching users.");
+        return false;
+    }
+
+    QSqlQuery query(m_database);
+
+    query.prepare("select id from sessions where user_id = :user_id;");
+    query.bindValue(":user_id", userId);
     syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
     query.exec();
 
@@ -421,11 +460,26 @@ bool QueryExecutor::doesSessionExist(const QSharedPointer<common::User> &user)
 
 bool QueryExecutor::updateSessionForUser(const QSharedPointer<common::User> &user)
 {
+    QSqlQuery checkQuery(m_database);
+    qlonglong userId;
+    syslog(LOG_INFO, "Checking of user existence in users by login: %s", user->getLogin().toStdString().c_str());
+    checkQuery.prepare("select id from users where login = :login;");
+    checkQuery.bindValue(":login", user->getLogin());
+    checkQuery.exec();
+
+    if (checkQuery.next()) {
+        syslog(LOG_INFO,"Match found.");
+        userId = checkQuery.value(0).toLongLong();
+    } else {
+        syslog(LOG_INFO,"No matching users.");
+        return false;
+    }
+
     QSqlQuery updateQuery(m_database);
     syslog(LOG_INFO, "Updating session for user with login: %s", user->getLogin().toStdString().c_str());
 
-    updateQuery.prepare("update sessions set last_access_time = now() where login = :login;");
-    updateQuery.bindValue(":login", user->getLogin());
+    updateQuery.prepare("update sessions set last_access_time = now() where user_id = :user_id;");
+    updateQuery.bindValue(":user_id", userId);
     syslog(LOG_INFO,"Sending: %s",updateQuery.lastQuery().toStdString().c_str());
     m_database.transaction();
     bool result = updateQuery.exec();
