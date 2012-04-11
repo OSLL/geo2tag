@@ -67,6 +67,7 @@ class UpdateThread: public QThread
   void updateReflections(DataMarks&, common::Users&, Channels&, TimeSlots&);
 
   void checkTmpUsers();
+  void checkSessions();
 
   void sendConfirmationLetter(const QString &, const QString &);
 
