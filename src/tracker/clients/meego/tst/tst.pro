@@ -24,6 +24,7 @@ MarksHistory_TestObj.h \
 ../../../../common/inc/Channel.h \
 ../../../../common/inc/ConcurrentVector.h \
 ../../../../common/inc/defines.h \
+../../../../common/inc/SettingsStorage.h \
 ../../../../common/inc/DataChannel.h
 
 SOURCES += main.cpp \
@@ -33,6 +34,7 @@ SOURCES += main.cpp \
 ../../../../common/src/DataMarks.cpp \
 ../../../../common/src/Channel.cpp \
 ../../../../common/src/defines.cpp \
+../../../../common/src/SettingsStorage.cpp \
 ../../../../json/src/JsonSerializer.cpp \
 ../../../../json/src/JsonUser.cpp \
 ../../../../json/src/JsonDataMark.cpp \
