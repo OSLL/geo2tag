@@ -395,7 +395,7 @@ namespace common
     QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
     syslog(LOG_INFO,"Adding mark with altitude = %f",dummyTag->getAltitude());
     QSharedPointer<User> dummyUser = dummyTag->getUser();
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())               //
     {
@@ -440,6 +440,8 @@ namespace common
     m_dataChannelsMap->insert(realChannel, realTag);
     m_updateThread->unlockWriting();
 
+    m_queryExecutor->updateSessionForUser(realUser);
+
     response.setErrno(SUCCESS);
     response.addTag(realTag);
 
@@ -461,7 +463,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -472,6 +474,9 @@ namespace common
     QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
     response.setChannels(channels);
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -490,7 +495,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -523,6 +528,9 @@ namespace common
     }
     response.setData(feed);
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -543,7 +551,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())
     {
@@ -593,6 +601,9 @@ namespace common
     m_updateThread->unlockWriting();
 
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -668,7 +679,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())
     {
@@ -711,6 +722,9 @@ namespace common
     m_updateThread->unlockWriting();
 
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -730,7 +744,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())
     {
@@ -759,6 +773,9 @@ namespace common
     }
 
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     response.addChannel(realChannel);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
@@ -779,7 +796,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())
     {
@@ -895,6 +912,9 @@ namespace common
     m_updateThread->unlockWriting();
 
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -915,7 +935,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())
     {
@@ -944,6 +964,9 @@ namespace common
     }
 
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     response.addTag(realTag);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
@@ -964,7 +987,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())
     {
@@ -1061,6 +1084,9 @@ namespace common
     m_updateThread->unlockWriting();
 
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -1080,7 +1106,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())
     {
@@ -1130,6 +1156,9 @@ namespace common
     m_updateThread->unlockWriting();
 
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -1149,7 +1178,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())
     {
@@ -1199,6 +1228,9 @@ namespace common
     m_updateThread->unlockWriting();
 
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -1219,7 +1251,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -1227,6 +1259,9 @@ namespace common
       return answer;
     }
     response.setChannels(m_channelsContainer);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
@@ -1246,7 +1281,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
 
     if(realUser.isNull())
     {
@@ -1285,6 +1320,9 @@ namespace common
     m_updateThread->unlockWriting();
 
     response.setErrno(SUCCESS);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -1340,7 +1378,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = m_queryExecutor->doesSessionExist(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -1367,6 +1405,9 @@ namespace common
       }
     }
     response.setDataChannels(feed);
+
+    m_queryExecutor->updateSessionForUser(realUser);
+
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());

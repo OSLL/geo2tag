@@ -425,21 +425,28 @@ bool QueryExecutor::insertNewSession(const QSharedPointer<common::User> &user)
     }
 }
 
-bool QueryExecutor::doesSessionExist(const QSharedPointer<common::User> &user)
+QSharedPointer<common::User> QueryExecutor::doesSessionExist(const QSharedPointer<common::User> &user)
 {
     QSqlQuery checkQuery(m_database);
     qlonglong userId;
+    QString email;
+    QString login;
+    QString password;
+
     syslog(LOG_INFO, "Checking of user existence in users by login: %s", user->getLogin().toStdString().c_str());
-    checkQuery.prepare("select id from users where login = :login;");
+    checkQuery.prepare("select id, email, login, password from users where login = :login;");
     checkQuery.bindValue(":login", user->getLogin());
     checkQuery.exec();
 
     if (checkQuery.next()) {
         syslog(LOG_INFO,"Match found.");
         userId = checkQuery.value(0).toLongLong();
+        email = checkQuery.value(1).toString();
+        login = checkQuery.value(2).toString();
+        password = checkQuery.value(3).toString();
     } else {
         syslog(LOG_INFO,"No matching users.");
-        return false;
+        return QSharedPointer<common::User>(NULL);
     }
 
     QSqlQuery query(m_database);
@@ -451,10 +458,10 @@ bool QueryExecutor::doesSessionExist(const QSharedPointer<common::User> &user)
 
     if (query.next()) {
         syslog(LOG_INFO,"Match found.");
-        return true;
+        return QSharedPointer<common::User>(new common::User(login, password, email));
     } else {
         syslog(LOG_INFO,"No matching session.");
-        return false;
+        return QSharedPointer<common::User>(NULL);
     }
 }
 
