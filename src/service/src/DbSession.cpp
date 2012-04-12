@@ -107,6 +107,9 @@
 #include "FilterBoxRequestJSON.h"
 #include "FilterFenceRequestJSON.h"
 
+#include "FilterChannelRequestJSON.h"
+#include "FilterChannelResponseJSON.h"
+
 #include "ErrnoInfoResponseJSON.h"
 
 #include "VersionResponseJSON.h"
@@ -159,6 +162,7 @@ namespace common
     m_processors.insert("filterRectangle", &DbObjectsCollection::processFilterRectangleQuery);
     m_processors.insert("filterBox", &DbObjectsCollection::processFilterBoxQuery);
     m_processors.insert("filterFence", &DbObjectsCollection::processFilterFenceQuery);
+    m_processors.insert("filterChannel", &DbObjectsCollection::processFilterChannelQuery);
 //  Here also should be something like
 //  m_processors.insert("confirmRegistration-*", &DbObjectsCollection::processFilterFenceQuery);
 
@@ -1386,6 +1390,59 @@ namespace common
 
     response.setErrno(SUCCESS);
     response.setVersion(version);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
+  QByteArray DbObjectsCollection::processFilterChannelQuery(const QByteArray& data)
+  {
+    FilterChannelRequestJSON request;
+    FilterChannelResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+    syslog(LOG_INFO, "point_1");
+
+    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
+    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    syslog(LOG_INFO, "point_2");
+    if(realUser.isNull())
+    {
+      syslog(LOG_INFO, "point_3");
+
+      response.setErrno(WRONG_TOKEN_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+    syslog(LOG_INFO, "point_4");
+
+    QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
+    QSharedPointer<Channel> channel;
+    for(int i = 0; i<channels->size(); i++)
+    {
+      if (channels->at(i)->getName() == request.getChannelName()){
+        channel = channels->at(i);
+        break;
+      }
+    }
+    if (channel.isNull()){
+      response.setErrno(CHANNEL_DOES_NOT_EXIST_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
+    int amount = request.getAmount();
+    tags = tags.count() > amount ? tags.mid(0, amount) : tags;
+
+    response.setData(channel, tags);
+    response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
