@@ -58,7 +58,6 @@ FilterChannelResponseJSON::FilterChannelResponseJSON(QObject *parent) : JsonSeri
 
 QByteArray FilterChannelResponseJSON::getJson() const
 {
-  // TODO
   QJson::Serializer serializer;
   QVariantMap obj;
 
@@ -82,25 +81,23 @@ QByteArray FilterChannelResponseJSON::getJson() const
     jtags.append(jtag);
   }
   channel["items"] = jtags;
-  channel["name"] = "bac1ca"; // TODO get name
+  channel["name"] = m_channel.isNull() ? "" : m_channel->getName();
 
-  obj["errno"] = getErrno();
   obj["channel"] = channel;
+  obj["errno"] = getErrno();
   return serializer.serialize(obj);
 }
 
 
-bool FilterChannelResponseJSON::parseJson(const QByteArray&data)
+bool FilterChannelResponseJSON::parseJson(const QByteArray&)
 {
-  // TODO
+  // TODO TBD
   return false;
 }
 
-void FilterChannelResponseJSON::setTags(QList<QSharedPointer<DataMark> > tags)
+void FilterChannelResponseJSON::setData(QSharedPointer<Channel> channel,
+QList<QSharedPointer<DataMark> > tags)
 {
+  m_channel = channel;
   m_tags = tags;
 }
-
-
-
-

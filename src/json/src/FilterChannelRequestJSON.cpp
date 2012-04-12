@@ -58,13 +58,8 @@ FilterChannelRequestJSON::FilterChannelRequestJSON(QObject *parent) : JsonSerial
 
 QByteArray FilterChannelRequestJSON::getJson() const
 {
-  // TODO
+  // TODO TBD
   return NULL;
-//  QJson::Serializer serializer;
-//  QVariantMap obj;
-//  obj.insert("login", m_usersContainer->at(0)->getLogin());
-//  obj.insert("password", m_usersContainer->at(0)->getPassword());
-//  return serializer.serialize(obj);
 }
 
 
@@ -77,8 +72,11 @@ bool FilterChannelRequestJSON::parseJson(const QByteArray&data)
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok) return false;
 
+  QString authToken = result["auth_token"].toString();
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("none", "none", authToken)));
+
   m_channel = result["channel"].toString();
-  m_amount  = result["amount"].toInt(&ok);
+  m_amount = result["amount"].toInt(&ok);
   return ok;
 }
 
