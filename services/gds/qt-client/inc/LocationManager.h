@@ -56,6 +56,7 @@ public:
 
 
 signals:
+    void positionUpdated();
 
 public slots:
     void satellitePositionUpdated(const QGeoPositionInfo &info);

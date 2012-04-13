@@ -5,11 +5,15 @@
 #include <QGraphicsScene>
 #include <QDebug>
 #include "EventsService.h"
+#include "defines.h"
 
 EventsWidget::EventsWidget(LocationManager *locationManager, QWidget *parent) :
     QWidget(parent),
     m_locationManager(locationManager),
     m_eventsService(locationManager),
+    m_positionIcon(":/data/position32.png"),
+    m_positionOffset(-16, - 16),
+    m_positionObject(0),
     m_eventIcon(":/data/event64.png"),
     m_eventOffset(-32, -32)
 {
@@ -25,7 +29,7 @@ EventsWidget::EventsWidget(LocationManager *locationManager, QWidget *parent) :
 
     QGraphicsScene* scene = new QGraphicsScene(this);
     m_graphicsView = new QGraphicsView(scene, this);
-    m_graphicsView = new QGraphicsView(scene, this);
+    //m_graphicsView = new QGraphicsView(scene);
     m_graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_graphicsView->setVisible(true);
@@ -48,6 +52,8 @@ EventsWidget::EventsWidget(LocationManager *locationManager, QWidget *parent) :
     connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueChanged(int)));
     connect(m_mapWidget, SIGNAL(zoomLevelChanged(qreal)), this, SLOT(mapZoomLevelChanged(qreal)));
     connect(m_mapWidget, SIGNAL(clicked(QPointF)), this, SLOT(onMapWidgetClicked(QPointF)));
+    connect(m_locationManager, SIGNAL(positionUpdated()),
+            this, SLOT(onPositionUpdated()));
 
     /* Initialize events thread */
     connect(&m_eventsThread, SIGNAL(started()),
@@ -56,7 +62,6 @@ EventsWidget::EventsWidget(LocationManager *locationManager, QWidget *parent) :
     qRegisterMetaType<Events>("Events");
     connect(&m_eventsService, SIGNAL(eventsReceived(Events)),
             this, SLOT(onEventsReceived(Events)));
-
 }
 
 EventsWidget::~EventsWidget()
@@ -68,7 +73,7 @@ EventsWidget::~EventsWidget()
 void EventsWidget::initGUI()
 {
     QHBoxLayout *mainLayout = new QHBoxLayout();
-    mainLayout->addWidget(m_graphicsView, 1);
+    mainLayout->addWidget(m_graphicsView);
     mainLayout->addWidget(m_slider);
     this->setLayout(mainLayout);
 }
@@ -91,7 +96,9 @@ void EventsWidget::stopEventsService()
 
 void EventsWidget::sliderValueChanged(int zoomLevel)
 {
+    QGeoCoordinate center = getCenter();
     m_mapWidget->setZoomLevel(zoomLevel);
+    setCenter(center);
 }
 
 void EventsWidget::mapZoomLevelChanged(qreal zoomLevel)
@@ -160,4 +167,53 @@ void EventsWidget::onEventsThreadStarted()
 void EventsWidget::onEventsServiceError(QString error)
 {
     QMessageBox::information(this, "Error", error);
+}
+
+void EventsWidget::onPositionUpdated()
+{
+    qDebug() << "EventsWidget::onPositionUpdated";
+    if (m_positionObject != 0) {
+        m_mapWidget->removeMapObject(m_positionObject);
+        m_positionObject->deleteLater();
+        m_positionObject = 0;
+    }
+
+    QGeoPositionInfo info = m_locationManager->getInfo();
+    if (info.isValid()) {
+        m_positionObject = new QGeoMapPixmapObject(
+                    info.coordinate(), m_positionOffset, m_positionIcon);
+        m_mapWidget->addMapObject(m_positionObject);
+        if (QDateTime::currentDateTime().addSecs( - MAP_CENTERED_PERIOD) > m_lastCentered) {
+            setCenter(info.coordinate());
+            qDebug() << "EventsWidget width: " << this->geometry().width();
+            qDebug() << "MapWidget width: " << m_mapWidget->geometry().width();
+            qDebug() << "Graphics view width: " << m_graphicsView->geometry().width();
+            m_lastCentered = QDateTime::currentDateTime();
+        }
+    }
+}
+
+QGeoCoordinate EventsWidget::getCenter()
+{
+    QGeoCoordinate center = m_mapWidget->center();
+    QPointF position = m_mapWidget->coordinateToScreenPosition(center);
+    QPointF delta = QPointF((m_mapWidget->geometry().width()
+                             - m_graphicsView->geometry().width()) / 2,
+                            (m_mapWidget->geometry().height()
+                             - m_graphicsView->geometry().height()) / 2);
+    QPointF new_position = position - delta;
+    return m_mapWidget->screenPositionToCoordinate(new_position);
+}
+
+void EventsWidget::setCenter(QGeoCoordinate bad_coordinate)
+{
+    QPointF position = m_mapWidget->coordinateToScreenPosition(bad_coordinate);
+    QPointF delta = QPointF((m_mapWidget->geometry().width()
+                             - m_graphicsView->geometry().width()) / 2,
+                            (m_mapWidget->geometry().height()
+                             - m_graphicsView->geometry().height()) / 2);
+    QPointF new_position = position + delta;
+    QGeoCoordinate coordinate =
+            m_mapWidget->screenPositionToCoordinate(new_position);
+    m_mapWidget->setCenter(coordinate);
 }

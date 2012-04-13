@@ -39,6 +39,7 @@
 #include <QGraphicsView>
 #include <QSlider>
 #include <QThread>
+#include <QDateTime>
 
 #include "LocationManager.h"
 #include "EventsService.h"
@@ -56,11 +57,16 @@ class EventsWidget : public QWidget
     QGraphicsView *m_graphicsView;
     QSlider *m_slider;
 
+    QDateTime m_lastCentered;
+
     LocationManager *m_locationManager;
     EventsService m_eventsService;
     QThread m_eventsThread;
     Settings m_settings;
 
+    QPixmap m_positionIcon;
+    QPoint m_positionOffset;
+    QGeoMapPixmapObject *m_positionObject;
 
     QPixmap m_eventIcon;
     QPoint m_eventOffset;
@@ -82,6 +88,9 @@ public slots:
     void onEventsReceived(Events events);
     void onEventsThreadStarted();
     void onEventsServiceError(QString error);
+    void onPositionUpdated();
+    QGeoCoordinate getCenter();
+    void setCenter(QGeoCoordinate coordinate);
 
 private:
     void initGUI();
