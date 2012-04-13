@@ -11,35 +11,55 @@ Rectangle {
         delegate: delegate
         anchors.fill: parent
         model: contact
-    }
+        highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+                 focus: true
+
+
     Component {
         id: delegate
         Rectangle {
+            //color: ListView.isCurrentItem ? "blue" : "#F0F8FF"
             color: "#F0F8FF"
             width: parent.width
-            height: nameText.height + genreText.height + 12
+            height: nameText.height + loginText.height + 12
+
+
+            Image {
+                visible: image==""? false: true
+                id:status
+                source: image
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+
             Text {
+                anchors.left: status.right
                 id: nameText
                 text: customname
          //       font.pointSize: 10
                 font.bold: true
             }
             Text {
-                id: genreText
+                anchors.left: status.right
+                id: loginText
                 anchors.top: nameText.bottom
                 anchors.margins: 3
                 text: "<" + name +">"
            //     font.pointSize: 10
                 color: "blue"
             }
-            Rectangle {
 
-                anchors.top: genreText.bottom
-                anchors.margins: 3
-                width: parent.width
-                height: 5
-                color: "black"
-            }
+
+
+//            Rectangle {
+
+//                anchors.top: loginText.bottom
+//                anchors.margins: 2
+//                width: parent.width
+//                height: 2
+//                color: "black"
+//            }
         }
     }
+}
 }

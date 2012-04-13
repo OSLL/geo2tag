@@ -17,6 +17,7 @@
 #include "Channel.h"
 #include "ContactModel.h"
 #include "SubscribedChannelsQuery.h"
+#include "LoadTagsQuery.h"
 
 class Client : public QObject
 {
@@ -27,6 +28,7 @@ class Client : public QObject
     bool m_trackingPermitted;
 
     QTimer * m_timer;
+    QTimer * m_additionalTimer;
 
     WriteTagQuery * m_addNewMarkQuery;
     SubscribeChannelQuery *m_subscribeChannelQuery;
@@ -41,6 +43,7 @@ class Client : public QObject
     QMap<QSharedPointer<Channel>, QString> m_channels;
     ContactModel * m_contactModel;
     SubscribedChannelsQuery *m_subscibedChannelsQuery;
+    LoadTagsQuery *m_loadTagsQuery;
 
 
     void pause(int msecs);
@@ -87,6 +90,9 @@ class Client : public QObject
     void onHistoryFull();
 
     void constructContactModel();
+    void getTagsRequest();
+    void onGetTags();
+
 
 };
 #endif                                  // CLIENT_H

@@ -13,11 +13,11 @@ Flickable {
     function reg(email, log, pass) {console.debug("try sign up"); Main.onReg(email, log, pass)}
     function incorrect(err){login.notify(err);}
     function entered(name) {login.login=name; login.state="Log out"; notifyDialog.notify("Authorization is successfull");
-        if (recbutton.curStatus=="unknown") {
+   /*     if (recbutton.curStatus=="unknown") {
             recbutton.curStatus="Stop";
             Main.trackingOnOff();
         }
-            recbutton.prevStatus=recbutton.curStatus}
+            recbutton.prevStatus=recbutton.curStatus*/}
     function tracking() {Main.trackingOnOff();}
     function getPosition() {map.getPosition()}
 
@@ -28,15 +28,14 @@ Flickable {
     TrackingSettingsView {id: trackSettings; width:parent.width; height: parent.height;  }
    //Rectangle {color:"cyan";  width: parent.width; height: parent.height}
     MapViewer {id:map; z:-1; width: parent.width; height: parent.height}
-    RecButton {id: recbutton;width: 100; height: 100;  z:5}
-    RecButton {id: herebutton;width: 100; height: 100;  z:5; color:"green"; curStatus: "I'm here"; anchors.top: recbutton.bottom; anchors.topMargin: 10}
+
     NotifyDialog{id: notifyDialog}
     RightPanel{id:rightPanel; z:5}
     Connections { target: login; onAuthrequest: auth(log, pass)}
     Connections {target: login; onSignrequest: reg(email,log,pass)}
-    Connections {target: recbutton; onTrackingRequest: tracking() }
+    //Connections {target: recbutton; onTrackingRequest: tracking() }
     Connections {target: Main; onTrackingStarted: {recbutton.curStatus="Stop"; recbutton.prevStatus="Stop"} }
-    Connections {target: herebutton; onGetPosition: getPosition() }
+    //Connections {target: herebutton; onGetPosition: getPosition() }
     Connections {target: trackSettings; onSettingschanged: Main.changeSettings(interval, permission)}
     Connections {target: rightPanel; onRequestToSubscribe:Main.onSubscribe(channel)}
 

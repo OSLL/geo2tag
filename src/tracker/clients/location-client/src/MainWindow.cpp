@@ -28,8 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
   //contactModel = new ContactModel(this);
-  contactModel.addContact(QSharedPointer<Contact>(new Contact(QSharedPointer<Channel>(new Channel("red","red")), "Regina")));
-  contactModel.addContact(QSharedPointer<Contact>(new Contact(QSharedPointer<Channel>(new Channel("werf54","red")), "Mother")));
+  /*contactModel.addContact(QSharedPointer<Contact>(new Contact(QSharedPointer<Channel>(new Channel("red","red")), "Regina")));
+  contactModel.addContact(QSharedPointer<Contact>(new Contact(QSharedPointer<Channel>(new Channel("werf54","red")), "Mother")));*/
 
   client =new Client(&contactModel, this);
   //   view->rootContext()->setContextProperty("Client", client);

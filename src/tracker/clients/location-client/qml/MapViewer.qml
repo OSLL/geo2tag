@@ -1,29 +1,25 @@
 //import Qt 4.7
 import QtQuick 1.0
 
-
+import com.nokia.symbian 1.1
 import QtMobility.location 1.2
 
 
  Item {
-   /*  width: 500
-     height: 500*/
+     width: 500
+     height: 500
      function getPosition(){
-         positionSource.active=true
          console.debug(positionSource.position.coordinate.latitude)
          map.center=positionSource.position.coordinate
-         map.zoomLevel=15
-         circle.center=positionSource.position.coordinate
-         circle.radius=10
-       //  positionSource.active=false
+   //      map.zoomLevel=15
+
      }
 
     // focus : true
-     PositionSource {
-         id: positionSource
-         updateInterval: 1000
-         active: true
-
+     function drawPins() {
+         var topLeft = map.toCoordinate(Qt.point(0,0))
+         var bottomRight = map.toCoordinate(Qt.point(map.width, map.height))
+        contactModel.drawPins(topLeft.latitude,topLeft.longitude,bottomRight.latitude,bottomRight.longitude, map.width,map.height);
      }
 
 
@@ -41,30 +37,59 @@ import QtMobility.location 1.2
          size.height: parent.height
          zoomLevel: 7
          mapType: Map.StreetMap
-       /*  center: positionSource.position.coordinate /*Coordinate {
+         center: /*positionSource.position.coordinate */Coordinate {
              latitude: 60
              longitude: 30
-         }*/
+         }
 
+         Item {
+             id: pinpointViewContainer
+             anchors.fill:parent
+             Repeater {
+                 id: landmarkPinpointView
+                 model: contactModel
+                 delegate: //landmarkMapDelegate
 
-
-         MapCircle {
-             id : circle
-             center : Coordinate {
-                         latitude : 60
-                         longitude : 30
+                 Component {
+                     id: landmarkMapDelegate
+                     Item {
+                         id:land
+                         width: 20;
+                         height: 30;
+                         x: X - 10
+                         y: Y - 30
+                         Image {
+                             id: mark
+                             source:image
+                         }
+                         visible: mark.source==""? false:true
                      }
-             color : "#80FF0000"
-             radius : 1000.0
-             MapMouseArea {
-                 onPositionChanged: {
-                     if (mouse.button == Qt.LeftButton)
-                         circle.center = mouse.coordinate
-                     if (mouse.button == Qt.RightButton)
-                         circle.radius = circle.center.distanceTo(mouse.coordinate)
                  }
              }
          }
+
+
+         PositionSource {
+             id: positionSource
+             updateInterval: 1000
+             active: true
+
+         }
+
+         MapImage {
+             id: mylocation
+             visible: true
+             source: "../images/red_mark.svg"
+             coordinate: Coordinate {
+                 latitude: positionSource.position.coordinate.latitude
+                 longitude: positionSource.position.coordinate.longitude
+             }
+             offset.x: 10
+             offset.y: -30
+             z:20
+         }
+
+
 
          MapMouseArea {
              property int lastX : -1
@@ -77,6 +102,7 @@ import QtMobility.location 1.2
              onReleased : {
                  lastX = -1
                  lastY = -1
+                 drawPins()
              }
              onPositionChanged: {
                  if (mouse.button == Qt.LeftButton) {
@@ -87,29 +113,61 @@ import QtMobility.location 1.2
                      }
                      lastX = mouse.x
                      lastY = mouse.y
+
                  }
+                  drawPins()
              }
-             onDoubleClicked: {
-                 map.center = mouse.coordinate
-                 map.zoomLevel += 1
-                 lastX = -1
-                 lastY = -1
-             }
+//             onDoubleClicked: {
+//                 map.center = mouse.coordinate
+//                 map.zoomLevel += 1
+//                 lastX = -1
+//                 lastY = -1
+//             }
          }
+
      }
 
-     Keys.onPressed: {
-         if (event.key == Qt.Key_Plus) {
-             map.zoomLevel += 1
-         } else if (event.key == Qt.Key_Minus) {
-             map.zoomLevel -= 1
-         } else if (event.key == Qt.Key_T) {
-             if (map.mapType == Map.StreetMap) {
-                 map.mapType = Map.SatelliteMapDay
-             } else if (map.mapType == Map.SatelliteMapDay) {
-                 map.mapType = Map.StreetMap
-             }
-         }
-     }
+  Button {
+      id: plus
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      text: "Zoom +"
+      z: 20
+      onClicked: map.zoomLevel += 1
 
- }
+
+
+    }
+
+  Button {
+      id: minus
+      anchors.left: plus.right
+      anchors.leftMargin: 5
+      anchors.bottom: parent.bottom
+      text: "Zoom -"
+      z: 20
+      onClicked: map.zoomLevel -= 1
+
+
+
+    }
+
+  Button {
+
+      anchors.left: minus.right
+      anchors.bottom: parent.bottom
+      text: "I'm here"
+      anchors.leftMargin: 5
+      z: 20
+      onClicked:  {
+          drawPins();
+
+          map.center=positionSource.position.coordinate
+      }
+
+
+    }
+
+}
+
+

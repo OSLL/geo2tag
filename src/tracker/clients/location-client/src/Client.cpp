@@ -22,6 +22,9 @@ QObject(parent),m_trackInterval(5),
   m_timer = new QTimer(this);
   connect(m_timer, SIGNAL(timeout()), SLOT(track()));
 
+  m_additionalTimer = new QTimer(this);
+  connect(m_additionalTimer, SIGNAL(timeout()),SLOT(getTagsRequest()));
+
 
 
   m_loginQuery = new LoginQuery(this);
@@ -54,6 +57,10 @@ QObject(parent),m_trackInterval(5),
   m_subscibedChannelsQuery = new SubscribedChannelsQuery(this);
   connect(m_subscibedChannelsQuery,SIGNAL(responseReceived()),SLOT(constructContactModel()));
   connect(m_subscibedChannelsQuery,SIGNAL(errorOccured(int)), SLOT(onError(int)));
+
+  m_loadTagsQuery = new LoadTagsQuery(this);
+  connect(m_loadTagsQuery, SIGNAL(tagsReceived()), SLOT(onGetTags()));
+  connect(m_loadTagsQuery,SIGNAL(errorOccured(int)), SLOT(onError(int)));
 
   if (Settings::getInstance().isHavingAuthData())
       auth(Settings::getInstance().getLogin(),Settings::getInstance().getPassword());
@@ -158,9 +165,10 @@ void Client::onAuthentificated()
   Settings::getInstance().setLogin(m_user->getPassword());
   m_authentificated = true;
 
+getTagsRequest();
+  /*m_subscibedChannelsQuery->setQuery(m_user);
+  m_subscibedChannelsQuery->doRequest();*/
 
-  m_subscibedChannelsQuery->setQuery(m_user);
-  m_subscibedChannelsQuery->doRequest();
    emit authentificated(QVariant(m_user->getLogin()));
 }
 
@@ -190,7 +198,7 @@ void Client::onChannelSubscribed(QSharedPointer<Channel> channel)
 {
     qDebug()<<"Channel is subscribed";
     m_channels.insert(channel,"");
-    m_contactModel->addContact(QSharedPointer<Contact>(new Contact(channel,channel->getName())));
+    m_contactModel->addContact(QSharedPointer<Contact>(new Contact(channel->getName(),channel->getName())));
     Settings::getInstance().setCustomName(channel->getName(),channel->getName());
 }
 
@@ -209,7 +217,11 @@ void Client::startTrack()
   if (!m_authentificated) emit authRequest();
   else
   if (!m_timer->isActive())
+  {
     m_timer->start(m_trackInterval*1000);
+    if (m_additionalTimer->isActive())
+        m_additionalTimer->stop();
+  }
 
 }
 
@@ -238,7 +250,10 @@ void Client::track()
 
 void Client::onHistoryFull()
 {
-  if (isOnline() && isAuthentificated()) sendHistory();
+  if (isOnline() && isAuthentificated()) {
+      sendHistory();
+      getTagsRequest();
+  }
 }
 
 
@@ -271,7 +286,10 @@ bool Client::isTracking()
 
 void Client::stopTrack()
 {
-  if (m_timer->isActive()) m_timer->stop();
+  if (m_timer->isActive()) {
+      m_timer->stop();
+      m_additionalTimer->start(m_history->getHistoryLimit()*m_trackInterval*1000);
+  }
   if (isOnline() && isAuthentificated() && !m_history->isEmpty()) sendHistory();
 }
 
@@ -284,7 +302,42 @@ void Client::setHistoryLimit(int sec)
 void Client::constructContactModel()
 {
     for (int i=0;i<m_subscibedChannelsQuery->getChannels()->size();i++)
-        m_contactModel->addContact(QSharedPointer<Contact>(new Contact(m_subscibedChannelsQuery->getChannels()->at(i),
+        m_contactModel->addContact(QSharedPointer<Contact>(new Contact(m_subscibedChannelsQuery->getChannels()->at(i)->getName(),
                                                                        Settings::getInstance().getCustomName(m_subscibedChannelsQuery->getChannels()->at(i)->getName()))));
+    getTagsRequest();
+
+}
+
+void Client::getTagsRequest()
+{
+    m_loadTagsQuery->setQuery(m_user,0,0,40000000);
+    m_loadTagsQuery->doRequest();
+}
+
+void Client::onGetTags()
+{
+    qDebug()<<"Tags is got! contactModel = "<<m_contactModel->getContacts().size();
+    QList<QSharedPointer <Channel> > channels = m_loadTagsQuery->getData().uniqueKeys();
+    for (int i=0; i<channels.size(); i++) {
+        QList<QSharedPointer<DataMark> > data = m_loadTagsQuery->getData().values(channels.at(i));
+        if (!data.isEmpty()) {
+            QSharedPointer<DataMark> mark = data.at(data.size()-1);
+            STATUS_TYPE type = LOST;
+           // m_contactModel->getContacts().at(i)->setLastDataMark(mark);
+
+
+            m_contactModel->getContactByName(channels.at(i)->getName())->setLastDataMark(mark);
+             qDebug()<<"---------------------------------";
+            qDebug()<<"channel name="<<channels.at(i)->getName();
+            qDebug()<<"mark lng="<<mark->getLongitude();
+            qDebug()<<"mark lat="<<mark->getLatitude();
+            qDebug()<<"---------------------------------";
+
+
+        }
+
+
+    }
+
 
 }
