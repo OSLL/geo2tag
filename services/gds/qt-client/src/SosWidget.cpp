@@ -70,8 +70,11 @@ void SosWidget::sos()
 {
     qDebug() << "sos clicked";
     QSharedPointer<DataMark> sosMark;
+    QString description = m_settings.getDescription();
+    if (description.isEmpty())
+        description = "no description";
     sosMark = QSharedPointer<DataMark>(
-               new DataMark(0, 0, 0, "SOS", "SOS", "", QDateTime::currentDateTime()));
+               new DataMark(0, 0, 0, "SOS", description, "", QDateTime::currentDateTime()));
 
     QGeoPositionInfo info = m_locationManager->getInfo();
     if (info.isValid()) {
@@ -91,7 +94,7 @@ void SosWidget::sos()
         m_writeSosQuery->doRequest();
     } else {
         qDebug() << "invalid geo info, waiting and trying again";
-        QTimer::singleShot(3 * 1000, this, SLOT(sos()));
+        QTimer::singleShot(DEFAULT_SOS_PERIOD * 1000, this, SLOT(sos()));
     }
 }
 
@@ -105,7 +108,7 @@ void SosWidget::onError(QString error)
 {
     qDebug() << "error occured during sos, error: " << error;
     // TODO: add to SOS status!
-    QTimer::singleShot(3 * 1000, this, SLOT(sos()));
+    QTimer::singleShot(DEFAULT_SOS_PERIOD * 1000, this, SLOT(sos()));
 }
 
 

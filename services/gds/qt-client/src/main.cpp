@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
  #endif
 
     QApplication app(argc, argv);
+    app.setApplicationName("GeoDoctorSearch");
 
     QFile file(":/data/SliderStyleSheet.qss");
     if (!file.open(QFile::ReadOnly)) {

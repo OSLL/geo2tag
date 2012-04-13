@@ -36,7 +36,7 @@
 package ru.spb.osll.GDS.preferences;
 
 import ru.spb.osll.GDS.R;
-import ru.spb.osll.GDS.preferences.Settings.IGDSSettings;
+import ru.spb.osll.GDS.exception.ExceptionHandler;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -46,16 +46,25 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-public class SettingsActivity extends Activity implements IGDSSettings {
+public class SettingsActivity extends Activity {
+	
+	private Settings m_settings;
+	private EditText m_descriptionEdit;
+	private EditText m_serverUrlEdit;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
+		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 	
 		setTitle("GeoDoctorSearch settings");
+		
+		m_settings = new Settings(this);
+		m_descriptionEdit = (EditText) findViewById(R.id.edit_description);
+		m_serverUrlEdit = (EditText) findViewById(R.id.edit_server_address);
+		
 		initializeFields();
-		//initializeTimeTickBtn();
 		
 		Button btnOk = (Button) findViewById(R.id.button_ok);
 		btnOk.setOnClickListener(new View.OnClickListener() {
@@ -75,45 +84,15 @@ public class SettingsActivity extends Activity implements IGDSSettings {
 			}
 		});
 	}
-	
-	private int m_timeTick;
+
 	private void initializeFields(){
-		//initField(LOGIN, R.id.edit_login);
-		//initField(PASSWORD, R.id.edit_password);
-		//initField(CHANNEL, R.id.edit_channel);
-		//initField(CHANNEL_KEY, R.id.edit_key);
-		initField(SERVER_URL, R.id.edit_server_address);
-		
-		//initCheckBox(IS_HIDE_APP, R.id.checkbox_hide);
-		//initCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick);
+		m_descriptionEdit.setText(m_settings.getDescription());
+		m_serverUrlEdit.setText(m_settings.getServerUrl());
 	}
 	
-//	private void initializeTimeTickBtn(){
-//		m_timeTick = new Settings(this).getPreferences().getInt(TIME_TICK, 0);
-//
-//		Button btnTick = (Button) findViewById(R.id.button_settings_tick);
-//		btnTick.setText(Integer.toString(m_timeTick));
-//		btnTick.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				//new TimeTickDialog(SettingsActivity.this, getIdx(m_timeTick)).show();
-//			}
-//		});
-//	}
-	
 	private void savePreferences(){
-		Editor prefEditor = new Settings(this).getPreferencesEditor();
-		//saveField(LOGIN, R.id.edit_login, prefEditor);
-		//saveField(PASSWORD, R.id.edit_password, prefEditor);
-		//saveField(CHANNEL, R.id.edit_channel, prefEditor);
-		//saveField(CHANNEL_KEY, R.id.edit_key, prefEditor);
-		//saveField(SERVER_URL, R.id.edit_server_address, prefEditor);
-		prefEditor.putInt(TIME_TICK, m_timeTick);
-		
-		//saveCheckBox(IS_HIDE_APP, R.id.checkbox_hide, prefEditor);
-		//saveCheckBox(IS_SHOW_TICKS, R.id.checkbox_tick, prefEditor);
-		
-		prefEditor.commit();
+		m_settings.setDescription(m_descriptionEdit.getText().toString().trim());
+		m_settings.setServerUrl(m_serverUrlEdit.getText().toString().trim());
 	}
 	
 	private Runnable m_saveToast = new Runnable() {
@@ -123,27 +102,15 @@ public class SettingsActivity extends Activity implements IGDSSettings {
 		}
 	};
 
-	private void initField(String key, int idField){
-		SharedPreferences settings = new Settings(this).getPreferences();
-		String str = settings.getString(key, "?????");
-		((EditText) findViewById(idField)).setText(str);
-	}
-
 	private void initCheckBox(String key, int id){
 		SharedPreferences settings = new Settings(this).getPreferences();
 		((CheckBox) findViewById(id)).setChecked(settings.getBoolean(key, false));
-	}
-
-	private void saveField(String key, int idField, Editor prefEditor){
-		String str = ((EditText) findViewById(idField)).getText().toString().trim();
-		prefEditor.putString(key, str);
 	}
 
 	private void saveCheckBox(String key, int id, Editor prefEditor){
 		boolean status = ((CheckBox) findViewById(id)).isChecked();
 		prefEditor.putBoolean(key, status);
 	}
-
 
 	String[] args = {"1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "60"};
 	private int getIdx(int val){
@@ -153,6 +120,22 @@ public class SettingsActivity extends Activity implements IGDSSettings {
 		}
 		return 0;
 	}
+	
+	//private int m_timeTick;
+	
+//	private void initializeTimeTickBtn(){
+//	m_timeTick = new Settings(this).getPreferences().getInt(TIME_TICK, 0);
+//
+//	Button btnTick = (Button) findViewById(R.id.button_settings_tick);
+//	btnTick.setText(Integer.toString(m_timeTick));
+//	btnTick.setOnClickListener(new View.OnClickListener() {
+//		@Override
+//		public void onClick(View v) {
+//			//new TimeTickDialog(SettingsActivity.this, getIdx(m_timeTick)).show();
+//		}
+//	});
+//}
+	
 	/*
 	class TimeTickDialog extends RadioButtonDialog{
 		public TimeTickDialog(Context context, int selectedItem) {

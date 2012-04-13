@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012  OSLL osll@osll.spb.ru
+ * Copyright 2012  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,49 +28,39 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! --------------------------------------------------------------------------
- * \file   SettingsStorage.cpp
- * \brief  Implementation of SettingStorage Class
+
+/*! ---------------------------------------------------------------
+ * \file FilterChannelRequestJSON.h
+ * \brief Header of FilterChannelRequestJSON
+ * \todo add comment here
+ *
+ * File description
  *
  * PROJ: OSLL/geo2tag
- * --------------------------------------------------------------------------- */
+ * ---------------------------------------------------------------- */
 
-#include "SettingsStorage.h"
 
-#include <QString>
-#include <QVariant>
-#include <QSettings>
+#ifndef _FilterChannelRequestJSON_H_796EB5EC_74E0_4EA2_A43C_7F6F850122D5_INCLUDED_
+#define _FilterChannelRequestJSON_H_796EB5EC_74E0_4EA2_A43C_7F6F850122D5_INCLUDED_
 
-SettingsStorage::SettingsStorage(const QString &filename)
-    : m_filename(filename)
+#include "JsonSerializer.h"
+
+class FilterChannelRequestJSON: public JsonSerializer
 {
-}
+private:
+  QString m_channel;
+  int m_amount;
 
-QString SettingsStorage::getFileName()
-{
-    return m_filename;
-}
+public:
+  FilterChannelRequestJSON(QObject *parent = 0);
 
-void SettingsStorage::setFileName(const QString &filename)
-{
-    m_filename = filename;
-}
+  QByteArray getJson() const;
 
-void SettingsStorage::setValue(const QString &key, const QVariant &value, const QString &group)
-{
-    QSettings settings(m_filename, QSettings::IniFormat);
-    settings.beginGroup(group);
-    settings.setValue(key, value);
-    settings.endGroup();
-}
+  bool parseJson(const QByteArray&);
 
-QVariant SettingsStorage::getValue(const QString &key, const QVariant &defaultValue)
-{
-    QSettings settings(m_filename, QSettings::IniFormat);
-    QVariant value = settings.value(key, defaultValue);
-    return value;
-}
+  QString getChannelName();
 
-SettingsStorage::~SettingsStorage()
-{
-}
+  int getAmount();
+};
+
+#endif //_FilterChannelRequestJSON_H_796EB5EC_74E0_4EA2_A43C_7F6F850122D5_INCLUDED_

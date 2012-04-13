@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QTextEdit>
 #include "Settings.h"
 
 class SettingsWidget : public QWidget
@@ -13,6 +14,7 @@ class SettingsWidget : public QWidget
     Settings m_settings;
 
     // GUI
+    QTextEdit *m_description;
     QLineEdit *m_serverUrlEdit;
     QPushButton *m_okButton;
     QPushButton *m_cancelButton;

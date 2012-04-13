@@ -1,22 +1,14 @@
 #include <QSettings>
 #include <QDebug>
 #include "defines.h"
+#include "SettingsStorage.h"
+
 
 QString getServerUrl()
 {
-  QSettings settings(QSettings::SystemScope,"osll","libs");
-  if (settings.value("server_url").toString().isEmpty())
-  {
-    return DEFAULT_SERVER;
-  }
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
 
-  QString serverUrl=settings.value("server_url").toString();
-
-  if(serverUrl == "")
-  {
-    serverUrl = DEFAULT_SERVER;
-    setServerUrl(serverUrl);
-  }
+  QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
 
   return serverUrl;
 }
@@ -31,13 +23,9 @@ void setServerUrl(QString serverUrl)
 
 int getServerPort()
 {
-  QSettings settings(QSettings::SystemScope,"osll","libs");
-  if (settings.value("server_port").toInt()==0)
-  {
-    return DEFAULT_PORT;
-  }
-  int serverPort = DEFAULT_PORT;
-  setServerPort(serverPort);
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+
+  int serverPort = storage.getValue("General_Settings/server_port", QVariant(DEFAULT_PORT)).toInt();
 
   return serverPort;
 }

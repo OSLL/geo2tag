@@ -46,7 +46,8 @@ HEADERS += \
     inc/FShapePolygon.h \
     inc/FShapeRectangle.h \
     inc/Region.h \
-    inc/signals.h
+    inc/signals.h \
+    inc/SettingsStorage.h
 
 SOURCES += \
     src/TimeSlot.cpp \
@@ -64,7 +65,8 @@ SOURCES += \
     src/FShapePolygon.cpp \
     src/FShapeRectangle.cpp \
     src/Region.cpp \ 
-    src/signals.cpp
+    src/signals.cpp \
+    src/SettingsStorage.cpp
 
 linux: {
     HEADERS += inc/GpsModeller.h

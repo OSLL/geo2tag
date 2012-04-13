@@ -46,7 +46,6 @@
 #include <QtSql>
 #include <QThread>
 #include <QMap>
-#include <QSettings>
 //#include </usr/include/qt4/QtSql/qsql_psql.h>
 #include "DataMarks.h"
 #include "Channel.h"
@@ -114,6 +113,8 @@ namespace common
     QByteArray processFilterRectangleQuery(const QByteArray&);
     QByteArray processFilterBoxQuery(const QByteArray&);
     QByteArray processFilterFenceQuery(const QByteArray&);
+    QByteArray processFilterChannelQuery(const QByteArray&);
+
 
 //    void processSendConfirmationLetter(const QString &address);
 

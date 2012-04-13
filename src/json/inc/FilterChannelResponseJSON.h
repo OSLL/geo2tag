@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2012  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,38 +29,36 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#ifndef LOCATIONMANAGER_H
-#define LOCATIONMANAGER_H
+/*! ---------------------------------------------------------------
+ * \file FilterChannelResponseJSON.h
+ * \brief Header of FilterChannelResponseJSON
+ * \todo add comment here
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include <QObject>
-#include <QGeoPositionInfoSource>
-#include <QGeoPositionInfo>
-#include <QMutex>
 
-QTM_USE_NAMESPACE
+#ifndef _FilterChannelResponseJSON_H_D06843F4_D6CB_4B9E_B538_74F7B2E8D42A_INCLUDED_
+#define _FilterChannelResponseJSON_H_D06843F4_D6CB_4B9E_B538_74F7B2E8D42A_INCLUDED_
 
-class LocationManager : public QObject
+#include "JsonSerializer.h"
+
+class FilterChannelResponseJSON: public JsonSerializer
 {
-    Q_OBJECT
-
-    QGeoPositionInfoSource *m_satelliteSource;
-    QGeoPositionInfoSource *m_nonSatelliteSource;
-    QGeoPositionInfo m_satelliteInfo;
-    QGeoPositionInfo m_nonSatelliteInfo;
-    QMutex m_infoMutex;
+private:
+  QList<QSharedPointer<DataMark> > m_tags;
+  QSharedPointer<Channel> m_channel;
 
 public:
-    explicit LocationManager(QObject *parent = 0);
-    QGeoPositionInfo getInfo();
-    bool isInfoValid();
+  FilterChannelResponseJSON(QObject *parent = 0);
 
+  QByteArray getJson() const;
 
-signals:
+  bool parseJson(const QByteArray&);
 
-public slots:
-    void satellitePositionUpdated(const QGeoPositionInfo &info);
-    void nonSatellitePositionUpdated(const QGeoPositionInfo &info);
-
+  void setData(QSharedPointer<Channel> channel, QList<QSharedPointer<DataMark> > tags);
 };
 
-#endif // LOCATIONMANAGER_H
+#endif //_FilterChannelResponseJSON_H_D06843F4_D6CB_4B9E_B538_74F7B2E8D42A_INCLUDED_

@@ -2,6 +2,7 @@ package ru.spb.osll.GDS.maps;
 
 import java.util.ArrayList;
 
+import ru.spb.osll.GDS.GDSUtil;
 import ru.spb.osll.objects.Mark;
 
 import android.app.AlertDialog;
@@ -42,7 +43,9 @@ public class EventsItemizedOverlay extends ItemizedOverlay {
 		MarkOverlayItem item = m_items.get(index);
 		AlertDialog.Builder dialog = new AlertDialog.Builder(m_context);
 		dialog.setTitle(item.getMark().getTitle());
-		dialog.setMessage(item.getMark().getDescription());
+		dialog.setMessage(item.getMark().getUser() + " ("
+				+ GDSUtil.getTimeFromUtcString(item.getMark().getTime()) + "):\n"
+				+ item.getMark().getDescription());
 		dialog.show();
 	return true;
 	}

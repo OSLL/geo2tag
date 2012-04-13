@@ -47,15 +47,12 @@ QString getServerUrl();
 void setServerUrl(QString serverUrl);
 int getServerPort();
 void setServerPort(int port);
-#define DEFAULT_SERVER "http://tracks.osll.spb.ru:81/"
-#define DEFAULT_PORT 81
 
 // "demo"
 #define SETTINGS_STORAGE_FILENAME "/opt/geo2tag/geo2tag.conf"
 
-#define GEO2TAG_VERSION "0.16"
-
-#define DATABASE_NAME "geo2tag"
+//#define GEO2TAG_VERSION "0.16"
+//#define DATABASE_NAME "geo2tag"
 
 #define SUBSCRIBE_HTTP_URL        getServerUrl()+QString("service/subscribe")
 #define UNSUBSCRIBE_HTTP_URL      getServerUrl()+QString("service/unsubscribe")
@@ -70,26 +67,28 @@ void setServerPort(int port);
 #define VERSION_HTTP_URL          getServerUrl()+QString("service/version")
 
 #define GPS_MODELLER_FILE         "/usr/share/wikigps/helsinki.gpx"
-#define CONFIG_FILE               "/usr/share/wikigps/wikigps.conf"
+//#define CONFIG_FILE               "/usr/share/wikigps/wikigps.conf"
+
+// Default values
+#define DEFAULT_SERVER "http://tracks.osll.spb.ru:81/"
+#define DEFAULT_PORT 81
 
 #define DEFAULT_RADIUS            30
 #define DEFAULT_USER_NAME         "Mark"
 #define DEFAULT_USER_PASSWORD     "test"
-#define DEFAULT_CHANNEL     "default"
+#define DEFAULT_CHANNEL           "default"
 #define DEFAULT_TOKEN             "2154086390Ivan1128557755"
 
-#define DEFAULT_TMP_USER_TIMELIFE  "2 days"
-
-#define TRACKER_TAG_LABEL   "tracker's tag"
+#define DEFAULT_TMP_USER_TIMELIFE "2 days"
 
 #define DEFAULT_LATITUDE   ((double) 59.91446)
 #define DEFAULT_LONGITUDE  ((double) 30.489442)
 
-#define TRACKER_MSECS_TIMEOUT 500
+//#define TRACKER_TAG_LABEL   "tracker's tag"
+//#define TRACKER_MSECS_TIMEOUT 500
 
-// for email settings
-#define DEFAULT_EMAIL_SUBJECT "Registration confirmation"
-#define DEFAULT_EMAIL_BODY    "This will go into the body of the mail."
+#define DEFAULT_EMAIL_SUBJECT     "Registration confirmation"
+#define DEFAULT_EMAIL_BODY        "This will go into the body of the mail."
 
 #ifndef Q_WS_SYMBIAN
 extern uint qHash(const QPoint & p);

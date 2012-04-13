@@ -1,13 +1,17 @@
 package ru.spb.osll.GDS;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
+
 import ru.spb.osll.objects.Mark;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 public class GDSUtil {
 	
@@ -28,10 +32,32 @@ public class GDSUtil {
 	public static final int RELEVANT_PERIOD_IN_HOURS = 240;
 	public static final int TRACKING_INTERVAL = 15;
 	
+	private static final String DATE_FORMAT = "dd MM yyyy HH:mm:ss.SSS";
+	private static final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+	private static final DateFormat dateUtcFormat;
+	static {
+		dateUtcFormat = new SimpleDateFormat(DATE_FORMAT);
+		dateUtcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
 	
-	private static final DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy HH:MM:ss.SSS");
-	public static String getTime(Date date){
+	public static String getTime(Date date) {
 		return dateFormat.format(date);
+	}
+	
+	public static String getUtcTime(Date date) {
+		return dateUtcFormat.format(date);
+	}
+	
+	public static String getTimeFromUtcString(String time) {
+		try {
+			Date date = dateUtcFormat.parse(time);
+			return date.toString();
+		} catch (ParseException e) {
+			if (DEBUG) {
+				Log.v(LOG, "can't parse UTC time " + time);
+			}
+			return time;
+		}
 	}
 	
 	@SuppressWarnings("static-access")

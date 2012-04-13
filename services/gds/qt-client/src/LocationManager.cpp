@@ -1,34 +1,69 @@
 #include "inc/LocationManager.h"
 #include <QDebug>
+#include <QStringList>
 #include "defines.h"
 
 LocationManager::LocationManager(QObject *parent) :
     QObject(parent)
 {
-    m_source = QGeoPositionInfoSource::createDefaultSource(this);
-    if (m_source) {
-        connect(m_source, SIGNAL(positionUpdated(QGeoPositionInfo)),
-                this, SLOT(positionUpdated(QGeoPositionInfo)));
-        m_source->setUpdateInterval(DEFAULT_LOCATION_TIMEOUT * 1000);
-        m_source->startUpdates();
+    m_satelliteSource = QGeoPositionInfoSource::createDefaultSource(this);
+    qDebug() << "satellite source: " << m_satelliteSource;
+    if (m_satelliteSource) {
+        connect(m_satelliteSource, SIGNAL(positionUpdated(QGeoPositionInfo)),
+                this, SLOT(satellitePositionUpdated(QGeoPositionInfo)));
+        m_satelliteSource->setPreferredPositioningMethods(
+                    QGeoPositionInfoSource::SatellitePositioningMethods);
+        m_satelliteSource->startUpdates();
     } else {
-        qDebug() << "Can't get geo source";
+        qDebug() << "Can't get satellite source";
     }
+
+    m_nonSatelliteSource = QGeoPositionInfoSource::createDefaultSource(this);
+    qDebug() << "non satellite source: " << m_nonSatelliteSource;
+    if (m_nonSatelliteSource) {
+        connect(m_nonSatelliteSource, SIGNAL(positionUpdated(QGeoPositionInfo)),
+                this, SLOT(nonSatellitePositionUpdated(QGeoPositionInfo)));
+        m_nonSatelliteSource->setPreferredPositioningMethods(
+                    QGeoPositionInfoSource::NonSatellitePositioningMethods);
+        m_nonSatelliteSource->startUpdates();
+    } else {
+        qDebug() << "Can't get non satellite source";
+    }
+
 }
 
 QGeoPositionInfo LocationManager::getInfo()
 {
     m_infoMutex.lock();
-    QGeoPositionInfo info = m_info;
+    QGeoPositionInfo info;
+    if (m_satelliteInfo.isValid() && !m_nonSatelliteInfo.isValid()) {
+        info = m_satelliteInfo;
+    } else if (!m_satelliteInfo.isValid() && m_nonSatelliteInfo.isValid()) {
+        info = m_nonSatelliteInfo;
+    } else if (m_satelliteInfo.isValid() && m_nonSatelliteInfo.isValid()) {
+        if (m_satelliteInfo.timestamp() >= m_nonSatelliteInfo.timestamp().addSecs(-60)) {
+            info = m_satelliteInfo;
+        } else {
+            info = m_nonSatelliteInfo;
+        }
+    }
     m_infoMutex.unlock();
     return info;
 }
 
-void LocationManager::positionUpdated(const QtMobility::QGeoPositionInfo &info)
+void LocationManager::satellitePositionUpdated(const QtMobility::QGeoPositionInfo &info)
 {
     m_infoMutex.lock();
-    m_info = info;
-    qDebug() << "Position updated:" << m_info;
+    m_satelliteInfo = info;
+    //qDebug() << "Satellite position updated:" << m_satelliteInfo;
+    m_infoMutex.unlock();
+}
+
+void LocationManager::nonSatellitePositionUpdated(const QtMobility::QGeoPositionInfo &info)
+{
+    m_infoMutex.lock();
+    m_nonSatelliteInfo = info;
+    //qDebug() << "Non satellite position updated:" << m_nonSatelliteInfo;
     m_infoMutex.unlock();
 }
 

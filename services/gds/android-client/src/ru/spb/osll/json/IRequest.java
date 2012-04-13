@@ -49,6 +49,7 @@ public interface IRequest {
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";
+		String EMAIL = "email";
 	}
 
 	public interface IApplyChannel{

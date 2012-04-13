@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,39 +28,47 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*----------------------------------------------------------------- !
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#ifndef LOCATIONMANAGER_H
-#define LOCATIONMANAGER_H
+#include "AddUserRequestJSON.h"
+#include "JsonUser.h"
 
-#include <QObject>
-#include <QGeoPositionInfoSource>
-#include <QGeoPositionInfo>
-#include <QMutex>
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
-QTM_USE_NAMESPACE
-
-class LocationManager : public QObject
+AddUserRequestJSON::AddUserRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
-    Q_OBJECT
+}
 
-    QGeoPositionInfoSource *m_satelliteSource;
-    QGeoPositionInfoSource *m_nonSatelliteSource;
-    QGeoPositionInfo m_satelliteInfo;
-    QGeoPositionInfo m_nonSatelliteInfo;
-    QMutex m_infoMutex;
+QByteArray AddUserRequestJSON::getJson() const
+{
+    QJson::Serializer serializer;
+    QVariantMap obj;
+    obj.insert("email", m_usersContainer->at(0)->getEmail());
+    obj.insert("login", m_usersContainer->at(0)->getLogin());
+    obj.insert("password", m_usersContainer->at(0)->getPassword());
+    return serializer.serialize(obj);
+}
 
-public:
-    explicit LocationManager(QObject *parent = 0);
-    QGeoPositionInfo getInfo();
-    bool isInfoValid();
+bool AddUserRequestJSON::parseJson(const QByteArray &data)
+{
+    clearContainers();
 
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if (!ok) return false;
 
-signals:
-
-public slots:
-    void satellitePositionUpdated(const QGeoPositionInfo &info);
-    void nonSatellitePositionUpdated(const QGeoPositionInfo &info);
-
-};
-
-#endif // LOCATIONMANAGER_H
+    QString email = result["email"].toString();
+    QString login = result["login"].toString();
+    QString password = result["password"].toString();
+    m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login, password, "unknown",email)));
+    return true;
+}

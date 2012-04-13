@@ -37,6 +37,20 @@
 
 #include "LoginRequestJSON.h"
 
-typedef LoginRequestJSON AddUserRequestJSON;
+//typedef LoginRequestJSON AddUserRequestJSON;
+
+class AddUserRequestJSON : public JsonSerializer
+{
+public:
+    AddUserRequestJSON(QObject *parent=0);
+
+    QByteArray getJson() const;
+
+    bool parseJson(const QByteArray&);
+};
+
+
+
+
 // ADDUSERREQUESTJSON_H
 #endif

@@ -59,7 +59,9 @@ HEADERS += \
            inc/RegisterUserRequestJSON.h \
            inc/RegisterUserResponseJSON.h \
            inc/ErrnoInfoResponseJSON.h \
-	   inc/VersionResponseJSON.h 
+           inc/VersionResponseJSON.h \
+           inc/FilterChannelRequestJSON.h \
+           inc/FilterChannelResponseJSON.h             
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \
@@ -95,7 +97,11 @@ SOURCES += \
            src/RegisterUserRequestJSON.cpp \
            src/RegisterUserResponseJSON.cpp \
            src/ErrnoInfoResponseJSON.cpp \
-	   src/VersionResponseJSON.cpp
+           src/VersionResponseJSON.cpp \
+           src/AddUserRequestJSON.cpp \
+           src/FilterChannelRequestJSON.cpp \
+           src/FilterChannelResponseJSON.cpp             
+           
 
 LIBS    +=  -lcommon -lqjson
 

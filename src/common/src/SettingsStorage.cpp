@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,39 +28,50 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+/*! --------------------------------------------------------------------------
+ * \file   SettingsStorage.cpp
+ * \brief  Implementation of SettingStorage Class
+ *
+ * PROJ: OSLL/geo2tag
+ * --------------------------------------------------------------------------- */
 
-#ifndef LOCATIONMANAGER_H
-#define LOCATIONMANAGER_H
+#include "SettingsStorage.h"
 
-#include <QObject>
-#include <QGeoPositionInfoSource>
-#include <QGeoPositionInfo>
-#include <QMutex>
+#include <QString>
+#include <QVariant>
+#include <QSettings>
 
-QTM_USE_NAMESPACE
-
-class LocationManager : public QObject
+SettingsStorage::SettingsStorage(const QString &filename)
+    : m_filename(filename)
 {
-    Q_OBJECT
+}
 
-    QGeoPositionInfoSource *m_satelliteSource;
-    QGeoPositionInfoSource *m_nonSatelliteSource;
-    QGeoPositionInfo m_satelliteInfo;
-    QGeoPositionInfo m_nonSatelliteInfo;
-    QMutex m_infoMutex;
+QString SettingsStorage::getFileName()
+{
+    return m_filename;
+}
 
-public:
-    explicit LocationManager(QObject *parent = 0);
-    QGeoPositionInfo getInfo();
-    bool isInfoValid();
+void SettingsStorage::setFileName(const QString &filename)
+{
+    m_filename = filename;
+}
 
+void SettingsStorage::setValue(const QString &key, const QVariant &value, const QString &group)
+{
+    QSettings settings(m_filename, QSettings::IniFormat);
+    settings.beginGroup(group);
+    settings.setValue(key, value);
+    settings.endGroup();
+}
 
-signals:
+QVariant SettingsStorage::getValue(const QString &key, const QVariant &defaultValue)
+{
+    QSettings settings(m_filename, QSettings::IniFormat);
+    QVariant value = settings.value(key, defaultValue);
+    return value;
+}
 
-public slots:
-    void satellitePositionUpdated(const QGeoPositionInfo &info);
-    void nonSatellitePositionUpdated(const QGeoPositionInfo &info);
+SettingsStorage::~SettingsStorage()
+{
+}
 
-};
-
-#endif // LOCATIONMANAGER_H

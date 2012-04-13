@@ -14,6 +14,14 @@ MainWidget::MainWidget(QWidget *parent) :
     initGUI();
 }
 
+MainWidget::~MainWidget()
+{
+    qDebug() << "Stoping other threads";
+    m_eventsWidget->stopEventsService();
+    m_trackingWidget->stopTracking();
+    qDebug() << "stoped";
+}
+
 void MainWidget::initGUI()
 {
     this->addTab(m_sosWidget, "SOS");

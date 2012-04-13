@@ -116,7 +116,11 @@ void EventsWidget::onMapWidgetClicked(QPointF pos)
             (pos.y() > (center.y() - delta)) &&
             (pos.y() < (center.y() + delta)))
         {
-            QMessageBox::information(this, "SOS message", m_events[i]->getDescription());
+            QString message = QString("%1 (%2):\n%3")
+                    .arg(m_events[i]->getUser()->getLogin(),
+                         m_events[i]->getTime().toLocalTime().toString(),
+                         m_events[i]->getDescription());
+            QMessageBox::information(this, "SOS message", message);
             break;
         }
     }

@@ -46,15 +46,28 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 public class Settings {
-	private Context m_context;
+
+	private static final String GDS_SETTINGS = "gds_settings";
 	private static final String SETTINGS_STATUS = "settings_status"; 
+	
+	/* From settings activity: */
+	private static final String DESCRIPTION = "description";
+	private static final String SERVER_URL = "server_url";
+	
+	/* Application internal settings */
+	private static final String AUTH_TOKEN = "auth_token";
+	private static final String LOGIN = "login";
+	private static final String PASSWORD = "password";
+	private static final String REMEMBER = "remember";
+	
+	private Context m_context;
 	
 	public Settings(Context context){
 		m_context = context;
 	}
 	
 	public SharedPreferences getPreferences(){
-		return m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
+		return m_context.getSharedPreferences(GDS_SETTINGS, 0);
 	}
 	
 	public Editor getPreferencesEditor(){
@@ -79,7 +92,7 @@ public class Settings {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
 			XMLReader xmlreader = parser.getXMLReader();
-			xmlreader.setContentHandler(new ConfigFeedParser(configEditor));
+			xmlreader.setContentHandler(new ConfigFeedParser(this));
 			xmlreader.parse(is);
 		} catch (Exception e) {
 			if (GDSUtil.DEBUG) {
@@ -90,75 +103,68 @@ public class Settings {
 	}
 	
 	public String getAuthToken() {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-		return prefs.getString(IGDSSettings.AUTH_TOKEN, "");
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+		return prefs.getString(AUTH_TOKEN, "");
 	}
 	
 	public void setAuthToken(String authToken) {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-	    prefs.edit().putString(IGDSSettings.AUTH_TOKEN, authToken).commit();
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putString(AUTH_TOKEN, authToken).commit();
 	}
 	
 	public String getLogin() {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-	    return prefs.getString(IGDSSettings.LOGIN, "");
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    return prefs.getString(LOGIN, "");
 	}
 	
 	public void setLogin(String login) {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-	    prefs.edit().putString(IGDSSettings.LOGIN, login).commit();
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putString(LOGIN, login).commit();
 	}
 	
 	public String getPassword() {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-	    return prefs.getString(IGDSSettings.PASSWORD, "");
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    return prefs.getString(PASSWORD, "");
 	}
 	
 	public void setPassword(String password) {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-	    prefs.edit().putString(IGDSSettings.PASSWORD, password).commit();
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putString(PASSWORD, password).commit();
 	}
 	
 	public boolean isRememberMe() {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-	    return prefs.getBoolean(IGDSSettings.REMEMBER, false);
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    return prefs.getBoolean(REMEMBER, false);
 	}
 	
 	public void setRememberMe(boolean status) {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-	    prefs.edit().putBoolean(IGDSSettings.REMEMBER, status).commit();
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putBoolean(REMEMBER, status).commit();
+	}
+	
+	public String getDescription() {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    return prefs.getString(DESCRIPTION, "");
+	}
+	
+	public void setDescription(String description) {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putString(DESCRIPTION, description).commit();
 	}
 	
 	public String getServerUrl() {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-	    return prefs.getString(IGDSSettings.SERVER_URL, "");
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    return prefs.getString(SERVER_URL, "");
 	}
 	
 	public void setServerUrl(String serverUrl) {
-		SharedPreferences prefs = m_context.getSharedPreferences(IGDSSettings.GDS_SETTINGS, 0);
-	    prefs.edit().putString(IGDSSettings.SERVER_URL, serverUrl).commit();
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putString(SERVER_URL, serverUrl).commit();
 	}
 
 	
 	public static SharedPreferences getPreferences(Context c){
 		return new Settings(c).getPreferences();
 	}
-	
-	public interface IGDSSettings{
-		String GDS_SETTINGS = "gds_settings";
-		
-		String AUTH_TOKEN = "auth_token";
-		String LOGIN = "login";
-		String PASSWORD = "password";
-		String REMEMBER = "remember";
-		String CHANNEL = "channel";
-		String CHANNEL_KEY = "channel_key";
-	   	String SERVER_URL = "server_url";
-	   	String TIME_TICK = "time_request";
-		String RADIUS = "radius";
-		String URI = "uri";
-		String IS_SHOW_TICKS = "is_show_ticks";
-		String IS_HIDE_APP = "is_hide_app";
-	}
-		
+			
 }

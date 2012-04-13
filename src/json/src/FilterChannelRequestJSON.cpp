@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Ivan Bezyazychnyy  ivan.bezyazychnyy@gmail.com
+ * Copyright 2012  bac1ca  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,38 +29,63 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-#ifndef LOCATIONMANAGER_H
-#define LOCATIONMANAGER_H
+/*! ---------------------------------------------------------------
+ *
+ * \file FilterChannelRequestJSON.cpp
+ * \brief FilterChannelRequestJSON implementation
+ *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-#include <QObject>
-#include <QGeoPositionInfoSource>
-#include <QGeoPositionInfo>
-#include <QMutex>
+#include "FilterChannelRequestJSON.h"
 
-QTM_USE_NAMESPACE
+#include "JsonUser.h"
 
-class LocationManager : public QObject
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
+
+FilterChannelRequestJSON::FilterChannelRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
-    Q_OBJECT
-
-    QGeoPositionInfoSource *m_satelliteSource;
-    QGeoPositionInfoSource *m_nonSatelliteSource;
-    QGeoPositionInfo m_satelliteInfo;
-    QGeoPositionInfo m_nonSatelliteInfo;
-    QMutex m_infoMutex;
-
-public:
-    explicit LocationManager(QObject *parent = 0);
-    QGeoPositionInfo getInfo();
-    bool isInfoValid();
+}
 
 
-signals:
+QByteArray FilterChannelRequestJSON::getJson() const
+{
+  // TODO TBD
+  return NULL;
+}
 
-public slots:
-    void satellitePositionUpdated(const QGeoPositionInfo &info);
-    void nonSatellitePositionUpdated(const QGeoPositionInfo &info);
 
-};
+bool FilterChannelRequestJSON::parseJson(const QByteArray&data)
+{
+  clearContainers();
 
-#endif // LOCATIONMANAGER_H
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
+
+  QString authToken = result["auth_token"].toString();
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("none", "none", authToken)));
+
+  m_channel = result["channel"].toString();
+  m_amount = result["amount"].toInt(&ok);
+  return ok;
+}
+
+QString FilterChannelRequestJSON::getChannelName()
+{
+  return m_channel;
+}
+
+int FilterChannelRequestJSON::getAmount()
+{
+  return m_amount;
+}

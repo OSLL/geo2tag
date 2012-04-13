@@ -41,16 +41,17 @@
 EventsService::EventsService(LocationManager *locationManager, QObject *parent) :
     QObject(parent),
     m_locationManager(locationManager),
-    m_filterCircleQuery(0)
+    m_filterCircleQuery(0),
+    m_mediaPlayer(0)
 {
-    m_mediaPlayer = new QMediaPlayer(this);
-    m_mediaPlayer->setMedia(QUrl::fromLocalFile(":/data/siren.wav"));
-    m_mediaPlayer->setVolume(50);
 }
 
 EventsService::~EventsService()
 {
-    //delete m_mediaPlayer;
+    if (m_mediaPlayer) {
+        m_mediaPlayer->stop();
+        m_mediaPlayer->deleteLater();
+    }
 }
 
 void EventsService::startService(QString name, QString password, QString authToken, QString serverUrl)
@@ -94,7 +95,7 @@ void EventsService::requestEvents()
         m_filterCircleQuery->doRequest();
     } else {
         qDebug() << "invalid geo info, waitin and trying again";
-        QTimer::singleShot(5 * 1000, this, SLOT(requestEvents()));
+        QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
     }
 }
 
@@ -141,9 +142,16 @@ void EventsService::onTagsReceived()
         }
         if (newEvents) {
             // play alert
-            m_mediaPlayer->stop();
+            if (m_mediaPlayer) {
+                m_mediaPlayer->stop();
+                m_mediaPlayer->deleteLater();
+            }
             qDebug() << "start player";
+            using namespace Phonon;
+#ifdef Q_OS_SYMBIAN
+            m_mediaPlayer = createPlayer(MusicCategory, MediaSource(":/data/siren.wav"));
             m_mediaPlayer->play();
+#endif
             qDebug() << "player finished";
         }
         if (newEvents || expiredEvents) {
@@ -152,12 +160,12 @@ void EventsService::onTagsReceived()
         }
     }
 
-    QTimer::singleShot(5 * 1000, this, SLOT(requestEvents()));
+    QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
 }
 
 void EventsService::onError(QString error)
 {
     qDebug() << "EventsService::onErrorOccured error: " << error;
     emit errorOccured(error);
-    QTimer::singleShot(5 * 1000, this, SLOT(requestEvents()));
+    QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
 }

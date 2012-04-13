@@ -29,7 +29,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.util.Log;
 
 public class EventsService extends Service {
@@ -131,14 +130,14 @@ public class EventsService extends Service {
 	private void requestEvents(Location location) {
 		String serverUrl = m_settings.getServerUrl();
 		JSONObject JSONResponse = null;
-		for(int i = 0; i < GDSUtil.ATTEMPTS; i++){
+		for(int i = 0; i < GDSUtil.ATTEMPTS; i++) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			calendar.add(Calendar.YEAR, 1); // just in case
-			String timeTo = GDSUtil.getTime(calendar.getTime());
+			String timeTo = GDSUtil.getUtcTime(calendar.getTime());
 			calendar.add(Calendar.YEAR, -1); // return current date
 			calendar.add(Calendar.HOUR, - GDSUtil.RELEVANT_PERIOD_IN_HOURS);
-			String timeFrom = GDSUtil.getTime(calendar.getTime());
+			String timeFrom = GDSUtil.getUtcTime(calendar.getTime());
 			JSONResponse = new JsonFilterCircleRequest(m_authToken,
 					location.getLatitude(), location.getLongitude(),
 					GDSUtil.EVENTS_RADIUS, timeFrom, timeTo,
@@ -156,15 +155,12 @@ public class EventsService extends Service {
 				response.parseJson(JSONResponse);
 				List<Channel> channels = response.getChannelsData();
 				for (Channel channel : channels) {
-					if (channel.getName().compareTo("Events") == 0) {
-						
+					if (channel.getName().compareTo("Events") == 0) {	
 						if (GDSUtil.NOT_RECEIVE_OWN_EVENTS) {
 							Iterator<Mark> iter = channel.getMarks().iterator();
 							String login = m_settings.getLogin();
-							Log.v(EventsManager.LOG, "my login: " + login);
 							while (iter.hasNext()) {
 								Mark mark = iter.next();
-								Log.v(EventsManager.LOG, "Mark login: " + mark.getUser());
 								if (login.compareTo(mark.getUser()) == 0) {
 									iter.remove();
 								}
