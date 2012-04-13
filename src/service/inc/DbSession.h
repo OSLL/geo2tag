@@ -113,6 +113,8 @@ namespace common
     QByteArray processFilterRectangleQuery(const QByteArray&);
     QByteArray processFilterBoxQuery(const QByteArray&);
     QByteArray processFilterFenceQuery(const QByteArray&);
+    QByteArray processFilterChannelQuery(const QByteArray&);
+
 
 //    void processSendConfirmationLetter(const QString &address);
 
