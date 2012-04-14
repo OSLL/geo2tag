@@ -34,5 +34,12 @@ public class EventsManager  {
 	public boolean isEventsServieRunning(Context c) {
 		return GDSUtil.isServiceRunning(c, EventsService.class.getName());
 	}
+	
+	public void requestEvents(Context c) {
+		Intent intent = new Intent(EventsService.InternalReceiver.ACTION);
+		intent.putExtra(EventsService.InternalReceiver.TYPE_SIGNAL,
+				EventsService.InternalReceiver.SIGNAL_SEND_MARKS);
+		c.sendBroadcast(intent);
+	}
 
 }
