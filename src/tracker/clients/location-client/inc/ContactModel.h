@@ -10,23 +10,19 @@ class ContactModel: public QAbstractListModel
     Q_OBJECT
 private:
     QList<QSharedPointer<Contact> > contacts;
-    double topLeftLat;
-    double topLeftLng;
-    double bottomRightLat;
-    double bottomRightLng;
-    double mapWidth;
-    double mapHeight;
+
 public:
     enum ContactRoles{
         NameRole = Qt::UserRole+1,
         CustomNameRole,
         ImageRole,
-        X,
-        Y
+        LatRole,
+        LngRole
     };
 
     ContactModel(QObject *parent=0);
     void addContact(QSharedPointer<Contact> contact);
+    void removeContact(const QString &contactName);
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
 
@@ -34,8 +30,9 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     QList<QSharedPointer<Contact> > getContacts();
     QSharedPointer<Contact> getContactByName(const QString &contactName);
+    int getContactNumByName(const QString &contactName);
 public slots:
-    void drawPins(QString x,QString y,QString xEnd,QString yEnd,QString xMap,QString yMap);
+    void drawPins();
 
 };
 

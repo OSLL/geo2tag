@@ -1,5 +1,6 @@
 #include "ContactModel.h"
 #include <QDebug>
+#include <QDateTime>
 
 ContactModel::ContactModel(QObject *parent): QAbstractListModel(parent)
 {
@@ -7,8 +8,9 @@ ContactModel::ContactModel(QObject *parent): QAbstractListModel(parent)
     roles[NameRole] = "name";
     roles[CustomNameRole] = "customname";
     roles[ImageRole] = "image";
-    roles[X] = "X";
-    roles[Y] = "Y";
+    roles[LatRole] = "lat";
+    roles[LngRole] = "lng";
+
     setRoleNames(roles);
 }
 
@@ -16,9 +18,19 @@ void ContactModel::addContact(QSharedPointer<Contact> contact)
 {
    // contacts.push_back(contact);
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    contacts << contact;
+   // contacts << contact;
+    contacts.push_back(contact);
     endInsertRows();
      emit dataChanged(createIndex(0,0),createIndex(contacts.size(),0));
+}
+
+void ContactModel::removeContact(const QString &contactName)
+{
+    int n = getContactNumByName(contactName);
+    beginRemoveRows(QModelIndex(),n,n);
+    contacts.removeAt(n);
+    endRemoveRows();
+    emit dataChanged(createIndex(0,0),createIndex(contacts.size(),0));
 }
 
 int ContactModel::rowCount(const QModelIndex & parent) const {
@@ -42,34 +54,21 @@ QVariant ContactModel::data(const QModelIndex & index, int role) const {
             res = contact->getCustomName();
             break;
         case ImageRole:
-            if (contact->getLastMark()->getLatitude() < bottomRightLat && contact->getLastMark()->getLatitude() > topLeftLat &&
-                     contact->getLastMark()->getLongitude() < topLeftLng && contact->getLastMark()->getLongitude() > bottomRightLng)
-                res = "";
-            else
-            {
-
-            if (contact->getStatus()==MY_CHANNEL)
-                res = QVariant("qrc:/images/red_mark.svg");
-            else
-                if (contact->getStatus()==AVAILABLE)
+            if (contact->getLastMark()->getTime()>QDateTime::currentDateTime().addSecs(-3600))
                     res = QVariant("qrc:/images/green_mark.svg");
             else
-                    if (contact->getStatus()==LOST)
+                    if (contact->getLastMark()->getTime()>QDateTime::currentDateTime().addSecs(-7200))
+                        res = QVariant("qrc:/images/blue_mark.svg");
+            else
                         res = QVariant("qrc:/images/gray_mark.svg");
-            }
-            break;
-        case X:
-         //   if (contact->getLastMark().isNull()) return QVariant();
-            if ( contact->getLastMark()->getLongitude() > topLeftLng && contact->getLastMark()->getLongitude() < bottomRightLng)
-                res =QVariant((mapWidth)*(contact->getLastMark()->getLongitude()- topLeftLng)/(bottomRightLng - topLeftLng));
-
 
             break;
-        case Y:
-           // if (contact->getLastMark().isNull()) return QVariant();
-            if ( contact->getLastMark()->getLatitude() > bottomRightLat && contact->getLastMark()->getLatitude() < topLeftLat)
-                res = QVariant(mapHeight*(contact->getLastMark()->getLatitude() - topLeftLat)/(bottomRightLat - topLeftLat));
+        case LatRole:
+            res = contact->getLastMark()->getLatitude();
             break;
+        case LngRole:
+            res = contact->getLastMark()->getLongitude();
+             break;
         }
     return res;
 }
@@ -98,13 +97,17 @@ QSharedPointer<Contact> ContactModel::getContactByName(const QString &contactNam
     return contact;
 
 }
+int ContactModel::getContactNumByName(const QString &contactName)
+{
+    for (int i=0; i<contacts.size(); i++)
+        if (contacts.at(i)->getChannelName()==contactName)
+            return i;
+    QSharedPointer<Contact> contact = QSharedPointer<Contact>(new Contact(contactName,contactName));
+    addContact(contact);
+    return contacts.size()-1;
+}
 
-void ContactModel::drawPins(QString x,QString y,QString xEnd,QString yEnd,QString xMap,QString yMap) {
-    topLeftLat = x.toDouble();
-    topLeftLng = y.toDouble();
-    bottomRightLat = xEnd.toDouble();
-    bottomRightLng = yEnd.toDouble();
-    mapWidth = xMap.toDouble();
-    mapHeight = yMap.toDouble();
+void ContactModel::drawPins() {
+
     emit dataChanged(createIndex(0,0),createIndex(contacts.size(),0));
 }

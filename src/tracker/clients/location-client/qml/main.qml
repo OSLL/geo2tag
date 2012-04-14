@@ -38,6 +38,7 @@ Flickable {
     //Connections {target: herebutton; onGetPosition: getPosition() }
     Connections {target: trackSettings; onSettingschanged: Main.changeSettings(interval, permission)}
     Connections {target: rightPanel; onRequestToSubscribe:Main.onSubscribe(channel)}
+    Connections {target: rightPanel; onRequestUnsubscribe: Main.unsubscribeChannel(channel)}
 
 
 }

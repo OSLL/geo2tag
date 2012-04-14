@@ -39,6 +39,7 @@ SOURCES += \
     ../../../http_requests/src/LoadTagsQuery.cpp \
     ../../../http_requests/src/ApplyChannelQuery.cpp \
     ../../../http_requests/src/SubscribeChannelQuery.cpp \
+    ../../../http_requests/src/UnsubscribeChannelQuery.cpp \
     ../../../http_requests/src/SubscribedChannelsQuery.cpp \
     ../../../common/src/User.cpp \
     ../../../common/src/TimeSlot.cpp \
@@ -48,6 +49,7 @@ SOURCES += \
     ../../../common/src/GpsModeller.cpp \
     ../../../common/src/MobilityGps.cpp \
     ../../../common/src/defines.cpp \
+    ../../../common/src/SettingsStorage.cpp \
     ../../../json/src/JsonSerializer.cpp \
     ../../../json/src/LoginResponseJSON.cpp \
     ../../../json/src/LoginRequestJSON.cpp \
@@ -87,6 +89,7 @@ HEADERS += \
     ../../../http_requests/inc/LoadTagsQuery.h \
     ../../../http_requests/inc/ApplyChannelQuery.h \
     ../../../http_requests/inc/SubscribeChannelQuery.h \
+    ../../../http_requests/inc/UnsubscribeChannelQuery.h \
     ../../../http_requests/inc/SubscribedChannelsQuery.h \
     ../../../json/inc/JsonSerializer.h \
     ../../../json/inc/LoginResponseJSON.h \
@@ -95,6 +98,8 @@ HEADERS += \
     ../../../json/inc/AddChannelRequestJSON.h \
     ../../../json/inc/SubscribeChannelResponseJSON.h \
     ../../../json/inc/SubscribeChannelJSON.h \
+    ../../../json/inc/UnsubscribeChannelRequestJSON.h \
+    ../../../json/inc/UnsubscribeChannelResponseJSON.h \
     ../../../json/inc/SubscribedChannelsResponseJSON.h \
     ../../../json/inc/SubscribedChannelsRequestJSON.h \
     ../../../json/inc/AvailableChannelsResponseJSON.h \
@@ -120,6 +125,7 @@ HEADERS += \
     ../../../common/inc/GpsModeller.h \
     ../../../common/inc/MobilityGps.h \
     ../../../common/inc/ErrnoTypes.h \
+    ../../../common/inc/SettingsStorage.h \
     ../../../common/inc/symbian.h \
     ../../../../3rdparty/qjson-0.7.1/src/parser.h \
     ../../../../3rdparty/qjson-0.7.1/src/serializerrunnable.h \

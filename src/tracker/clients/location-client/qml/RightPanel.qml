@@ -7,6 +7,7 @@ Rectangle {
 
     id:panel
     signal requestToSubscribe(string channel)
+    signal requestUnsubscribe(string channel)
     x:parent.width - 50
     width: content.width + 20
     color: "#F0F8FF"
@@ -45,7 +46,7 @@ Rectangle {
 }
 
 
-    ContactList {id: contactList; anchors.topMargin:content.height; anchors.leftMargin: border.width; anchors.fill: parent; opacity: parent.opacity}
+    ContactList {id: contactList; anchors.topMargin:content.height; anchors.leftMargin: border.width; anchors.fill: parent; opacity: parent.opacity; z:15}
 
 
     BorderImage {
@@ -67,6 +68,8 @@ Rectangle {
   //  RightPanelContent{id:content; z:5; }
 
     NotifyDialog {id:notify}
+
+    Connections {target: contactList; onUnsubscribe:panel.requestUnsubscribe(channel)}
 
 
 

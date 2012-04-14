@@ -22,14 +22,21 @@ MainWindow::MainWindow(QWidget *parent) :
   view->rootContext()->setContextProperty("contactModel", &contactModel);
 
   view->setSource(QUrl(mainQmlApp));
+ // view->setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
   view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
   view->engine()->addImportPath(QString("/opt/qtm12/imports"));
   view->engine()->addPluginPath(QString("/opt/qtm12/plugins"));
 
 
-  //contactModel = new ContactModel(this);
-  /*contactModel.addContact(QSharedPointer<Contact>(new Contact(QSharedPointer<Channel>(new Channel("red","red")), "Regina")));
-  contactModel.addContact(QSharedPointer<Contact>(new Contact(QSharedPointer<Channel>(new Channel("werf54","red")), "Mother")));*/
+
+//  QSharedPointer<Contact> contact = QSharedPointer<Contact>(new Contact("red", "Regina"));
+//  contact->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0, 60,30, "QString label",
+//                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
+//  contactModel.addContact(contact);
+//  QSharedPointer<Contact> cont= QSharedPointer<Contact>(new Contact("redee", "Regewrina"));
+//  cont->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0, 59.9,29, "QString label",
+//                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
+//  contactModel.addContact(cont);
 
   client =new Client(&contactModel, this);
   //   view->rootContext()->setContextProperty("Client", client);
@@ -37,9 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
   //qmlRegisterType<ContactModel>();
 
-
-  //
-    //
 
   QObject* rootObject = dynamic_cast<QObject*>(view->rootObject());
   QObject::connect(authAction, SIGNAL(triggered()), rootObject, SLOT(showLoginView()));
@@ -146,4 +150,9 @@ void MainWindow::onSubscribe(const QString &channelName)
 {
     if (client->isAuthentificated())
     client->subscribeChannel(channelName);
+}
+
+void MainWindow::unsubscribeChannel(const QString &channelName)
+{
+    client->unSubscribeChannelRequest(channelName);
 }

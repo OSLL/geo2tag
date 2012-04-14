@@ -34,6 +34,7 @@ class MainWindow : public QMainWindow
     void trackingOnOff();
     void changeSettings(int track_interval,bool permission);
     void onSubscribe(const QString &channelName);
+    void unsubscribeChannel(const QString& channelName);
   private:
     void createMenus();
     void createActions();
@@ -41,6 +42,7 @@ class MainWindow : public QMainWindow
     void shedulerSettings();
     void trackingSettings();
     void pathSettings();
+
 
 
 };

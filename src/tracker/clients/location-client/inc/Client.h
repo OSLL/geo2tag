@@ -18,6 +18,7 @@
 #include "ContactModel.h"
 #include "SubscribedChannelsQuery.h"
 #include "LoadTagsQuery.h"
+#include "UnsubscribeChannelQuery.h"
 
 class Client : public QObject
 {
@@ -44,6 +45,7 @@ class Client : public QObject
     ContactModel * m_contactModel;
     SubscribedChannelsQuery *m_subscibedChannelsQuery;
     LoadTagsQuery *m_loadTagsQuery;
+    UnsubscribeChannelQuery *m_unsubscribeChannelQuery;
 
 
     void pause(int msecs);
@@ -60,6 +62,9 @@ class Client : public QObject
     void setHistoryLimit(int sec);
     void setPermission(bool permission);
     bool isTrackingPermitted();
+
+    void unSubscribeChannelRequest(const QString &channelName);
+
 
   private slots:
     void onError(QString error);
@@ -92,6 +97,8 @@ class Client : public QObject
     void constructContactModel();
     void getTagsRequest();
     void onGetTags();
+
+    void onChannelUnsubscribed();
 
 
 };

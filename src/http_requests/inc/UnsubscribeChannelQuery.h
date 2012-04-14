@@ -50,21 +50,13 @@
 
 #include "Channel.h"
 #include "User.h"
+#include "DefaultQuery.h"
 
-namespace GUI
-{
-  /*!
-   * UnsubscribeChannelQuery class definition.
-   *
-   * The object of this class represents http query to server.
-   * This query includes json request to Unsubscribe channel.
-   *
-   */
-  class UnsubscribeChannelQuery: public QObject
+  class UnsubscribeChannelQuery: public DefaultQuery
   {
     Q_OBJECT
 
-      QSharedPointer<User> m_user;
+    QSharedPointer<common::User> m_user;
     QSharedPointer<Channel> m_channel;
     QString m_status;
     virtual QString getUrl() const;
@@ -78,22 +70,22 @@ namespace GUI
 
       UnsubscribeChannelQuery(QObject *parent = 0);
 
-      UnsubscribeChannelQuery(QSharedPointer<User> user, QSharedPointer<Channel> channel, QObject *parent = 0);
+      UnsubscribeChannelQuery(const QSharedPointer<common::User> &user,const QSharedPointer<Channel> &channel, QObject *parent = 0);
 
-      void setQuery(QSharedPointer<User> user, QSharedPointer<Channel>  channel);
+      void setQuery(const QSharedPointer<common::User> &user, const QSharedPointer<Channel>  &channel);
 
       ~UnsubscribeChannelQuery();
 
       const QString& getStatus() const;
+      QSharedPointer<Channel> getChannel();
 
       Q_SIGNALS:
-      void responseReceived();
+      void channelUnsubscribed();
 
       // class UnsubscribeChannelQuery
   };
 
-  // namespace GUI
-}
+
 
 
 //_UnsubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_

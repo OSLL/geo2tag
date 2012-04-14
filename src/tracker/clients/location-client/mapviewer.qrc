@@ -9,8 +9,6 @@
         <file>qml/MapViewer.qml</file>
         <file>qml/TrackingSettingsView.qml</file>
         <file>qml/ContactList.qml</file>
-        <file>images/mark.svg</file>
-        <file>images/mark3.svg</file>
         <file>images/gray_mark.svg</file>
         <file>images/green_mark.svg</file>
         <file>images/blue_mark.svg</file>

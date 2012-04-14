@@ -1,18 +1,20 @@
 import QtQuick 1.1
-//import com.mycompany.qmlcomponents 1.0
+import com.nokia.symbian 1.1
 
 Rectangle {
+    id: contactContainer
     property variant contact: contactModel
-
+   signal unsubscribe(string channel)
 //    width: 500
 //    height: 300
     ListView {
+
         id: list
         delegate: delegate
         anchors.fill: parent
         model: contact
         highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
-                 focus: true
+        focus: true
 
 
     Component {
@@ -47,6 +49,16 @@ Rectangle {
                 text: "<" + name +">"
            //     font.pointSize: 10
                 color: "blue"
+            }
+
+            Button {
+                anchors.right: parent.right
+                text: "Del"
+                z:20
+                onClicked: {
+                    console.debug("del!")
+                    contactContainer.unsubscribe(name)
+                }
             }
 
 

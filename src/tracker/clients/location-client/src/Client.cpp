@@ -62,6 +62,10 @@ QObject(parent),m_trackInterval(5),
   connect(m_loadTagsQuery, SIGNAL(tagsReceived()), SLOT(onGetTags()));
   connect(m_loadTagsQuery,SIGNAL(errorOccured(int)), SLOT(onError(int)));
 
+  m_unsubscribeChannelQuery = new UnsubscribeChannelQuery(this);
+  connect(m_unsubscribeChannelQuery, SIGNAL(channelUnsubscribed()),SLOT(onChannelUnsubscribed()));
+  connect(m_unsubscribeChannelQuery,SIGNAL(errorOccured(int)), SLOT(onError(int)));
+
   if (Settings::getInstance().isHavingAuthData())
       auth(Settings::getInstance().getLogin(),Settings::getInstance().getPassword());
 
@@ -316,22 +320,21 @@ void Client::getTagsRequest()
 
 void Client::onGetTags()
 {
-    qDebug()<<"Tags is got! contactModel = "<<m_contactModel->getContacts().size();
     QList<QSharedPointer <Channel> > channels = m_loadTagsQuery->getData().uniqueKeys();
     for (int i=0; i<channels.size(); i++) {
+        if (channels.at(i)->getName()!=m_user->getLogin())
+        {
         QList<QSharedPointer<DataMark> > data = m_loadTagsQuery->getData().values(channels.at(i));
         if (!data.isEmpty()) {
             QSharedPointer<DataMark> mark = data.at(data.size()-1);
             STATUS_TYPE type = LOST;
-           // m_contactModel->getContacts().at(i)->setLastDataMark(mark);
-
-
             m_contactModel->getContactByName(channels.at(i)->getName())->setLastDataMark(mark);
              qDebug()<<"---------------------------------";
             qDebug()<<"channel name="<<channels.at(i)->getName();
             qDebug()<<"mark lng="<<mark->getLongitude();
             qDebug()<<"mark lat="<<mark->getLatitude();
             qDebug()<<"---------------------------------";
+        }
 
 
         }
@@ -339,5 +342,18 @@ void Client::onGetTags()
 
     }
 
+
+}
+
+void Client::unSubscribeChannelRequest(const QString &channelName)
+{
+    QSharedPointer<Channel> channel = QSharedPointer<Channel>(new Channel(channelName, channelName + "'s channel"));
+    m_unsubscribeChannelQuery->setQuery(m_user,channel);
+    m_unsubscribeChannelQuery->doRequest();
+}
+
+void Client::onChannelUnsubscribed()
+{
+    m_contactModel->removeContact(m_unsubscribeChannelQuery->getChannel()->getName());
 
 }
