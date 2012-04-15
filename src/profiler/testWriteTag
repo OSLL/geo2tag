@@ -2,27 +2,31 @@
 
 auth_token="MMMMMMMMMM";
 channel="test_channel_$RANDOM";
-result_dir="./results_w_`date +'%d_%m_%Y_%H:%M:%S'`/";
-steps_count=5000;
+date_=`date +'%d_%m_%Y_%H_%M_%S'`;
+result_dir="./results_w_$date_/";
+steps_count=100;
+step=1000;
 symbs=`echo $steps_count | wc -m`;
-tag_to_be_written=15000;
+tag_to_be_written=50;
+
 
 mkdir "$result_dir"
+touch "$date_"
+curl -d "{\"auth_token\":\"$auth_token\", \"name\":\"$channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://tracks.osll.spb.ru:81/service/addChannel 2>/dev/null
 
+curl -d "{\"auth_token\":\"$auth_token\", \"channel\":\"$channel\"}" http://tracks.osll.spb.ru:81/service/subscribe 2>/dev/null
+sleep 10s
 
 for (( i=0;  i<=steps_count; i++ )) ;
 do
 	file_name=`printf "%05d" $i`;
 
-	curl -d "{\"auth_token\":\"$auth_token\", \"name\":\"$channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://tracks.osll.spb.ru:81/service/addChannel 2>/dev/null
-
-	curl -d "{\"auth_token\":\"$auth_token\", \"channel\":\"$channel\"}" http://tracks.osll.spb.ru:81/service/subscribe 2>/dev/null
-sleep 10s
 
 	date_s=`date +'%d_%m_%Y_%H:%M:%S'`
 	echo "$file_name iteration started at `date +'%d_%m_%Y_%H:%M:%S'`"
 	./profiler $tag_to_be_written writeTag $auth_token $channel 2>"$result_dir/$file_name"
-	ssh root@tracks.osll.spb.ru "/opt/geo2tag/automation/clean_db.sh"
-	sleep 15s
-	echo "$file_name iteration finished at `date +'%d_%m_%Y_%H:%M:%S'`"
+	./profiler $step writeTag $auth_token $channel 2>"$date_"
+#	ssh root@tracks.osll.spb.ru "/opt/geo2tag/automation/clean_db.sh"
+#	sleep 15s
+	echo "$file_name iteration finished at `date +'%d_%m_%Y_%H_%M_%S'`"
 done

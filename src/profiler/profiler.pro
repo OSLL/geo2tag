@@ -26,6 +26,7 @@ HEADERS += ProfilerThread.h LoginThread.h TrackThread.h LoadTagsThread.h \
 ../common/inc/User.h \
 ../common/inc/defines.h \
 ../common/inc/ErrnoTypes.h \
+../common/inc/SettingsStorage.h \
 ../json/inc/LoginRequestJSON.h \
 ../json/inc/LoginResponseJSON.h \
 ../json/inc/WriteTagRequestJSON.h \
@@ -45,7 +46,7 @@ SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp LoadTagsT
 ../common/src/TimeSlot.cpp \
 ../common/src/DataMarks.cpp \
 ../common/src/defines.cpp \
-../common/src/ErrnoTypes.cpp \
+../common/src/SettingsStorage.cpp \
 ../http_requests/src/DefaultQuery.cpp \
 ../http_requests/src/WriteTagQuery.cpp \
 ../http_requests/src/LoginQuery.cpp \
