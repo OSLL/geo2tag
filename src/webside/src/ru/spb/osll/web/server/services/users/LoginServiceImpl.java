@@ -49,17 +49,21 @@ import org.json.JSONObject;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-public class LoginServiceImpl extends RemoteServiceServlet
-	implements LoginService, Session.HasSession {
+public class LoginServiceImpl extends RemoteServiceServlet implements
+		LoginService, Session.HasSession {
 	private String m_authToken;
+	private String errno;
+	private String ERRNO = "errno";
 	private String AUTH_TOKEN = "auth_token";
+
 	@Override
 	public User login(User user) throws IllegalArgumentException {
 		JSONObject JSONResponse = null;
 		JSONResponse = new JsonLoginRequest(user.getLogin(),
 				user.getPassword(), JsonBase.getServerUrl()).doRequest();
-
-		if (JSONResponse != null) {
+		errno = JsonBase.getString(JSONResponse, ERRNO);
+		int error = Integer.parseInt(errno);
+		if (error == 0) {
 			m_authToken = JsonBase.getString(JSONResponse, AUTH_TOKEN);
 			user.setToken(m_authToken);
 			user.setStatus(Response.STATUS_SUCCES);
@@ -78,15 +82,15 @@ public class LoginServiceImpl extends RemoteServiceServlet
 
 	@Override
 	public User isAuthorized() throws IllegalArgumentException {
-		final Long id = (Long)Session.Instance().getValue(this, USER_ID);
+		final Long id = (Long) Session.Instance().getValue(this, USER_ID);
 		return id == null ? null : Users.Instance().select(id);
 	}
-	
+
 	@Override
 	public User addUser(User user) throws IllegalArgumentException {
 		final Users users = Users.Instance();
 		final User standart = users.select(user.getLogin());
-		if (standart == null){
+		if (standart == null) {
 			user = users.insert(user);
 			user.setStatus(Response.STATUS_SUCCES);
 		} else {
@@ -96,9 +100,9 @@ public class LoginServiceImpl extends RemoteServiceServlet
 	}
 
 	@Override
-	public HttpSession getSession(){
+	public HttpSession getSession() {
 		return getThreadLocalRequest().getSession();
 	}
-	
+
 	private static final String USER_ID = "user.id";
 }
