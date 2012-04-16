@@ -72,6 +72,8 @@ QByteArray FilterCircleRequestJSON::getJson() const
 bool FilterCircleRequestJSON::parseJson(const QByteArray&data)
 {
   clearContainers();
+  FilterRequestJSON::parseJson(data);
+
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
