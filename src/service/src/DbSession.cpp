@@ -1288,6 +1288,8 @@ namespace common
 
   QByteArray DbObjectsCollection::processFilterCircleQuery(const QByteArray& data)
   {
+    syslog(LOG_INFO, ">>> processFilterCircleQuery");
+
     FilterCircleRequestJSON request;
     return internalProcessFilterQuery(request, data, false);
   }
@@ -1335,6 +1337,7 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
+
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
     QSharedPointer<User> realUser = findUserFromToken(dummyUser);
     if(realUser.isNull())
@@ -1343,27 +1346,61 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
+
     filtration.addFilter(QSharedPointer<Filter>(new ShapeFilter(request.getShape())));
     filtration.addFilter(QSharedPointer<Filter>(new TimeFilter(request.getTimeFrom(), request.getTimeTo())));
     if(is3d)
     {
       filtration.addFilter(QSharedPointer<Filter>(new AltitudeFilter(request.getAltitude1(), request.getAltitude2())));
     }
+
     QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
     DataChannels feed;
-    for(int i = 0; i<channels->size(); i++)
+    if (request.getChannels()->size() > 0)
     {
-      QSharedPointer<Channel> channel = channels->at(i);
-      QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
-      QList<QSharedPointer<DataMark> > filteredTags = filtration.filtrate(tags);
-      //qSort(tags);
-      for(int j = 0; j < filteredTags.size(); j++)
+      syslog(LOG_INFO, "point_2");
+
+      QSharedPointer<Channel> targetChannel;
+      // look for ...
+      for(int i = 0; i<channels->size(); i++)
       {
-        feed.insert(channel, filteredTags.at(j));
+        if (channels->at(i)->getName() == request.getChannels()->at(0)->getName()){
+          targetChannel = channels->at(i);
+          break;
+        }
       }
+
+      if (targetChannel.isNull())
+      {
+        response.setErrno(CHANNEL_DOES_NOT_EXIST_ERROR);
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+      }
+      QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(targetChannel);
+      QList<QSharedPointer<DataMark> > filteredTags = filtration.filtrate(tags);
+      for(int i = 0; i < filteredTags.size(); i++)
+      {
+        feed.insert(targetChannel, filteredTags.at(i));
+      }
+      response.setErrno(SUCCESS);
+    }
+    else
+    {
+      for(int i = 0; i<channels->size(); i++)
+      {
+        QSharedPointer<Channel> channel = channels->at(i);
+        QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
+        QList<QSharedPointer<DataMark> > filteredTags = filtration.filtrate(tags);
+        for(int j = 0; j < filteredTags.size(); j++)
+        {
+          feed.insert(channel, filteredTags.at(j));
+        }
+      }
+      response.setErrno(SUCCESS);
     }
     response.setDataChannels(feed);
-    response.setErrno(SUCCESS);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;

@@ -40,6 +40,16 @@
  * ---------------------------------------------------------------- */
 
 #include "FilterRequestJSON.h"
+#include "JsonChannel.h"
+#include <syslog.h>
+
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
 FilterRequestJSON::FilterRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
@@ -108,4 +118,22 @@ double FilterRequestJSON::getAltitude1() const
 double FilterRequestJSON::getAltitude2() const
 {
   return m_alt2;
+}
+
+bool FilterRequestJSON::parseJson(const QByteArray& data)
+{
+  clearContainers();
+
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
+
+  QString name = result["channel"].toString();
+  if (!name.isEmpty())
+  {
+    Channel * ch = new JsonChannel(name,"n/a","n/a");
+    m_channelsContainer->push_back(QSharedPointer<Channel>(ch));
+  }
+  return true;
 }

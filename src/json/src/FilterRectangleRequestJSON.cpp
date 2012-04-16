@@ -72,6 +72,8 @@ QByteArray FilterRectangleRequestJSON::getJson() const
 bool FilterRectangleRequestJSON::parseJson(const QByteArray&data)
 {
   clearContainers();
+  FilterRequestJSON::parseJson(data);
+
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
