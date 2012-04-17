@@ -97,12 +97,6 @@ namespace common
     QByteArray processUnsubscribeQuery(const QByteArray&);
     QByteArray processAddUserQuery(const QByteArray&);
     QByteArray processAddChannelQuery(const QByteArray&);
-    QByteArray processGetTimeSlotQuery(const QByteArray&);
-    QByteArray processSetTimeSlotQuery(const QByteArray&);
-    QByteArray processGetTimeSlotMarkQuery(const QByteArray&);
-    QByteArray processSetTimeSlotMarkQuery(const QByteArray&);
-    QByteArray processSetDefaultTimeSlotQuery(const QByteArray&);
-    QByteArray processSetDefaultTimeSlotMarkQuery(const QByteArray&);
     QByteArray processVersionQuery(const QByteArray&);
 
     QByteArray processGetErrnoInfo(const QByteArray&);

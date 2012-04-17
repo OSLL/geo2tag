@@ -67,32 +67,6 @@ CREATE TABLE subscribe (
                                                        on delete cascade
 );
 
-CREATE SEQUENCE timeSlots_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
-
-CREATE TABLE timeSlot (
-  id NUMERIC(9,0) NOT NULL DEFAULT nextval('timeSlots_seq'),
-  slot BIGINT NOT NULL,  
-  constraint timeSlot_pkey primary key (id)  
-);
-
-CREATE TABLE channelTimeSlot (
-  channel_id NUMERIC(9,0) NOT NULL,
-  timeSlot_id NUMERIC(9,0) NOT NULL,
-  constraint fk_timeSlot foreign key (timeSlot_id) references timeSlot(id)
-                                                       on delete cascade,
-  constraint fk_channels foreign key (channel_id) references channel(id)
-                                                       on delete cascade
-);
-
-CREATE TABLE tagTimeSlot (
-  tag_id NUMERIC(9,0) NOT NULL,
-  timeSlot_id NUMERIC(9,0) NOT NULL,
-  constraint fk_timeSlot foreign key (timeSlot_id) references timeSlot(id)
-                                                       on delete cascade,
-  constraint fk_tags foreign key (tag_id) references tag(id)
-                                                       on delete cascade
-);
-
 CREATE TABLE actions (
 id SERIAL NOT NULL,
 name VARCHAR(300) NOT NULL,
@@ -168,18 +142,6 @@ INSERT into tags (channel_id, tag_id) values (4, 6);
 INSERT into tags (channel_id, tag_id) values (5, 7);
 INSERT into tags (channel_id, tag_id) values (1, 8);
 
-INSERT into timeSlot (slot) values (259200);
-INSERT into timeSlot (slot) values (10080);
-INSERT into timeSlot (slot) values (1440);
-
-INSERT into channelTimeSlot (channel_id, timeSlot_id) values (1, 1);
-INSERT into channelTimeSlot (channel_id, timeSlot_id) values (2, 2);
-INSERT into channelTimeSlot (channel_id, timeSlot_id) values (3, 3);
-INSERT into channelTimeSlot (channel_id, timeSlot_id) values (4, 3);
-INSERT into channelTimeSlot (channel_id, timeSlot_id) values (5, 2);
-
-INSERT into tagTimeSlot (tag_id, timeSlot_id) values (5, 2);
-INSERT into tagTimeSlot (tag_id, timeSlot_id) values (6, 1);
 
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0,59.938994,30.315857, 'Palace Square', 'Russia, St.Petersburg, Palace Square',1 , 'http://www.saint-petersburg.com/images/virtual-tour/alexander-column.jpg');
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values (0,59.934024,30.306182,'Saint Isaac''s Cathedral','The dome of St. Isaac’s Cathedral dominates the skyline of St. Petersburg and its gilded cupola can be seen glistening from all over the city.',2,'http://www.saint-petersburg.com/images/virtual-tour/st-isaac.jpg');
