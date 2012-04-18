@@ -3,6 +3,7 @@
 auth_token="MMMMMMMMMM";
 channel="test_channel_$RANDOM";
 result_dir="./results_r_`date +'%d_%m_%Y_%H_%M_%S'`/";
+server_name="localhost";
 # How much files be created
 steps_count=10000;
 # How much tags will be added at step 
@@ -11,8 +12,8 @@ read_requests_count=10000;
 
 mkdir "$result_dir"
 
-curl -d "{\"auth_token\":\"$auth_token\", \"name\":\"$channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel 2>/dev/null
-curl -d "{\"auth_token\":\"$auth_token\", \"channel\":\"$channel\"}" http://localhost:81/service/subscribe 2>/dev/null
+curl -d "{\"auth_token\":\"$auth_token\", \"name\":\"$channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://$server_name:81/service/addChannel 2>/dev/null
+curl -d "{\"auth_token\":\"$auth_token\", \"channel\":\"$channel\"}" http://$server_name:81/service/subscribe 2>/dev/null
 sleep 10s
 for (( i=0;  i<=steps_count; i++ )) ;
 do

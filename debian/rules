@@ -31,17 +31,24 @@ build-stamp:
 	cp -r ./data $(BUILDDIR)
 	cp -r ./scripts $(BUILDDIR)
 	cp -r ./debian/config.pri $(BUILDDIR)
-	echo "Current diRRR"
-	echo $(CURDIR)
 #Check what architecture we are use. If it is i386, we need to build all for i386, else build all armel code
-	if [ "$(DEB_BUILD_ARCH)" != "armel" ] ; then \
+	if [ "$(DEB_BUILD_ARCH)" != "armel" ];  \
+	then \
 		echo $$PWD ; \
 		echo "i386 architecture selection"; \
-		cd $(BUILDDIR) && qmake "CONFIG +=linux" -after *.pro && $(MAKE); \
+		cd $(BUILDDIR); \
+		qmake "CONFIG +=linux" -after *.pro; \
+		if  $(MAKE); \
+		then echo "Build normal"; \
+		else exit 1; \
+		fi; \
 		cd ../../; \
 	else \
-	cd $(BUILDDIR) && qmake "CONFIG += maemo" -after *.pro; \
-	$(MAKE); \
+		qmake "CONFIG +=maemo" -after *.pro; \
+		if  $(MAKE); \
+		then echo "Build normal"; \
+		else exit 1; \
+		fi; \
 	fi;
 	touch build-stamp
 
