@@ -12,6 +12,7 @@
 #include <QCoreApplication>
 #include "Test_RegisterUserQuery.h"
 #include "VersionQuery_Test.h"
+#include "DeleteUserQuery_Test.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,10 +21,11 @@ int main(int argc, char *argv[])
     QObject *tests[] =
     {
         new Test::Test_RegisterUserQuery,
-	new Test::VersionQuery_Test
+	new Test::VersionQuery_Test,
+	new Test::DeleteUserQuery_Test
     };
 
-    for (int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
+    for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
         QTest::qExec(tests[i]);
     }
 

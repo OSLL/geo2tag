@@ -29,54 +29,58 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/*! ---------------------------------------------------------------
- * \file DeleteUserQuery.h
- * \brief Header of DeleteUserQuery
- * \todo add comment here
- *
- * File description
+/*!
+ * \file DeleteUserQuery_Test.h
+ * \brief Test suite for DeleteUserQuery class
  *
  * PROJ: OSLL/geo2tag
- * ---------------------------------------------------------------- */
-
-
-#ifndef _DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_
-#define _DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_
+ * ----------------------------------------------------------- */
 
 
 #include <QObject>
-#include <QString>
-#include "DefaultQuery.h"
-#include "User.h"
+#include <QtTest/QtTest>
+#include <QSignalSpy>
 
-class DeleteUserQuery: public DefaultQuery
+//include Application class
+#include "DeleteUserQuery.h"
+#include "signals.h"
+
+
+namespace Test
 {
-  Q_OBJECT
+  class DeleteUserQuery_Test : public QObject
+  {
+    Q_OBJECT;
 
-  QString m_login;
-  QString m_password;
-
-  virtual QString getUrl() const;
-  virtual QByteArray getRequestBody() const;
-
-  private Q_SLOTS:
-
-    virtual void processReply(QNetworkReply *reply);
-
-  public:
-
-    DeleteUserQuery(const QString& login, const QString& password, QObject *parent = 0);
-
-    DeleteUserQuery(QObject *parent = 0);
-
-    void setQuery(const QString& login, const QString& password);
-
-    ~DeleteUserQuery();
-
-    Q_SIGNALS:
-
-    void connected();
-}; // class DeleteUserQuery
+		// DeleteUserQuery*  m_tstObject; // Object for testing
   
+  public:
+    
+    DeleteUserQuery_Test(QObject *parent =0) : QObject(parent)
+    {
+  	  // initialization here
+			// m_tstObject = new DeleteUserQuery;
+    }
+    
+    ~DeleteUserQuery_Test()
+    {
+  	  // destroying  here
+			// delete m_tstObject;
+			// m_tstObject = NULL;
+    }
+  
+  private slots:
+  
+    void test1()
+    {
 
-#endif //_DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_
+	DeleteUserQuery * query = new DeleteUserQuery(this);
+	QSignalSpy spy_deleteUser(query,SIGNAL(errorOccured(int)));
+	query->doRequest();
+	QVERIFY(waitForSignal(query,SIGNAL(errorOccured(int)),5000));
+	QCOMPARE(spy_deleteUser.count(), 1);
+    }
+  
+  }; // class DeleteUserQuery_Test
+
+} // end of namespace Test

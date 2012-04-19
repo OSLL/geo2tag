@@ -41,7 +41,75 @@
 
 #include "DeleteUserQuery.h"
 
-namespace 
+#include <QDebug>
+
+#include "DeleteUserQuery.h"
+#include "defines.h"
+
+#include "JsonUser.h"
+#include "DeleteUserRequestJSON.h"
+#include "DeleteUserResponseJSON.h"
+
+#ifndef Q_OS_SYMBIAN
+#include <syslog.h>
+#else
+#include "symbian.h"
+#endif
+
+DeleteUserQuery::DeleteUserQuery(const QString &login, const QString &password, QObject *parent):
+DefaultQuery(parent), m_login(login), m_password(password)
+{
+}
+
+
+DeleteUserQuery::DeleteUserQuery(QObject *parent):
+DefaultQuery(parent)
+{
+}
+
+
+QString DeleteUserQuery::getUrl() const
+{
+  return DELETE_USER_HTTP_URL;
+}
+
+
+QByteArray DeleteUserQuery::getRequestBody() const
+{
+  QSharedPointer<common::User> dummyUser(new JsonUser(m_login,m_password));
+  DeleteUserRequestJSON request;
+  request.addUser(dummyUser);
+  return request.getJson();
+}
+
+
+void DeleteUserQuery::processReply(QNetworkReply *reply)
+{
+  #ifndef Q_OS_SYMBIAN
+  DeleteUserResponseJSON response;
+  response.parseJson(reply->readAll());
+  m_errno = response.getErrno();
+  if(response.getErrno() == SUCCESS)
+  {
+    syslog(LOG_INFO,"!!connected!");
+    Q_EMIT connected();
+  }
+  else
+  {
+    Q_EMIT errorOccured(response.getErrno());
+  }
+  #endif
+}
+
+
+void DeleteUserQuery::setQuery(const QString& login, const QString& password)
+{
+  m_login=login;
+  m_password=password;
+}
+
+
+DeleteUserQuery::~DeleteUserQuery()
 {
 
-} // namespace 
+}
