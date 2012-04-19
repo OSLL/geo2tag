@@ -92,6 +92,9 @@
 #include "FilterChannelRequestJSON.h"
 #include "FilterChannelResponseJSON.h"
 
+#include "DeleteUserRequestJSON.h"
+#include "DeleteUserResponseJSON.h"
+
 #include "ErrnoInfoResponseJSON.h"
 
 #include "VersionResponseJSON.h"
@@ -129,6 +132,7 @@ namespace common
     m_processors.insert("channels", &DbObjectsCollection::processAvailableChannelsQuery);
     m_processors.insert("unsubscribe", &DbObjectsCollection::processUnsubscribeQuery);
     m_processors.insert("version", &DbObjectsCollection::processVersionQuery);
+    m_processors.insert("deleteUser", &DbObjectsCollection::processDeleteUserQuery);
 
     m_processors.insert("errnoInfo", &DbObjectsCollection::processGetErrnoInfo);
     m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
@@ -214,19 +218,26 @@ namespace common
 
   }
 
-  QSharedPointer<User> DbObjectsCollection::findUserFromToken(const QSharedPointer<User> &dummyUser) const
+  QSharedPointer<User> DbObjectsCollection::findUser(const QSharedPointer<User> &dummyUser) const
   {
     QSharedPointer<User> realUser;      // Null pointer
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
-    syslog(LOG_INFO, "checking user's key: %s from %d known users", dummyUser->getToken().toStdString().c_str(),
+    syslog(LOG_INFO, "checking user key: %s from %d known users", dummyUser->getToken().toStdString().c_str(),
       currentUsers.size());
-    for(int i=0; i<currentUsers.size(); i++)
+    if (!dummyUser->getToken().isEmpty() && dummyUser->getToken()!="unknown")
     {
-      if(currentUsers.at(i)->getToken() == dummyUser->getToken())
-      {
-        realUser = currentUsers.at(i);
-        break;
-      }
+    	for(int i=0; i<currentUsers.size(); i++)
+    	{
+      		if(currentUsers.at(i)->getToken() == dummyUser->getToken())
+        	return currentUsers.at(i);
+    	}
+    }else if (!dummyUser->getLogin().isEmpty() && !dummyUser->getPassword().isEmpty())
+    {
+    	for(int i=0; i<currentUsers.size(); i++)
+    	{
+      		if(currentUsers.at(i)->getLogin() == dummyUser->getLogin() && currentUsers.at(i)->getPassword() == dummyUser->getPassword())
+        	return currentUsers.at(i);
+    	}
     }
     return realUser;
   }
@@ -366,7 +377,7 @@ namespace common
     QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
     syslog(LOG_INFO,"Adding mark with altitude = %f",dummyTag->getAltitude());
     QSharedPointer<User> dummyUser = dummyTag->getUser();
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
 
     if(realUser.isNull())               //
     {
@@ -432,7 +443,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -461,7 +472,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -514,7 +525,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
 
     if(realUser.isNull())
     {
@@ -639,7 +650,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
 
     if(realUser.isNull())
     {
@@ -701,7 +712,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -728,7 +739,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
 
     if(realUser.isNull())
     {
@@ -825,7 +836,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -933,7 +944,7 @@ namespace common
     syslog(LOG_INFO, "point_1");
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     syslog(LOG_INFO, "point_2");
     if(realUser.isNull())
     {
@@ -971,6 +982,49 @@ namespace common
     return answer;
   }
 
+
+  QByteArray DbObjectsCollection::processDeleteUserQuery(const QByteArray& data)
+  {
+    syslog(LOG_INFO, "starting DeleteUser processing");
+    DeleteUserRequestJSON request;
+    DeleteUserResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+    // Look for user with the same name
+    QSharedPointer<User> realUser = findUser(request.getUsers()->at(0));
+
+
+    if(!realUser) {
+      response.setErrno(INCORRECT_CREDENTIALS_ERROR);
+      answer.append(response.getJson());
+      syslog(LOG_INFO, "answer: %s", answer.data());
+      return answer;
+    }
+
+    syslog(LOG_INFO, "Sending sql request for DeleteUser");
+    bool isDeleted = m_queryExecutor->deleteUser(realUser);
+    if(!isDeleted)
+    {
+      response.setErrno(INTERNAL_DB_ERROR);
+      answer.append(response.getJson());
+      syslog(LOG_INFO, "answer: %s", answer.data());
+      return answer;
+    }
+    m_updateThread->lockWriting();
+    // Here will be removing user from container
+    m_usersContainer->erase(realUser);
+    m_updateThread->unlockWriting();
+
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
 }                                       // namespace common
 
 
