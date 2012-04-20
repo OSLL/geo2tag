@@ -76,7 +76,7 @@ public class TrackingService extends Service {
 			return;
 		}
 		
-		//startTracking(); // TODO for testing on AVD
+		startTracking(); // TODO for testing on AVD
 	}
 
 	@Override
