@@ -99,6 +99,7 @@ namespace common
     QByteArray processAddChannelQuery(const QByteArray&);
     QByteArray processVersionQuery(const QByteArray&);
     QByteArray processDeleteUserQuery(const QByteArray&);
+    QByteArray processBuildQuery(const QByteArray&);
 
     QByteArray processGetErrnoInfo(const QByteArray&);
 

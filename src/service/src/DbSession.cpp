@@ -98,6 +98,7 @@
 #include "ErrnoInfoResponseJSON.h"
 
 #include "VersionResponseJSON.h"
+#include "BuildResponseJSON.h"
 
 #include "ChannelInternal.h"
 #include "ErrnoTypes.h"
@@ -133,6 +134,7 @@ namespace common
     m_processors.insert("unsubscribe", &DbObjectsCollection::processUnsubscribeQuery);
     m_processors.insert("version", &DbObjectsCollection::processVersionQuery);
     m_processors.insert("deleteUser", &DbObjectsCollection::processDeleteUserQuery);
+    m_processors.insert("build", &DbObjectsCollection::processBuildQuery);
 
     m_processors.insert("errnoInfo", &DbObjectsCollection::processGetErrnoInfo);
     m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
@@ -921,6 +923,21 @@ namespace common
 
     SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
     QString version = storage.getValue("General_Settings/geo2tag_version").toString();
+
+    response.setErrno(SUCCESS);
+    response.setVersion(version);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
+  QByteArray DbObjectsCollection::processBuildQuery(const QByteArray&)
+  {
+    BuildResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString version = storage.getValue("General_Settings/geo2tag_build").toString();
 
     response.setErrno(SUCCESS);
     response.setVersion(version);

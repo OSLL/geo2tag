@@ -50,7 +50,8 @@ HEADERS += \
            inc/FilterChannelRequestJSON.h \
            inc/FilterChannelResponseJSON.h \
 	   inc/DeleteUserRequestJSON.h \
-	   inc/DeleteUserResponseJSON.h             
+	   inc/DeleteUserResponseJSON.h \
+	   inc/BuildResponseJSON.h 
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \
