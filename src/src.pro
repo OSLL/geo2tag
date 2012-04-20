@@ -24,7 +24,7 @@ linux: {
   SUBDIRS += common
   SUBDIRS += \
              json \
-             #json/tst \
+             json/tst \
              http_requests \
              service \
 	     tracker/clients/meego/tst \

@@ -38,7 +38,7 @@
 
 #include <QtTest/QtTest>
 #include <QtCore/QtCore>
-#include <QApplication>
+#include <QCoreApplication>
 
 // Test headers
 #include "JsonUser_Test.h"
@@ -48,7 +48,7 @@
 
 int main(int argc, char **argv)
 {
-    //QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
     QObject *tests[] =
     {
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 //        new Test::Test_AvailableChannelsResponseJSON()
     };
 
-    for (int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
+    for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
         QTest::qExec(tests[i]);
     }
     return 0;//app.exec();

@@ -97,12 +97,6 @@ namespace common
     QByteArray processUnsubscribeQuery(const QByteArray&);
     QByteArray processAddUserQuery(const QByteArray&);
     QByteArray processAddChannelQuery(const QByteArray&);
-    QByteArray processGetTimeSlotQuery(const QByteArray&);
-    QByteArray processSetTimeSlotQuery(const QByteArray&);
-    QByteArray processGetTimeSlotMarkQuery(const QByteArray&);
-    QByteArray processSetTimeSlotMarkQuery(const QByteArray&);
-    QByteArray processSetDefaultTimeSlotQuery(const QByteArray&);
-    QByteArray processSetDefaultTimeSlotMarkQuery(const QByteArray&);
     QByteArray processVersionQuery(const QByteArray&);
 
     QByteArray processGetErrnoInfo(const QByteArray&);
@@ -115,10 +109,11 @@ namespace common
     QByteArray processFilterFenceQuery(const QByteArray&);
     QByteArray processFilterChannelQuery(const QByteArray&);
 
+    QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
+
 
 //    void processSendConfirmationLetter(const QString &address);
 
-    QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 
 //    static void processSendConfirmationLetter(const QString&);
 

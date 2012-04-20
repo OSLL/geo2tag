@@ -21,7 +21,6 @@ HEADERS += \
            inc/JsonUser.h \
            inc/JsonDataMark.h \
            inc/JsonChannel.h \
-           inc/JsonTimeSlot.h \
            inc/JsonSerializer.h \
            inc/LoginRequestJSON.h \
            inc/LoginResponseJSON.h \
@@ -35,19 +34,7 @@ HEADERS += \
            inc/SubscribedChannelsResponseJSON.h \
            inc/AddChannelRequestJSON.h \
            inc/AddChannelResponseJSON.h \
-           inc/GetTimeSlotRequestJSON.h \
-           inc/GetTimeSlotResponseJSON.h \
            inc/DefaultResponseJSON.h \
-           inc/SetTimeSlotRequestJSON.h \
-           inc/SetTimeSlotResponseJSON.h \
-           inc/GetTimeSlotMarkRequestJSON.h \
-           inc/GetTimeSlotMarkResponseJSON.h \
-           inc/SetTimeSlotMarkRequestJSON.h \
-           inc/SetTimeSlotMarkResponseJSON.h \
-           inc/SetDefaultTimeSlotMarkRequestJSON.h \
-           inc/SetDefaultTimeSlotMarkResponseJSON.h \
-           inc/SetDefaultTimeSlotRequestJSON.h \
-           inc/SetDefaultTimeSlotResponseJSON.h \
            inc/FilterRequestJSON.h \
            inc/FilterDefaultResponseJSON.h \
            inc/FilterCircleRequestJSON.h \ 
@@ -71,21 +58,14 @@ SOURCES += \
            src/JsonUser.cpp \
            src/JsonChannel.cpp \
            src/SubscribedChannelsRequestJSON.cpp \
-           src/JsonTimeSlot.cpp \
            src/JsonDataMark.cpp \
            src/JsonSerializer.cpp \
            src/LoginRequestJSON.cpp \
            src/LoginResponseJSON.cpp \
            src/WriteTagRequestJSON.cpp \
            src/AddChannelRequestJSON.cpp \
-           src/GetTimeSlotRequestJSON.cpp \
-           src/GetTimeSlotResponseJSON.cpp \
            src/DefaultResponseJSON.cpp \
-           src/SetTimeSlotRequestJSON.cpp \
-           src/GetTimeSlotMarkRequestJSON.cpp \
            src/WriteTagResponseJSON.cpp \
-           src/GetTimeSlotMarkResponseJSON.cpp \
-           src/SetTimeSlotMarkRequestJSON.cpp \
            src/FilterRequestJSON.cpp \
            src/FilterDefaultResponseJSON.cpp \
            src/FilterCircleRequestJSON.cpp \

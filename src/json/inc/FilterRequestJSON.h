@@ -70,5 +70,7 @@ class FilterRequestJSON : public JsonSerializer
     void setAltitude2(double alt);
     double getAltitude1() const;
     double getAltitude2() const;
+
+    bool parseJson(const QByteArray&);
 };                                      // class FilterRequestJSON
 #endif                                  //_FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_

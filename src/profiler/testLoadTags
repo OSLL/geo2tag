@@ -2,20 +2,23 @@
 
 auth_token="MMMMMMMMMM";
 channel="test_channel_$RANDOM";
-result_dir="./results_r_`date +'%d_%m_%Y_%H:%M:%S'`/";
+result_dir="./results_r_`date +'%d_%m_%Y_%H_%M_%S'`/";
+server_name="localhost";
 # How much files be created
-steps_count=200;
+steps_count=10000;
 # How much tags will be added at step 
-step_size=250;
-read_requests_count=5000;
+step_size=1000;
+read_requests_count=10000;
 
-curl -d "{\"auth_token\":\"$auth_token\", \"name\":\"$channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://tracks.osll.spb.ru:81/service/addChannel 2>/dev/null
-curl -d "{\"auth_token\":\"$auth_token\", \"channel\":\"$channel\"}" http://tracks.osll.spb.ru:81/service/subscribe 2>/dev/null
+mkdir "$result_dir"
+
+curl -d "{\"auth_token\":\"$auth_token\", \"name\":\"$channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://$server_name:81/service/addChannel 2>/dev/null
+curl -d "{\"auth_token\":\"$auth_token\", \"channel\":\"$channel\"}" http://$server_name:81/service/subscribe 2>/dev/null
 sleep 10s
 for (( i=0;  i<=steps_count; i++ )) ;
 do
 	echo "$i iteration"
-	cool_num=`printf "%02d" $i`;
+	cool_num=`printf "%08d" $i`;
 	./profiler $read_requests_count loadTags $auth_token 2>"$result_dir/$cool_num"
 	./profiler $step_size writeTag $auth_token $channel 2>/dev/null 1>/dev/null
 
