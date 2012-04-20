@@ -84,7 +84,7 @@ namespace common
 
     DbObjectsCollection();
 
-    QSharedPointer<User> findUserFromToken(const QSharedPointer<User>&) const;
+    QSharedPointer<User> findUser(const QSharedPointer<User>&) const;
 
     QByteArray processRegisterUserQuery(const QByteArray&);
     QByteArray processConfirmRegistrationQuery(const QString&);
@@ -98,6 +98,7 @@ namespace common
     QByteArray processAddUserQuery(const QByteArray&);
     QByteArray processAddChannelQuery(const QByteArray&);
     QByteArray processVersionQuery(const QByteArray&);
+    QByteArray processDeleteUserQuery(const QByteArray&);
 
     QByteArray processGetErrnoInfo(const QByteArray&);
 

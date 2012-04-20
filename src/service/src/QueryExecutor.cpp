@@ -281,17 +281,11 @@ QSharedPointer<common::User> QueryExecutor::insertNewTmpUser(const QSharedPointe
     QString newToken = generateNewToken(user->getEmail(), user->getLogin(),user->getPassword());
     newSignupQuery.prepare("insert into signups (id,email,login,password,registration_token,sent) values(:id,:email,:login,:password,:r_token,:sent);");
     newSignupQuery.bindValue(":id", newId);
-    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
     newSignupQuery.bindValue(":email", user->getEmail());
-    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
     newSignupQuery.bindValue(":login", user->getLogin());
-    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
     newSignupQuery.bindValue(":password", user->getPassword());
-    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
     newSignupQuery.bindValue(":r_token", newToken);
-    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
     newSignupQuery.bindValue(":sent", FALSE);
-    syslog(LOG_INFO,"Sending: %s",newSignupQuery.lastQuery().toStdString().c_str());
 
     m_database.transaction();
     result = newSignupQuery.exec();
@@ -382,15 +376,10 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
   //  syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
   newUserQuery.prepare("insert into users (id,email,login,password,token) values(:id,:email,:login,:password,:a_t);");
   newUserQuery.bindValue(":id",newId);
-  syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
   newUserQuery.bindValue(":email",user->getEmail());
-  syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
   newUserQuery.bindValue(":login",user->getLogin());
-  syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
   newUserQuery.bindValue(":password",user->getPassword());
-  syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
   newUserQuery.bindValue(":a_t",newToken);
-  syslog(LOG_INFO,"Sending: %s",newUserQuery.lastQuery().toStdString().c_str());
   m_database.transaction();
   result=newUserQuery.exec();
   if(!result)
@@ -656,4 +645,24 @@ bool QueryExecutor::isChannelSubscribed(QSharedPointer<Channel> &channel, QShare
         syslog(LOG_INFO,"No matching subscription.");
         return false;
     }
+}
+
+bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
+{
+    bool result;
+    QSqlQuery deleteUserQuery(m_database);
+    syslog(LOG_INFO,"Deleting: id = %lld", user->getId());
+    deleteUserQuery.prepare("delete from users where id = :id;");
+    deleteUserQuery.bindValue(":id",user->getId() );
+
+    m_database.transaction();
+    result = deleteUserQuery.exec();
+    if(!result) {
+      syslog(LOG_INFO,"Rollback for deleteUser sql query");
+      m_database.rollback();
+    } else {
+      syslog(LOG_INFO,"Commit for deleteUser sql query");
+      m_database.commit();
+    }
+    return result;
 }

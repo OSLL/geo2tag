@@ -48,7 +48,9 @@ HEADERS += \
            inc/ErrnoInfoResponseJSON.h \
            inc/VersionResponseJSON.h \
            inc/FilterChannelRequestJSON.h \
-           inc/FilterChannelResponseJSON.h             
+           inc/FilterChannelResponseJSON.h \
+	   inc/DeleteUserRequestJSON.h \
+	   inc/DeleteUserResponseJSON.h             
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \
