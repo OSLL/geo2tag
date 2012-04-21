@@ -48,7 +48,7 @@ then
 	exit 1
 fi
 
-test_altitude=$((RANDOM%100)).$((RANDOM%1000));
+test_altitude=$((RANDOM%100)).0;
 test_time=`date +'%d %m %Y %H:%M:%S.300'`;
 echo "test time = $test_time"
 echo "Test alt:$test_altitude"
