@@ -27,16 +27,29 @@ MainWindow::MainWindow(QWidget *parent) :
   view->engine()->addImportPath(QString("/opt/qtm12/imports"));
   view->engine()->addPluginPath(QString("/opt/qtm12/plugins"));
 
+/*test*/
+
+  QSharedPointer<Contact> co = QSharedPointer<Contact>(new Contact("piter88", "Petja"));
+  co->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0, 59.938994,30.315857, "QString label",
+                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
+  contactModel.addContact(co);
+
+  QSharedPointer<Contact> con = QSharedPointer<Contact>(new Contact("marja", "Mother"));
+  con->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0,59.925657,30.296165, "QString label",
+                                                                 "QString description", "QString url", QDateTime::currentDateTime().addSecs(-3800))));
+  contactModel.addContact(con);
+
+  QSharedPointer<Contact> contact = QSharedPointer<Contact>(new Contact("vred", "Vasja"));
+  contact->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0,59.945152,30.371842, "QString label",
+                                                                 "QString description", "QString url", QDateTime::currentDateTime().addSecs(-9600))));
+  contactModel.addContact(contact);
+  QSharedPointer<Contact> cont= QSharedPointer<Contact>(new Contact("quen", "daughter"));
+  cont->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0,59.94376,30.368825, "QString label",
+                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
+  contactModel.addContact(cont);
 
 
-//  QSharedPointer<Contact> contact = QSharedPointer<Contact>(new Contact("red", "Regina"));
-//  contact->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0, 60,30, "QString label",
-//                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
-//  contactModel.addContact(contact);
-//  QSharedPointer<Contact> cont= QSharedPointer<Contact>(new Contact("redee", "Regewrina"));
-//  cont->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0, 59.9,29, "QString label",
-//                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
-//  contactModel.addContact(cont);
+  /*test*/
 
   client =new Client(&contactModel, this);
   //   view->rootContext()->setContextProperty("Client", client);

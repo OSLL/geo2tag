@@ -39,6 +39,7 @@ Flickable {
     Connections {target: trackSettings; onSettingschanged: Main.changeSettings(interval, permission)}
     Connections {target: rightPanel; onRequestToSubscribe:Main.onSubscribe(channel)}
     Connections {target: rightPanel; onRequestUnsubscribe: Main.unsubscribeChannel(channel)}
+    Connections {target: rightPanel; onShow: map.showContact(contact,lat,lng)}
 
 
 }

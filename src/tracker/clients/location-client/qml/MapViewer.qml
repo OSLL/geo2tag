@@ -6,6 +6,7 @@ import QtMobility.location 1.2
 
 
  Item {
+     property string curName: ""
      id: container
      width: 500
      height: 500
@@ -19,6 +20,11 @@ import QtMobility.location 1.2
 
      }
 
+     function showContact(contact,lat,lng) {
+         curName = contact;
+         setPosition(lat,lng);
+     }
+
 
 
      Map {
@@ -28,7 +34,7 @@ import QtMobility.location 1.2
          plugin : Plugin {
                              name : "nokia"
                          }
-         zoomLevel: 7
+         zoomLevel: 10
          mapType: Map.StreetMap
          center: /*positionSource.position.coordinate */Coordinate {
              latitude: 60
@@ -81,7 +87,12 @@ import QtMobility.location 1.2
                                  source:image
                              }
                              Text {
+                                 visible: (curName==name) ? true: false
+
+
                                  id: text
+                                 font.pointSize: 5
+                                 font.bold: true
                                  text: customname
                                  anchors.bottom: mark.top
                              }
@@ -134,15 +145,13 @@ import QtMobility.location 1.2
       text: "Zoom +"
       z: 20
       onClicked:
-      {         console.debug(positionSource.position.coordinate.latitude)
-          map.center=positionSource.position.coordinate
-    //      map.zoomLevel=15
+      {
 
 
 
      // focus : true
            map.zoomLevel += 1
-          drawPins();
+          //drawPins();
 
 
       }
@@ -161,7 +170,7 @@ import QtMobility.location 1.2
       onClicked: {
           if (map.zoomLevel>3) {
                map.zoomLevel -= 1;
-              drawPins()
+              //drawPins()
           }
 
 

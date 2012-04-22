@@ -1,5 +1,5 @@
 #QML_IMPORT_PATH = qml
-TARGET = location-client
+TARGET = ThereAndHere
 TEMPLATE=app
 OBJECTS_DIR = obj
 MOC_DIR = moc
@@ -53,8 +53,8 @@ SOURCES += \
     ../../../json/src/JsonSerializer.cpp \
     ../../../json/src/LoginResponseJSON.cpp \
     ../../../json/src/LoginRequestJSON.cpp \
-    ../../../json/src/SubscribeChannelJSON.cpp \
     ../../../json/src/SubscribedChannelsRequestJSON.cpp \
+    ../../../json/src/SubscribeChannelJSON.cpp \
     ../../../json/src/AvailableChannelsResponseJSON.cpp \
     ../../../json/src/AddChannelRequestJSON.cpp \
     ../../../json/src/DefaultResponseJSON.cpp \
@@ -167,7 +167,8 @@ OTHER_FILES += \
     qtc_packaging/debian_fremantle/compat \
     qtc_packaging/debian_fremantle/changelog \
     qml/TrackingSettingsView.qml \
-    qml/ContactList.qml
+    qml/ContactList.qml \
+    qml/ContactEditDialog.qml
 
 maemo5 {
     target.path = /opt/bin

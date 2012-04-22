@@ -8,6 +8,9 @@ Rectangle {
     id:panel
     signal requestToSubscribe(string channel)
     signal requestUnsubscribe(string channel)
+    signal show(string contact, double lat, double lng)
+
+
     x:parent.width - 50
     width: content.width + 20
     color: "#F0F8FF"
@@ -70,6 +73,7 @@ Rectangle {
     NotifyDialog {id:notify}
 
     Connections {target: contactList; onUnsubscribe:panel.requestUnsubscribe(channel)}
+    Connections {target: contactList; onShow: panel.show(contact,lat,lng)}
 
 
 

@@ -4,7 +4,8 @@ import com.nokia.symbian 1.1
 Rectangle {
     id: contactContainer
     property variant contact: contactModel
-   signal unsubscribe(string channel)
+    signal unsubscribe(string channel)
+    signal show(string contact, double lat, double lng)
 //    width: 500
 //    height: 300
     ListView {
@@ -20,10 +21,17 @@ Rectangle {
     Component {
         id: delegate
         Rectangle {
-            //color: ListView.isCurrentItem ? "blue" : "#F0F8FF"
-            color: "#F0F8FF"
+            color: list.isCurrentItem ? "blue" : "#F0F8FF"
+            //color: "#F0F8FF"
             width: parent.width
             height: nameText.height + loginText.height + 12
+            z:150
+
+            MouseArea {        
+                anchors.fill: parent
+                onPressAndHold: {dialog.customname=customname; dialog.open()}
+                onClicked: {list.currentIndex =index; contactContainer.show(name,lat,lng)}
+            }
 
 
             Image {
@@ -53,13 +61,18 @@ Rectangle {
 
             Button {
                 anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
                 text: "Del"
                 z:20
                 onClicked: {
                     console.debug("del!")
                     contactContainer.unsubscribe(name)
                 }
+
             }
+
+
+ContactEditDialog{id: dialog}
 
 
 
@@ -72,6 +85,7 @@ Rectangle {
 //                color: "black"
 //            }
         }
+
     }
 }
 }
