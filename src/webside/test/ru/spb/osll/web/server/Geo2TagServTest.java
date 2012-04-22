@@ -47,6 +47,8 @@ import ru.spb.osll.web.server.db.Channels;
 import ru.spb.osll.web.server.db.Tags;
 import ru.spb.osll.web.server.db.Users;
 import ru.spb.osll.web.server.json.JsonBase;
+import ru.spb.osll.web.server.json.JsonFilterCircleRequest;
+import ru.spb.osll.web.server.json.JsonFilterRectangleRequest;
 import ru.spb.osll.web.server.json.JsonLoginRequest;
 
 public class Geo2TagServTest extends TestCase {
@@ -54,10 +56,34 @@ public class Geo2TagServTest extends TestCase {
 	public void testLogin() {
 		String m_authToken;
 		JSONObject JSONResponse = null;
-		JSONResponse = new JsonLoginRequest("Paul", "test", 
-				JsonBase.getServerUrl()).doRequest();
+		JSONResponse = new JsonLoginRequest("Paul", "test", JsonBase
+				.getServerUrl()).doRequest();
 		m_authToken = JsonBase.getString(JSONResponse, "auth_token");
 		assertEquals(m_authToken, "PPPPPPPPPP");
+		String errno;
+		errno = JsonBase.getString(JSONResponse, "errno");
+		int error = Integer.parseInt(errno);
+		assertTrue(error == 0);
+	}
+
+	public void testCircleFilter() {
+		String channels;
+		JSONObject JSONResponse = null;
+		JSONResponse = new JsonFilterCircleRequest("MMMMMMMMMM",
+				"04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", 60.1632,
+				24.8593, 30.0, JsonBase.getServerUrl()).doRequest();
+		channels = JsonBase.getString(JSONResponse, "channels");
+		assertEquals(channels, "[]");
+	}
+
+	public void testRectangleFilter() {
+		String channels;
+		JSONObject JSONResponse = null;
+		JSONResponse = new JsonFilterRectangleRequest("MMMMMMMMMM",
+				"04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", 0.0,
+				100.0, 0.0, 100.0, JsonBase.getServerUrl()).doRequest();
+		channels = JsonBase.getString(JSONResponse, "channels");
+		assertEquals(channels, "[]");
 	}
 
 	public void testUsers() {
