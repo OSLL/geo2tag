@@ -61,6 +61,8 @@ CREATE TABLE tags (
 CREATE TABLE subscribe (
   channel_id NUMERIC(9,0) NOT NULL,
   user_id NUMERIC(9,0) NOT NULL,
+  constraint uniquenes UNIQUE (channel_id,user_id),
+  constraint subscribe_pkey primary key (channel_id,user_id),
   constraint fk_tags  foreign key (user_id) references users(id)
                                                        on delete cascade,
   constraint fk_channels foreign key (channel_id) references channel(id)
