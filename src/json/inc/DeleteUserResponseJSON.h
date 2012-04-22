@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,25 +28,23 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file SetTimeSlotMarkRequestJSON.h
- * \brief Header of SetTimeSlotMarkRequestJSON
+
+/*! ---------------------------------------------------------------
+ * \file DeleteUserResponseJSON.h
+ * \brief Header of DeleteUserResponseJSON
+ * \todo add comment here
  *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _SETTIMESLOTMARKREQUESTJSON_H_a4a8252b_f9ac_4e61_9169_8c9f7496a73a_
-#define _SETTIMESLOTMARKREQUESTJSON_H_a4a8252b_f9ac_4e61_9169_8c9f7496a73a_
 
-#include "JsonSerializer.h"
+#ifndef _DeleteUserResponseJSON_H_0000F356_F4F1_47A8_9042_31C1569A745C_INCLUDED_
+#define _DeleteUserResponseJSON_H_0000F356_F4F1_47A8_9042_31C1569A745C_INCLUDED_
 
-class SetTimeSlotMarkRequestJSON : public JsonSerializer
-{
-  Q_OBJECT;
-  public:
-    SetTimeSlotMarkRequestJSON(QObject *parent=0);
+#include "DefaultResponseJSON.h"
 
-    QByteArray getJson() const;
+typedef DefaultResponseJSON DeleteUserResponseJSON;
 
-    bool parseJson(const QByteArray&);
-};
-#endif                                  // _SETTIMESLOTMARKREQUESTJSON_H_a4a8252b_f9ac_4e61_9169_8c9f7496a73a_
+#endif //_DeleteUserResponseJSON_H_0000F356_F4F1_47A8_9042_31C1569A745C_INCLUDED_

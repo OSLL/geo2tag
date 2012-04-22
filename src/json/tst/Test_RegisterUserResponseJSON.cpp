@@ -12,23 +12,19 @@
 #include "Test_RegisterUserResponseJSON.h"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
+#include "ErrnoTypes.h"
+#include <QDebug>
 
 namespace Test
 {
     void Test_RegisterUserResponseJSON::getJson()
     {
         RegisterUserResponseJSON response;
-        QByteArray data;
-        QJson::Serializer serializer;
-        QVariantMap obj;
-
-        data = QString("{\"errno\":\"0\"}").toAscii();
-        obj.insert("errno", 0);
-
-        QByteArray true_json = serializer.serialize(obj);
-
-        response.parseJson(data);
-        QCOMPARE(response.getJson(), true_json);
+        QString data = "{ \"confirmUrl\" : \"\", \"errno\" : 0 }";
+	response.setErrno(SUCCESS);
+	qDebug() << data;
+	qDebug() << response.getJson();
+        QCOMPARE(response.getJson(), data.toAscii());
     }
 
     void Test_RegisterUserResponseJSON::parseJson()
@@ -36,7 +32,7 @@ namespace Test
         RegisterUserResponseJSON response;
         QByteArray data;
 
-        data = QString("{\"errno\":\"0\"}").toAscii();
+        data = QString("{ \"errno\" : 0 }").toAscii();
         QCOMPARE(response.parseJson(data), true);
         QCOMPARE(response.getErrno(), 0);
     }

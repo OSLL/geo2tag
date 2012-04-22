@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,43 +28,88 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+
 /*! ---------------------------------------------------------------
  *
- *
- * \file JsonTimeSlot.cpp
- * \brief JsonTimeSlot implementation
+ * \file DeleteUserQuery.cpp
+ * \brief DeleteUserQuery implementation
  *
  * File description
  *
- * PROJ: OSLL/geoblog
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "JsonTimeSlot.h"
+#include "DeleteUserQuery.h"
 
-qlonglong JsonTimeSlot::globalTimeSlotId = 0;
+#include <QDebug>
 
-JsonTimeSlot::JsonTimeSlot(const qulonglong &slot):
-TimeSlot(slot),
-m_id(globalTimeSlotId++)
+#include "DeleteUserQuery.h"
+#include "defines.h"
+
+#include "JsonUser.h"
+#include "DeleteUserRequestJSON.h"
+#include "DeleteUserResponseJSON.h"
+
+#ifndef Q_OS_SYMBIAN
+#include <syslog.h>
+#else
+#include "symbian.h"
+#endif
+
+DeleteUserQuery::DeleteUserQuery(const QString &login, const QString &password, QObject *parent):
+DefaultQuery(parent), m_login(login), m_password(password)
 {
 }
 
 
-qlonglong JsonTimeSlot::getId() const
-{
-  return m_id;
-}
-
-
-void JsonTimeSlot::setId(qlonglong id)
-{
-  m_id=id;
-}
-
-
-JsonTimeSlot::~JsonTimeSlot()
+DeleteUserQuery::DeleteUserQuery(QObject *parent):
+DefaultQuery(parent)
 {
 }
 
 
-/* ===[ End of file ]=== */
+QString DeleteUserQuery::getUrl() const
+{
+  return DELETE_USER_HTTP_URL;
+}
+
+
+QByteArray DeleteUserQuery::getRequestBody() const
+{
+  QSharedPointer<common::User> dummyUser(new JsonUser(m_login,m_password));
+  DeleteUserRequestJSON request;
+  request.addUser(dummyUser);
+  return request.getJson();
+}
+
+
+void DeleteUserQuery::processReply(QNetworkReply *reply)
+{
+  #ifndef Q_OS_SYMBIAN
+  DeleteUserResponseJSON response;
+  response.parseJson(reply->readAll());
+  m_errno = response.getErrno();
+  if(response.getErrno() == SUCCESS)
+  {
+    syslog(LOG_INFO,"!!connected!");
+    Q_EMIT connected();
+  }
+  else
+  {
+    Q_EMIT errorOccured(response.getErrno());
+  }
+  #endif
+}
+
+
+void DeleteUserQuery::setQuery(const QString& login, const QString& password)
+{
+  m_login=login;
+  m_password=password;
+}
+
+
+DeleteUserQuery::~DeleteUserQuery()
+{
+
+}

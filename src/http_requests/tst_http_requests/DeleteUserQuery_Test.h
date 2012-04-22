@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,16 +28,59 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
+
 /*!
- * \file SetDefaultTimeSlotResponseJSON.h
- * \brief Header of SetDefaultTimeSlotResponseJSON
+ * \file DeleteUserQuery_Test.h
+ * \brief Test suite for DeleteUserQuery class
  *
- * ---------------------------------------------------------------- */
+ * PROJ: OSLL/geo2tag
+ * ----------------------------------------------------------- */
 
-#ifndef _SETDEFAULTTIMESLOTRESPONSEJSON_H_3d4dc66e_e09a_49cc_bfe5_b8437d28dac9_
-#define _SETDEFAULTTIMESLOTRESPONSEJSON_H_3d4dc66e_e09a_49cc_bfe5_b8437d28dac9_
 
-#include "DefaultResponseJSON.h"
+#include <QObject>
+#include <QtTest/QtTest>
+#include <QSignalSpy>
 
-typedef DefaultResponseJSON SetDefaultTimeSlotResponseJSON;
-#endif                                  // _SETDEFAULTTIMESLOTRESPONSEJSON_H_3d4dc66e_e09a_49cc_bfe5_b8437d28dac9_
+//include Application class
+#include "DeleteUserQuery.h"
+#include "signals.h"
+
+
+namespace Test
+{
+  class DeleteUserQuery_Test : public QObject
+  {
+    Q_OBJECT;
+
+		// DeleteUserQuery*  m_tstObject; // Object for testing
+  
+  public:
+    
+    DeleteUserQuery_Test(QObject *parent =0) : QObject(parent)
+    {
+  	  // initialization here
+			// m_tstObject = new DeleteUserQuery;
+    }
+    
+    ~DeleteUserQuery_Test()
+    {
+  	  // destroying  here
+			// delete m_tstObject;
+			// m_tstObject = NULL;
+    }
+  
+  private slots:
+  
+    void test1()
+    {
+
+	DeleteUserQuery * query = new DeleteUserQuery(this);
+	QSignalSpy spy_deleteUser(query,SIGNAL(errorOccured(int)));
+	query->doRequest();
+	QVERIFY(waitForSignal(query,SIGNAL(errorOccured(int)),5000));
+	QCOMPARE(spy_deleteUser.count(), 1);
+    }
+  
+  }; // class DeleteUserQuery_Test
+
+} // end of namespace Test

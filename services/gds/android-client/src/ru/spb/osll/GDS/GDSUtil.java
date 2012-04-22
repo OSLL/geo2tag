@@ -82,9 +82,9 @@ public class GDSUtil {
 	
 	public static String convertLocation(double lat, double lon, double alt){
 		StringBuffer strBuffer = new StringBuffer();
-		strBuffer.append("lat: ").append(Location.convert(lat, Location.FORMAT_MINUTES)).
-		append("  lon: ").append(Location.convert(lon, Location.FORMAT_MINUTES)).
-		append("  alt: ").append(Location.convert(alt, Location.FORMAT_DEGREES));
+		strBuffer.append("lat: ").append(String.valueOf(lat)).
+			append("  lon: ").append(String.valueOf(lon));
+			// append("  alt: ").append(String.valueOf(alt));
 		return strBuffer.toString();
 	}
 

@@ -39,6 +39,7 @@ public class EventsService extends Service {
 	private Settings m_settings;
 	private MediaPlayer m_sirenPlayer;
 	private Set<Long> m_events_ids = new HashSet<Long>();
+	private Channel m_savedEvents;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -211,6 +212,7 @@ public class EventsService extends Service {
 						
 						if (new_ids || expired_ids) {
 							m_events_ids = events_ids_new;
+							m_savedEvents = channel;
 							broadcastEvents(channel);
 						}
 					}
@@ -253,6 +255,7 @@ public class EventsService extends Service {
 		public static final String TYPE_SIGNAL	= "osll.gds.signal";
 
 		public static final int SIGNAL_UPDATE_SETTINGS	= 0;
+		public static final int SIGNAL_SEND_MARKS = 1;
 		
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -261,6 +264,14 @@ public class EventsService extends Service {
 			case SIGNAL_UPDATE_SETTINGS:
 				//refreshSCache();
 				//onSettingUpdated();
+				break;
+			case SIGNAL_SEND_MARKS:
+				if (GDSUtil.DEBUG) {
+					Log.v(EventsManager.LOG, "saved events reqeusted");
+				}
+				if (m_savedEvents != null) {
+					broadcastEvents(m_savedEvents);
+				}
 				break;
 			}
 		}

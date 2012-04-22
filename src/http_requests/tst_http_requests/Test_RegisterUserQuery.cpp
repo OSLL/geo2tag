@@ -26,7 +26,7 @@ namespace Test
         query.setQuery(email, login, password);
         query.doRequest();
         //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
-        QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 1000));
+        QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
 
     }
 

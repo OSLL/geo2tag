@@ -12,21 +12,21 @@ import android.graphics.drawable.Drawable;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
-public class EventsItemizedOverlay extends ItemizedOverlay {
+public class EventsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	private ArrayList<MarkOverlayItem> m_items = new ArrayList<MarkOverlayItem>();
 	private Context m_context;
 	
 	public EventsItemizedOverlay(Drawable defaultMarker) {
-		super(boundCenterBottom(defaultMarker));
+		super(boundCenter(defaultMarker));
 		populate();
 	}
 	
 	public EventsItemizedOverlay(Drawable defaultMarker, Context context) {
-		  super(boundCenterBottom(defaultMarker));
+		  super(boundCenter(defaultMarker));
 		  m_context = context;
 		  populate();
-		}
+	}
 
 	@Override
 	protected OverlayItem createItem(int i) {

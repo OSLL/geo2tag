@@ -89,7 +89,7 @@ void ProfilerThread::sendRequest()
 
 void ProfilerThread::responseRecieved()
 {
-  incCounter();
+  if (m_query->getErrno() == SUCCESS) incCounter();
   qDebug() << getCounter() << " " << m_sendTime.msecsTo(QDateTime::currentDateTime()) << " " << m_query->getErrno();
   if (m_counter == m_number_of_requests ) exit();
   emit doRequest();

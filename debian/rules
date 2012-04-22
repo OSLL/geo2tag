@@ -11,6 +11,8 @@
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
+lastCommit = `git log --pretty=format:'%h' -n 1`
+buildNum = `git log --pretty=format:'' | wc -l`
 CFLAGS = -Wall -g
 
 BUILDDIR = ./debian/build/
@@ -31,17 +33,24 @@ build-stamp:
 	cp -r ./data $(BUILDDIR)
 	cp -r ./scripts $(BUILDDIR)
 	cp -r ./debian/config.pri $(BUILDDIR)
-	echo "Current diRRR"
-	echo $(CURDIR)
 #Check what architecture we are use. If it is i386, we need to build all for i386, else build all armel code
-	if [ "$(DEB_BUILD_ARCH)" != "armel" ] ; then \
+	if [ "$(DEB_BUILD_ARCH)" != "armel" ];  \
+	then \
 		echo $$PWD ; \
 		echo "i386 architecture selection"; \
-		cd $(BUILDDIR) && qmake "CONFIG +=linux" -after *.pro && $(MAKE); \
+		cd $(BUILDDIR); \
+		qmake "CONFIG +=linux" -after *.pro; \
+		if  $(MAKE); \
+		then echo "Build normal"; \
+		else exit 1; \
+		fi; \
 		cd ../../; \
 	else \
-	cd $(BUILDDIR) && qmake "CONFIG += maemo" -after *.pro; \
-	$(MAKE); \
+		qmake "CONFIG +=maemo" -after *.pro; \
+		if  $(MAKE); \
+		then echo "Build normal"; \
+		else exit 1; \
+		fi; \
 	fi;
 	touch build-stamp
 
@@ -62,6 +71,8 @@ install: build unittest
 	dh_clean -k
 	dh_installdirs
 	$(MAKE) -C $(BUILDDIR) INSTALL_ROOT=$(CURDIR)/debian/tmp install; 
+	sed -i "s/geo2tag_build.*$$/geo2tag_build=$(lastCommit)-$(buildNum)/" $(CURDIR)/debian/tmp/opt/geo2tag/geo2tag.conf
+
 #	install -d $(CURDIR)/debian/tmp/etc/event.d; 
 #	install -d $(CURDIR)/debian/tmp/etc/logrotate.d; 
 #	install -d $(CURDIR)/debian/tmp/usr/share/applications/hildon; 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2012  Mark Zaslavskiy  mark.zaslavskiy@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,25 +28,55 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file GetTimeSlotMarkRequestJSON.h
- * \brief Header of GetTimeSlotMarkRequestJSON
+
+/*! ---------------------------------------------------------------
+ * \file DeleteUserQuery.h
+ * \brief Header of DeleteUserQuery
+ * \todo add comment here
  *
+ * File description
+ *
+ * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _GETTIMESLOTMARKRESPONSEJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_
-#define _GETTIMESLOTMARKRESPONSEJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_
 
-#include "JsonSerializer.h"
+#ifndef _DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_
+#define _DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_
 
-class GetTimeSlotMarkResponseJSON : public JsonSerializer
+
+#include <QObject>
+#include <QString>
+#include "DefaultQuery.h"
+#include "User.h"
+
+class DeleteUserQuery: public DefaultQuery
 {
-  Q_OBJECT;
+  Q_OBJECT
+
+  QString m_login;
+  QString m_password;
+
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
+
+  private Q_SLOTS:
+
+    virtual void processReply(QNetworkReply *reply);
+
   public:
-    GetTimeSlotMarkResponseJSON(QObject *parent=0);
 
-    QByteArray getJson() const;
+    DeleteUserQuery(const QString& login, const QString& password, QObject *parent = 0);
 
-    bool parseJson(const QByteArray&);
-};
-#endif                                  // _GETTIMESLOTMARKRESPONSEJSON_H_d0c6382c_dec2_4012_b1af_9dc1d5fdf1c2_
+    DeleteUserQuery(QObject *parent = 0);
+
+    void setQuery(const QString& login, const QString& password);
+
+    ~DeleteUserQuery();
+
+    Q_SIGNALS:
+
+    void connected();
+}; // class DeleteUserQuery
+  
+
+#endif //_DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_

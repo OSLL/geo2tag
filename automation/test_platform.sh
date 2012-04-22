@@ -48,7 +48,7 @@ then
 	exit 1
 fi
 
-test_altitude=$((RANDOM%100)).$((RANDOM%1000));
+test_altitude=$((RANDOM%100)).0;
 test_time=`date +'%d %m %Y %H:%M:%S.300'`;
 echo "test time = $test_time"
 echo "Test alt:$test_altitude"
@@ -85,5 +85,27 @@ then
         echo "Fail at bug_575 test"
         exit 1
 fi
+
+response_add_user_test=`curl -d "{\"login\":\"$test_channel\",\"password\":\"test\",\"email\":\"11@11.ru\"}" http://localhost:81/service/addUser`;
+if ! echo $response_add_user_test | grep -q -s -F "$correct_result"  ;
+then
+        echo "Fail at addUser test"
+        exit 1
+fi
+
+echo "$test_channel"
+response_delete_user_test=`curl -d "{\"login\":\"$test_channel\",\"password\":\"test\"}" http://localhost:81/service/deleteUser`;
+response_check_delete_test=`curl -d "{\"login\":\"$test_channel\",\"password\":\"test\"}" http://localhost:81/service/login`;
+if ! echo $response_delete_user_test | grep -q -s -F "$correct_result"  ;
+then
+        echo "Fail at deleteUser test"
+        exit 1
+fi
+if  echo $response_check_delete_test | grep -q -s -F "$correct_result"  ;
+then
+        echo "Fail at checkDelete test"
+        exit 1
+fi
+
 
 echo "Succes"

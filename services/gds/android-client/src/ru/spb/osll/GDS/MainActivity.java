@@ -145,6 +145,7 @@ public class MainActivity extends TabActivity {
 	@Override
 	protected void onDestroy() {
 		stopService(new Intent(this, LocationService.class));
+		m_trackingManager.stopTracking(this);
 		unregisterReceiver(m_trackingReceiver);
 		super.onDestroy();
 	}

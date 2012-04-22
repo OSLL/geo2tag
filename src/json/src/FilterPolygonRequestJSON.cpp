@@ -70,6 +70,8 @@ QByteArray FilterPolygonRequestJSON::getJson() const
 bool FilterPolygonRequestJSON::parseJson(const QByteArray&data)
 {
   clearContainers();
+  FilterRequestJSON::parseJson(data);
+
   QJson::Parser parser;
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();

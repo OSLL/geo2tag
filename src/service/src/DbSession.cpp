@@ -69,24 +69,6 @@
 #include "SubscribeChannelJSON.h"
 #include "SubscribeChannelResponseJSON.h"
 
-#include "GetTimeSlotRequestJSON.h"
-#include "GetTimeSlotResponseJSON.h"
-
-#include "SetTimeSlotRequestJSON.h"
-#include "SetTimeSlotResponseJSON.h"
-
-#include "GetTimeSlotMarkRequestJSON.h"
-#include "GetTimeSlotMarkResponseJSON.h"
-
-#include "SetTimeSlotMarkRequestJSON.h"
-#include "SetTimeSlotMarkResponseJSON.h"
-
-#include "SetDefaultTimeSlotRequestJSON.h"
-#include "SetDefaultTimeSlotResponseJSON.h"
-
-#include "SetDefaultTimeSlotMarkRequestJSON.h"
-#include "SetDefaultTimeSlotMarkResponseJSON.h"
-
 #include "AvailableChannelsRequestJSON.h"
 #include "AvailableChannelsResponseJSON.h"
 
@@ -110,11 +92,14 @@
 #include "FilterChannelRequestJSON.h"
 #include "FilterChannelResponseJSON.h"
 
+#include "DeleteUserRequestJSON.h"
+#include "DeleteUserResponseJSON.h"
+
 #include "ErrnoInfoResponseJSON.h"
 
 #include "VersionResponseJSON.h"
+#include "BuildResponseJSON.h"
 
-#include "JsonTimeSlot.h"
 #include "ChannelInternal.h"
 #include "ErrnoTypes.h"
 
@@ -145,15 +130,11 @@ namespace common
     m_processors.insert("subscribed", &DbObjectsCollection::processSubscribedChannelsQuery);
     m_processors.insert("addUser", &DbObjectsCollection::processAddUserQuery);
     m_processors.insert("addChannel", &DbObjectsCollection::processAddChannelQuery);
-    m_processors.insert("getTimeSlot", &DbObjectsCollection::processGetTimeSlotQuery);
-    m_processors.insert("setTimeSlot", &DbObjectsCollection::processSetTimeSlotQuery);
-    m_processors.insert("getTimeSlotMark", &DbObjectsCollection::processGetTimeSlotMarkQuery);
-    m_processors.insert("setTimeSlotMark", &DbObjectsCollection::processSetTimeSlotMarkQuery);
-    m_processors.insert("setDefaultTimeSlot", &DbObjectsCollection::processSetDefaultTimeSlotQuery);
-    m_processors.insert("setDefaultTimeSlotMark", &DbObjectsCollection::processSetDefaultTimeSlotMarkQuery);
     m_processors.insert("channels", &DbObjectsCollection::processAvailableChannelsQuery);
     m_processors.insert("unsubscribe", &DbObjectsCollection::processUnsubscribeQuery);
     m_processors.insert("version", &DbObjectsCollection::processVersionQuery);
+    m_processors.insert("deleteUser", &DbObjectsCollection::processDeleteUserQuery);
+    m_processors.insert("build", &DbObjectsCollection::processBuildQuery);
 
     m_processors.insert("errnoInfo", &DbObjectsCollection::processGetErrnoInfo);
     m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
@@ -239,19 +220,26 @@ namespace common
 
   }
 
-  QSharedPointer<User> DbObjectsCollection::findUserFromToken(const QSharedPointer<User> &dummyUser) const
+  QSharedPointer<User> DbObjectsCollection::findUser(const QSharedPointer<User> &dummyUser) const
   {
     QSharedPointer<User> realUser;      // Null pointer
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
-    syslog(LOG_INFO, "checking user's key: %s from %d known users", dummyUser->getToken().toStdString().c_str(),
+    syslog(LOG_INFO, "checking user key: %s from %d known users", dummyUser->getToken().toStdString().c_str(),
       currentUsers.size());
-    for(int i=0; i<currentUsers.size(); i++)
+    if (!dummyUser->getToken().isEmpty() && dummyUser->getToken()!="unknown")
     {
-      if(currentUsers.at(i)->getToken() == dummyUser->getToken())
-      {
-        realUser = currentUsers.at(i);
-        break;
-      }
+    	for(int i=0; i<currentUsers.size(); i++)
+    	{
+      		if(currentUsers.at(i)->getToken() == dummyUser->getToken())
+        	return currentUsers.at(i);
+    	}
+    }else if (!dummyUser->getLogin().isEmpty() && !dummyUser->getPassword().isEmpty())
+    {
+    	for(int i=0; i<currentUsers.size(); i++)
+    	{
+      		if(currentUsers.at(i)->getLogin() == dummyUser->getLogin() && currentUsers.at(i)->getPassword() == dummyUser->getPassword())
+        	return currentUsers.at(i);
+    	}
     }
     return realUser;
   }
@@ -391,7 +379,7 @@ namespace common
     QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
     syslog(LOG_INFO,"Adding mark with altitude = %f",dummyTag->getAltitude());
     QSharedPointer<User> dummyUser = dummyTag->getUser();
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
 
     if(realUser.isNull())               //
     {
@@ -457,7 +445,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -486,7 +474,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -539,7 +527,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
 
     if(realUser.isNull())
     {
@@ -664,7 +652,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
 
     if(realUser.isNull())
     {
@@ -712,495 +700,6 @@ namespace common
     return answer;
   }
 
-  QByteArray DbObjectsCollection::processGetTimeSlotQuery(const QByteArray &data)
-  {
-    syslog(LOG_INFO, "starting GetTimeSlotQuery processing");
-    GetTimeSlotRequestJSON request;
-    GetTimeSlotResponseJSON response;
-    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    if (!request.parseJson(data))
-    {
-      response.setErrno(INCORRECT_JSON_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
-
-    if(realUser.isNull())
-    {
-      DefaultResponseJSON response;
-      response.setErrno(WRONG_TOKEN_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
-    QSharedPointer<Channel> realChannel;// Null pointer
-    QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
-    for(int i=0; i<currentChannels.size(); i++)
-    {
-      if(currentChannels.at(i)->getName() == dummyChannel->getName())
-      {
-        realChannel = currentChannels.at(i);
-      }
-    }
-    if(realChannel.isNull())
-    {
-      DefaultResponseJSON response;
-      response.setErrno(CHANNEL_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    response.setErrno(SUCCESS);
-    response.addChannel(realChannel);
-    answer.append(response.getJson());
-    syslog(LOG_INFO, "answer: %s", answer.data());
-    return answer;
-  }
-
-  QByteArray DbObjectsCollection::processSetTimeSlotQuery(const QByteArray &data)
-  {
-    syslog(LOG_INFO, "starting SetTimeSlotQuery processing");
-    SetTimeSlotRequestJSON request;
-    SetTimeSlotResponseJSON response;
-    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    if (!request.parseJson(data))
-    {
-      response.setErrno(INCORRECT_JSON_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
-
-    if(realUser.isNull())
-    {
-      response.setErrno(WRONG_TOKEN_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
-    QSharedPointer<Channel> realChannel;// Null pointer
-    QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
-    for(int i=0; i<currentChannels.size(); i++)
-    {
-      if(currentChannels.at(i)->getName() == dummyChannel->getName())
-      {
-        realChannel = currentChannels.at(i);
-      }
-    }
-
-    if(realChannel.isNull())
-    {
-      response.setErrno(CHANNEL_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    syslog(LOG_INFO, "Sending sql request for SetTimeSlot");
-
-    QSharedPointer<TimeSlot> dummyTimeSlot = dummyChannel->getTimeSlot();
-    if (!dummyTimeSlot->getSlot())
-    {
-      response.setErrno(NULL_TIMESLOT_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-                                        // Null pointer
-    QSharedPointer<TimeSlot> realTimeSlot;
-    QVector<QSharedPointer<TimeSlot> > currentTimeSlots = m_timeSlotsContainer->vector();
-    for(int i=0; i<currentTimeSlots.size(); i++)
-    {
-      if(currentTimeSlots.at(i)->getSlot() == dummyTimeSlot->getSlot())
-        realTimeSlot = currentTimeSlots.at(i);
-    }
-
-    bool realTimeSlotIsNull = false;
-    QSharedPointer<TimeSlot> addedTimeSlot;
-
-    if ((realTimeSlot.isNull()) && (dummyTimeSlot->getSlot() != Channel::DEFAULT_TIME_SLOT_VALUE_MIN) )
-    {
-      realTimeSlotIsNull = true;
-      addedTimeSlot = m_queryExecutor->insertNewTimeSlot(dummyTimeSlot);
-      if(!addedTimeSlot)
-      {
-        response.setErrno(INTERNAL_DB_ERROR);
-        answer.append(response.getJson());
-        syslog(LOG_INFO, "answer: %s", answer.data());
-        return answer;
-      }
-      m_updateThread->lockWriting();
-      m_timeSlotsContainer->push_back(addedTimeSlot);
-      m_updateThread->unlockWriting();
-    }
-
-    bool result = false;
-    bool channelTimeSlotIsDefault = false;
-    if (realChannel->timeSlotIsDefault())
-    {
-      channelTimeSlotIsDefault = true;
-      if (realTimeSlotIsNull)
-        result = m_queryExecutor->insertNewChannelTimeSlot(realChannel, addedTimeSlot);
-      else if ( (dummyTimeSlot->getSlot() == Channel::DEFAULT_TIME_SLOT_VALUE_MIN) ||
-        (realTimeSlot->getSlot() == Channel::DEFAULT_TIME_SLOT_VALUE_MIN) )
-      {
-        response.setErrno(SUCCESS);
-        answer.append(response.getJson());
-        return answer;
-      }
-      else if (realTimeSlot->getSlot() != Channel::DEFAULT_TIME_SLOT_VALUE_MIN)
-        result = m_queryExecutor->insertNewChannelTimeSlot(realChannel, realTimeSlot);
-    }
-    else
-    {
-      if (realTimeSlotIsNull)
-        result = m_queryExecutor->changeChannelTimeSlot(realChannel, addedTimeSlot);
-      else if ( (dummyTimeSlot->getSlot() == Channel::DEFAULT_TIME_SLOT_VALUE_MIN) ||
-        (realTimeSlot->getSlot() == Channel::DEFAULT_TIME_SLOT_VALUE_MIN) )
-        return processSetDefaultTimeSlotQuery(data);
-      else if (realTimeSlot->getSlot() != Channel::DEFAULT_TIME_SLOT_VALUE_MIN)
-        result = m_queryExecutor->changeChannelTimeSlot(realChannel, realTimeSlot);
-    }
-
-    if(!result)
-    {
-      response.setErrno(INTERNAL_DB_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    m_updateThread->lockWriting();
-    if (realTimeSlotIsNull)
-    {
-      realChannel->setTimeSlot(addedTimeSlot);
-      if (channelTimeSlotIsDefault)
-        realChannel->setDefaultTimeSlot(false);
-    }
-    else
-    {
-      realChannel->setTimeSlot(realTimeSlot);
-      if (channelTimeSlotIsDefault)
-        realChannel->setDefaultTimeSlot(false);
-    }
-    m_updateThread->unlockWriting();
-
-    response.setErrno(SUCCESS);
-    answer.append(response.getJson());
-    syslog(LOG_INFO, "answer: %s", answer.data());
-    return answer;
-
-  }
-
-  QByteArray DbObjectsCollection::processGetTimeSlotMarkQuery(const QByteArray &data)
-  {
-    syslog(LOG_INFO, "starting GetTimeSlotmarkQuery processing");
-    GetTimeSlotMarkRequestJSON request;
-    GetTimeSlotMarkResponseJSON response;
-    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    if (!request.parseJson(data))
-    {
-      response.setErrno(INCORRECT_JSON_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
-
-    if(realUser.isNull())
-    {
-      DefaultResponseJSON response;
-      response.setErrno(WRONG_TOKEN_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
-    QSharedPointer<DataMark> realTag;   // Null pointer
-    QVector<QSharedPointer<DataMark> > currentTags = m_tagsContainer->vector();
-    for(int i=0; i<currentTags.size(); i++)
-    {
-      if(currentTags.at(i)->getId() == dummyTag->getId())
-      {
-        realTag = currentTags.at(i);
-      }
-    }
-    if(realTag.isNull())
-    {
-      DefaultResponseJSON response;
-      response.setErrno(TAG_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    response.setErrno(SUCCESS);
-    response.addTag(realTag);
-    answer.append(response.getJson());
-    syslog(LOG_INFO, "answer: %s", answer.data());
-    return answer;
-  }
-
-  QByteArray DbObjectsCollection::processSetTimeSlotMarkQuery(const QByteArray &data)
-  {
-    syslog(LOG_INFO, "starting SetTimeSlotMarkQuery processing");
-    SetTimeSlotMarkRequestJSON request;
-    SetTimeSlotMarkResponseJSON response;
-    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    if (!request.parseJson(data))
-    {
-      response.setErrno(INCORRECT_JSON_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
-
-    if(realUser.isNull())
-    {
-      response.setErrno(WRONG_TOKEN_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
-    QSharedPointer<DataMark> realTag;   // Null pointer
-    QVector<QSharedPointer<DataMark> > currentTags = m_tagsContainer->vector();
-    for(int i=0; i<currentTags.size(); i++)
-    {
-      if(currentTags.at(i)->getId() == dummyTag->getId())
-      {
-        realTag = currentTags.at(i);
-      }
-    }
-    if(realTag.isNull())
-    {
-      response.setErrno(TAG_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    syslog(LOG_INFO, "Sending sql request for SetTimeSlotMark");
-
-    QSharedPointer<TimeSlot> dummyTimeSlot = dummyTag->getTimeSlot();
-    if (!dummyTimeSlot->getSlot())
-    {
-      response.setErrno(NULL_TIMESLOT_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-                                        // Null pointer
-    QSharedPointer<TimeSlot> realTimeSlot;
-    QVector<QSharedPointer<TimeSlot> > currentTimeSlots = m_timeSlotsContainer->vector();
-    for(int i=0; i<currentTimeSlots.size(); i++)
-    {
-      if(currentTimeSlots.at(i)->getSlot() == dummyTimeSlot->getSlot())
-      {
-        realTimeSlot = currentTimeSlots.at(i);
-      }
-    }
-
-    bool realTimeSlotIsNull = false;
-    QSharedPointer<TimeSlot> addedTimeSlot;
-
-    if (realTimeSlot.isNull())
-    {
-      realTimeSlotIsNull = true;
-      addedTimeSlot = m_queryExecutor->insertNewTimeSlot(dummyTimeSlot);
-      if(!addedTimeSlot)
-      {
-        response.setErrno(INTERNAL_DB_ERROR);
-        answer.append(response.getJson());
-        syslog(LOG_INFO, "answer: %s", answer.data());
-        return answer;
-      }
-      m_updateThread->lockWriting();
-      m_timeSlotsContainer->push_back(addedTimeSlot);
-      m_updateThread->unlockWriting();
-    }
-
-    bool result;
-    if (realTag->timeSlotIsNull())
-    {
-      if (realTimeSlotIsNull)
-        result = m_queryExecutor->insertNewMarkTimeSlot(realTag, addedTimeSlot);
-      else
-        result = m_queryExecutor->insertNewMarkTimeSlot(realTag, realTimeSlot);
-    }
-    else
-    {
-      if (realTimeSlotIsNull)
-        result = m_queryExecutor->changeMarkTimeSlot(realTag, addedTimeSlot);
-      else
-        result = m_queryExecutor->changeMarkTimeSlot(realTag, realTimeSlot);
-    }
-
-    if(!result)
-    {
-      response.setErrno(INTERNAL_DB_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    m_updateThread->lockWriting();
-    if (realTimeSlotIsNull)
-      realTag->setTimeSlot(addedTimeSlot);
-    else
-      realTag->setTimeSlot(realTimeSlot);
-    m_updateThread->unlockWriting();
-
-    response.setErrno(SUCCESS);
-    answer.append(response.getJson());
-    syslog(LOG_INFO, "answer: %s", answer.data());
-    return answer;
-  }
-
-  QByteArray DbObjectsCollection::processSetDefaultTimeSlotQuery(const QByteArray& data)
-  {
-    syslog(LOG_INFO, "starting SetDefaultTimeSlotQuery processing");
-    SetDefaultTimeSlotRequestJSON request;
-    SetDefaultTimeSlotResponseJSON response;
-    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    if (!request.parseJson(data))
-    {
-      response.setErrno(INCORRECT_JSON_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
-
-    if(realUser.isNull())
-    {
-      response.setErrno(WRONG_TOKEN_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
-    QSharedPointer<Channel> realChannel;// Null pointer
-    QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
-    for(int i=0; i<currentChannels.size(); i++)
-    {
-      if(currentChannels.at(i)->getName() == dummyChannel->getName())
-      {
-        realChannel = currentChannels.at(i);
-      }
-    }
-    if(realChannel.isNull())
-    {
-      response.setErrno(CHANNEL_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    syslog(LOG_INFO, "Sending sql request for SetDefaultTimeSlotQuery");
-
-    if (realChannel->timeSlotIsDefault())
-    {
-      response.setErrno(SUCCESS);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    bool result = m_queryExecutor->deleteChannelTimeSlot(realChannel);
-
-    if(!result)
-    {
-      response.setErrno(INTERNAL_DB_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    m_updateThread->lockWriting();
-    realChannel->setTimeSlot(QSharedPointer<TimeSlot> (new TimeSlot(Channel::DEFAULT_TIME_SLOT_VALUE_MIN)));
-    realChannel->setDefaultTimeSlot(true);
-    m_updateThread->unlockWriting();
-
-    response.setErrno(SUCCESS);
-    answer.append(response.getJson());
-    syslog(LOG_INFO, "answer: %s", answer.data());
-    return answer;
-  }
-
-  QByteArray DbObjectsCollection::processSetDefaultTimeSlotMarkQuery(const QByteArray& data)
-  {
-    syslog(LOG_INFO, "starting SetDefaultTimeSlotMarkQuery processing");
-    SetDefaultTimeSlotMarkRequestJSON request;
-    SetDefaultTimeSlotMarkResponseJSON response;
-    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    if (!request.parseJson(data))
-    {
-      response.setErrno(INCORRECT_JSON_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
-
-    if(realUser.isNull())
-    {
-      response.setErrno(WRONG_TOKEN_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
-    QSharedPointer<DataMark> realTag;   // Null pointer
-    QVector<QSharedPointer<DataMark> > currentTags = m_tagsContainer->vector();
-    for(int i=0; i<currentTags.size(); i++)
-    {
-      if(currentTags.at(i)->getId() == dummyTag->getId())
-      {
-        realTag = currentTags.at(i);
-      }
-    }
-
-    if(realTag.isNull())
-    {
-      response.setErrno(TAG_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    syslog(LOG_INFO, "Sending sql request for SetDefaultTimeSlotMark");
-
-    if (realTag->timeSlotIsNull())
-    {
-      response.setErrno(SUCCESS);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    bool result = m_queryExecutor->deleteMarkTimeSlot(realTag);
-
-    if(!result)
-    {
-      response.setErrno(INTERNAL_DB_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    m_updateThread->lockWriting();
-    realTag->setTimeSlot(QSharedPointer<TimeSlot>(NULL));
-    m_updateThread->unlockWriting();
-
-    response.setErrno(SUCCESS);
-    answer.append(response.getJson());
-    syslog(LOG_INFO, "answer: %s", answer.data());
-    return answer;
-
-  }
-
   QByteArray DbObjectsCollection::processAvailableChannelsQuery(const QByteArray &data)
   {
     AvailableChannelsRequestJSON request;
@@ -1215,7 +714,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
@@ -1242,7 +741,7 @@ namespace common
       return answer;
     }
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
 
     if(realUser.isNull())
     {
@@ -1288,6 +787,8 @@ namespace common
 
   QByteArray DbObjectsCollection::processFilterCircleQuery(const QByteArray& data)
   {
+    syslog(LOG_INFO, ">>> processFilterCircleQuery");
+
     FilterCircleRequestJSON request;
     return internalProcessFilterQuery(request, data, false);
   }
@@ -1335,35 +836,70 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
+
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
     }
+
     filtration.addFilter(QSharedPointer<Filter>(new ShapeFilter(request.getShape())));
     filtration.addFilter(QSharedPointer<Filter>(new TimeFilter(request.getTimeFrom(), request.getTimeTo())));
     if(is3d)
     {
       filtration.addFilter(QSharedPointer<Filter>(new AltitudeFilter(request.getAltitude1(), request.getAltitude2())));
     }
+
     QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
     DataChannels feed;
-    for(int i = 0; i<channels->size(); i++)
+    if (request.getChannels()->size() > 0)
     {
-      QSharedPointer<Channel> channel = channels->at(i);
-      QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
-      QList<QSharedPointer<DataMark> > filteredTags = filtration.filtrate(tags);
-      //qSort(tags);
-      for(int j = 0; j < filteredTags.size(); j++)
+      syslog(LOG_INFO, "point_2");
+
+      QSharedPointer<Channel> targetChannel;
+      // look for ...
+      for(int i = 0; i<channels->size(); i++)
       {
-        feed.insert(channel, filteredTags.at(j));
+        if (channels->at(i)->getName() == request.getChannels()->at(0)->getName()){
+          targetChannel = channels->at(i);
+          break;
+        }
       }
+
+      if (targetChannel.isNull())
+      {
+        response.setErrno(CHANNEL_DOES_NOT_EXIST_ERROR);
+        answer.append(response.getJson());
+        syslog(LOG_INFO, "answer: %s", answer.data());
+        return answer;
+      }
+      QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(targetChannel);
+      QList<QSharedPointer<DataMark> > filteredTags = filtration.filtrate(tags);
+      for(int i = 0; i < filteredTags.size(); i++)
+      {
+        feed.insert(targetChannel, filteredTags.at(i));
+      }
+      response.setErrno(SUCCESS);
+    }
+    else
+    {
+      for(int i = 0; i<channels->size(); i++)
+      {
+        QSharedPointer<Channel> channel = channels->at(i);
+        QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
+        QList<QSharedPointer<DataMark> > filteredTags = filtration.filtrate(tags);
+        for(int j = 0; j < filteredTags.size(); j++)
+        {
+          feed.insert(channel, filteredTags.at(j));
+        }
+      }
+      response.setErrno(SUCCESS);
     }
     response.setDataChannels(feed);
-    response.setErrno(SUCCESS);
+
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -1395,6 +931,21 @@ namespace common
     return answer;
   }
 
+  QByteArray DbObjectsCollection::processBuildQuery(const QByteArray&)
+  {
+    BuildResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString version = storage.getValue("General_Settings/geo2tag_build").toString();
+
+    response.setErrno(SUCCESS);
+    response.setVersion(version);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
   QByteArray DbObjectsCollection::processFilterChannelQuery(const QByteArray& data)
   {
     FilterChannelRequestJSON request;
@@ -1410,7 +961,7 @@ namespace common
     syslog(LOG_INFO, "point_1");
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUserFromToken(dummyUser);
+    QSharedPointer<User> realUser = findUser(dummyUser);
     syslog(LOG_INFO, "point_2");
     if(realUser.isNull())
     {
@@ -1448,6 +999,49 @@ namespace common
     return answer;
   }
 
+
+  QByteArray DbObjectsCollection::processDeleteUserQuery(const QByteArray& data)
+  {
+    syslog(LOG_INFO, "starting DeleteUser processing");
+    DeleteUserRequestJSON request;
+    DeleteUserResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+    // Look for user with the same name
+    QSharedPointer<User> realUser = findUser(request.getUsers()->at(0));
+
+
+    if(!realUser) {
+      response.setErrno(INCORRECT_CREDENTIALS_ERROR);
+      answer.append(response.getJson());
+      syslog(LOG_INFO, "answer: %s", answer.data());
+      return answer;
+    }
+
+    syslog(LOG_INFO, "Sending sql request for DeleteUser");
+    bool isDeleted = m_queryExecutor->deleteUser(realUser);
+    if(!isDeleted)
+    {
+      response.setErrno(INTERNAL_DB_ERROR);
+      answer.append(response.getJson());
+      syslog(LOG_INFO, "answer: %s", answer.data());
+      return answer;
+    }
+    m_updateThread->lockWriting();
+    // Here will be removing user from container
+    m_usersContainer->erase(realUser);
+    m_updateThread->unlockWriting();
+
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
 }                                       // namespace common
 
 

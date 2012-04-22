@@ -43,7 +43,6 @@
 #include "DataMarkInternal.h"
 #include "DbSession.h"
 #include "DynamicCastFailure.h"
-#include "JsonTimeSlot.h"
 #include <syslog.h>
 
 DbChannel::DbChannel(qlonglong id,
