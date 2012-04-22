@@ -9,7 +9,7 @@ Contact::Contact(const QString &channelName, const QString &customName, STATUS_T
     m_channelName=channelName;
     m_customName=customName;
     //m_status = LOST;
-    m_lastMark = QSharedPointer<DataMark>(new DataMark(0,60,30,"","","",QDateTime::currentDateTime()));
+    //m_lastMark = QSharedPointer<DataMark>(new DataMark(0,60,30,"","","",QDateTime::currentDateTime()));
 
 
 

@@ -327,7 +327,7 @@ void Client::onGetTags()
         QList<QSharedPointer<DataMark> > data = m_loadTagsQuery->getData().values(channels.at(i));
         if (!data.isEmpty()) {
             QSharedPointer<DataMark> mark = data.at(data.size()-1);
-            //STATUS_TYPE type = LOST;
+            STATUS_TYPE type = LOST;
             m_contactModel->getContactByName(channels.at(i)->getName())->setLastDataMark(mark);
              qDebug()<<"---------------------------------";
             qDebug()<<"channel name="<<channels.at(i)->getName();

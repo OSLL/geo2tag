@@ -39,10 +39,10 @@ int ContactModel::rowCount(const QModelIndex & parent) const {
 
 QVariant ContactModel::data(const QModelIndex & index, int role) const {
 
-    if (index.row() < 0 || index.row() > contacts.count())
+    if (index.row() < 0 || index.row() > contacts.count() )
         return QVariant();
     QSharedPointer<Contact> contact = contacts[index.row()];
-
+    if (contact->getLastMark().isNull()) return QVariant();
     QVariant res;
         switch (role) {
         case NameRole:
