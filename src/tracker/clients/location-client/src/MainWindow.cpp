@@ -29,24 +29,24 @@ MainWindow::MainWindow(QWidget *parent) :
 
 /*test*/
 
-  QSharedPointer<Contact> co = QSharedPointer<Contact>(new Contact("piter88", "Petja"));
-  co->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0, 59.938994,30.315857, "QString label",
-                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
-  contactModel.addContact(co);
+//  QSharedPointer<Contact> co = QSharedPointer<Contact>(new Contact("piter88", "Petja"));
+//  co->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0, 59.938994,30.315857, "QString label",
+//                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
+//  contactModel.addContact(co);
 
-  QSharedPointer<Contact> con = QSharedPointer<Contact>(new Contact("marja", "Mother"));
-  con->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0,59.925657,30.296165, "QString label",
-                                                                 "QString description", "QString url", QDateTime::currentDateTime().addSecs(-3800))));
-  contactModel.addContact(con);
+//  QSharedPointer<Contact> con = QSharedPointer<Contact>(new Contact("marja", "Mother"));
+//  con->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0,59.925657,30.296165, "QString label",
+//                                                                 "QString description", "QString url", QDateTime::currentDateTime().addSecs(-3800))));
+//  contactModel.addContact(con);
 
-  QSharedPointer<Contact> contact = QSharedPointer<Contact>(new Contact("vred", "Vasja"));
-  contact->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0,59.945152,30.371842, "QString label",
-                                                                 "QString description", "QString url", QDateTime::currentDateTime().addSecs(-9600))));
-  contactModel.addContact(contact);
-  QSharedPointer<Contact> cont= QSharedPointer<Contact>(new Contact("quen", "daughter"));
-  cont->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0,59.94376,30.368825, "QString label",
-                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
-  contactModel.addContact(cont);
+//  QSharedPointer<Contact> contact = QSharedPointer<Contact>(new Contact("vred", "Vasja"));
+//  contact->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0,59.945152,31.371842, "QString label",
+//                                                                 "QString description", "QString url", QDateTime::currentDateTime().addSecs(-9600))));
+//  contactModel.addContact(contact);
+//  QSharedPointer<Contact> cont= QSharedPointer<Contact>(new Contact("quen", "daughter"));
+//  cont->setLastDataMark(QSharedPointer<DataMark>(new DataMark(0,59.94376,30.368825, "QString label",
+//                                                                 "QString description", "QString url", QDateTime::currentDateTime())));
+//  contactModel.addContact(cont);
 
 
   /*test*/
@@ -88,20 +88,20 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::createMenus()
 {
   menu = menuBar()->addMenu(tr("Settings"));
-  menu->addAction(shedulerAction);
+ // menu->addAction(shedulerAction);
   menu->addAction(trackingAction);
   menu->addAction(authAction);
-  menu->addAction(pathAction);
+ // menu->addAction(pathAction);
 
 }
 
 
 void MainWindow::createActions()
 {
-  shedulerAction = new QAction(tr("Sheduler"), this);
+ // shedulerAction = new QAction(tr("Sheduler"), this);
   trackingAction = new QAction(tr("Tracking"), this);
   authAction = new QAction(tr("Authorization data"),this);
-  pathAction = new QAction(tr("Path"), this);
+  //pathAction = new QAction(tr("Path"), this);
 
 }
 

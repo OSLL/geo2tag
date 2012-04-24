@@ -29,6 +29,8 @@ public:
     void setLastDataMark(QSharedPointer<DataMark> datamark);
     void setStatus(STATUS_TYPE status);
     STATUS_TYPE getStatus() const;
+signals:
+    void contactChanged();
 
 };
 

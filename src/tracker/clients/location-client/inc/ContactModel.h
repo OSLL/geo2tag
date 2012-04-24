@@ -33,6 +33,7 @@ public:
     int getContactNumByName(const QString &contactName);
 public slots:
     void drawPins();
+    void setCustomNameByIndex(/*const QModelIndex &*/int index, const QString & newName);
 
 };
 

@@ -11,17 +11,19 @@ Rectangle {
     signal show(string contact, double lat, double lng)
 
 
-    x:parent.width - 50
-    width: content.width + 20
+    x:parent.width - border.width
+    width: content.width + border.width
     color: "#F0F8FF"
     opacity: 0.7
     height: parent.height
+
 
 
     Row
     {
         id:content
         z:5
+
         anchors.right: parent.right
         Button {
             id: addButton
@@ -55,7 +57,8 @@ Rectangle {
     BorderImage {
         id: border
         source: ":../images/strip.png"
-        width: 20; height: parent.height
+        width: 40; height: parent.height
+
 
 
 
@@ -66,7 +69,7 @@ Rectangle {
         drag.target: panel
         drag.axis: Drag.XAxis
         drag.minimumX: panel.parent.width - panel.width
-        drag.maximumX: panel.parent.width - 50
+        drag.maximumX: panel.parent.width - border.width
     }
   //  RightPanelContent{id:content; z:5; }
 

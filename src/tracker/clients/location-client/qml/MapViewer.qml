@@ -13,6 +13,8 @@ import QtMobility.location 1.2
      function setPosition(lat, lon) {
                  var coord = Qt.createQmlObject('import QtMobility.location 1.2; Coordinate{latitude:' + lat + ';longitude:' + lon + ';}', container, "coord");
                  map.center = coord;
+         drawPins();
+         map.pan(0,0);
              }
 
      function drawPins() {
@@ -37,8 +39,8 @@ import QtMobility.location 1.2
          zoomLevel: 10
          mapType: Map.StreetMap
          center: /*positionSource.position.coordinate */Coordinate {
-             latitude: 60
-             longitude: 30
+             latitude: 59.945152
+             longitude: 30.371842
          }
          onZoomLevelChanged: drawPins()
 
@@ -170,6 +172,7 @@ import QtMobility.location 1.2
       onClicked: {
           if (map.zoomLevel>3) {
                map.zoomLevel -= 1;
+              map.pan(0,0);
               //drawPins()
           }
 

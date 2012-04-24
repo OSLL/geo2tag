@@ -19,6 +19,7 @@
 #include "SubscribedChannelsQuery.h"
 #include "LoadTagsQuery.h"
 #include "UnsubscribeChannelQuery.h"
+#include "AddUserQuery.h"
 
 class Client : public QObject
 {
@@ -27,6 +28,7 @@ class Client : public QObject
     int m_trackInterval;
     bool m_authentificated;
     bool m_trackingPermitted;
+    bool m_isHavingOwnChannel;
 
     QTimer * m_timer;
     QTimer * m_additionalTimer;
@@ -73,6 +75,8 @@ class Client : public QObject
     void onRegistered();
     void onMarkAdded();
     void track();
+    void process(QNetworkReply*);
+    void subscribeToOwnChannel();
  signals:
     void error(QVariant error);
     void authentificated(QVariant);
@@ -94,7 +98,7 @@ class Client : public QObject
     // When history is full
     void onHistoryFull();
 
-    void constructContactModel();
+   // void constructContactModel();
     void getTagsRequest();
     void onGetTags();
 

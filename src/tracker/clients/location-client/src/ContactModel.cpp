@@ -21,6 +21,7 @@ void ContactModel::addContact(QSharedPointer<Contact> contact)
    // contacts << contact;
     contacts.push_back(contact);
     endInsertRows();
+    connect(contact.data(), SIGNAL(contactChanged()),SLOT(drawPins()));
      emit dataChanged(createIndex(0,0),createIndex(contacts.size(),0));
 }
 
@@ -42,7 +43,7 @@ QVariant ContactModel::data(const QModelIndex & index, int role) const {
     if (index.row() < 0 || index.row() > contacts.count() )
         return QVariant();
     QSharedPointer<Contact> contact = contacts[index.row()];
-    if (contact->getLastMark().isNull()) return QVariant();
+   // if (contact->getLastMark().isNull()) return QVariant();
     QVariant res;
         switch (role) {
         case NameRole:
@@ -54,6 +55,9 @@ QVariant ContactModel::data(const QModelIndex & index, int role) const {
             res = contact->getCustomName();
             break;
         case ImageRole:
+            if (contact->getLastMark().isNull()) res="";
+            else
+
             if (contact->getLastMark()->getTime()>QDateTime::currentDateTime().addSecs(-3600))
                     res = QVariant("qrc:/images/green_mark.svg");
             else
@@ -64,13 +68,26 @@ QVariant ContactModel::data(const QModelIndex & index, int role) const {
 
             break;
         case LatRole:
+            if (contact->getLastMark().isNull()) res=QVariant();
+            else
             res = contact->getLastMark()->getLatitude();
             break;
         case LngRole:
+            if (contact->getLastMark().isNull()) res=QVariant();
+            else
             res = contact->getLastMark()->getLongitude();
              break;
         }
     return res;
+}
+
+void ContactModel::setCustomNameByIndex(int index, const QString& newName)
+{
+    //if (index.isValid()) {
+    qDebug()<<"CustomName";
+        contacts.at(index/*index.row()*/)->setCustomName(newName);
+        emit dataChanged(createIndex(0,0),createIndex(contacts.size(),0));
+   // }
 }
 
 Qt::ItemFlags ContactModel::flags(const QModelIndex &index) const

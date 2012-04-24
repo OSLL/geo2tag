@@ -29,7 +29,7 @@ Rectangle {
 
             MouseArea {        
                 anchors.fill: parent
-                onPressAndHold: {dialog.customname=customname; dialog.open()}
+                onPressAndHold: {list.currentIndex =index; dialog.customname=customname; dialog.open()}
                 onClicked: {list.currentIndex =index; contactContainer.show(name,lat,lng)}
             }
 
@@ -72,7 +72,7 @@ Rectangle {
             }
 
 
-ContactEditDialog{id: dialog}
+
 
 
 
@@ -87,5 +87,7 @@ ContactEditDialog{id: dialog}
         }
 
     }
+    ContactEditDialog{id: dialog}
+    Connections{target: dialog; onContactchanged: contactModel.setCustomNameByIndex(list.currentIndex, newName) }
 }
 }

@@ -4,6 +4,7 @@ import com.nokia.symbian 1.1
 
 CommonDialog{
     property string customname: "value"
+
     signal contactchanged(string newName)
 
 
@@ -49,6 +50,7 @@ buttons: ToolBar {
             text: "Ok"
             width: (buttons.width - 3 * platformStyle.paddingMedium) / 2
             onClicked: {
+                contactSettings.contactchanged(newName.text)
                 contactSettings.accept()
             }
 

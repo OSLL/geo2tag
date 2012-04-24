@@ -1,5 +1,6 @@
 #include "Contact.h"
 #include <QDateTime>
+#include "Settings.h"
 Contact::Contact(QObject *parent): QObject(parent)
 {
 
@@ -20,6 +21,7 @@ Contact::Contact(const QString &channelName, const QString &customName, STATUS_T
 void Contact::setCustomName(const QString & customName)
 {
     m_customName = customName;
+    Settings::getInstance().setCustomName(m_channelName, m_customName);
 }
 
 QString  Contact::getChannelName() const {
@@ -40,6 +42,7 @@ QSharedPointer<DataMark> Contact::getLastMark() {
 void Contact::setLastDataMark(QSharedPointer<DataMark> datamark)
 {
     m_lastMark = datamark;
+    emit contactChanged();
 
 }
 
