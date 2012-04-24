@@ -15,16 +15,26 @@
             android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+
             <LinearLayout
                 android:id="@+id/sos_tab"
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-                <Button
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <!-- <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/sos_button"
-                    android:text="@string/sos" />     
+                    android:text="@string/sos" />   -->
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sos_button"
+                    android:src="@drawable/sos128"
+                    android:layout_gravity="center"/>
             </LinearLayout>
             <RelativeLayout
                 android:id="@+id/emptylayout1"

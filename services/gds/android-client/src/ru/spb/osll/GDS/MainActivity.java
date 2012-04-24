@@ -57,6 +57,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -107,7 +108,7 @@ public class MainActivity extends TabActivity {
 		
 	    m_TabHost = getTabHost();
 	    m_TabHost.addTab(m_TabHost.newTabSpec("tab1").setIndicator("SOS").setContent(R.id.sos_tab));
-	    ((Button) findViewById(R.id.sos_button)).setOnClickListener(new View.OnClickListener() {
+	    ((ImageButton) findViewById(R.id.sos_button)).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				sos();
