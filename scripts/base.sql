@@ -126,6 +126,10 @@ INSERT into users (email, login, password, token) values ('kirill@test.org', 'Ki
 INSERT into users (email, login, password, token) values ('mark@test.org', 'Mark',   'test', 'MMMMMMMMMM');
 INSERT into users (email, login, password, token) values ('yevgeni@test.org', 'Yevgeni', 'test', 'YYYYYYYYYY');
 
+INSERT into users (email, login, password, token) values ('rom@test.org', 'Rom',   'test', 'RRRRRRRRRR');
+INSERT into users (email, login, password, token) values ('jul@test.org', 'Jul', 'test', 'JJJJJJJJJJ');
+
+
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.166504, 24.841204, 'A', 'Accident at road 51. Time: 15:45, January 2, 2010.', 1, 'http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif');
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.163216, 24.859314, 'B', 'Shell 95: 1.299 e', 2, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0,60.166264, 24.859915, 'C', 'Neste Oil diesel: .0989 e', 1, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');
@@ -208,9 +212,19 @@ INSERT into channel (name, description, url) values ('Route C', '', '');
 INSERT into channel (name, description, url) values ('Route D', '', '');
 INSERT into channel (name, description, url) values ('Route E', '', '');
 
+INSERT into channel (name, description, url) values ('Rom', 'Rom''s channel', '');
+INSERT into channel (name, description, url) values ('Jul', 'Jul''s channel', '');
+INSERT into channel (name, description, url) values ('Paul', 'Paul''s channel', '');
+INSERT into channel (name, description, url) values ('Mark', 'Mark''s channel', '');
 
+INSERT into subscribe (channel_id, user_id) values (12, 5);
+INSERT into subscribe (channel_id, user_id) values (13, 5);
+INSERT into subscribe (channel_id, user_id) values (13, 6);
+INSERT into subscribe (channel_id, user_id) values (12, 6);
+INSERT into subscribe (channel_id, user_id) values (14, 1);
+INSERT into subscribe (channel_id, user_id) values (15, 3);
 
-INSERT into tags (channel_id, tag_id) values (6, 9);
+INSERT into tags (channel_id, tag_id) values (12, 9);
 INSERT into tags (channel_id, tag_id) values (6, 10);
 INSERT into tags (channel_id, tag_id) values (6, 11);
 INSERT into tags (channel_id, tag_id) values (6, 12);
@@ -220,7 +234,7 @@ INSERT into tags (channel_id, tag_id) values (6, 15);
 INSERT into tags (channel_id, tag_id) values (6, 16);
 INSERT into tags (channel_id, tag_id) values (6, 17);
 
-INSERT into tags (channel_id, tag_id) values (7, 18);
+INSERT into tags (channel_id, tag_id) values (14, 18);
 INSERT into tags (channel_id, tag_id) values (7, 19);
 INSERT into tags (channel_id, tag_id) values (7, 20);
 INSERT into tags (channel_id, tag_id) values (7, 21);
@@ -229,7 +243,7 @@ INSERT into tags (channel_id, tag_id) values (7, 23);
 INSERT into tags (channel_id, tag_id) values (7, 24);
 INSERT into tags (channel_id, tag_id) values (7, 25);
 
-INSERT into tags (channel_id, tag_id) values (8, 26);
+INSERT into tags (channel_id, tag_id) values (15, 26);
 INSERT into tags (channel_id, tag_id) values (8, 27);
 INSERT into tags (channel_id, tag_id) values (8, 28);
 INSERT into tags (channel_id, tag_id) values (8, 29);
@@ -249,7 +263,7 @@ INSERT into tags (channel_id, tag_id) values (10, 39);
 INSERT into tags (channel_id, tag_id) values (10, 40);
 
 
-INSERT into tags (channel_id, tag_id) values (11, 41);
+INSERT into tags (channel_id, tag_id) values (13, 41);
 INSERT into tags (channel_id, tag_id) values (11, 42);
 INSERT into tags (channel_id, tag_id) values (11, 43);
 INSERT into tags (channel_id, tag_id) values (11, 44);

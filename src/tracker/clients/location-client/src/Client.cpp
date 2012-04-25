@@ -66,6 +66,9 @@ QObject(parent),m_trackInterval(5),
   connect(m_unsubscribeChannelQuery, SIGNAL(channelUnsubscribed()),SLOT(onChannelUnsubscribed()));
   connect(m_unsubscribeChannelQuery,SIGNAL(errorOccured(int)), SLOT(onError(int)));
 
+  qDebug()<<Settings::getInstance().getLogin();
+  qDebug()<<Settings::getInstance().getPassword();
+
   if (Settings::getInstance().isHavingAuthData())
       auth(Settings::getInstance().getLogin(),Settings::getInstance().getPassword());
 
@@ -165,11 +168,13 @@ void Client::sendHistory()
 
 void Client::onAuthentificated()
 {
-  qDebug() << "Authentificated " <<  m_loginQuery->getUser()->getToken();
+    qDebug() << "Authentificated " <<  m_loginQuery->getUser()->getToken();
 
   m_user =  m_loginQuery->getUser();
   Settings::getInstance().setLogin(m_user->getLogin());
-  Settings::getInstance().setLogin(m_user->getPassword());
+  Settings::getInstance().setPassword(m_user->getPassword());
+
+
   m_authentificated = true;
   if (!m_isHavingOwnChannel)
   {
