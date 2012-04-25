@@ -35,6 +35,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QMessageBox>
+#include <QIcon>
 #include "DataMarks.h"
 #include "User.h"
 #include "Channel.h"
@@ -45,7 +46,13 @@ SosWidget::SosWidget(LocationManager *locationManager, QWidget *parent) :
     QWidget(parent),
     m_locationManager(locationManager)
 {
-    m_sosButton = new QPushButton("SOS", this);
+    m_sosButton = new QPushButton();
+    QPixmap m_sosPixmap(":/data/sos128.png");
+    QIcon icon(m_sosPixmap);
+    QSize iconSize(m_sosPixmap.width(), m_sosPixmap.height());
+    //m_sosButton->setIconSize(iconSize);
+    m_sosButton->setIcon(icon);
+    //m_sosButton = new QPushButton(QIcon(":/data/sos128.png"), this);
 
     initGUI();
 
@@ -61,8 +68,8 @@ SosWidget::SosWidget(LocationManager *locationManager, QWidget *parent) :
 void SosWidget::initGUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addWidget(m_sosButton);
-    mainLayout->addStretch();
+    mainLayout->addWidget(m_sosButton, 0, Qt::AlignVCenter);
+    //mainLayout->addStretch();
     this->setLayout(mainLayout);
 }
 

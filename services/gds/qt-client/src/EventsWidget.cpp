@@ -212,7 +212,11 @@ void EventsWidget::setCenter(QGeoCoordinate bad_coordinate)
                              - m_graphicsView->geometry().width()) / 2,
                             (m_mapWidget->geometry().height()
                              - m_graphicsView->geometry().height()) / 2);
-    QPointF new_position = position + delta;
+    QPointF new_position = position;
+    if (m_graphicsView->geometry().width() > 10) {
+        new_position = position + delta;
+    }
+
     QGeoCoordinate coordinate =
             m_mapWidget->screenPositionToCoordinate(new_position);
     m_mapWidget->setCenter(coordinate);
