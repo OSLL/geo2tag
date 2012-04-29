@@ -237,7 +237,9 @@ namespace common
     {
     	for(int i=0; i<currentUsers.size(); i++)
     	{
-      		if(currentUsers.at(i)->getLogin() == dummyUser->getLogin() && currentUsers.at(i)->getPassword() == dummyUser->getPassword())
+            if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0
+               &&
+               currentUsers.at(i)->getPassword() == dummyUser->getPassword())
         	return currentUsers.at(i);
     	}
     }
@@ -261,7 +263,7 @@ namespace common
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
     for(int i=0; i<currentUsers.size(); i++)
     {
-      if(currentUsers.at(i)->getLogin() == newTmpUser->getLogin())
+      if(QString::compare(currentUsers.at(i)->getLogin(), newTmpUser->getLogin(), Qt::CaseInsensitive) == 0)
       {
         response.setErrno(USER_ALREADY_EXIST_ERROR);
         answer.append(response.getJson());
@@ -338,7 +340,7 @@ namespace common
     {
       syslog(LOG_INFO,"Look up in %s and %s",currentUsers.at(i)->getLogin().toStdString().c_str(),
         currentUsers.at(i)->getPassword().toStdString().c_str());
-      if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
+      if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0)
       {
         if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
         {
@@ -394,7 +396,7 @@ namespace common
 
     for(int i=0; i<currentChannels.size(); i++)
     {
-      if(currentChannels.at(i)->getName() == dummyChannel->getName())
+      if(QString::compare(currentChannels.at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = currentChannels.at(i);
       }
@@ -542,7 +544,7 @@ namespace common
     QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
     for(int i=0; i<currentChannels.size(); i++)
     {
-      if(currentChannels.at(i)->getName() == dummyChannel->getName())
+      if(QString::compare(currentChannels.at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = currentChannels.at(i);
       }
@@ -601,7 +603,7 @@ namespace common
 
     for(int i=0; i<currentUsers.size(); i++)
     {
-      if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
+      if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0)
       {
         response.setErrno(USER_ALREADY_EXIST_ERROR);
         answer.append(response.getJson());
@@ -666,7 +668,7 @@ namespace common
     QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
     for(int i=0; i<currentChannels.size(); i++)
     {
-      if(currentChannels.at(i)->getName() == dummyChannel->getName())
+      if(QString::compare(currentChannels.at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = currentChannels.at(i);
       }
@@ -756,7 +758,7 @@ namespace common
     QSharedPointer<Channels> subscribedChannels = realUser->getSubscribedChannels();
     for(int i=0; i<subscribedChannels->size(); i++)
     {
-      if(subscribedChannels->at(i)->getName() == dummyChannel->getName())
+      if(QString::compare(subscribedChannels->at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = subscribedChannels->at(i);
       }
@@ -977,7 +979,7 @@ namespace common
     QSharedPointer<Channel> channel;
     for(int i = 0; i<channels->size(); i++)
     {
-      if (channels->at(i)->getName() == request.getChannelName()){
+      if(QString::compare(channels->at(i)->getName(), request.getChannelName(), Qt::CaseInsensitive) == 0){
         channel = channels->at(i);
         break;
       }

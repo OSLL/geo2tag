@@ -6,7 +6,7 @@ test_channel="test_$RANDOM";
 
 sleep 15s
 
-response_add_channel=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"name\":\"$test_channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel`;
+response_add_channel=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"name\":\"$test_channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost/service/addChannel`;
 echo "$response_add_channel"
 if ! echo $response_add_channel | grep -q -s -F "$correct_result"  ;
 then
@@ -14,7 +14,7 @@ then
 	exit 1
 fi
 
-response_subscribe=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"channel\":\"$test_channel\"}" http://localhost:81/service/subscribe`;
+response_subscribe=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"channel\":\"$test_channel\"}" http://localhost/service/subscribe`;
 if ! echo $response_subscribe | grep -q -s -F "$correct_result"  ;
 then
         echo "Fail at subscribe test"
@@ -22,7 +22,7 @@ then
 fi
 
 
-response_login_test=`curl -d '{"login":"Mark","password":"test"}'  http://localhost:81/service/login`;
+response_login_test=`curl -d '{"login":"Mark","password":"test"}'  http://localhost/service/login`;
 correct_result_login='{ "auth_token" : "MMMMMMMMMM", "errno" : 0 }';
 if ! echo $response_login_test | grep -q -s -F "$correct_result_login"  ; 
 then
@@ -31,7 +31,7 @@ then
 fi
 
 
-response_incorrect_json_test=`curl -d '{"login":"Markpassword":"test"}'  http://localhost:81/service/login`;
+response_incorrect_json_test=`curl -d '{"login":"Markpassword":"test"}'  http://localhost/service/login`;
 correct_result_incorrect_json='{ "errno" : 9 }';
 if ! echo $response_incorrect_json_test | grep -q -s -F "$correct_result_incorrect_json"  ; 
 then
@@ -40,7 +40,7 @@ then
 fi
 
 
-response_incorrect_url_test=`curl -d ''  http://localhost:81/service/incorrect_url`;
+response_incorrect_url_test=`curl -d ''  http://localhost/service/incorrect_url`;
 correct_result_incorrect_url='{ "errno" : 8 }';
 if ! echo $response_incorrect_url_test | grep -q -s -F "$correct_result_incorrect_url"  ; 
 then
@@ -52,7 +52,7 @@ test_altitude=$((RANDOM%100)).0;
 test_time=`date +'%d %m %Y %H:%M:%S.300'`;
 echo "test time = $test_time"
 echo "Test alt:$test_altitude"
-response_write_tag_test=`curl -d "{ \"auth_token\" : \"MMMMMMMMMM\", \"channel\" : \"$test_channel\", \"description\" : \"\", \"altitude\" : $test_altitude , \"latitude\" : 0.0,\"link\" : \"\", \"longitude\" : 0.0, \"time\" : \"$test_time\", \"title\" : \"\" }"  http://localhost:81/service/writeTag`;
+response_write_tag_test=`curl -d "{ \"auth_token\" : \"MMMMMMMMMM\", \"channel\" : \"$test_channel\", \"description\" : \"\", \"altitude\" : $test_altitude , \"latitude\" : 0.0,\"link\" : \"\", \"longitude\" : 0.0, \"time\" : \"$test_time\", \"title\" : \"\" }"  http://localhost/service/writeTag`;
 echo "$response_write_tag_test "
 if ! echo $response_write_tag_test | grep -q -s -F "$correct_result"  ;
 then
@@ -62,7 +62,7 @@ fi
 
 sleep 15s
 
-response_altitude_test=`curl -d "{\"auth_token\":\"MMMMMMMMMM\",\"latitude\":0.0, \"longitude\":0.0, \"radius\":10.0}"  http://localhost:81/service/loadTags`;
+response_altitude_test=`curl -d "{\"auth_token\":\"MMMMMMMMMM\",\"latitude\":0.0, \"longitude\":0.0, \"radius\":10.0}"  http://localhost/service/loadTags`;
 echo "Alt test - $response_altitude_test "
 if ! echo $response_altitude_test | grep -q -s -F "$test_altitude"  ;
 then
@@ -71,14 +71,14 @@ then
 fi
 
 
-response_unsubscribe=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"channel\":\"$test_channel\"}" http://localhost:81/service/unsubscribe`;
+response_unsubscribe=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"channel\":\"$test_channel\"}" http://localhost/service/unsubscribe`;
 if ! echo $response_unsubscribe | grep -q -s -F "$correct_result"  ;
 then
         echo "Fail at unsubscribe test"
         exit 1
 fi
 
-response_575_bug=`curl -d "{\"email\":\"email1@test1.org\", \"login\":\"Vasja\",\"password\":\"VasjaPWD\"}"  http://localhost:81/service/registerUser`;
+response_575_bug=`curl -d "{\"email\":\"email1@test1.org\", \"login\":\"Vasja\",\"password\":\"VasjaPWD\"}"  http://localhost/service/registerUser`;
 correct_result_575="{ \"errno\" : 17 }";
 if ! echo $response_575_bug | grep -q -s -F "$correct_result_575"  ;
 then
@@ -86,7 +86,7 @@ then
         exit 1
 fi
 
-response_add_user_test=`curl -d "{\"login\":\"$test_channel\",\"password\":\"test\",\"email\":\"11@11.ru\"}" http://localhost:81/service/addUser`;
+response_add_user_test=`curl -d "{\"login\":\"$test_channel\",\"password\":\"test\",\"email\":\"11@11.ru\"}" http://localhost/service/addUser`;
 if ! echo $response_add_user_test | grep -q -s -F "$correct_result"  ;
 then
         echo "Fail at addUser test"
@@ -94,8 +94,8 @@ then
 fi
 
 echo "$test_channel"
-response_delete_user_test=`curl -d "{\"login\":\"$test_channel\",\"password\":\"test\"}" http://localhost:81/service/deleteUser`;
-response_check_delete_test=`curl -d "{\"login\":\"$test_channel\",\"password\":\"test\"}" http://localhost:81/service/login`;
+response_delete_user_test=`curl -d "{\"login\":\"$test_channel\",\"password\":\"test\"}" http://localhost/service/deleteUser`;
+response_check_delete_test=`curl -d "{\"login\":\"$test_channel\",\"password\":\"test\"}" http://localhost/service/login`;
 if ! echo $response_delete_user_test | grep -q -s -F "$correct_result"  ;
 then
         echo "Fail at deleteUser test"
