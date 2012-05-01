@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Geo2tag" default="build" basedir=".">
 	<property name="version" value="0.18" />
-	
-<!--
+
+	<!--
  * Copyright 2011-2012 OSLL
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  -->
 
-<!-- ==============================================================
+	<!-- ==============================================================
  * PROJ: OSLL/geo2tag
  * ================================================================ -->
 
@@ -109,7 +109,7 @@
 
 	<!-- deploy/undeploy app on remote server -->
 
-	<target name="clean" description="Cleans this project">
+	<target name="clean" depends="jgeo-clean" description="Cleans this project">
 		<delete dir="war/WEB-INF/classes" failonerror="false" />
 		<delete dir="war/WEB-INF/lib" failonerror="false" />
 		<delete dir="war/${app.name}" failonerror="false" />
@@ -127,11 +127,12 @@
 		<copy todir="war/WEB-INF/lib" file="lib/gwt_i18n_server_1.0.jar" />
 		<copy todir="war/WEB-INF/lib" file="lib/commons-logging-1.1.1.jar" />
 		<copy todir="war/WEB-INF/lib" file="lib/httpclient-4.1.3.jar" />
-		<copy todir="war/WEB-INF/lib" file="lib/httpcore-4.1.4.jar" />		
+		<copy todir="war/WEB-INF/lib" file="lib/httpcore-4.1.4.jar" />
+		<copy todir="war/WEB-INF/lib" file="lib/jgeo.jar" />
 		<!-- Add any additional server libs that need to be copied -->
 	</target>
 
-	<target name="javac" depends="libs" description="Compile java source to bytecode">
+	<target name="javac" depends="jgeo, libs" description="Compile java source to bytecode">
 		<mkdir dir="war/WEB-INF/classes" />
 		<javac srcdir="src" includes="**" encoding="utf-8" destdir="war/WEB-INF/classes" source="1.5" target="1.5" nowarn="true" debug="true" debuglevel="lines,vars,source">
 			<classpath refid="project.class.path" />
@@ -252,10 +253,20 @@
 
 	<target name="deploy-refresh-info" depends="deploy">
 		<tstamp>
-		     <format property="NOW" pattern="yyyy MMMM dd HH:mm:ss" locale="en"/>
+			<format property="NOW" pattern="yyyy MMMM dd HH:mm:ss" locale="en"/>
 		</tstamp>
 		<echo message="version='${version}'${line.separator}" file="${tom.dir}/geo2tag-build"/>
 		<echo message="deployDate='${NOW}'${line.separator}" append="true" file="${tom.dir}/geo2tag-build"/>
+	</target>
+
+	<!-- JGEO CORE -->
+	<target name="jgeo">
+		<ant antfile="../jgeo/build.xml" dir="../jgeo/" target="all"/>
+		<copy todir="lib" file="../jgeo/jgeo.jar" />
+	</target>
+
+	<target name="jgeo-clean">
+		<ant antfile="../jgeo/build.xml" dir="../jgeo/" target="clean"/>
 	</target>
 	
 </project>

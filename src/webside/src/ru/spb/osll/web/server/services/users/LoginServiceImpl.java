@@ -37,6 +37,7 @@ package ru.spb.osll.web.server.services.users;
 
 import javax.servlet.http.HttpSession;
 
+import ru.spb.osll.json.JsonLoginResponse;
 import ru.spb.osll.web.client.services.objects.Response;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
@@ -51,22 +52,21 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet implements
 		LoginService, Session.HasSession {
-	private String m_authToken;
-	private String errno;
-	private String ERRNO = "errno";
-	private String AUTH_TOKEN = "auth_token";
+//	private String m_authToken;
+//	private String errno;
+//	private String ERRNO = "errno";
+//	private String AUTH_TOKEN = "auth_token";
 
 	@Override
 	public User login(User user) throws IllegalArgumentException {
 		JSONObject JSONResponse = null;
-		JSONResponse = new JsonLoginRequest(user.getLogin(),
-				user.getPassword(), JsonBase.getServerUrl()).doRequest();
-		errno = JsonBase.getString(JSONResponse, ERRNO);
-		int error = Integer.parseInt(errno);
-		if (error == 0) {
-			m_authToken = JsonBase.getString(JSONResponse, AUTH_TOKEN);
-			user.setToken(m_authToken);
-			user.setStatus(Response.STATUS_SUCCES);
+		JSONResponse = new JsonLoginRequest(user.getLogin(), 
+			user.getPassword(), JsonBase.getServerUrl()).doRequest();
+		if (JSONResponse != null) {
+			JsonLoginResponse r = new JsonLoginResponse();
+			r.parseJson(JSONResponse);
+			user.setToken(r.getAuthString());
+			user.setStatus(r.getErrno());
 			Session.Instance().addValue(this, USER_ID, user.getId());
 		} else {
 			user.setStatus(Response.STATUS_FAIL);
