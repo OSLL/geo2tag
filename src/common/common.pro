@@ -47,6 +47,7 @@ HEADERS += \
     inc/FShapeRectangle.h \
     inc/Region.h \
     inc/signals.h \
+    inc/ProfilerUtil.h \
     inc/SettingsStorage.h
 
 SOURCES += \

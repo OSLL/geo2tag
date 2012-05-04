@@ -38,6 +38,7 @@
 #include "UpdateThread.h"
 #include "SettingsStorage.h"
 #include "defines.h"
+#include "ProfilerUtil.h" 
 
 UpdateThread::UpdateThread(const QSqlDatabase &db,
 const QSharedPointer<DataMarks> &tags,
@@ -71,8 +72,10 @@ void UpdateThread::unlockWriting()
 
 void UpdateThread::run()
 {
+
   for(;;)
   {
+    TIC_
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
     bool result = m_database.open();
     if(!result)
@@ -121,6 +124,7 @@ void UpdateThread::run()
     syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());
     syslog(LOG_INFO,  "current channels' size = %d", m_channelsContainer->size());
     m_database.close();
+    TOC_("db_update")
     QThread::msleep(10000);
   }
 }

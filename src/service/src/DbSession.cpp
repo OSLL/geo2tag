@@ -107,6 +107,8 @@
 #include <QMap>
 #include <QRegExp>
 
+#include "ProfilerUtil.h" 
+
 namespace common
 {
   const QString DbObjectsCollection::error = QString("Error");
@@ -194,7 +196,11 @@ namespace common
       {
         ProcessMethod method = m_processors.value(queries[i]);
         syslog(LOG_INFO,"calling %s processor %s",queryType.toStdString().c_str(),QString(body).toStdString().c_str());
-        return (*this.*method)(body);
+        QByteArray aa;
+	TIC_
+        aa = (*this.*method)(body);
+        TOC_(queryType.toStdString().c_str())
+        return aa;
       }
     }
 
@@ -204,7 +210,12 @@ namespace common
         syslog(LOG_INFO, "Pattern matched!");
         const QString token = rx.cap(1);
         ProcessMethodWithStr method = &DbObjectsCollection::processConfirmRegistrationQuery;
-        return (*this.*method)(token);
+        QByteArray aa; 
+        TIC_
+        aa = (*this.*method)(token);
+        TOC_("confirmRegistration")
+        return aa;
+
     } else {
         syslog(LOG_INFO, "Pattern not matched!");
     }
