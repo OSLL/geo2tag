@@ -35,22 +35,38 @@
 
 package ru.spb.osll.test.json;
 
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import org.json.JSONObject;
 
+import ru.spb.osll.json.JsonAddUserRequest;
+import ru.spb.osll.json.JsonAddUserResponse;
+import ru.spb.osll.json.JsonApplyChannelRequest;
+import ru.spb.osll.json.JsonApplyChannelResponse;
+import ru.spb.osll.json.JsonFilterBoxRequest;
+import ru.spb.osll.json.JsonFilterCircleRequest;
+import ru.spb.osll.json.JsonFilterCylinderRequest;
+import ru.spb.osll.json.JsonFilterFenceRequest;
+import ru.spb.osll.json.JsonFilterPolygonRequest;
+import ru.spb.osll.json.JsonFilterRectangleRequest;
+import ru.spb.osll.json.JsonFilterResponse;
 import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.JsonLoginResponse;
 import ru.spb.osll.log.Log;
+import ru.spb.osll.objects.Channel;
+import ru.spb.osll.objects.Mark;
 
 public class JsonRequestTest extends TestCase {
 	public static final String LOG = "TEST";
-	
+
 	// GEO2TAG INSTANCE
-	public final String url = "http://tracks.osll.spb.ru:81/service"; 
-	
-	public void testLogin(){
-		JSONObject JSONResponse = new JsonLoginRequest("Mark", "test", url).doRequest();
+	public final String url = "http://tracks.osll.spb.ru:81/service";
+
+	public void testLogin() {
+		JSONObject JSONResponse = new JsonLoginRequest("Mark", "test", url)
+				.doRequest();
 		assertNotNull(JSONResponse);
 		if (JSONResponse != null) {
 			Log.out.println(LOG, JSONResponse.toString());
@@ -58,213 +74,177 @@ public class JsonRequestTest extends TestCase {
 			r.parseJson(JSONResponse);
 			assertEquals(r.getErrno(), 0);
 			assertEquals(r.getAuthString(), "MMMMMMMMMM");
-		} 
+		}
 	}
-	
-	// TODO
-	
-//	public void testAddUser(){
-//		final JSONObject JSONResponse = new JsonAddUserRequest("bac1ca", "test", url).doRequest();
-//		assertNotNull(JSONResponse);
-//		if (JSONResponse != null) {
-//			Log.out.println(LOG, JSONResponse.toString());
-//			JsonAddUserResponse r = new JsonAddUserResponse();
-//			r.parseJson(JSONResponse);
-//			String status = r.getStatus();
-//			String statusMess = r.getStatusMessage();
-//			boolean success = status.equals(JsonOldResponse.STATUS_OK) || statusMess.equals(JsonOldResponse.SM_USER_EXTSTS);
-//			assertTrue(success);
-//		} 
-//	}
 
-/*
-	public void testApplyChannel(){
-		final boolean isOnline = TrackerUtil.isOnline(getContext());
-		assertTrue(isOnline);
-		if (isOnline){
-			final JSONObject JSONResponse = new JsonApplyChannelRequest("MMMMMMMMMM", 
-				"My channel", "tracker channel", "http://osll.spb.ru", 3000, url).doRequest();
-			assertNotNull(JSONResponse);
-			if (JSONResponse != null) {
-				Log.d(LOG, JSONResponse.toString());
-				JsonApplyChannelResponse r = new JsonApplyChannelResponse();
-				r.parseJson(JSONResponse);
-				String status = r.getStatus();
-				String statusMess = r.getStatusMessage();
-				boolean success = status.equals(JsonOldResponse.STATUS_OK) || statusMess.equals(JsonOldResponse.SM_CHANNEL_EXTSTS); 
-				assertTrue(success);
-			} 
-		} else {
-			Log.v(LOG, "client offline");
+	/*public void testAddUser() {
+		final JSONObject JSONResponse = new JsonAddUserRequest("bac1ca",
+				"test", url).doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonAddUserResponse r = new JsonAddUserResponse();
+			r.parseJson(JSONResponse);
+			String status = r.getStatus();
+			String statusMess = r.getStatusMessage();
+			boolean success = status.equals(JsonOldResponse.STATUS_OK) || statusMess.equals(JsonOldResponse.SM_CHANNEL_EXTSTS); 
+			assertTrue(success);
 		}
 	}
-	
+
+	public void testApplyChannel() {
+		final JSONObject JSONResponse = new JsonApplyChannelRequest(
+				"MMMMMMMMMM", "My channel", "tracker channel",
+				"http://osll.spb.ru", 3000, url).doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonApplyChannelResponse r = new JsonApplyChannelResponse();
+			r.parseJson(JSONResponse);
+			String status = r.getStatus();
+			String statusMess = r.getStatusMessage();
+			boolean success = status.equals(JsonOldResponse.STATUS_OK) || statusMess.equals(JsonOldResponse.SM_CHANNEL_EXTSTS); 
+			assertTrue(success);
+		}
+	}*/
+
 	public void testCircleFilter() {
-		final boolean isOnline = TrackerUtil.isOnline(getContext());
-		assertTrue(isOnline);
-		if (isOnline){
-			final JSONObject JSONResponse = new JsonFilterCircleRequest("MMMMMMMMMM", 60.1632,
-				24.8593, 30.0, "04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url).doRequest();
-			assertNotNull(JSONResponse);
-			if (JSONResponse != null) {
-				Log.d(LOG, JSONResponse.toString()); 
-				JsonFilterResponse r = new JsonFilterResponse();
-				r.parseJson(JSONResponse);
-				assertEquals(r.getErrno(), 0);
-				assertTrue(r.getChannelsData().size() > 0);
-				List<Channel> channels = r.getChannelsData();				
-				for (Channel c : channels) {
-					Log.d(LOG, "" + c.getName());
-					for (Mark m : c.getMarks()) {
-						Log.d(LOG, "" + m);
-					}
+		final JSONObject JSONResponse = new JsonFilterCircleRequest(
+				"MMMMMMMMMM", 60.1632, 24.8593, 30.0,
+				"04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url)
+				.doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonFilterResponse r = new JsonFilterResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannelsData().size() > 0);
+			List<Channel> channels = r.getChannelsData();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+				for (Mark m : c.getMarks()) {
+					Log.out.println(LOG, "" + m);
 				}
-			} 
-		} else {
-			Log.v(LOG, "client offline");
+			}
 		}
 	}
-	
+
 	public void testCylinderFilter() {
-		final boolean isOnline = TrackerUtil.isOnline(getContext());
-		assertTrue(isOnline);
-		if (isOnline){
-			final JSONObject JSONResponse = new JsonFilterCylinderRequest("MMMMMMMMMM", 60.1632,
-				24.8593, 30.0, 1.0, -1.0, "04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url).doRequest();
-			assertNotNull(JSONResponse);
-			if (JSONResponse != null) {
-				Log.d(LOG, JSONResponse.toString()); 
-				JsonFilterResponse r = new JsonFilterResponse();
-				r.parseJson(JSONResponse);
-				assertEquals(r.getErrno(), 0);
-				assertTrue(r.getChannelsData().size() > 0);
-				List<Channel> channels = r.getChannelsData();				
-				for (Channel c : channels) {
-					Log.d(LOG, "" + c.getName());
-					for (Mark m : c.getMarks()) {
-						Log.d(LOG, "" + m);
-					}
+		final JSONObject JSONResponse = new JsonFilterCylinderRequest(
+				"MMMMMMMMMM", 60.1632, 24.8593, 30.0, 1.0, -1.0,
+				"04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url)
+				.doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonFilterResponse r = new JsonFilterResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannelsData().size() > 0);
+			List<Channel> channels = r.getChannelsData();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+				for (Mark m : c.getMarks()) {
+					Log.out.println(LOG, "" + m);
 				}
-			} 
-		} else {
-			Log.v(LOG, "client offline");
+			}
 		}
 	}
 
 	public void testRectangleFilter() {
-		final boolean isOnline = TrackerUtil.isOnline(getContext());
-		assertTrue(isOnline);
-		if (isOnline){
-			final JSONObject JSONResponse = new JsonFilterRectangleRequest("MMMMMMMMMM", 0.0,
-				100.0, 0.0, 100.0, "04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url).doRequest();
-			assertNotNull(JSONResponse);
-			if (JSONResponse != null) {
-				Log.d(LOG, JSONResponse.toString()); 
-				JsonFilterResponse r = new JsonFilterResponse();
-				r.parseJson(JSONResponse);
-				assertEquals(r.getErrno(), 0);
-				assertTrue(r.getChannelsData().size() > 0);
-				List<Channel> channels = r.getChannelsData();				
-				for (Channel c : channels) {
-					Log.d(LOG, "" + c.getName());
-					for (Mark m : c.getMarks()) {
-						Log.d(LOG, "" + m);
-					}
+		final JSONObject JSONResponse = new JsonFilterRectangleRequest(
+				"MMMMMMMMMM", 0.0, 100.0, 0.0, 100.0,
+				"04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url)
+				.doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonFilterResponse r = new JsonFilterResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannelsData().size() > 0);
+			List<Channel> channels = r.getChannelsData();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+				for (Mark m : c.getMarks()) {
+					Log.out.println(LOG, "" + m);
 				}
-			} 
-		} else {
-			Log.v(LOG, "client offline");
+			}
 		}
 	}
 
 	public void testBoxFilter() {
-		final boolean isOnline = TrackerUtil.isOnline(getContext());
-		assertTrue(isOnline);
-		if (isOnline){
-			final JSONObject JSONResponse = new JsonFilterBoxRequest("MMMMMMMMMM", 0.0,
-				100.0, 0.0, 100.0, -0.1, 0.1, "04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url).doRequest();
-			assertNotNull(JSONResponse);
-			if (JSONResponse != null) {
-				Log.d(LOG, JSONResponse.toString()); 
-				JsonFilterResponse r = new JsonFilterResponse();
-				r.parseJson(JSONResponse);
-				assertEquals(r.getErrno(), 0);
-				assertTrue(r.getChannelsData().size() > 0);
-				List<Channel> channels = r.getChannelsData();				
-				for (Channel c : channels) {
-					Log.d(LOG, "" + c.getName());
-					for (Mark m : c.getMarks()) {
-						Log.d(LOG, "" + m);
-					}
+		final JSONObject JSONResponse = new JsonFilterBoxRequest("MMMMMMMMMM",
+				0.0, 100.0, 0.0, 100.0, -0.1, 0.1, "04 03 2011 15:33:47.630",
+				"31 12 2011 15:33:47.630", url).doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonFilterResponse r = new JsonFilterResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannelsData().size() > 0);
+			List<Channel> channels = r.getChannelsData();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+				for (Mark m : c.getMarks()) {
+					Log.out.println(LOG, "" + m);
 				}
-			} 
-		} else {
-			Log.v(LOG, "client offline");
+			}
 		}
 	}
 
 	public void testPolygonFilter() {
-		final boolean isOnline = TrackerUtil.isOnline(getContext());
-		assertTrue(isOnline);
-		if (isOnline){
-			JsonFilterPolygonRequest filter = new JsonFilterPolygonRequest("MMMMMMMMMM", 
-				"04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url);
-			filter.addPoint(0.0, 0.0);
-			filter.addPoint(70.0, 0.0);
-			filter.addPoint(70.0, 100.0);
-			final JSONObject JSONResponse = filter.doRequest();
-			
-			assertNotNull(JSONResponse);
-			if (JSONResponse != null) {
-				Log.d(LOG, JSONResponse.toString()); 
-				JsonFilterResponse r = new JsonFilterResponse();
-				r.parseJson(JSONResponse);
-				assertEquals(r.getErrno(), 0);
-				assertTrue(r.getChannelsData().size() > 0);
-				List<Channel> channels = r.getChannelsData();				
-				for (Channel c : channels) {
-					Log.d(LOG, "" + c.getName());
-					for (Mark m : c.getMarks()) {
-						Log.d(LOG, "" + m);
-					}
+		JsonFilterPolygonRequest filter = new JsonFilterPolygonRequest(
+				"MMMMMMMMMM", "04 03 2011 15:33:47.630",
+				"31 12 2011 15:33:47.630", url);
+		filter.addPoint(0.0, 0.0);
+		filter.addPoint(70.0, 0.0);
+		filter.addPoint(70.0, 100.0);
+		final JSONObject JSONResponse = filter.doRequest();
+
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonFilterResponse r = new JsonFilterResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannelsData().size() > 0);
+			List<Channel> channels = r.getChannelsData();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+				for (Mark m : c.getMarks()) {
+					Log.out.println(LOG, "" + m);
 				}
-			} 
-		} else {
-			Log.v(LOG, "client offline");
+			}
 		}
 	}
 
 	public void testFenceFilter() {
-		final boolean isOnline = TrackerUtil.isOnline(getContext());
-		assertTrue(isOnline);
-		if (isOnline){
-			JsonFilterPolygonRequest filter = new JsonFilterFenceRequest("MMMMMMMMMM", 
-				-0.1, 0.1, "04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", url);
-			filter.addPoint(0.0, 0.0);
-			filter.addPoint(70.0, 0.0);
-			filter.addPoint(70.0, 100.0);
-			final JSONObject JSONResponse = filter.doRequest();
-			
-			assertNotNull(JSONResponse);
-			if (JSONResponse != null) {
-				Log.d(LOG, JSONResponse.toString()); 
-				JsonFilterResponse r = new JsonFilterResponse();
-				r.parseJson(JSONResponse);
-				assertEquals(r.getErrno(), 0);
-				assertTrue(r.getChannelsData().size() > 0);
-				List<Channel> channels = r.getChannelsData();				
-				for (Channel c : channels) {
-					Log.d(LOG, "" + c.getName());
-					for (Mark m : c.getMarks()) {
-						Log.d(LOG, "" + m);
-					}
+		JsonFilterPolygonRequest filter = new JsonFilterFenceRequest(
+				"MMMMMMMMMM", -0.1, 0.1, "04 03 2011 15:33:47.630",
+				"31 12 2011 15:33:47.630", url);
+		filter.addPoint(0.0, 0.0);
+		filter.addPoint(70.0, 0.0);
+		filter.addPoint(70.0, 100.0);
+		final JSONObject JSONResponse = filter.doRequest();
+
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonFilterResponse r = new JsonFilterResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannelsData().size() > 0);
+			List<Channel> channels = r.getChannelsData();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+				for (Mark m : c.getMarks()) {
+					Log.out.println(LOG, "" + m);
 				}
-			} 
-		} else {
-			Log.v(LOG, "client offline");
+			}
 		}
 	}
-	
-	*/
-	
+
 }
