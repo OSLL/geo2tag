@@ -45,6 +45,8 @@ import ru.spb.osll.json.JsonAddUserRequest;
 import ru.spb.osll.json.JsonAddUserResponse;
 import ru.spb.osll.json.JsonApplyChannelRequest;
 import ru.spb.osll.json.JsonApplyChannelResponse;
+import ru.spb.osll.json.JsonAvailableChannelRequest;
+import ru.spb.osll.json.JsonAvailableChannelResponse;
 import ru.spb.osll.json.JsonFilterBoxRequest;
 import ru.spb.osll.json.JsonFilterCircleRequest;
 import ru.spb.osll.json.JsonFilterCylinderRequest;
@@ -54,6 +56,10 @@ import ru.spb.osll.json.JsonFilterRectangleRequest;
 import ru.spb.osll.json.JsonFilterResponse;
 import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.JsonLoginResponse;
+import ru.spb.osll.json.JsonSubscribeRequest;
+import ru.spb.osll.json.JsonSubscribeResponse;
+import ru.spb.osll.json.JsonUnsubscribeRequest;
+import ru.spb.osll.json.JsonUnsubscribeResponse;
 import ru.spb.osll.log.Log;
 import ru.spb.osll.objects.Channel;
 import ru.spb.osll.objects.Mark;
@@ -76,37 +82,67 @@ public class JsonRequestTest extends TestCase {
 			assertEquals(r.getAuthString(), "MMMMMMMMMM");
 		}
 	}
+	
+	public void testSubscribe() {
+		JSONObject JSONResponse = new JsonSubscribeRequest("KKKKKKKKKK", "Public announcements", url)
+				.doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonSubscribeResponse r = new JsonSubscribeResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+		}
+	}
+	
+	public void testUnsubscribe() {
+		JSONObject JSONResponse = new JsonUnsubscribeRequest("KKKKKKKKKK", "Public announcements", url)
+				.doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonUnsubscribeResponse r = new JsonUnsubscribeResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+		}
+	}
 
-	/*public void testAddUser() {
-		final JSONObject JSONResponse = new JsonAddUserRequest("bac1ca",
-				"test", url).doRequest();
+	public void testAvailableChannels() {
+		JSONObject JSONResponse = new JsonAvailableChannelRequest("KKKKKKKKKK", url)
+				.doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonAvailableChannelResponse r = new JsonAvailableChannelResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+		}
+	}
+
+	public void testAddUser() {
+		final JSONObject JSONResponse = new JsonAddUserRequest("sergpetrov@gmail.com", "sergpetrov",
+				"sergAP", url).doRequest();
 		assertNotNull(JSONResponse);
 		if (JSONResponse != null) {
 			Log.out.println(LOG, JSONResponse.toString());
 			JsonAddUserResponse r = new JsonAddUserResponse();
 			r.parseJson(JSONResponse);
-			String status = r.getStatus();
-			String statusMess = r.getStatusMessage();
-			boolean success = status.equals(JsonOldResponse.STATUS_OK) || statusMess.equals(JsonOldResponse.SM_CHANNEL_EXTSTS); 
-			assertTrue(success);
+			assertEquals(r.getErrno(), 0);
 		}
 	}
-
+	
 	public void testApplyChannel() {
 		final JSONObject JSONResponse = new JsonApplyChannelRequest(
-				"MMMMMMMMMM", "My channel", "tracker channel",
+				"MMMMMMMMMM", "Test channel", "My test channel",
 				"http://osll.spb.ru", 3000, url).doRequest();
 		assertNotNull(JSONResponse);
 		if (JSONResponse != null) {
 			Log.out.println(LOG, JSONResponse.toString());
 			JsonApplyChannelResponse r = new JsonApplyChannelResponse();
 			r.parseJson(JSONResponse);
-			String status = r.getStatus();
-			String statusMess = r.getStatusMessage();
-			boolean success = status.equals(JsonOldResponse.STATUS_OK) || statusMess.equals(JsonOldResponse.SM_CHANNEL_EXTSTS); 
-			assertTrue(success);
+			assertEquals(r.getErrno(), 0);
 		}
-	}*/
+	}
 
 	public void testCircleFilter() {
 		final JSONObject JSONResponse = new JsonFilterCircleRequest(
