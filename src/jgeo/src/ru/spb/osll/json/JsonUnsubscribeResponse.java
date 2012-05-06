@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2012 OSLL
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,46 +29,8 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-/*! ---------------------------------------------------------------
- * PROJ: OSLL/geo2tag
- * ---------------------------------------------------------------- */
-
 package ru.spb.osll.json;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import ru.spb.osll.log.Log;
-
-import static ru.spb.osll.json.IRequest.IAddUser.*;
-
-public class JsonAddUserRequest extends JsonBaseRequest {
-	private String m_login;
-	private String m_password;
-	private String m_serverUrl;
-	private String m_email;
-
-	public JsonAddUserRequest(String email, String login, String password, 
-			String serverUrl) {
-		m_email = email;
-		m_login = login;
-		m_password = password;
-		m_serverUrl = serverUrl;
-	}
-
-	@Override
-	protected JSONObject doRequestInternal() throws JSONException, IOException,
-			URISyntaxException {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(EMAIL, m_email);
-		jsonObject.put(LOGIN, m_login);
-		jsonObject.put(PASSWORD, m_password);
-		Log.out.println(JSON_LOG, jsonObject.toString());
-		return JsonBase.instance().doRequest(jsonObject, new URI(m_serverUrl + REQUEST));
-	}
+public class JsonUnsubscribeResponse extends JsonBaseResponse {
 
 }

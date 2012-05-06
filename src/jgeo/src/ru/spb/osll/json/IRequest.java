@@ -49,6 +49,7 @@ public interface IRequest {
 		
 		String LOGIN = "login";
 		String PASSWORD = "password";
+		String EMAIL = "email";
 	}
 
 	public interface IApplyChannel{
@@ -94,6 +95,26 @@ public interface IRequest {
 		String ALT_SHIFT 		= "altitude_shift";
 		String ALT1 			= "altitude1";
 		String ALT2 			= "altitude2";		
+	}
+	
+	public interface ISubscribeChannel {
+		String REQUEST = "/subscribe";
+
+		String AUTH_TOKEN = "auth_token";
+		String CHANNEL = "channel";
+	}
+	
+	public interface IUnsubscribeChannel {
+		String REQUEST = "/unsubscribe";
+
+		String AUTH_TOKEN = "auth_token";
+		String CHANNEL = "channel";
+	}
+	
+	public interface IAvailableChannel {
+		String REQUEST = "/channels";
+
+		String AUTH_TOKEN = "auth_token";
 	}
 	
 }
