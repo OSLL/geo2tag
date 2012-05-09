@@ -559,7 +559,7 @@ namespace common
     QSharedPointer<Channels>  subscribedChannels = realUser->getSubscribedChannels();
     for(int i=0; i<subscribedChannels->size(); i++)
     {
-      syslog(LOG_INFO,"%s is subscribed for  %s , %lld",realUser->getLogin().toStdString().c_str(),subscribedChannels->at(i)->getName().toStdString().c_str(),subscribedChannels->at(i)->getId());
+      //syslog(LOG_INFO,"%s is subscribed for  %s , %lld",realUser->getLogin().toStdString().c_str(),subscribedChannels->at(i)->getName().toStdString().c_str(),subscribedChannels->at(i)->getId());
       if(QString::compare(subscribedChannels->at(i)->getName(), realChannel->getName(),Qt::CaseInsensitive) == 0)
       {
         response.setErrno(CHANNEL_ALREADY_SUBSCRIBED_ERROR);

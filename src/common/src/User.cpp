@@ -69,11 +69,13 @@ namespace common
 
   void User::subscribe(const QSharedPointer<Channel>& channel)
   {
-    syslog(LOG_INFO,"Trying subscribed %lld for %lld",getId(),channel->getId());
+//    syslog(LOG_INFO,"Trying subscribed %lld for %lld",getId(),channel->getId());
  //   if(!m_channels->exist(channel->getId()))
  //   {
+      //syslog(LOG_INFO, "User->Subscribe: Num of channels before: %d", m_channels->size());
       m_channels->push_back(channel);
-      syslog(LOG_INFO,"Success subscription");
+      //syslog(LOG_INFO, "User->Subscribe: Num of channels after: %d", m_channels->size());
+      //syslog(LOG_INFO,"Success subscription");
 //    }else
 //    {
 //      syslog(LOG_INFO,"Unsuccess subscription");
@@ -82,7 +84,9 @@ namespace common
 
   void User::unsubscribe(const QSharedPointer<Channel>& channel)
   {
+    //syslog(LOG_INFO, "User->Unsubscribe: Num of channels before: %d", m_channels->size());
     m_channels->erase(channel);
+    //syslog(LOG_INFO, "User->Unsubscribe: Num of channels after: %d", m_channels->size());
   }
 
   const QString& User::getLogin() const

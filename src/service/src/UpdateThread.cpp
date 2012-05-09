@@ -59,14 +59,14 @@ m_database(db)
 
 void UpdateThread::lockWriting()
 {
-  syslog(LOG_INFO, "UpdateThread::lockWriting()");
+  //syslog(LOG_INFO, "UpdateThread::lockWriting()");
   m_updateLock.lockForWrite();
 }
 
 
 void UpdateThread::unlockWriting()
 {
-  syslog(LOG_INFO, "UpdateThread::unlock()");
+  //syslog(LOG_INFO, "UpdateThread::unlock()");
   m_updateLock.unlock();
 }
 

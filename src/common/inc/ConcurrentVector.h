@@ -40,6 +40,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QMap>
+#include <syslog.h>
 
 template<typename T>
 class ConcurrentVector
@@ -129,8 +130,10 @@ class ConcurrentVector
     {
       QMutexLocker locker(&m_lock);
       int i = m_container.indexOf(val);
-      if(i != -1)
+      if(i != -1) {
         m_container.remove(i);
+        m_map.remove(m_map.key(val));
+      }
     }
 
     QVector<QSharedPointer<T> > vector() const
