@@ -117,4 +117,18 @@ public interface IRequest {
 		String AUTH_TOKEN = "auth_token";
 	}
 	
+	public interface IFilterChannel {
+		String REQUEST = "/filterChannel";
+		
+		String AUTH_TOKEN = "auth_token";
+		String CHANNEL = "channel";
+		String AMOUNT = "amount";
+	}
+	
+	public interface ISubscribedChannel {
+		String REQUEST = "/subscribed";
+
+		String AUTH_TOKEN = "auth_token";
+	}
+	
 }
