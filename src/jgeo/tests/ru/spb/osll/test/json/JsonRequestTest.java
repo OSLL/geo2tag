@@ -49,6 +49,8 @@ import ru.spb.osll.json.JsonApplyChannelResponse;
 import ru.spb.osll.json.JsonAvailableChannelRequest;
 import ru.spb.osll.json.JsonAvailableChannelResponse;
 import ru.spb.osll.json.JsonFilterBoxRequest;
+import ru.spb.osll.json.JsonFilterChannelRequest;
+import ru.spb.osll.json.JsonFilterChannelResponse;
 import ru.spb.osll.json.JsonFilterCircleRequest;
 import ru.spb.osll.json.JsonFilterCylinderRequest;
 import ru.spb.osll.json.JsonFilterFenceRequest;
@@ -59,6 +61,8 @@ import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.JsonLoginResponse;
 import ru.spb.osll.json.JsonSubscribeRequest;
 import ru.spb.osll.json.JsonSubscribeResponse;
+import ru.spb.osll.json.JsonSubscribedChannelsRequest;
+import ru.spb.osll.json.JsonSubscribedChannelsResponse;
 import ru.spb.osll.json.JsonUnsubscribeRequest;
 import ru.spb.osll.json.JsonUnsubscribeResponse;
 import ru.spb.osll.log.Log;
@@ -300,6 +304,30 @@ public class JsonRequestTest extends TestCase {
 					Log.out.println(LOG, "" + m);
 				}
 			}
+		}
+	}
+	
+	public void testFilterChannel() {
+		JSONObject JSONResponse = new JsonFilterChannelRequest("MMMMMMMMMM","Fuel Prices", 10, url)
+				.doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonFilterChannelResponse r = new JsonFilterChannelResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+		}
+	}
+	
+	public void testSubscribedChannels() {
+		JSONObject JSONResponse = new JsonSubscribedChannelsRequest("MMMMMMMMMM", url)
+				.doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonSubscribedChannelsResponse r = new JsonSubscribedChannelsResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
 		}
 	}
 
