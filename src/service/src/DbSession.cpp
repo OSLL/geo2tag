@@ -570,7 +570,8 @@ namespace common
     QSharedPointer<Channels>  subscribedChannels = realUser->getSubscribedChannels();
     for(int i=0; i<subscribedChannels->size(); i++)
     {
-      if(subscribedChannels->at(i)->getName() == realChannel->getName())
+      //syslog(LOG_INFO,"%s is subscribed for  %s , %lld",realUser->getLogin().toStdString().c_str(),subscribedChannels->at(i)->getName().toStdString().c_str(),subscribedChannels->at(i)->getId());
+      if(QString::compare(subscribedChannels->at(i)->getName(), realChannel->getName(),Qt::CaseInsensitive) == 0)
       {
         response.setErrno(CHANNEL_ALREADY_SUBSCRIBED_ERROR);
         answer.append(response.getJson());
@@ -586,6 +587,7 @@ namespace common
       return answer;
     }
     m_updateThread->lockWriting();
+    syslog(LOG_INFO, "Try to subscribe for realChannel = %lld",realChannel->getId());
     realUser->subscribe(realChannel);
     m_updateThread->unlockWriting();
 
@@ -772,6 +774,7 @@ namespace common
       if(QString::compare(subscribedChannels->at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = subscribedChannels->at(i);
+	break;
       }
     }
     if(realChannel.isNull())
@@ -780,7 +783,7 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
-    syslog(LOG_INFO, "Sending sql request for SubscribeQuery");
+    syslog(LOG_INFO, "Sending sql request for UnsubscribeQuery");
     bool result = m_queryExecutor->unsubscribeChannel(realUser,realChannel);
     if(!result)
     {
