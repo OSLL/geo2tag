@@ -48,6 +48,6 @@
 
 #define TIC_ timeval a,b; gettimeofday(&a,0);
 #define TOC_( FUNC_NAME  ) gettimeofday(&b,0);\
-syslog(LOG_INFO, "profiling: time_of_%s = %ld.%06ld",FUNC_NAME,b.tv_sec-a.tv_sec,(b.tv_usec-a.tv_usec>0?b.tv_usec-a.tv_usec:1000000+b.tv_usec-a.tv_usec));
+syslog(LOG_INFO, "profiling: time_of_%s %ld.%06ld",FUNC_NAME,b.tv_sec-a.tv_sec,(b.tv_usec-a.tv_usec>0?b.tv_usec-a.tv_usec:1000000+b.tv_usec-a.tv_usec));
 
 #endif //_ProfilerUtil_H_B9D00A44_0260_4AC3_9404_605AE29EA141_INCLUDED_

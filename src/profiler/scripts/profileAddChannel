@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Use next commands to see results (run them BEFORE statring this script):
+# >>>>>>  sudo tail -f /var/log/syslog |  grep -v 'db_update' | grep -o time_of_.* | grep -o '[^_]*$' > output_file
+# this will add "method_name time_spended_for_method" records into file @output_file@
+# After this all just grep out data
+
+number_of_iterations=20;
+auth_token="MMMMMMMMMM";
+
+
+
+for (( i=0;  i<=number_of_iterations; i++ )) ;
+do
+        channel="test_channel_$RANDOM";
+        curl -d "{\"auth_token\":\"$auth_token\", \"name\":\"$channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel
+	sleep 1s
+done
