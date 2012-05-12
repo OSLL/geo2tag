@@ -30,6 +30,13 @@ then
 	exit 1
 fi
 
+response_CI_test=`curl -d '{"login":"mark","password":"test"}'  http://localhost:81/service/login`;
+if ! echo $response_CI_test | grep -q -s -F "$correct_result_login"  ; 
+then
+	echo "Fail at caseinsentivenes test"
+	exit 1
+fi
+
 
 response_incorrect_json_test=`curl -d '{"login":"Markpassword":"test"}'  http://localhost:81/service/login`;
 correct_result_incorrect_json='{ "errno" : 9 }';
@@ -108,4 +115,4 @@ then
 fi
 
 
-echo "Succes"
+echo "Success"

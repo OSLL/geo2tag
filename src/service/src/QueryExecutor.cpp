@@ -274,7 +274,6 @@ QSharedPointer<common::User> QueryExecutor::insertNewTmpUser(const QSharedPointe
 {
     bool result;
     QSqlQuery newSignupQuery(m_database);
-    syslog(LOG_INFO, "OK!");
     qlonglong newId = nextUserKey();
     syslog(LOG_INFO,"Generating token for new signup, %s : %s",user->getLogin().toStdString().c_str()
                                                             ,user->getPassword().toStdString().c_str());
