@@ -40,8 +40,15 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
+//#include <qjson/parser.h>
+//#include <qjson/serializer.h>
+//#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+//#include <qjson/parser.h>
+//#include <qjson/serializer.h>
+//#else
+#include "parser.h"
+#include "serializer.h"
+//#endif
 
 #include <QVariant>
 #include <QVariantMap>
@@ -50,10 +57,10 @@
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
-#include <syslog.h>
+//#include <syslog.h>
 SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON()
 {
-  syslog(LOG_INFO,"SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON()");
+//  syslog(LOG_INFO,"SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON()");
 }
 
 

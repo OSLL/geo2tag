@@ -19,7 +19,7 @@
 #include "SubscribedChannelsQuery.h"
 #include "LoadTagsQuery.h"
 #include "UnsubscribeChannelQuery.h"
-#include "AddUserQuery.h"
+
 
 class Client : public QObject
 {
@@ -66,6 +66,7 @@ class Client : public QObject
     bool isTrackingPermitted();
 
     void unSubscribeChannelRequest(const QString &channelName);
+    void logout();
 
 
   private slots:

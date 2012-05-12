@@ -169,3 +169,8 @@ void MainWindow::unsubscribeChannel(const QString &channelName)
 {
     client->unSubscribeChannelRequest(channelName);
 }
+
+void MainWindow::logout() {
+    client->logout();
+
+}

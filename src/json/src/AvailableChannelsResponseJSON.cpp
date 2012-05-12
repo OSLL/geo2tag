@@ -40,8 +40,10 @@
  *
  * ------------------------------------------------------------------------ */
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
+//#include <qjson/parser.h>
+//#include <qjson/serializer.h>
+#include "parser.h"
+#include "serializer.h"
 
 #include "AvailableChannelsResponseJSON.h"
 #include "JsonChannel.h"

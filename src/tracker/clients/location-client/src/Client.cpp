@@ -133,6 +133,9 @@ void Client::onError(int err)
   else
       if (err==USER_ALREADY_EXIST_ERROR)
           emit error(QVariant("User with that name already exist"));
+  else
+          if (err==CHANNEL_DOES_NOT_EXIST_ERROR)
+              emit error(QVariant("User with that name isn't existed"));
 
 }
 
@@ -191,7 +194,7 @@ void Client::onAuthentificated()
 void Client::process(QNetworkReply *)
 {
     m_isHavingOwnChannel =false;
-    pause(10000);
+    //pause(10000);
     auth(Settings::getInstance().getLogin(), Settings::getInstance().getPassword());
 }
 
@@ -328,14 +331,6 @@ void Client::setHistoryLimit(int sec)
 
 }
 
-//void Client::constructContactModel()
-//{
-//    for (int i=0;i<m_subscibedChannelsQuery->getChannels()->size();i++)
-//        m_contactModel->addContact(QSharedPointer<Contact>(new Contact(m_subscibedChannelsQuery->getChannels()->at(i)->getName(),
-//                                                                       Settings::getInstance().getCustomName(m_subscibedChannelsQuery->getChannels()->at(i)->getName()))));
-//    getTagsRequest();
-
-//}
 
 void Client::getTagsRequest()
 {
@@ -380,5 +375,20 @@ void Client::unSubscribeChannelRequest(const QString &channelName)
 void Client::onChannelUnsubscribed()
 {
     m_contactModel->removeContact(m_unsubscribeChannelQuery->getChannel()->getName());
+
+}
+
+void Client::logout()
+{
+    if (isTracking())
+        stopTrack();
+    else
+        if (m_additionalTimer->isActive())
+            m_additionalTimer->stop();
+    Settings::getInstance().setLogin("unknown");
+    Settings::getInstance().setPassword("unknown");
+    int size = m_contactModel->getContacts().size();
+    for (int i=0;i<size;i++)
+        m_contactModel->removeContact(m_contactModel->getContacts().at(0)->getChannelName());
 
 }

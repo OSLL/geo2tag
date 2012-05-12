@@ -3,14 +3,15 @@ import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 //import org.maemo.fremantle 1.0  // for Core components
 import com.nokia.symbian 1.1
 
-/*Sheet*/CommonDialog {
+CommonDialog {
     id: sheet
     property string acceptButtonText: "Log in"
 
     signal authrequest(string log, string pass)
     signal signrequest(string email, string log, string pass)
+    signal logout()
     function notify(error) {sheet.open(); notifyDialog.notify(error)}
-    function logout_handler(){login=""; sheet.open(); sheet.state="Log in"}
+    function logout_handler(){login=""; sheet.open(); sheet.state="Log in"; sheet.logout()}
     state: "Log in"
 
     property string login: ""
@@ -65,6 +66,7 @@ import com.nokia.symbian 1.1
 
                 Text{
                     text: "Login:"
+                    color: "white"
                 }
 
                 TextField{
@@ -75,6 +77,7 @@ import com.nokia.symbian 1.1
                 Text{
                      id: emailText
                      text: "e-mail:"
+                     color: "white"
                 }
 
                 TextField{
@@ -84,6 +87,7 @@ import com.nokia.symbian 1.1
 
                 Text{
                      text: "Password:"
+                     color: "white"
                 }
 
                 TextField{
@@ -96,6 +100,7 @@ import com.nokia.symbian 1.1
                     id: confirmText
                     text: "Password confirm:"
                     visible: false
+                    color: "white"
                 }
 
                 TextField{
@@ -109,6 +114,7 @@ import com.nokia.symbian 1.1
                 id: loginnedText
                 visible: false
                 text: "You loginned as "+ login
+                color: "white"
             }
 
 
@@ -169,6 +175,7 @@ import com.nokia.symbian 1.1
                  PropertyChanges { target: emailText; visible: false}
                  PropertyChanges { target: emailField; visible: false}
                  PropertyChanges { target: sheet; acceptButtonText: "Log in"}
+                 PropertyChanges { target: form; visible: true}
 
              },
              State {
@@ -186,7 +193,9 @@ import com.nokia.symbian 1.1
                  PropertyChanges { target: confirmField; visible: true}
                  PropertyChanges { target: emailText; visible: true}
                  PropertyChanges { target: emailField; visible: true}
-                 PropertyChanges { target: sheet; acceptButtonText: "Sign up"}}
+                 PropertyChanges { target: sheet; acceptButtonText: "Sign up"}
+        PropertyChanges { target: form; visible: true}
+        }
 
 
          ]
