@@ -38,7 +38,7 @@ package ru.spb.osll.web.server.db;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ru.spb.osll.web.client.services.objects.Channel;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.User;
 
 public class Users extends AbstractBase<User> {
@@ -95,11 +95,11 @@ public class Users extends AbstractBase<User> {
 		return baseBoolQuery(query);
 	}
 	
-	public boolean subscribeToChannel(Channel ch, User user){
+	public boolean subscribeToChannel(WChannel ch, User user){
 		return subscribeToChannel(ch.getId(), user.getId());
 	}	
 	
-	public boolean unsubscribeFromChannel(Channel ch, User user){
+	public boolean unsubscribeFromChannel(WChannel ch, User user){
 		return unsubscribeFromChannel(ch.getId(), user.getId());
 	}	
 	

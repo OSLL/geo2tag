@@ -6,14 +6,14 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import ru.spb.osll.web.client.services.objects.Channel;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 
 public class GTState {
 	private User m_currenUser;
-	private Channel m_currenChannel;
+	private WChannel m_currenChannel;
 
 	private List<UserStateListener> m_userHandlers;
 	private List<ChannelStateListener> m_channelHandlers;
@@ -37,14 +37,14 @@ public class GTState {
 		return m_currenUser;
 	}	
 	
-	public void setCurChannel(Channel ch){
+	public void setCurChannel(WChannel ch){
 		m_currenChannel = ch;
 		for(ChannelStateListener l : m_channelHandlers){
 			l.onChannelChange(ch);
 		}
 	}
 
-	public Channel getCurChannel(){
+	public WChannel getCurChannel(){
 		return m_currenChannel;
 	}	
 
@@ -55,7 +55,7 @@ public class GTState {
 	}
 
 	public static interface ChannelStateListener{
-		public void onChannelChange(Channel ch);
+		public void onChannelChange(WChannel ch);
 	}
 
 	// GT ACTIONS

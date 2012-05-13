@@ -38,7 +38,7 @@ package ru.spb.osll.web.server.services.tags;
 import java.util.Date;
 import java.util.List;
 
-import ru.spb.osll.web.client.services.objects.Channel;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.tags.TagService;
@@ -61,18 +61,18 @@ public class TagServiceImpl extends RemoteServiceServlet implements TagService {
 	}
 	
 	@Override
-	public List<Tag> getTags(Channel ch) throws IllegalArgumentException {
+	public List<Tag> getTags(WChannel ch) throws IllegalArgumentException {
 		return Tags.Instance().selectByChannel(ch);
 	}
 
 	@Override
-	public List<Tag> getTags(Channel ch, Date dateFrom, Date dateTo)
+	public List<Tag> getTags(WChannel ch, Date dateFrom, Date dateTo)
 			throws IllegalArgumentException {
 		return Tags.Instance().selectByChannel(ch, dateFrom, dateTo);
 	}
 
 	@Override
-	public List<Tag> getTags(List<Channel> channels, Date dateFrom, Date dateTo) 
+	public List<Tag> getTags(List<WChannel> channels, Date dateFrom, Date dateTo) 
 			throws IllegalArgumentException {
 		return Tags.Instance().selectByChannels(channels, dateFrom, dateTo);
 	}

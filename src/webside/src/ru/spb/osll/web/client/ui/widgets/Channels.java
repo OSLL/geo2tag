@@ -42,8 +42,8 @@ import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.services.channels.ChannelService;
 import ru.spb.osll.web.client.services.channels.ChannelServiceAsync;
-import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.ui.common.Fields;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.TableWidget;
@@ -65,8 +65,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Channels extends SimpleComposite {
-	private TableWidget<Channel> m_userChannels;
-	private TableWidget<Channel> m_avalChannels;
+	private TableWidget<WChannel> m_userChannels;
+	private TableWidget<WChannel> m_avalChannels;
 	
 	@Override
 	protected String getName() {
@@ -75,13 +75,13 @@ public class Channels extends SimpleComposite {
 
 	@Override
 	protected Widget onInitialize() {
-		List<TableField<Channel>> fields = new ArrayList<TableField<Channel>>();
+		List<TableField<WChannel>> fields = new ArrayList<TableField<WChannel>>();
 		fields.add(Fields.CHANNEL_FIELD_NAME);
 		fields.add(Fields.CHANNEL_FIELD_DESC);
 		fields.add(Fields.CHANNEL_FIELD_URL);
 
-		m_userChannels = new TableWidget<Channel>(fields);
-		m_avalChannels = new TableWidget<Channel>(fields);
+		m_userChannels = new TableWidget<WChannel>(fields);
+		m_avalChannels = new TableWidget<WChannel>(fields);
 		refreshUserChannels();
 		refreshAvaiChannels();
 		
@@ -146,7 +146,7 @@ public class Channels extends SimpleComposite {
 	
 	private void subscribe(){
 		final User u = GTState.Instanse().getCurUser();
-		final Channel ch = m_avalChannels.getSelectedObject();
+		final WChannel ch = m_avalChannels.getSelectedObject();
 		if (null == u || ch == null){
 			return;
 		}
@@ -168,7 +168,7 @@ public class Channels extends SimpleComposite {
 	
 	private void unsubscribe(){
 		final User u = GTState.Instanse().getCurUser();
-		final Channel ch = m_userChannels.getSelectedObject();
+		final WChannel ch = m_userChannels.getSelectedObject();
 		if (null == u || ch == null){
 			return;
 		}
@@ -207,9 +207,9 @@ public class Channels extends SimpleComposite {
 		}
 		
 		final ChannelServiceAsync service = ChannelService.Util.getInstance();
-		service.getUserChannels(u, new AsyncCallback<List<Channel>>() {
+		service.getUserChannels(u, new AsyncCallback<List<WChannel>>() {
 			@Override
-			public void onSuccess(List<Channel> result) {
+			public void onSuccess(List<WChannel> result) {
 				m_userChannels.addRows(result);
 			}
 			@Override
@@ -222,9 +222,9 @@ public class Channels extends SimpleComposite {
 	private void refreshAvaiChannels(){
 		m_avalChannels.erase();
 		final ChannelServiceAsync service = ChannelService.Util.getInstance();
-		service.getAllChannels(new AsyncCallback<List<Channel>>() {
+		service.getAllChannels(new AsyncCallback<List<WChannel>>() {
 			@Override
-			public void onSuccess(List<Channel> result) {
+			public void onSuccess(List<WChannel> result) {
 				m_avalChannels.addRows(result);
 			}
 			@Override

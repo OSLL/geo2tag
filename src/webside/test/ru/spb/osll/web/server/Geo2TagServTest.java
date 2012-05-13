@@ -40,7 +40,7 @@ import java.util.List;
 import org.json.JSONObject;
 import junit.framework.TestCase;
 
-import ru.spb.osll.web.client.services.objects.Channel;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.server.db.Channels;
@@ -105,7 +105,7 @@ public class Geo2TagServTest extends TestCase {
 	}
 
 	public void testChannels() {
-		Channel testChannel = new Channel("Channel1", "TestChannel",
+		WChannel testChannel = new WChannel("Channel1", "TestChannel",
 				"www.bac1ca.com/channel");
 
 		Channels.Instance().delete(testChannel);
@@ -117,7 +117,7 @@ public class Geo2TagServTest extends TestCase {
 		testChannel.setDescription("blablabla");
 		assertTrue(Channels.Instance().update(testChannel));
 
-		List<Channel> channels = Channels.Instance().selectAll();
+		List<WChannel> channels = Channels.Instance().selectAll();
 		assertTrue(channels.get(channels.size() - 1).getDescription().equals(
 				"blablabla"));
 
@@ -129,9 +129,9 @@ public class Geo2TagServTest extends TestCase {
 		Users.Instance().delete(testUser);
 		testUser = Users.Instance().insert(testUser);
 
-		Channel testChannel1 = new Channel("Channel1", "TestChannel",
+		WChannel testChannel1 = new WChannel("Channel1", "TestChannel",
 				"www.bac1ca.com/channel");
-		Channel testChannel2 = new Channel("Channel2", "TestChannel",
+		WChannel testChannel2 = new WChannel("Channel2", "TestChannel",
 				"www.bac1ca.com/channel");
 		Channels.Instance().delete(testChannel1);
 		Channels.Instance().delete(testChannel2);
@@ -145,7 +145,7 @@ public class Geo2TagServTest extends TestCase {
 		// assertFalse(Users.Instance().subscribeToChannel(testChannel2,
 		// testUser)); // FIXME
 
-		List<Channel> channels = Channels.Instance().selectByUser(testUser);
+		List<WChannel> channels = Channels.Instance().selectByUser(testUser);
 		assertTrue(2 == channels.size());
 
 		assertTrue(Users.Instance().unsubscribeFromChannel(testChannel1,
@@ -186,9 +186,9 @@ public class Geo2TagServTest extends TestCase {
 				.getDescription().equals("blablabla"));
 
 		// CHANNELS
-		Channel testChannel1 = new Channel("Channel1", "TestChannel",
+		WChannel testChannel1 = new WChannel("Channel1", "TestChannel",
 				"www.bac1ca.com/channel");
-		Channel testChannel2 = new Channel("Channel2", "TestChannel",
+		WChannel testChannel2 = new WChannel("Channel2", "TestChannel",
 				"www.bac1ca.com/channel");
 		Channels.Instance().delete(testChannel1);
 		Channels.Instance().delete(testChannel2);

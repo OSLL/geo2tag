@@ -38,17 +38,17 @@ package ru.spb.osll.web.client.services.objects;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class Channel implements Serializable {
+public class WChannel implements Serializable {
 	
 	private long id; 
 	private String name;
 	private String description;
 	private String url;
 	
-	public Channel() {
+	public WChannel() {
 	}
 	
-	public Channel(final String name, final String decsription, final String url) {
+	public WChannel(final String name, final String decsription, final String url) {
 		this.name = name;
 		this.description = decsription;
 		this.url = url;

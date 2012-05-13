@@ -39,10 +39,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import ru.spb.osll.web.client.services.objects.Channel;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.User;
 
-public class Channels extends AbstractBase<Channel> {
+public class Channels extends AbstractBase<WChannel> {
 	public static final String TABLE 		= "channel";
 	
 	public static final String ID 			= "id";
@@ -60,7 +60,7 @@ public class Channels extends AbstractBase<Channel> {
 	private Channels() {};
 	
 	
-	public Channel insert(Channel ch){  
+	public WChannel insert(WChannel ch){  
 		final String insertChannel = "INSERT INTO channel(name, description, url) VALUES('%s', '%s', '%s');";
 		final String query = String.format(insertChannel, ch.getName(), ch.getDescription(), ch.getUrl());
 		final long id = baseInsert(query); 
@@ -72,24 +72,24 @@ public class Channels extends AbstractBase<Channel> {
 		return ch;
 	}
 
-	public boolean delete(Channel channel){
+	public boolean delete(WChannel channel){
 		final String deleteChannel = "DELETE FROM channel WHERE name='%s';";	
 		final String query = String.format(deleteChannel, channel.getName());
 		return baseBoolQuery(query);
 	}	
 	
-	public boolean update(Channel ch){
+	public boolean update(WChannel ch){
 		final String updateChannel = "UPDATE channel SET name='%s', description='%s', url='%s' WHERE id='%s';";
 		final String query = String.format(updateChannel, ch.getName(), ch.getDescription(), ch.getUrl(), ch.getId());
 		return baseBoolQuery(query);
 	}
 	
-	public List<Channel> selectAll(){
+	public List<WChannel> selectAll(){
 		final String query = "SELECT * FROM channel;";
 	    return baseMultiSelect(query);
 	}
 
-	public List<Channel> selectByUser(User user){
+	public List<WChannel> selectByUser(User user){
 		final String selectByUser = "SELECT * FROM channel INNER JOIN subscribe " +
 				" ON subscribe.channel_id = channel.id WHERE subscribe.user_id = %s;";
 		final String query = String.format(selectByUser, user.getId());
@@ -97,14 +97,14 @@ public class Channels extends AbstractBase<Channel> {
 	}
 
 	@Deprecated
-	public List<Channel> selectUnuse(User user){
+	public List<WChannel> selectUnuse(User user){
 		// TODO 
 		return null;
 	}
 
 	@Override
-	protected Channel constructObject(ResultSet result) throws SQLException {
-    	Channel channel = new Channel();
+	protected WChannel constructObject(ResultSet result) throws SQLException {
+    	WChannel channel = new WChannel();
     	channel.setId(result.getLong(ID)); 
     	channel.setName(result.getString(NAME));
     	channel.setDescription(result.getString(DESCRIPTION));

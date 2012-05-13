@@ -40,7 +40,7 @@ import java.util.List;
 
 import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.services.channels.ChannelService;
-import ru.spb.osll.web.client.services.objects.Channel;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.services.objects.User;
 import ru.spb.osll.web.client.services.tags.TagService;
@@ -69,7 +69,7 @@ import com.google.gwt.user.datepicker.client.DateBox;
 public abstract class BaseTagsWidget extends SimpleComposite {
 	private TagsView m_tagsView; 
 	
-	private SmartListBox<Channel> m_channelBox;
+	private SmartListBox<WChannel> m_channelBox;
     private DateBox m_dateBoxFrom;
     private DateBox m_dateBoxTo;
     private RadioButton m_radioBtnAll;		
@@ -111,7 +111,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    m_dateBoxFrom.setFormat(new DateBox.DefaultFormat());
 	    m_dateBoxTo.setFormat(new DateBox.DefaultFormat());
 
-	    m_channelBox = new SmartListBox<Channel>(Accessors.CHANNEL_ACC_NAME);
+	    m_channelBox = new SmartListBox<WChannel>(Accessors.CHANNEL_ACC_NAME);
 	    m_channelBox.setWidth("200px");
 	    
 	    final String uniqueId = UIUtil.getUniqueId("channle.type"); 
@@ -194,13 +194,13 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		if(obj == null){
 			return;
 		}
-		else if (obj instanceof Channel){
-			final Channel ch = (Channel) obj;
+		else if (obj instanceof WChannel){
+			final WChannel ch = (WChannel) obj;
 			loadTags(ch, dateFrom, dateTo);
 		}
 		else if (obj instanceof List<?>){
 			@SuppressWarnings("unchecked")
-			final List<Channel> chs = (List<Channel>)obj;
+			final List<WChannel> chs = (List<WChannel>)obj;
 			loadTags(chs, dateFrom, dateTo);
 		}
 		m_tagsView.refresh();
@@ -221,7 +221,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		);
 	}
 	
-	private void loadTags(Channel ch, Date dateFrom, Date dateTo){
+	private void loadTags(WChannel ch, Date dateFrom, Date dateTo){
 		TagService.Util.getInstance().getTags(ch, dateFrom, dateTo,
 			new AsyncCallback<List<Tag>>() {
 				@Override
@@ -236,7 +236,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		);
 	}
 
-	private void loadTags(List<Channel> chs, Date dateFrom, Date dateTo){
+	private void loadTags(List<WChannel> chs, Date dateFrom, Date dateTo){
 		TagService.Util.getInstance().getTags(chs, dateFrom, dateTo,
 			new AsyncCallback<List<Tag>>() {
 				@Override
@@ -256,9 +256,9 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		if (u == null){
 			return;
 		}
-		AsyncCallback<List<Channel>> callback = new AsyncCallback<List<Channel>>() {
+		AsyncCallback<List<WChannel>> callback = new AsyncCallback<List<WChannel>>() {
 			@Override
-			public void onSuccess(List<Channel> result) {
+			public void onSuccess(List<WChannel> result) {
 				m_channelBox.setData(result, LOC.itemAllChannels());
 				if (result.size() > 0){
 					m_radioBtnAll.setValue(true);

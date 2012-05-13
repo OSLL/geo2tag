@@ -38,9 +38,9 @@ package ru.spb.osll.web.client.services.tags;
 import java.util.Date;
 import java.util.List;
 
-import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WChannel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -55,13 +55,13 @@ public interface TagService extends RemoteService {
 	List<Tag> getTags(User u, Date dateFrom, Date dateTo)
 			throws IllegalArgumentException;
 	
-	List<Tag> getTags(Channel ch) 
+	List<Tag> getTags(WChannel ch) 
 			throws IllegalArgumentException;
 
-	List<Tag> getTags(Channel ch, Date dateFrom, Date dateTo)
+	List<Tag> getTags(WChannel ch, Date dateFrom, Date dateTo)
 			throws IllegalArgumentException;
 
-	List<Tag> getTags(List<Channel> channels, Date dateFrom, Date dateTo)
+	List<Tag> getTags(List<WChannel> channels, Date dateFrom, Date dateTo)
 			throws IllegalArgumentException;
 
 	

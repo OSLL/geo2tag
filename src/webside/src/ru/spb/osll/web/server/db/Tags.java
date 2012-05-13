@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ru.spb.osll.web.client.services.objects.Channel;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.services.objects.User;
 
@@ -111,14 +111,14 @@ public class Tags extends AbstractBase<Tag> {
 	    return baseMultiSelect(query);
 	}
 	
-	public List<Tag> selectByChannel(Channel channel){
+	public List<Tag> selectByChannel(WChannel channel){
 		final String selectTagsByChannel = "SELECT time, id, latitude, longitude, label, description, url, user_id" +
 			" FROM tag INNER JOIN tags ON tag.id = tags.tag_id WHERE tags.channel_id = '%s';";
 		final String query = String.format(selectTagsByChannel, channel.getId());
 	    return baseMultiSelect(query);
 	}	
 
-	public List<Tag> selectByChannel(Channel channel, Date dateFrom, Date dateTo){
+	public List<Tag> selectByChannel(WChannel channel, Date dateFrom, Date dateTo){
 		final String timeFromCondition = getTimeFromCondition(dateFrom);
 		final String timeToCondition = getTimeToCondition(dateTo);
 		final String selectTagsByChannel = "SELECT time, id, latitude, longitude, label, description, url, user_id" +
@@ -129,9 +129,9 @@ public class Tags extends AbstractBase<Tag> {
 	}	
 
 	// FIXME later
-	public List<Tag> selectByChannels(List<Channel> channels, Date dateFrom, Date dateTo){
+	public List<Tag> selectByChannels(List<WChannel> channels, Date dateFrom, Date dateTo){
 		List<Tag> result = new ArrayList<Tag>();
-		for (Channel ch : channels){
+		for (WChannel ch : channels){
 			result.addAll(selectByChannel(ch, dateFrom, dateTo));
 		}
 		return result;
@@ -153,13 +153,13 @@ public class Tags extends AbstractBase<Tag> {
 		return String.format(condition, new Timestamp(timeTo.getTime()));
 	}
 	
-	public boolean addTagToChannel(Channel ch, Tag tag){
+	public boolean addTagToChannel(WChannel ch, Tag tag){
 		final String insertTagChannel = "INSERT INTO tags(channel_id, tag_id) VALUES ('%s', '%s');";
 		final String query = String.format(insertTagChannel, ch.getId() , tag.getId());
 		return baseBoolQuery(query);
 	}
 
-	public boolean removeTagFromChannel(Channel ch, Tag tag){
+	public boolean removeTagFromChannel(WChannel ch, Tag tag){
 		final String deleteTagChannel = "DELETE FROM tags WHERE channel_id='%s' AND tag_id='%s';";	
 		final String query = String.format(deleteTagChannel, ch.getId(), tag.getId());
 		return baseBoolQuery(query);

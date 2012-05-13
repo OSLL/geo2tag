@@ -35,27 +35,27 @@
 
 package ru.spb.osll.web.client.ui.common;
 
-import ru.spb.osll.web.client.services.objects.Channel;
 import ru.spb.osll.web.client.services.objects.Tag;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.ui.core.IsDataAccessor;
 
 public class Accessors {
 
 	// CHANNEL'S ACCESSORS
-	public final static IsDataAccessor<Channel> CHANNEL_ACC_NAME = new IsDataAccessor<Channel>(){
-		public String extractData(Channel ch) {
+	public final static IsDataAccessor<WChannel> CHANNEL_ACC_NAME = new IsDataAccessor<WChannel>(){
+		public String extractData(WChannel ch) {
 			return ch.getName();
 		}
 	};
 
-	public final static IsDataAccessor<Channel> CHANNEL_ACC_DESC = new IsDataAccessor<Channel>(){
-		public String extractData(Channel ch) {
+	public final static IsDataAccessor<WChannel> CHANNEL_ACC_DESC = new IsDataAccessor<WChannel>(){
+		public String extractData(WChannel ch) {
 			return ch.getDescription();
 		}
 	};
 
-	public final static IsDataAccessor<Channel> CHANNEL_ACC_URL = new IsDataAccessor<Channel>() {
-		public String extractData(Channel ch) {
+	public final static IsDataAccessor<WChannel> CHANNEL_ACC_URL = new IsDataAccessor<WChannel>() {
+		public String extractData(WChannel ch) {
 			return ch.getUrl();
 		}
 	};

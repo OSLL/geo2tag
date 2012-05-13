@@ -35,7 +35,7 @@
 
 package ru.spb.osll.web.client.ui.common;
 
-import ru.spb.osll.web.client.services.objects.Channel;
+import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.Tag;
 import ru.spb.osll.web.client.ui.core.TableWidget.TableField;
 
@@ -43,14 +43,14 @@ public class Fields {
 
 	// CHANNEL'S FIELDS
 	// TODO Localize
-	public final static TableField<Channel> CHANNEL_FIELD_NAME = 
-			new TableField<Channel>("field.name", "Name", Accessors.CHANNEL_ACC_NAME);
+	public final static TableField<WChannel> CHANNEL_FIELD_NAME = 
+			new TableField<WChannel>("field.name", "Name", Accessors.CHANNEL_ACC_NAME);
 
-	public final static TableField<Channel> CHANNEL_FIELD_DESC = 
-			new TableField<Channel>("field.name", "Desc", Accessors.CHANNEL_ACC_DESC);
+	public final static TableField<WChannel> CHANNEL_FIELD_DESC = 
+			new TableField<WChannel>("field.name", "Desc", Accessors.CHANNEL_ACC_DESC);
 
-	public final static TableField<Channel> CHANNEL_FIELD_URL = 
-			new TableField<Channel>("field.name", "Url", Accessors.CHANNEL_ACC_URL);
+	public final static TableField<WChannel> CHANNEL_FIELD_URL = 
+			new TableField<WChannel>("field.name", "Url", Accessors.CHANNEL_ACC_URL);
 
 	
 	// TAG'S FIELDS
