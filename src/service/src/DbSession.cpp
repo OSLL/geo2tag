@@ -309,9 +309,11 @@ namespace common
         answer.append("Given token doesn't exist!");
         return answer;
     }
-    // Token exists!
-    if (m_queryExecutor->insertTmpUserIntoUsers(registrationToken)) {
+
+    QSharedPointer<User> newUser = m_queryExecutor->insertTmpUserIntoUsers(registrationToken);
+    if (!newUser.isNull()) {
         m_queryExecutor->deleteTmpUser(registrationToken);
+        m_usersContainer->push_back(newUser);
         answer.append("Congratulations!");
     } else {
         answer.append("Attempt of inserting user has failed!");
