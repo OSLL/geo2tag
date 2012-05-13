@@ -43,11 +43,11 @@
 //#include <qjson/parser.h>
 //#include <qjson/serializer.h>
 //#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
-//#include <qjson/parser.h>
-//#include <qjson/serializer.h>
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 //#else
-#include "parser.h"
-#include "serializer.h"
+//#include "parser.h"
+//#include "serializer.h"
 //#endif
 
 #include <QVariant>
