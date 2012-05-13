@@ -148,7 +148,7 @@ public class JsonRequestTest extends TestCase {
 			JsonAddUserResponse r = new JsonAddUserResponse();
 			r.parseJson(JSONResponse);
 			boolean successResult = (r.getErrno()==Errno.SUCCESS)||
-			(r.getErrno()==Errno.USER_ALREADY_EXIST_ERROR);
+					(r.getErrno()==Errno.USER_ALREADY_EXIST_ERROR);
 			assertTrue(successResult);
 		}
 	}

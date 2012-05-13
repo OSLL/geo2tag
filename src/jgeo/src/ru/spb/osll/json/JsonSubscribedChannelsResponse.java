@@ -31,6 +31,16 @@
 
 package ru.spb.osll.json;
 
+import java.util.List;
+
+import ru.spb.osll.objects.Channel;
+
 public class JsonSubscribedChannelsResponse extends JsonBaseResponse {
 
+	// TODO parse input json object and fill ChannelList
+	public List<Channel> getChannels() {
+		// TODO 
+		return null;
+	}
+	
 }
