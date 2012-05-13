@@ -45,11 +45,25 @@ public class Channel {
 	private String description;
 	private String language;
 	private String pubDate;
-	
-	private List<Mark> makrs = new ArrayList<Mark>();
-	
+	private List<Mark> marks = new ArrayList<Mark>();
+
+	public Channel() {
+	}
+
 	public Channel(String name) {
 		this.name = name;
+	}
+	
+	public Channel(String name, String title, String link, String description,
+		String language, String pubDate, List<Mark> marks) {
+		super();
+		this.name = name;
+		this.title = title;
+		this.link = link;
+		this.description = description;
+		this.language = language;
+		this.pubDate = pubDate;
+		this.marks = marks;
 	}
 
 	public String getName() {
@@ -60,16 +74,56 @@ public class Channel {
 		this.name = name;
 	}
 
-	public void addMark(Mark mark) {
-		makrs.add(mark); 
-	}
-	
-	public void setMarks(List<Mark> marks) {
-		this.makrs = marks;
-	}
-	
-	public List<Mark> getMarks() {
-		return makrs;
+	public String getTitle() {
+		return title;
 	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public String getPubDate() {
+		return pubDate;
+	}
+
+	public void setPubDate(String pubDate) {
+		this.pubDate = pubDate;
+	}
+
+	public List<Mark> getMarks() {
+		return marks;
+	}
+
+	public void setMakrs(List<Mark> marks) {
+		this.marks = marks;
+	}
+
+	public void addMark(Mark mark) {
+		this.marks.add(mark);
+	}
+	
 }
