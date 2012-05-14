@@ -38,7 +38,7 @@ package ru.spb.osll.web.client.services.channels;
 import java.util.List;
 
 import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -49,11 +49,11 @@ public interface ChannelService extends RemoteService {
 
 	List<WChannel> getAllChannels() throws IllegalArgumentException; 
 	
-	List<WChannel> getUserChannels(User u) throws IllegalArgumentException;
+	List<WChannel> getUserChannels(WUser u) throws IllegalArgumentException;
 	
-	Boolean subscribe(WChannel ch, User u) throws IllegalArgumentException;
+	Boolean subscribe(WChannel ch, WUser u) throws IllegalArgumentException;
 	
-	Boolean unsubscribe(WChannel ch, User u) throws IllegalArgumentException;
+	Boolean unsubscribe(WChannel ch, WUser u) throws IllegalArgumentException;
 	
 	public static class Util {
 		private static ChannelServiceAsync instance;

@@ -38,24 +38,24 @@ package ru.spb.osll.web.client.services.tags;
 import java.util.Date;
 import java.util.List;
 
-import ru.spb.osll.web.client.services.objects.Tag;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WMark;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.objects.WChannel;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface TagServiceAsync {
 
-	void getTags(User u, AsyncCallback<List<Tag>> callback);
+	void getTags(WUser u, AsyncCallback<List<WMark>> callback);
 
-	void getTags(User u, Date dateFrom, Date dateTo,
-			AsyncCallback<List<Tag>> callback);
+	void getTags(WUser u, Date dateFrom, Date dateTo,
+			AsyncCallback<List<WMark>> callback);
 	
-	void getTags(WChannel ch, AsyncCallback<List<Tag>> callback);
+	void getTags(WChannel ch, AsyncCallback<List<WMark>> callback);
 
 	void getTags(WChannel ch, Date dateFrom, Date dateTo,
-			AsyncCallback<List<Tag>> callback);
+			AsyncCallback<List<WMark>> callback);
 
 	void getTags(List<WChannel> channels, Date dateFrom, Date dateTo,
-			AsyncCallback<List<Tag>> callback);
+			AsyncCallback<List<WMark>> callback);
 }

@@ -7,12 +7,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 
 public class GTState {
-	private User m_currenUser;
+	private WUser m_currenUser;
 	private WChannel m_currenChannel;
 
 	private List<UserStateListener> m_userHandlers;
@@ -26,14 +26,14 @@ public class GTState {
 		m_channelHandlers.add(l);
 	}
 	
-	public void setCurUser(User user){
+	public void setCurUser(WUser user){
 		m_currenUser = user;
 		for(UserStateListener l : m_userHandlers){
 			l.onUserChange(user);
 		}
 	}
 
-	public User getCurUser(){
+	public WUser getCurUser(){
 		return m_currenUser;
 	}	
 	
@@ -51,7 +51,7 @@ public class GTState {
 	
 	// GT STATE LISTENERS 
 	public static interface UserStateListener{
-		public void onUserChange(User u);
+		public void onUserChange(WUser u);
 	}
 
 	public static interface ChannelStateListener{
@@ -61,9 +61,9 @@ public class GTState {
 	// GT ACTIONS
 	public void checkAuth(){
 		LoginServiceAsync service = LoginService.Util.getInstance();
-		service.isAuthorized(new AsyncCallback<User>() {
+		service.isAuthorized(new AsyncCallback<WUser>() {
 			@Override
-			public void onSuccess(User user) {
+			public void onSuccess(WUser user) {
 				GTState.Instanse().setCurUser(user); 
 			}
 			@Override

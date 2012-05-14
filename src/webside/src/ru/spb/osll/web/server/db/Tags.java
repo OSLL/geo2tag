@@ -43,10 +43,10 @@ import java.util.Date;
 import java.util.List;
 
 import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.Tag;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WMark;
+import ru.spb.osll.web.client.services.objects.WUser;
 
-public class Tags extends AbstractBase<Tag> {
+public class Tags extends AbstractBase<WMark> {
 	public static final String TABLE 		= "tag";
 	
 	public static final String ID 			= "id";
@@ -68,7 +68,7 @@ public class Tags extends AbstractBase<Tag> {
 	private Tags(){}
 	
 	
-	public Tag insert(Tag tag){  
+	public WMark insert(WMark tag){  
 		final String insertTag = "INSERT INTO tag(latitude, longitude, label, description, user_id, url) " +
 				"VALUES (%s, %s, '%s', '%s', '%s', '%s');";
 		final String query = String.format(insertTag, tag.getLatitude(), tag.getLongitude(), 
@@ -82,13 +82,13 @@ public class Tags extends AbstractBase<Tag> {
 		return tag;
 	}
 		
-	public boolean delete(Tag tag){
+	public boolean delete(WMark tag){
 		final String deleteTag = "DELETE FROM tag WHERE id=%s;"; 
 		final String query = String.format(deleteTag, tag.getId());
 		return baseBoolQuery(query);
 	}	
 	
-	public boolean update(Tag tag){
+	public boolean update(WMark tag){
 		final String updateTag = "UPDATE tag SET latitude='%s', longitude='%s', " +
 				"label='%s', description='%s', url='%s', user_id='%s' WHERE id='%s';";
 		final String query = String.format(updateTag, tag.getLatitude(), tag.getLongitude(), 
@@ -96,13 +96,13 @@ public class Tags extends AbstractBase<Tag> {
 		return baseBoolQuery(query);
 	}
 	
-	public List<Tag> selectByUser(User user){
+	public List<WMark> selectByUser(WUser user){
 		final String selectTagsByUser = "SELECT * FROM tag WHERE user_id=%s;";
 		final String query = String.format(selectTagsByUser, user.getId());
 	    return baseMultiSelect(query);
 	}
 
-	public List<Tag> selectByUser(User user, Date dateFrom, Date dateTo){
+	public List<WMark> selectByUser(WUser user, Date dateFrom, Date dateTo){
 		final String timeFromCondition = getTimeFromCondition(dateFrom);
 		final String timeToCondition = getTimeToCondition(dateTo);
 		final String selectTagsByUser = "SELECT * FROM tag WHERE user_id=%s " + 
@@ -111,14 +111,14 @@ public class Tags extends AbstractBase<Tag> {
 	    return baseMultiSelect(query);
 	}
 	
-	public List<Tag> selectByChannel(WChannel channel){
+	public List<WMark> selectByChannel(WChannel channel){
 		final String selectTagsByChannel = "SELECT time, id, latitude, longitude, label, description, url, user_id" +
 			" FROM tag INNER JOIN tags ON tag.id = tags.tag_id WHERE tags.channel_id = '%s';";
 		final String query = String.format(selectTagsByChannel, channel.getId());
 	    return baseMultiSelect(query);
 	}	
 
-	public List<Tag> selectByChannel(WChannel channel, Date dateFrom, Date dateTo){
+	public List<WMark> selectByChannel(WChannel channel, Date dateFrom, Date dateTo){
 		final String timeFromCondition = getTimeFromCondition(dateFrom);
 		final String timeToCondition = getTimeToCondition(dateTo);
 		final String selectTagsByChannel = "SELECT time, id, latitude, longitude, label, description, url, user_id" +
@@ -129,8 +129,8 @@ public class Tags extends AbstractBase<Tag> {
 	}	
 
 	// FIXME later
-	public List<Tag> selectByChannels(List<WChannel> channels, Date dateFrom, Date dateTo){
-		List<Tag> result = new ArrayList<Tag>();
+	public List<WMark> selectByChannels(List<WChannel> channels, Date dateFrom, Date dateTo){
+		List<WMark> result = new ArrayList<WMark>();
 		for (WChannel ch : channels){
 			result.addAll(selectByChannel(ch, dateFrom, dateTo));
 		}
@@ -153,21 +153,21 @@ public class Tags extends AbstractBase<Tag> {
 		return String.format(condition, new Timestamp(timeTo.getTime()));
 	}
 	
-	public boolean addTagToChannel(WChannel ch, Tag tag){
+	public boolean addTagToChannel(WChannel ch, WMark tag){
 		final String insertTagChannel = "INSERT INTO tags(channel_id, tag_id) VALUES ('%s', '%s');";
 		final String query = String.format(insertTagChannel, ch.getId() , tag.getId());
 		return baseBoolQuery(query);
 	}
 
-	public boolean removeTagFromChannel(WChannel ch, Tag tag){
+	public boolean removeTagFromChannel(WChannel ch, WMark tag){
 		final String deleteTagChannel = "DELETE FROM tags WHERE channel_id='%s' AND tag_id='%s';";	
 		final String query = String.format(deleteTagChannel, ch.getId(), tag.getId());
 		return baseBoolQuery(query);
 	}
 
 	@Override
-	protected Tag constructObject(ResultSet result) throws SQLException {
-		Tag tag = new Tag();
+	protected WMark constructObject(ResultSet result) throws SQLException {
+		WMark tag = new WMark();
     	tag.setId(result.getInt(ID)); 
     	tag.setTime(result.getTimestamp(TIME));
     	tag.setLatitude(result.getFloat(LATITUDE));

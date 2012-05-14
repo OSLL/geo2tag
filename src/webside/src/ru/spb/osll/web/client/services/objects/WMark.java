@@ -39,7 +39,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @SuppressWarnings("serial")
-public class Tag implements Serializable {
+public class WMark implements Serializable {
 
 	private long id = -1;
 	private Timestamp time;
@@ -50,10 +50,10 @@ public class Tag implements Serializable {
 	private String url;
 	private long user_id;
 	
-	public Tag() {
+	public WMark() {
 	}
 	
-	public Tag(final float latitude, final float longitude, final String label,
+	public WMark(final float latitude, final float longitude, final String label,
 			final String description, final String url, final long user_id) {
 		this.latitude = latitude;
 		this.longitude = longitude;

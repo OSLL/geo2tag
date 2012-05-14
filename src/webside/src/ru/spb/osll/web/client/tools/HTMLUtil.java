@@ -35,12 +35,12 @@
 
 package ru.spb.osll.web.client.tools;
 
-import ru.spb.osll.web.client.services.objects.Tag;
+import ru.spb.osll.web.client.services.objects.WMark;
 
 
 public class HTMLUtil {
 	
-	public static String toHTML(Tag tag) {
+	public static String toHTML(WMark tag) {
 		StringBuffer sb = new StringBuffer().append("<b>").
 			append(tag.getLabel()).append("</b><br>");
 		if (tag.getUrl() != null){

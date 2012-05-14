@@ -47,7 +47,7 @@ import org.gwtopenmaps.openlayers.client.layer.OSM;
 import org.gwtopenmaps.openlayers.client.popup.FramedCloud;
 import org.gwtopenmaps.openlayers.client.popup.Popup;
 
-import ru.spb.osll.web.client.services.objects.Tag;
+import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.tools.HTMLUtil;
 
 import com.google.gwt.user.client.ui.Widget;
@@ -108,16 +108,16 @@ public class OSMWidget extends BaseMapWidget {
 	}
 	
 	@Override
-	public void setTags(List<Tag> tags){
+	public void setTags(List<WMark> tags){
 		removeMarkers();
 		if (tags == null || tags.size() == 0){
 			return;
 		}
 		final Map map = m_mapWidget.getMap(); 
-		final Tag initTag = tags.get(0);
+		final WMark initTag = tags.get(0);
 		setMapCenter(initTag.getLongitude(), initTag.getLatitude(), 10);
 		
-		for (Tag tag : tags) {
+		for (WMark tag : tags) {
 			final LonLat longLat = new LonLat(tag.getLongitude(), tag.getLatitude());
 			longLat.transform("EPSG:4326", "EPSG:900913");
 	

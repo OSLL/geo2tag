@@ -39,8 +39,8 @@ import java.util.Date;
 import java.util.List;
 
 import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.Tag;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WMark;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.tags.TagService;
 import ru.spb.osll.web.server.db.Tags;
 
@@ -50,29 +50,29 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class TagServiceImpl extends RemoteServiceServlet implements TagService {
 
 	@Override
-	public List<Tag> getTags(User u) throws IllegalArgumentException {
+	public List<WMark> getTags(WUser u) throws IllegalArgumentException {
 		return Tags.Instance().selectByUser(u);
 	}
 
 	@Override
-	public List<Tag> getTags(User u, Date dateFrom, Date dateTo)
+	public List<WMark> getTags(WUser u, Date dateFrom, Date dateTo)
 			throws IllegalArgumentException {
 		return Tags.Instance().selectByUser(u, dateFrom, dateTo);
 	}
 	
 	@Override
-	public List<Tag> getTags(WChannel ch) throws IllegalArgumentException {
+	public List<WMark> getTags(WChannel ch) throws IllegalArgumentException {
 		return Tags.Instance().selectByChannel(ch);
 	}
 
 	@Override
-	public List<Tag> getTags(WChannel ch, Date dateFrom, Date dateTo)
+	public List<WMark> getTags(WChannel ch, Date dateFrom, Date dateTo)
 			throws IllegalArgumentException {
 		return Tags.Instance().selectByChannel(ch, dateFrom, dateTo);
 	}
 
 	@Override
-	public List<Tag> getTags(List<WChannel> channels, Date dateFrom, Date dateTo) 
+	public List<WMark> getTags(List<WChannel> channels, Date dateFrom, Date dateTo) 
 			throws IllegalArgumentException {
 		return Tags.Instance().selectByChannels(channels, dateFrom, dateTo);
 	}

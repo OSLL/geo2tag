@@ -40,7 +40,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 
 public class Channels extends AbstractBase<WChannel> {
 	public static final String TABLE 		= "channel";
@@ -89,7 +89,7 @@ public class Channels extends AbstractBase<WChannel> {
 	    return baseMultiSelect(query);
 	}
 
-	public List<WChannel> selectByUser(User user){
+	public List<WChannel> selectByUser(WUser user){
 		final String selectByUser = "SELECT * FROM channel INNER JOIN subscribe " +
 				" ON subscribe.channel_id = channel.id WHERE subscribe.user_id = %s;";
 		final String query = String.format(selectByUser, user.getId());
@@ -97,7 +97,7 @@ public class Channels extends AbstractBase<WChannel> {
 	}
 
 	@Deprecated
-	public List<WChannel> selectUnuse(User user){
+	public List<WChannel> selectUnuse(WUser user){
 		// TODO 
 		return null;
 	}

@@ -39,9 +39,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 
-public class Users extends AbstractBase<User> {
+public class Users extends AbstractBase<WUser> {
 	public static final String TABLE 	= "users";
 	
 	public static final String ID 		= "id";
@@ -59,19 +59,19 @@ public class Users extends AbstractBase<User> {
 	private Users(){}
 
 
-	public User select(String login){
+	public WUser select(String login){
 		final String selectUser = "SELECT * FROM users WHERE login='%s';";
 		final String query = String.format(selectUser, login);
 		return baseSingleSelect(query);
 	}
 
-	public User select(long id){
+	public WUser select(long id){
 		final String selectUser = "SELECT * FROM users WHERE id=%s;";
 		final String query = String.format(selectUser, id);
 		return baseSingleSelect(query);
 	}
 	
-	public User insert(User user){
+	public WUser insert(WUser user){
 		final String insertUser = "INSERT INTO users (login, password, token) VALUES ('%s', '%s', '%s');";
 		final String query = String.format(insertUser, user.getLogin(), user.getPassword(), user.getToken());
 		final long id = baseInsert(query); 
@@ -83,23 +83,23 @@ public class Users extends AbstractBase<User> {
 		return user;
 	}
 	
-	public boolean delete(User user){
+	public boolean delete(WUser user){
 		final String deleteUser = "DELETE FROM users WHERE login='%s';";
 		final String query = String.format(deleteUser, user.getLogin());
 		return baseBoolQuery(query);
 	}	
 	
-	public boolean update(User u){
+	public boolean update(WUser u){
 		final String updateUser = "UPDATE users SET password='%s', token='%s' WHERE login='%s';";
 		final String query = String.format(updateUser, u.getPassword(), u.getToken(), u.getLogin());
 		return baseBoolQuery(query);
 	}
 	
-	public boolean subscribeToChannel(WChannel ch, User user){
+	public boolean subscribeToChannel(WChannel ch, WUser user){
 		return subscribeToChannel(ch.getId(), user.getId());
 	}	
 	
-	public boolean unsubscribeFromChannel(WChannel ch, User user){
+	public boolean unsubscribeFromChannel(WChannel ch, WUser user){
 		return unsubscribeFromChannel(ch.getId(), user.getId());
 	}	
 	
@@ -121,8 +121,8 @@ public class Users extends AbstractBase<User> {
 	}
 	
 	@Override
-	protected User constructObject(ResultSet result) throws SQLException {
-		User user = new User();	
+	protected WUser constructObject(ResultSet result) throws SQLException {
+		WUser user = new WUser();	
     	user.setId(result.getInt(ID)); 
     	user.setLogin(result.getString(LOGIN));
     	user.setPassword(result.getString(PASSWORD));

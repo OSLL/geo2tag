@@ -38,17 +38,17 @@ package ru.spb.osll.web.client.services.objects;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class User extends Response implements Serializable {
+public class WUser extends Response implements Serializable {
 
 	private long id; 
 	private String login;
 	private String password;
 	private String token;
 	
-	public User() {
+	public WUser() {
 	}
 	
-	public User(final String login, final String password) {
+	public WUser(final String login, final String password) {
 		this.login = login;
 		this.password = password;
 	}

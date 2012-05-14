@@ -37,7 +37,7 @@ package ru.spb.osll.web.client.services.channels;
 
 import java.util.List;
 
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.objects.WChannel;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -46,10 +46,10 @@ public interface ChannelServiceAsync {
 
 	void getAllChannels(AsyncCallback<List<WChannel>> callback);
 
-	void getUserChannels(User u, AsyncCallback<List<WChannel>> callback);
+	void getUserChannels(WUser u, AsyncCallback<List<WChannel>> callback);
 
-	void subscribe(WChannel ch, User u, AsyncCallback<Boolean> callback);
+	void subscribe(WChannel ch, WUser u, AsyncCallback<Boolean> callback);
 
-	void unsubscribe(WChannel ch, User u, AsyncCallback<Boolean> callback);
+	void unsubscribe(WChannel ch, WUser u, AsyncCallback<Boolean> callback);
 
 }

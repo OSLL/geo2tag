@@ -41,8 +41,8 @@ import java.util.List;
 import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.services.channels.ChannelService;
 import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.Tag;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WMark;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.tags.TagService;
 import ru.spb.osll.web.client.ui.common.Accessors;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
@@ -90,13 +90,13 @@ public abstract class BaseTagsWidget extends SimpleComposite {
     
 	@Override
 	public void onResume() {
-		final User user = GTState.Instanse().getCurUser();
+		final WUser user = GTState.Instanse().getCurUser();
 		showWarningMessage(user);
 		refreshFilterPanel(user);
 		m_tagsView.refresh();
 	}
 
-	private void showWarningMessage(User u){
+	private void showWarningMessage(WUser u){
 		if (u != null){
 			hideWarningMessage();
 		} else {
@@ -176,7 +176,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	}
 
 	private void refreshByUser(){
-		final User u = GTState.Instanse().getCurUser();
+		final WUser u = GTState.Instanse().getCurUser();
 		final Date dateFrom = m_dateBoxFrom.getValue();
 		final Date dateTo = m_dateBoxTo.getValue();
 		if(u == null){
@@ -206,11 +206,11 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		m_tagsView.refresh();
 	}
 
-	private void loadTags(User u, Date dateFrom, Date dateTo){
+	private void loadTags(WUser u, Date dateFrom, Date dateTo){
 		TagService.Util.getInstance().getTags(u, dateFrom, dateTo,
-			new AsyncCallback<List<Tag>>() {
+			new AsyncCallback<List<WMark>>() {
 				@Override
-				public void onSuccess(List<Tag> result) {
+				public void onSuccess(List<WMark> result) {
 					m_tagsView.setTags(result);
 				}
 				@Override
@@ -223,9 +223,9 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	
 	private void loadTags(WChannel ch, Date dateFrom, Date dateTo){
 		TagService.Util.getInstance().getTags(ch, dateFrom, dateTo,
-			new AsyncCallback<List<Tag>>() {
+			new AsyncCallback<List<WMark>>() {
 				@Override
-				public void onSuccess(List<Tag> result) {
+				public void onSuccess(List<WMark> result) {
 					m_tagsView.setTags(result);
 				}
 				@Override
@@ -238,9 +238,9 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 
 	private void loadTags(List<WChannel> chs, Date dateFrom, Date dateTo){
 		TagService.Util.getInstance().getTags(chs, dateFrom, dateTo,
-			new AsyncCallback<List<Tag>>() {
+			new AsyncCallback<List<WMark>>() {
 				@Override
-				public void onSuccess(List<Tag> result) {
+				public void onSuccess(List<WMark> result) {
 					m_tagsView.setTags(result);
 				}
 				@Override
@@ -251,7 +251,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		);
 	}
 	
-	private void refreshFilterPanel(final User u){
+	private void refreshFilterPanel(final WUser u){
 		m_channelBox.clear();
 		if (u == null){
 			return;
@@ -279,7 +279,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	}
 
 	public interface TagsView extends IsWidget {
-		public void setTags(List<Tag> tags);
+		public void setTags(List<WMark> tags);
 		public void refresh();
 	}
 	

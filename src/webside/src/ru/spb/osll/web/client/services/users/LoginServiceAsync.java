@@ -35,19 +35,19 @@
 
 package ru.spb.osll.web.client.services.users;
 
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface LoginServiceAsync {
-	void login(User user, AsyncCallback<User> callback)
+	void login(WUser user, AsyncCallback<WUser> callback)
 		throws IllegalArgumentException;
 
 	void logout(AsyncCallback<Boolean> callback);
 
-	void isAuthorized(AsyncCallback<User> callback)
+	void isAuthorized(AsyncCallback<WUser> callback)
 		throws IllegalArgumentException;
 	
-	void addUser(User user, AsyncCallback<User> callback)
+	void addUser(WUser user, AsyncCallback<WUser> callback)
 		throws IllegalArgumentException;
 }

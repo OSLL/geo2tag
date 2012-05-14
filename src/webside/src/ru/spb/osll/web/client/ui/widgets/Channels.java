@@ -42,7 +42,7 @@ import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.services.channels.ChannelService;
 import ru.spb.osll.web.client.services.channels.ChannelServiceAsync;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.ui.common.Fields;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
@@ -104,7 +104,7 @@ public class Channels extends SimpleComposite {
 		refreshAvaiChannels();
 	}
 
-	private void showWarningMessage(User u){
+	private void showWarningMessage(WUser u){
 		if (u != null){
 			hideWarningMessage();
 		} else {
@@ -145,7 +145,7 @@ public class Channels extends SimpleComposite {
 	}
 	
 	private void subscribe(){
-		final User u = GTState.Instanse().getCurUser();
+		final WUser u = GTState.Instanse().getCurUser();
 		final WChannel ch = m_avalChannels.getSelectedObject();
 		if (null == u || ch == null){
 			return;
@@ -167,7 +167,7 @@ public class Channels extends SimpleComposite {
 	}
 	
 	private void unsubscribe(){
-		final User u = GTState.Instanse().getCurUser();
+		final WUser u = GTState.Instanse().getCurUser();
 		final WChannel ch = m_userChannels.getSelectedObject();
 		if (null == u || ch == null){
 			return;
@@ -201,7 +201,7 @@ public class Channels extends SimpleComposite {
 	
 	private void refreshUserChannels(){
 		m_userChannels.erase();
-		final User u = GTState.Instanse().getCurUser();
+		final WUser u = GTState.Instanse().getCurUser();
 		if (null == u){
 			return;
 		}

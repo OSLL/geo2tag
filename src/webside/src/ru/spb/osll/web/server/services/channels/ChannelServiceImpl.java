@@ -39,7 +39,7 @@ import java.util.List;
 
 import ru.spb.osll.web.client.services.channels.ChannelService;
 import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.server.db.Channels;
 import ru.spb.osll.web.server.db.Users;
 
@@ -54,12 +54,12 @@ public class ChannelServiceImpl extends RemoteServiceServlet implements ChannelS
 	}
 
 	@Override
-	public List<WChannel> getUserChannels(User u) throws IllegalArgumentException {
+	public List<WChannel> getUserChannels(WUser u) throws IllegalArgumentException {
 		return Channels.Instance().selectByUser(u);
 	}
 
 	@Override
-	public Boolean subscribe(WChannel ch, User u) throws IllegalArgumentException {
+	public Boolean subscribe(WChannel ch, WUser u) throws IllegalArgumentException {
 		if (Users.Instance().isSubscribed(ch.getId(), u.getId())){
 			return false;
 		}
@@ -67,7 +67,7 @@ public class ChannelServiceImpl extends RemoteServiceServlet implements ChannelS
 	}
 
 	@Override
-	public Boolean unsubscribe(WChannel ch, User u) throws IllegalArgumentException {
+	public Boolean unsubscribe(WChannel ch, WUser u) throws IllegalArgumentException {
 		return Users.Instance().unsubscribeFromChannel(ch, u);
 	}
 }

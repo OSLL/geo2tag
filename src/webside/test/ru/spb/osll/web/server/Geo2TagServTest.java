@@ -41,8 +41,8 @@ import org.json.JSONObject;
 import junit.framework.TestCase;
 
 import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.Tag;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WMark;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.server.db.Channels;
 import ru.spb.osll.web.server.db.Tags;
 import ru.spb.osll.web.server.db.Users;
@@ -87,7 +87,7 @@ public class Geo2TagServTest extends TestCase {
 	}
 
 	public void testUsers() {
-		User testUser = new User("Dima", "pass");
+		WUser testUser = new WUser("Dima", "pass");
 		Users.Instance().delete(testUser);
 
 		testUser = Users.Instance().insert(testUser);
@@ -125,7 +125,7 @@ public class Geo2TagServTest extends TestCase {
 	}
 
 	public void testSubscribe() {
-		User testUser = new User("Dima", "pass");
+		WUser testUser = new WUser("Dima", "pass");
 		Users.Instance().delete(testUser);
 		testUser = Users.Instance().insert(testUser);
 
@@ -162,17 +162,17 @@ public class Geo2TagServTest extends TestCase {
 	}
 
 	public void testTags() {
-		User testUser = new User("Dima", "pass");
+		WUser testUser = new WUser("Dima", "pass");
 		Users.Instance().delete(testUser);
 		testUser = Users.Instance().insert(testUser);
 
-		Tag testTag1 = new Tag(1f, 1f, "testlabel1", "testTag1", "testurl",
+		WMark testTag1 = new WMark(1f, 1f, "testlabel1", "testTag1", "testurl",
 				testUser.getId());
 		testTag1 = Tags.Instance().insert(testTag1);
 		assertTrue(Tags.Instance().selectByUser(testUser).get(0).getLabel()
 				.equals("testlabel1"));
 
-		Tag testTag2 = new Tag(2f, 2f, "testlabel2", "testTag2", "testurl",
+		WMark testTag2 = new WMark(2f, 2f, "testlabel2", "testTag2", "testurl",
 				testUser.getId());
 		testTag2 = Tags.Instance().insert(testTag2);
 

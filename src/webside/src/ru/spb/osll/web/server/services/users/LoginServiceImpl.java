@@ -39,7 +39,7 @@ import javax.servlet.http.HttpSession;
 
 import ru.spb.osll.json.JsonLoginResponse;
 import ru.spb.osll.web.client.services.objects.Response;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.server.db.Users;
 import ru.spb.osll.web.server.Session;
@@ -58,7 +58,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 //	private String AUTH_TOKEN = "auth_token";
 
 	@Override
-	public User login(User user) throws IllegalArgumentException {
+	public WUser login(WUser user) throws IllegalArgumentException {
 		JSONObject JSONResponse = null;
 		JSONResponse = new JsonLoginRequest(user.getLogin(), 
 			user.getPassword(), JsonBase.getServerUrl()).doRequest();
@@ -81,15 +81,15 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public User isAuthorized() throws IllegalArgumentException {
+	public WUser isAuthorized() throws IllegalArgumentException {
 		final Long id = (Long) Session.Instance().getValue(this, USER_ID);
 		return id == null ? null : Users.Instance().select(id);
 	}
 
 	@Override
-	public User addUser(User user) throws IllegalArgumentException {
+	public WUser addUser(WUser user) throws IllegalArgumentException {
 		final Users users = Users.Instance();
-		final User standart = users.select(user.getLogin());
+		final WUser standart = users.select(user.getLogin());
 		if (standart == null) {
 			user = users.insert(user);
 			user.setStatus(Response.STATUS_SUCCES);

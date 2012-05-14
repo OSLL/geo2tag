@@ -41,7 +41,7 @@ import java.util.List;
 import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.objects.Response;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.ui.core.FieldsWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
@@ -94,14 +94,14 @@ public class RegistrationWidget extends FieldsWidget {
 			public void onClick(ClickEvent event) {
 				hideMessage();
 				if (isValid()) {
-					final User user = new User(m_login.getText(), m_pass.getText());
-					final AsyncCallback<User> callback = new AsyncCallback<User>() {
+					final WUser user = new WUser(m_login.getText(), m_pass.getText());
+					final AsyncCallback<WUser> callback = new AsyncCallback<WUser>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							showMessage(caught.getMessage());
 						}
 						@Override
-						public void onSuccess(User user) {
+						public void onSuccess(WUser user) {
 							if (user != null) {
 								if (user.getStatus() == Response.STATUS_SUCCES) {
 									final String title = Localizer.res().registration();

@@ -38,7 +38,7 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.spb.osll.web.client.services.objects.Tag;
+import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.ui.common.Fields;
 import ru.spb.osll.web.client.ui.core.TableWidget;
 import ru.spb.osll.web.client.ui.core.TableWidget.TableField;
@@ -69,23 +69,23 @@ public class TagsTableWidget extends BaseTagsWidget {
 	}
 
 	private class TagsTablePanel extends Composite implements TagsView {
-		private TableWidget<Tag> m_tagsTable;
+		private TableWidget<WMark> m_tagsTable;
 		
 		public TagsTablePanel(){
-			List<TableField<Tag>> fields = new ArrayList<TableField<Tag>>();
+			List<TableField<WMark>> fields = new ArrayList<TableField<WMark>>();
 			fields.add(Fields.TAG_FIELD_LABEL);
 			fields.add(Fields.TAG_FIELD_DESC);
 			fields.add(Fields.TAG_FIELD_URL);
 			fields.add(Fields.TAG_FIELD_TIME);
 			fields.add(Fields.TAG_FIELD_LAT);
 			fields.add(Fields.TAG_FIELD_LON);
-			m_tagsTable = new TableWidget<Tag>(fields);
+			m_tagsTable = new TableWidget<WMark>(fields);
 			
 			initWidget(m_tagsTable);
 		}
 		
 		@Override
-		public void setTags(List<Tag> tags) {
+		public void setTags(List<WMark> tags) {
 			m_tagsTable.erase();
 			m_tagsTable.addRows(tags);
 		}

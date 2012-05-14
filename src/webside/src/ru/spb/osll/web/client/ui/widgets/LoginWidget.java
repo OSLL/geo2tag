@@ -42,7 +42,7 @@ import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.objects.Response;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.ui.core.FieldsWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
@@ -116,16 +116,16 @@ public class LoginWidget extends FieldsWidget {
 	
 	private void login(){
 		hideMessage();
-		final User user = new User(m_loginField.getText(), m_passField.getText());
+		final WUser user = new WUser(m_loginField.getText(), m_passField.getText());
 		
-		AsyncCallback<User> callback = new AsyncCallback<User>() {
+		AsyncCallback<WUser> callback = new AsyncCallback<WUser>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showMessage(caught.getMessage());
 			}
 			
 			@Override
-			public void onSuccess(User user) {
+			public void onSuccess(WUser user) {
 				if (user != null){
 					if (user.getStatus() == Response.STATUS_SUCCES){
 						GTState.Instanse().setCurUser(user);

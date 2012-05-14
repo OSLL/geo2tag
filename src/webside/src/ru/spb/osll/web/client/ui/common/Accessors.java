@@ -35,7 +35,7 @@
 
 package ru.spb.osll.web.client.ui.common;
 
-import ru.spb.osll.web.client.services.objects.Tag;
+import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.ui.core.IsDataAccessor;
 
@@ -61,38 +61,38 @@ public class Accessors {
 	};
 
 	// CHANNEL'S ACCESSORS
-	public final static IsDataAccessor<Tag> TAG_ACC_LABEL = new IsDataAccessor<Tag>() {
-		public String extractData(Tag t) {
+	public final static IsDataAccessor<WMark> TAG_ACC_LABEL = new IsDataAccessor<WMark>() {
+		public String extractData(WMark t) {
 			return t.getLabel();
 		}
 	};
 
-	public final static IsDataAccessor<Tag> TAG_ACC_DESC = new IsDataAccessor<Tag>() {
-		public String extractData(Tag t) {
+	public final static IsDataAccessor<WMark> TAG_ACC_DESC = new IsDataAccessor<WMark>() {
+		public String extractData(WMark t) {
 			return t.getDescription();
 		}
 	};
 	
-	public final static IsDataAccessor<Tag> TAG_ACC_URL = new IsDataAccessor<Tag>() {
-		public String extractData(Tag t) {
+	public final static IsDataAccessor<WMark> TAG_ACC_URL = new IsDataAccessor<WMark>() {
+		public String extractData(WMark t) {
 			return t.getUrl();
 		}
 	};
 	
-	public final static IsDataAccessor<Tag> TAG_ACC_TIME = new IsDataAccessor<Tag>() {
-		public String extractData(Tag t) {
+	public final static IsDataAccessor<WMark> TAG_ACC_TIME = new IsDataAccessor<WMark>() {
+		public String extractData(WMark t) {
 			return t.getTime().toGMTString(); 	// FIXME
 		}
 	};
 	
-	public final static IsDataAccessor<Tag> TAG_ACC_LAT = new IsDataAccessor<Tag>() {
-		public String extractData(Tag t) {
+	public final static IsDataAccessor<WMark> TAG_ACC_LAT = new IsDataAccessor<WMark>() {
+		public String extractData(WMark t) {
 			return t.getLatitude() + ""; 		// FIXME
 		}
 	};
 
-	public final static IsDataAccessor<Tag> TAG_ACC_LON = new IsDataAccessor<Tag>() {
-		public String extractData(Tag t) {
+	public final static IsDataAccessor<WMark> TAG_ACC_LON = new IsDataAccessor<WMark>() {
+		public String extractData(WMark t) {
 			return t.getLongitude() + ""; 		// FIXME
 		}
 	};

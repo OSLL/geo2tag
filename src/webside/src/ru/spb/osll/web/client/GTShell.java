@@ -1,7 +1,7 @@
 package ru.spb.osll.web.client;
 
 import ru.spb.osll.web.client.localization.Localizer;
-import ru.spb.osll.web.client.services.objects.User;
+import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
@@ -97,9 +97,9 @@ public class GTShell extends Composite {
 		setContent(HomePage.Instance(), false);
 		
 		LoginServiceAsync service = LoginService.Util.getInstance();
-		service.isAuthorized(new AsyncCallback<User>() {
+		service.isAuthorized(new AsyncCallback<WUser>() {
 			@Override
-			public void onSuccess(User user) {
+			public void onSuccess(WUser user) {
 				GTState.Instanse().setCurUser(user); 
 				refreshAutorizedStatus();
 			}
@@ -129,9 +129,9 @@ public class GTShell extends Composite {
 	
 	protected void initDefaultWidget(){
 		LoginServiceAsync service = LoginService.Util.getInstance();
-		service.isAuthorized(new AsyncCallback<User>() {
+		service.isAuthorized(new AsyncCallback<WUser>() {
 			@Override
-			public void onSuccess(User user) {
+			public void onSuccess(WUser user) {
 				if (user == null){
 					setContent(LoginWidget.Instance(), false);
 				} else {
