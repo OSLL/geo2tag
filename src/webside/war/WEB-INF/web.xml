@@ -45,5 +45,13 @@
   	<servlet-name>VersionService</servlet-name>
   	<url-pattern>/geo2tag/VersionService</url-pattern>
   </servlet-mapping>
+  <servlet>
+  	<servlet-name>GTService</servlet-name>
+  	<servlet-class>ru.spb.osll.web.server.services.GTServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GTService</servlet-name>
+  	<url-pattern>/geo2tag/GTService</url-pattern>
+  </servlet-mapping>
 
 </web-app>
