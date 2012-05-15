@@ -33,15 +33,21 @@ package ru.spb.osll.web.server.services;
 
 import java.util.List;
 
+import ru.spb.osll.log.Log;
 import ru.spb.osll.web.client.services.GTService;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WUser;
+import ru.spb.osll.web.server.WebLogger;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
 public class GTServiceImpl extends RemoteServiceServlet implements GTService {
+	
+	static {
+		Log.setLogger(new WebLogger());
+	}
 
 	@Override
 	public WUser login(WUser user) throws IllegalArgumentException {
