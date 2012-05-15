@@ -31,6 +31,38 @@
 
 package ru.spb.osll.json;
 
-public class JsonSubscribedChannelsResponse extends JsonBaseResponse {
+import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import ru.spb.osll.log.Log;
+import ru.spb.osll.objects.Channel;
+
+public class JsonSubscribedChannelsResponse extends JsonBaseResponse {
+	
+	private List<Channel> m_channels = new ArrayList<Channel>();
+
+	@Override
+	public void parseJson(JSONObject obj) {
+		super.parseJson(obj);
+		try {
+			JSONArray jchannels = obj.getJSONArray("channels");
+			for (int i = 0; i < jchannels.length(); i++) {
+				final String channelName = jchannels.getJSONObject(i).getString("name");
+				Channel channel = new Channel(channelName);
+				channel.setDescription(jchannels.getJSONObject(i).getString("description"));
+				channel.setLink(jchannels.getJSONObject(i).getString("url"));
+				m_channels.add(channel);
+			}
+		} catch (JSONException e) {
+			Log.out.println(LOG, e);
+		}
+	}
+
+	public List<Channel> getChannels() {
+		return m_channels;
+	}
 }
