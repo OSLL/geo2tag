@@ -31,16 +31,54 @@
 
 package ru.spb.osll.json;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import ru.spb.osll.log.Log;
 import ru.spb.osll.objects.Channel;
+import ru.spb.osll.objects.Mark;
 
 public class JsonFilterChannelResponse extends JsonBaseResponse {
 
-	// TODO parse input json object and fill ChannelList
-	public List<Channel> getChannels() {
-		// TODO 
-		return null;
+	private List<Channel> m_channels = new ArrayList<Channel>();
+
+	@Override
+	public void parseJson(JSONObject obj) {
+		super.parseJson(obj);
+		try {
+				JSONObject jchannel = obj.getJSONObject("channel");
+				final String channelName = jchannel.getString("name");
+				Channel channel = new Channel(channelName);
+
+				JSONArray jmarks = jchannel.getJSONArray("items");
+				for (int j = 0; j < jmarks.length(); j++) {
+					JSONObject jmark = jmarks.getJSONObject(j);
+
+					Mark mark = new Mark();
+					mark.setChannel(channelName);
+					mark.setId(jmark.getLong("id"));
+					mark.setUser(jmark.getString("user"));
+					mark.setTitle(jmark.getString("title"));
+					mark.setLink(jmark.getString("link"));
+					mark.setDescription(jmark.getString("description"));
+					mark.setLatitude(jmark.getDouble("latitude"));
+					mark.setLongitude(jmark.getDouble("longitude"));
+					mark.setAltitude(jmark.getDouble("altitude"));
+					mark.setTime(jmark.getString("pubDate"));
+
+					channel.addMark(mark);
+				}
+				m_channels.add(channel);
+		} catch (JSONException e) {
+			Log.out.println(LOG, e);
+		}
 	}
-	
+
+	public List<Channel> getChannels() {
+		return m_channels;
+	}
 }

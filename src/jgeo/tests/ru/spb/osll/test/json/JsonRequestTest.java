@@ -87,37 +87,37 @@ public class JsonRequestTest extends TestCase {
 			assertEquals(r.getAuthString(), "MMMMMMMMMM");
 		}
 	}
-	
-	public void testApplySubscribeUnsubscribe() {  
-		//error platform 
-		//incorrect work with the memory
-		//http://jira.geo2tag.org:8080/browse/GT-599
+
+	public void testApplySubscribeUnsubscribe() {
+		// error platform
+		// incorrect work with the memory
+		// http://jira.geo2tag.org:8080/browse/GT-599
 		final JSONObject JSONResponse = new JsonApplyChannelRequest(
 				"MMMMMMMMMM", "Test channel2", "My test channel",
 				"http://osll.spb.ru", 3000, url).doRequest();
 		assertNotNull(JSONResponse);
-	
-		final JSONObject JSONResponse1 = new JsonSubscribeRequest(
-				"KKKKKKKKKK", "Test channel2", url).doRequest();
+
+		final JSONObject JSONResponse1 = new JsonSubscribeRequest("KKKKKKKKKK",
+				"Test channel2", url).doRequest();
 		assertNotNull(JSONResponse1);
-		
+
 		final JSONObject JSONResponse2 = new JsonUnsubscribeRequest(
 				"KKKKKKKKKK", "Test channel2", url).doRequest();
 		assertNotNull(JSONResponse2);
-		
+
 		if (JSONResponse != null) {
 			Log.out.println(LOG, JSONResponse.toString());
 			JsonApplyChannelResponse r = new JsonApplyChannelResponse();
 			r.parseJson(JSONResponse);
-			boolean successApply = (r.getErrno()==Errno.SUCCESS)||
-			(r.getErrno()==Errno.CHANNEL_ALREADY_EXIST_ERROR);
+			boolean successApply = (r.getErrno() == Errno.SUCCESS)
+					|| (r.getErrno() == Errno.CHANNEL_ALREADY_EXIST_ERROR);
 			assertTrue(successApply);
 
 			Log.out.println(LOG, JSONResponse1.toString());
 			JsonSubscribeResponse r1 = new JsonSubscribeResponse();
 			r1.parseJson(JSONResponse);
-			boolean successSubscribe = (r1.getErrno()==Errno.SUCCESS)||
-			(r1.getErrno()==Errno.CHANNEL_ALREADY_SUBSCRIBED_ERROR);
+			boolean successSubscribe = (r1.getErrno() == Errno.SUCCESS)
+					|| (r1.getErrno() == Errno.CHANNEL_ALREADY_SUBSCRIBED_ERROR);
 			assertTrue(successSubscribe);
 
 			Log.out.println(LOG, JSONResponse2.toString());
@@ -126,22 +126,28 @@ public class JsonRequestTest extends TestCase {
 			assertEquals(r2.getErrno(), Errno.SUCCESS);
 		}
 	}
-	
+
 	public void testAvailableChannels() {
-		JSONObject JSONResponse = new JsonAvailableChannelRequest("KKKKKKKKKK", url)
-				.doRequest();
+		JSONObject JSONResponse = new JsonAvailableChannelRequest("KKKKKKKKKK",
+				url).doRequest();
 		assertNotNull(JSONResponse);
 		if (JSONResponse != null) {
 			Log.out.println(LOG, JSONResponse.toString());
 			JsonAvailableChannelResponse r = new JsonAvailableChannelResponse();
 			r.parseJson(JSONResponse);
 			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannels().size() > 0);
+			List<Channel> channels = r.getChannels();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+			}
 		}
 	}
 
 	public void testAddUser() {
-		final JSONObject JSONResponse = new JsonAddUserRequest("sergpetrov@gmail.com", "sergpetrov",
-				"sergAP", url).doRequest();
+		final JSONObject JSONResponse = new JsonAddUserRequest(
+				"sergpetrov@gmail.com", "sergpetrov", "sergAP", url)
+				.doRequest();
 		assertNotNull(JSONResponse);
 		if (JSONResponse != null) {
 			Log.out.println(LOG, JSONResponse.toString());
@@ -152,7 +158,7 @@ public class JsonRequestTest extends TestCase {
 			assertTrue(successResult);
 		}
 	}
-	
+
 	public void testApplyChannel() {
 		final JSONObject JSONResponse = new JsonApplyChannelRequest(
 				"MMMMMMMMMM", "Test channel", "My test channel",
@@ -162,8 +168,8 @@ public class JsonRequestTest extends TestCase {
 			Log.out.println(LOG, JSONResponse.toString());
 			JsonApplyChannelResponse r = new JsonApplyChannelResponse();
 			r.parseJson(JSONResponse);
-			boolean successResult = (r.getErrno()==Errno.SUCCESS)||
-			(r.getErrno()==Errno.CHANNEL_ALREADY_EXIST_ERROR);
+			boolean successResult = (r.getErrno() == Errno.SUCCESS)
+					|| (r.getErrno() == Errno.CHANNEL_ALREADY_EXIST_ERROR);
 			assertTrue(successResult);
 		}
 	}
@@ -179,7 +185,7 @@ public class JsonRequestTest extends TestCase {
 			JsonFilterResponse r = new JsonFilterResponse();
 			r.parseJson(JSONResponse);
 			assertEquals(r.getErrno(), 0);
-			//assertTrue(r.getChannelsData().size() > 0);
+			// assertTrue(r.getChannelsData().size() > 0);
 			List<Channel> channels = r.getChannelsData();
 			for (Channel c : channels) {
 				Log.out.println(LOG, "" + c.getName());
@@ -201,7 +207,7 @@ public class JsonRequestTest extends TestCase {
 			JsonFilterResponse r = new JsonFilterResponse();
 			r.parseJson(JSONResponse);
 			assertEquals(r.getErrno(), 0);
-			//assertTrue(r.getChannelsData().size() > 0);
+			// assertTrue(r.getChannelsData().size() > 0);
 			List<Channel> channels = r.getChannelsData();
 			for (Channel c : channels) {
 				Log.out.println(LOG, "" + c.getName());
@@ -223,7 +229,7 @@ public class JsonRequestTest extends TestCase {
 			JsonFilterResponse r = new JsonFilterResponse();
 			r.parseJson(JSONResponse);
 			assertEquals(r.getErrno(), 0);
-			//assertTrue(r.getChannelsData().size() > 0);
+			// assertTrue(r.getChannelsData().size() > 0);
 			List<Channel> channels = r.getChannelsData();
 			for (Channel c : channels) {
 				Log.out.println(LOG, "" + c.getName());
@@ -244,7 +250,7 @@ public class JsonRequestTest extends TestCase {
 			JsonFilterResponse r = new JsonFilterResponse();
 			r.parseJson(JSONResponse);
 			assertEquals(r.getErrno(), 0);
-			//assertTrue(r.getChannelsData().size() > 0);
+			// assertTrue(r.getChannelsData().size() > 0);
 			List<Channel> channels = r.getChannelsData();
 			for (Channel c : channels) {
 				Log.out.println(LOG, "" + c.getName());
@@ -270,7 +276,7 @@ public class JsonRequestTest extends TestCase {
 			JsonFilterResponse r = new JsonFilterResponse();
 			r.parseJson(JSONResponse);
 			assertEquals(r.getErrno(), 0);
-			//assertTrue(r.getChannelsData().size() > 0);
+			// assertTrue(r.getChannelsData().size() > 0);
 			List<Channel> channels = r.getChannelsData();
 			for (Channel c : channels) {
 				Log.out.println(LOG, "" + c.getName());
@@ -296,7 +302,7 @@ public class JsonRequestTest extends TestCase {
 			JsonFilterResponse r = new JsonFilterResponse();
 			r.parseJson(JSONResponse);
 			assertEquals(r.getErrno(), 0);
-			//assertTrue(r.getChannelsData().size() > 0);
+			// assertTrue(r.getChannelsData().size() > 0);
 			List<Channel> channels = r.getChannelsData();
 			for (Channel c : channels) {
 				Log.out.println(LOG, "" + c.getName());
@@ -306,28 +312,48 @@ public class JsonRequestTest extends TestCase {
 			}
 		}
 	}
-	
+
 	public void testFilterChannel() {
-		JSONObject JSONResponse = new JsonFilterChannelRequest("MMMMMMMMMM","Fuel Prices", 10, url)
-				.doRequest();
+		final JSONObject JSONResponse = new JsonSubscribeRequest("MMMMMMMMMM",
+				"Fuel Prices", url).doRequest();
 		assertNotNull(JSONResponse);
-		if (JSONResponse != null) {
-			Log.out.println(LOG, JSONResponse.toString());
+
+		final JSONObject JSONResponse1 = new JsonFilterChannelRequest("MMMMMMMMMM",
+				"Fuel Prices", 10, url).doRequest();
+		assertNotNull(JSONResponse1);
+		if (JSONResponse1 != null) {
+			Log.out.println(LOG, JSONResponse1.toString());
 			JsonFilterChannelResponse r = new JsonFilterChannelResponse();
-			r.parseJson(JSONResponse);
+			r.parseJson(JSONResponse1);
 			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannels().size() > 0);
+			List<Channel> channels = r.getChannels();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+				for (Mark m : c.getMarks()) {
+					Log.out.println(LOG, "" + m);
+				}
+			}
 		}
 	}
-	
+
 	public void testSubscribedChannels() {
-		JSONObject JSONResponse = new JsonSubscribedChannelsRequest("MMMMMMMMMM", url)
-				.doRequest();
+		final JSONObject JSONResponse = new JsonSubscribedChannelsRequest(
+				"MMMMMMMMMM", url).doRequest();
 		assertNotNull(JSONResponse);
 		if (JSONResponse != null) {
 			Log.out.println(LOG, JSONResponse.toString());
 			JsonSubscribedChannelsResponse r = new JsonSubscribedChannelsResponse();
 			r.parseJson(JSONResponse);
 			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannels().size() > 0);
+			List<Channel> channels = r.getChannels();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+				for (Mark m : c.getMarks()) {
+					Log.out.println(LOG, "" + m);
+				}
+			}
 		}
 	}
 
