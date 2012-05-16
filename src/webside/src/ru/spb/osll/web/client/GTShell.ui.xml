@@ -118,14 +118,14 @@
 					align='right'>
 					<tr>
 						<td class='{style.link}'>
-							<a href='http://www.osll.spb.ru'>
+							<a href='http://osll.spb.ru'>
 								<ui:msg key='mainLinkHomepage'>OSLL Homepage</ui:msg>
 							</a>
 						</td>
 						<td class='{style.link}'>&nbsp;|&nbsp;
 						</td>
 						<td class='{style.link}'>
-							<a href='http://osll.spb.ru/projects/geo2tag'>
+							<a href='http://geo2tag.org/'>
 								<ui:msg key='mainLinkExamples'>Geo2Tag project</ui:msg>
 							</a>
 						</td>
