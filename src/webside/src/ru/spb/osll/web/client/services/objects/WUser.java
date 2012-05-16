@@ -44,6 +44,7 @@ public class WUser extends Response implements Serializable {
 	private String login;
 	private String password;
 	private String token;
+	private String email;
 	
 	public WUser() {
 	}
@@ -84,9 +85,17 @@ public class WUser extends Response implements Serializable {
 		this.token = token;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "user: " + id + " \t| " + login + " \t| " + password + " \t| " + token;
 	}
-
 }

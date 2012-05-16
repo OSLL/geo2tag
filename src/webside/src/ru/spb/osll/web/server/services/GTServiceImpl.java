@@ -33,17 +33,24 @@ package ru.spb.osll.web.server.services;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import ru.spb.osll.log.Log;
 import ru.spb.osll.web.client.services.GTService;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WUser;
+import ru.spb.osll.web.server.Session;
 import ru.spb.osll.web.server.WebLogger;
+import ru.spb.osll.json.*;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-public class GTServiceImpl extends RemoteServiceServlet implements GTService {
+public class GTServiceImpl extends RemoteServiceServlet implements 
+		GTService, Session.HasSession {
+	
+	public static String serverUrl = "http://localhost:81/service";
 	
 	static {
 		Log.setLogger(new WebLogger());
@@ -51,26 +58,54 @@ public class GTServiceImpl extends RemoteServiceServlet implements GTService {
 
 	@Override
 	public WUser login(WUser user) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		JsonLoginRequest request = new JsonLoginRequest(user.getLogin(), user.getPassword(), serverUrl);
+		JsonLoginResponse response = new JsonLoginResponse();
+		response.parseJson(request.doRequest());
+		if (response.getAuthString() == null) {
+			return null;
+		} else {
+			WUser newUser = new WUser(user.getLogin(), user.getPassword());
+			newUser.setToken(response.getAuthString());
+			//Session.Instance().addValue(this, USER_TOKEN, newUser.getToken());
+			return newUser;
+		}
 	}
 
 	@Override
 	public boolean logout() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return false;
+		Session.Instance().removeValue(this, USER_TOKEN);
+		return true;
 	}
 
 	@Override
 	public WUser isAuthorized() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		final String authToken = Session.Instance().getValue(this, USER_TOKEN).toString();
+		if (authToken != null) {
+			WUser user = new WUser();
+			user.setToken(authToken);
+			return user; 
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public WUser addUser(WUser user) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		JsonAddUserRequest request = new JsonAddUserRequest(user.getEmail(),
+															user.getLogin(), 
+															user.getPassword(), 
+															serverUrl);
+		JsonAddUserResponse response = new JsonAddUserResponse();
+		response.parseJson(request.doRequest());
+		if (response.getAuthToken() == null) {
+			return null;
+		} else {
+			WUser newUser = new WUser(user.getLogin(), user.getPassword());
+			newUser.setToken(user.getEmail());
+			newUser.setPassword(user.getPassword());
+			newUser.setToken(response.getAuthToken());
+			return newUser;
+		}
 	}
 
 	@Override
@@ -119,5 +154,10 @@ public class GTServiceImpl extends RemoteServiceServlet implements GTService {
 		return null;
 	}
 	
+	@Override
+	public HttpSession getSession() {
+		return getThreadLocalRequest().getSession();
+	}
 	
+	private static final String USER_TOKEN = "user.token";
 }

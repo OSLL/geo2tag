@@ -50,20 +50,25 @@ import ru.spb.osll.web.server.json.JsonBase;
 import ru.spb.osll.web.server.json.JsonFilterCircleRequest;
 import ru.spb.osll.web.server.json.JsonFilterRectangleRequest;
 import ru.spb.osll.web.server.json.JsonLoginRequest;
+import ru.spb.osll.web.server.services.GTServiceImpl;
 
 public class Geo2TagServTest extends TestCase {
 
 	public void testLogin() {
-		String m_authToken;
-		JSONObject JSONResponse = null;
-		JSONResponse = new JsonLoginRequest("Paul", "test", JsonBase
-				.getServerUrl()).doRequest();
-		m_authToken = JsonBase.getString(JSONResponse, "auth_token");
-		assertEquals(m_authToken, "PPPPPPPPPP");
-		String errno;
-		errno = JsonBase.getString(JSONResponse, "errno");
-		int error = Integer.parseInt(errno);
-		assertTrue(error == 0);
+		WUser user;
+		GTServiceImpl service = new GTServiceImpl();
+		user = service.login(new WUser("Paul", "test"));
+		assertTrue(user != null);
+		assertEquals(user.getToken(), "PPPPPPPPPP");
+	}
+	
+	public void testAddUser() {
+		GTServiceImpl service = new GTServiceImpl();
+		WUser user = new WUser("Sam", "test");
+		user.setEmail("sam@test.org");
+		user = service.addUser(user);
+		assertTrue(user != null);
+		//assertEquals(user.getToken(), "PPPPPPPPPP");
 	}
 
 	public void testCircleFilter() {
