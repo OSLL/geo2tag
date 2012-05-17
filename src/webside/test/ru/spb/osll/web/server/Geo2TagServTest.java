@@ -49,7 +49,6 @@ import ru.spb.osll.web.server.db.Users;
 import ru.spb.osll.web.server.json.JsonBase;
 import ru.spb.osll.web.server.json.JsonFilterCircleRequest;
 import ru.spb.osll.web.server.json.JsonFilterRectangleRequest;
-import ru.spb.osll.web.server.json.JsonLoginRequest;
 import ru.spb.osll.web.server.services.GTServiceImpl;
 
 public class Geo2TagServTest extends TestCase {
@@ -64,13 +63,51 @@ public class Geo2TagServTest extends TestCase {
 	
 	public void testAddUser() {
 		GTServiceImpl service = new GTServiceImpl();
-		WUser user = new WUser("Sam", "test");
+		WUser user = new WUser("Paul", "test");
 		user.setEmail("sam@test.org");
 		user = service.addUser(user);
-		assertTrue(user != null);
+		assertTrue(user == null);
 		//assertEquals(user.getToken(), "PPPPPPPPPP");
 	}
-
+	
+	public void testUnsubscribe() {
+		GTServiceImpl service = new GTServiceImpl();
+		WUser user = new WUser("Paul", "test");
+		user.setToken("PPPPPPPPPP");
+		WChannel channel = new WChannel("Paul", "Paul's channel", GTServiceImpl.serverUrl);
+		Boolean result = service.unsubscribe(channel, user);
+		assertTrue(result == true);
+	}
+	
+	public void testSubscribe() {
+		GTServiceImpl service = new GTServiceImpl();
+		WUser user = new WUser("Paul", "test");
+		user.setToken("PPPPPPPPPP");
+		WChannel channel = new WChannel("Paul", "Paul's channel", GTServiceImpl.serverUrl);
+		Boolean result = service.subscribe(channel, user);
+		assertTrue(result == true);
+	}
+	
+	public void testAvailableChannels() {
+		GTServiceImpl service = new GTServiceImpl();
+		WUser user = new WUser("Paul", "test");
+		user.setToken("PPPPPPPPPP");
+		List<WChannel> availableChannels= service.availableChannels(user);
+		assertTrue(availableChannels.isEmpty() == false);
+		//System.out.println(availableChannels.get(0).getName());
+		//assertEquals(availableChannels.get(0).getName(), "Tourist information");
+	}
+	
+	public void testSubscribedChannels() {
+		GTServiceImpl service = new GTServiceImpl();
+		WUser user = new WUser("Paul", "test");
+		user.setToken("PPPPPPPPPP");
+		List<WChannel> subscribedChannels= service.subscribedChannels(user);
+		assertTrue(subscribedChannels.isEmpty() == false);
+		//System.out.println(subscribedChannels.get(0).getName());
+		//assertEquals(subscribedChannels.get(0).getName(), "Channel2");
+	}
+	
 	public void testCircleFilter() {
 		String channels;
 		JSONObject JSONResponse = null;
@@ -127,43 +164,6 @@ public class Geo2TagServTest extends TestCase {
 				"blablabla"));
 
 		assertTrue(Channels.Instance().delete(testChannel));
-	}
-
-	public void testSubscribe() {
-		WUser testUser = new WUser("Dima", "pass");
-		Users.Instance().delete(testUser);
-		testUser = Users.Instance().insert(testUser);
-
-		WChannel testChannel1 = new WChannel("Channel1", "TestChannel",
-				"www.bac1ca.com/channel");
-		WChannel testChannel2 = new WChannel("Channel2", "TestChannel",
-				"www.bac1ca.com/channel");
-		Channels.Instance().delete(testChannel1);
-		Channels.Instance().delete(testChannel2);
-		testChannel1 = Channels.Instance().insert(testChannel1);
-		testChannel2 = Channels.Instance().insert(testChannel2);
-
-		assertTrue(Users.Instance().subscribeToChannel(testChannel1, testUser));
-		assertTrue(Users.Instance().subscribeToChannel(testChannel2, testUser));
-		// assertFalse(Users.Instance().subscribeToChannel(testChannel1,
-		// testUser)); // FIXME
-		// assertFalse(Users.Instance().subscribeToChannel(testChannel2,
-		// testUser)); // FIXME
-
-		List<WChannel> channels = Channels.Instance().selectByUser(testUser);
-		assertTrue(2 == channels.size());
-
-		assertTrue(Users.Instance().unsubscribeFromChannel(testChannel1,
-				testUser));
-		// assertFalse(Users.Instance().unsubscribeFromChannel(testChannel1,
-		// testUser)); //FIXME
-
-		channels = Channels.Instance().selectByUser(testUser);
-		assertTrue(1 == channels.size());
-
-		Users.Instance().delete(testUser);
-		Channels.Instance().delete(testChannel1);
-		Channels.Instance().delete(testChannel2);
 	}
 
 	public void testTags() {

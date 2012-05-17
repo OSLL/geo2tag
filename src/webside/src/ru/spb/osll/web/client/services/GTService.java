@@ -56,7 +56,7 @@ public interface GTService extends RemoteService {
 	
 	Boolean unsubscribe(WChannel ch, WUser u) throws IllegalArgumentException;
 
-	List<WChannel> availableChannels() throws IllegalArgumentException; 
+	List<WChannel> availableChannels(WUser u) throws IllegalArgumentException; 
 	
 	List<WChannel> subscribedChannels(WUser u) throws IllegalArgumentException;
 	

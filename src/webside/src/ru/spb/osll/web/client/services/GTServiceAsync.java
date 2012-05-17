@@ -53,7 +53,7 @@ public interface GTServiceAsync {
 
 	void unsubscribe(WChannel ch, WUser u, AsyncCallback<Boolean> callback);
 
-	void availableChannels(AsyncCallback<List<WChannel>> callback);
+	void availableChannels(WUser u, AsyncCallback<List<WChannel>> callback);
 
 	void subscribedChannels(WUser u, AsyncCallback<List<WChannel>> callback);
 

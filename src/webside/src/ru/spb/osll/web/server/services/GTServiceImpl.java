@@ -31,6 +31,7 @@
 
 package ru.spb.osll.web.server.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -109,30 +110,58 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Boolean subscribe(WChannel ch, WUser u)
-			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean subscribe(WChannel ch, WUser u) throws IllegalArgumentException {
+		JsonSubscribeRequest request = new JsonSubscribeRequest(u.getToken(), ch.getName(), serverUrl);
+		JsonSubscribeResponse response = new JsonSubscribeResponse();
+		response.parseJson(request.doRequest());
+		if (response.getErrno() == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
 	public Boolean unsubscribe(WChannel ch, WUser u)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		JsonUnsubscribeRequest request = new JsonUnsubscribeRequest(u.getToken(), ch.getName(), serverUrl);
+		JsonUnsubscribeResponse response = new JsonUnsubscribeResponse();
+		response.parseJson(request.doRequest());
+		if (response.getErrno() == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
-	public List<WChannel> availableChannels() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<WChannel> availableChannels(WUser u) throws IllegalArgumentException {
+		JsonAvailableChannelRequest request = new JsonAvailableChannelRequest(u.getToken(), serverUrl);
+		JsonAvailableChannelResponse response = new JsonAvailableChannelResponse();
+		response.parseJson(request.doRequest());
+		List<WChannel> channels = new ArrayList<WChannel>();
+		for (int i = 0; i < response.getChannels().size(); i++) {
+			WChannel channel = new WChannel(response.getChannels().get(i).getName(),
+											response.getChannels().get(i).getDescription(),
+											response.getChannels().get(i).getLink());
+			channels.add(channel);
+		}
+		return channels;
 	}
 
 	@Override
-	public List<WChannel> subscribedChannels(WUser u)
-			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<WChannel> subscribedChannels(WUser u) throws IllegalArgumentException {
+		JsonSubscribedChannelsRequest request = new JsonSubscribedChannelsRequest(u.getToken(), serverUrl);
+		JsonSubscribedChannelsResponse response = new JsonSubscribedChannelsResponse();
+		response.parseJson(request.doRequest());
+		List<WChannel> channels = new ArrayList<WChannel>();
+		for (int i = 0; i < response.getChannels().size(); i++) {
+			WChannel channel = new WChannel(response.getChannels().get(i).getName(),
+											response.getChannels().get(i).getDescription(),
+											response.getChannels().get(i).getLink());
+			channels.add(channel);
+		}
+		return channels;
 	}
 
 	@Override
