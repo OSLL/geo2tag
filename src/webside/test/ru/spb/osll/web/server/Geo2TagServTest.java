@@ -108,6 +108,43 @@ public class Geo2TagServTest extends TestCase {
 		//assertEquals(subscribedChannels.get(0).getName(), "Channel2");
 	}
 	
+	public void testGetTagsByFilterChannel() {
+		GTServiceImpl service = new GTServiceImpl();
+		WUser user = new WUser("Kirill", "test");
+		user.setToken("KKKKKKKKKK");
+		WChannel channel = new WChannel("Fuel prices", "...", GTServiceImpl.serverUrl);
+		int amount = 100;
+		List<WMark> tags = service.getTags(user, channel, amount);
+		assertTrue(tags.isEmpty() == false);
+		assertTrue(tags.size() == 3);
+		/*for (WMark tag : tags) {
+			System.out.println(tag.getLatitude());
+			System.out.println(tag.getLongitude());
+			System.out.println(tag.getLabel());
+			System.out.println(tag.getDescription());
+			System.out.println(tag.getUrl());			
+		}*/
+	}
+	
+	public void testGetTagsByLoadTags() {
+		GTServiceImpl service = new GTServiceImpl();
+		WUser user = new WUser("Kirill", "test");
+		user.setToken("KKKKKKKKKK");
+		double latitude = 60.166504;
+		double longitude = 24.841204;
+		double radius = 30.0;
+		List<WMark> tags = service.getTags(user, latitude, longitude, radius);
+		assertTrue(tags.isEmpty() == false);
+		assertTrue(tags.size() == 4);
+		/*for (WMark tag : tags) {
+			System.out.println(tag.getLabel());
+			System.out.println(tag.getLatitude());
+			System.out.println(tag.getLongitude());
+			System.out.println(tag.getDescription());
+			System.out.println(tag.getUrl());			
+		}*/
+	}
+	
 	public void testCircleFilter() {
 		String channels;
 		JSONObject JSONResponse = null;

@@ -167,20 +167,68 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public List<WChannel> ownedChannels(WUser u)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+		// TODO Later
 		return null;
 	}
 
 	@Override
-	public List<WMark> getTags(WUser u) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<WMark> getTags(WUser u, WChannel ch, int amount) 
+			throws IllegalArgumentException {
+		JsonFilterChannelRequest request = new JsonFilterChannelRequest(u.getToken(), ch.getName(), amount, serverUrl);
+		JsonFilterChannelResponse response = new JsonFilterChannelResponse();
+		response.parseJson(request.doRequest());
+		List<WMark> marks = new ArrayList<WMark>();
+		for (int i = 0; i < response.getChannels().size(); i++) {
+			for (int j = 0; j < response.getChannels().get(i).getMarks().size(); j++) {
+				float latitude = (float)response.getChannels().get(i).getMarks().get(j).getLatitude();
+				float longitude = (float)response.getChannels().get(i).getMarks().get(j).getLongitude();
+				String label = response.getChannels().get(i).getMarks().get(j).getTitle();
+				String url = response.getChannels().get(i).getMarks().get(j).getLink();
+				String description = response.getChannels().get(i).getMarks().get(j).getDescription();
+				long id = response.getChannels().get(i).getMarks().get(j).getId();
+				// TODO long user_id = ...;
+				WMark mark = new WMark();
+				mark.setLatitude(latitude);
+				mark.setLongitude(longitude);
+				mark.setLabel(label);
+				mark.setDescription(description);
+				mark.setUrl(url);
+				mark.setId(id);
+				// TODO mark.setUserId(user_id);
+				// TODO mark.setTime(time);
+				marks.add(mark);
+			}
+		}
+		return marks;
 	}
 
 	@Override
-	public List<WMark> getTags(WChannel ch) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<WMark> getTags(WUser u, double latitude, double longitude, double radius) 
+			throws IllegalArgumentException {
+		JsonLoadTagsRequest request = new JsonLoadTagsRequest(u.getToken(), latitude, longitude, radius, serverUrl);
+		JsonLoadTagsResponse response = new JsonLoadTagsResponse();
+		response.parseJson(request.doRequest());
+		List<WMark> marks = new ArrayList<WMark>();
+		for (int i = 0; i < response.getChannels().size(); i++) {
+			for (int j = 0; j < response.getChannels().get(i).getMarks().size(); j++) {
+				float rLatitude = (float)response.getChannels().get(i).getMarks().get(j).getLatitude();
+				float rLongitude = (float)response.getChannels().get(i).getMarks().get(j).getLongitude();
+				String label = response.getChannels().get(i).getMarks().get(j).getTitle();
+				String url = response.getChannels().get(i).getMarks().get(j).getLink();
+				String description = response.getChannels().get(i).getMarks().get(j).getDescription();
+				long id = response.getChannels().get(i).getMarks().get(j).getId();
+				WMark mark = new WMark();
+				mark.setLatitude(rLatitude);
+				mark.setLongitude(rLongitude);
+				mark.setLabel(label);
+				mark.setDescription(description);
+				mark.setUrl(url);
+				mark.setId(id);
+				// TODO mark.setTime(time);
+				marks.add(mark);
+			}
+		}
+		return marks;
 	}
 	
 	@Override

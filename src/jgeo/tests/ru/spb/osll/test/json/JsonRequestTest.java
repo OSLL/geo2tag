@@ -57,6 +57,8 @@ import ru.spb.osll.json.JsonFilterFenceRequest;
 import ru.spb.osll.json.JsonFilterPolygonRequest;
 import ru.spb.osll.json.JsonFilterRectangleRequest;
 import ru.spb.osll.json.JsonFilterResponse;
+import ru.spb.osll.json.JsonLoadTagsRequest;
+import ru.spb.osll.json.JsonLoadTagsResponse;
 import ru.spb.osll.json.JsonLoginRequest;
 import ru.spb.osll.json.JsonLoginResponse;
 import ru.spb.osll.json.JsonSubscribeRequest;
@@ -354,6 +356,30 @@ public class JsonRequestTest extends TestCase {
 					Log.out.println(LOG, "" + m);
 				}
 			}
+		}
+	}
+	
+	public void testLoadTags() {
+		String url = "http://localhost:81/service";
+		double latitude = 60.166504; 
+		double longitude = 24.841204;
+		double radius = 30.0;
+		final JSONObject JSONResponse = new JsonLoadTagsRequest("KKKKKKKKKK", 
+				latitude, longitude, radius, url).doRequest();
+		assertNotNull(JSONResponse);
+		if (JSONResponse != null) {
+			Log.out.println(LOG, JSONResponse.toString());
+			JsonLoadTagsResponse r = new JsonLoadTagsResponse();
+			r.parseJson(JSONResponse);
+			assertEquals(r.getErrno(), 0);
+			assertTrue(r.getChannels().size() > 0);
+			List<Channel> channels = r.getChannels();
+			for (Channel c : channels) {
+				Log.out.println(LOG, "" + c.getName());
+				for (Mark m : c.getMarks()) {
+					Log.out.println(LOG, "" + m);
+				}
+			}			
 		}
 	}
 

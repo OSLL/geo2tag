@@ -131,4 +131,12 @@ public interface IRequest {
 		String AUTH_TOKEN = "auth_token";
 	}
 	
+	public interface ILoadTags {
+		String REQUEST = "/loadTags";
+
+		String AUTH_TOKEN = "auth_token";
+		String LATITUDE = "latitude";
+		String LONGITUDE = "longitude";
+		String RADIUS = "radius";
+	}
 }
