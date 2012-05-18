@@ -32,31 +32,51 @@
 package ru.spb.osll.web.server;
 
 import ru.spb.osll.objects.Channel;
+import ru.spb.osll.objects.Mark;
+import ru.spb.osll.objects.User;
 import ru.spb.osll.web.client.services.objects.WChannel;
+import ru.spb.osll.web.client.services.objects.WMark;
+import ru.spb.osll.web.client.services.objects.WUser;
 
 public class JGeoConnector {
 
-	// TODO rename ru.spb.osll.web.client.services.objects.User 
-	// to WUser and use it there 
-	/*
-	public static WUser toWUser(User channel) {
-		// TODO
-		return null;
+	public static WUser toWUser(User user) {
+		WUser wUser = new WUser();
+		wUser.setLogin(user.getName());
+		wUser.setPassword(user.getPass());
+		wUser.setToken(user.getToken());
+		
+		return wUser;
 	}
-	*/
 
-	// TODO rename ru.spb.osll.web.client.services.objects.Tag 
-	// to WMark and use it there 
-	/*
-	public static WMark toWTag(Mark mark) {
-		// TODO
-		return null;
-	}
-	*/
-	
+	  public static WMark toWTag(Mark mark) { 
+		  WMark wMark = new WMark();
+		  wMark.setDescription(mark.getDescription());
+		  wMark.setId(mark.getId());
+		  wMark.setLabel(mark.getTitle());
+		  wMark.setLatitude((float)mark.getLatitude());
+		  wMark.setLongitude((float) mark.getLongitude());
+		 // wMark.setTime(mark.getTime());
+		  wMark.setAltitude(mark.getAltitude());
+		  wMark.setChannel(mark.getChannel());
+		  wMark.setUser(mark.getUser());
+		  wMark.setUrl(mark.getLink());
+		  wMark.setAuthToken(mark.getAuthToken());
+		  
+		  return wMark;
+	  }
+	 
+
 	public static WChannel toWChannel(Channel channel) {
-		// TODO
-		return null;
+		WChannel wChannel = new WChannel();
+		wChannel.setDescription(channel.getDescription());
+		wChannel.setName(channel.getName());
+		wChannel.setUrl(channel.getLink());
+		wChannel.setLanguage(channel.getLanguage());
+		wChannel.setPubDate(channel.getPubDate());
+		wChannel.setTitle(channel.getTitle());
+
+		return wChannel;
 	}
 
 }
