@@ -49,7 +49,11 @@ public class WMark implements Serializable {
 	private String description;
 	private String url;
 	private long user_id;
-	
+	private double altitude;
+	private String user;
+	private String channel;
+	private String authToken;
+
 	public WMark() {
 	}
 	
@@ -124,6 +128,38 @@ public class WMark implements Serializable {
 	
 	public void setUserId(long user_id) {
 		this.user_id = user_id;
+	}
+
+	public void setAltitude(double altitude) {
+		this.altitude = altitude;
+	}
+
+	public double getAltitude() {
+		return altitude;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
+
+	public String getChannel() {
+		return channel;
+	}
+
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
+	}
+
+	public String getAuthToken() {
+		return authToken;
 	}
 	
 }
