@@ -44,6 +44,9 @@ public class WChannel implements Serializable {
 	private String name;
 	private String description;
 	private String url;
+	private String language;
+	private String pubDate;
+	private String title;
 	
 	public WChannel() {
 	}
@@ -83,6 +86,30 @@ public class WChannel implements Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setPubDate(String pubDate) {
+		this.pubDate = pubDate;
+	}
+
+	public String getPubDate() {
+		return pubDate;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 
 }
