@@ -52,6 +52,7 @@ class FilterCircleQuery : public DefaultQuery
     double m_radius;
     QDateTime m_timeFrom;
     QDateTime m_timeTo;
+    QSharedPointer<Channel> m_channel;
 
     DataChannels m_hashMap;
 
@@ -70,6 +71,7 @@ public:
                       double radius,
                       QDateTime timeFrom,
                       QDateTime timeTo,
+                      const QSharedPointer<Channel> &channel = QSharedPointer<Channel>(0),
                       QObject *parent = 0);
 
     FilterCircleQuery(QObject *parent = 0);
@@ -79,7 +81,8 @@ public:
                   double longitude,
                   double radius,
                   QDateTime timeFrom,
-                  QDateTime timeTo);
+                  QDateTime timeTo,
+                  const QSharedPointer<Channel> &channel = QSharedPointer<Channel>(0));
 
     ~FilterCircleQuery();
 

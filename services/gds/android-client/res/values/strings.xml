@@ -25,7 +25,8 @@
     <string name="user_description">Description:</string>
     <string name="server_address">Geo2Tag server</string>
     <string name="time_request">Time between ticks</string>
-    <string name="radius">Radius</string>
+    <string name="radius">Radius (km)</string>
+    <string name="tracking_period">Tracking period (min)</string>
     <string name="uri">Uri</string>
     
     <!-- CheckBox -->

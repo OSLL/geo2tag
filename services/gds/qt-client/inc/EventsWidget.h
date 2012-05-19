@@ -91,6 +91,7 @@ public slots:
     void onPositionUpdated();
     QGeoCoordinate getCenter();
     void setCenter(QGeoCoordinate coordinate);
+    void onSettingsUpdated();
 
 private:
     void initGUI();

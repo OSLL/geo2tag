@@ -58,6 +58,9 @@ void EventsService::startService(QString name, QString password, QString authTok
 {
     qDebug() << "EventsService::startService " << this->thread()->currentThreadId();
 
+    m_eventsRadius = m_settings.getRadius();
+    m_eventsChannel = QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "", ""));
+
     if (m_filterCircleQuery != 0)
         m_filterCircleQuery->deleteLater();
 
@@ -88,8 +91,8 @@ void EventsService::requestEvents()
         QDateTime timeFrom = currentTime.addSecs( - RELEVANT_PERIOD_IN_HOURS * 60 * 60);
 
         m_filterCircleQuery->setQuery(m_user, info.coordinate().latitude(),
-                                      info.coordinate().longitude(), EVENTS_RADIUS,
-                                      timeFrom, timeTo);
+                                      info.coordinate().longitude(), m_eventsRadius,
+                                      timeFrom, timeTo, m_eventsChannel);
 
         qDebug() << "do events service request";
         m_filterCircleQuery->doRequest();
@@ -168,4 +171,10 @@ void EventsService::onError(QString error)
     qDebug() << "EventsService::onErrorOccured error: " << error;
     emit errorOccured(error);
     QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
+}
+
+void EventsService::updateSettings()
+{
+    qDebug() << "Updating EventsService settings";
+    m_eventsRadius = m_settings.getRadius();
 }

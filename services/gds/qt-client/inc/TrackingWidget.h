@@ -71,6 +71,7 @@ public slots:
     void appendToLog(QString message);
     void onMarkSent(QPointF coords);
     void onError(QString error);
+    void onSettingsUpdated();
 
 private:
     void initGUI();

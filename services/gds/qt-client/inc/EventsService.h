@@ -40,6 +40,7 @@
 #include "FilterCircleQuery.h"
 #include "User.h"
 #include <phonon>
+#include "Settings.h"
 
 QTM_USE_NAMESPACE
 
@@ -55,6 +56,9 @@ class EventsService : public QObject
     QSharedPointer<common::User> m_user;
     QSet<int> m_eventsIds;
     Phonon::MediaObject *m_mediaPlayer;
+    Settings m_settings;
+    int m_eventsRadius;
+    QSharedPointer<Channel> m_eventsChannel;
 
 public:
     explicit EventsService(LocationManager *locationManager, QObject *parent = 0);
@@ -64,6 +68,7 @@ public slots:
     void requestEvents();
     void startService(QString name, QString password, QString auth_token, QString serverUrl);
     void stopService();
+    void updateSettings();
 
 signals:
     void eventsReceived(Events events);

@@ -53,6 +53,8 @@ public class Settings {
 	/* From settings activity: */
 	private static final String DESCRIPTION = "description";
 	private static final String SERVER_URL = "server_url";
+	private static final String RADIUS = "radius";
+	private static final String TRACKING_PERIOD = "tracking_period";
 	
 	/* Application internal settings */
 	private static final String AUTH_TOKEN = "auth_token";
@@ -160,6 +162,26 @@ public class Settings {
 	public void setServerUrl(String serverUrl) {
 		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
 	    prefs.edit().putString(SERVER_URL, serverUrl).commit();
+	}
+	
+	public int getRadius() {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    return prefs.getInt(RADIUS, GDSUtil.EVENTS_RADIUS);
+	}
+	
+	public void setRadius(int radius) {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putInt(RADIUS, radius).commit();
+	}
+	
+	public int getTrackingPeriod() {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    return prefs.getInt(TRACKING_PERIOD, GDSUtil.TRACKING_INTERVAL);
+	}
+	
+	public void setTrackingPeriod(int trackingPeriod) {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putInt(TRACKING_PERIOD, trackingPeriod).commit();
 	}
 
 	

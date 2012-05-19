@@ -11,6 +11,8 @@
 #define SERVER_URL "server_url"
 #define AUTH_TOKEN "auth_token"
 #define DESCRIPTION "description"
+#define RADIUS "radius"
+#define TRACKING_PERIOD "tracking_period"
 
 class Settings
 {
@@ -36,6 +38,10 @@ public:
     void setDescription(const QString& description);
     QString getServerUrl();
     void setServerUrl(const QString& serverUrl);
+    int getRadius();
+    void setRadius(int radius);
+    int getTrackingPeriod();
+    void setTrackingPeriod(int trackingPeriod);
 
 };
 

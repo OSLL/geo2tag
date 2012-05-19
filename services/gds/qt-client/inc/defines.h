@@ -6,10 +6,10 @@
 #define DEFAULT_REMEMBER            true
 #define DEFAULT_TOKEN               "fake token"
 #define DEFAULT_URL                 "http://127.0.0.1/"
-#define DEFAULT_TRACKING_PERIOD     10
+#define DEFAULT_TRACKING_PERIOD     1
 #define DEFAULT_LOCATION_TIMEOUT    10
 #define EVENTS_CHANNEL              "Events"
-#define EVENTS_RADIUS               30
+#define EVENTS_RADIUS               3
 #define DEFAULT_EVENTS_PERIOD       15
 #define RELEVANT_PERIOD_IN_HOURS    240
 #define NOT_RECEIVE_OWN_EVENTS      true

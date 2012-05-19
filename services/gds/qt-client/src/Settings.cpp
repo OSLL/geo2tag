@@ -80,3 +80,23 @@ void Settings::setDescription(const QString &description)
 {
     m_settings.setValue(DESCRIPTION, description);
 }
+
+int Settings::getRadius()
+{
+    return m_settings.value(RADIUS, EVENTS_RADIUS).toInt();
+}
+
+void Settings::setRadius(int radius)
+{
+    m_settings.setValue(RADIUS, radius);
+}
+
+int Settings::getTrackingPeriod()
+{
+    return m_settings.value(TRACKING_PERIOD, DEFAULT_TRACKING_PERIOD).toInt();
+}
+
+void Settings::setTrackingPeriod(int trackingPeriod)
+{
+    m_settings.setValue(TRACKING_PERIOD, trackingPeriod);
+}

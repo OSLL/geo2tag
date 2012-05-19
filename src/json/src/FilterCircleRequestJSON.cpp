@@ -65,6 +65,8 @@ QByteArray FilterCircleRequestJSON::getJson() const
     obj.insert("radius", m_radius);
     obj.insert("time_from", getTimeFrom().toString("dd MM yyyy HH:mm:ss.zzz"));
     obj.insert("time_to", getTimeTo().toString("dd MM yyyy HH:mm:ss.zzz"));
+    if (m_channelsContainer->size() > 0)
+        obj.insert("channel", m_channelsContainer->at(0)->getName());
     return serializer.serialize(obj);
 }
 

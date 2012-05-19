@@ -45,6 +45,7 @@ FilterCircleQuery::FilterCircleQuery(
         double radius,
         QDateTime timeFrom,
         QDateTime timeTo,
+        const QSharedPointer<Channel> &channel,
         QObject *parent)
     : DefaultQuery(parent),
       m_user(user),
@@ -52,7 +53,8 @@ FilterCircleQuery::FilterCircleQuery(
       m_longitude(longitude),
       m_radius(radius),
       m_timeFrom(timeFrom),
-      m_timeTo(timeTo)
+      m_timeTo(timeTo),
+      m_channel(channel)
 {
 }
 
@@ -67,7 +69,8 @@ void FilterCircleQuery::setQuery(QSharedPointer<common::User> &user,
                                  double longitude,
                                  double radius,
                                  QDateTime timeFrom,
-                                 QDateTime timeTo)
+                                 QDateTime timeTo,
+                                 const QSharedPointer<Channel> &channel)
 {
     m_user = user;
     m_latitude = latitude;
@@ -75,6 +78,7 @@ void FilterCircleQuery::setQuery(QSharedPointer<common::User> &user,
     m_radius = radius;
     m_timeFrom = timeFrom;
     m_timeTo = timeTo;
+    m_channel = channel;
 }
 
 
@@ -91,6 +95,8 @@ QByteArray FilterCircleQuery::getRequestBody() const
     request.setShape(shape);
     request.setTimeFrom(m_timeFrom);
     request.setTimeTo(m_timeTo);
+    if (m_channel != 0)
+        request.setChannel(m_channel);
     request.addUser(m_user);
     return request.getJson();
 }

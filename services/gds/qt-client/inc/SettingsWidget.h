@@ -16,6 +16,8 @@ class SettingsWidget : public QWidget
     // GUI
     QTextEdit *m_description;
     QLineEdit *m_serverUrlEdit;
+    QLineEdit *m_radiusEdit;
+    QLineEdit *m_trackingPeriodEdit;
     QPushButton *m_okButton;
     QPushButton *m_cancelButton;
 

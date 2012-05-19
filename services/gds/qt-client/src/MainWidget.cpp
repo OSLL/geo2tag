@@ -47,3 +47,9 @@ void MainWidget::signOut()
     }
     m_trackingWidget->stopTracking();
 }
+
+void MainWidget::onSettingsUpdated()
+{
+    m_trackingWidget->onSettingsUpdated();
+    m_eventsWidget->onSettingsUpdated();
+}

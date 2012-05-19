@@ -40,6 +40,29 @@
 				android:id="@+id/edit_server_address"
 				android:singleLine="true"
 				android:inputType="text" />
+			<TextView 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/radius"           
+                android:singleLine="true"/>
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_radius"
+                android:singleLine="true"
+                android:inputType="number"
+                android:numeric="integer" />
+            <TextView 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tracking_period"           
+                android:singleLine="true"/>
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_tracking_period"
+                android:singleLine="true"
+                android:inputType="number" />
 <!-- this options will be deleted soon
 	        <TextView 
 	        	android:layout_width="fill_parent"

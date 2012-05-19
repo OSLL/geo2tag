@@ -141,7 +141,7 @@ public class EventsService extends Service {
 			String timeFrom = GDSUtil.getUtcTime(calendar.getTime());
 			JSONResponse = new JsonFilterCircleRequest(m_authToken,
 					location.getLatitude(), location.getLongitude(),
-					GDSUtil.EVENTS_RADIUS, timeFrom, timeTo,
+					m_settings.getRadius(), timeFrom, timeTo,
 					serverUrl).doRequest();
 			if (JSONResponse != null) 
 				break;

@@ -171,7 +171,7 @@ void EventsWidget::onEventsServiceError(QString error)
 
 void EventsWidget::onPositionUpdated()
 {
-    qDebug() << "EventsWidget::onPositionUpdated";
+    //qDebug() << "EventsWidget::onPositionUpdated";
     if (m_positionObject != 0) {
         m_mapWidget->removeMapObject(m_positionObject);
         m_positionObject->deleteLater();
@@ -185,9 +185,9 @@ void EventsWidget::onPositionUpdated()
         m_mapWidget->addMapObject(m_positionObject);
         if (QDateTime::currentDateTime().addSecs( - MAP_CENTERED_PERIOD) > m_lastCentered) {
             setCenter(info.coordinate());
-            qDebug() << "EventsWidget width: " << this->geometry().width();
-            qDebug() << "MapWidget width: " << m_mapWidget->geometry().width();
-            qDebug() << "Graphics view width: " << m_graphicsView->geometry().width();
+            //qDebug() << "EventsWidget width: " << this->geometry().width();
+            //qDebug() << "MapWidget width: " << m_mapWidget->geometry().width();
+            //qDebug() << "Graphics view width: " << m_graphicsView->geometry().width();
             m_lastCentered = QDateTime::currentDateTime();
         }
     }
@@ -220,4 +220,11 @@ void EventsWidget::setCenter(QGeoCoordinate bad_coordinate)
     QGeoCoordinate coordinate =
             m_mapWidget->screenPositionToCoordinate(new_position);
     m_mapWidget->setCenter(coordinate);
+}
+
+void EventsWidget::onSettingsUpdated()
+{
+    if (m_eventsThread.isRunning()) {
+        QMetaObject::invokeMethod(&m_eventsService, "updateSettings", Qt::QueuedConnection);
+    }
 }

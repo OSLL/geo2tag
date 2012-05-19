@@ -36,6 +36,7 @@
 #include "WriteTagQuery.h"
 #include "LocationManager.h"
 #include "DataMarks.h"
+#include "Settings.h"
 
 class TrackingService : public QObject
 {
@@ -46,6 +47,8 @@ class TrackingService : public QObject
     QSharedPointer<DataMark> m_dataMark;
     QSharedPointer<common::User> m_user;
     QSharedPointer<Channel> m_channel;
+    Settings m_settings;
+    int m_period;
 
 public:
     explicit TrackingService(LocationManager *locationManager, QObject *parent = 0);
@@ -53,6 +56,7 @@ public:
 public slots:
     void startTracking(QString name, QString password, QString authToken, QString serverUrl);
     void stopTracking();
+    void updateSettings();
 
 signals:
     void markSent(QPointF coordinates);

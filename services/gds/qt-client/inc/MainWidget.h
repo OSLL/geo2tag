@@ -62,6 +62,7 @@ signals:
 public slots:
     void signIn(const QString& authToken);
     void signOut();
+    void onSettingsUpdated();
 
 private:
     void initGUI();

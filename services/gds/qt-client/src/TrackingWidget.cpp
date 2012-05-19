@@ -128,4 +128,11 @@ void TrackingWidget::onError(QString error)
     appendToLog(QString("Error: ") + error);
 }
 
+void TrackingWidget::onSettingsUpdated()
+{
+    if (isTracking()) {
+        QMetaObject::invokeMethod(&m_trackingService, "updateSettings", Qt::QueuedConnection);
+    }
+}
+
 

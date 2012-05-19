@@ -51,6 +51,8 @@ public class SettingsActivity extends Activity {
 	private Settings m_settings;
 	private EditText m_descriptionEdit;
 	private EditText m_serverUrlEdit;
+	private EditText m_radiusEdit;
+	private EditText m_trackingPeriodEdit;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class SettingsActivity extends Activity {
 		m_settings = new Settings(this);
 		m_descriptionEdit = (EditText) findViewById(R.id.edit_description);
 		m_serverUrlEdit = (EditText) findViewById(R.id.edit_server_address);
+		m_radiusEdit = (EditText) findViewById(R.id.edit_radius);
+		m_trackingPeriodEdit = (EditText) findViewById(R.id.edit_tracking_period);
 		
 		initializeFields();
 		
@@ -88,11 +92,18 @@ public class SettingsActivity extends Activity {
 	private void initializeFields(){
 		m_descriptionEdit.setText(m_settings.getDescription());
 		m_serverUrlEdit.setText(m_settings.getServerUrl());
+		m_radiusEdit.setText(String.valueOf(m_settings.getRadius()));
+		m_trackingPeriodEdit.setText(
+				String.valueOf(m_settings.getTrackingPeriod()));
+		
 	}
 	
 	private void savePreferences(){
 		m_settings.setDescription(m_descriptionEdit.getText().toString().trim());
 		m_settings.setServerUrl(m_serverUrlEdit.getText().toString().trim());
+		m_settings.setRadius(Integer.parseInt(m_radiusEdit.getText().toString()));
+		m_settings.setTrackingPeriod(
+				Integer.parseInt(m_trackingPeriodEdit.getText().toString()));
 	}
 	
 	private Runnable m_saveToast = new Runnable() {

@@ -153,7 +153,7 @@ public class TrackingService extends Service {
 					
 					sendMark(location);
 					
-					SystemClock.sleep(GDSUtil.TRACKING_INTERVAL * 1000);
+					SystemClock.sleep(m_settings.getTrackingPeriod() * 60 * 1000);
 				}
 			}
 		});

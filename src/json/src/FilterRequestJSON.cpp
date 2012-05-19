@@ -115,6 +115,12 @@ double FilterRequestJSON::getAltitude1() const
 }
 
 
+void FilterRequestJSON::setChannel(const QSharedPointer<Channel> &channel)
+{
+    m_channelsContainer->push_back(channel);
+}
+
+
 double FilterRequestJSON::getAltitude2() const
 {
   return m_alt2;
@@ -137,3 +143,5 @@ bool FilterRequestJSON::parseJson(const QByteArray& data)
   }
   return true;
 }
+
+

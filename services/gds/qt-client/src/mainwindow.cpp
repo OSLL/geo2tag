@@ -35,6 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, SLOT(onSettingsSaved()));
     connect(m_settingsWidget, SIGNAL(cancelled()),
             this, SLOT(onSettingsCancelled()));
+    connect(m_settingsWidget, SIGNAL(saved()),
+            m_mainWidget, SLOT(onSettingsUpdated()));
 
     qDebug() << "MainWindow created";
 }

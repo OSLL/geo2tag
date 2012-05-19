@@ -48,6 +48,8 @@ void TrackingService::startTracking(QString name, QString password, QString auth
 {
     qDebug() << "startTracking url: " << serverUrl;
 
+    m_period = m_settings.getTrackingPeriod() * 60;
+
     if (m_writeTagQuery != 0)
         m_writeTagQuery->deleteLater();
 
@@ -80,7 +82,7 @@ void TrackingService::sendMark()
         m_writeTagQuery->doRequest();
     } else {
         qDebug() << "invalid geo info, waitin and trying again";
-        QTimer::singleShot(5 * 1000, this, SLOT(sendMark()));
+        QTimer::singleShot(m_period * 1000, this, SLOT(sendMark()));
     }
 }
 
@@ -88,12 +90,18 @@ void TrackingService::onMarkSent()
 {
     qDebug() << "TrackingService::onMarkSent";
     emit markSent(QPointF(m_dataMark->getLatitude(), m_dataMark->getLongitude()));
-    QTimer::singleShot(5 * 1000, this, SLOT(sendMark()));
+    QTimer::singleShot(m_period * 1000, this, SLOT(sendMark()));
 }
 
 void TrackingService::onError(QString error)
 {
     qDebug() << "TrackingService::onErrorOccured error: " << error;
     emit errorOccured(error);
-    QTimer::singleShot(5 * 1000, this, SLOT(sendMark()));
+    QTimer::singleShot(m_period * 1000, this, SLOT(sendMark()));
+}
+
+void TrackingService::updateSettings()
+{
+    qDebug() << "Updating TrackingService settings";
+    m_period = m_settings.getTrackingPeriod();
 }
