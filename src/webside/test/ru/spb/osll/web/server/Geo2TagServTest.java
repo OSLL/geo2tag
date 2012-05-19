@@ -37,7 +37,6 @@ package ru.spb.osll.web.server;
 
 import java.util.List;
 
-import org.json.JSONObject;
 import junit.framework.TestCase;
 
 import ru.spb.osll.web.client.services.objects.WChannel;
@@ -46,9 +45,6 @@ import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.server.db.Channels;
 import ru.spb.osll.web.server.db.Tags;
 import ru.spb.osll.web.server.db.Users;
-import ru.spb.osll.web.server.json.JsonBase;
-import ru.spb.osll.web.server.json.JsonFilterCircleRequest;
-import ru.spb.osll.web.server.json.JsonFilterRectangleRequest;
 import ru.spb.osll.web.server.services.GTServiceImpl;
 
 public class Geo2TagServTest extends TestCase {
@@ -143,26 +139,6 @@ public class Geo2TagServTest extends TestCase {
 			System.out.println(tag.getDescription());
 			System.out.println(tag.getUrl());			
 		}*/
-	}
-	
-	public void testCircleFilter() {
-		String channels;
-		JSONObject JSONResponse = null;
-		JSONResponse = new JsonFilterCircleRequest("MMMMMMMMMM",
-				"04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", 60.1632,
-				24.8593, 30.0, JsonBase.getServerUrl()).doRequest();
-		channels = JsonBase.getString(JSONResponse, "channels");
-		assertEquals(channels, "[]");
-	}
-
-	public void testRectangleFilter() {
-		String channels;
-		JSONObject JSONResponse = null;
-		JSONResponse = new JsonFilterRectangleRequest("MMMMMMMMMM",
-				"04 03 2011 15:33:47.630", "31 12 2011 15:33:47.630", 0.0,
-				100.0, 0.0, 100.0, JsonBase.getServerUrl()).doRequest();
-		channels = JsonBase.getString(JSONResponse, "channels");
-		assertEquals(channels, "[]");
 	}
 
 	public void testUsers() {
