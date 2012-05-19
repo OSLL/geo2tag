@@ -41,6 +41,7 @@ import ru.spb.osll.web.client.services.GTService;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WUser;
+import ru.spb.osll.web.server.JGeoConnector;
 import ru.spb.osll.web.server.Session;
 import ru.spb.osll.web.server.WebLogger;
 import ru.spb.osll.json.*;
@@ -103,7 +104,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 			return null;
 		} else {
 			WUser newUser = new WUser(user.getLogin(), user.getPassword());
-			newUser.setToken(user.getEmail());
+			newUser.setEmail(user.getEmail());
 			newUser.setPassword(user.getPassword());
 			newUser.setToken(response.getAuthToken());
 			return newUser;
@@ -115,7 +116,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		JsonSubscribeRequest request = new JsonSubscribeRequest(u.getToken(), ch.getName(), serverUrl);
 		JsonSubscribeResponse response = new JsonSubscribeResponse();
 		response.parseJson(request.doRequest());
-		if (response.getErrno() == 0) {
+		if (response.getErrno() == Errno.SUCCESS) {
 			return true;
 		} else {
 			return false;
@@ -128,7 +129,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		JsonUnsubscribeRequest request = new JsonUnsubscribeRequest(u.getToken(), ch.getName(), serverUrl);
 		JsonUnsubscribeResponse response = new JsonUnsubscribeResponse();
 		response.parseJson(request.doRequest());
-		if (response.getErrno() == 0) {
+		if (response.getErrno() == Errno.SUCCESS) {
 			return true;
 		} else {
 			return false;
@@ -142,9 +143,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		response.parseJson(request.doRequest());
 		List<WChannel> channels = new ArrayList<WChannel>();
 		for (int i = 0; i < response.getChannels().size(); i++) {
-			WChannel channel = new WChannel(response.getChannels().get(i).getName(),
-											response.getChannels().get(i).getDescription(),
-											response.getChannels().get(i).getLink());
+			WChannel channel = JGeoConnector.toWChannel(response.getChannels().get(i));
 			channels.add(channel);
 		}
 		return channels;
@@ -157,9 +156,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		response.parseJson(request.doRequest());
 		List<WChannel> channels = new ArrayList<WChannel>();
 		for (int i = 0; i < response.getChannels().size(); i++) {
-			WChannel channel = new WChannel(response.getChannels().get(i).getName(),
-											response.getChannels().get(i).getDescription(),
-											response.getChannels().get(i).getLink());
+			WChannel channel = JGeoConnector.toWChannel(response.getChannels().get(i));
 			channels.add(channel);
 		}
 		return channels;
@@ -181,22 +178,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		List<WMark> marks = new ArrayList<WMark>();
 		for (int i = 0; i < response.getChannels().size(); i++) {
 			for (int j = 0; j < response.getChannels().get(i).getMarks().size(); j++) {
-				float latitude = (float)response.getChannels().get(i).getMarks().get(j).getLatitude();
-				float longitude = (float)response.getChannels().get(i).getMarks().get(j).getLongitude();
-				String label = response.getChannels().get(i).getMarks().get(j).getTitle();
-				String url = response.getChannels().get(i).getMarks().get(j).getLink();
-				String description = response.getChannels().get(i).getMarks().get(j).getDescription();
-				long id = response.getChannels().get(i).getMarks().get(j).getId();
-				// TODO long user_id = ...;
-				WMark mark = new WMark();
-				mark.setLatitude(latitude);
-				mark.setLongitude(longitude);
-				mark.setLabel(label);
-				mark.setDescription(description);
-				mark.setUrl(url);
-				mark.setId(id);
-				// TODO mark.setUserId(user_id);
-				// TODO mark.setTime(time);
+				WMark mark = JGeoConnector.toWTag(response.getChannels().get(i).getMarks().get(j));
 				marks.add(mark);
 			}
 		}
@@ -212,20 +194,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		List<WMark> marks = new ArrayList<WMark>();
 		for (int i = 0; i < response.getChannels().size(); i++) {
 			for (int j = 0; j < response.getChannels().get(i).getMarks().size(); j++) {
-				float rLatitude = (float)response.getChannels().get(i).getMarks().get(j).getLatitude();
-				float rLongitude = (float)response.getChannels().get(i).getMarks().get(j).getLongitude();
-				String label = response.getChannels().get(i).getMarks().get(j).getTitle();
-				String url = response.getChannels().get(i).getMarks().get(j).getLink();
-				String description = response.getChannels().get(i).getMarks().get(j).getDescription();
-				long id = response.getChannels().get(i).getMarks().get(j).getId();
-				WMark mark = new WMark();
-				mark.setLatitude(rLatitude);
-				mark.setLongitude(rLongitude);
-				mark.setLabel(label);
-				mark.setDescription(description);
-				mark.setUrl(url);
-				mark.setId(id);
-				// TODO mark.setTime(time);
+				WMark mark = JGeoConnector.toWTag(response.getChannels().get(i).getMarks().get(j));
 				marks.add(mark);
 			}
 		}
