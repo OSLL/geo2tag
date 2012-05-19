@@ -37,31 +37,28 @@ package ru.spb.osll.web.server.services.users;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
 import ru.spb.osll.json.JsonLoginResponse;
 import ru.spb.osll.web.client.services.objects.Response;
 import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.server.db.Users;
 import ru.spb.osll.web.server.Session;
-import ru.spb.osll.web.server.json.JsonBase;
-import ru.spb.osll.web.server.json.JsonLoginRequest;
-import org.json.JSONObject;
+import ru.spb.osll.json.*;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet implements
 		LoginService, Session.HasSession {
-//	private String m_authToken;
-//	private String errno;
-//	private String ERRNO = "errno";
-//	private String AUTH_TOKEN = "auth_token";
+	public static String serverUrl = "http://tracks.osll.spb.ru:81/service";
 
 	@Override
 	public WUser login(WUser user) throws IllegalArgumentException {
 		JSONObject JSONResponse = null;
 		JSONResponse = new JsonLoginRequest(user.getLogin(), 
-			user.getPassword(), JsonBase.getServerUrl()).doRequest();
+			user.getPassword(), serverUrl).doRequest();
 		if (JSONResponse != null) {
 			JsonLoginResponse r = new JsonLoginResponse();
 			r.parseJson(JSONResponse);
