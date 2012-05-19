@@ -83,7 +83,7 @@ const QString& RegisterUserQuery::getConfirmUrl() const
 
 void RegisterUserQuery::processReply(QNetworkReply *reply)
 {
-    #ifndef Q_OS_SYMBIAN
+    //#ifndef Q_OS_SYMBIAN
     qDebug("I'm in!");
     RegisterUserResponseJSON response;
     response.parseJson(reply->readAll());
@@ -96,7 +96,7 @@ void RegisterUserQuery::processReply(QNetworkReply *reply)
         qDebug("!!errorOccured!");
         Q_EMIT errorOccured(response.getErrno());
     }
-    #endif
+    //#endif
 }
 
 void RegisterUserQuery::setQuery(const QString &email, const QString &login, const QString &password)

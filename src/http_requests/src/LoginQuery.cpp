@@ -84,7 +84,7 @@ QByteArray LoginQuery::getRequestBody() const
 
 void LoginQuery::processReply(QNetworkReply *reply)
 {
-  #ifndef Q_OS_SYMBIAN
+  //#ifndef Q_OS_SYMBIAN
   LoginResponseJSON response;
   response.parseJson(reply->readAll());
   m_errno = response.getErrno();
@@ -99,7 +99,7 @@ void LoginQuery::processReply(QNetworkReply *reply)
   {
     Q_EMIT errorOccured(response.getErrno());
   }
-  #endif
+//  #endif
 }
 
 

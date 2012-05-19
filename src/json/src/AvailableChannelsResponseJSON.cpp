@@ -42,6 +42,8 @@
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
+//#include "parser.h"
+//#include "serializer.h"
 
 #include "AvailableChannelsResponseJSON.h"
 #include "JsonChannel.h"
@@ -82,7 +84,8 @@ bool AvailableChannelsResponseJSON::parseJson(const QByteArray &data)
     QVariantMap channelVariant = channels.at(i).toMap();
     QString name = channelVariant["name"].toString();
     QString description = channelVariant["description"].toString();
-    QSharedPointer<Channel> channel(new JsonChannel(name, description));
+    QString url = channelVariant["url"].toString();
+    QSharedPointer<Channel> channel(new JsonChannel(name, description, url));
     m_channelsContainer->push_back(channel);
   }
   return true;
@@ -99,6 +102,7 @@ QByteArray AvailableChannelsResponseJSON::getJson() const
     QVariantMap channelMap;
     channelMap.insert("name", ch->getName());
     channelMap.insert("description", ch->getDescription());
+    channelMap.insert("url", ch->getUrl());
     QVariantList tagsList;
     channelMap.insert("tags", tagsList);
     channelsList.append(channelMap);

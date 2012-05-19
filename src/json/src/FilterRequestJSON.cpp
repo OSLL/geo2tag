@@ -41,7 +41,6 @@
 
 #include "FilterRequestJSON.h"
 #include "JsonChannel.h"
-#include <syslog.h>
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>

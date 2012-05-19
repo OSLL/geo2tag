@@ -274,7 +274,6 @@ QSharedPointer<common::User> QueryExecutor::insertNewTmpUser(const QSharedPointe
 {
     bool result;
     QSqlQuery newSignupQuery(m_database);
-    syslog(LOG_INFO, "OK!");
     qlonglong newId = nextUserKey();
     syslog(LOG_INFO,"Generating token for new signup, %s : %s",user->getLogin().toStdString().c_str()
                                                             ,user->getPassword().toStdString().c_str());
@@ -320,7 +319,7 @@ bool QueryExecutor::doesRegistrationTokenExist(const QString &token)
     }
 }
 
-bool QueryExecutor::insertTmpUserIntoUsers(const QString &token)
+QSharedPointer<common::User> QueryExecutor::insertTmpUserIntoUsers(const QString &token)
 {
     QSqlQuery checkQuery(m_database);
     syslog(LOG_INFO, "Checking of user existence in signups by token: %s", token.toStdString().c_str());
@@ -336,12 +335,11 @@ bool QueryExecutor::insertTmpUserIntoUsers(const QString &token)
         QString login = checkQuery.value(1).toString();
         QString password = checkQuery.value(2).toString();
         const QSharedPointer<common::User> newUser(new common::User(login, password, email));
-        if (!insertNewUser(newUser))
-            return false;
-        return true;
+        QSharedPointer<common::User> insertedUser = insertNewUser(newUser);
+        return insertedUser;
     } else {
         syslog(LOG_INFO,"No matching users.");
-        return false;
+        return QSharedPointer<common::User>(NULL);;
     }
 }
 

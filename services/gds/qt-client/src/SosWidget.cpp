@@ -50,7 +50,7 @@ SosWidget::SosWidget(LocationManager *locationManager, QWidget *parent) :
     QPixmap m_sosPixmap(":/data/sos128.png");
     QIcon icon(m_sosPixmap);
     QSize iconSize(m_sosPixmap.width(), m_sosPixmap.height());
-    //m_sosButton->setIconSize(iconSize);
+    m_sosButton->setIconSize(iconSize);
     m_sosButton->setIcon(icon);
     //m_sosButton = new QPushButton(QIcon(":/data/sos128.png"), this);
 

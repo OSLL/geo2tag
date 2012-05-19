@@ -237,7 +237,9 @@ namespace common
     {
     	for(int i=0; i<currentUsers.size(); i++)
     	{
-      		if(currentUsers.at(i)->getLogin() == dummyUser->getLogin() && currentUsers.at(i)->getPassword() == dummyUser->getPassword())
+            if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0
+               &&
+               currentUsers.at(i)->getPassword() == dummyUser->getPassword())
         	return currentUsers.at(i);
     	}
     }
@@ -261,7 +263,7 @@ namespace common
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
     for(int i=0; i<currentUsers.size(); i++)
     {
-      if(currentUsers.at(i)->getLogin() == newTmpUser->getLogin())
+      if(QString::compare(currentUsers.at(i)->getLogin(), newTmpUser->getLogin(), Qt::CaseInsensitive) == 0)
       {
         response.setErrno(USER_ALREADY_EXIST_ERROR);
         answer.append(response.getJson());
@@ -307,9 +309,11 @@ namespace common
         answer.append("Given token doesn't exist!");
         return answer;
     }
-    // Token exists!
-    if (m_queryExecutor->insertTmpUserIntoUsers(registrationToken)) {
+
+    QSharedPointer<User> newUser = m_queryExecutor->insertTmpUserIntoUsers(registrationToken);
+    if (!newUser.isNull()) {
         m_queryExecutor->deleteTmpUser(registrationToken);
+        m_usersContainer->push_back(newUser);
         answer.append("Congratulations!");
     } else {
         answer.append("Attempt of inserting user has failed!");
@@ -338,7 +342,7 @@ namespace common
     {
       syslog(LOG_INFO,"Look up in %s and %s",currentUsers.at(i)->getLogin().toStdString().c_str(),
         currentUsers.at(i)->getPassword().toStdString().c_str());
-      if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
+      if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0)
       {
         if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
         {
@@ -394,7 +398,7 @@ namespace common
 
     for(int i=0; i<currentChannels.size(); i++)
     {
-      if(currentChannels.at(i)->getName() == dummyChannel->getName())
+      if(QString::compare(currentChannels.at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = currentChannels.at(i);
       }
@@ -542,7 +546,7 @@ namespace common
     QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
     for(int i=0; i<currentChannels.size(); i++)
     {
-      if(currentChannels.at(i)->getName() == dummyChannel->getName())
+      if(QString::compare(currentChannels.at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = currentChannels.at(i);
       }
@@ -557,7 +561,8 @@ namespace common
     QSharedPointer<Channels>  subscribedChannels = realUser->getSubscribedChannels();
     for(int i=0; i<subscribedChannels->size(); i++)
     {
-      if(subscribedChannels->at(i)->getName() == realChannel->getName())
+      //syslog(LOG_INFO,"%s is subscribed for  %s , %lld",realUser->getLogin().toStdString().c_str(),subscribedChannels->at(i)->getName().toStdString().c_str(),subscribedChannels->at(i)->getId());
+      if(QString::compare(subscribedChannels->at(i)->getName(), realChannel->getName(),Qt::CaseInsensitive) == 0)
       {
         response.setErrno(CHANNEL_ALREADY_SUBSCRIBED_ERROR);
         answer.append(response.getJson());
@@ -573,6 +578,7 @@ namespace common
       return answer;
     }
     m_updateThread->lockWriting();
+    syslog(LOG_INFO, "Try to subscribe for realChannel = %lld",realChannel->getId());
     realUser->subscribe(realChannel);
     m_updateThread->unlockWriting();
 
@@ -601,7 +607,7 @@ namespace common
 
     for(int i=0; i<currentUsers.size(); i++)
     {
-      if(currentUsers.at(i)->getLogin() == dummyUser->getLogin())
+      if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0)
       {
         response.setErrno(USER_ALREADY_EXIST_ERROR);
         answer.append(response.getJson());
@@ -666,7 +672,7 @@ namespace common
     QVector<QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
     for(int i=0; i<currentChannels.size(); i++)
     {
-      if(currentChannels.at(i)->getName() == dummyChannel->getName())
+      if(QString::compare(currentChannels.at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = currentChannels.at(i);
       }
@@ -756,9 +762,10 @@ namespace common
     QSharedPointer<Channels> subscribedChannels = realUser->getSubscribedChannels();
     for(int i=0; i<subscribedChannels->size(); i++)
     {
-      if(subscribedChannels->at(i)->getName() == dummyChannel->getName())
+      if(QString::compare(subscribedChannels->at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = subscribedChannels->at(i);
+	break;
       }
     }
     if(realChannel.isNull())
@@ -767,7 +774,7 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
-    syslog(LOG_INFO, "Sending sql request for SubscribeQuery");
+    syslog(LOG_INFO, "Sending sql request for UnsubscribeQuery");
     bool result = m_queryExecutor->unsubscribeChannel(realUser,realChannel);
     if(!result)
     {
@@ -977,7 +984,7 @@ namespace common
     QSharedPointer<Channel> channel;
     for(int i = 0; i<channels->size(); i++)
     {
-      if (channels->at(i)->getName() == request.getChannelName()){
+      if(QString::compare(channels->at(i)->getName(), request.getChannelName(), Qt::CaseInsensitive) == 0){
         channel = channels->at(i);
         break;
       }

@@ -59,12 +59,14 @@ m_database(db)
 
 void UpdateThread::lockWriting()
 {
+  //syslog(LOG_INFO, "UpdateThread::lockWriting()");
   m_updateLock.lockForWrite();
 }
 
 
 void UpdateThread::unlockWriting()
 {
+  //syslog(LOG_INFO, "UpdateThread::unlock()");
   m_updateLock.unlock();
 }
 
@@ -164,8 +166,7 @@ void UpdateThread::loadChannels(Channels &container)
     QString name = query.record().value("name").toString();
     QString description = query.record().value("description").toString();
     QString url = query.record().value("url").toString();
-    DbChannel *newChannel = new DbChannel(id,name,description,url);
-    QSharedPointer<DbChannel> pointer(newChannel);
+    QSharedPointer<DbChannel> pointer(new DbChannel(id,name,description,url));
     container.push_back(pointer);
   }
 }

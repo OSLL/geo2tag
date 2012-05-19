@@ -11,7 +11,11 @@ Flickable {
     function showTrackSettings() {trackSettings.open()}
     function auth(log, pass){ console.debug("try auth"); Main.onAuth(log,pass)}
     function reg(email, log, pass) {console.debug("try sign up"); Main.onReg(email, log, pass)}
-    function incorrect(err){login.notify(err);}
+    function incorrect(err){
+        if (err=="Incorrect login or password" || err=="User with that name already exist")
+        login.notify(err);
+    else
+    notifyDialog.notify(err);}
     function entered(name) {login.login=name; login.state="Log out"; notifyDialog.notify("Authorization is successfull");
    /*     if (recbutton.curStatus=="unknown") {
             recbutton.curStatus="Stop";
@@ -31,8 +35,9 @@ Flickable {
 
     NotifyDialog{id: notifyDialog}
     RightPanel{id:rightPanel; z:5}
-    Connections { target: login; onAuthrequest: auth(log, pass)}
+    Connections { target: login; onAuthrequest: Main.onAuth(log,pass)/*auth(log, pass)*/}
     Connections {target: login; onSignrequest: reg(email,log,pass)}
+    Connections {target: login; onLogout: Main.logout()}
     //Connections {target: recbutton; onTrackingRequest: tracking() }
     Connections {target: Main; onTrackingStarted: {recbutton.curStatus="Stop"; recbutton.prevStatus="Stop"} }
     //Connections {target: herebutton; onGetPosition: getPosition() }

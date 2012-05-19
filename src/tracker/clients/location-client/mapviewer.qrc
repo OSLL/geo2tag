@@ -14,5 +14,7 @@
         <file>images/blue_mark.svg</file>
         <file>images/red_mark.svg</file>
         <file>qml/ContactEditDialog.qml</file>
+        <file>images/TH15.png</file>
+        <file>images/TH15.svg</file>
     </qresource>
 </RCC>

@@ -153,6 +153,7 @@ OTHER_FILES += \
     qml/RightPanel.qml \
     qml/TrackingSettingsView.qml \
     images/strip.png \
+    images/TH15.svg \
     qtc_packaging/debian_harmattan/rules \
     qtc_packaging/debian_harmattan/README \
     qtc_packaging/debian_harmattan/manifest.aegis \
@@ -177,6 +178,8 @@ INCLUDEPATH += . inc \
 symbian {
 
   #  TARGET.UID3=0x2004234A
+    ICON= \
+    images/TH15.svg
     DEFINES+= Q_WS_SYMBIAN
     TARGET.CAPABILITY = NetworkServices \
                     Location \
