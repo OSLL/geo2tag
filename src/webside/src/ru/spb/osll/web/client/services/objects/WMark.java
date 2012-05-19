@@ -41,7 +41,6 @@ import java.sql.Timestamp;
 @SuppressWarnings("serial")
 public class WMark implements Serializable {
 
-	private long id = -1;
 	private Timestamp time;
     private float latitude;
     private float longitude;
@@ -52,7 +51,6 @@ public class WMark implements Serializable {
 	private double altitude;
 	private String user;
 	private String channel;
-	private String authToken;
 
 	public WMark() {
 	}
@@ -65,14 +63,6 @@ public class WMark implements Serializable {
 		this.description = description;
 		this.url = url;
 		this.user_id = user_id;
-	}
-	
-	public long getId() {
-		return id;
-	}
-	
-	public void setId(long id) {
-		this.id = id;
 	}
 	
 	public Timestamp getTime() {
@@ -154,12 +144,17 @@ public class WMark implements Serializable {
 		return channel;
 	}
 
-	public void setAuthToken(String authToken) {
-		this.authToken = authToken;
+	// FIXME
+	// This part will be deleted  
+	// after removing  DB access
+	private long id = -1;
+	
+	public long getId() {
+		return id;
 	}
-
-	public String getAuthToken() {
-		return authToken;
+	
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 }

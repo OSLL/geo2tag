@@ -61,7 +61,6 @@ public class JGeoConnector {
 		  wMark.setChannel(mark.getChannel());
 		  wMark.setUser(mark.getUser());
 		  wMark.setUrl(mark.getLink());
-		  wMark.setAuthToken(mark.getAuthToken());
 		  
 		  return wMark;
 	  }
