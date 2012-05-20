@@ -18,7 +18,7 @@ symbian:TARGET.UID3 = 0xE6691141
 # Allow network access on Symbian
 symbian:TARGET.CAPABILITY += NetworkServices Location
 
-symbian:ICON = gds_icon
+symbian:ICON = gds_icon.svg
 
 CONFIG += mobility
 MOBILITY += location multimedia
@@ -56,7 +56,8 @@ HEADERS += inc/defines.h \
     inc/MapWidget.h \
     inc/EventsWidget.h \
     inc/EventsService.h \
-    inc/utils.h
+    inc/utils.h \
+    inc/syslog.h
 
 # qsjon library
 INCLUDEPATH += ../../../3rdparty/qjson-0.7.1/src
