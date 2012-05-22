@@ -49,6 +49,7 @@
  */
 
 #include <QThread>
+#include <QTimer>
 #include "DefaultQuery.h"
 
 class ProfilerThread: public QThread
@@ -60,6 +61,7 @@ class ProfilerThread: public QThread
   void run();
 public:
   static int m_number_of_requests; 
+  static double m_requests_per_second;
   ProfilerThread();
   ~ProfilerThread();
   
