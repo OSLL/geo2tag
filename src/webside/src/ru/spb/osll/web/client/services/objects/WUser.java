@@ -37,13 +37,15 @@ package ru.spb.osll.web.client.services.objects;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 @SuppressWarnings("serial")
-public class WUser extends Response implements Serializable {
+public class WUser extends Response implements Serializable, IsSerializable {
 
 	private String login;
 	private String password;
-	private String token;
 	private String email;
+	private String token;
 	
 	public WUser() {
 	}
@@ -88,7 +90,7 @@ public class WUser extends Response implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "user: " + id + " \t| " + login + " \t| " + password + " \t| " + token;
+		return "user: " + id + " \t| " + login + " \t| " + password + " \t| " + email + " \t| "+ token;
 	}
 	
     // FIXME

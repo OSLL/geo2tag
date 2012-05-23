@@ -37,8 +37,10 @@ package ru.spb.osll.web.client.services.objects;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 @SuppressWarnings("serial")
-public class WChannel implements Serializable {
+public class WChannel implements Serializable, IsSerializable {
 	
 	private String name;
 	private String description;

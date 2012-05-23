@@ -40,8 +40,8 @@ import java.util.List;
 
 import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.GTState;
-import ru.spb.osll.web.client.services.channels.ChannelService;
-import ru.spb.osll.web.client.services.channels.ChannelServiceAsync;
+import ru.spb.osll.web.client.services.GTService;
+import ru.spb.osll.web.client.services.GTServiceAsync;
 import ru.spb.osll.web.client.services.objects.WUser;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.ui.common.Fields;
@@ -151,7 +151,7 @@ public class Channels extends SimpleComposite {
 			return;
 		}
 		
-		ChannelService.Util.getInstance().subscribe(ch, u, new AsyncCallback<Boolean>() {
+		GTService.Util.getInstance().subscribe(ch, u, new AsyncCallback<Boolean>() {
 			@Override
 			public void onSuccess(Boolean result) {
 				if (result){
@@ -173,7 +173,7 @@ public class Channels extends SimpleComposite {
 			return;
 		}
 		
-		ChannelService.Util.getInstance().unsubscribe(ch, u, new AsyncCallback<Boolean>() {
+		GTService.Util.getInstance().unsubscribe(ch, u, new AsyncCallback<Boolean>() {
 			@Override
 			public void onSuccess(Boolean result) {
 				if (result){
@@ -206,8 +206,8 @@ public class Channels extends SimpleComposite {
 			return;
 		}
 		
-		final ChannelServiceAsync service = ChannelService.Util.getInstance();
-		service.getUserChannels(u, new AsyncCallback<List<WChannel>>() {
+		final GTServiceAsync service = GTService.Util.getInstance();
+		service.subscribedChannels(u, new AsyncCallback<List<WChannel>>() {
 			@Override
 			public void onSuccess(List<WChannel> result) {
 				m_userChannels.addRows(result);
@@ -221,14 +221,20 @@ public class Channels extends SimpleComposite {
 	
 	private void refreshAvaiChannels(){
 		m_avalChannels.erase();
-		final ChannelServiceAsync service = ChannelService.Util.getInstance();
-		service.getAllChannels(new AsyncCallback<List<WChannel>>() {
+		final WUser u = GTState.Instanse().getCurUser();
+		if (null == u){
+			return;
+		}
+		
+		final GTServiceAsync service = GTService.Util.getInstance();
+		service.availableChannels(u, new AsyncCallback<List<WChannel>>() {
 			@Override
 			public void onSuccess(List<WChannel> result) {
 				m_avalChannels.addRows(result);
 			}
 			@Override
 			public void onFailure(Throwable caught) {
+				System.out.println("loadUserChannels : " + caught.getMessage());
 				GWT.log("loadUserChannels : " + caught.getMessage());
 			}
 		});
