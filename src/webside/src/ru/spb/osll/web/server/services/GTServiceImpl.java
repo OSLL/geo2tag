@@ -163,8 +163,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public List<WChannel> ownedChannels(WUser u)
-			throws IllegalArgumentException {
+	public List<WChannel> ownedChannels(WUser u) throws IllegalArgumentException {
 		// TODO Later
 		return null;
 	}

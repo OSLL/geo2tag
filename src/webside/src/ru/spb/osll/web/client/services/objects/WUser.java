@@ -40,7 +40,6 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class WUser extends Response implements Serializable {
 
-	private long id; 
 	private String login;
 	private String password;
 	private String token;
@@ -54,17 +53,10 @@ public class WUser extends Response implements Serializable {
 		this.password = password;
 	}
 	
-	public long getId() {
-		return id;
-	}
-	
-	public void setId(long id) {
-		this.id = id;
-	}
-	
 	public String getLogin() {
 		return login;
 	}
+
 	public void setLogin(String login) {
 		this.login = login;
 	}
@@ -98,4 +90,17 @@ public class WUser extends Response implements Serializable {
 	public String toString() {
 		return "user: " + id + " \t| " + login + " \t| " + password + " \t| " + token;
 	}
+	
+    // FIXME
+    // This part will be deleted  
+    // after removing  DB access 
+	private long id; 
+    public long getId() {
+        return id;
+    }
+    
+    public void setId(long id) {
+        this.id = id;
+    }
+
 }
