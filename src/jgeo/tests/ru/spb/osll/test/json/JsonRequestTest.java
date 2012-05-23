@@ -90,44 +90,42 @@ public class JsonRequestTest extends TestCase {
 		}
 	}
 
-	public void testApplySubscribeUnsubscribe() {
-		// error platform
-		// incorrect work with the memory
-		// http://jira.geo2tag.org:8080/browse/GT-599
-		final JSONObject JSONResponse = new JsonApplyChannelRequest(
-				"MMMMMMMMMM", "Test channel2", "My test channel",
-				"http://osll.spb.ru", 3000, url).doRequest();
-		assertNotNull(JSONResponse);
+    public void testApplySubscribeUnsubscribe() {
+        final JSONObject JSONResponse = new JsonApplyChannelRequest(
+                "MMMMMMMMMM", "Test channel2", "My test channel",
+                "http://osll.spb.ru", 3000, url).doRequest();
+        assertNotNull(JSONResponse);
 
-		final JSONObject JSONResponse1 = new JsonSubscribeRequest("KKKKKKKKKK",
-				"Test channel2", url).doRequest();
-		assertNotNull(JSONResponse1);
+        final JSONObject JSONResponse1 = new JsonSubscribeRequest("KKKKKKKKKK",
+                "Test channel2", url).doRequest();
+        assertNotNull(JSONResponse1);
 
-		final JSONObject JSONResponse2 = new JsonUnsubscribeRequest(
-				"KKKKKKKKKK", "Test channel2", url).doRequest();
-		assertNotNull(JSONResponse2);
+        final JSONObject JSONResponse2 = new JsonUnsubscribeRequest(
+                "KKKKKKKKKK", "Test channel2", url).doRequest();
+        assertNotNull(JSONResponse2);
 
-		if (JSONResponse != null) {
-			Log.out.println(LOG, JSONResponse.toString());
-			JsonApplyChannelResponse r = new JsonApplyChannelResponse();
-			r.parseJson(JSONResponse);
-			boolean successApply = (r.getErrno() == Errno.SUCCESS)
-					|| (r.getErrno() == Errno.CHANNEL_ALREADY_EXIST_ERROR);
-			assertTrue(successApply);
+        if (JSONResponse != null) {
+            Log.out.println(LOG, JSONResponse.toString());
+            JsonApplyChannelResponse r = new JsonApplyChannelResponse();
+            r.parseJson(JSONResponse);
+            boolean successApply = (r.getErrno() == Errno.SUCCESS)
+                    || (r.getErrno() == Errno.CHANNEL_ALREADY_EXIST_ERROR);
+            assertTrue(successApply);
 
-			Log.out.println(LOG, JSONResponse1.toString());
-			JsonSubscribeResponse r1 = new JsonSubscribeResponse();
-			r1.parseJson(JSONResponse);
-			boolean successSubscribe = (r1.getErrno() == Errno.SUCCESS)
-					|| (r1.getErrno() == Errno.CHANNEL_ALREADY_SUBSCRIBED_ERROR);
-			assertTrue(successSubscribe);
+            Log.out.println(LOG, JSONResponse1.toString());
+            JsonSubscribeResponse r1 = new JsonSubscribeResponse();
+            r1.parseJson(JSONResponse1);
 
-			Log.out.println(LOG, JSONResponse2.toString());
-			JsonUnsubscribeResponse r2 = new JsonUnsubscribeResponse();
-			r2.parseJson(JSONResponse);
-			assertEquals(r2.getErrno(), Errno.SUCCESS);
-		}
-	}
+            boolean successSubscribe = (r1.getErrno() == Errno.SUCCESS)
+                    || (r1.getErrno() == Errno.CHANNEL_ALREADY_SUBSCRIBED_ERROR);
+            assertTrue(successSubscribe);
+
+            Log.out.println(LOG, JSONResponse2.toString());
+            JsonUnsubscribeResponse r2 = new JsonUnsubscribeResponse();
+            r2.parseJson(JSONResponse2);
+            assertEquals(r2.getErrno(), Errno.SUCCESS);
+        }
+    }
 
 	public void testAvailableChannels() {
 		JSONObject JSONResponse = new JsonAvailableChannelRequest("KKKKKKKKKK",
