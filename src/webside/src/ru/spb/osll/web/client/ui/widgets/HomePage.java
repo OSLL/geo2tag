@@ -140,11 +140,11 @@ public class HomePage extends SimpleComposite {
 
 		@Override
 		protected List<Anchor> getLinks() {
-			Anchor loginLink = new Anchor(LOC.TestAccountWidget());
+			Anchor loginLink = new Anchor(LOC.login());
 			loginLink.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					GTShell.Instance.setContent(TestAccountWidget.Instance());
+					GTShell.Instance.setContent(LoginWidget.Instance());
 				}
 			});
 			List<Anchor> links = super.getLinks();

@@ -42,10 +42,12 @@ public interface GTLocalization extends Constants {
 	String btnOk();
 	String btnCancel();
 	String btnSignin();
+	String btnRegister();
 	String btnSignout();
 	
 	// warnings
 	String wrngLoginNull();
+	String wrngEmailNull();
 	String wrngPasswordNull();
 	String wrngConfirmNull();
 	String wrngPassAndConf(); 
@@ -70,8 +72,13 @@ public interface GTLocalization extends Constants {
 	String login();
 	String password();
 	String confirm();
-	String registration();
 	String loginFailed();
+
+	// Widget : RegistrationWidget
+	String email();
+	String userExists();
+	String registration();
+	String successReg();
 
 	// Widget : Channel
 	String channels();
