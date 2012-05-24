@@ -58,6 +58,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -70,8 +71,9 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	private TagsView m_tagsView; 
 	
 	private SmartListBox<WChannel> m_channelBox;
-    private DateBox m_dateBoxFrom;
+	private DateBox m_dateBoxFrom;
     private DateBox m_dateBoxTo;
+    //private IntegerBox m_amountBox;
     private RadioButton m_radioBtnAll;		
     private RadioButton m_radioBtnMy;
 	
@@ -114,6 +116,9 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    m_channelBox = new SmartListBox<WChannel>(Accessors.CHANNEL_ACC_NAME);
 	    m_channelBox.setWidth("200px");
 	    
+	    //m_amountBox = new IntegerBox();
+	    //m_amountBox.setWidth("50px");
+	    
 	    final String uniqueId = UIUtil.getUniqueId("channle.type"); 
 	    m_radioBtnAll = new RadioButton(uniqueId, LOC.radioBtnInChannel(), false);
 	    m_radioBtnAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -149,6 +154,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    		cosntuctPair("Channel", m_channelBox),
 	    		cosntuctPair("From", m_dateBoxFrom),
 	    		cosntuctPair("To", m_dateBoxTo),
+	    		//cosntuctPair("Marks amount", m_amountBox),
 	    		refreshBtn
 	    };
 
