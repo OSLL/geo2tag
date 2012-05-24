@@ -52,7 +52,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class GTServiceImpl extends RemoteServiceServlet implements 
 		GTService, Session.HasSession {
 	
-	//public static String serverUrl = "http://localhost:81/service";
+	///public static String serverUrl = "http://localhost:81/service";
 	public static String serverUrl = "http://tracks.osll.spb.ru:81/service";
 	
 	static {

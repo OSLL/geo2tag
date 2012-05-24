@@ -82,8 +82,9 @@ public class Channels extends SimpleComposite {
 
 		m_userChannels = new TableWidget<WChannel>(fields);
 		m_avalChannels = new TableWidget<WChannel>(fields);
-		refreshUserChannels();
-		refreshAvaiChannels();
+		
+		refreshUserChannels(true);
+		//refreshAvaiChannels();
 		
 		VerticalPanel vp = UIUtil.getVerticalPanel();
 		vp.setSpacing(10);
@@ -100,8 +101,8 @@ public class Channels extends SimpleComposite {
 	@Override
 	public void onResume() {
 		showWarningMessage(GTState.Instanse().getCurUser());
-		refreshUserChannels();
-		refreshAvaiChannels();
+		refreshUserChannels(true);
+		//refreshAvaiChannels();
 	}
 
 	private void showWarningMessage(WUser u){
@@ -199,7 +200,7 @@ public class Channels extends SimpleComposite {
 		return scrollPanel;
 	}
 	
-	private void refreshUserChannels(){
+	private void refreshUserChannels(final Boolean toRefreshAvaiChannels){
 		m_userChannels.erase();
 		final WUser u = GTState.Instanse().getCurUser();
 		if (null == u){
@@ -211,15 +212,19 @@ public class Channels extends SimpleComposite {
 			@Override
 			public void onSuccess(List<WChannel> result) {
 				m_userChannels.addRows(result);
+				if (toRefreshAvaiChannels)
+					refreshAvaiChannels(false);
 			}
 			@Override
 			public void onFailure(Throwable caught) {
 				GWT.log("loadUserChannels : " + caught.getMessage());
+				if (toRefreshAvaiChannels)
+					refreshAvaiChannels(false);
 			}
 		});
 	}
 	
-	private void refreshAvaiChannels(){
+	private void refreshAvaiChannels(final Boolean toRefreshUserChannels){
 		m_avalChannels.erase();
 		final WUser u = GTState.Instanse().getCurUser();
 		if (null == u){
@@ -231,11 +236,14 @@ public class Channels extends SimpleComposite {
 			@Override
 			public void onSuccess(List<WChannel> result) {
 				m_avalChannels.addRows(result);
+				if (toRefreshUserChannels)
+					refreshUserChannels(false);				
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				System.out.println("loadUserChannels : " + caught.getMessage());
 				GWT.log("loadUserChannels : " + caught.getMessage());
+				if (toRefreshUserChannels)
+					refreshUserChannels(false);
 			}
 		});
 	}
