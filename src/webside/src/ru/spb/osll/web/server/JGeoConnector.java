@@ -31,6 +31,10 @@
 
 package ru.spb.osll.web.server;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import ru.spb.osll.objects.Channel;
 import ru.spb.osll.objects.Mark;
 import ru.spb.osll.objects.User;
@@ -49,14 +53,19 @@ public class JGeoConnector {
 		return wUser;
 	}
 
-	public static WMark toWTag(Mark mark) {
+	public static WMark toWTag(Mark mark){
 		final WMark wMark = new WMark();
+		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
 		wMark.setDescription(mark.getDescription());
 		wMark.setId(mark.getId());
 		wMark.setLabel(mark.getTitle());
 		wMark.setLatitude((float) mark.getLatitude());
 		wMark.setLongitude((float) mark.getLongitude());
-		// wMark.setTime(mark.getTime()); // TODO 
+	    try {
+			wMark.setTime((Timestamp) date.parse(mark.getTime()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		wMark.setAltitude(mark.getAltitude());
 		wMark.setChannel(mark.getChannel());
 		wMark.setUser(mark.getUser());
