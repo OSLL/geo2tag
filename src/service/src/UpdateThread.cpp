@@ -75,6 +75,7 @@ void UpdateThread::run()
 
   for(;;)
   {
+    {
     PerformanceCounter counter("db_update");    
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
     bool result = m_database.open();
@@ -128,6 +129,7 @@ void UpdateThread::run()
     syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());
     syslog(LOG_INFO,  "current channels' size = %d", m_channelsContainer->size());
     m_database.close();
+    }
     QThread::msleep(10000);
   }
 }
