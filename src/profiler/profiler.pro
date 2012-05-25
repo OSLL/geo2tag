@@ -36,7 +36,6 @@ HEADERS += ProfilerThread.h LoginThread.h TrackThread.h LoadTagsThread.h \
 ../json/inc/JsonUser.h \
 ../json/inc/JsonDataMark.h \
 ../json/inc/JsonChannel.h \
-../json/inc/JsonTimeSlot.h \
 ../json/inc/JsonSerializer.h \
 ../json/inc/DefaultResponseJSON.h 
 
@@ -58,7 +57,6 @@ SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp LoadTagsT
 ../json/src/LoadTagsRequestJSON.cpp \
 ../json/src/LoadTagsResponseJSON.cpp \
 ../json/src/JsonChannel.cpp \
-../json/src/JsonTimeSlot.cpp \
 ../json/src/JsonDataMark.cpp \
 ../json/src/JsonSerializer.cpp \
 ../json/src/JsonUser.cpp \

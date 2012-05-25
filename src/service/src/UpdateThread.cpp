@@ -38,6 +38,7 @@
 #include "UpdateThread.h"
 #include "SettingsStorage.h"
 #include "defines.h"
+#include "PerformanceCounter.h" 
 
 UpdateThread::UpdateThread(const QSqlDatabase &db,
 const QSharedPointer<DataMarks> &tags,
@@ -59,22 +60,22 @@ m_database(db)
 
 void UpdateThread::lockWriting()
 {
-  //syslog(LOG_INFO, "UpdateThread::lockWriting()");
   m_updateLock.lockForWrite();
 }
 
 
 void UpdateThread::unlockWriting()
 {
-  //syslog(LOG_INFO, "UpdateThread::unlock()");
   m_updateLock.unlock();
 }
 
 
 void UpdateThread::run()
 {
+
   for(;;)
   {
+    PerformanceCounter counter("db_update");    
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
     bool result = m_database.open();
     if(!result)
@@ -97,27 +98,31 @@ void UpdateThread::run()
     loadTimeSlots(timeSlotsContainer);
 
     lockWriting();
+    syslog(LOG_INFO,"Containers locked for db_update");
     m_usersContainer->merge(usersContainer);
     m_tagsContainer->merge(tagsContainer);
     m_channelsContainer->merge(channelsContainer);
     m_timeSlotsContainer->merge(timeSlotsContainer);
 
     updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer, *m_timeSlotsContainer);
-
-    for(int i=0; i<m_tagsContainer->size(); i++)
-    {
-      QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
-      QSharedPointer<Channel> channel = tag->getChannel();
-      if(!m_dataChannelsMap->contains(channel, tag))
-      {
-        // syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i, m_tagsContainer->size(),
-        // tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(), channel->getName().toStdString().c_str());
-
-        m_dataChannelsMap->insert(channel, tag);
-      }
-    }
+    
     syslog(LOG_INFO, "tags added. trying to unlock");
     unlockWriting();
+
+    syslog(LOG_INFO,"lock: filling m_dataChannelsMap ");
+    for(int i=0; i<m_tagsContainer->size(); i++)
+    {
+      if(!m_dataChannelsMap->contains(m_tagsContainer->at(i)->getChannel(), m_tagsContainer->at(i)))
+      {
+        QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
+        QSharedPointer<Channel> channel = tag->getChannel();
+        syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i, m_tagsContainer->size(),
+         tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(), channel->getName().toStdString().c_str());
+        lockWriting();
+        m_dataChannelsMap->insert(channel, tag);
+        unlockWriting();
+      }
+    }
 
     syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
     syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());

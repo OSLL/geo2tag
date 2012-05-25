@@ -47,9 +47,11 @@
 
 int ProfilerThread::m_counter=0;
 int ProfilerThread::m_number_of_requests=0;
+double ProfilerThread::m_requests_per_second=0.;
 
 ProfilerThread::ProfilerThread()
 {
+  m_sendTime = QDateTime::currentDateTime();
 }
 
 void ProfilerThread::setConnections()
@@ -83,6 +85,7 @@ void ProfilerThread::sendRequest()
 {
 
   srand(time(NULL));
+  m_requests_per_second = 1000./((double)m_sendTime.msecsTo(QDateTime::currentDateTime()));
   m_sendTime = QDateTime::currentDateTime();
   m_query->doRequest();
 }
@@ -90,7 +93,9 @@ void ProfilerThread::sendRequest()
 void ProfilerThread::responseRecieved()
 {
   if (m_query->getErrno() == SUCCESS) incCounter();
-  qDebug() << getCounter() << " " << m_sendTime.msecsTo(QDateTime::currentDateTime()) << " " << m_query->getErrno();
+  qDebug() << getCounter() << m_sendTime.msecsTo(QDateTime::currentDateTime()) <<  (int)(m_query->getErrno()!=SUCCESS) << m_requests_per_second;
+  //QString a=QString("echo \"%1 %2 %3 %4 `ps -e -o rss,comm | grep fcgi | grep -o \\\"^[0-9 ]*\\\"`\"").arg(getCounter()).arg(m_sendTime.msecsTo(QDateTime::currentDateTime())).arg((int)(m_query->getErrno()!=SUCCESS)).arg(m_requests_per_second);
+  //system(a.toStdString().c_str());
   if (m_counter == m_number_of_requests ) exit();
   emit doRequest();
 }

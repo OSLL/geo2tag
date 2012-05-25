@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Use next commands to see results (run them BEFORE statring this script):
+# >>>>>>  sudo tail -f /var/log/syslog |  grep -v 'db_update' | grep -o time_of_.* | grep -o '[^_]*$' > output_file
+# this will add "method_name time_spended_for_method" records into file @output_file@
+# After this all just grep out data
+
+number_of_iterations=500;
+auth_token="MMMMMMMMMM";
+channel="test_channel_$RANDOM";
+
+curl -d "{\"auth_token\":\"$auth_token\", \"name\":\"$channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel
+curl -d "{\"auth_token\":\"$auth_token\", \"channel\":\"$channel\"}" http://localhost:81/service/subscribe 2>/dev/null
+sleep 10s
+
+
+for (( i=0;  i<number_of_iterations; i++ )) ;
+do
+
+	curl -d "{ \"auth_token\" : \"$auth_token\", \"channel\" : \"$channel\", \"description\" : \"$RANDOM_$RANDOM\", \"latitude\" : 60.0, \"altitude\":30.0, \"link\" : \"$RANDOM\", \"longitude\" : 30.0, \"time\" : \"04 03 2012 15:33:47.630\", \"title\" : \"test tag\" }"  http://localhost:81/service/writeTag &
+
+done

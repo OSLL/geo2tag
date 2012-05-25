@@ -107,6 +107,8 @@
 #include <QMap>
 #include <QRegExp>
 
+#include "PerformanceCounter.h" 
+
 namespace common
 {
   const QString DbObjectsCollection::error = QString("Error");
@@ -192,9 +194,13 @@ namespace common
     {
       if (queryType.compare(queries[i],Qt::CaseInsensitive) == 0)
       {
+	
         ProcessMethod method = m_processors.value(queries[i]);
         syslog(LOG_INFO,"calling %s processor %s",queryType.toStdString().c_str(),QString(body).toStdString().c_str());
-        return (*this.*method)(body);
+        QByteArray aa;
+	PerformanceCounter a(queryType.toStdString());
+        aa = (*this.*method)(body);
+        return aa;
       }
     }
 
@@ -204,7 +210,11 @@ namespace common
         syslog(LOG_INFO, "Pattern matched!");
         const QString token = rx.cap(1);
         ProcessMethodWithStr method = &DbObjectsCollection::processConfirmRegistrationQuery;
-        return (*this.*method)(token);
+        QByteArray aa; 
+        PerformanceCounter a("confirmRegistration");
+        aa = (*this.*method)(token);
+        return aa;
+
     } else {
         syslog(LOG_INFO, "Pattern not matched!");
     }

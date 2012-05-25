@@ -30,8 +30,8 @@
  */
 
 /*! ---------------------------------------------------------------
- * \file ProfilerThread.h
- * \brief Header of ProfilerThread
+ * \file PerformanceCounter.h
+ * \brief Header of PerformanceCounter
  * \todo add comment here
  *
  * File description
@@ -40,48 +40,21 @@
  * ---------------------------------------------------------------- */
 
 
-#ifndef _ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_
-#define _ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_
+#ifndef _PerformanceCounter_H_B9D00A44_0260_4AC3_9404_605AE29EA141_INCLUDED_
+#define _PerformanceCounter_H_B9D00A44_0260_4AC3_9404_605AE29EA141_INCLUDED_
 
- /*!
- * Class description. May use HTML formatting
- *
- */
 
-#include <QThread>
-#include <QTimer>
-#include "DefaultQuery.h"
+#include <sys/time.h>
+#include <string>
 
-class ProfilerThread: public QThread
+class PerformanceCounter
 {
-  Q_OBJECT;
-
-  static int m_counter;
-  QDateTime m_sendTime;
-  void run();
+	timeval m_a;
+	std::string m_text;
 public:
-  static int m_number_of_requests; 
-  static double m_requests_per_second;
-  ProfilerThread();
-  ~ProfilerThread();
-  
-  DefaultQuery * m_query; 
-  void setConnections();
+	PerformanceCounter(const std::string & text);
+	~PerformanceCounter();
+};
 
- 
-  static int getCounter() ;
-  static void incCounter() ;
 
-signals:
- 
-  void doRequest();
-
-public slots:
-  
-  void sendRequest();
-  void responseRecieved();
-
-}; // class ProfilerThread
-  
-
-#endif //_ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_
+#endif //_PerformanceCounter_H_B9D00A44_0260_4AC3_9404_605AE29EA141_INCLUDED_
