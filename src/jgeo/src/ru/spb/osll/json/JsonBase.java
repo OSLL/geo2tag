@@ -65,7 +65,7 @@ public class JsonBase {
     private HttpPost m_httpPost;
     
     private static JsonBase instanceJSBase;
-    public static JsonBase instance(){
+    public static synchronized JsonBase instance(){
     	if (instanceJSBase == null)
     		instanceJSBase = new JsonBase();
     	return instanceJSBase;
