@@ -47,7 +47,7 @@ HEADERS += \
     inc/FShapeRectangle.h \
     inc/Region.h \
     inc/signals.h \
-    inc/ProfilerUtil.h \
+    inc/PerformanceCounter.h \
     inc/SettingsStorage.h
 
 SOURCES += \
@@ -67,6 +67,7 @@ SOURCES += \
     src/FShapeRectangle.cpp \
     src/Region.cpp \ 
     src/signals.cpp \
+    src/PerformanceCounter.cpp \
     src/SettingsStorage.cpp
 
 linux: {

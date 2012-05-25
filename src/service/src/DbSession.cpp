@@ -107,7 +107,7 @@
 #include <QMap>
 #include <QRegExp>
 
-#include "ProfilerUtil.h" 
+#include "PerformanceCounter.h" 
 
 namespace common
 {
@@ -194,12 +194,12 @@ namespace common
     {
       if (queryType.compare(queries[i],Qt::CaseInsensitive) == 0)
       {
+	
         ProcessMethod method = m_processors.value(queries[i]);
         syslog(LOG_INFO,"calling %s processor %s",queryType.toStdString().c_str(),QString(body).toStdString().c_str());
         QByteArray aa;
-	TIC_
+	PerformanceCounter a(queryType.toStdString());
         aa = (*this.*method)(body);
-        TOC_(queryType.toStdString().c_str())
         return aa;
       }
     }
@@ -211,9 +211,8 @@ namespace common
         const QString token = rx.cap(1);
         ProcessMethodWithStr method = &DbObjectsCollection::processConfirmRegistrationQuery;
         QByteArray aa; 
-        TIC_
+        PerformanceCounter a("confirmRegistration");
         aa = (*this.*method)(token);
-        TOC_("confirmRegistration")
         return aa;
 
     } else {

@@ -39,13 +39,14 @@
 #include <QSqlError>
 #include <QVariant>
 #include <QString>
+
 #include "QueryExecutor.h"
 #include "JsonUser.h"
 #include "DataMarkInternal.h"
 #include "UserInternal.h"
 #include "ChannelInternal.h"
 #include "TimeSlotInternal.h"
-#include "ProfilerUtil.h"
+#include "PerformanceCounter.h"
  
 
 QueryExecutor::QueryExecutor(const QSqlDatabase &db, QObject *parent): QObject(parent),
@@ -124,7 +125,7 @@ const QString QueryExecutor::generateNewToken(const QString& email, const QStrin
 
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
-  TIC_
+  PerformanceCounter counter("QueryExecutor::insertNewTag");
   bool result;
   qlonglong newId = nextTagKey();
 
@@ -156,7 +157,6 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
   {
     m_database.rollback();
     syslog(LOG_INFO, "Rollback for NewTag sql query");
-    TOC_("QueryExecutor::insertNewTag")
     return QSharedPointer<DataMark>(NULL);
   }
 
@@ -165,7 +165,6 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
   {
     m_database.rollback();
     syslog(LOG_INFO, "Rollback for putTagToChannel sql query");
-    TOC_("QueryExecutor::insertNewTag")
     return QSharedPointer<DataMark>(NULL);
   }
 
@@ -179,14 +178,13 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
   t->setUser(tag->getUser());
   t->setChannel(tag->getChannel());
 
-  TOC_("QueryExecutor::insertNewTag")
   return t;
 }
 
 
 QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Channel>& channel)
 {
-  TIC_
+  PerformanceCounter counter("QueryExecutor::insertNewChannel");
   bool result;
   QSqlQuery newChannelQuery(m_database);
   qlonglong newId = nextChannelKey();
@@ -204,7 +202,6 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
   {
     syslog(LOG_INFO,"Rollback for NewChannel sql query");
     m_database.rollback();
-    TOC_("QueryExecutor::insertNewChannel")
     return QSharedPointer<Channel>(NULL);
   }else
   syslog(LOG_INFO,"Commit for NewChannel sql query - insert in table channel");
@@ -212,13 +209,12 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
   m_database.commit();
 
   QSharedPointer<DbChannel> newChannel(new DbChannel(newId,channel->getName(),channel->getDescription(),channel->getUrl()));
-  TOC_("QueryExecutor::insertNewChannel")
   return newChannel;
 }
 
 QSharedPointer<common::User> QueryExecutor::doesTmpUserExist(const QSharedPointer<common::User> &user)
 {
-    TIC_
+    PerformanceCounter counter("QueryExecutor::doesTmpUserExist");
     QSqlQuery query(m_database);
     query.prepare("select id, email, login, password, registration_token from signups where login = :login or email = :email;");
     query.bindValue(":login",user->getLogin());
@@ -234,18 +230,16 @@ QSharedPointer<common::User> QueryExecutor::doesTmpUserExist(const QSharedPointe
         QString login = query.value(2).toString();
         QString password = query.value(3).toString();
         QString token = query.value(4).toString();
-        TOC_("QueryExecutor::doesTmpUserExist")
         return QSharedPointer<DbUser>(new DbUser(login, password, id, token));
     } else {
         syslog(LOG_INFO,"No matching users.");
-        TOC_("QueryExecutor::doesTmpUserExist")
         return QSharedPointer<common::User>(NULL);
     }
 }
 
 bool QueryExecutor::doesUserWithGivenEmailExist(const QSharedPointer<common::User> &user)
 {
-    TIC_
+    PerformanceCounter counter("QueryExecutor::doesUserWithGivenEmailExist");
     QSqlQuery query(m_database);
     syslog(LOG_INFO, "Checking of user existence in users by email: %s", user->getEmail().toStdString().c_str());
 
@@ -256,18 +250,16 @@ bool QueryExecutor::doesUserWithGivenEmailExist(const QSharedPointer<common::Use
 
     if (query.next()) {
         syslog(LOG_INFO,"Match found.");
-        TOC_("QueryExecutor::doesUserWithGivenEmailExist")
         return true;
     } else {
         syslog(LOG_INFO,"No matching users.");
-        TOC_("QueryExecutor::doesUserWithGivenEmailExist")
         return false;
     }
 }
 
 bool QueryExecutor::deleteTmpUser(const QSharedPointer<common::User> &user)
 {
-    TIC_
+    PerformanceCounter counter("QueryExecutor::deleteTmpUser"); 
     bool result;
     QSqlQuery deleteSignupQuery(m_database);
     deleteSignupQuery.prepare("delete from signups where login = :login;");
@@ -283,13 +275,12 @@ bool QueryExecutor::deleteTmpUser(const QSharedPointer<common::User> &user)
       syslog(LOG_INFO,"Commit for deleteSignup sql query");
       m_database.commit();
     }
-    TOC_("QueryExecutor::deleteTmpUser")
     return result;
 }
 
 QSharedPointer<common::User> QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
 {
-    TIC_
+    PerformanceCounter counter("QueryExecutor::insertNewTmpUser");
     bool result;
     QSqlQuery newSignupQuery(m_database);
     qlonglong newId = nextUserKey();
@@ -315,13 +306,12 @@ QSharedPointer<common::User> QueryExecutor::insertNewTmpUser(const QSharedPointe
       tmpUser = QSharedPointer<common::User>(new JsonUser(user->getLogin(),user->getPassword(),newToken,user->getEmail()));
       m_database.commit();
     }
-    TOC_("QueryExecutor::insertNewTmpUser")
     return tmpUser;
 }
 
 bool QueryExecutor::doesRegistrationTokenExist(const QString &token)
 {
-    TIC_
+    PerformanceCounter counter("QueryExecutor::doesRegistrationTokenExist"); 
     QSqlQuery query(m_database);
     syslog(LOG_INFO, "Checking of user existence in signups by token: %s", token.toStdString().c_str());
 
@@ -332,18 +322,16 @@ bool QueryExecutor::doesRegistrationTokenExist(const QString &token)
 
     if (query.next()) {
         syslog(LOG_INFO,"Match found.");
-        TOC_("QueryExecutor::doesRegistrationTokenExist")
         return true;
     } else {
         syslog(LOG_INFO,"No matching users.");
-        TOC_("QueryExecutor::doesRegistrationTokenExist")
         return false;
     }
 }
 
 bool QueryExecutor::insertTmpUserIntoUsers(const QString &token)
 {
-    TIC_
+    PerformanceCounter counter("QueryExecutor::insertTmpUserIntoUsers");
     QSqlQuery checkQuery(m_database);
     syslog(LOG_INFO, "Checking of user existence in signups by token: %s", token.toStdString().c_str());
 
@@ -358,20 +346,18 @@ bool QueryExecutor::insertTmpUserIntoUsers(const QString &token)
         QString login = checkQuery.value(1).toString();
         QString password = checkQuery.value(2).toString();
         const QSharedPointer<common::User> newUser(new common::User(login, password, email));
-        TOC_("QueryExecutor::insertTmpUserIntoUsers")
         if (!insertNewUser(newUser))
             return false;
         return true;
     } else {
         syslog(LOG_INFO,"No matching users.");
-        TOC_("QueryExecutor::insertTmpUserIntoUsers")
         return false;
     }
 }
 
 bool QueryExecutor::deleteTmpUser(const QString &token)
 {
-    TIC_
+    PerformanceCounter counter("QueryExecutor::deleteTmpUser");
     bool result;
     QSqlQuery deleteSignupQuery(m_database);
     deleteSignupQuery.prepare("delete from signups where registration_token = :token;");
@@ -387,13 +373,12 @@ bool QueryExecutor::deleteTmpUser(const QString &token)
       syslog(LOG_INFO,"Commit for deleteSignup sql query");
       m_database.commit();
     }
-    TOC_("QueryExecutor::deleteTmpUser")
     return result;
 }
 
 QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<common::User>& user)
 {
-  TIC_
+  PerformanceCounter counter("QueryExecutor::insertNewUser");
   bool result;
   QSqlQuery newUserQuery(m_database);
   qlonglong newId = nextUserKey();
@@ -421,14 +406,13 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
     newUser = QSharedPointer<common::User>(new DbUser(user->getLogin(),user->getPassword(),newId,newToken));
     m_database.commit();
   }
-  TOC_("QueryExecutor::insertNewUser")
   return newUser;
 }
 
 
 bool QueryExecutor::subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel)
 {
-  TIC_
+  PerformanceCounter counter("QueryExecutor::subscribeChannel"); 
   bool result;
   QSqlQuery insertNewSubscribtion(m_database);
   insertNewSubscribtion.prepare("insert into subscribe (channel_id,user_id) values(:channel_id,:user_id);");
@@ -448,7 +432,6 @@ bool QueryExecutor::subscribeChannel(const QSharedPointer<common::User>& user,co
     syslog(LOG_INFO,"Commit for subscribeChannel sql query");
     m_database.commit();
   }
-  TOC_("QueryExecutor::subscribeChannel")
   return result;
 }
 
@@ -636,7 +619,7 @@ bool QueryExecutor::deleteMarkTimeSlot(const QSharedPointer<DataMark>& tag)
 
 bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel)
 {
-  TIC_
+  PerformanceCounter counter("QueryExecutor::unsubscribeChannel"); 
   bool result;
   QSqlQuery deleteSubscribtion(m_database);
   deleteSubscribtion.prepare("delete from subscribe where channel_id = :channel_id AND user_id = :user_id;");
@@ -656,13 +639,12 @@ bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,
     syslog(LOG_INFO,"Commit for unsubscribeChannel sql query");
     m_database.commit();
   }
-  TOC_("QueryExecutor::unsubscribeChannel")
   return result;
 }
 
 bool QueryExecutor::isChannelSubscribed(QSharedPointer<Channel> &channel, QSharedPointer<common::User> &user)
 {
-    TIC_
+    PerformanceCounter counter("QueryExecutor::isChannelSubscribed"); 
     QSqlQuery query(m_database);
     syslog(LOG_INFO, "Checking of subscription of user %s to channel %s...", user->getToken().toStdString().c_str(), channel->getName().toStdString().c_str());
 
@@ -674,18 +656,16 @@ bool QueryExecutor::isChannelSubscribed(QSharedPointer<Channel> &channel, QShare
 
     if (query.next()) {
         syslog(LOG_INFO,"Subscription found.");
-        TOC_("QueryExecutor::isChannelSubscribed")
         return true;
     } else {
         syslog(LOG_INFO,"No matching subscription.");
-        TOC_("QueryExecutor::isChannelSubscribed")
         return false;
     }
 }
 
 bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
 {
-    TIC_
+    PerformanceCounter counter("QueryExecutor::deleteUser");
     bool result;
     QSqlQuery deleteUserQuery(m_database);
     syslog(LOG_INFO,"Deleting: id = %lld", user->getId());
@@ -701,6 +681,5 @@ bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
       syslog(LOG_INFO,"Commit for deleteUser sql query");
       m_database.commit();
     }
-    TOC_("QueryExecutor::deleteUser")
     return result;
 }
