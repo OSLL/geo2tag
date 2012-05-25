@@ -36,8 +36,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import ru.spb.osll.log.Log;
 import ru.spb.osll.web.client.services.GTService;
+import ru.spb.osll.web.client.services.objects.Response;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WUser;
@@ -61,6 +64,8 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public WUser login(WUser user) throws IllegalArgumentException {
+	    Logger.getLogger(getClass()).debug("called login()");
+
 		JsonLoginRequest request = new JsonLoginRequest(user.getLogin(), user.getPassword(), serverUrl);
 		JsonLoginResponse response = new JsonLoginResponse();
 		response.parseJson(request.doRequest());
@@ -69,7 +74,8 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		} else {
 			WUser newUser = new WUser(user.getLogin(), user.getPassword());
 			newUser.setToken(response.getAuthString());
-			//Session.Instance().addValue(this, USER_TOKEN, newUser.getToken());
+			newUser.setStatus(Response.STATUS_SUCCES );
+			Session.Instance().addValue(this, USER_TOKEN, newUser.getToken());
 			return newUser;
 		}
 	}
@@ -82,14 +88,14 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public WUser isAuthorized() throws IllegalArgumentException {
-		final String authToken = Session.Instance().getValue(this, USER_TOKEN).toString();
-		if (authToken != null) {
-			WUser user = new WUser();
-			user.setToken(authToken);
-			return user; 
-		} else {
-			return null;
-		}
+	    Logger.getLogger(getClass()).debug("called isAuthorized()");
+		if (Session.Instance().getValue(this, USER_TOKEN) != null) {
+	        final String authToken = Session.Instance().getValue(this, USER_TOKEN).toString();
+	        WUser user = new WUser();
+	        user.setToken(authToken);
+	        return user; 
+		}	    
+		return null;
 	}
 
 	@Override

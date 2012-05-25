@@ -41,9 +41,9 @@ import java.util.List;
 import ru.spb.osll.web.client.GTShell;
 import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.localization.Localizer;
+import ru.spb.osll.web.client.services.GTService;
 import ru.spb.osll.web.client.services.objects.Response;
 import ru.spb.osll.web.client.services.objects.WUser;
-import ru.spb.osll.web.client.services.users.LoginService;
 import ru.spb.osll.web.client.ui.core.FieldsWidget;
 import ru.spb.osll.web.client.ui.core.UIUtil;
 
@@ -137,7 +137,7 @@ public class LoginWidget extends FieldsWidget {
 				}
 			}
 		};
-		LoginService.Util.getInstance().login(user, callback);		
+		GTService.Util.getInstance().login(user, callback);		
 	}
 	
 	public static LoginWidget Instance(){

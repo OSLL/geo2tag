@@ -1,9 +1,9 @@
 package ru.spb.osll.web.client;
 
 import ru.spb.osll.web.client.localization.Localizer;
+import ru.spb.osll.web.client.services.GTService;
+import ru.spb.osll.web.client.services.GTServiceAsync;
 import ru.spb.osll.web.client.services.objects.WUser;
-import ru.spb.osll.web.client.services.users.LoginService;
-import ru.spb.osll.web.client.services.users.LoginServiceAsync;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 
 import com.google.gwt.core.client.GWT;
@@ -96,7 +96,7 @@ public class GTShell extends Composite {
 	protected void initStartWidget(){
 		setContent(HomePage.Instance(), false);
 		
-		LoginServiceAsync service = LoginService.Util.getInstance();
+		GTServiceAsync service = GTService.Util.getInstance();
 		service.isAuthorized(new AsyncCallback<WUser>() {
 			@Override
 			public void onSuccess(WUser user) {
@@ -128,7 +128,7 @@ public class GTShell extends Composite {
 	}
 	
 	protected void initDefaultWidget(){
-		LoginServiceAsync service = LoginService.Util.getInstance();
+		GTServiceAsync service = GTService.Util.getInstance();
 		service.isAuthorized(new AsyncCallback<WUser>() {
 			@Override
 			public void onSuccess(WUser user) {
@@ -178,7 +178,7 @@ public class GTShell extends Composite {
 				GWT.log("logout", caught);
 			}
 		};
-		LoginService.Util.getInstance().logout(callback);
+		GTService.Util.getInstance().logout(callback);
 	}
 
 }
