@@ -55,14 +55,14 @@ public class JGeoConnector {
 
 	public static WMark toWTag(Mark mark){
 		final WMark wMark = new WMark();
-		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+		SimpleDateFormat date = new SimpleDateFormat("dd MM yyyy hh:mm:ss.SSS");
 		wMark.setDescription(mark.getDescription());
 		wMark.setId(mark.getId());
 		wMark.setLabel(mark.getTitle());
 		wMark.setLatitude((float) mark.getLatitude());
 		wMark.setLongitude((float) mark.getLongitude());
-	    try {
-			wMark.setTime((Timestamp) date.parse(mark.getTime()));
+		try {
+			wMark.setTime(new Timestamp(date.parse(mark.getTime()).getTime()));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

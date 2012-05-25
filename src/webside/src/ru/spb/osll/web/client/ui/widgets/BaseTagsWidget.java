@@ -35,15 +35,13 @@
 
 package ru.spb.osll.web.client.ui.widgets;
 
-import java.util.Date;
 import java.util.List;
 
 import ru.spb.osll.web.client.GTState;
-import ru.spb.osll.web.client.services.channels.ChannelService;
+import ru.spb.osll.web.client.services.GTService;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WUser;
-import ru.spb.osll.web.client.services.tags.TagService;
 import ru.spb.osll.web.client.ui.common.Accessors;
 import ru.spb.osll.web.client.ui.core.SimpleComposite;
 import ru.spb.osll.web.client.ui.core.SmartListBox;
@@ -58,22 +56,22 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 public abstract class BaseTagsWidget extends SimpleComposite {
 	private TagsView m_tagsView; 
-	
 	private SmartListBox<WChannel> m_channelBox;
-	private DateBox m_dateBoxFrom;
-    private DateBox m_dateBoxTo;
-    //private IntegerBox m_amountBox;
+	private TextBox m_latitudeBox;
+	private TextBox m_longitudeBox;
+	private TextBox m_radiusBox;
+    private TextBox m_amountBox;
     private RadioButton m_radioBtnAll;		
     private RadioButton m_radioBtnMy;
 	
@@ -87,6 +85,11 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		contaier.setWidth("100%");
 		initFiltersPanel(contaier);
 		contaier.add(m_tagsView);
+		m_channelBox.setEnabled(true);
+		m_latitudeBox.setEnabled(false);
+		m_longitudeBox.setEnabled(false);
+		m_radiusBox.setEnabled(false);
+		m_amountBox.setEnabled(true);
 		return contaier;
 	}
     
@@ -96,6 +99,11 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		showWarningMessage(user);
 		refreshFilterPanel(user);
 		m_tagsView.refresh();
+		m_channelBox.setEnabled(true);
+		m_latitudeBox.setEnabled(false);
+		m_longitudeBox.setEnabled(false);
+		m_radiusBox.setEnabled(false);
+		m_amountBox.setEnabled(true);
 	}
 
 	private void showWarningMessage(WUser u){
@@ -107,17 +115,13 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	}
 	
 	private void initFiltersPanel(VerticalPanel container){
-	    m_dateBoxFrom = new GTDateBox();
-	    m_dateBoxTo = new GTDateBox();
-	    
-	    m_dateBoxFrom.setFormat(new DateBox.DefaultFormat());
-	    m_dateBoxTo.setFormat(new DateBox.DefaultFormat());
-
 	    m_channelBox = new SmartListBox<WChannel>(Accessors.CHANNEL_ACC_NAME);
 	    m_channelBox.setWidth("200px");
 	    
-	    //m_amountBox = new IntegerBox();
-	    //m_amountBox.setWidth("50px");
+	    m_latitudeBox = UIUtil.getTextBox(65, 200);
+	    m_longitudeBox = UIUtil.getTextBox(65, 200);
+	    m_radiusBox = UIUtil.getTextBox(65, 200);
+	    m_amountBox = UIUtil.getTextBox(65, 100);
 	    
 	    final String uniqueId = UIUtil.getUniqueId("channle.type"); 
 	    m_radioBtnAll = new RadioButton(uniqueId, LOC.radioBtnInChannel(), false);
@@ -125,6 +129,10 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				m_channelBox.setEnabled(event.getValue());
+				m_latitudeBox.setEnabled(!event.getValue());
+				m_longitudeBox.setEnabled(!event.getValue());
+				m_radiusBox.setEnabled(!event.getValue());
+				m_amountBox.setEnabled(event.getValue());
 			}
 		});
 	    m_radioBtnMy = new RadioButton(uniqueId, LOC.radioBtnMy(), false);
@@ -132,6 +140,10 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				m_channelBox.setEnabled(!event.getValue());
+				m_latitudeBox.setEnabled(event.getValue());
+				m_longitudeBox.setEnabled(event.getValue());
+				m_radiusBox.setEnabled(event.getValue());
+				m_amountBox.setEnabled(!event.getValue());
 			}
 		});
 	    
@@ -152,9 +164,10 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    		m_radioBtnAll,
 	    		m_radioBtnMy,
 	    		cosntuctPair("Channel", m_channelBox),
-	    		cosntuctPair("From", m_dateBoxFrom),
-	    		cosntuctPair("To", m_dateBoxTo),
-	    		//cosntuctPair("Marks amount", m_amountBox),
+	    		cosntuctPair("Latitude", m_latitudeBox),
+	    		cosntuctPair("Longitude", m_longitudeBox),
+	    		cosntuctPair("Radius", m_radiusBox),
+	    		cosntuctPair("Marks amount", m_amountBox),
 	    		refreshBtn
 	    };
 
@@ -183,37 +196,48 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 
 	private void refreshByUser(){
 		final WUser u = GTState.Instanse().getCurUser();
-		final Date dateFrom = m_dateBoxFrom.getValue();
-		final Date dateTo = m_dateBoxTo.getValue();
-		if(u == null){
+		//double latitude = 60.166504;
+		//double longitude = 24.841204;
+		//double radius = 30.0;
+		double latitude;
+		double longitude;
+		double radius;
+		try {
+			latitude = Double.parseDouble(m_latitudeBox.getText());
+			longitude = Double.parseDouble(m_longitudeBox.getText());
+			radius = Double.parseDouble(m_radiusBox.getText());
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
 			return;
 		}
-		loadTags(u, dateFrom, dateTo);
+		
+		loadTags(u, latitude, longitude, radius);		
 		m_tagsView.refresh();
 	}
 	
 	private void refreshByChannel(){
-		final Date dateFrom = m_dateBoxFrom.getValue();
-		final Date dateTo = m_dateBoxTo.getValue();
-
+		final WUser u = GTState.Instanse().getCurUser();
 		final Object obj = m_channelBox.getSelectedObject();
-		if(obj == null){
+		int amount;
+		try {
+			amount = Integer.parseInt(m_amountBox.getText());
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
 			return;
 		}
-		else if (obj instanceof WChannel){
+		System.out.println(amount);
+		if (obj == null) {
+			return;
+		} else if (obj instanceof WChannel) {
 			final WChannel ch = (WChannel) obj;
-			loadTags(ch, dateFrom, dateTo);
-		}
-		else if (obj instanceof List<?>){
-			@SuppressWarnings("unchecked")
-			final List<WChannel> chs = (List<WChannel>)obj;
-			loadTags(chs, dateFrom, dateTo);
+			loadTags(u, ch, amount);
 		}
 		m_tagsView.refresh();
 	}
 
-	private void loadTags(WUser u, Date dateFrom, Date dateTo){
-		TagService.Util.getInstance().getTags(u, dateFrom, dateTo,
+	private void loadTags(WUser u, double latitude, double longitude, double radius)
+	{
+		GTService.Util.getInstance().getTags(u, latitude, longitude, radius, 
 			new AsyncCallback<List<WMark>>() {
 				@Override
 				public void onSuccess(List<WMark> result) {
@@ -222,13 +246,14 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 				@Override
 				public void onFailure(Throwable caught) {
 					GWT.log("loadTags", caught);
-				}
+				}			
 			}
 		);
 	}
 	
-	private void loadTags(WChannel ch, Date dateFrom, Date dateTo){
-		TagService.Util.getInstance().getTags(ch, dateFrom, dateTo,
+	private void loadTags(WUser u, WChannel ch, int amount)
+	{
+		GTService.Util.getInstance().getTags(u, ch, amount, 
 			new AsyncCallback<List<WMark>>() {
 				@Override
 				public void onSuccess(List<WMark> result) {
@@ -237,22 +262,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 				@Override
 				public void onFailure(Throwable caught) {
 					GWT.log("loadTags", caught);
-				}
-			}
-		);
-	}
-
-	private void loadTags(List<WChannel> chs, Date dateFrom, Date dateTo){
-		TagService.Util.getInstance().getTags(chs, dateFrom, dateTo,
-			new AsyncCallback<List<WMark>>() {
-				@Override
-				public void onSuccess(List<WMark> result) {
-					m_tagsView.setTags(result);
-				}
-				@Override
-				public void onFailure(Throwable caught) {
-					GWT.log("loadTags", caught);
-				}
+				}			
 			}
 		);
 	}
@@ -281,7 +291,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 				GWT.log("fillChannelBox", caught);
 			}
 		};
-		ChannelService.Util.getInstance().getUserChannels(u, callback);
+		GTService.Util.getInstance().subscribedChannels(u, callback);
 	}
 
 	public interface TagsView extends IsWidget {

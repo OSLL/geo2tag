@@ -138,6 +138,7 @@ public class Geo2TagServTest extends TestCase {
 			System.out.println(tag.getLongitude());
 			System.out.println(tag.getDescription());
 			System.out.println(tag.getUrl());			
+			System.out.println(tag.getTime());
 		}*/
 	}
 
