@@ -109,6 +109,7 @@ public class TableWidget<T> extends FlexTable implements ClickHandler {
 	}
 
 	public void addRows(List<T> objs) {
+		m_data.clear();
 		for (T obj : objs){
 			addRow(obj);
 		}
