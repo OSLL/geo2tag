@@ -66,8 +66,12 @@ public interface GTService extends RemoteService {
 	List<WMark> getTags(WUser u, WChannel ch, int amount) 
 			throws IllegalArgumentException;
 
+	List<WMark> getTags(WUser u, List<WChannel> channels, int amount) 
+            throws IllegalArgumentException;
+
 	List<WMark> getTags(WUser u, double latitude, double longitude, double radius) 
 			throws IllegalArgumentException;
+
 
 	// TODO 
 	/* 

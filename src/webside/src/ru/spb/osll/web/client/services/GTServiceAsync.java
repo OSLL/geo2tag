@@ -59,9 +59,10 @@ public interface GTServiceAsync {
 
 	void ownedChannels(WUser u, AsyncCallback<List<WChannel>> callback);
 
-	void getTags(WUser u, WChannel ch, int amount,
-			AsyncCallback<List<WMark>> callback);
+    void getTags(WUser u, WChannel ch, int amount, AsyncCallback<List<WMark>> callback);
 
+	void getTags(WUser u, List<WChannel> channels, int amount, AsyncCallback<List<WMark>> callback);
+	
 	void getTags(WUser u, double latitude, double longitude, double radius, AsyncCallback<List<WMark>> callback);
 
 }

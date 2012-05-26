@@ -190,6 +190,17 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		return marks;
 	}
 
+    @Override
+    public List<WMark> getTags(WUser u, List<WChannel> channels, int amount)
+            throws IllegalArgumentException {
+        Logger.getLogger(getClass()).debug("called getTags(WUser u, List<WChannel> channels, int amount)");
+        final List<WMark> marks = new ArrayList<WMark>();
+        for (WChannel ch : channels) {
+            marks.addAll(getTags(u, ch, amount));
+        }        
+        return marks;
+    }
+	
 	@Override
 	public List<WMark> getTags(WUser u, double latitude, double longitude, double radius) 
 			throws IllegalArgumentException {
@@ -212,4 +223,5 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 	}
 	
 	private static final String USER_TOKEN = "user.token";
+
 }

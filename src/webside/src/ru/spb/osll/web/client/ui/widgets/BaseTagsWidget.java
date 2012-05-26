@@ -71,7 +71,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	private TextBox m_latitudeBox;
 	private TextBox m_longitudeBox;
 	private TextBox m_radiusBox;
-    private TextBox m_amountBox;
     private RadioButton m_radioBtnAll;		
     private RadioButton m_radioBtnMy;
 	
@@ -89,7 +88,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		m_latitudeBox.setEnabled(false);
 		m_longitudeBox.setEnabled(false);
 		m_radiusBox.setEnabled(false);
-		m_amountBox.setEnabled(true);
 		return contaier;
 	}
     
@@ -103,7 +101,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		m_latitudeBox.setEnabled(false);
 		m_longitudeBox.setEnabled(false);
 		m_radiusBox.setEnabled(false);
-		m_amountBox.setEnabled(true);
 	}
 
 	private void showWarningMessage(WUser u){
@@ -121,7 +118,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    m_latitudeBox = UIUtil.getTextBox(65, 200);
 	    m_longitudeBox = UIUtil.getTextBox(65, 200);
 	    m_radiusBox = UIUtil.getTextBox(65, 200);
-	    m_amountBox = UIUtil.getTextBox(65, 100);
 	    
 	    final String uniqueId = UIUtil.getUniqueId("channle.type"); 
 	    m_radioBtnAll = new RadioButton(uniqueId, LOC.radioBtnInChannel(), false);
@@ -132,7 +128,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 				m_latitudeBox.setEnabled(!event.getValue());
 				m_longitudeBox.setEnabled(!event.getValue());
 				m_radiusBox.setEnabled(!event.getValue());
-				m_amountBox.setEnabled(event.getValue());
 			}
 		});
 	    m_radioBtnMy = new RadioButton(uniqueId, LOC.radioBtnMy(), false);
@@ -143,7 +138,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 				m_latitudeBox.setEnabled(event.getValue());
 				m_longitudeBox.setEnabled(event.getValue());
 				m_radiusBox.setEnabled(event.getValue());
-				m_amountBox.setEnabled(!event.getValue());
 			}
 		});
 	    
@@ -167,7 +161,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    		cosntuctPair("Latitude", m_latitudeBox),
 	    		cosntuctPair("Longitude", m_longitudeBox),
 	    		cosntuctPair("Radius", m_radiusBox),
-	    		cosntuctPair("Marks amount", m_amountBox),
 	    		refreshBtn
 	    };
 
@@ -218,19 +211,15 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	private void refreshByChannel(){
 		final WUser u = GTState.Instanse().getCurUser();
 		final Object obj = m_channelBox.getSelectedObject();
-		int amount;
-		try {
-			amount = Integer.parseInt(m_amountBox.getText());
-		} catch(NumberFormatException e) {
-			e.printStackTrace();
-			return;
-		}
-		System.out.println(amount);
 		if (obj == null) {
-			return;
+		    return;
 		} else if (obj instanceof WChannel) {
 			final WChannel ch = (WChannel) obj;
-			loadTags(u, ch, amount);
+			loadTags(u, ch);
+		} else if (obj instanceof List<?>) {
+            @SuppressWarnings("unchecked")
+            final List<WChannel> chs = (List<WChannel>)obj;
+            loadTags(u, chs, 10);
 		}
 		m_tagsView.refresh();
 	}
@@ -251,6 +240,13 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		);
 	}
 	
+	/*
+	 * there is used default marks amount - 20
+	 */
+	private void loadTags(WUser u, WChannel ch){
+	    loadTags(u, ch, 20);
+	}
+	
 	private void loadTags(WUser u, WChannel ch, int amount)
 	{
 		GTService.Util.getInstance().getTags(u, ch, amount, 
@@ -266,6 +262,21 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			}
 		);
 	}
+	
+    private void loadTags(WUser u, List<WChannel> chs, int amount) {
+        GTService.Util.getInstance().getTags(u, chs, amount,
+                new AsyncCallback<List<WMark>>() {
+                    @Override
+                    public void onSuccess(List<WMark> result) {
+                        m_tagsView.setTags(result);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        GWT.log("loadTags", caught);
+                    }
+                });
+    }
 	
 	private void refreshFilterPanel(final WUser u){
 		m_channelBox.clear();
@@ -299,6 +310,9 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		public void refresh();
 	}
 	
+	/*
+	 * it will be used with flat shape filtration
+	 */
 	// customize of GWT's DateBox class 
 	private static class GTDateBox extends DateBox {
 		private final static int SIZE = 120;
