@@ -96,5 +96,11 @@ public class Accessors {
 			return t.getLongitude() + ""; 		// FIXME
 		}
 	};
+	
+    public final static IsDataAccessor<Integer> INTEGRE_ACC = new IsDataAccessor<Integer>() {
+        public String extractData(Integer value) {
+            return value.toString();
+        }
+    };
 
 }

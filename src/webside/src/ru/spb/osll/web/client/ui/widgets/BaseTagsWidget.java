@@ -35,6 +35,7 @@
 
 package ru.spb.osll.web.client.ui.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.spb.osll.web.client.GTState;
@@ -68,10 +69,8 @@ import com.google.gwt.user.datepicker.client.DateBox;
 public abstract class BaseTagsWidget extends SimpleComposite {
 	private TagsView m_tagsView; 
 	private SmartListBox<WChannel> m_channelBox;
-	private TextBox m_latitudeBox;
-	private TextBox m_longitudeBox;
-	private TextBox m_radiusBox;
-    private RadioButton m_radioBtnAll;		
+	private SmartListBox<Integer>  m_amountBox;
+	private RadioButton m_radioBtnAll;		
     private RadioButton m_radioBtnMy;
 	
     protected abstract TagsView getTagsView();
@@ -85,9 +84,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		initFiltersPanel(contaier);
 		contaier.add(m_tagsView);
 		m_channelBox.setEnabled(true);
-		m_latitudeBox.setEnabled(false);
-		m_longitudeBox.setEnabled(false);
-		m_radiusBox.setEnabled(false);
 		return contaier;
 	}
     
@@ -98,9 +94,6 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		refreshFilterPanel(user);
 		m_tagsView.refresh();
 		m_channelBox.setEnabled(true);
-		m_latitudeBox.setEnabled(false);
-		m_longitudeBox.setEnabled(false);
-		m_radiusBox.setEnabled(false);
 	}
 
 	private void showWarningMessage(WUser u){
@@ -115,19 +108,23 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    m_channelBox = new SmartListBox<WChannel>(Accessors.CHANNEL_ACC_NAME);
 	    m_channelBox.setWidth("200px");
 	    
-	    m_latitudeBox = UIUtil.getTextBox(65, 200);
-	    m_longitudeBox = UIUtil.getTextBox(65, 200);
-	    m_radiusBox = UIUtil.getTextBox(65, 200);
-	    
+	    m_amountBox = new SmartListBox<Integer>(Accessors.INTEGRE_ACC);
+	    m_amountBox.setWidth("40px");
+	    List<Integer> amountData = new ArrayList<Integer>();
+	    amountData.add(10);
+	    amountData.add(20);
+	    amountData.add(30);
+	    amountData.add(40);
+	    amountData.add(50);
+	    m_amountBox.setData(amountData);
+        	    
 	    final String uniqueId = UIUtil.getUniqueId("channle.type"); 
 	    m_radioBtnAll = new RadioButton(uniqueId, LOC.radioBtnInChannel(), false);
 	    m_radioBtnAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				m_channelBox.setEnabled(event.getValue());
-				m_latitudeBox.setEnabled(!event.getValue());
-				m_longitudeBox.setEnabled(!event.getValue());
-				m_radiusBox.setEnabled(!event.getValue());
+				m_amountBox.setEnabled(event.getValue());
 			}
 		});
 	    m_radioBtnMy = new RadioButton(uniqueId, LOC.radioBtnMy(), false);
@@ -135,9 +132,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				m_channelBox.setEnabled(!event.getValue());
-				m_latitudeBox.setEnabled(event.getValue());
-				m_longitudeBox.setEnabled(event.getValue());
-				m_radiusBox.setEnabled(event.getValue());
+				m_amountBox.setEnabled(!event.getValue());
 			}
 		});
 	    
@@ -158,9 +153,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    		m_radioBtnAll,
 	    		m_radioBtnMy,
 	    		cosntuctPair("Channel", m_channelBox),
-	    		cosntuctPair("Latitude", m_latitudeBox),
-	    		cosntuctPair("Longitude", m_longitudeBox),
-	    		cosntuctPair("Radius", m_radiusBox),
+	    		cosntuctPair("Amount", m_amountBox),
 	    		refreshBtn
 	    };
 
@@ -188,22 +181,11 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	}
 
 	private void refreshByUser(){
+	    System.out.println("called refreshByUser()");
 		final WUser u = GTState.Instanse().getCurUser();
-		//double latitude = 60.166504;
-		//double longitude = 24.841204;
-		//double radius = 30.0;
-		double latitude;
-		double longitude;
-		double radius;
-		try {
-			latitude = Double.parseDouble(m_latitudeBox.getText());
-			longitude = Double.parseDouble(m_longitudeBox.getText());
-			radius = Double.parseDouble(m_radiusBox.getText());
-		} catch(NumberFormatException e) {
-			e.printStackTrace();
-			return;
-		}
-		
+        double radius = Double.MAX_VALUE;
+		double latitude = 60.166504;
+		double longitude = 24.841204;
 		loadTags(u, latitude, longitude, radius);		
 		m_tagsView.refresh();
 	}
@@ -211,21 +193,27 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	private void refreshByChannel(){
 		final WUser u = GTState.Instanse().getCurUser();
 		final Object obj = m_channelBox.getSelectedObject();
+
+		//final Integer amount = (Integer) m_amountBox.getSelectedObject();
+		System.out.println("amount: " +  m_amountBox.getSelectedObject());
+        int amount = 10;
+		
 		if (obj == null) {
 		    return;
 		} else if (obj instanceof WChannel) {
 			final WChannel ch = (WChannel) obj;
-			loadTags(u, ch);
+			loadTags(u, ch, amount);
 		} else if (obj instanceof List<?>) {
             @SuppressWarnings("unchecked")
             final List<WChannel> chs = (List<WChannel>)obj;
-            loadTags(u, chs, 10);
+            loadTags(u, chs, amount);
 		}
 		m_tagsView.refresh();
 	}
 
 	private void loadTags(WUser u, double latitude, double longitude, double radius)
 	{
+	    System.out.println("called loadTags(WUser u, double latitude, double longitude, double radius)");
 		GTService.Util.getInstance().getTags(u, latitude, longitude, radius, 
 			new AsyncCallback<List<WMark>>() {
 				@Override
@@ -239,14 +227,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			}
 		);
 	}
-	
-	/*
-	 * there is used default marks amount - 20
-	 */
-	private void loadTags(WUser u, WChannel ch){
-	    loadTags(u, ch, 20);
-	}
-	
+		
 	private void loadTags(WUser u, WChannel ch, int amount)
 	{
 		GTService.Util.getInstance().getTags(u, ch, amount, 
@@ -304,7 +285,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 		};
 		GTService.Util.getInstance().subscribedChannels(u, callback);
 	}
-
+	
 	public interface TagsView extends IsWidget {
 		public void setTags(List<WMark> tags);
 		public void refresh();
