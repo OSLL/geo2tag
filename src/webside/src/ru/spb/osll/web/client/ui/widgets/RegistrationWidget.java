@@ -38,6 +38,8 @@ package ru.spb.osll.web.client.ui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.spb.osll.web.client.GTShell;
+import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.GTService;
 import ru.spb.osll.web.client.services.objects.WUser;
@@ -92,6 +94,9 @@ public class RegistrationWidget extends FieldsWidget {
 						public void onSuccess(WUser result) {
 							if (result != null) {
 								showMessage(Localizer.res().successReg());
+								GTState.Instanse().setCurUser(null);
+								LoginWidget.Instance().dropData();
+								GTShell.Instance.setContent(LoginWidget.Instance());
 							} else {
 								showMessage(Localizer.res().userExists());
 							}

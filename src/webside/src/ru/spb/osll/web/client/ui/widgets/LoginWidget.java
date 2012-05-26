@@ -140,6 +140,11 @@ public class LoginWidget extends FieldsWidget {
 		GTService.Util.getInstance().login(user, callback);		
 	}
 	
+	public void dropData() {
+	    m_loginField.setText("");
+	    m_passField.setText("");
+	}
+	
 	public static LoginWidget Instance(){
 		if(instance == null){
 			instance = new LoginWidget();
