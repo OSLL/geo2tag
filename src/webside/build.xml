@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Geo2tag" default="build" basedir=".">
-	<property name="version" value="0.18" />
+	<property name="version" value="0.19" />
 
 	<!--
  * Copyright 2011-2012 OSLL
