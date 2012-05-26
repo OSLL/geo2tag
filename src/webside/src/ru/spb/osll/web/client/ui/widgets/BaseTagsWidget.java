@@ -61,7 +61,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -70,8 +69,8 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	private TagsView m_tagsView; 
 	private SmartListBox<WChannel> m_channelBox;
 	private SmartListBox<Integer>  m_amountBox;
-	private RadioButton m_radioBtnAll;		
-    private RadioButton m_radioBtnMy;
+//	private RadioButton m_radioBtnAll;		
+//    private RadioButton m_radioBtnMy;
 	
     protected abstract TagsView getTagsView();
     
@@ -118,40 +117,46 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	    amountData.add(50);
 	    m_amountBox.setData(amountData);
         	    
-	    final String uniqueId = UIUtil.getUniqueId("channle.type"); 
-	    m_radioBtnAll = new RadioButton(uniqueId, LOC.radioBtnInChannel(), false);
-	    m_radioBtnAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-			@Override
-			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				m_channelBox.setEnabled(event.getValue());
-				m_amountBox.setEnabled(event.getValue());
-			}
-		});
-	    m_radioBtnMy = new RadioButton(uniqueId, LOC.radioBtnMy(), false);
-	    m_radioBtnMy.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-			@Override
-			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				m_channelBox.setEnabled(!event.getValue());
-				m_amountBox.setEnabled(!event.getValue());
-			}
-		});
+        m_channelBox.setEnabled(true);
+        m_amountBox.setEnabled(true);
+	    
+//	    final String uniqueId = UIUtil.getUniqueId("channle.type"); 
+//	    m_radioBtnAll = new RadioButton(uniqueId, LOC.radioBtnInChannel(), false);
+//	    m_radioBtnAll.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+//			@Override
+//			public void onValueChange(ValueChangeEvent<Boolean> event) {
+//				m_channelBox.setEnabled(event.getValue());
+//				m_amountBox.setEnabled(event.getValue());
+//			}
+//		});
+//	    m_radioBtnMy = new RadioButton(uniqueId, LOC.radioBtnMy(), false);
+//	    m_radioBtnMy.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+//			@Override
+//			public void onValueChange(ValueChangeEvent<Boolean> event) {
+//				m_channelBox.setEnabled(!event.getValue());
+//				m_amountBox.setEnabled(!event.getValue());
+//			}
+//		});
 	    
 	    Button refreshBtn = new Button(LOC.btnRefresh());
 	    refreshBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (m_radioBtnAll.getValue()){
-					refreshByChannel();
-				} else {
-					refreshByUser();
-				}
+//				if (m_radioBtnAll.getValue()){
+//					refreshByChannel();
+//				} else {
+//					refreshByUser();
+//				}
+			    refreshByChannel();
 			}
 		});
 
+        refreshByChannel();
+        
 	    Widget widgets[] = {
-	    		new Label("Tags"),
-	    		m_radioBtnAll,
-	    		m_radioBtnMy,
+//	    		new Label("Tags"),
+//	    		m_radioBtnAll,
+//	    		m_radioBtnMy,
 	    		cosntuctPair("Channel", m_channelBox),
 	    		cosntuctPair("Amount", m_amountBox),
 	    		refreshBtn
@@ -193,10 +198,7 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 	private void refreshByChannel(){
 		final WUser u = GTState.Instanse().getCurUser();
 		final Object obj = m_channelBox.getSelectedObject();
-
-		//final Integer amount = (Integer) m_amountBox.getSelectedObject();
-		System.out.println("amount: " +  m_amountBox.getSelectedObject());
-        int amount = 10;
+        final int amount = (Integer) m_amountBox.getSelectedObject();
 		
 		if (obj == null) {
 		    return;
@@ -268,15 +270,16 @@ public abstract class BaseTagsWidget extends SimpleComposite {
 			@Override
 			public void onSuccess(List<WChannel> result) {
 				m_channelBox.setData(result, LOC.itemAllChannels());
-				if (result.size() > 0){
-					m_radioBtnAll.setValue(true);
-					m_radioBtnMy.setValue(false);
-					refreshByChannel();
-				} else {
-					m_radioBtnMy.setValue(true);
-					m_radioBtnAll.setValue(false);
-					refreshByUser();
-				}
+				refreshByUser();
+//				if (result.size() > 0){
+//					m_radioBtnAll.setValue(true);
+//					m_radioBtnMy.setValue(false);
+//					refreshByChannel();
+//				} else {
+//					m_radioBtnMy.setValue(true);
+//					m_radioBtnAll.setValue(false);
+//					refreshByUser();
+//				}
 			}
 			@Override
 			public void onFailure(Throwable caught) {
