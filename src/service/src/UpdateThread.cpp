@@ -53,7 +53,8 @@ m_tagsContainer(tags),
 m_usersContainer(users),
 m_timeSlotsContainer(timeSlots),
 m_dataChannelsMap(dataChannelsMap),
-m_database(db)
+m_database(db),
+m_transactionCount(0)
 {
 }
 
@@ -69,6 +70,31 @@ void UpdateThread::unlockWriting()
   m_updateLock.unlock();
 }
 
+
+void UpdateThread::incrementTransactionCount()
+{
+  m_transactionCount++;
+}
+
+
+bool UpdateThread::compareTransactionNumber()
+{
+// Calculate number of successful write requests
+  QSqlQuery query(m_database);
+  bool result;
+  query.exec("select tup_inserted ,tup_updated ,tup_deleted from  pg_stat_database where datname='geo2tag';");
+  query.next();
+  qlonglong transactionCount = query.record().value("tup_inserted").toLongLong() +
+				query.record().value("tup_updated").toLongLong() +
+				query.record().value("tup_deleted").toLongLong();
+
+  syslog(LOG_INFO, "Checking number of write requests: logged = %lld, fact = %lld", m_transactionCount, transactionCount);
+// If m_transactionCount < transactionCount then need sync 
+  result = (m_transactionCount < transactionCount);
+  if (result) m_transactionCount = transactionCount;
+
+  return result;
+}
 
 void UpdateThread::run()
 {
@@ -87,6 +113,15 @@ void UpdateThread::run()
     }
 
     qDebug() << "connected...";
+// Check if DB contain new changes
+
+    if (!compareTransactionNumber())
+    {
+      QThread::msleep(10000);
+      continue;
+    }
+
+
     common::Users       usersContainer(*m_usersContainer);
     DataMarks   tagsContainer(*m_tagsContainer);
     Channels    channelsContainer(*m_channelsContainer);

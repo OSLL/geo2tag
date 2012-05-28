@@ -434,6 +434,7 @@ namespace common
     }
 
     m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
     m_tagsContainer->push_back(realTag);
     m_dataChannelsMap->insert(realChannel, realTag);
     m_updateThread->unlockWriting();
@@ -588,6 +589,7 @@ namespace common
       return answer;
     }
     m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
     syslog(LOG_INFO, "Try to subscribe for realChannel = %lld",realChannel->getId());
     realUser->subscribe(realChannel);
     m_updateThread->unlockWriting();
@@ -643,6 +645,7 @@ namespace common
     }
     m_updateThread->lockWriting();
     // Here will be adding user into user container
+    m_updateThread->incrementTransactionCount();
     m_usersContainer->push_back(addedUser);
     m_updateThread->unlockWriting();
 
@@ -706,6 +709,7 @@ namespace common
     }
 
     m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
     // Here will be adding user into user container
     m_channelsContainer->push_back(addedChannel);
     m_updateThread->unlockWriting();
@@ -793,6 +797,7 @@ namespace common
       return answer;
     }
     m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
     realUser->unsubscribe(realChannel);
     m_updateThread->unlockWriting();
 
@@ -1050,6 +1055,7 @@ namespace common
       return answer;
     }
     m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
     // Here will be removing user from container
     m_usersContainer->erase(realUser);
     m_updateThread->unlockWriting();

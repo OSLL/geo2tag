@@ -60,6 +60,10 @@ class UpdateThread: public QThread
   //will be locked when containers is being updated
   QReadWriteLock m_updateLock;
 
+  qlonglong m_transactionCount;
+
+  bool compareTransactionNumber();
+
   void loadUsers(common::Users &);
   void loadTags(DataMarks &);
   void loadChannels(Channels &);
@@ -83,6 +87,8 @@ class UpdateThread: public QThread
       const QSharedPointer<TimeSlots>& timeSlots,
       const QSharedPointer<DataChannels>& dataChannelsMap,
       QObject *parent = 0);
+
+    void incrementTransactionCount();
 
     void lockWriting();
 
