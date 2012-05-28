@@ -44,6 +44,7 @@
 
 #include "LoginResponseJSON.h"
 #include "JsonUser.h"
+#include "JsonSession.h"
 
 LoginResponseJSON::LoginResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
@@ -54,8 +55,8 @@ QByteArray LoginResponseJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj;
-  if(m_usersContainer->size()>0)
-    obj.insert("auth_token", m_usersContainer->at(0)->getToken());
+  if(m_sessionsContainer->size()>0)
+    obj.insert("session_token", m_sessionsContainer->at(0)->getSessionToken());
   obj.insert("errno", m_errno);
   return serializer.serialize(obj);
 }
@@ -75,8 +76,10 @@ bool LoginResponseJSON::parseJson(const QByteArray &data)
   if (!ok) return false;
   m_errno = result["errno"].toInt(&ok);
 
-  QString auth_token = result["auth_token"].toString();
-  QSharedPointer<common::User> user(new JsonUser("unknown", "unknown", auth_token));
-  m_usersContainer->push_back(user);
+  QString session_token = result["session_token"].toString();
+  //QSharedPointer<common::User> user(new JsonUser("unknown", "unknown", auth_token));
+  //m_usersContainer->push_back(user);
+  QSharedPointer<Session> session(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL)));
+  m_sessionsContainer->push_back(session);
   return true;
 }

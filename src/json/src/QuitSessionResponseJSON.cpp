@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,46 +28,46 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-
-/*!
- * \file main.cpp
- * \brief Test suite for json
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * ---------------------------------------------------------------- */
 
-#include <QtTest/QtTest>
-#include <QtCore/QtCore>
-#include <QApplication>
+#include "QuitSessionResponseJSON.h"
+#include "JsonUser.h"
 
-// Test headers
-#include "JsonUser_Test.h"
-#include "Test_RegisterUserRequestJSON.h"
-#include "Test_RegisterUserResponseJSON.h"
-#include "Test_AvailableChannelsResponseJSON.h"
-#include "Test_QuitSessionRequestJSON.h"
-#include "Test_QuitSessionResponseJSON.h"
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
-int main(int argc, char **argv)
+QuitSessionResponseJSON::QuitSessionResponseJSON(QObject *parent)
+    : JsonSerializer(parent)
 {
-    QApplication app(argc, argv);
-
-    QObject *tests[] =
-    {
-        new Test::JsonUser_Test(),
-        new Test::Test_RegisterUserRequestJSON(),
-        new Test::Test_RegisterUserResponseJSON(),
-        new Test::Test_AvailableChannelsResponseJSON(),
-        new Test::Test_QuitSessionRequestJSON(),
-        new Test::Test_QuitSessionResponseJSON()
-    };
-
-    QTest::qExec(tests[4]);
-    for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
-        QTest::qExec(tests[i]);
-    }
-    return 0;//app.exec();
 }
 
+QByteArray QuitSessionResponseJSON::getJson() const
+{
+    QJson::Serializer serializer;
+    QVariantMap obj;
+    obj.insert("errno", m_errno);
+    return serializer.serialize(obj);
+}
 
-/* ===[ End of file $HeadURL$ ]=== */
+bool QuitSessionResponseJSON::parseJson(const QByteArray&data)
+{
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if (!ok) return false;
+
+    m_errno = result["errno"].toInt();
+
+    return true;
+}
+
+QuitSessionResponseJSON::~QuitSessionResponseJSON()
+{
+}
