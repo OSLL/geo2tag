@@ -46,8 +46,6 @@
 
 class Session : public QObject
 {
-    Q_OBJECT
-
 private:
     QString      m_sessionToken;
     QDateTime    m_lastAccessTime;
