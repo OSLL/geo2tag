@@ -115,6 +115,7 @@ void UpdateThread::run()
     qDebug() << "connected...";
 // Check if DB contain new changes
 
+    checkTmpUsers();
     if (!compareTransactionNumber())
     {
       QThread::msleep(10000);
@@ -127,7 +128,6 @@ void UpdateThread::run()
     Channels    channelsContainer(*m_channelsContainer);
     TimeSlots   timeSlotsContainer(*m_timeSlotsContainer);
 
-    checkTmpUsers();
     loadUsers(usersContainer);
     loadTags(tagsContainer);
     loadChannels(channelsContainer);
@@ -371,7 +371,15 @@ void UpdateThread::checkTmpUsers()
         sendConfirmationLetter(email, token);
         checkQuery.prepare("update signups set sent = true where id = :id;");
         checkQuery.bindValue(":id", id);
-        checkQuery.exec();
+        bool result = checkQuery.exec();
+        if(!result) {
+            syslog(LOG_INFO,"Rollback for CheckTmpUser sql query");
+            m_database.rollback();
+        } else {
+            syslog(LOG_INFO,"Commit for CheckTmpUser sql query");
+            m_database.commit();
+        }
+	incrementTransactionCount();
     }
 
     // Deleting old signups
@@ -398,6 +406,7 @@ void UpdateThread::checkTmpUsers()
             syslog(LOG_INFO,"Commit for DeleteTmpUser sql query");
             m_database.commit();
         }
+	incrementTransactionCount();
     }
 }
 

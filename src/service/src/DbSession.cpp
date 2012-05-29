@@ -426,6 +426,9 @@ namespace common
     dummyTag->setUser(realUser);
                                         //now
     QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);
+    m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
+    m_updateThread->unlockWriting();
     if(realTag == NULL)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -434,7 +437,6 @@ namespace common
     }
 
     m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
     m_tagsContainer->push_back(realTag);
     m_dataChannelsMap->insert(realChannel, realTag);
     m_updateThread->unlockWriting();
@@ -582,6 +584,9 @@ namespace common
     }
     syslog(LOG_INFO, "Sending sql request for SubscribeQuery");
     bool result = m_queryExecutor->subscribeChannel(realUser,realChannel);
+    m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
+    m_updateThread->unlockWriting();
     if(!result)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -589,7 +594,6 @@ namespace common
       return answer;
     }
     m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
     syslog(LOG_INFO, "Try to subscribe for realChannel = %lld",realChannel->getId());
     realUser->subscribe(realChannel);
     m_updateThread->unlockWriting();
@@ -636,6 +640,10 @@ namespace common
 
     syslog(LOG_INFO, "Sending sql request for AddUser");
     QSharedPointer<User> addedUser = m_queryExecutor->insertNewUser(dummyUser);
+    m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
+    m_updateThread->unlockWriting();
+
     if(!addedUser)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -645,7 +653,6 @@ namespace common
     }
     m_updateThread->lockWriting();
     // Here will be adding user into user container
-    m_updateThread->incrementTransactionCount();
     m_usersContainer->push_back(addedUser);
     m_updateThread->unlockWriting();
 
@@ -700,6 +707,10 @@ namespace common
 
     syslog(LOG_INFO, "Sending sql request for AddChannel");
     QSharedPointer<Channel> addedChannel = m_queryExecutor->insertNewChannel(dummyChannel);
+    m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
+    m_updateThread->unlockWriting();
+
     if(!addedChannel)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -709,7 +720,6 @@ namespace common
     }
 
     m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
     // Here will be adding user into user container
     m_channelsContainer->push_back(addedChannel);
     m_updateThread->unlockWriting();
@@ -790,6 +800,10 @@ namespace common
     }
     syslog(LOG_INFO, "Sending sql request for UnsubscribeQuery");
     bool result = m_queryExecutor->unsubscribeChannel(realUser,realChannel);
+    m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
+    m_updateThread->unlockWriting();
+
     if(!result)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -797,7 +811,6 @@ namespace common
       return answer;
     }
     m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
     realUser->unsubscribe(realChannel);
     m_updateThread->unlockWriting();
 
@@ -1047,6 +1060,10 @@ namespace common
 
     syslog(LOG_INFO, "Sending sql request for DeleteUser");
     bool isDeleted = m_queryExecutor->deleteUser(realUser);
+    m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
+    m_updateThread->unlockWriting();
+
     if(!isDeleted)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -1055,7 +1072,6 @@ namespace common
       return answer;
     }
     m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
     // Here will be removing user from container
     m_usersContainer->erase(realUser);
     m_updateThread->unlockWriting();
