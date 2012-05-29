@@ -141,6 +141,9 @@ INSERT into users (email, login, password, token) values ('yevgeni@test.org', 'Y
 INSERT into users (email, login, password, token) values ('rom@test.org', 'Rom',   'test', 'RRRRRRRRRR');
 INSERT into users (email, login, password, token) values ('jul@test.org', 'Jul', 'test', 'JJJJJJJJJJ');
 
+INSERT into sessions (user_id, session_token, last_access_time) values (2, 'kkkkkkkkkk', now());
+INSERT into sessions (user_id, session_token, last_access_time) values (3, 'mmmmmmmmmm', now());
+
 
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.166504, 24.841204, 'A', 'Accident at road 51. Time: 15:45, January 2, 2010.', 1, 'http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif');
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.163216, 24.859314, 'B', 'Shell 95: 1.299 e', 2, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg');

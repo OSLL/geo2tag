@@ -23,7 +23,7 @@ fi
 
 
 response_login_test=`curl -d '{"login":"Mark","password":"test"}'  http://localhost:81/service/login`;
-correct_result_login='{ "auth_token" : "MMMMMMMMMM", "errno" : 0 }';
+correct_result_login='{ "errno" : 0, "session_token" : "mmmmmmmmmm" }';
 if ! echo $response_login_test | grep -q -s -F "$correct_result_login"  ; 
 then
 	echo "Fail at login test"
@@ -111,6 +111,31 @@ fi
 if  echo $response_check_delete_test | grep -q -s -F "$correct_result"  ;
 then
         echo "Fail at checkDelete test"
+        exit 1
+fi
+
+response_quit_session_test=`curl -d '{"session_token":"mmmmmmmmmm"}'  http://localhost:81/service/quitSession`;
+correct_result_quit_session='{ "errno" : 0 }';
+if ! echo $response_quit_session_test | grep -q -s -F "$correct_result_quit_session"  ; 
+then
+	echo "Fail at quitSession test"
+	exit 1
+fi
+
+session_error_with_add_channel=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"name\":\"$test_channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel`;
+correct_result_session_error_with_add_channel='{ "errno" : 20 }';
+echo "$response_add_channel"
+if ! echo $session_error_with_add_channel | grep -q -s -F "$correct_result_session_error_with_add_channel"  ;
+then
+	echo "Fail at sessionError with addChannel test"
+	exit 1
+fi
+
+session_error_with_subscribe=`curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"channel\":\"$test_channel\"}" http://localhost:81/service/subscribe`;
+correct_result_session_error_with_subscribe='{ "errno" : 20 }';
+if ! echo $session_error_with_subscribe | grep -q -s -F "$correct_result_session_error_with_subscribe"  ;
+then
+        echo "Fail at sessionError with subscribe test"
         exit 1
 fi
 
