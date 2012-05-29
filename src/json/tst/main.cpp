@@ -1,5 +1,5 @@
 /*
- * Copyright 2011  Kirill Krinkin  kirill.krinkin@gmail.com
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -28,7 +28,6 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-
 /*!
  * \file main.cpp
  * \brief Test suite for json
@@ -38,7 +37,7 @@
 
 #include <QtTest/QtTest>
 #include <QtCore/QtCore>
-#include <QApplication>
+#include <QCoreApplication>
 
 // Test headers
 #include "JsonUser_Test.h"
@@ -50,7 +49,7 @@
 
 int main(int argc, char **argv)
 {
-    QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
     QObject *tests[] =
     {
