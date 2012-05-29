@@ -88,7 +88,7 @@ class UpdateThread: public QThread
       const QSharedPointer<DataChannels>& dataChannelsMap,
       QObject *parent = 0);
 
-    void incrementTransactionCount();
+    void incrementTransactionCount(int i = 1);
 
     void lockWriting();
 

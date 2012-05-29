@@ -71,9 +71,10 @@ void UpdateThread::unlockWriting()
 }
 
 
-void UpdateThread::incrementTransactionCount()
+void UpdateThread::incrementTransactionCount(int i)
 {
-  m_transactionCount++;
+  m_transactionCount+=i;
+  syslog(LOG_INFO, "Number of write requests: logged = %lld",m_transactionCount);
 }
 
 

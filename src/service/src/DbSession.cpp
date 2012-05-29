@@ -294,6 +294,9 @@ namespace common
         return answer;
     }
     newTmpUser = m_queryExecutor->insertNewTmpUser(newTmpUser);
+    m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
+    m_updateThread->unlockWriting();
     if(newTmpUser.isNull()) {
         response.setErrno(INTERNAL_DB_ERROR);
         answer.append(response.getJson());
@@ -321,9 +324,15 @@ namespace common
     }
 
     QSharedPointer<User> newUser = m_queryExecutor->insertTmpUserIntoUsers(registrationToken);
+    m_updateThread->lockWriting();
+    m_updateThread->incrementTransactionCount();
+    m_updateThread->unlockWriting();
+
     if (!newUser.isNull()) {
+        m_updateThread->lockWriting();
         m_queryExecutor->deleteTmpUser(registrationToken);
         m_usersContainer->push_back(newUser);
+        m_updateThread->unlockWriting();
         answer.append("Congratulations!");
     } else {
         answer.append("Attempt of inserting user has failed!");
@@ -427,7 +436,7 @@ namespace common
                                         //now
     QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);
     m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
+    m_updateThread->incrementTransactionCount(2);
     m_updateThread->unlockWriting();
     if(realTag == NULL)
     {
