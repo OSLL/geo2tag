@@ -20,6 +20,7 @@ SOURCES += \
     ../../json/src/DefaultResponseJSON.cpp \
     ../../json/src/VersionResponseJSON.cpp \
     ../../common/src/signals.cpp \
+    ../../common/src/session.cpp \
     Test_RegisterUserQuery.cpp
 
 HEADERS += \
@@ -38,6 +39,7 @@ HEADERS += \
     ../../json/inc/VersionResponseJSON.h \
     ../../json/inc/DefaultResponseJSON.h \
     ../../common/inc/signals.h \
+    ../../common/inc/session.h \
     VersionQuery_Test.h \
     DeleteUserQuery_Test.h \
     Test_RegisterUserQuery.h
