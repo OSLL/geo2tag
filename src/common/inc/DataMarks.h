@@ -47,6 +47,7 @@
 #include <QSharedPointer>
 #include <QDateTime>
 #include "User.h"
+#include "Session.h"
 #include "ConcurrentVector.h"
 //#include "Channel.h"
 
@@ -64,6 +65,8 @@ class DataMark: public QObject
 
   QSharedPointer<common::User> m_user;
 
+  QSharedPointer<Session> m_session;
+
   QSharedPointer<Channel> m_channel;
 
   QSharedPointer<TimeSlot> m_timeSlot;
@@ -75,6 +78,8 @@ class DataMark: public QObject
       QString description, QString url, QDateTime time);
 
     void setUser(QSharedPointer<common::User> user);
+
+    void setSession(QSharedPointer<Session> session);
 
     void setChannel(QSharedPointer<Channel> channel);
 
@@ -104,6 +109,8 @@ class DataMark: public QObject
     void setTime(const QDateTime& time=QDateTime::currentDateTime().toUTC());
 
     QSharedPointer<common::User> getUser() const;
+
+    QSharedPointer<Session> getSession() const;
 
     QSharedPointer<Channel> getChannel() const;
     static double getDistance(double lat1, double lon1, double lat2, double lon2);

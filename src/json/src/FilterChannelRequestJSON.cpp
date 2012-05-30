@@ -41,7 +41,7 @@
 
 #include "FilterChannelRequestJSON.h"
 
-#include "JsonUser.h"
+#include "JsonSession.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>
@@ -72,8 +72,8 @@ bool FilterChannelRequestJSON::parseJson(const QByteArray&data)
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok) return false;
 
-  QString authToken = result["auth_token"].toString();
-  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("none", "none", authToken)));
+  QString session_token = result["session_token"].toString();
+  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
 
   m_channel = result["channel"].toString();
   m_amount = result["amount"].toInt(&ok);

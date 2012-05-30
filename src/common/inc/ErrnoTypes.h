@@ -66,7 +66,6 @@
 #define TMP_USER_ALREADY_EXIST_ERROR        17
 #define NETWORK_ERROR                       18
 #define EMAIL_ALREADY_EXIST_ERROR           19
-#define SESSION_DOES_NOT_EXIST_ERROR        20
 
 
 class Errno
@@ -99,7 +98,6 @@ public:
     emap.insert(TMP_USER_ALREADY_EXIST_ERROR       ,"TMP_USER_ALREADY_EXIST_ERROR");    // 17
     emap.insert(NETWORK_ERROR                      ,"NETWORK_ERROR");                   // 18
     emap.insert(EMAIL_ALREADY_EXIST_ERROR          ,"EMAIL_ALREADY_EXIST_ERROR");       // 19
-    emap.insert(SESSION_DOES_NOT_EXIST_ERROR       ,"SESSION_DOES_NOT_EXIST_ERROR");    // 20
     return emap;
   }
 };

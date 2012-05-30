@@ -42,7 +42,7 @@
 #include <syslog.h>
 #include "FilterRectangleRequestJSON.h"
 
-#include "JsonUser.h"
+#include "JsonSession.h"
 #include "FShape.h"
 #include "FShapeRectangle.h"
 
@@ -64,7 +64,7 @@ QByteArray FilterRectangleRequestJSON::getJson() const
   // TODO it's necessary for symbian client
   QJson::Serializer serializer;
   QVariantMap obj;
-  obj.insert("auth_token", m_usersContainer->at(0)->getToken());
+  obj.insert("session_token", m_sessionsContainer->at(0)->getSessionToken());
   return serializer.serialize(obj);
 }
 
@@ -78,7 +78,7 @@ bool FilterRectangleRequestJSON::parseJson(const QByteArray&data)
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok) return false;
-  QString authToken = result["auth_token"].toString();
+  QString session_token = result["session_token"].toString();
   setTimeFrom(QDateTime::fromString(result["time_from"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
   setTimeTo(QDateTime::fromString(result["time_to"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
 
@@ -101,6 +101,6 @@ bool FilterRectangleRequestJSON::parseJson(const QByteArray&data)
 
   FShapeRectangle * shape = new FShapeRectangle(lat1, lon1, lat2, lon2);
   setShape(QSharedPointer<FShape>(shape));
-  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("null", "null", authToken)));
+  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
   return true;
 }

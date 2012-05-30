@@ -55,7 +55,7 @@
 
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
-#include "JsonUser.h"
+#include "JsonSession.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <syslog.h>
@@ -93,12 +93,13 @@ bool SubscribeChannelRequestJSON::parseJson(const QByteArray &data)
   if (!ok) return false;
 
   QString channelLabel = result["channel"].toString();
-  QString authToken =    result["auth_token"].toString();
+  QString session_token = result["session_token"].toString();
 
   QSharedPointer<Channel> dummyChannel(new JsonChannel(channelLabel, "from SubscribeChannelReques"));
   m_channelsContainer->push_back(dummyChannel);
-  QSharedPointer<common::User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
-  m_usersContainer->push_back(dummyUser);
+
+  QSharedPointer<Session> dummySession(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL)));
+  m_sessionsContainer->push_back(dummySession);
 
   return true;
 }
@@ -109,7 +110,7 @@ QByteArray SubscribeChannelRequestJSON::getJson() const
   QJson::Serializer serializer;
   QVariantMap request;
 
-  request.insert("auth_token", m_usersContainer->at(0)->getToken());
+  request.insert("session_token", m_sessionsContainer->at(0)->getSessionToken());
   request.insert("channel", m_channelsContainer->at(0)->getName());
 
   return serializer.serialize(request);

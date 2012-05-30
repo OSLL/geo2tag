@@ -77,8 +77,6 @@ bool LoginResponseJSON::parseJson(const QByteArray &data)
   m_errno = result["errno"].toInt(&ok);
 
   QString session_token = result["session_token"].toString();
-  //QSharedPointer<common::User> user(new JsonUser("unknown", "unknown", auth_token));
-  //m_usersContainer->push_back(user);
   QSharedPointer<Session> session(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL)));
   m_sessionsContainer->push_back(session);
   return true;

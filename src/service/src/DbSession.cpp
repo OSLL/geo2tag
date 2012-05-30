@@ -456,7 +456,7 @@ namespace common
 
       if(realSession.isNull()) {
           syslog(LOG_INFO, "Session hasn't been found.");
-          response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
+          response.setErrno(WRONG_TOKEN_ERROR);
           answer.append(response.getJson());
           return answer;
       }
@@ -496,22 +496,17 @@ namespace common
     QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
     syslog(LOG_INFO,"Adding mark with altitude = %f",dummyTag->getAltitude());
 
-    QSharedPointer<User> dummyUser = dummyTag->getUser();
-    QSharedPointer<Session> realSession = findSessionForUser(dummyUser);
+    syslog(LOG_INFO,"Checking for sessions with token = %s",dummyTag->getSession()->getSessionToken().toStdString().c_str());
+    QSharedPointer<Session> dummySession = dummyTag->getSession();
+    QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
-    {
-      response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-    QSharedPointer<User> realUser = findUser(dummyUser);
-
-    if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
     }
+
+    QSharedPointer<User> realUser = realSession->getUser();
 
     QSharedPointer<Channel> dummyChannel = dummyTag->getChannel();
     QSharedPointer<Channel> realChannel;// Null pointer
@@ -534,6 +529,7 @@ namespace common
     }
 
     dummyTag->setChannel(realChannel);
+    dummyTag->setSession(realSession);
     dummyTag->setUser(realUser);
                                         //now
     QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);
@@ -548,6 +544,10 @@ namespace common
     m_tagsContainer->push_back(realTag);
     m_dataChannelsMap->insert(realChannel, realTag);
     m_updateThread->unlockWriting();
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
 
     response.setErrno(SUCCESS);
     response.addTag(realTag);
@@ -569,25 +569,24 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<Session> realSession = findSessionForUser(dummyUser);
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
-    {
-      response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> realUser = findUser(dummyUser);
-    if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
     }
 
+    QSharedPointer<User> realUser = realSession->getUser();
+
     QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
     response.setChannels(channels);
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
@@ -606,23 +605,16 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<Session> realSession = findSessionForUser(dummyUser);
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
-    {
-      response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> realUser = findUser(dummyUser);
-    if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
     }
 
+    QSharedPointer<User> realUser = realSession->getUser();
     QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
     DataChannels feed;
 
@@ -647,6 +639,11 @@ namespace common
       }
     }
     response.setData(feed);
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
@@ -667,22 +664,16 @@ namespace common
       return answer;
     }
 
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
-    QSharedPointer<Session> realSession = findSessionForUser(dummyUser);
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);;
+    QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
-    {
-      response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> realUser = findUser(dummyUser);
-    if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
     }
+
+    QSharedPointer<User> realUser = realSession->getUser();
 
     QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
 
@@ -725,6 +716,10 @@ namespace common
     syslog(LOG_INFO, "Try to subscribe for realChannel = %lld",realChannel->getId());
     realUser->subscribe(realChannel);
     m_updateThread->unlockWriting();
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
 
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
@@ -801,18 +796,9 @@ namespace common
       return answer;
     }
 
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<Session> realSession = findSessionForUser(dummyUser);
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
-    {
-      response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> realUser = findUser(dummyUser);
-
-    if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
@@ -852,6 +838,10 @@ namespace common
     m_channelsContainer->push_back(addedChannel);
     m_updateThread->unlockWriting();
 
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
@@ -871,22 +861,19 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<Session> realSession = findSessionForUser(dummyUser);
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
-    {
-      response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> realUser = findUser(dummyUser);
-    if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
     }
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+
     response.setChannels(m_channelsContainer);
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
@@ -906,22 +893,16 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);;
-    QSharedPointer<Session> realSession = findSessionForUser(dummyUser);
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
-    {
-      response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> realUser = findUser(dummyUser);
-    if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
     }
+
+    QSharedPointer<User> realUser = realSession->getUser();
 
     QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);;
 
@@ -952,6 +933,10 @@ namespace common
     m_updateThread->lockWriting();
     realUser->unsubscribe(realChannel);
     m_updateThread->unlockWriting();
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
 
     response.setErrno(SUCCESS);
     answer.append(response.getJson());
@@ -1011,22 +996,16 @@ namespace common
       return answer;
     }
 
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<Session> realSession = findSessionForUser(dummyUser);
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
-    {
-      response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> realUser = findUser(dummyUser);
-    if(realUser.isNull())
     {
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
     }
+
+    QSharedPointer<User> realUser = realSession->getUser();
 
     filtration.addFilter(QSharedPointer<Filter>(new ShapeFilter(request.getShape())));
     filtration.addFilter(QSharedPointer<Filter>(new TimeFilter(request.getTimeFrom(), request.getTimeTo())));
@@ -1081,6 +1060,10 @@ namespace common
       response.setErrno(SUCCESS);
     }
     response.setDataChannels(feed);
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
 
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
@@ -1140,29 +1123,17 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
-    syslog(LOG_INFO, "point_1");
 
-    QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<Session> realSession = findSessionForUser(dummyUser);
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
     {
-      response.setErrno(SESSION_DOES_NOT_EXIST_ERROR);
-      answer.append(response.getJson());
-      return answer;
-    }
-
-    QSharedPointer<User> realUser = findUser(dummyUser);
-    syslog(LOG_INFO, "point_2");
-    if(realUser.isNull())
-    {
-      syslog(LOG_INFO, "point_3");
-
       response.setErrno(WRONG_TOKEN_ERROR);
       answer.append(response.getJson());
       return answer;
     }
-    syslog(LOG_INFO, "point_4");
 
+    QSharedPointer<User> realUser = realSession->getUser();
     QSharedPointer<Channels> channels = realUser->getSubscribedChannels();
     QSharedPointer<Channel> channel;
     for(int i = 0; i<channels->size(); i++)
@@ -1181,6 +1152,10 @@ namespace common
     QList<QSharedPointer<DataMark> > tags = m_dataChannelsMap->values(channel);
     int amount = request.getAmount();
     tags = tags.count() > amount ? tags.mid(0, amount) : tags;
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
 
     response.setData(channel, tags);
     response.setErrno(SUCCESS);

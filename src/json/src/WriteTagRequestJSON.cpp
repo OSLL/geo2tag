@@ -36,7 +36,7 @@
 #include "DataMarks.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
-#include "JsonUser.h"
+#include "JsonSession.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>
@@ -59,7 +59,7 @@ bool WriteTagRequestJSON::parseJson(const QByteArray &data)
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok) return false;
 
-  QString token = result["auth_token"].toString();
+  QString session_token = result["session_token"].toString();
   QString channel_name = result["channel"].toString();
   QString title = result["title"].toString();
   QString link = result["link"].toString();
@@ -74,12 +74,12 @@ bool WriteTagRequestJSON::parseJson(const QByteArray &data)
 
   QDateTime time = QDateTime::fromString(result["time"].toString(), "dd MM yyyy HH:mm:ss.zzz");
 
-  QSharedPointer<common::User>  user(new JsonUser("unknown", "unknown", token));
+  QSharedPointer<Session> session(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL)));
   QSharedPointer<Channel> channel(new JsonChannel(channel_name, "unknown"));
 
   QSharedPointer<DataMark> tag(new JsonDataMark(altitude, latitude, longitude, title, description, link, time));
   tag->setChannel(channel);
-  tag->setUser(user);
+  tag->setSession(session);
   m_tagsContainer->push_back(tag);
 
   return true;
@@ -91,7 +91,7 @@ QByteArray WriteTagRequestJSON::getJson() const
   QJson::Serializer serializer;
   QVariantMap request;
   QSharedPointer<DataMark> mark = m_tagsContainer->at(0);
-  request.insert("auth_token", mark->getUser()->getToken());
+  request.insert("session_token", mark->getSession()->getSessionToken());
   request.insert("channel", mark->getChannel()->getName());
   request.insert("title", mark->getLabel().isEmpty()? "New mark":mark->getLabel());
   request.insert("link", mark->getUrl());
