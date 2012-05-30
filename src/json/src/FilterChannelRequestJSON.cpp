@@ -72,8 +72,8 @@ bool FilterChannelRequestJSON::parseJson(const QByteArray&data)
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok) return false;
 
-  QString session_token = result["session_token"].toString();
-  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
+  QString auth_token = result["auth_token"].toString();
+  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(auth_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
 
   m_channel = result["channel"].toString();
   m_amount = result["amount"].toInt(&ok);

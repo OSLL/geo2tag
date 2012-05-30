@@ -64,7 +64,7 @@ QByteArray FilterRectangleRequestJSON::getJson() const
   // TODO it's necessary for symbian client
   QJson::Serializer serializer;
   QVariantMap obj;
-  obj.insert("session_token", m_sessionsContainer->at(0)->getSessionToken());
+  obj.insert("auth_token", m_sessionsContainer->at(0)->getSessionToken());
   return serializer.serialize(obj);
 }
 
@@ -78,7 +78,7 @@ bool FilterRectangleRequestJSON::parseJson(const QByteArray&data)
   bool ok;
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok) return false;
-  QString session_token = result["session_token"].toString();
+  QString auth_token = result["auth_token"].toString();
   setTimeFrom(QDateTime::fromString(result["time_from"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
   setTimeTo(QDateTime::fromString(result["time_to"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
 
@@ -101,6 +101,6 @@ bool FilterRectangleRequestJSON::parseJson(const QByteArray&data)
 
   FShapeRectangle * shape = new FShapeRectangle(lat1, lon1, lat2, lon2);
   setShape(QSharedPointer<FShape>(shape));
-  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
+  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(auth_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
   return true;
 }

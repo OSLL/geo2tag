@@ -7,7 +7,7 @@ test_channel="test_$RANDOM";
 sleep 15s
 
 response_login_test=`curl -d '{"login":"Mark","password":"test"}'  http://localhost:81/service/login`;
-correct_result_login='{ "errno" : 0, "session_token" : "mmmmmmmmmm" }';
+correct_result_login="{ \"auth_token\" : \"mmmmmmmmmm\", \"errno\" : 0 }";
 if ! echo $response_login_test | grep -q -s -F "$correct_result_login"  ; 
 then
 	echo "Fail at login test"
@@ -21,7 +21,7 @@ then
 	exit 1
 fi
 
-response_add_channel=`curl -d "{\"session_token\":\"mmmmmmmmmm\", \"name\":\"$test_channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel`;
+response_add_channel=`curl -d "{\"auth_token\":\"mmmmmmmmmm\", \"name\":\"$test_channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel`;
 echo "$response_add_channel"
 if ! echo $response_add_channel | grep -q -s -F "$correct_result"  ;
 then
@@ -29,7 +29,7 @@ then
 	exit 1
 fi
 
-response_subscribe=`curl -d "{\"session_token\":\"mmmmmmmmmm\", \"channel\":\"$test_channel\"}" http://localhost:81/service/subscribe`;
+response_subscribe=`curl -d "{\"auth_token\":\"mmmmmmmmmm\", \"channel\":\"$test_channel\"}" http://localhost:81/service/subscribe`;
 if ! echo $response_subscribe | grep -q -s -F "$correct_result"  ;
 then
         echo "Fail at subscribe test"
@@ -56,7 +56,7 @@ test_altitude=$((RANDOM%100)).0;
 test_time=`date +'%d %m %Y %H:%M:%S.300'`;
 echo "test time = $test_time"
 echo "Test alt:$test_altitude"
-response_write_tag_test=`curl -d "{ \"session_token\" : \"mmmmmmmmmm\", \"channel\" : \"$test_channel\", \"description\" : \"\", \"altitude\" : $test_altitude , \"latitude\" : 0.0,\"link\" : \"\", \"longitude\" : 0.0, \"time\" : \"$test_time\", \"title\" : \"\" }"  http://localhost:81/service/writeTag`;
+response_write_tag_test=`curl -d "{ \"auth_token\" : \"mmmmmmmmmm\", \"channel\" : \"$test_channel\", \"description\" : \"\", \"altitude\" : $test_altitude , \"latitude\" : 0.0,\"link\" : \"\", \"longitude\" : 0.0, \"time\" : \"$test_time\", \"title\" : \"\" }"  http://localhost:81/service/writeTag`;
 echo "$response_write_tag_test "
 if ! echo $response_write_tag_test | grep -q -s -F "$correct_result"  ;
 then
@@ -66,7 +66,7 @@ fi
 
 sleep 15s
 
-response_altitude_test=`curl -d "{\"session_token\":\"mmmmmmmmmm\",\"latitude\":0.0, \"longitude\":0.0, \"radius\":10.0}"  http://localhost:81/service/loadTags`;
+response_altitude_test=`curl -d "{\"auth_token\":\"mmmmmmmmmm\",\"latitude\":0.0, \"longitude\":0.0, \"radius\":10.0}"  http://localhost:81/service/loadTags`;
 echo "Alt test - $response_altitude_test "
 if ! echo $response_altitude_test | grep -q -s -F "$test_altitude"  ;
 then
@@ -75,7 +75,7 @@ then
 fi
 
 
-response_unsubscribe=`curl -d "{\"session_token\":\"mmmmmmmmmm\", \"channel\":\"$test_channel\"}" http://localhost:81/service/unsubscribe`;
+response_unsubscribe=`curl -d "{\"auth_token\":\"mmmmmmmmmm\", \"channel\":\"$test_channel\"}" http://localhost:81/service/unsubscribe`;
 if ! echo $response_unsubscribe | grep -q -s -F "$correct_result"  ;
 then
         echo "Fail at unsubscribe test"
@@ -111,7 +111,7 @@ then
         exit 1
 fi
 
-response_quit_session_test=`curl -d '{"session_token":"mmmmmmmmmm"}'  http://localhost:81/service/quitSession`;
+response_quit_session_test=`curl -d '{"auth_token":"mmmmmmmmmm"}'  http://localhost:81/service/quitSession`;
 correct_result_quit_session='{ "errno" : 0 }';
 if ! echo $response_quit_session_test | grep -q -s -F "$correct_result_quit_session"  ; 
 then
@@ -119,7 +119,7 @@ then
 	exit 1
 fi
 
-session_error_with_add_channel=`curl -d "{\"session_token\":\"mmmmmmmmmm\", \"name\":\"$test_channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel`;
+session_error_with_add_channel=`curl -d "{\"auth_token\":\"mmmmmmmmmm\", \"name\":\"$test_channel\", \"description\":\"\", \"url\":\"\", \"activeRadius\":30}"  http://localhost:81/service/addChannel`;
 correct_result_session_error_with_add_channel='{ "errno" : 1 }';
 echo "$response_add_channel"
 if ! echo $session_error_with_add_channel | grep -q -s -F "$correct_result_session_error_with_add_channel"  ;
@@ -128,7 +128,7 @@ then
 	exit 1
 fi
 
-session_error_with_subscribe=`curl -d "{\"session_token\":\"mmmmmmmmmm\", \"channel\":\"$test_channel\"}" http://localhost:81/service/subscribe`;
+session_error_with_subscribe=`curl -d "{\"auth_token\":\"mmmmmmmmmm\", \"channel\":\"$test_channel\"}" http://localhost:81/service/subscribe`;
 correct_result_session_error_with_subscribe='{ "errno" : 1 }';
 if ! echo $session_error_with_subscribe | grep -q -s -F "$correct_result_session_error_with_subscribe"  ;
 then

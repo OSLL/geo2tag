@@ -53,7 +53,7 @@ QByteArray AddChannelRequestJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj;
-  obj.insert("session_token", m_sessionsContainer->at(0)->getSessionToken());
+  obj.insert("auth_token", m_sessionsContainer->at(0)->getSessionToken());
   obj.insert("name", m_channelsContainer->at(0)->getName());
   obj.insert("description",m_channelsContainer->at(0)->getDescription());
   obj.insert("url",m_channelsContainer->at(0)->getUrl());
@@ -70,11 +70,11 @@ bool AddChannelRequestJSON::parseJson(const QByteArray&data)
   QVariantMap result = parser.parse(data, &ok).toMap();
   if (!ok)   return false;
 
-  QString session_token = result["session_token"].toString();
+  QString auth_token = result["auth_token"].toString();
   QString name = result["name"].toString();
   QString description = result["description"].toString();
   QString url = result["url"].toString();
-  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
+  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(auth_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
   m_channelsContainer->push_back(QSharedPointer<Channel>(new JsonChannel(name,description,url)));
   return true;
 }

@@ -59,7 +59,7 @@ QByteArray FilterCircleRequestJSON::getJson() const
 {
     QJson::Serializer serializer;
     QVariantMap obj;
-    obj.insert("session_token",m_sessionsContainer->at(0)->getSessionToken());
+    obj.insert("auth_token",m_sessionsContainer->at(0)->getSessionToken());
     obj.insert("latitude", m_latitude);
     obj.insert("longitude", m_longitude);
     obj.insert("radius", m_radius);
@@ -83,7 +83,7 @@ bool FilterCircleRequestJSON::parseJson(const QByteArray&data)
   {
     return false;
   }
-  QString session_token = result["session_token"].toString();
+  QString auth_token = result["auth_token"].toString();
   setTimeFrom(QDateTime::fromString(result["time_from"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
   setTimeTo(QDateTime::fromString(result["time_to"].toString(), "dd MM yyyy HH:mm:ss.zzz"));
   double latitude = result["latitude"].toDouble(&ok);
@@ -96,7 +96,7 @@ bool FilterCircleRequestJSON::parseJson(const QByteArray&data)
   if (!ok) return false;
 
   FilterRequestJSON::setShape(QSharedPointer<FShape>(new FShapeCircle(latitude, longitude, radius)));
-  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
+  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(auth_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
   return true;
 }
 

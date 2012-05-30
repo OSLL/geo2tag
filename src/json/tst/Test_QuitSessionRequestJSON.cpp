@@ -49,8 +49,8 @@ namespace Test
         QJson::Serializer serializer;
         QVariantMap obj;
 
-        data = QString("{\"session_token\":\"MMMMMMMMMM\"}").toAscii();
-        obj.insert("session_token", QString("MMMMMMMMMM"));
+        data = QString("{\"auth_token\":\"MMMMMMMMMM\"}").toAscii();
+        obj.insert("auth_token", QString("MMMMMMMMMM"));
 
         QByteArray true_json = serializer.serialize(obj);
 
@@ -63,7 +63,7 @@ namespace Test
         QuitSessionRequestJSON request;
         QByteArray data;
 
-        data = QString("{\"session_token\":\"MMMMMMMMMM\"}").toAscii();
+        data = QString("{\"auth_token\":\"MMMMMMMMMM\"}").toAscii();
         QCOMPARE(request.parseJson(data), true);
         QCOMPARE(request.getSessionToken(), QString("MMMMMMMMMM"));
     }

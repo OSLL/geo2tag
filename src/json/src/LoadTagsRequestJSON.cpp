@@ -66,8 +66,8 @@ bool LoadTagsRequestJSON::parseJson(const QByteArray &data)
 
   if (!ok) return false;
 
-  QString session_token = result["session_token"].toString();
-  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(session_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
+  QString auth_token = result["auth_token"].toString();
+  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(auth_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
 
   result["latitude"].toDouble(&ok);
   if (!ok) return false;
@@ -93,7 +93,7 @@ QByteArray LoadTagsRequestJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj;
-  obj.insert("session_token", getSessionToken());
+  obj.insert("auth_token", getSessionToken());
   obj.insert("latitude", getLatitude());
   obj.insert("longitude", getLongitude());
   obj.insert("radius", getRadius());

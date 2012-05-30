@@ -69,7 +69,7 @@ QByteArray QuitSessionRequestJSON::getJson() const
 {
     QJson::Serializer serializer;
     QVariantMap obj;
-    obj.insert("session_token", m_sessionToken);
+    obj.insert("auth_token", m_sessionToken);
     return serializer.serialize(obj);
 }
 
@@ -80,7 +80,7 @@ bool QuitSessionRequestJSON::parseJson(const QByteArray&data)
     QVariantMap result = parser.parse(data, &ok).toMap();
     if (!ok) return false;
 
-    m_sessionToken = result["session_token"].toString();
+    m_sessionToken = result["auth_token"].toString();
 
     return true;
 }
