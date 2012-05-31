@@ -47,7 +47,7 @@ LoginThread::LoginThread()
 {
   m_query = new LoginQuery();
   dynamic_cast<LoginQuery*>(m_query)->setQuery(DEFAULT_USER_NAME,DEFAULT_USER_PASSWORD);
-  connect(m_query,SIGNAL(connected()),this, SLOT(responseRecieved()));
+  connect(m_query,SIGNAL(connected()),this, SLOT(responseReceived()));
   setConnections();
 }
 

@@ -46,7 +46,7 @@
 LoadTagsThread::LoadTagsThread(QSharedPointer<common::User> user)
 {
   m_query = new LoadTagsQuery(user,DEFAULT_LATITUDE,DEFAULT_LONGITUDE,(double)DEFAULT_RADIUS);
-  connect(m_query,SIGNAL(tagsReceived()),this, SLOT(responseRecieved()));
+  connect(m_query,SIGNAL(tagsReceived()),this, SLOT(responseReceived()));
   setConnections();
 }
 

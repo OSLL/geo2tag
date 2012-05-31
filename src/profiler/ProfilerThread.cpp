@@ -57,7 +57,7 @@ ProfilerThread::ProfilerThread()
 void ProfilerThread::setConnections()
 {
   connect(this,SIGNAL(doRequest()),this, SLOT(sendRequest()));
-  connect(m_query,SIGNAL(errorOccured(int)),this, SLOT(responseRecieved()));
+  connect(m_query,SIGNAL(errorOccured(int)),this, SLOT(responseReceived()));
 }
 
 ProfilerThread::~ProfilerThread()
@@ -90,7 +90,7 @@ void ProfilerThread::sendRequest()
   m_query->doRequest();
 }
 
-void ProfilerThread::responseRecieved()
+void ProfilerThread::responseReceived()
 {
   if (m_query->getErrno() == SUCCESS) incCounter();
   qDebug() << getCounter() << m_sendTime.msecsTo(QDateTime::currentDateTime()) <<  (int)(m_query->getErrno()!=SUCCESS) << m_requests_per_second;

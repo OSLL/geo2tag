@@ -76,9 +76,9 @@ namespace Test
     {
 
 	VersionQuery * query = new VersionQuery(this);
-	QSignalSpy spy_version(query,SIGNAL(responseRecieved()));
+	QSignalSpy spy_version(query,SIGNAL(responseReceived()));
 	query->doRequest();
-	QVERIFY(waitForSignal(query,SIGNAL(responseRecieved()),5000));
+	QVERIFY(waitForSignal(query,SIGNAL(responseReceived()),5000));
 	QCOMPARE(spy_version.count(), 1);
 		
      // see docs: http://doc.qt.nokia.com/4.7/qtest.html

@@ -209,7 +209,7 @@ void TrackerDaemon::onConnected()
 {
   m_isConnected = true;
 
-  qDebug() << "Auth_token recieved - " << m_loginQuery->getUser()->getToken() ;
+  qDebug() << "Auth_token received - " << m_loginQuery->getUser()->getToken() ;
   if(m_tagQuery == NULL)
   {
     QSharedPointer<DataMark> mark(new JsonDataMark(0.,0.,

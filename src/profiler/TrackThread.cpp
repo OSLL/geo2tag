@@ -49,7 +49,7 @@
 TrackThread::TrackThread(const QSharedPointer<DataMark> &tag)
 {
   m_query = new WriteTagQuery(tag);
-  connect(m_query,SIGNAL(tagAdded()),this, SLOT(responseRecieved()));
+  connect(m_query,SIGNAL(tagAdded()),this, SLOT(responseReceived()));
   setConnections();
 }
 

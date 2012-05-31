@@ -50,15 +50,15 @@ void MaemoDaemon::readData()
 
   QString message = m_device->readAll();
 
-  // split recieved message for many parts, process last and clean
+  // split received message for many parts, process last and clean
   QStringList commands=message.split(" ",QString::SkipEmptyParts);
-  qDebug() << "recieved from trackerDaemon " << message;
+  qDebug() << "received from trackerDaemon " << message;
   if (commands.last().indexOf("lastCoords_")!=-1)
   {
     QString buf=commands.last();
     QStringList lastCoord = buf.right(buf.size()-QString("lastCoords_").size()).split(",",QString::SkipEmptyParts);
 
-    qDebug() << "REcieved coordinates" << lastCoord.at(0) << " "<< lastCoord.at(1);
+    qDebug() << "Received coordinates" << lastCoord.at(0) << " "<< lastCoord.at(1);
     m_lastCoordinates.setX(lastCoord.at(0).toDouble());
     m_lastCoordinates.setY(lastCoord.at(1).toDouble());
     m_started = true;

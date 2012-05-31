@@ -61,7 +61,7 @@ void VersionQuery::processReply(QNetworkReply *reply)
   m_errno = response.getErrno();
   if(response.getErrno() == SUCCESS)
   {
-    Q_EMIT responseRecieved();
+    Q_EMIT responseReceived();
   }
   else
   {

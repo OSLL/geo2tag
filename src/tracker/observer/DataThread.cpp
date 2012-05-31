@@ -100,7 +100,7 @@ void DataThread::onMarksGotten()
   m_marks=m_rssQuery->getData();
   m_map->setMarks(m_marks);
   QList<QSharedPointer<DataMark> > marks = m_marks.values();
-  qDebug() << "RssFeed gotten!!!!! " <<  m_marks.count() << "marks recieved";
+  qDebug() << "RssFeed gotten!!!!! " <<  m_marks.count() << "marks received";
   m_requestIsSent=false;
   //and now redraw canvas
 }

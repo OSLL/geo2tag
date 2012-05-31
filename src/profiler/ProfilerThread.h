@@ -79,7 +79,7 @@ signals:
 public slots:
   
   void sendRequest();
-  void responseRecieved();
+  void responseReceived();
 
 }; // class ProfilerThread
   

@@ -62,7 +62,7 @@ namespace common
   bool MobilityGps::isReady()
   {
     int ageOfLastCoords = m_lastUpdate.toUTC().secsTo(QDateTime::currentDateTime());
-    //    qDebug() << "Age of last recieved coordinates " << ageOfLastCoords << " secs";
+    //    qDebug() << "Age of last received coordinates " << ageOfLastCoords << " secs";
     if (ageOfLastCoords > 60) setReady(false);
     return Gps::isReady();
   }

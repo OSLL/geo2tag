@@ -54,7 +54,7 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
   //  QTcpSocket *m_daemon;
   //  QTextStream *m_device;
   //  QString m_lastCoord;
-  // contain data, recieved from daemon
+  // contain data, received from daemon
   //  QString m_message;
 
   LogWidget * m_logWidget;

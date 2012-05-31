@@ -76,7 +76,7 @@ class VersionQuery: public DefaultQuery
 
 
     Q_SIGNALS:
-    void responseRecieved();
+    void responseReceived();
 
     // class VersionQuery
 };
