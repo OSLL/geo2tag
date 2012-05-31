@@ -29,29 +29,43 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file RegisterUserRequestJSON_Test.h
- * \brief Test suite for RegisterUserRequestJSON class
+ * \file Test_QuitSessionRequestJSON_Test.cpp
+ * \brief Test suite for QuitSessionRequestJSON class
  *
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-#ifndef TEST_REGISTERUSERREQUESTJSON_H
-#define TEST_REGISTERUSERREQUESTJSON_H
+#include "Test_QuitSessionRequestJSON.h"
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 
-#include <QObject>
-#include <QtTest>
-#include "../inc/RegisterUserRequestJSON.h"
 
 namespace Test
 {
-    class Test_RegisterUserRequestJSON : public QObject
+    void Test_QuitSessionRequestJSON::getJson()
     {
-        Q_OBJECT
+        QuitSessionRequestJSON request;
+        QByteArray data;
+        QJson::Serializer serializer;
+        QVariantMap obj;
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_RegisterUserRequestJSON
-}                // end of namespace Test
+        data = QString("{\"auth_token\":\"MMMMMMMMMM\"}").toAscii();
+        obj.insert("auth_token", QString("MMMMMMMMMM"));
 
-#endif // TEST_REGISTERUSERREQUESTJSON_H
+        QByteArray true_json = serializer.serialize(obj);
+
+        request.parseJson(data);
+        QCOMPARE(request.getJson(), true_json);
+    }
+
+    void Test_QuitSessionRequestJSON::parseJson()
+    {
+        QuitSessionRequestJSON request;
+        QByteArray data;
+
+        data = QString("{\"auth_token\":\"MMMMMMMMMM\"}").toAscii();
+        QCOMPARE(request.parseJson(data), true);
+        QCOMPARE(request.getSessionToken(), QString("MMMMMMMMMM"));
+    }
+
+} // end of namespace Test

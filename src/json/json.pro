@@ -51,7 +51,10 @@ HEADERS += \
            inc/FilterChannelResponseJSON.h \
 	   inc/DeleteUserRequestJSON.h \
 	   inc/DeleteUserResponseJSON.h \
-	   inc/BuildResponseJSON.h 
+	   inc/BuildResponseJSON.h \ 
+    inc/QuitSessionRequestJSON.h \
+    inc/QuitSessionResponseJSON.h \
+    inc/JsonSession.h
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \
@@ -83,7 +86,10 @@ SOURCES += \
            src/VersionResponseJSON.cpp \
            src/AddUserRequestJSON.cpp \
            src/FilterChannelRequestJSON.cpp \
-           src/FilterChannelResponseJSON.cpp             
+           src/FilterChannelResponseJSON.cpp \             
+    src/QuitSessionRequestJSON.cpp \
+    src/QuitSessionResponseJSON.cpp \
+    src/JsonSession.cpp
            
 
 LIBS    +=  -lcommon -lqjson

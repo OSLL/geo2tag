@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012  OSLL osll@osll.spb.ru
+ * Copyright 2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,29 +29,31 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file RegisterUserRequestJSON_Test.h
- * \brief Test suite for RegisterUserRequestJSON class
+ * \file  JsonSession.h
+ * \brief Header of JsonSession
  *
  * PROJ: OSLL/geo2tag
- * ----------------------------------------------------------- */
+ * ---------------------------------------------------------------- */
 
-#ifndef TEST_REGISTERUSERREQUESTJSON_H
-#define TEST_REGISTERUSERREQUESTJSON_H
+#ifndef JSONSESSION_H
+#define JSONSESSION_H
 
-#include <QObject>
-#include <QtTest>
-#include "../inc/RegisterUserRequestJSON.h"
+#include "Session.h"
 
-namespace Test
+class JsonSession: public Session
 {
-    class Test_RegisterUserRequestJSON : public QObject
-    {
-        Q_OBJECT
+  static qlonglong globalSessionId;
+  qlonglong m_id;
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_RegisterUserRequestJSON
-}                // end of namespace Test
+  public:
+    JsonSession(const QString& sessionToken,
+                const QDateTime& lastAccessTime,
+                const QSharedPointer<common::User>& user);
 
-#endif // TEST_REGISTERUSERREQUESTJSON_H
+    qlonglong getId() const;
+    void setId(qlonglong);
+
+    ~JsonSession();
+};
+
+#endif // JSONSESSION_H

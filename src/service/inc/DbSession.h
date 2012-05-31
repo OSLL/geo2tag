@@ -55,6 +55,7 @@
 #include "UpdateThread.h"
 #include "QueryExecutor.h"
 #include "FilterRequestJSON.h"
+#include "Session.h"
 
 namespace common
 {
@@ -69,6 +70,7 @@ namespace common
     QSharedPointer<Users>        m_usersContainer;
     QSharedPointer<TimeSlots>    m_timeSlotsContainer;
     QSharedPointer<DataChannels> m_dataChannelsMap;
+    QSharedPointer<Sessions>     m_sessionsContainer;
 
     UpdateThread *              m_updateThread;
 
@@ -85,10 +87,13 @@ namespace common
     DbObjectsCollection();
 
     QSharedPointer<User> findUser(const QSharedPointer<User>&) const;
+    QSharedPointer<Session> findSession(const QSharedPointer<Session>&) const;
+    QSharedPointer<Session> findSessionForUser(const QSharedPointer<User>&) const;
 
     QByteArray processRegisterUserQuery(const QByteArray&);
     QByteArray processConfirmRegistrationQuery(const QString&);
     QByteArray processLoginQuery(const QByteArray&);
+    QByteArray processQuitSessionQuery(const QByteArray&);
     QByteArray processSubscribedChannelsQuery(const QByteArray&);
     QByteArray processAvailableChannelsQuery(const QByteArray&);
     QByteArray processWriteTagQuery(const QByteArray&);

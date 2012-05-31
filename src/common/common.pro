@@ -48,7 +48,8 @@ HEADERS += \
     inc/Region.h \
     inc/signals.h \
     inc/PerformanceCounter.h \
-    inc/SettingsStorage.h
+    inc/SettingsStorage.h \
+    inc/Session.h
 
 SOURCES += \
     src/TimeSlot.cpp \
@@ -68,7 +69,8 @@ SOURCES += \
     src/Region.cpp \ 
     src/signals.cpp \
     src/PerformanceCounter.cpp \
-    src/SettingsStorage.cpp
+    src/SettingsStorage.cpp \
+    src/Session.cpp
 
 linux: {
     HEADERS += inc/GpsModeller.h

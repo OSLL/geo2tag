@@ -41,6 +41,7 @@
 #include "User.h"
 #include "Channel.h"
 #include "DataMarks.h"
+#include "Session.h"
 
 class QueryExecutor : public QObject
 {
@@ -60,9 +61,11 @@ class QueryExecutor : public QObject
     qlonglong nextChannelKey() const;
     qlonglong nextTagKey() const;
     qlonglong nextTimeSlotKey() const;
+    qlonglong nextSessionKey() const;
 
     const QString generateNewToken(const QString& login,const QString& password) const;
     const QString generateNewToken(const QString& email, const QString& login,const QString& password) const;
+    const QString generateNewToken(const QString& accessTime, const QString& email, const QString& login,const QString& password) const;
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
@@ -84,8 +87,11 @@ class QueryExecutor : public QObject
     bool                     deleteChannelTimeSlot(const QSharedPointer<Channel>&);
     bool                     deleteMarkTimeSlot(const QSharedPointer<DataMark>&);
     bool                     isChannelSubscribed(QSharedPointer<Channel>&, QSharedPointer<common::User>&);
-    bool                     deleteUser(const QSharedPointer<common::User> &user); 
-
+    bool                     deleteUser(const QSharedPointer<common::User> &user);
+    // Sessions
+    QSharedPointer<Session>  insertNewSession(const QSharedPointer<Session>& session);
+    bool                     updateSession(const QSharedPointer<Session>& session);
+    bool                     deleteSession(const QSharedPointer<Session>& session);
 
     signals:
 

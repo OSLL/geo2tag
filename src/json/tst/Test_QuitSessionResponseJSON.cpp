@@ -29,29 +29,42 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file RegisterUserRequestJSON_Test.h
- * \brief Test suite for RegisterUserRequestJSON class
- *
- * PROJ: OSLL/geo2tag
- * ----------------------------------------------------------- */
+* \file Test_QuitSessionResponseJSON.cpp
+* \brief Test suite for QuitSessionResponseJSON class
+*
+* PROJ: OSLL/geo2tag
+* ----------------------------------------------------------- */
 
-#ifndef TEST_REGISTERUSERREQUESTJSON_H
-#define TEST_REGISTERUSERREQUESTJSON_H
-
-#include <QObject>
-#include <QtTest>
-#include "../inc/RegisterUserRequestJSON.h"
+#include "Test_QuitSessionResponseJSON.h"
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 
 namespace Test
 {
-    class Test_RegisterUserRequestJSON : public QObject
+    void Test_QuitSessionResponseJSON::getJson()
     {
-        Q_OBJECT
+        QuitSessionResponseJSON response;
+        QByteArray data;
+        QJson::Serializer serializer;
+        QVariantMap obj;
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_RegisterUserRequestJSON
-}                // end of namespace Test
+        data = QString("{\"errno\":\"0\"}").toAscii();
+        obj.insert("errno", 0);
 
-#endif // TEST_REGISTERUSERREQUESTJSON_H
+        QByteArray true_json = serializer.serialize(obj);
+
+        response.parseJson(data);
+        QCOMPARE(response.getJson(), true_json);
+    }
+
+    void Test_QuitSessionResponseJSON::parseJson()
+    {
+        QuitSessionResponseJSON response;
+        QByteArray data;
+
+        data = QString("{\"errno\":\"0\"}").toAscii();
+        QCOMPARE(response.parseJson(data), true);
+        QCOMPARE(response.getErrno(), 0);
+    }
+
+} // end of namespace Test

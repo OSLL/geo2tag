@@ -22,6 +22,18 @@ CREATE TABLE users (
   constraint users_pkey primary key (id)
 );
 
+CREATE SEQUENCE sessions_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
+
+CREATE TABLE sessions (
+  id NUMERIC(9,0) NOT NULL DEFAULT nextval('sessions_seq'),
+  user_id NUMERIC(9,0) NOT NULL,
+  session_token VARCHAR(65) NOT NULL,
+  last_access_time TIMESTAMP NOT NULL DEFAULT now(),
+  constraint sessions_pkey primary key (id),
+  constraint fk_user foreign key (user_id) references users(id)
+                                                      on delete cascade
+);
+
 CREATE SEQUENCE tags_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
 
 CREATE TABLE tag (
@@ -128,6 +140,9 @@ INSERT into users (email, login, password, token) values ('yevgeni@test.org', 'Y
 
 INSERT into users (email, login, password, token) values ('rom@test.org', 'Rom',   'test', 'RRRRRRRRRR');
 INSERT into users (email, login, password, token) values ('jul@test.org', 'Jul', 'test', 'JJJJJJJJJJ');
+
+INSERT into sessions (user_id, session_token, last_access_time) values (2, 'kkkkkkkkkk', now());
+INSERT into sessions (user_id, session_token, last_access_time) values (3, 'mmmmmmmmmm', now());
 
 
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url) values(0, 60.166504, 24.841204, 'A', 'Accident at road 51. Time: 15:45, January 2, 2010.', 1, 'http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif');

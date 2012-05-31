@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012  OSLL osll@osll.spb.ru
+ * Copyright 2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,30 +28,37 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file RegisterUserRequestJSON_Test.h
- * \brief Test suite for RegisterUserRequestJSON class
+/*! ---------------------------------------------------------------
+ * \file  SessionInternal.cpp
+ * \brief SessionInternal implementation
  *
- * PROJ: OSLL/geo2tag
- * ----------------------------------------------------------- */
+ * PROJ: OSLL/geoblog
+ * ---------------------------------------------------------------- */
 
-#ifndef TEST_REGISTERUSERREQUESTJSON_H
-#define TEST_REGISTERUSERREQUESTJSON_H
+#include "SessionInternal.h"
 
-#include <QObject>
-#include <QtTest>
-#include "../inc/RegisterUserRequestJSON.h"
-
-namespace Test
+DbSession::DbSession(qlonglong id,
+                     const QString &sessionToken,
+                     const QDateTime &lastAccessTime,
+                     const QSharedPointer<common::User> &user)
+    : Session(sessionToken, lastAccessTime, user),
+      m_id(id)
 {
-    class Test_RegisterUserRequestJSON : public QObject
-    {
-        Q_OBJECT
+}
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_RegisterUserRequestJSON
-}                // end of namespace Test
 
-#endif // TEST_REGISTERUSERREQUESTJSON_H
+qlonglong DbSession::getId() const
+{
+    return m_id;
+}
+
+
+void DbSession::setId(qlonglong id)
+{
+    m_id = id;
+}
+
+
+DbSession::~DbSession()
+{
+}

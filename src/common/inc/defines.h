@@ -81,6 +81,7 @@ void setServerPort(int port);
 #define DEFAULT_TOKEN             "2154086390Ivan1128557755"
 
 #define DEFAULT_TMP_USER_TIMELIFE "2 days"
+#define DEFAULT_SESSION_TIMELIFE  3 // days
 
 #define DEFAULT_LATITUDE   ((double) 59.91446)
 #define DEFAULT_LONGITUDE  ((double) 30.489442)

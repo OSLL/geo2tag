@@ -11,6 +11,7 @@ SOURCES += \
     ../../http_requests/src/VersionQuery.cpp \
     ../../http_requests/src/DeleteUserQuery.cpp \
     ../../json/src/JsonUser.cpp \
+    ../../json/src/JsonSession.cpp \
     ../../json/src/JsonSerializer.cpp \
     ../../json/src/LoginRequestJSON.cpp \
     ../../json/src/LoginResponseJSON.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     ../../json/src/DefaultResponseJSON.cpp \
     ../../json/src/VersionResponseJSON.cpp \
     ../../common/src/signals.cpp \
+    ../../common/src/session.cpp \
     Test_RegisterUserQuery.cpp
 
 HEADERS += \
@@ -28,6 +30,7 @@ HEADERS += \
     ../../http_requests/inc/VersionQuery.h \
     ../../http_requests/inc/DeleteUserQuery.h \
     ../../json/inc/JsonUser.h \
+    ../../json/inc/JsonSession.h \
     ../../json/inc/JsonSerializer.h \
     ../../json/inc/LoginRequestJSON.h \
     ../../json/inc/LoginResponseJSON.h \
@@ -36,6 +39,7 @@ HEADERS += \
     ../../json/inc/VersionResponseJSON.h \
     ../../json/inc/DefaultResponseJSON.h \
     ../../common/inc/signals.h \
+    ../../common/inc/session.h \
     VersionQuery_Test.h \
     DeleteUserQuery_Test.h \
     Test_RegisterUserQuery.h
