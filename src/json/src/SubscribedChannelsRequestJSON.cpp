@@ -56,7 +56,7 @@
 #include "SubscribedChannelsRequestJSON.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
-#include "JsonUser.h"
+#include "JsonSession.h"
 //#include <syslog.h>
 SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON()
 {
@@ -80,9 +80,10 @@ bool SubscribedChannelsRequestJSON::parseJson(const QByteArray &data)
 
   if (!ok) return false;
 
-  QString authToken =    result["auth_token"].toString();
-  QSharedPointer<common::User>    dummyUser(new JsonUser("unknown", "unknown", authToken));
-  m_usersContainer->push_back(dummyUser);
+  QString auth_token = result["auth_token"].toString();
+  QSharedPointer<Session> dummySession(new JsonSession(auth_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL)));
+
+  m_sessionsContainer->push_back(dummySession);
 
   return true;
 }
@@ -93,7 +94,7 @@ QByteArray SubscribedChannelsRequestJSON::getJson() const
   QJson::Serializer serializer;
   QVariantMap request;
 
-  request.insert("auth_token", m_usersContainer->at(0)->getToken());
+  request.insert("auth_token", m_sessionsContainer->at(0)->getSessionToken());
 
   return serializer.serialize(request);
 }

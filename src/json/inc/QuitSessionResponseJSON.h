@@ -28,30 +28,29 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file RegisterUserRequestJSON_Test.h
- * \brief Test suite for RegisterUserRequestJSON class
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
- * ----------------------------------------------------------- */
+ * ---------------------------------------------------------------- */
 
-#ifndef TEST_REGISTERUSERREQUESTJSON_H
-#define TEST_REGISTERUSERREQUESTJSON_H
+#ifndef QUITSESSIONRESPONSEJSON_H
+#define QUITSESSIONRESPONSEJSON_H
 
-#include <QObject>
-#include <QtTest>
-#include "../inc/RegisterUserRequestJSON.h"
+#include "JsonSerializer.h"
 
-namespace Test
+#include <QString>
+
+class QuitSessionResponseJSON: public JsonSerializer
 {
-    class Test_RegisterUserRequestJSON : public QObject
-    {
-        Q_OBJECT
+private:
+    QString m_sessionToken;
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_RegisterUserRequestJSON
-}                // end of namespace Test
+public:
+    QuitSessionResponseJSON(QObject *parent = 0);
 
-#endif // TEST_REGISTERUSERREQUESTJSON_H
+    QByteArray getJson() const;
+    bool parseJson(const QByteArray&);
+
+    ~QuitSessionResponseJSON();
+};
+
+#endif // QUITSESSIONRESPONSEJSON_H

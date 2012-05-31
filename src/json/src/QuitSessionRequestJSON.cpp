@@ -28,30 +28,63 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file RegisterUserRequestJSON_Test.h
- * \brief Test suite for RegisterUserRequestJSON class
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
- * ----------------------------------------------------------- */
+ * ---------------------------------------------------------------- */
 
-#ifndef TEST_REGISTERUSERREQUESTJSON_H
-#define TEST_REGISTERUSERREQUESTJSON_H
+#include "QuitSessionRequestJSON.h"
+#include "JsonUser.h"
 
-#include <QObject>
-#include <QtTest>
-#include "../inc/RegisterUserRequestJSON.h"
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
-namespace Test
+QuitSessionRequestJSON::QuitSessionRequestJSON(QString sessionToken, QObject *parent)
+    : JsonSerializer(parent),
+      m_sessionToken(sessionToken)
+
 {
-    class Test_RegisterUserRequestJSON : public QObject
-    {
-        Q_OBJECT
+}
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_RegisterUserRequestJSON
-}                // end of namespace Test
+QuitSessionRequestJSON::QuitSessionRequestJSON(QObject *parent)
+    : JsonSerializer(parent)
+{
+}
 
-#endif // TEST_REGISTERUSERREQUESTJSON_H
+void QuitSessionRequestJSON::setSessionToken(QString sessionToken)
+{
+    m_sessionToken = sessionToken;
+}
+
+QString QuitSessionRequestJSON::getSessionToken() const
+{
+    return m_sessionToken;
+}
+
+QByteArray QuitSessionRequestJSON::getJson() const
+{
+    QJson::Serializer serializer;
+    QVariantMap obj;
+    obj.insert("auth_token", m_sessionToken);
+    return serializer.serialize(obj);
+}
+
+bool QuitSessionRequestJSON::parseJson(const QByteArray&data)
+{
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if (!ok) return false;
+
+    m_sessionToken = result["auth_token"].toString();
+
+    return true;
+}
+
+QuitSessionRequestJSON::~QuitSessionRequestJSON()
+{
+}

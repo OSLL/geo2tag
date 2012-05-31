@@ -41,20 +41,22 @@
 #include "PerformanceCounter.h" 
 
 UpdateThread::UpdateThread(const QSqlDatabase &db,
-const QSharedPointer<DataMarks> &tags,
-const QSharedPointer<common::Users> &users,
-const QSharedPointer<Channels> &channels,
-const QSharedPointer<TimeSlots> &timeSlots,
-const QSharedPointer<DataChannels>& dataChannelsMap,
-QObject *parent):
-QThread(parent),
-m_channelsContainer(channels),
-m_tagsContainer(tags),
-m_usersContainer(users),
-m_timeSlotsContainer(timeSlots),
-m_dataChannelsMap(dataChannelsMap),
-m_database(db),
-m_transactionCount(0)
+                           const QSharedPointer<DataMarks> &tags,
+                           const QSharedPointer<common::Users> &users,
+                           const QSharedPointer<Channels> &channels,
+                           const QSharedPointer<TimeSlots> &timeSlots,
+                           const QSharedPointer<DataChannels>& dataChannelsMap,
+                           const QSharedPointer<Sessions>& sessions,
+                           QObject *parent)
+    : QThread(parent),
+      m_channelsContainer(channels),
+      m_tagsContainer(tags),
+      m_usersContainer(users),
+      m_timeSlotsContainer(timeSlots),
+      m_dataChannelsMap(dataChannelsMap),
+      m_sessionsContainer(sessions),
+      m_database(db),
+      m_transactionCount(0)
 {
 }
 
@@ -117,6 +119,7 @@ void UpdateThread::run()
 // Check if DB contain new changes
 
     checkTmpUsers();
+    checkSessions();
     if (!compareTransactionNumber())
     {
       QThread::msleep(10000);
@@ -128,11 +131,13 @@ void UpdateThread::run()
     DataMarks   tagsContainer(*m_tagsContainer);
     Channels    channelsContainer(*m_channelsContainer);
     TimeSlots   timeSlotsContainer(*m_timeSlotsContainer);
+    Sessions    sessionsContainer(*m_sessionsContainer);
 
     loadUsers(usersContainer);
     loadTags(tagsContainer);
     loadChannels(channelsContainer);
     loadTimeSlots(timeSlotsContainer);
+    loadSessions(sessionsContainer);
 
     lockWriting();
     syslog(LOG_INFO,"Containers locked for db_update");
@@ -140,8 +145,9 @@ void UpdateThread::run()
     m_tagsContainer->merge(tagsContainer);
     m_channelsContainer->merge(channelsContainer);
     m_timeSlotsContainer->merge(timeSlotsContainer);
+    m_sessionsContainer->merge(sessionsContainer);
 
-    updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer, *m_timeSlotsContainer);
+    updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer, *m_timeSlotsContainer, *m_sessionsContainer);
     
     syslog(LOG_INFO, "tags added. trying to unlock");
     unlockWriting();
@@ -161,9 +167,11 @@ void UpdateThread::run()
       }
     }
 
+
     syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
     syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());
     syslog(LOG_INFO,  "current channels' size = %d", m_channelsContainer->size());
+    syslog(LOG_INFO,  "current sessions' size = %d", m_sessionsContainer->size());
     m_database.close();
     }
     QThread::msleep(10000);
@@ -277,8 +285,27 @@ void UpdateThread::loadTags(DataMarks &container)
   }
 }
 
+void UpdateThread::loadSessions(Sessions &container)
+{
+    syslog(LOG_INFO, "Sessions size = %d", m_usersContainer->size());
+    QSqlQuery query(m_database);
+    query.exec("select id, user_id, session_token, last_access_time from sessions;");
+    while (query.next()) {
+        qlonglong id = query.record().value("id").toLongLong();
+        if (container.exist(id))
+            continue;
+        qlonglong userId = query.record().value("user_id").toLongLong();
+        QSharedPointer<common::User> user(new DbUser("", "", userId, ""));
 
-void UpdateThread::updateReflections(DataMarks &tags, common::Users &users, Channels &channels, TimeSlots & timeSlots)
+        QString sessionToken = query.record().value("session_token").toString();
+        QDateTime lastAccessTime = query.record().value("last_access_time").toDateTime();//.toTimeSpec(Qt::LocalTime);
+
+        QSharedPointer<Session> newSession(new DbSession(id, sessionToken, lastAccessTime, user));
+        container.push_back(newSession);
+    }
+}
+
+void UpdateThread::updateReflections(DataMarks &tags, common::Users &users, Channels &channels, TimeSlots & timeSlots, Sessions &sessions)
 {
   {
     QSqlQuery query(m_database);
@@ -356,6 +383,10 @@ void UpdateThread::updateReflections(DataMarks &tags, common::Users &users, Chan
     }
   }
 
+  for(int i=0; i<sessions.size(); i++)
+  {
+      sessions[i]->setUser(users.item(sessions[i]->getUser()->getId()));
+  }
 }
 
 void UpdateThread::checkTmpUsers()
@@ -380,7 +411,9 @@ void UpdateThread::checkTmpUsers()
             syslog(LOG_INFO,"Commit for CheckTmpUser sql query");
             m_database.commit();
         }
+	lockWriting();
 	incrementTransactionCount();
+	unlockWriting();
     }
 
     // Deleting old signups
@@ -407,7 +440,41 @@ void UpdateThread::checkTmpUsers()
             syslog(LOG_INFO,"Commit for DeleteTmpUser sql query");
             m_database.commit();
         }
+        lockWriting();
 	incrementTransactionCount();
+	unlockWriting();	
+    }
+}
+
+void UpdateThread::checkSessions()
+{
+    syslog(LOG_INFO,"checkSessions query is running now...");
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    int timelife = storage.getValue("General_Settings/session_timelife", QVariant(DEFAULT_SESSION_TIMELIFE)).toInt();
+    for (int i = 0; i < m_sessionsContainer->size(); i++) {
+        QDateTime currentTime = QDateTime::currentDateTime().toUTC();
+        //syslog(LOG_INFO, "Current time: %s", currentTime.toString().toStdString().c_str());
+        QDateTime lastAccessTime = m_sessionsContainer->at(i)->getLastAccessTime();
+        //syslog(LOG_INFO, "Last access time: %s", lastAccessTime.toString().toStdString().c_str());
+        if (lastAccessTime.addDays(timelife) <= currentTime) {
+            QSqlQuery query(m_database);
+            query.prepare("delete from sessions where id = :id;");
+            query.bindValue(":id", m_sessionsContainer->at(i)->getId());
+            syslog(LOG_INFO,"Deleting: %s", query.lastQuery().toStdString().c_str());
+            m_database.transaction();
+            bool result = query.exec();
+            if (!result) {
+                syslog(LOG_INFO, "Rollback for DeleteSession sql query");
+                m_database.rollback();
+            } else {
+                syslog(LOG_INFO, "Commit for DeleteSession sql query");
+                m_database.commit();
+            }
+	    lockWriting();
+	    incrementTransactionCount();
+            m_sessionsContainer->erase(m_sessionsContainer->at(i));
+	    unlockWriting();
+        }
     }
 }
 

@@ -34,10 +34,12 @@
 
 #include "JsonSerializer.h"
 
-JsonSerializer::JsonSerializer(QObject * parent):QObject(parent),
-m_channelsContainer(new Channels),
-m_tagsContainer(new DataMarks),
-m_usersContainer(new common::Users)
+JsonSerializer::JsonSerializer(QObject * parent)
+    : QObject(parent),
+      m_channelsContainer(new Channels),
+      m_tagsContainer(new DataMarks),
+      m_usersContainer(new common::Users),
+      m_sessionsContainer(new Sessions)
 {
 }
 
@@ -65,6 +67,11 @@ QSharedPointer<DataMarks> JsonSerializer::getTags() const
   return m_tagsContainer;
 }
 
+QSharedPointer<Sessions> JsonSerializer::getSessions() const
+{
+  return m_sessionsContainer;
+}
+
 
 void JsonSerializer::addChannel(const QSharedPointer<Channel> &channel)
 {
@@ -78,9 +85,14 @@ void JsonSerializer::addTag(const QSharedPointer<DataMark> &tag)
 }
 
 
-void JsonSerializer::addUser(const QSharedPointer<common::User> &tag)
+void JsonSerializer::addUser(const QSharedPointer<common::User> &user)
 {
-  m_usersContainer->push_back(tag);
+  m_usersContainer->push_back(user);
+}
+
+void JsonSerializer::addSession(const QSharedPointer<Session> &session)
+{
+  m_sessionsContainer->push_back(session);
 }
 
 

@@ -53,7 +53,7 @@ class LoadTagsRequestJSON: public JsonSerializer
     double getLatitude() const;
     double getLongitude() const;
     double getRadius() const;
-    QString getAuthToken() const;
+    QString getSessionToken() const;
 
     void setLatitude(double latitude);
     void setLongitude(double longitude);

@@ -44,6 +44,7 @@
 #include "ChannelInternal.h"
 #include "DataChannel.h"
 #include "TimeSlotInternal.h"
+#include "SessionInternal.h"
 
 class UpdateThread: public QThread
 {
@@ -54,6 +55,7 @@ class UpdateThread: public QThread
   QSharedPointer<common::Users>        m_usersContainer;
   QSharedPointer<TimeSlots>    m_timeSlotsContainer;
   QSharedPointer<DataChannels> m_dataChannelsMap;
+  QSharedPointer<Sessions>     m_sessionsContainer;
 
   QSqlDatabase m_database;
 
@@ -68,9 +70,11 @@ class UpdateThread: public QThread
   void loadTags(DataMarks &);
   void loadChannels(Channels &);
   void loadTimeSlots(TimeSlots &);
-  void updateReflections(DataMarks&, common::Users&, Channels&, TimeSlots&);
+  void loadSessions(Sessions &);
+  void updateReflections(DataMarks&, common::Users&, Channels&, TimeSlots&, Sessions&);
 
   void checkTmpUsers();
+  void checkSessions();
 
   void sendConfirmationLetter(const QString &, const QString &);
 
@@ -86,6 +90,7 @@ class UpdateThread: public QThread
       const QSharedPointer<Channels>& channels,
       const QSharedPointer<TimeSlots>& timeSlots,
       const QSharedPointer<DataChannels>& dataChannelsMap,
+      const QSharedPointer<Sessions>& sessions,
       QObject *parent = 0);
 
     void incrementTransactionCount(int i = 1);

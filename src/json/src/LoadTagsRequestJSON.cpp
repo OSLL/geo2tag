@@ -33,7 +33,7 @@
 #include <QDebug>
 #include "LoadTagsRequestJSON.h"
 
-#include "JsonUser.h"
+#include "JsonSession.h"
 #include "JsonChannel.h"
 #include "JsonDataMark.h"
 
@@ -66,8 +66,8 @@ bool LoadTagsRequestJSON::parseJson(const QByteArray &data)
 
   if (!ok) return false;
 
-  QString authToken = result["auth_token"].toString();
-  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("dummyUser[LoadTagsRequest]","dummyPassword",authToken)));
+  QString auth_token = result["auth_token"].toString();
+  m_sessionsContainer->push_back(QSharedPointer<Session>(new JsonSession(auth_token, QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL))));
 
   result["latitude"].toDouble(&ok);
   if (!ok) return false;
@@ -93,7 +93,7 @@ QByteArray LoadTagsRequestJSON::getJson() const
 {
   QJson::Serializer serializer;
   QVariantMap obj;
-  obj.insert("auth_token", getAuthToken());
+  obj.insert("auth_token", getSessionToken());
   obj.insert("latitude", getLatitude());
   obj.insert("longitude", getLongitude());
   obj.insert("radius", getRadius());
@@ -101,9 +101,9 @@ QByteArray LoadTagsRequestJSON::getJson() const
 }
 
 
-QString LoadTagsRequestJSON::getAuthToken() const
+QString LoadTagsRequestJSON::getSessionToken() const
 {
-  return m_usersContainer->at(0)->getToken();
+  return m_sessionsContainer->at(0)->getSessionToken();
 }
 
 

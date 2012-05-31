@@ -67,6 +67,7 @@ m_url(url),
 m_time(time)
 {
   m_user = QSharedPointer<common::User>(NULL);
+  m_session = QSharedPointer<Session>(NULL);
   m_channel = QSharedPointer<Channel>(NULL);
   if (m_label.isEmpty())
     m_label = "New mark";
@@ -85,6 +86,12 @@ qlonglong DataMark::getId() const
 void DataMark::setUser(QSharedPointer<common::User> user)
 {
   m_user=user;
+}
+
+
+void DataMark::setSession(QSharedPointer<Session> session)
+{
+  m_session=session;
 }
 
 
@@ -176,6 +183,12 @@ void DataMark::setTime(const QDateTime& time)
 QSharedPointer<common::User> DataMark::getUser() const
 {
   return m_user;
+}
+
+
+QSharedPointer<Session> DataMark::getSession() const
+{
+  return m_session;
 }
 
 

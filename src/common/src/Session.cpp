@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012  OSLL osll@osll.spb.ru
+ * Copyright 2010  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,29 +29,56 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file RegisterUserRequestJSON_Test.h
- * \brief Test suite for RegisterUserRequestJSON class
+ * \file  Session.cpp
+ * \brief Implementation of the class Session
  *
  * PROJ: OSLL/geo2tag
- * ----------------------------------------------------------- */
+ * ---------------------------------------------------------------- */
 
-#ifndef TEST_REGISTERUSERREQUESTJSON_H
-#define TEST_REGISTERUSERREQUESTJSON_H
+#include "Session.h"
 
-#include <QObject>
-#include <QtTest>
-#include "../inc/RegisterUserRequestJSON.h"
-
-namespace Test
+Session::Session(const QString &sessionToken, const QDateTime &lastAccessTime, const QSharedPointer<common::User> &user)
+    : m_sessionToken(sessionToken),
+      m_lastAccessTime(lastAccessTime),
+      m_user(user)
 {
-    class Test_RegisterUserRequestJSON : public QObject
-    {
-        Q_OBJECT
+}
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_RegisterUserRequestJSON
-}                // end of namespace Test
+void Session::setSessionToken(const QString &sessionToken)
+{
+    m_sessionToken = sessionToken;
+}
 
-#endif // TEST_REGISTERUSERREQUESTJSON_H
+void Session::setLastAccessTime(const QDateTime lastAccessTime)
+{
+    m_lastAccessTime = lastAccessTime;
+}
+
+void Session::setUser(const QSharedPointer<common::User> &user)
+{
+    m_user = user;
+}
+
+const QString& Session::getSessionToken() const
+{
+    return m_sessionToken;
+}
+
+const QDateTime& Session::getLastAccessTime() const
+{
+    return m_lastAccessTime;
+}
+
+const QSharedPointer<common::User>& Session::getUser() const
+{
+    return m_user;
+}
+
+qlonglong Session::getId() const
+{
+    return 0;
+}
+
+Session::~Session()
+{
+}

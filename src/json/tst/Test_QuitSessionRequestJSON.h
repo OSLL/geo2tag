@@ -29,29 +29,29 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file RegisterUserRequestJSON_Test.h
- * \brief Test suite for RegisterUserRequestJSON class
+ * \file QuitSessionRequestJSON_Test.h
+ * \brief Test suite for QuitSessionRequestJSON class
  *
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-#ifndef TEST_REGISTERUSERREQUESTJSON_H
-#define TEST_REGISTERUSERREQUESTJSON_H
+#ifndef TEST_QUITSESSIONREQUESTJSON_H
+#define TEST_QUITSESSIONREQUESTJSON_H
 
 #include <QObject>
 #include <QtTest>
-#include "../inc/RegisterUserRequestJSON.h"
+#include "../inc/QuitSessionRequestJSON.h"
 
 namespace Test
 {
-    class Test_RegisterUserRequestJSON : public QObject
+    class Test_QuitSessionRequestJSON : public QObject
     {
         Q_OBJECT
 
     private slots:
           void getJson();
           void parseJson();
-    };               // class Test_RegisterUserRequestJSON
-}                // end of namespace Test
+    };
+}
 
-#endif // TEST_REGISTERUSERREQUESTJSON_H
+#endif // TEST_QUITSESSIONREQUESTJSON_H

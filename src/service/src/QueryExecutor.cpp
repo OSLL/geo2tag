@@ -46,6 +46,7 @@
 #include "UserInternal.h"
 #include "ChannelInternal.h"
 #include "TimeSlotInternal.h"
+#include "SessionInternal.h"
 #include "PerformanceCounter.h"
  
 
@@ -101,6 +102,10 @@ qlonglong QueryExecutor::nextTimeSlotKey() const
   return nextKey("timeSlots_seq");
 }
 
+qlonglong QueryExecutor::nextSessionKey() const
+{
+  return nextKey("sessions_seq");
+}
 
 const QString QueryExecutor::generateNewToken(const QString& login,const QString& password) const
 {
@@ -115,6 +120,16 @@ const QString QueryExecutor::generateNewToken(const QString& login,const QString
 const QString QueryExecutor::generateNewToken(const QString& email, const QString& login,const QString& password) const
 {
   QString log=login+password+email;
+  QByteArray toHash(log.toUtf8());
+  toHash=QCryptographicHash::hash(log.toUtf8(),QCryptographicHash::Md5);
+  QString result(toHash.toHex());
+  syslog(LOG_INFO,"TOken = %s",result.toStdString().c_str());
+  return result;
+}
+
+const QString QueryExecutor::generateNewToken(const QString& accessTime, const QString& email, const QString& login,const QString& password) const
+{
+  QString log=login+password+email+accessTime;
   QByteArray toHash(log.toUtf8());
   toHash=QCryptographicHash::hash(log.toUtf8(),QCryptographicHash::Md5);
   QString result(toHash.toHex());
@@ -681,4 +696,81 @@ bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
       m_database.commit();
     }
     return result;
+}
+
+QSharedPointer<Session> QueryExecutor::insertNewSession(const QSharedPointer<Session>& session)
+{
+    QSqlQuery query(m_database);
+    qlonglong newId = nextSessionKey();
+    QString newSessionToken = generateNewToken(session->getLastAccessTime().toUTC().toString(),
+                                               session->getUser()->getEmail(),
+                                               session->getUser()->getLogin(),
+                                               session->getUser()->getPassword());
+
+    syslog(LOG_INFO, "NewId ready, now preparing sql query for adding new session");
+    query.prepare("insert into sessions (id, user_id, session_token, last_access_time) values (:id, :user_id, :token, :time);");
+    query.bindValue(":id", newId);
+    query.bindValue(":user_id", session->getUser()->getId());
+    query.bindValue(":token", newSessionToken);
+    query.bindValue(":time", session->getLastAccessTime().toUTC());
+
+    m_database.transaction();
+
+    bool result = query.exec();
+    if (!result) {
+        syslog(LOG_INFO,"Rollback for NewSession sql query");
+        m_database.rollback();
+        return QSharedPointer<Session>(NULL);
+    } else {
+        syslog(LOG_INFO,"Commit for NewSession sql query - insert in table sessions");
+        m_database.commit();
+    }
+    return QSharedPointer<Session>(new DbSession(newId, newSessionToken, session->getLastAccessTime(), session->getUser()));
+}
+
+bool QueryExecutor::updateSession(const QSharedPointer<Session>& session)
+{
+    QSqlQuery query(m_database);
+    QDateTime currentTime = QDateTime::currentDateTime().toUTC();
+    syslog(LOG_INFO, "Updating session with token: %s", session->getSessionToken().toStdString().c_str());
+
+    query.prepare("update sessions set last_access_time = :time where session_token = :token;");
+    query.bindValue(":time", currentTime);
+    query.bindValue(":token", session->getSessionToken());
+
+    m_database.transaction();
+
+    bool result = query.exec();
+    if (!result) {
+        syslog(LOG_INFO,"Rollback for updateSession sql query");
+        m_database.rollback();
+        return false;
+    } else {
+        syslog(LOG_INFO,"Commit for updateSession sql query");
+        m_database.commit();
+        session->setLastAccessTime(currentTime);
+        return true;
+    }
+}
+
+bool QueryExecutor::deleteSession(const QSharedPointer<Session> &session)
+{
+    QSqlQuery query(m_database);
+    syslog(LOG_INFO, "Deleting session with token: %s", session->getSessionToken().toStdString().c_str());
+
+    query.prepare("delete from sessions where id = :id;");
+    query.bindValue(":id", session->getId());
+
+    m_database.transaction();
+
+    bool result = query.exec();
+    if (!result) {
+        syslog(LOG_INFO, "Rollback for deleteSession sql query");
+        m_database.rollback();
+        return false;
+    } else {
+        syslog(LOG_INFO, "Commit for deleteSession sql query");
+        m_database.commit();
+        return true;
+    }
 }
