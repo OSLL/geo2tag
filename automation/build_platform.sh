@@ -80,6 +80,9 @@ then
 		cp ${dir_geo2tag}/automation/test_platform.sh ${dir_automation}
 		cd ${dir_automation}
 		ls
+		/etc/init.d/lighttpd stop		
+		sudo -u postgres dropdb geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
+		sudo -u postgres dropuser geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		echo "n" | dpkg -i wikigps-libs_* wikigps-service_* >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 
 		#TEST
