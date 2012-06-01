@@ -49,10 +49,11 @@ QString label,
 QString description,
 const QString &url,
 const QDateTime &time,
-qlonglong userId):
+qlonglong userId, qlonglong channelId):
 DataMark(altitude,latitude, longitude, label, description, url, time),
 m_id(id),
-m_userId(userId)
+m_userId(userId),
+m_channelId(channelId)
 {
 }
 
@@ -68,6 +69,10 @@ qlonglong DbDataMark::getUserId() const
   return m_userId;
 }
 
+qlonglong DbDataMark::getChannelId() const
+{
+  return m_channelId;
+}
 
 void DbDataMark::setId(qlonglong id)
 {

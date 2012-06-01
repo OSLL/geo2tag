@@ -121,7 +121,6 @@ namespace common
   m_channelsContainer(new Channels()),
     m_tagsContainer(new DataMarks()),
     m_usersContainer(new Users()),
-    m_timeSlotsContainer(new TimeSlots()),
     m_dataChannelsMap(new DataChannels()),
     m_sessionsContainer(new Sessions()),
     m_updateThread(NULL),
@@ -165,7 +164,6 @@ namespace common
       m_tagsContainer,
       m_usersContainer,
       m_channelsContainer,
-      m_timeSlotsContainer,
       m_dataChannelsMap,
       m_sessionsContainer,
       NULL);
@@ -546,7 +544,7 @@ namespace common
                                         //now
     QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);
     m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount(2);
+    m_updateThread->incrementTransactionCount();
     m_updateThread->unlockWriting();
     if(realTag == NULL)
     {

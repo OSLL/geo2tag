@@ -52,15 +52,17 @@ class DbDataMark: public DataMark
 
   //!< Assotiated user's identifier for the tag
   qlonglong m_userId;
-
+  qlonglong m_channelId;
   public:
     DbDataMark(qlonglong id, double altitude, double latitude, double longitude,
       QString label, QString description, const QString& url, const QDateTime& time,
-      qlonglong userId);
+      qlonglong userId, qlonglong channelId);
 
     qlonglong getId() const;
 
     qlonglong getUserId() const;
+
+    qlonglong getChannelId() const;
 
     void setId(qlonglong id);
 

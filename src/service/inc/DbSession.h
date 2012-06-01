@@ -51,7 +51,6 @@
 #include "Channel.h"
 #include "DataChannel.h"
 #include "User.h"
-#include "TimeSlot.h"
 #include "UpdateThread.h"
 #include "QueryExecutor.h"
 #include "FilterRequestJSON.h"
@@ -68,7 +67,6 @@ namespace common
     QSharedPointer<Channels>     m_channelsContainer;
     QSharedPointer<DataMarks>    m_tagsContainer;
     QSharedPointer<Users>        m_usersContainer;
-    QSharedPointer<TimeSlots>    m_timeSlotsContainer;
     QSharedPointer<DataChannels> m_dataChannelsMap;
     QSharedPointer<Sessions>     m_sessionsContainer;
 
