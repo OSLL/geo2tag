@@ -12,6 +12,9 @@ SettingsWidget::SettingsWidget(QWidget *parent) :
     m_radiusEdit->setValidator(new QIntValidator(0, 40000, this));
     m_trackingPeriodEdit = new QLineEdit(this);
     m_trackingPeriodEdit->setValidator(new QIntValidator(1, 1000, this));
+    m_eventsPeriodEdit = new QLineEdit(this);
+    m_eventsPeriodEdit->setValidator(new QIntValidator(1, 120, this));
+    m_isDoctorCheck = new QCheckBox("Receive events", this);
     m_okButton = new QPushButton("Ok", this);
     m_cancelButton = new QPushButton("Cancel", this);
 
@@ -35,6 +38,9 @@ void SettingsWidget::initGUI()
     mainLayout->addWidget(m_radiusEdit);
     mainLayout->addWidget(new QLabel("Tracking period (min):", this));
     mainLayout->addWidget(m_trackingPeriodEdit);
+    mainLayout->addWidget(new QLabel("Events period (sec):", this));
+    mainLayout->addWidget(m_eventsPeriodEdit);
+    mainLayout->addWidget(m_isDoctorCheck);
     QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->addWidget(m_okButton);
     btnsLayout->addWidget(m_cancelButton);
@@ -49,6 +55,8 @@ void SettingsWidget::fill()
     m_serverUrlEdit->setText(m_settings.getServerUrl());
     m_radiusEdit->setText(QString::number(m_settings.getRadius()));
     m_trackingPeriodEdit->setText(QString::number(m_settings.getTrackingPeriod()));
+    m_eventsPeriodEdit->setText(QString::number(m_settings.getEventsPeriod()));
+    m_isDoctorCheck->setChecked(m_settings.getIsDoctor());
 }
 
 void SettingsWidget::onOkClicked()
@@ -57,6 +65,8 @@ void SettingsWidget::onOkClicked()
     m_settings.setServerUrl(m_serverUrlEdit->text());
     m_settings.setRadius(m_radiusEdit->text().toInt());
     m_settings.setTrackingPeriod(m_trackingPeriodEdit->text().toInt());
+    m_settings.setEventsPeriod(m_eventsPeriodEdit->text().toInt());
+    m_settings.setIsDoctor(m_isDoctorCheck->isChecked());
     emit saved();
 }
 

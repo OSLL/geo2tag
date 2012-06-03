@@ -31,7 +31,9 @@ void MainWidget::initGUI()
 
 void MainWidget::signIn(const QString & /*authToken*/)
 {
-    m_eventsWidget->startEventsService();
+    if (m_settings.getIsDoctor()) {
+        m_eventsWidget->startEventsService();
+    }
     if (m_shouldStartTracking) {
         m_trackingWidget->startTracking();
     }

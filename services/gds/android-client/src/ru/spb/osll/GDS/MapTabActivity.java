@@ -7,6 +7,7 @@ import ru.spb.osll.GDS.events.EventsReceiver;
 import ru.spb.osll.GDS.events.EventsService;
 import ru.spb.osll.GDS.maps.EventsItemizedOverlay;
 import ru.spb.osll.GDS.maps.PositionOverlay;
+import ru.spb.osll.GDS.preferences.Settings;
 import ru.spb.osll.objects.Mark;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -26,11 +27,12 @@ import com.google.android.maps.OverlayItem;
 
 public class MapTabActivity extends MapActivity {
 
-	EventsManager m_eventsManager;
-	String m_authToken;
-	MapView m_mapView;
-	EventsItemizedOverlay m_eventsOverlay;
-	PositionOverlay m_positionOverlay;
+	private Settings m_settings;
+	private EventsManager m_eventsManager;
+	private String m_authToken;
+	private MapView m_mapView;
+	private EventsItemizedOverlay m_eventsOverlay;
+	private PositionOverlay m_positionOverlay;
 	
 	private LocationManager m_locationManager;
 	private LocationListener m_locationListener = new LocationListener() {
@@ -49,6 +51,8 @@ public class MapTabActivity extends MapActivity {
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.map_tab_view);
+		
+		m_settings = new Settings(this);
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -85,7 +89,9 @@ public class MapTabActivity extends MapActivity {
 	    
 	    m_eventsManager = new EventsManager();
 	    m_eventsManager.setData(m_authToken);
-	    m_eventsManager.startEventsService(this);
+	    if (m_settings.getIsDoctor()) {
+	    	m_eventsManager.startEventsService(this);
+	    }
 	}
 	
 	@Override

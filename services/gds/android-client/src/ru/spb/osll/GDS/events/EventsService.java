@@ -121,7 +121,7 @@ public class EventsService extends Service {
 						requestEvents(location);
 					}
 					
-					SystemClock.sleep(GDSUtil.EVENTS_INTERVAL * 1000);
+					SystemClock.sleep(m_settings.getEventsPeriod() * 1000);
 				}
 			}
 		});
@@ -136,7 +136,7 @@ public class EventsService extends Service {
 			calendar.setTime(new Date());
 			calendar.add(Calendar.YEAR, 1); // just in case
 			String timeTo = GDSUtil.getUtcTime(calendar.getTime());
-			calendar.add(Calendar.YEAR, -1); // return current date
+			calendar.add(Calendar.YEAR, -1); // back to current date
 			calendar.add(Calendar.HOUR, - GDSUtil.RELEVANT_PERIOD_IN_HOURS);
 			String timeFrom = GDSUtil.getUtcTime(calendar.getTime());
 			JSONResponse = new JsonFilterCircleRequest(m_authToken,

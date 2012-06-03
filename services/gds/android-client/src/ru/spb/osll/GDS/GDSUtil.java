@@ -31,6 +31,7 @@ public class GDSUtil {
 	public static final int EVENTS_RADIUS = 3;
 	public static final int RELEVANT_PERIOD_IN_HOURS = 240;
 	public static final int TRACKING_INTERVAL = 1;
+	public static final boolean IS_DOCTOR = true;
 	
 	private static final String DATE_FORMAT = "dd MM yyyy HH:mm:ss.SSS";
 	private static final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

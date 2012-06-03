@@ -80,6 +80,7 @@ void EventsWidget::initGUI()
 
 void EventsWidget::startEventsService()
 {
+    qDebug() << "Starting events service";
     m_eventsThread.start();
     QMetaObject::invokeMethod(&m_eventsService, "startService", Qt::QueuedConnection,
                               Q_ARG(QString, m_settings.getLogin()),
@@ -90,6 +91,7 @@ void EventsWidget::startEventsService()
 
 void EventsWidget::stopEventsService()
 {
+    qDebug() << "Stopping events service";
     m_eventsThread.exit();
     m_eventsThread.wait();
 }
@@ -225,6 +227,14 @@ void EventsWidget::setCenter(QGeoCoordinate bad_coordinate)
 void EventsWidget::onSettingsUpdated()
 {
     if (m_eventsThread.isRunning()) {
-        QMetaObject::invokeMethod(&m_eventsService, "updateSettings", Qt::QueuedConnection);
+        if (!m_settings.getIsDoctor()) {
+            this->stopEventsService();
+        } else {
+            QMetaObject::invokeMethod(&m_eventsService, "updateSettings", Qt::QueuedConnection);
+        }
+    } else {
+        if (m_settings.getIsDoctor()) {
+            this->startEventsService();
+        }
     }
 }

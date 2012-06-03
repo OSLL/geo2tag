@@ -13,6 +13,8 @@
 #define DESCRIPTION "description"
 #define RADIUS "radius"
 #define TRACKING_PERIOD "tracking_period"
+#define EVENTS_PERIOD "events_period"
+#define IS_DOCTOR "is_doctor"
 
 class Settings
 {
@@ -42,6 +44,10 @@ public:
     void setRadius(int radius);
     int getTrackingPeriod();
     void setTrackingPeriod(int trackingPeriod);
+    int getEventsPeriod();
+    void setEventsPeriod(int eventsPeriod);
+    bool getIsDoctor();
+    void setIsDoctor(bool isDoctor);
 
 };
 

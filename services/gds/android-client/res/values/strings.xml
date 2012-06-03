@@ -27,6 +27,8 @@
     <string name="time_request">Time between ticks</string>
     <string name="radius">Radius (km)</string>
     <string name="tracking_period">Tracking period (min)</string>
+    <string name="events_period">Events period (sec)</string>
+    <string name="is_doctor">Receive events</string>
     <string name="uri">Uri</string>
     
     <!-- CheckBox -->

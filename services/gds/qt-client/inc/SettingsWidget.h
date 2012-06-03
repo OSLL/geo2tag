@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QTextEdit>
+#include <QCheckBox>
 #include "Settings.h"
 
 class SettingsWidget : public QWidget
@@ -18,6 +19,8 @@ class SettingsWidget : public QWidget
     QLineEdit *m_serverUrlEdit;
     QLineEdit *m_radiusEdit;
     QLineEdit *m_trackingPeriodEdit;
+    QLineEdit *m_eventsPeriodEdit;
+    QCheckBox *m_isDoctorCheck;
     QPushButton *m_okButton;
     QPushButton *m_cancelButton;
 

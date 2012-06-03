@@ -100,3 +100,23 @@ void Settings::setTrackingPeriod(int trackingPeriod)
 {
     m_settings.setValue(TRACKING_PERIOD, trackingPeriod);
 }
+
+int Settings::getEventsPeriod()
+{
+    return m_settings.value(EVENTS_PERIOD, DEFAULT_EVENTS_PERIOD).toInt();
+}
+
+void Settings::setEventsPeriod(int eventsPeriod)
+{
+    m_settings.setValue(EVENTS_PERIOD, eventsPeriod);
+}
+
+bool Settings::getIsDoctor()
+{
+    return m_settings.value(IS_DOCTOR, DEFAULT_IS_DOCTOR).toBool();
+}
+
+void Settings::setIsDoctor(bool isDoctor)
+{
+    m_settings.setValue(IS_DOCTOR, isDoctor);
+}

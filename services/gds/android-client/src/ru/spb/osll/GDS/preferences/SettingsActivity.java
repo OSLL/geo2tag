@@ -53,6 +53,8 @@ public class SettingsActivity extends Activity {
 	private EditText m_serverUrlEdit;
 	private EditText m_radiusEdit;
 	private EditText m_trackingPeriodEdit;
+	private EditText m_eventsPeriodEdit;
+	private CheckBox m_isDoctorCheck;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,8 @@ public class SettingsActivity extends Activity {
 		m_serverUrlEdit = (EditText) findViewById(R.id.edit_server_address);
 		m_radiusEdit = (EditText) findViewById(R.id.edit_radius);
 		m_trackingPeriodEdit = (EditText) findViewById(R.id.edit_tracking_period);
+		m_eventsPeriodEdit = (EditText) findViewById(R.id.edit_events_period);
+		m_isDoctorCheck = (CheckBox) findViewById(R.id.checkbox_is_doctor);
 		
 		initializeFields();
 		
@@ -95,6 +99,8 @@ public class SettingsActivity extends Activity {
 		m_radiusEdit.setText(String.valueOf(m_settings.getRadius()));
 		m_trackingPeriodEdit.setText(
 				String.valueOf(m_settings.getTrackingPeriod()));
+		m_eventsPeriodEdit.setText(
+				String.valueOf(m_settings.getEventsPeriod()));
 		
 	}
 	
@@ -104,6 +110,9 @@ public class SettingsActivity extends Activity {
 		m_settings.setRadius(Integer.parseInt(m_radiusEdit.getText().toString()));
 		m_settings.setTrackingPeriod(
 				Integer.parseInt(m_trackingPeriodEdit.getText().toString()));
+		m_settings.setEventsPeriod(
+				Integer.parseInt(m_eventsPeriodEdit.getText().toString()));
+		m_settings.setIsDoctor(m_isDoctorCheck.isChecked());
 	}
 	
 	private Runnable m_saveToast = new Runnable() {

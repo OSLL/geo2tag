@@ -63,6 +63,21 @@
                 android:id="@+id/edit_tracking_period"
                 android:singleLine="true"
                 android:inputType="number" />
+            <TextView 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/events_period"           
+                android:singleLine="true"/>
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_events_period"
+                android:singleLine="true"
+                android:inputType="number" />
+            <CheckBox android:id="@+id/checkbox_is_doctor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/is_doctor"/>
 <!-- this options will be deleted soon
 	        <TextView 
 	        	android:layout_width="fill_parent"

@@ -55,6 +55,8 @@ public class Settings {
 	private static final String SERVER_URL = "server_url";
 	private static final String RADIUS = "radius";
 	private static final String TRACKING_PERIOD = "tracking_period";
+	private static final String EVENTS_PERIOD = "events_perion";
+	private static final String IS_DOCTOR = "is_doctor";
 	
 	/* Application internal settings */
 	private static final String AUTH_TOKEN = "auth_token";
@@ -183,6 +185,27 @@ public class Settings {
 		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
 	    prefs.edit().putInt(TRACKING_PERIOD, trackingPeriod).commit();
 	}
+	
+	public int getEventsPeriod() {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    return prefs.getInt(EVENTS_PERIOD, GDSUtil.EVENTS_INTERVAL);
+	}
+	
+	public void setEventsPeriod(int eventsPeriod) {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putInt(EVENTS_PERIOD, eventsPeriod).commit();
+	}
+	
+	public boolean getIsDoctor() {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    return prefs.getBoolean(IS_DOCTOR, GDSUtil.IS_DOCTOR);
+	}
+	
+	public void setIsDoctor(boolean isDoctor) {
+		SharedPreferences prefs = m_context.getSharedPreferences(GDS_SETTINGS, 0);
+	    prefs.edit().putBoolean(TRACKING_PERIOD, isDoctor).commit();
+	}
+	
 
 	
 	public static SharedPreferences getPreferences(Context c){

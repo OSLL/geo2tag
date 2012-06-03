@@ -98,7 +98,7 @@ void EventsService::requestEvents()
         m_filterCircleQuery->doRequest();
     } else {
         qDebug() << "invalid geo info, waitin and trying again";
-        QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
+        QTimer::singleShot(m_settings.getEventsPeriod() * 1000, this, SLOT(requestEvents()));
     }
 }
 
@@ -163,7 +163,7 @@ void EventsService::onTagsReceived()
         }
     }
 
-    QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
+    QTimer::singleShot(m_settings.getEventsPeriod() * 1000, this, SLOT(requestEvents()));
 }
 
 void EventsService::onError(QString error)
