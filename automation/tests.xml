@@ -16,7 +16,7 @@
 	</testcase>
 	<testcase title="ADD CHANNEL (channel exists)">
 		 <pred></pred>
-		 <test>curl -d "{\"auth_token\":\"mmmmmmmmmm\", \"name\":\"Fuel prices\", \"description\":\"my new super chanel\", \"url\":\"http://osll.spb.ru\", \"activeRadius\":3000}"  http://tracks.osll.spb.ru:81/service/addChannel</test>
+		 <test>curl -d "{\"auth_token\":\"mmmmmmmmmm\", \"name\":\"Fuel prices\", \"description\":\"my new super chanel\", \"url\":\"http://osll.spb.ru\", \"activeRadius\":3000}"  http://localhost:81/service/addChannel</test>
 		 <post>4</post>
 	</testcase>
 	<testcase title="SUBSCRIBE TO CHANNEL">
