@@ -409,11 +409,12 @@ void UpdateThread::checkSessions()
 void UpdateThread::sendConfirmationLetter(const QString &address, const QString &token)
 {
     SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
     QString subject = storage.getValue("Mail_Settings/subject", QVariant(DEFAULT_EMAIL_SUBJECT)).toString();
     QString body = storage.getValue("Mail_Settings/body", QVariant(DEFAULT_EMAIL_BODY)).toString();
     syslog(LOG_INFO, "Process registration confirmation is started... ");
     body.append(" To confirm registration, please, go to this link: ");
-    body.append(DEFAULT_SERVER);
+    body.append(serverUrl.toStdString().c_str());
     body.append("service/confirmRegistration-");
     body.append(token);
     syslog(LOG_INFO, "Setting storage: %s", storage.getFileName().toStdString().c_str());
