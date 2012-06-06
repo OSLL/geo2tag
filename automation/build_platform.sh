@@ -18,12 +18,7 @@ dir_backup="${dir_automation}/platform_backup"
 
 branch="$1"
 last_commit="$2"
-AIROMO_FLAG="$3"
 
-if [ "$AIROMO_FLAG" == "AIROMO" ] ; then
-        platform_repo="airomo-platform-repo"
-        dir_geo2tag="${dir_automation}/${platform_repo}"
-fi
 
 # If branch name is "web-devel" then exit
 if [ "$branch" == "web-devel" ]
@@ -34,11 +29,7 @@ fi
 if [ -e $dir_geo2tag ]; then
         echo "geo2tag directory exists" 
 else
-	if [ "$AIROMO_FLAG" == "AIROMO" ] ; then
-                git clone ssh://airomo@repo.osll.spb.ru/git/airomo ${platform_repo}
-        else
-                git clone git://github.com/OSLL/geo2tag.git ${platform_repo}
-        fi
+        git clone git://github.com/OSLL/geo2tag.git ${platform_repo}
 fi
 
 #CREATE LOGS
@@ -73,7 +64,7 @@ then
 	${dir_geo2tag}/tst/unit/platform.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 
 	# DEPLOY and TEST only if branch is master
-	if [ "$branch" == "master" ] && [ "$AIROMO_FLAG" != "AIROMO" ]
+	if [ "$branch" == "master" ] 
 	then
 
 		#DEPLOY
@@ -128,9 +119,9 @@ test_summary=`cat "${dir_log}/test_summary.log"  `;
 echo $test_summary
 if [ "$branch" == "master" ]
 then
-	ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform master ${AIROMO_FLAG} ${last_commit}: integration reports " -Dmessage "$test_summary" -Dlogdir "platform_logs" 
+	ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform master ${last_commit}: integration reports " -Dmessage "$test_summary" -Dlogdir "platform_logs" 
 else
-	ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform $branch ${AIROMO_FLAG} ${last_commit}: build and test reports " -Dmessage "$test_summary" -Dlogdir "platform_logs"
+	ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform $branch ${last_commit}: build and test reports " -Dmessage "$test_summary" -Dlogdir "platform_logs"
 fi
 echo "" > ${dir_log}/build.log.txt
 echo "" > ${dir_log}/deploy.log.txt
