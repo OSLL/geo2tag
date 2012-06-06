@@ -1,3 +1,9 @@
+geo2tag (0.1.9) unstable; urgency=low
+
+  * release
+
+ -- Open Source and Linux lab <osll@lists.osll.spb.ru>  Fri, 6 Jun 2012 11:35:30 +0400
+
 wikigps (0.1.6) unstable; urgency=low
 
   * lots of fixies
