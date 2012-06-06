@@ -72,8 +72,8 @@ then
 	echo "Unit testing:"  >>${dir_log}/test.log.txt
 	${dir_geo2tag}/tst/unit/platform.sh >>${dir_log}/test.log.txt 2>>${dir_log}/test.log.txt
 
-	# DEPLOY and TEST only if branch is devel
-	if [ "$branch" == "devel" ] && [ "$AIROMO_FLAG" != "AIROMO" ]
+	# DEPLOY and TEST only if branch is master
+	if [ "$branch" == "master" ] && [ "$AIROMO_FLAG" != "AIROMO" ]
 	then
 
 		#DEPLOY
@@ -81,9 +81,11 @@ then
 		cd ${dir_automation}
 		ls
 		/etc/init.d/lighttpd stop		
+		/etc/init.d/postgresql stop
+		/etc/init.d/postgresql start
 		sudo -u postgres dropdb geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		sudo -u postgres dropuser geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
-		echo "n" | dpkg -i wikigps-libs_* wikigps-service_* >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
+		echo "n" | dpkg -i geo2tag-*deb libgeo2tag-*deb >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 
 		#TEST
                 test_result=`${dir_automation}/test_platform.sh`;
@@ -96,8 +98,8 @@ then
 			cd "${dir_automation}"
 			rm -rf "${dir_backup}"
 			mkdir "${dir_backup}"
-			mv -f ${dir_automation}/wikigps-libs_* "${dir_backup}"
-			mv -f ${dir_automation}/wikigps-service_* "${dir_backup}"	
+			mv -f ${dir_automation}/libgeo2tag-*deb "${dir_backup}"
+			mv -f ${dir_automation}/geo2tag-*deb "${dir_backup}"	
 		else
 		# test cases not passed, restore backup
 			echo "Tests not passed" >> ${dir_log}/test.log.txt
@@ -115,15 +117,18 @@ cd ${dir_geo2tag}
 dh_clean
 #git stash
 cd ${dir_automation}
+rm -rf libgeo2tag*
+rm -rf geo2tag*
 rm -rf wikigps*
+
 
 #SEND EMAIL
 echo "E-mailing!"
 test_summary=`cat "${dir_log}/test_summary.log"  `;
 echo $test_summary
-if [ "$branch" == "devel" ]
+if [ "$branch" == "master" ]
 then
-	ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform devel ${AIROMO_FLAG} ${last_commit}: integration reports " -Dmessage "$test_summary" -Dlogdir "platform_logs" 
+	ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform master ${AIROMO_FLAG} ${last_commit}: integration reports " -Dmessage "$test_summary" -Dlogdir "platform_logs" 
 else
 	ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform $branch ${AIROMO_FLAG} ${last_commit}: build and test reports " -Dmessage "$test_summary" -Dlogdir "platform_logs"
 fi
