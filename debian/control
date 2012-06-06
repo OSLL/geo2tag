@@ -9,29 +9,29 @@ Architecture: any
 Depends: ${shlibs:Depends}, libxml2 (>=2.6) [i386],libqt4-core ,libqt4-network ,libqt4-gui, libqt4-sql-psql [i386]
 Description: Geo2tag libs
 
-Package: libgeo2tag-0.19-standalone
-Architecture: i386 amd64 
-Depends:wikigps-qt, libxml2 (>=2.6)
-Description: Geo2tag libs
-
+#Package: libgeo2tag-0.19-standalone
+#Architecture: i386 amd64 
+#Depends:wikigps-qt, libxml2 (>=2.6)
+#Description: Geo2tag libs
+#
 #Package: wikigps-client
 #Architecture: powerpc 
 #Depends: libgeo2tag-0.19, libqjson0 [i386],libqjson [armel], libqtm-location (>=1.0) [armel],libqtm-bearer (>=1.0) [armel]
 #Description: WikiGPS service client
 # Very long description will be here
 #
-Package: wikigps-tracker
-Architecture: armel
-Depends: ${shlibs:Depends},libgeo2tag-0.19 (>=0.1.2), logrotate
-Description: WikiGPS tracker
- has very tiny interface. alfa version.
-
-Package: wikigps-observer
-Architecture: i386 amd64
-Depends: ${shlibs:Depends},libgeo2tag-0.19 (>=0.1.2)
-Description: WikiGPS observer
- observs marks setted by tracker.
-
+#Package: wikigps-tracker
+#Architecture: armel
+#Depends: ${shlibs:Depends},libgeo2tag-0.19 (>=0.1.2), logrotate
+#Description: WikiGPS tracker
+# has very tiny interface. alfa version.
+#
+#Package: wikigps-observer
+#Architecture: i386 amd64
+#Depends: ${shlibs:Depends},libgeo2tag-0.19 (>=0.1.2)
+#Description: WikiGPS observer
+# observs marks setted by tracker.
+#
 #Package: wikigps-webside
 #Architecture:i386 amd64
 #Depends: ${shlibs:Depends}, geo2tag-0.19, libgeo2tag-0.19
@@ -42,7 +42,7 @@ Architecture: i386 amd64
 Depends: lighttpd, postgresql-8.4, postgresql-client-8.4, libgeo2tag-0.19, libpq5, libfcgi0ldbl, mailutils, ssmtp
 Description: Geo2tag webservice
 
-Package: geo2tag-0.19-standalone
-Architecture: i386 amd64
-Depends: lighttpd, postgresql, libgeo2tag-0.19-standalone, libpq5, libfcgi0ldbl
-Description: Geo2tag webservice for platform that doesnt support qt 4.7
+#Package: geo2tag-0.19-standalone
+#Architecture: i386 amd64
+#Depends: lighttpd, postgresql, libgeo2tag-0.19-standalone, libpq5, libfcgi0ldbl
+#Description: Geo2tag webservice for platform that doesnt support qt 4.7
