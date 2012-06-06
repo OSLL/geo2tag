@@ -1,10 +1,12 @@
 #!/bin/bash
 
-auth_token="MMMMMMMMMM";
 channel="test_channel_$RANDOM";
 date_=`date +'%d_%m_%Y_%H_%M_%S'`;
 result_dir="./results_w_$date_/";
 server_name="localhost";
+response_login=`curl -d '{"login":"Mark","password":"test"}'  http://$server_name:81/service/login`;
+auth_token=`echo $response_login | grep -Po '"\w+"' | grep -v "auth_token" | grep -v "errno" | grep -o '[^"]*'`;
+echo "$auth_token"
 steps_count=100;
 step=1000;
 symbs=`echo $steps_count | wc -m`;

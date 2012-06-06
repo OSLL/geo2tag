@@ -47,6 +47,7 @@
 #include "LoadTagsRequestJSON.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
+#include "JsonSession.h"
 
 LoadTagsQuery::LoadTagsQuery(QSharedPointer<common::User> &user,
 double latitude,
@@ -87,7 +88,9 @@ QString LoadTagsQuery::getUrl() const
 QByteArray LoadTagsQuery::getRequestBody() const
 {
   LoadTagsRequestJSON request(m_latitude, m_longitude, m_radius);
-  request.addUser(m_user);
+//  request.addUser(m_user);
+  QSharedPointer<Session> session(new JsonSession(m_user->getToken(), QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL)));
+  request.addSession(session);
   return request.getJson();
 }
 

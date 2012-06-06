@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "JsonUser.h"
 #include "JsonChannel.h"
+#include "JsonSession.h"
 #include "JsonDataMark.h"
 #include <QCoreApplication>
 //#include "ThreadCleaner.h"
@@ -28,6 +29,7 @@ int main(int argc,char** argv)
     QEventLoop loop;
     int number_of_op = QString(argv[1]).toInt();
     ProfilerThread::m_number_of_requests = number_of_op;
+    QSharedPointer<Session> session(new JsonSession(argv[3], QDateTime::currentDateTime(), QSharedPointer<common::User>(NULL)));
     if (QString(argv[2]) == "login") //perform login testing
     {
       srand ( time(NULL) );
@@ -44,6 +46,7 @@ int main(int argc,char** argv)
       QSharedPointer<common::User> user(new JsonUser("","",argv[3]));
       QSharedPointer<Channel> channel(new JsonChannel(argv[4],"",""));
       tag->setChannel(channel);
+      tag->setSession(session);
       tag->setUser(user);
       for (int i=0;i<4;i++)
       {
