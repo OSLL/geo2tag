@@ -31,7 +31,7 @@ rm $WEBGEO_HOME/3rd_party.tar.gz
 git clone git://github.com/OSLL/geo2tag.git ${dir_repo}
 cd ${dir_repo}
 git pull --all
-git checkout devel 
+git checkout master 
 cp -rf ${dir_repo}/automation ${dir_automation}
 #rm -rf ${dir_repo}
 
