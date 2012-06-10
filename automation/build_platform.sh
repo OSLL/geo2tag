@@ -104,6 +104,10 @@ else
 	status="fail";
 fi
 
+# update webtests page
+cd ${dir_automation}
+./update_webtests.sh $branch
+
 cd ${dir_geo2tag}
 dh_clean
 #git stash
