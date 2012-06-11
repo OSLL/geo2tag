@@ -84,11 +84,10 @@ const QString& RegisterUserQuery::getConfirmUrl() const
 void RegisterUserQuery::processReply(QNetworkReply *reply)
 {
     //#ifndef Q_OS_SYMBIAN
-    qDebug("I'm in!");
     RegisterUserResponseJSON response;
     response.parseJson(reply->readAll());
     if (response.getErrno() == SUCCESS) {
-	m_confirmUrl = response.getConfirmUrl();
+        m_confirmUrl = response.getConfirmUrl();
         syslog(LOG_INFO,"!!connected!");
         qDebug("!!connected!");
         Q_EMIT connected();

@@ -30,31 +30,30 @@
  */
 
 /*!
- * \file Test_RegisterUserQuery.cpp
- * \brief Test suite for RegisterUserQuery class
+ * \file Test_RegisterUserQuery.h
+ * \brief Test suite for Test_RegisterUserQuery class
  *
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-#include "Test_RegisterUserQuery.h"
-#include "signals.h"
+#ifndef TEST_LOGINQUERY_H
+#define TEST_LOGINQUERY_H
 
-#include <QString>
-#include <QTimer>
+#include <QObject>
+#include <QTest>
+#include "LoginQuery.h"
 
 namespace Test
 {
-    void Test_RegisterUserQuery::response()
+
+    class Test_LoginQuery : public QObject
     {
-        RegisterUserQuery query(this);
-        QString email = "email5@test1.org";
-        QString login = "Mark";
-        QString password = "test";
-        query.setQuery(email, login, password);
-        query.doRequest();
-        //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
-        QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
+        Q_OBJECT
 
-    }
+    private slots:
+        void response();
 
-} // end of namespace Test
+    };  // class Test_LoginQuery
+} // namespace Test
+
+#endif // TEST_LOGINQUERY_H

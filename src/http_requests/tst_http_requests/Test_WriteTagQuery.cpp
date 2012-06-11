@@ -30,31 +30,39 @@
  */
 
 /*!
- * \file Test_RegisterUserQuery.cpp
- * \brief Test suite for RegisterUserQuery class
+ * \file Test_WriteTagQuery.cpp
+ * \brief Test suite for WriteTagQuery class
  *
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-#include "Test_RegisterUserQuery.h"
+#include "Test_WriteTagQuery.h"
 #include "signals.h"
+#include "Session.h"
+#include "User.h"
+#include "JsonDataMark.h"
 
 #include <QString>
 #include <QTimer>
+#include <QDateTime>
 
 namespace Test
 {
-    void Test_RegisterUserQuery::response()
+    void Test_WriteTagQuery::response()
     {
-        RegisterUserQuery query(this);
-        QString email = "email5@test1.org";
-        QString login = "Mark";
-        QString password = "test";
-        query.setQuery(email, login, password);
+        WriteTagQuery query(this);
+        QSharedPointer<Channel> channel(new Channel("Test channel", "description"));
+        QSharedPointer<common::User> user(new common::User("Paul", "test"));
+        QSharedPointer<Session> session(new Session("ppppppppp", QDateTime::currentDateTime().toUTC(), user));
+        JsonDataMark tag(30.0, 60.0, 30.0, "Test mark", "Test description", "", QDateTime::currentDateTime());
+        tag.setChannel(channel);
+        tag.setSession(session);
+        query.setTag(QSharedPointer<DataMark>(&tag));
         query.doRequest();
         //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
         QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
-
     }
 
 } // end of namespace Test
+
+
