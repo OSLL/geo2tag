@@ -76,7 +76,7 @@ then
 		/etc/init.d/postgresql start
 		sudo -u postgres dropdb geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		sudo -u postgres dropuser geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
-		echo "n" | dpkg -i geo2tag-*deb libgeo2tag-*deb >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
+		echo "n" | dpkg -i geo2tag_*deb libgeo2tag_*deb >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 
 		#TEST
                 test_result=`${dir_automation}/test_platform.sh`;
@@ -89,8 +89,8 @@ then
 			cd "${dir_automation}"
 			rm -rf "${dir_backup}"
 			mkdir "${dir_backup}"
-			mv -f ${dir_automation}/libgeo2tag-*deb "${dir_backup}"
-			mv -f ${dir_automation}/geo2tag-*deb "${dir_backup}"	
+			mv -f ${dir_automation}/libgeo2tag_*deb "${dir_backup}"
+			mv -f ${dir_automation}/geo2tag_*deb "${dir_backup}"	
 		else
 		# test cases not passed, restore backup
 			echo "Tests not passed" >> ${dir_log}/test.log.txt
