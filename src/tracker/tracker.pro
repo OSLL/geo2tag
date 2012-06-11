@@ -7,7 +7,7 @@ include(../../config.pri)
 
 linux {
        SUBDIRS = ui observer
-       TARGET =  ui/wikigpsTracker-ui #observer/wikigps-observer
+       TARGET =  ui/wikigpsTracker-ui observer/wikigps-observer
 
 
 }
