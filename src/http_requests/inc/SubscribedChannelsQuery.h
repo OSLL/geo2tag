@@ -49,7 +49,7 @@
 #include <QNetworkReply>
 #include "DefaultQuery.h"
 #include "Channel.h"
-#include "User.h"
+#include "Session.h"
 
   /*!
    * SubscribedChannelsQuery class definition.
@@ -62,7 +62,7 @@
   {
     Q_OBJECT
 
-      QSharedPointer<common::User> m_user;
+    QSharedPointer<Session> m_session;
     QSharedPointer<Channels> m_channels;
 
     virtual QString getUrl() const;
@@ -76,12 +76,12 @@
 
       SubscribedChannelsQuery(QObject *parent = 0);
 
-      SubscribedChannelsQuery(QSharedPointer<common::User> user, QObject *parent = 0);
+      SubscribedChannelsQuery(const QSharedPointer<Session>& session, QObject *parent = 0);
 
       ~SubscribedChannelsQuery();
 
       const QSharedPointer<Channels>& getChannels() const;
-      void setQuery(QSharedPointer<common::User>&);
+      void setQuery(const QSharedPointer<Session>& session);
 
       Q_SIGNALS:
 

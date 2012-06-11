@@ -69,7 +69,7 @@ DefaultQuery(parent)
 
 QString LoginQuery::getUrl() const
 {
-  return LOGIN_HTTP_URL;
+    return LOGIN_HTTP_URL;
 }
 
 
@@ -90,13 +90,11 @@ void LoginQuery::processReply(QNetworkReply *reply)
   m_errno = response.getErrno();
   if(response.getErrno() == SUCCESS)
   {
-    QSharedPointer<common::User> user = response.getUsers()->at(0);
-    m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, user->getToken()));
+    m_session = response.getSessions()->at(0);
     syslog(LOG_INFO,"!!connected!");
     Q_EMIT connected();
-  }
-  else
-  {
+  } else {
+    qDebug("!!errorOccured!");
     Q_EMIT errorOccured(response.getErrno());
   }
 //  #endif
@@ -110,9 +108,9 @@ void LoginQuery::setQuery(const QString& login, const QString& password)
 }
 
 
-QSharedPointer<common::User> LoginQuery::getUser() const
+QSharedPointer<Session> LoginQuery::getSession() const
 {
-  return m_user;
+  return m_session;
 }
 
 
