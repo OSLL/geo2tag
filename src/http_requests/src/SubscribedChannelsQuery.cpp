@@ -47,9 +47,9 @@
 #include "JsonDataMark.h"
 #include "JsonUser.h"
 
-SubscribedChannelsQuery::SubscribedChannelsQuery(QSharedPointer<common::User> user,
-QObject *parent): DefaultQuery(parent),
-m_user(user)
+SubscribedChannelsQuery::SubscribedChannelsQuery(const QSharedPointer<Session>& session, QObject *parent)
+    : DefaultQuery(parent),
+      m_session(session)
 {
 }
 
@@ -59,9 +59,9 @@ SubscribedChannelsQuery::SubscribedChannelsQuery(QObject *parent): DefaultQuery(
 }
 
 
-void SubscribedChannelsQuery::setQuery(QSharedPointer<common::User> &user)
+void SubscribedChannelsQuery::setQuery(const QSharedPointer<Session>& session)
 {
-  m_user=user;
+  m_session = session;
 }
 
 
@@ -74,7 +74,7 @@ QString SubscribedChannelsQuery::getUrl() const
 QByteArray SubscribedChannelsQuery::getRequestBody() const
 {
   SubscribedChannelsRequestJSON request;
-  request.addUser(m_user);
+  request.addSession(m_session);
   return request.getJson();
 }
 

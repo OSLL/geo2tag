@@ -48,7 +48,7 @@
 #include <DefaultQuery.h>
 
 #include "DataMarks.h"
-#include "User.h"
+#include "Session.h"
 #include "Channel.h"
 #include "DataChannel.h"
 
@@ -62,7 +62,7 @@ class LoadTagsQuery : public DefaultQuery
 {
   Q_OBJECT
 
-    QSharedPointer<common::User> m_user;
+    QSharedPointer<Session> m_session;
   double m_latitude;
   double m_longitude;
   double m_radius;
@@ -78,7 +78,7 @@ class LoadTagsQuery : public DefaultQuery
 
   public:
 
-    LoadTagsQuery(QSharedPointer<common::User> &user,
+    LoadTagsQuery(QSharedPointer<Session> &session,
       double latitude,
       double longitude,
       double radius,
@@ -86,7 +86,7 @@ class LoadTagsQuery : public DefaultQuery
 
     LoadTagsQuery(QObject *parent = 0);
 
-    void setQuery(QSharedPointer<common::User> &user,
+    void setQuery(QSharedPointer<Session> &session,
       double latitude,
       double longitude,
       double radius);

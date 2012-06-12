@@ -46,7 +46,7 @@
 #include <QObject>
 #include <QString>
 #include "DefaultQuery.h"
-#include "User.h"
+#include "Session.h"
 
 
   class SubscribeChannelQuery: public DefaultQuery
@@ -54,7 +54,7 @@
     Q_OBJECT
 
     QSharedPointer<Channel> m_channel;
-    QSharedPointer<common::User> m_user;
+    QSharedPointer<Session> m_session;
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
 
@@ -66,9 +66,9 @@
 
       SubscribeChannelQuery(QObject *parent = 0);
 
-      SubscribeChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user, QObject *parent = 0);
+      SubscribeChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<Session> &session, QObject *parent = 0);
 
-      void setQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user);
+      void setQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<Session> &session);
 
       ~SubscribeChannelQuery();
 

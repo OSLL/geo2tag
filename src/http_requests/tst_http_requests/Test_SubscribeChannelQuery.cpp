@@ -36,25 +36,27 @@
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-#include "Test_RegisterUserQuery.h"
+#include "Test_SubscribeChannelQuery.h"
 #include "signals.h"
+#include "Session.h"
 
 #include <QString>
 #include <QTimer>
 
 namespace Test
 {
-    void Test_RegisterUserQuery::response()
+    void Test_SubscribeChannelQuery::response()
     {
-        RegisterUserQuery query(this);
-        QString email = "email5@test1.org";
-        QString login = "Mark";
-        QString password = "test";
-        query.setQuery(email, login, password);
+        SubscribeChannelQuery query;
+        QSharedPointer<Channel> channel(new Channel("name", "description"));
+        QSharedPointer<common::User> user(new common::User("Paul", "test"));
+        QSharedPointer<Session> session(new Session("ppppppppp", QDateTime::currentDateTime().toUTC(), user));
+        query.setQuery(channel, session);
         query.doRequest();
         //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
         QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
-
     }
 
 } // end of namespace Test
+
+

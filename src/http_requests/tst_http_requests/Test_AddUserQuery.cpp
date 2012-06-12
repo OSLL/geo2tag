@@ -30,13 +30,13 @@
  */
 
 /*!
- * \file Test_RegisterUserQuery.cpp
- * \brief Test suite for RegisterUserQuery class
+ * \file Test_AddUserQuery.cpp
+ * \brief Test suite for AddUserQuery class
  *
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-#include "Test_RegisterUserQuery.h"
+#include "Test_AddUserQuery.h"
 #include "signals.h"
 
 #include <QString>
@@ -44,13 +44,13 @@
 
 namespace Test
 {
-    void Test_RegisterUserQuery::response()
+    void Test_AddUserQuery::response()
     {
-        RegisterUserQuery query(this);
+        AddUserQuery query(this);
         QString email = "email5@test1.org";
         QString login = "Mark";
         QString password = "test";
-        query.setQuery(email, login, password);
+        query.setQuery(login, password, email);
         query.doRequest();
         //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
         QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
@@ -58,3 +58,4 @@ namespace Test
     }
 
 } // end of namespace Test
+

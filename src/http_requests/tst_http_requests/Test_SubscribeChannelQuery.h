@@ -30,31 +30,33 @@
  */
 
 /*!
- * \file Test_RegisterUserQuery.cpp
- * \brief Test suite for RegisterUserQuery class
+ * \file Test_AddUserQuery.h
+ * \brief Test suite for AddUserQuery class
  *
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-#include "Test_RegisterUserQuery.h"
+#ifndef TEST_SUBSCRIBECHANNELQUERY_H
+#define TEST_SUBSCRIBECHANNELQUERY_H
+
+#include <QObject>
+#include <QtTest/QtTest>
+#include <QSignalSpy>
+
+#include "SubscribeChannelQuery.h"
 #include "signals.h"
 
-#include <QString>
-#include <QTimer>
 
 namespace Test
 {
-    void Test_RegisterUserQuery::response()
+    class Test_SubscribeChannelQuery : public QObject
     {
-        RegisterUserQuery query(this);
-        QString email = "email5@test1.org";
-        QString login = "Mark";
-        QString password = "test";
-        query.setQuery(email, login, password);
-        query.doRequest();
-        //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
-        QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
+        Q_OBJECT
 
-    }
+    private slots:
+        void response();
 
-} // end of namespace Test
+    };  // class Test_SubscribeChannelQuery
+} // namespace Test
+
+#endif // TEST_SUBSCRIBECHANNELQUERY_H

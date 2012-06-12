@@ -30,27 +30,29 @@
  */
 
 /*!
- * \file Test_RegisterUserQuery.cpp
- * \brief Test suite for RegisterUserQuery class
+ * \file Test_AvailableChannelsQuery.cpp
+ * \brief Test suite for AvailableChannelsQuery class
  *
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-#include "Test_RegisterUserQuery.h"
+#include "Test_AvailableChannelsQuery.h"
 #include "signals.h"
+#include "Session.h"
+#include "User.h"
 
 #include <QString>
 #include <QTimer>
+#include <QDateTime>
 
 namespace Test
 {
-    void Test_RegisterUserQuery::response()
+    void Test_AvailableChannelsQuery::response()
     {
-        RegisterUserQuery query(this);
-        QString email = "email5@test1.org";
-        QString login = "Mark";
-        QString password = "test";
-        query.setQuery(email, login, password);
+        AvailableChannelsQuery query;
+        QSharedPointer<common::User> user(new common::User("Paul", "test"));
+        QSharedPointer<Session> session(new Session("ppppppppp", QDateTime::currentDateTime().toUTC(), user));
+        query.setQuery(session);
         query.doRequest();
         //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
         QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
@@ -58,3 +60,5 @@ namespace Test
     }
 
 } // end of namespace Test
+
+

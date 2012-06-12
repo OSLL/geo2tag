@@ -31,7 +31,7 @@ linux: {
 	     tracker/clients/meego/tst \
              common/tst \
 	     maps \
-             tracker/observer
+             #tracker/observer
 }
 
 #SUBDIRS += \
