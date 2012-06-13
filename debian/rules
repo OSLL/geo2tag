@@ -54,9 +54,9 @@ build-stamp:
 		else exit 1; \
 		fi; \
 	fi;
-	cd $(CURDIR)/src/webside/; \
-	ant war; \
-	cd ../../; \
+#	cd $(CURDIR)/src/webside/; \
+#	ant war; \
+#	cd ../../; \
 	touch build-stamp
 
 clean:
@@ -95,7 +95,7 @@ install: build unittest
 		cp scripts/base.sql $(CURDIR)/debian/tmp/opt/geo2tag; 
 #		cp scripts/odbc.ini $(CURDIR)/debian/tmp/opt/geo2tag; \
 		cp scripts/odbcinst.ini $(CURDIR)/debian/tmp/opt/geo2tag; 
-		cp $(BUILDDIR)/webside/geo2tag.war $(CURDIR)/debian/tmp/opt/geo2tag; 
+#		cp $(BUILDDIR)/webside/geo2tag.war $(CURDIR)/debian/tmp/opt/geo2tag; 
 #	fi;
 #	cp $(BUILDDIR)tracker/wikigpsTracker $(CURDIR)/debian/tmp/etc/event.d; 
 #	cp $(BUILDDIR)tracker/wikigpsTracker-logrotate $(CURDIR)/debian/tmp/etc/logrotate.d; 
