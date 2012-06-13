@@ -1,0 +1,13 @@
+#!/bin/bash
+echo "Now please deploy geo2tag-web app on your Tomcat 7.0 web-server."
+echo "Webapp geo2tag.war is in /opt/geo2tag directory"
+#if echo $CATALINA_HOME/bin && echo $CATALINA_HOME/webapps
+#then
+#    echo $CATALINA_HOME
+#    sudo cp -f /opt/geo2tag/geo2tag.war $CATALINA_HOME/webapps
+#    $CATALINA_HOME/bin/startup.sh
+##    echo "Now please restart your Tomcat 7.0 web-server."
+#else
+#    echo "Please configure Tomcat 7.0 web-server with CATALINA_HOME variable."
+#    echo "Webapp geo2tag.war is in /opt/geo2tag directory."
+#fi
