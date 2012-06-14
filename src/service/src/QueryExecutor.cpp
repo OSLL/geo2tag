@@ -270,7 +270,7 @@ bool QueryExecutor::deleteTmpUser(const QSharedPointer<common::User> &user)
     return result;
 }
 
-const QString& QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
+const QString QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
 {
     PerformanceCounter counter("QueryExecutor::insertNewTmpUser");
     bool result;
@@ -292,7 +292,7 @@ const QString& QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User
     if(!result) {
       syslog(LOG_INFO,"Rollback for NewSignup sql query");
       m_database.rollback();
-      return "";
+      return QString("");
     } 
     syslog(LOG_INFO,"Commit for NewSignup sql query");
     m_database.commit();
