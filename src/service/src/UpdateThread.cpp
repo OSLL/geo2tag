@@ -91,7 +91,10 @@ bool UpdateThread::compareTransactionNumber()
 
   syslog(LOG_INFO, "Checking number of write requests: logged = %lld, fact = %lld", m_transactionCount, transactionCount);
 // If m_transactionCount < transactionCount then need sync 
-  result = (m_transactionCount < transactionCount);
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+  qlonglong transactionDiff =  storage.getValue("General_Settings/transaction_diff", QVariant(DEFAULT_DB_UPDATE_INTERVAL)).toLongLong();
+  syslog(LOG_INFO, "Diff from config = %lld, fact = %lld",transactionDiff,transactionCount-m_transactionCount);
+  result = ( transactionCount - m_transactionCount >= transactionDiff);
   if (result) m_transactionCount = transactionCount;
 
   return result;
@@ -102,6 +105,8 @@ void UpdateThread::run()
 
   for(;;)
   {
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    qlonglong interval = storage.getValue("General_Settings/db_update_interval", QVariant(DEFAULT_TRANSACTION_DIFF_TO_SYNC)).toLongLong();
     {
     PerformanceCounter counter("db_update");    
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
@@ -115,12 +120,11 @@ void UpdateThread::run()
 
     qDebug() << "connected...";
 // Check if DB contain new changes
-
     checkTmpUsers();
     checkSessions();
     if (!compareTransactionNumber())
     {
-      QThread::msleep(10000);
+      QThread::msleep(interval);
       continue;
     }
 
@@ -169,7 +173,7 @@ void UpdateThread::run()
     syslog(LOG_INFO,  "current sessions' size = %d", m_sessionsContainer->size());
     m_database.close();
     }
-    QThread::msleep(10000);
+    QThread::msleep(interval);
   }
 }
 
