@@ -56,17 +56,17 @@ int main(int argc, char *argv[])
 
     QObject *tests[] =
     {
-        //new Test::DeleteUserQuery_Test,
-        //new Test::Test_AddUserQuery,
-        //new Test::Test_ApplyChannelQuery,
-        //new Test::Test_AvailableChannelsQuery,
-        //new Test::Test_LoadTagsQuery,
-        //new Test::Test_LoginQuery,
-        //new Test::Test_RegisterUserQuery,
-        //new Test::Test_SubscribeChannelQuery,
-        //new Test::Test_SubscribedChannelsQuery,
+        new Test::DeleteUserQuery_Test,
+        new Test::Test_AddUserQuery,
+        new Test::Test_ApplyChannelQuery,
+        new Test::Test_AvailableChannelsQuery,
+        new Test::Test_LoadTagsQuery,
+        new Test::Test_LoginQuery,
+        new Test::Test_RegisterUserQuery,
+        new Test::Test_SubscribeChannelQuery,
+        new Test::Test_SubscribedChannelsQuery,
         new Test::Test_WriteTagQuery,
-        //new Test::VersionQuery_Test
+        new Test::VersionQuery_Test
     };
 
     for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
