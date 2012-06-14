@@ -36,12 +36,18 @@
 #define ADDCHANNELREQUESTJSON_H_
 
 #include "JsonSerializer.h"
+#include "Session.h"
+#include "Channel.h"
 
 class AddChannelRequestJSON: public JsonSerializer
 {
   Q_OBJECT;
   public:
     AddChannelRequestJSON(QObject *parent=0);
+
+    AddChannelRequestJSON(const QSharedPointer<Session>& session,
+                          const QSharedPointer<Channel>& channel,
+                          QObject* parent = 0);
 
     QByteArray getJson() const;
 

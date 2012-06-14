@@ -39,12 +39,16 @@
 #include <QString>
 #include "DefaultQuery.h"
 #include "User.h"
+#include "Session.h"
+#include "Channel.h"
 #include "DataMarks.h"
 
 class WriteTagQuery: public DefaultQuery
 {
   Q_OBJECT
 
+    QSharedPointer<Session> m_session;
+    QSharedPointer<Channel> m_channel;
     QSharedPointer<DataMark> m_tag;
 
   virtual QString getUrl() const;
@@ -52,13 +56,21 @@ class WriteTagQuery: public DefaultQuery
   virtual void processReply(QNetworkReply *reply);
 
   public:
-    WriteTagQuery(const QSharedPointer<DataMark> &tag, QObject *parent = 0);
+    WriteTagQuery(const QSharedPointer<Session>& session,
+                  const QSharedPointer<Channel>& channel,
+                  const QSharedPointer<DataMark> &tag, QObject *parent = 0);
     WriteTagQuery(QObject *parent = 0);
 
     ~WriteTagQuery();
     void setTag(const QSharedPointer<DataMark> &tag);
     QSharedPointer<DataMark> getTag();
     const QSharedPointer<DataMark>& getTag() const;
+
+    void setSession(const QSharedPointer<Session>& session);
+    const QSharedPointer<Session>& getSession() const;
+
+    void setChannel(const QSharedPointer<Channel>& channel);
+    const QSharedPointer<Channel>& getChannel() const;
 
     Q_SIGNALS:
 

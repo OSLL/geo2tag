@@ -44,11 +44,15 @@
 #define _SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
 
 #include "JsonSerializer.h"
+#include "Session.h"
+#include "Channel.h"
 
 class SubscribeChannelRequestJSON: public JsonSerializer
 {
-  public:
-    SubscribeChannelRequestJSON(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user,QObject *parent=0);
+public:
+    SubscribeChannelRequestJSON(QObject *parent = 0);
+
+    SubscribeChannelRequestJSON(const QSharedPointer<Session>& session, const QSharedPointer<Channel> &channel, QObject *parent = 0);
 
     // Three functions below was virtual
     QByteArray getJson() const;
@@ -57,11 +61,8 @@ class SubscribeChannelRequestJSON: public JsonSerializer
 
     //   ~SubscribeChannelRequestJSON();
 
-    SubscribeChannelRequestJSON(QObject *parent=0);
+};  // class SubscribeChannelJSON
 
-    // class SubscribeChannelJSON
-};
-//_SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
-#endif
+#endif //_SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

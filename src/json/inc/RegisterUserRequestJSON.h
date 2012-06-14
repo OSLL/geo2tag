@@ -36,11 +36,14 @@
 #define REGISTERUSERREQUESTJSON_H
 
 #include "JsonSerializer.h"
+#include "User.h"
 
 class RegisterUserRequestJSON : public JsonSerializer
 {
 public:
     RegisterUserRequestJSON(QObject *parent=0);
+
+    RegisterUserRequestJSON(const QSharedPointer<common::User>& user, QObject *parent=0);
 
     QByteArray getJson() const;
 

@@ -57,6 +57,8 @@ namespace Test
         JsonDataMark tag(30.0, 60.0, 30.0, "Test mark", "Test description", "", QDateTime::currentDateTime());
         tag.setChannel(channel);
         tag.setSession(session);
+        query.setSession(session);
+        query.setChannel(channel);
         query.setTag(QSharedPointer<DataMark>(&tag));
         query.doRequest();
         //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));

@@ -50,6 +50,17 @@ WriteTagRequestJSON::WriteTagRequestJSON(QObject *parent) : JsonSerializer(paren
 {
 }
 
+WriteTagRequestJSON::WriteTagRequestJSON(const QSharedPointer<Session> &session,
+                                         const QSharedPointer<Channel> &channel,
+                                         const QSharedPointer<DataMark> &tag,
+                                         QObject *parent)
+    : JsonSerializer(parent)
+{
+    m_sessionsContainer->push_back(session);
+    m_channelsContainer->push_back(channel);
+    m_tagsContainer->push_back(tag);
+}
+
 
 bool WriteTagRequestJSON::parseJson(const QByteArray &data)
 {
@@ -78,8 +89,10 @@ bool WriteTagRequestJSON::parseJson(const QByteArray &data)
   QSharedPointer<Channel> channel(new JsonChannel(channel_name, "unknown"));
 
   QSharedPointer<DataMark> tag(new JsonDataMark(altitude, latitude, longitude, title, description, link, time));
-  tag->setChannel(channel);
-  tag->setSession(session);
+  //tag->setChannel(channel);
+  //tag->setSession(session);
+  m_channelsContainer->push_back(channel);
+  m_sessionsContainer->push_back(session);
   m_tagsContainer->push_back(tag);
 
   return true;
@@ -91,8 +104,10 @@ QByteArray WriteTagRequestJSON::getJson() const
   QJson::Serializer serializer;
   QVariantMap request;
   QSharedPointer<DataMark> mark = m_tagsContainer->at(0);
-  request.insert("auth_token", mark->getSession()->getSessionToken());
-  request.insert("channel", mark->getChannel()->getName());
+  QSharedPointer<Session> session = m_sessionsContainer->at(0);
+  QSharedPointer<Channel> channel = m_channelsContainer->at(0);
+  request.insert("auth_token", session->getSessionToken());
+  request.insert("channel", channel->getName());
   request.insert("title", mark->getLabel().isEmpty()? "New mark":mark->getLabel());
   request.insert("link", mark->getUrl());
   request.insert("description", mark->getDescription());
