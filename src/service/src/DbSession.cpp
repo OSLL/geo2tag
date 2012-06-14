@@ -506,8 +506,8 @@ namespace common
     QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
     syslog(LOG_INFO,"Adding mark with altitude = %f",dummyTag->getAltitude());
 
-    syslog(LOG_INFO,"Checking for sessions with token = %s",dummyTag->getSession()->getSessionToken().toStdString().c_str());
-    QSharedPointer<Session> dummySession = dummyTag->getSession();
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    syslog(LOG_INFO,"Checking for sessions with token = %s",dummySession->getSessionToken().toStdString().c_str());
     QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
     {
@@ -518,7 +518,7 @@ namespace common
 
     QSharedPointer<User> realUser = realSession->getUser();
 
-    QSharedPointer<Channel> dummyChannel = dummyTag->getChannel();
+    QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
     QSharedPointer<Channel> realChannel;// Null pointer
     QVector<QSharedPointer<Channel> > currentChannels = realUser->getSubscribedChannels()->vector();
 

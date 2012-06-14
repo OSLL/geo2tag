@@ -47,6 +47,13 @@ AddUserRequestJSON::AddUserRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
+AddUserRequestJSON::AddUserRequestJSON(const QSharedPointer<common::User>& user,
+                                       QObject *parent)
+    : JsonSerializer(parent)
+{
+    m_usersContainer->push_back(user);
+}
+
 QByteArray AddUserRequestJSON::getJson() const
 {
     QJson::Serializer serializer;
