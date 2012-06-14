@@ -238,16 +238,9 @@ namespace common
   {
     QSharedPointer<User> realUser;      // Null pointer
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
-    syslog(LOG_INFO, "checking user key: %s from %d known users", dummyUser->getToken().toStdString().c_str(),
+    syslog(LOG_INFO, "checking user key: %s from %d known users", dummyUser->getLogin().toStdString().c_str(),
       currentUsers.size());
-    if (!dummyUser->getToken().isEmpty() && dummyUser->getToken()!="unknown")
-    {
-    	for(int i=0; i<currentUsers.size(); i++)
-    	{
-      		if(currentUsers.at(i)->getToken() == dummyUser->getToken())
-        	return currentUsers.at(i);
-    	}
-    }else if (!dummyUser->getLogin().isEmpty() && !dummyUser->getPassword().isEmpty())
+    if (!dummyUser->getLogin().isEmpty() && !dummyUser->getPassword().isEmpty())
     {
     	for(int i=0; i<currentUsers.size(); i++)
     	{
@@ -277,13 +270,8 @@ namespace common
   QSharedPointer<Session> DbObjectsCollection::findSessionForUser(const QSharedPointer<User>& user) const
   {
       QVector< QSharedPointer<Session> > currentSessions = m_sessionsContainer->vector();
-      syslog(LOG_INFO, "checking of session existence for user with token: %s", user->getToken().toStdString().c_str());
-      if (!user->getToken().isEmpty() && user->getToken()!="unknown") {
-        for (int i = 0; i < currentSessions.size(); i++) {
-            if (currentSessions.at(i)->getUser()->getToken() == user->getToken())
-                return currentSessions.at(i);
-        }
-      } else if (!user->getLogin().isEmpty() && !user->getPassword().isEmpty()) {
+      syslog(LOG_INFO, "checking of session existence for user with name: %s", user->getLogin().toStdString().c_str());
+      if (!user->getLogin().isEmpty() && !user->getPassword().isEmpty()) {
         for (int i = 0; i < currentSessions.size(); i++) {
             if (QString::compare(currentSessions.at(i)->getUser()->getLogin(), user->getLogin(), Qt::CaseInsensitive) == 0
                 &&
@@ -329,11 +317,11 @@ namespace common
         answer.append(response.getJson());
         return answer;
     }
-    newTmpUser = m_queryExecutor->insertNewTmpUser(newTmpUser);
+    QString confirmToken = m_queryExecutor->insertNewTmpUser(newTmpUser);
     m_updateThread->lockWriting();
     m_updateThread->incrementTransactionCount();
     m_updateThread->unlockWriting();
-    if(newTmpUser.isNull()) {
+    if(confirmToken.isEmpty()) {
         response.setErrno(INTERNAL_DB_ERROR);
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
@@ -341,7 +329,7 @@ namespace common
     }
 
     response.setErrno(SUCCESS);
-    response.setConfirmUrl(QString(DEFAULT_SERVER)+QString("service/confirmRegistration-")+newTmpUser->getToken());
+    response.setConfirmUrl(QString(DEFAULT_SERVER)+QString("service/confirmRegistration-")+confirmToken);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -389,30 +377,14 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser;      // Null pointer
-    QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+    QSharedPointer<User> realUser = findUser(dummyUser);      
 
-    for(int i=0; i<currentUsers.size(); i++)
-    {
-      syslog(LOG_INFO,"Look up in %s and %s",currentUsers.at(i)->getLogin().toStdString().c_str(),
-        currentUsers.at(i)->getPassword().toStdString().c_str());
-      if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0)
-      {
-        if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
-        {
-          realUser = currentUsers.at(i);
-          break;
-        }
-        else  response.setErrno(INCORRECT_CREDENTIALS_ERROR);
-      }
-    }
     if(realUser.isNull())
     {
       response.setErrno(INCORRECT_CREDENTIALS_ERROR);
     }
     else
     {
-      syslog(LOG_INFO, "Searching of session for user with token: %s", realUser->getToken().toStdString().c_str());
       QSharedPointer<Session> session = findSessionForUser(realUser);
       if (session.isNull()) {
           QSharedPointer<Session> dummySession(new Session("", QDateTime::currentDateTime(), realUser));

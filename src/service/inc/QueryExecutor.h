@@ -68,17 +68,16 @@ class QueryExecutor : public QObject
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
-    QSharedPointer<common::User> doesTmpUserExist(const QSharedPointer<common::User> &user);
+    bool		     doesTmpUserExist(const QSharedPointer<common::User> &user);
     bool                     doesUserWithGivenEmailExist(const QSharedPointer<common::User> &user);
     bool                     deleteTmpUser(const QSharedPointer<common::User> &user);
-    QSharedPointer<common::User>  insertNewTmpUser(const QSharedPointer<common::User> &user);
+    const QString&  insertNewTmpUser(const QSharedPointer<common::User> &user);
     bool                     doesRegistrationTokenExist(const QString &token);
     QSharedPointer<common::User> insertTmpUserIntoUsers(const QString &token);
     bool                     deleteTmpUser(const QString &token);
     QSharedPointer<DataMark> insertNewTag(const QSharedPointer<DataMark>&);
     QSharedPointer<common::User>    insertNewUser(const QSharedPointer<common::User>&);
     QSharedPointer<Channel>  insertNewChannel(const QSharedPointer<Channel>&);
-    bool                     isChannelSubscribed(QSharedPointer<Channel>&, QSharedPointer<common::User>&);
     bool                     deleteUser(const QSharedPointer<common::User> &user);
     // Sessions
     QSharedPointer<Session>  insertNewSession(const QSharedPointer<Session>& session);

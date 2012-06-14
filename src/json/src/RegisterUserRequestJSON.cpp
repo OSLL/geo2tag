@@ -75,6 +75,6 @@ bool RegisterUserRequestJSON::parseJson(const QByteArray &data)
     QString email = result["email"].toString();
     QString login = result["login"].toString();
     QString password = result["password"].toString();
-    m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login, password, "unknown",email)));
+    m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login, password,email)));
     return true;
 }

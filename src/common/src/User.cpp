@@ -46,12 +46,6 @@
 namespace common
 {
 
-  User::User(const QString& name, const QString& pass):
-  m_login(name),
-    m_password(pass),
-    m_channels(new Channels())
-  {
-  }
 
   User::User(const QString &name, const QString &passw, const QString &email)
       : m_login(name),
@@ -94,11 +88,6 @@ namespace common
     return m_login;
   }
 
-  const QString& User::getToken() const
-  {
-    return m_token;
-  }
-
   const QString& User::getPassword() const
   {
     return m_password;
@@ -117,11 +106,6 @@ namespace common
   void User::setPassword(QString password)
   {
     m_password = password;
-  }
-
-  void User::setToken(const QString &token)
-  {
-    m_token = token;
   }
 
   User::~User()

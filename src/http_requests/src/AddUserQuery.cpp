@@ -36,7 +36,7 @@ QString AddUserQuery::getUrl() const
 
 QByteArray AddUserQuery::getRequestBody() const
 {
-  QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, "unknown", m_email));
+  QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, m_email));
   AddUserRequestJSON request;
   request.addUser(dummyUser);
   return request.getJson();
@@ -51,8 +51,9 @@ void AddUserQuery::processReply(QNetworkReply *reply)
   m_errno = response.getErrno();
   if(response.getErrno() == SUCCESS)
   {
-    QSharedPointer<common::User> user = response.getUsers()->at(0);
-    m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, user->getToken(), m_email));
+    m_session = response.getSessions()->at(0);
+    m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, m_email));
+
     syslog(LOG_INFO,"!!connected!");
     Q_EMIT connected();
   }
@@ -79,6 +80,11 @@ void AddUserQuery::setQuery(const QString& login, const QString& password, const
 QSharedPointer<common::User> AddUserQuery::getUser() const
 {
   return m_user;
+}
+
+QSharedPointer<Session> AddUserQuery::getSession() const
+{
+  return m_session;
 }
 
 AddUserQuery::~AddUserQuery()

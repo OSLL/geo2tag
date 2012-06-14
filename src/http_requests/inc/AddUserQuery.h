@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QString>
 #include "DefaultQuery.h"
-#include "User.h"
+#include "Session.h"
 
 
 class AddUserQuery: public DefaultQuery
@@ -16,6 +16,7 @@ class AddUserQuery: public DefaultQuery
 
   //!< full information about user
   QSharedPointer<common::User> m_user;
+  QSharedPointer<Session> m_session;
 
   virtual QString getUrl() const;
   virtual QByteArray getRequestBody() const;
@@ -34,6 +35,7 @@ class AddUserQuery: public DefaultQuery
     void setQuery(const QString& login, const QString& password, const QString& email);
 
     QSharedPointer<common::User> getUser() const;
+    QSharedPointer<Session> getSession() const;
 
     ~AddUserQuery();
 
