@@ -48,14 +48,14 @@
  *
  */
 #include "ProfilerThread.h"
-#include "User.h"
+#include "Session.h"
 #include <QSharedPointer>
 
 class LoadTagsThread: public ProfilerThread
 {
   Q_OBJECT;
 public:
-  LoadTagsThread(QSharedPointer<common::User> user);
+  LoadTagsThread(QSharedPointer<Session> session);
 
   ~LoadTagsThread();
 }; // class LoadTagsThread

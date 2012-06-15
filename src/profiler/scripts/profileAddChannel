@@ -5,10 +5,15 @@
 # this will add "method_name time_spended_for_method" records into file @output_file@
 # After this all just grep out data
 
-number_of_iterations=20;
-auth_token="MMMMMMMMMM";
 
-
+if [[ "$#" == "2" ]]
+then
+	number_of_iterations=$1;
+	auth_token="$2";
+else
+	number_of_iterations=20;
+	auth_token="MMMMMMMMMM";
+fi
 
 for (( i=0;  i<=number_of_iterations; i++ )) ;
 do

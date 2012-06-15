@@ -43,24 +43,19 @@ int main(int argc,char** argv)
     }else if (QString(argv[2]) == "writeTag") // perform track testing
     {
       QSharedPointer<DataMark> tag(new JsonDataMark(0.0,0.0,0.0,"","","",QDateTime::currentDateTime()));
-      QSharedPointer<common::User> user(new JsonUser("","",argv[3]));
       QSharedPointer<Channel> channel(new JsonChannel(argv[4],"",""));
-      tag->setChannel(channel);
-      tag->setSession(session);
-      tag->setUser(user);
       for (int i=0;i<4;i++)
       {
-	TrackThread * thread = new TrackThread(tag);
+	TrackThread * thread = new TrackThread(session,channel,tag);
         QObject::connect(thread,SIGNAL(terminated()),&loop,SLOT(quit()));
         QObject::connect(thread,SIGNAL(finished()),&loop,SLOT(quit()));
         thread->start(); 
       }
     }else if (QString(argv[2]) == "loadTags") // perform track testing
     {
-      QSharedPointer<common::User> user(new JsonUser("","",argv[3]));
       for (int i=0;i<4;i++)
       {
-	LoadTagsThread * thread = new LoadTagsThread(user);
+	LoadTagsThread * thread = new LoadTagsThread(session);
         QObject::connect(thread,SIGNAL(terminated()),&loop,SLOT(quit()));
         QObject::connect(thread,SIGNAL(finished()),&loop,SLOT(quit()));
         thread->start(); 

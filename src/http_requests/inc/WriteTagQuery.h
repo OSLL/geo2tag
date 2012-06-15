@@ -58,7 +58,7 @@ class WriteTagQuery: public DefaultQuery
   public:
     WriteTagQuery(const QSharedPointer<Session>& session,
                   const QSharedPointer<Channel>& channel,
-                  const QSharedPointer<DataMark> &tag, QObject *parent = 0);
+                  const QSharedPointer<DataMark>& tag, QObject *parent = 0);
     WriteTagQuery(QObject *parent = 0);
 
     ~WriteTagQuery();
