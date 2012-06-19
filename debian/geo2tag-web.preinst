@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if !(which java)
+then
+    echo "Error: JDK isn't installed. Please install JDK and set JAVA_HOME variable."
+    exit 1
+else
+    echo "Starting the installation of Geo2Tag-web..."
+fi
