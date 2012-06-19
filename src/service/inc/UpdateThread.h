@@ -45,6 +45,8 @@
 #include "DataChannel.h"
 #include "SessionInternal.h"
 
+class QueryExecutor;
+
 class UpdateThread: public QThread
 {
   Q_OBJECT
@@ -55,7 +57,9 @@ class UpdateThread: public QThread
   QSharedPointer<DataChannels> m_dataChannelsMap;
   QSharedPointer<Sessions>     m_sessionsContainer;
 
-  QSqlDatabase m_database;
+  //QSqlDatabase m_database;
+
+  QueryExecutor* m_queryExecutor;
 
   //will be locked when containers is being updated
   QReadWriteLock m_updateLock;
@@ -82,7 +86,7 @@ class UpdateThread: public QThread
 
 
     UpdateThread(
-      const QSqlDatabase &db,
+      //const QSqlDatabase &db,
       const QSharedPointer<DataMarks>& tags,
       const QSharedPointer<common::Users>& users,
       const QSharedPointer<Channels>& channels,
@@ -90,11 +94,23 @@ class UpdateThread: public QThread
       const QSharedPointer<Sessions>& sessions,
       QObject *parent = 0);
 
+    UpdateThread(
+      //const QSqlDatabase &db,
+      const QSharedPointer<DataMarks>& tags,
+      const QSharedPointer<common::Users>& users,
+      const QSharedPointer<Channels>& channels,
+      const QSharedPointer<DataChannels>& dataChannelsMap,
+      const QSharedPointer<Sessions>& sessions,
+      QueryExecutor* queryExecutor,
+      QObject *parent = 0);
+
     void incrementTransactionCount(int i = 1);
 
     void lockWriting();
 
     void unlockWriting();
+
+    void setQueryExecutor(QueryExecutor* queryExecutor);
 
     signals:
 

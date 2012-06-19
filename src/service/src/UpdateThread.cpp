@@ -39,8 +39,9 @@
 #include "SettingsStorage.h"
 #include "defines.h"
 #include "PerformanceCounter.h" 
+#include "QueryExecutor.h"
 
-UpdateThread::UpdateThread(const QSqlDatabase &db,
+UpdateThread::UpdateThread(//const QSqlDatabase &db,
                            const QSharedPointer<DataMarks> &tags,
                            const QSharedPointer<common::Users> &users,
                            const QSharedPointer<Channels> &channels,
@@ -53,7 +54,28 @@ UpdateThread::UpdateThread(const QSqlDatabase &db,
       m_usersContainer(users),
       m_dataChannelsMap(dataChannelsMap),
       m_sessionsContainer(sessions),
-      m_database(db),
+      //m_database(db),
+      m_queryExecutor(0),
+      m_transactionCount(0)
+{
+}
+
+UpdateThread::UpdateThread(//const QSqlDatabase &db,
+                           const QSharedPointer<DataMarks> &tags,
+                           const QSharedPointer<common::Users> &users,
+                           const QSharedPointer<Channels> &channels,
+                           const QSharedPointer<DataChannels>& dataChannelsMap,
+                           const QSharedPointer<Sessions>& sessions,
+                           QueryExecutor* queryExecutor,
+                           QObject *parent)
+    : QThread(parent),
+      m_channelsContainer(channels),
+      m_tagsContainer(tags),
+      m_usersContainer(users),
+      m_dataChannelsMap(dataChannelsMap),
+      m_sessionsContainer(sessions),
+      //m_database(db),
+      m_queryExecutor(queryExecutor),
       m_transactionCount(0)
 {
 }
@@ -70,6 +92,10 @@ void UpdateThread::unlockWriting()
   m_updateLock.unlock();
 }
 
+void UpdateThread::setQueryExecutor(QueryExecutor *queryExecutor)
+{
+  m_queryExecutor = queryExecutor;
+}
 
 void UpdateThread::incrementTransactionCount(int i)
 {

@@ -56,7 +56,7 @@ class QueryExecutor : public QObject
   public:
 
     QueryExecutor(const QSqlDatabase& db, QObject* parent = 0);
-    QueryExecutor(const QSqlDatabase& db, UpdateThread* updateThread, QObject* parent = 0);
+    QueryExecutor(UpdateThread* updateThread, const QSqlDatabase& db, QObject* parent = 0);
 
     void setUpdateThread(UpdateThread* updateThread);
 
@@ -74,7 +74,7 @@ class QueryExecutor : public QObject
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
-    bool		     doesTmpUserExist(const QSharedPointer<common::User> &user);
+    bool		             doesTmpUserExist(const QSharedPointer<common::User> &user);
     bool                     doesUserWithGivenEmailExist(const QSharedPointer<common::User> &user);
     bool                     deleteTmpUser(const QSharedPointer<common::User> &user);
     const QString  insertNewTmpUser(const QSharedPointer<common::User> &user);

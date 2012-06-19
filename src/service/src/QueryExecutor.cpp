@@ -57,7 +57,7 @@ QueryExecutor::QueryExecutor(const QSqlDatabase& db, QObject* parent)
 }
 
 
-QueryExecutor::QueryExecutor(const QSqlDatabase& db, UpdateThread* updateThread, QObject* parent)
+QueryExecutor::QueryExecutor(UpdateThread* updateThread, const QSqlDatabase& db, QObject* parent)
     : QObject(parent),
       m_database(db),
       m_updateThread(updateThread)
