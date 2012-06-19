@@ -49,9 +49,25 @@
 #include "PerformanceCounter.h"
  
 
-QueryExecutor::QueryExecutor(const QSqlDatabase &db, QObject *parent): QObject(parent),
-m_database(db)
+QueryExecutor::QueryExecutor(const QSqlDatabase& db, QObject* parent)
+    : QObject(parent),
+      m_database(db),
+      m_updateThread(0)
 {
+}
+
+
+QueryExecutor::QueryExecutor(const QSqlDatabase& db, UpdateThread* updateThread, QObject* parent)
+    : QObject(parent),
+      m_database(db),
+      m_updateThread(updateThread)
+{
+}
+
+
+void QueryExecutor::setUpdateThread(UpdateThread* updateThread)
+{
+    m_updateThread = updateThread;
 }
 
 
@@ -155,8 +171,12 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
   newTagQuery.bindValue(":time", tag->getTime().toUTC());
   newTagQuery.bindValue(":id", newId);
 
-
   m_database.transaction();
+  if (m_updateThread != 0) {
+      m_updateThread->lockWriting();
+      m_updateThread->incrementTransactionCount();
+      m_updateThread->unlockWriting();
+  }
 
   result = newTagQuery.exec();
   if(!result)
@@ -194,6 +214,11 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
   newChannelQuery.bindValue(":url",channel->getUrl());
 
   m_database.transaction();
+  if (m_updateThread != 0) {
+      m_updateThread->lockWriting();
+      m_updateThread->incrementTransactionCount();
+      m_updateThread->unlockWriting();
+  }
 
   result=newChannelQuery.exec();
   if(!result)
@@ -259,6 +284,12 @@ bool QueryExecutor::deleteTmpUser(const QSharedPointer<common::User> &user)
     syslog(LOG_INFO,"Deleting: %s", deleteSignupQuery.lastQuery().toStdString().c_str());
 
     m_database.transaction();
+    if (m_updateThread != 0) {
+        m_updateThread->lockWriting();
+        m_updateThread->incrementTransactionCount();
+        m_updateThread->unlockWriting();
+    }
+
     result = deleteSignupQuery.exec();
     if(!result) {
       syslog(LOG_INFO,"Rollback for deleteSignup sql query");
@@ -288,6 +319,12 @@ const QString QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User>
     newSignupQuery.bindValue(":sent", FALSE);
 
     m_database.transaction();
+    if (m_updateThread != 0) {
+        m_updateThread->lockWriting();
+        m_updateThread->incrementTransactionCount();
+        m_updateThread->unlockWriting();
+    }
+
     result = newSignupQuery.exec();
     if(!result) {
       syslog(LOG_INFO,"Rollback for NewSignup sql query");
@@ -355,6 +392,12 @@ bool QueryExecutor::deleteTmpUser(const QString &token)
     syslog(LOG_INFO,"Deleting: %s", deleteSignupQuery.lastQuery().toStdString().c_str());
 
     m_database.transaction();
+    if (m_updateThread != 0) {
+        m_updateThread->lockWriting();
+        m_updateThread->incrementTransactionCount();
+        m_updateThread->unlockWriting();
+    }
+
     result = deleteSignupQuery.exec();
     if(!result) {
       syslog(LOG_INFO,"Rollback for deleteSignup sql query");
@@ -381,9 +424,15 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
   newUserQuery.bindValue(":email",user->getEmail());
   newUserQuery.bindValue(":login",user->getLogin());
   newUserQuery.bindValue(":password",user->getPassword());
-  m_database.transaction();
-  result=newUserQuery.exec();
 
+  m_database.transaction();
+  if (m_updateThread != 0) {
+      m_updateThread->lockWriting();
+      m_updateThread->incrementTransactionCount();
+      m_updateThread->unlockWriting();
+  }
+
+  result=newUserQuery.exec();
   QSharedPointer<common::User> newUser = QSharedPointer<common::User>(NULL);
   if(!result)
   {
@@ -411,6 +460,12 @@ bool QueryExecutor::subscribeChannel(const QSharedPointer<common::User>& user,co
     channel->getName().toStdString().c_str(),channel->getId());
 
   m_database.transaction();
+  if (m_updateThread != 0) {
+      m_updateThread->lockWriting();
+      m_updateThread->incrementTransactionCount();
+      m_updateThread->unlockWriting();
+  }
+
   result=insertNewSubscribtion.exec();
   if(!result)
   {
@@ -436,6 +491,12 @@ bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,
     channel->getName().toStdString().c_str(),channel->getId());
 
   m_database.transaction();
+  if (m_updateThread != 0) {
+      m_updateThread->lockWriting();
+      m_updateThread->incrementTransactionCount();
+      m_updateThread->unlockWriting();
+  }
+
   result=deleteSubscribtion.exec();
   if(!result)
   {
@@ -460,6 +521,12 @@ bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
     deleteUserQuery.bindValue(":id",user->getId() );
 
     m_database.transaction();
+    if (m_updateThread != 0) {
+        m_updateThread->lockWriting();
+        m_updateThread->incrementTransactionCount();
+        m_updateThread->unlockWriting();
+    }
+
     result = deleteUserQuery.exec();
     if(!result) {
       syslog(LOG_INFO,"Rollback for deleteUser sql query");
@@ -488,6 +555,11 @@ QSharedPointer<Session> QueryExecutor::insertNewSession(const QSharedPointer<Ses
     query.bindValue(":time", session->getLastAccessTime().toUTC());
 
     m_database.transaction();
+    if (m_updateThread != 0) {
+        m_updateThread->lockWriting();
+        m_updateThread->incrementTransactionCount();
+        m_updateThread->unlockWriting();
+    }
 
     bool result = query.exec();
     if (!result) {
@@ -512,6 +584,11 @@ bool QueryExecutor::updateSession(const QSharedPointer<Session>& session)
     query.bindValue(":token", session->getSessionToken());
 
     m_database.transaction();
+    if (m_updateThread != 0) {
+        m_updateThread->lockWriting();
+        m_updateThread->incrementTransactionCount();
+        m_updateThread->unlockWriting();
+    }
 
     bool result = query.exec();
     if (!result) {
@@ -535,6 +612,11 @@ bool QueryExecutor::deleteSession(const QSharedPointer<Session> &session)
     query.bindValue(":id", session->getId());
 
     m_database.transaction();
+    if (m_updateThread != 0) {
+        m_updateThread->lockWriting();
+        m_updateThread->incrementTransactionCount();
+        m_updateThread->unlockWriting();
+    }
 
     bool result = query.exec();
     if (!result) {

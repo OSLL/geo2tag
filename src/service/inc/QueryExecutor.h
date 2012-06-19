@@ -42,17 +42,23 @@
 #include "Channel.h"
 #include "DataMarks.h"
 #include "Session.h"
+#include "UpdateThread.h"
 
 class QueryExecutor : public QObject
 {
   Q_OBJECT
-    QSqlDatabase m_database;
 
-  qlonglong nextKey(const QString& sequence) const;
+    QSqlDatabase m_database;
+    UpdateThread* m_updateThread;
+
+    qlonglong nextKey(const QString& sequence) const;
 
   public:
 
-    QueryExecutor(const QSqlDatabase &db, QObject *parent = 0);
+    QueryExecutor(const QSqlDatabase& db, QObject* parent = 0);
+    QueryExecutor(const QSqlDatabase& db, UpdateThread* updateThread, QObject* parent = 0);
+
+    void setUpdateThread(UpdateThread* updateThread);
 
     bool isConnected();
     bool connect();
