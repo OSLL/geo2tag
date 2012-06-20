@@ -57,7 +57,7 @@ class UpdateThread: public QThread
   QSharedPointer<DataChannels> m_dataChannelsMap;
   QSharedPointer<Sessions>     m_sessionsContainer;
 
-  //QSqlDatabase m_database;
+  QSqlDatabase m_database;
 
   QueryExecutor* m_queryExecutor;
 
@@ -75,18 +75,13 @@ class UpdateThread: public QThread
   void loadSessions(Sessions &);
   void updateReflections(DataMarks&, common::Users&, Channels&, Sessions&);
 
-  void checkTmpUsers();
-  void checkSessions();
-
-  void sendConfirmationLetter(const QString &, const QString &);
-
   void run();
 
   public:
 
 
     UpdateThread(
-      //const QSqlDatabase &db,
+      const QSqlDatabase &db,
       const QSharedPointer<DataMarks>& tags,
       const QSharedPointer<common::Users>& users,
       const QSharedPointer<Channels>& channels,
@@ -95,7 +90,7 @@ class UpdateThread: public QThread
       QObject *parent = 0);
 
     UpdateThread(
-      //const QSqlDatabase &db,
+      const QSqlDatabase &db,
       const QSharedPointer<DataMarks>& tags,
       const QSharedPointer<common::Users>& users,
       const QSharedPointer<Channels>& channels,
@@ -111,6 +106,7 @@ class UpdateThread: public QThread
     void unlockWriting();
 
     void setQueryExecutor(QueryExecutor* queryExecutor);
+    QSharedPointer<Sessions> getSessionsContainer() const;
 
     signals:
 

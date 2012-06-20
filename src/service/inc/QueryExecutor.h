@@ -90,6 +90,11 @@ class QueryExecutor : public QObject
     bool                     updateSession(const QSharedPointer<Session>& session);
     bool                     deleteSession(const QSharedPointer<Session>& session);
 
+    void checkTmpUsers();
+    void checkSessions();
+
+    void sendConfirmationLetter(const QString &, const QString &);
+
     signals:
 
   public slots:

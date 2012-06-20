@@ -160,7 +160,7 @@ namespace common
     database.setPassword("geo2tag");
 
     m_updateThread = new UpdateThread(
-      //QSqlDatabase::cloneDatabase(database,"updateThread"),
+      QSqlDatabase::cloneDatabase(database,"updateThread"),
       m_tagsContainer,
       m_usersContainer,
       m_channelsContainer,

@@ -40,12 +40,14 @@
 #include <QVariant>
 #include <QString>
 
+#include "defines.h"
 #include "QueryExecutor.h"
 #include "JsonUser.h"
 #include "DataMarkInternal.h"
 #include "UserInternal.h"
 #include "ChannelInternal.h"
 #include "SessionInternal.h"
+#include "SettingsStorage.h"
 #include "PerformanceCounter.h"
  
 
@@ -628,4 +630,115 @@ bool QueryExecutor::deleteSession(const QSharedPointer<Session> &session)
         m_database.commit();
         return true;
     }
+}
+
+void QueryExecutor::checkTmpUsers()
+{
+    QSqlQuery checkQuery(m_database);
+    QSqlQuery deleteQuery(m_database);
+    syslog(LOG_INFO,"checkTmpUsers query is running now...");
+    // Sending emails to new users
+    checkQuery.exec("select id, email, registration_token from signups where sent = false;");
+    while (checkQuery.next()) {
+        qlonglong id = checkQuery.value(0).toLongLong();
+        QString email = checkQuery.value(1).toString();
+        QString token = checkQuery.value(2).toString();
+        sendConfirmationLetter(email, token);
+        checkQuery.prepare("update signups set sent = true where id = :id;");
+        checkQuery.bindValue(":id", id);
+        bool result = checkQuery.exec();
+        if(!result) {
+            syslog(LOG_INFO,"Rollback for CheckTmpUser sql query");
+            m_database.rollback();
+        } else {
+            syslog(LOG_INFO,"Commit for CheckTmpUser sql query");
+            m_database.commit();
+        }
+        m_updateThread->lockWriting();
+        m_updateThread->incrementTransactionCount();
+        m_updateThread->unlockWriting();
+    }
+
+    // Deleting old signups
+    QString strQuery;
+
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString timelife = storage.getValue("Registration_Settings/tmp_user_timelife", QVariant(DEFAULT_TMP_USER_TIMELIFE)).toString();
+
+    strQuery.append("select id from signups where (now() - datetime) >= INTERVAL '");
+    strQuery.append(timelife);
+    strQuery.append("';");
+    checkQuery.exec(strQuery.toStdString().c_str());
+    while (checkQuery.next()) {
+        qlonglong id = checkQuery.value(0).toLongLong();
+        deleteQuery.prepare("delete from signups where id = :id;");
+        deleteQuery.bindValue(":id", id);
+        syslog(LOG_INFO,"Deleting: %s", deleteQuery.lastQuery().toStdString().c_str());
+        m_database.transaction();
+        bool result = deleteQuery.exec();
+        if(!result) {
+            syslog(LOG_INFO,"Rollback for DeleteTmpUser sql query");
+            m_database.rollback();
+        } else {
+            syslog(LOG_INFO,"Commit for DeleteTmpUser sql query");
+            m_database.commit();
+        }
+        m_updateThread->lockWriting();
+        m_updateThread->incrementTransactionCount();
+        m_updateThread->unlockWriting();
+    }
+}
+
+void QueryExecutor::checkSessions()
+{
+    syslog(LOG_INFO,"checkSessions query is running now...");
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    int timelife = storage.getValue("General_Settings/session_timelife", QVariant(DEFAULT_SESSION_TIMELIFE)).toInt();
+    QSharedPointer<Sessions> sessions = m_updateThread->getSessionsContainer();
+    for (int i = 0; i < sessions->size(); i++) {
+        QDateTime currentTime = QDateTime::currentDateTime().toUTC();
+        //syslog(LOG_INFO, "Current time: %s", currentTime.toString().toStdString().c_str());
+        QDateTime lastAccessTime = sessions->at(i)->getLastAccessTime();
+        //syslog(LOG_INFO, "Last access time: %s", lastAccessTime.toString().toStdString().c_str());
+        if (lastAccessTime.addDays(timelife) <= currentTime) {
+            QSqlQuery query(m_database);
+            query.prepare("delete from sessions where id = :id;");
+            query.bindValue(":id", sessions->at(i)->getId());
+            syslog(LOG_INFO,"Deleting: %s", query.lastQuery().toStdString().c_str());
+            m_database.transaction();
+            bool result = query.exec();
+            if (!result) {
+                syslog(LOG_INFO, "Rollback for DeleteSession sql query");
+                m_database.rollback();
+            } else {
+                syslog(LOG_INFO, "Commit for DeleteSession sql query");
+                m_database.commit();
+            }
+            m_updateThread->lockWriting();
+            m_updateThread->incrementTransactionCount();
+            sessions->erase(sessions->at(i));
+            m_updateThread->unlockWriting();
+        }
+    }
+}
+
+void QueryExecutor::sendConfirmationLetter(const QString &address, const QString &token)
+{
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
+    QString subject = storage.getValue("Mail_Settings/subject", QVariant(DEFAULT_EMAIL_SUBJECT)).toString();
+    QString body = storage.getValue("Mail_Settings/body", QVariant(DEFAULT_EMAIL_BODY)).toString();
+    syslog(LOG_INFO, "Process registration confirmation is started... ");
+    body.append(" To confirm registration, please, go to this link: ");
+    body.append(serverUrl.toStdString().c_str());
+    body.append("service/confirmRegistration-");
+    body.append(token);
+    syslog(LOG_INFO, "Setting storage: %s", storage.getFileName().toStdString().c_str());
+    syslog(LOG_INFO, "Email: %s", address.toStdString().c_str());
+    syslog(LOG_INFO, "Token: %s", token.toStdString().c_str());
+    syslog(LOG_INFO, "Subject: %s",subject.toStdString().c_str());
+    syslog(LOG_INFO, "Body: %s", body.toStdString().c_str());
+    QString command = "echo " + body + " | mail -s '" + subject + "' " + address;
+    system(command.toStdString().c_str());
+    syslog(LOG_INFO, "Process registration confirmation finished... ");
 }
