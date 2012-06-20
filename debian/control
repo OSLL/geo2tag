@@ -17,4 +17,4 @@ Description: Geo2Tag LBS platform
 Package: geo2tag-web
 Architecture: i386 amd64
 Depends: unzip
-Description: Geo2tag LBS platform webapp
+Description: Geo2tag LBS platform web-application
