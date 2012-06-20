@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if !(which javaa)
+if !(which java)
 then
     echo "Error: JDK isn't installed. Please install JDK and set JAVA_HOME variable."
     echo "For more details see http://geo2tag.org/index.php/Install_webside_howto#How_to_install_our_web-application"
