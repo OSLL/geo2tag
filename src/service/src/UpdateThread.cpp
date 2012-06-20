@@ -153,12 +153,12 @@ void UpdateThread::run()
 // Check if DB contain new changes
     m_queryExecutor->checkTmpUsers();
     m_queryExecutor->checkSessions();
+
     if (!compareTransactionNumber())
     {
       QThread::msleep(interval);
       continue;
     }
-
 
     common::Users       usersContainer(*m_usersContainer);
     DataMarks   tagsContainer(*m_tagsContainer);
