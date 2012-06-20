@@ -42,17 +42,23 @@
 #include "Channel.h"
 #include "DataMarks.h"
 #include "Session.h"
+#include "UpdateThread.h"
 
 class QueryExecutor : public QObject
 {
   Q_OBJECT
-    QSqlDatabase m_database;
 
-  qlonglong nextKey(const QString& sequence) const;
+    QSqlDatabase m_database;
+    UpdateThread* m_updateThread;
+
+    qlonglong nextKey(const QString& sequence) const;
 
   public:
 
-    QueryExecutor(const QSqlDatabase &db, QObject *parent = 0);
+    QueryExecutor(const QSqlDatabase& db, QObject* parent = 0);
+    QueryExecutor(UpdateThread* updateThread, const QSqlDatabase& db, QObject* parent = 0);
+
+    void setUpdateThread(UpdateThread* updateThread);
 
     bool isConnected();
     bool connect();
@@ -68,7 +74,7 @@ class QueryExecutor : public QObject
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
-    bool		     doesTmpUserExist(const QSharedPointer<common::User> &user);
+    bool		             doesTmpUserExist(const QSharedPointer<common::User> &user);
     bool                     doesUserWithGivenEmailExist(const QSharedPointer<common::User> &user);
     bool                     deleteTmpUser(const QSharedPointer<common::User> &user);
     const QString  insertNewTmpUser(const QSharedPointer<common::User> &user);
@@ -83,6 +89,11 @@ class QueryExecutor : public QObject
     QSharedPointer<Session>  insertNewSession(const QSharedPointer<Session>& session);
     bool                     updateSession(const QSharedPointer<Session>& session);
     bool                     deleteSession(const QSharedPointer<Session>& session);
+
+    void checkTmpUsers();
+    void checkSessions();
+
+    void sendConfirmationLetter(const QString &, const QString &);
 
     signals:
 

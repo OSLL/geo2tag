@@ -166,11 +166,13 @@ namespace common
       m_channelsContainer,
       m_dataChannelsMap,
       m_sessionsContainer,
+      m_queryExecutor,
       NULL);
 
-    m_updateThread->start();
+    m_queryExecutor = new QueryExecutor(m_updateThread, QSqlDatabase::cloneDatabase(database,"executor"), NULL);
+    m_updateThread->setQueryExecutor(m_queryExecutor);
 
-    m_queryExecutor = new QueryExecutor(QSqlDatabase::cloneDatabase(database,"executor"), NULL);
+    m_updateThread->start();
   }
 
   DbObjectsCollection& DbObjectsCollection::getInstance()
@@ -318,9 +320,6 @@ namespace common
         return answer;
     }
     QString confirmToken = m_queryExecutor->insertNewTmpUser(newTmpUser);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
     if(confirmToken.isEmpty()) {
         response.setErrno(INTERNAL_DB_ERROR);
         answer.append(response.getJson());
@@ -347,9 +346,6 @@ namespace common
     }
 
     QSharedPointer<User> newUser = m_queryExecutor->insertTmpUserIntoUsers(registrationToken);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if (!newUser.isNull()) {
         m_updateThread->lockWriting();
@@ -390,9 +386,6 @@ namespace common
           QSharedPointer<Session> dummySession(new Session("", QDateTime::currentDateTime(), realUser));
           syslog(LOG_INFO, "Session hasn't been found. Generating of new Session.");
           QSharedPointer<Session> addedSession = m_queryExecutor->insertNewSession(dummySession);
-	  m_updateThread->lockWriting();
-	  m_updateThread->incrementTransactionCount();
-	  m_updateThread->unlockWriting();
           if (!addedSession) {
               response.setErrno(INTERNAL_DB_ERROR);
               answer.append(response.getJson());
@@ -515,9 +508,6 @@ namespace common
     dummyTag->setUser(realUser);
                                         //now
     QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
     if(realTag == NULL)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -691,9 +681,6 @@ namespace common
     }
     syslog(LOG_INFO, "Sending sql request for SubscribeQuery");
     bool result = m_queryExecutor->subscribeChannel(realUser,realChannel);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
     if(!result)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -751,9 +738,6 @@ namespace common
 
     syslog(LOG_INFO, "Sending sql request for AddUser");
     QSharedPointer<User> addedUser = m_queryExecutor->insertNewUser(dummyUser);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if(!addedUser)
     {
@@ -817,9 +801,6 @@ namespace common
 
     syslog(LOG_INFO, "Sending sql request for AddChannel");
     QSharedPointer<Channel> addedChannel = m_queryExecutor->insertNewChannel(dummyChannel);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if(!addedChannel)
     {
@@ -920,9 +901,6 @@ namespace common
     }
     syslog(LOG_INFO, "Sending sql request for UnsubscribeQuery");
     bool result = m_queryExecutor->unsubscribeChannel(realUser,realChannel);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if(!result)
     {
@@ -1190,9 +1168,6 @@ namespace common
 
     syslog(LOG_INFO, "Sending sql request for DeleteUser");
     bool isDeleted = m_queryExecutor->deleteUser(realUser);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if(!isDeleted)
     {
