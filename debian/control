@@ -14,7 +14,7 @@ Architecture: i386 amd64
 Depends: lighttpd, postgresql-8.4, postgresql-client-8.4, libgeo2tag, libpq5, libfcgi0ldbl, mailutils, ssmtp
 Description: Geo2Tag LBS platform
 
-Package: geo2tag-web
+Package: geo2tag-webside
 Architecture: i386 amd64
 Depends: unzip
-Description: Geo2tag LBS platform web-application
+Description: Geo2tag LBS platform web front-end

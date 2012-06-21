@@ -6,5 +6,5 @@ then
     echo "For more details see http://geo2tag.org/index.php/Install_webside_howto#How_to_install_our_web-application"
     exit 1
 else
-    echo "Starting the installation of Geo2Tag-web..."
+    echo "Starting the installation of Geo2Tag-webside..."
 fi
