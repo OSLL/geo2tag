@@ -110,7 +110,8 @@
 #include <QMap>
 #include <QRegExp>
 
-#include "PerformanceCounter.h" 
+#include "PerformanceCounter.h"
+#include "Geo2tagDatabase.h"
 
 namespace common
 {
@@ -169,7 +170,9 @@ namespace common
       m_queryExecutor,
       NULL);
 
-    m_queryExecutor = new QueryExecutor(m_updateThread, QSqlDatabase::cloneDatabase(database,"executor"), NULL);
+    m_queryExecutor = new QueryExecutor(m_updateThread,
+                                        Geo2tagDatabase(QSqlDatabase::cloneDatabase(database,"executor")),
+                                        NULL);
     m_updateThread->setQueryExecutor(m_queryExecutor);
 
     m_updateThread->start();

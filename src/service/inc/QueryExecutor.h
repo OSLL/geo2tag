@@ -36,27 +36,27 @@
 #define QUERYEXECUTOR_H
 
 #include <QObject>
-#include <QSqlDatabase>
 
 #include "User.h"
 #include "Channel.h"
 #include "DataMarks.h"
 #include "Session.h"
 #include "UpdateThread.h"
+#include "Geo2tagDatabase.h"
 
 class QueryExecutor : public QObject
 {
   Q_OBJECT
 
-    QSqlDatabase m_database;
+    Geo2tagDatabase m_database;
     UpdateThread* m_updateThread;
 
     qlonglong nextKey(const QString& sequence) const;
 
   public:
 
-    QueryExecutor(const QSqlDatabase& db, QObject* parent = 0);
-    QueryExecutor(UpdateThread* updateThread, const QSqlDatabase& db, QObject* parent = 0);
+    QueryExecutor(const Geo2tagDatabase& db, QObject* parent = 0);
+    QueryExecutor(UpdateThread* updateThread, const Geo2tagDatabase& db, QObject* parent = 0);
 
     void setUpdateThread(UpdateThread* updateThread);
 

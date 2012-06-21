@@ -38,7 +38,7 @@
 #include "Geo2tagDatabase.h"
 #include "UpdateThread.h"
 
-Geo2tagDatabase::Geo2tagDatabase(const QSqlDatabase &parent, const QSharedPointer<UpdateThread>& updateThread)
+Geo2tagDatabase::Geo2tagDatabase(const QSqlDatabase &parent, UpdateThread* updateThread)
     : QSqlDatabase(parent),
       m_updateThread(updateThread)
 {
@@ -46,19 +46,19 @@ Geo2tagDatabase::Geo2tagDatabase(const QSqlDatabase &parent, const QSharedPointe
 
 void Geo2tagDatabase::incrementTransactionCount(int i)
 {
-    if (!m_updateThread.isNull()) {
+    if (m_updateThread) {
         m_updateThread->lockWriting();
         m_updateThread->incrementTransactionCount(i);
         m_updateThread->unlockWriting();
     }
 }
 
-QSharedPointer<UpdateThread> Geo2tagDatabase::getUpdateThread() const
+UpdateThread* Geo2tagDatabase::getUpdateThread() const
 {
     return m_updateThread;
 }
 
-void Geo2tagDatabase::setUpdateThread(const QSharedPointer<UpdateThread>& updateThread)
+void Geo2tagDatabase::setUpdateThread(UpdateThread* updateThread)
 {
     m_updateThread = updateThread;
 }
