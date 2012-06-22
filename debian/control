@@ -16,5 +16,5 @@ Description: Geo2Tag LBS platform
 
 Package: geo2tag-webside
 Architecture: i386 amd64
-Depends: unzip
+Depends: unzip, openjdk-6-jre
 Description: Geo2tag LBS platform web front-end
