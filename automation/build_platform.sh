@@ -79,11 +79,14 @@ then
 		echo "n" | dpkg -i geo2tag_*deb libgeo2tag_*deb >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 
 		#TEST
-                test_result=`${dir_automation}/test_platform.sh`;
+		test_result=`${dir_automation}/test_platform.sh`;
 		echo "Integration tests $test_result" >>${dir_log}/test.log.txt
                 if ! echo $test_result | grep -i fail
                 then
 		# test cases passed, move installed debs to backup
+			# copy *.deb to repo
+			cp ${dir_automation}/*.deb /var/www/geo2tag_repo/binary/
+
 			echo "Tests passed" >> ${dir_log}/test.log.txt
 			status="success";
 			cd "${dir_automation}"
