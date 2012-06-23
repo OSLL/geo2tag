@@ -54,6 +54,8 @@ public:
 
     UpdateThread* getUpdateThread() const;
     void setUpdateThread(UpdateThread* updateThread);
+
+    bool transaction();
 };
 
 

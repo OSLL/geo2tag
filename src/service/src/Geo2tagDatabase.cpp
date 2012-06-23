@@ -62,3 +62,9 @@ void Geo2tagDatabase::setUpdateThread(UpdateThread* updateThread)
 {
     m_updateThread = updateThread;
 }
+
+bool Geo2tagDatabase::transaction()
+{
+    incrementTransactionCount();
+    return QSqlDatabase::transaction();
+}

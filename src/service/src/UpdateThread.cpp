@@ -40,6 +40,7 @@
 #include "defines.h"
 #include "PerformanceCounter.h"
 #include "QueryExecutor.h"
+#include "Geo2tagDatabase.h"
 
 UpdateThread::UpdateThread(const QSqlDatabase &db,
                            const QSharedPointer<DataMarks> &tags,
@@ -140,6 +141,8 @@ void UpdateThread::run()
     qlonglong interval = storage.getValue("General_Settings/db_update_interval", QVariant(DEFAULT_TRANSACTION_DIFF_TO_SYNC)).toLongLong();
     {
     PerformanceCounter counter("db_update");    
+
+
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
     bool result = m_database.open();
     if(!result)
@@ -149,10 +152,19 @@ void UpdateThread::run()
       continue;
     }
 
+    syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
+    result = m_queryExecutor->connect();
+    if(!result)
+    {
+      syslog(LOG_INFO, "connection error %s", m_queryExecutor->lastError().text().toStdString().c_str());
+      QThread::msleep(1000);
+      continue;
+    }
+
     qDebug() << "connected...";
 // Check if DB contain new changes
     m_queryExecutor->checkTmpUsers();
-    m_queryExecutor->checkSessions();
+    m_queryExecutor->checkSessions(m_sessionsContainer);
 
     if (!compareTransactionNumber())
     {
@@ -203,6 +215,7 @@ void UpdateThread::run()
     syslog(LOG_INFO,  "current channels' size = %d", m_channelsContainer->size());
     syslog(LOG_INFO,  "current sessions' size = %d", m_sessionsContainer->size());
     m_database.close();
+    m_queryExecutor->disconnect();
     }
     QThread::msleep(interval);
   }

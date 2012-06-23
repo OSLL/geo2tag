@@ -41,7 +41,6 @@
 #include "Channel.h"
 #include "DataMarks.h"
 #include "Session.h"
-#include "UpdateThread.h"
 #include "Geo2tagDatabase.h"
 
 class QueryExecutor : public QObject
@@ -49,19 +48,19 @@ class QueryExecutor : public QObject
   Q_OBJECT
 
     Geo2tagDatabase m_database;
-    UpdateThread* m_updateThread;
 
     qlonglong nextKey(const QString& sequence) const;
 
   public:
 
     QueryExecutor(const Geo2tagDatabase& db, QObject* parent = 0);
-    QueryExecutor(UpdateThread* updateThread, const Geo2tagDatabase& db, QObject* parent = 0);
 
-    void setUpdateThread(UpdateThread* updateThread);
+    const Geo2tagDatabase& getDatabase() const;
 
     bool isConnected();
     bool connect();
+    void disconnect();
+    QSqlError lastError();
 
     qlonglong nextUserKey() const;
     qlonglong nextChannelKey() const;
@@ -91,7 +90,7 @@ class QueryExecutor : public QObject
     bool                     deleteSession(const QSharedPointer<Session>& session);
 
     void checkTmpUsers();
-    void checkSessions();
+    void checkSessions(const QSharedPointer<Sessions>& sessions);
 
     void sendConfirmationLetter(const QString &, const QString &);
 
