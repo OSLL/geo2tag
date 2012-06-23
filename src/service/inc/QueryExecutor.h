@@ -96,9 +96,8 @@ class QueryExecutor : public QObject
     void loadSessions(Sessions &);
     void updateReflections(DataMarks&, common::Users&, Channels&, Sessions&);
 
+    qlonglong getFactTransactionNumber();
     bool compareTransactionNumber(qlonglong& transactionCount);
-
-    void sendConfirmationLetter(const QString &, const QString &);
 
     signals:
 

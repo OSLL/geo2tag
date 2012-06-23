@@ -66,6 +66,8 @@ class UpdateThread: public QThread
 
   qlonglong m_transactionCount;
 
+  bool compareTransactionNumber(qlonglong factCount);
+
   void run();
 
   public:
@@ -91,6 +93,8 @@ class UpdateThread: public QThread
       QObject *parent = 0);
 
     void incrementTransactionCount(int i = 1);
+
+
 
     void lockWriting();
 

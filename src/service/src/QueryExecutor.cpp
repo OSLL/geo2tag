@@ -49,6 +49,7 @@
 #include "SessionInternal.h"
 #include "SettingsStorage.h"
 #include "PerformanceCounter.h"
+#include "EmailMessage.h"
  
 
 QueryExecutor::QueryExecutor(const Geo2tagDatabase& db, QObject* parent)
@@ -576,7 +577,12 @@ void QueryExecutor::checkTmpUsers()
         qlonglong id = checkQuery.value(0).toLongLong();
         QString email = checkQuery.value(1).toString();
         QString token = checkQuery.value(2).toString();
-        sendConfirmationLetter(email, token);
+
+        syslog(LOG_INFO, "Process registration confirmation is started... ");
+        EmailMessage message(email, token);
+        message.send();
+        syslog(LOG_INFO, "Process registration confirmation finished... ");
+
         checkQuery.prepare("update signups set sent = true where id = :id;");
         checkQuery.bindValue(":id", id);
         bool result = checkQuery.exec();
@@ -786,45 +792,15 @@ void QueryExecutor::updateReflections(DataMarks &tags, common::Users &users, Cha
   }
 }
 
-bool QueryExecutor::compareTransactionNumber(qlonglong& transactionCount)
+qlonglong QueryExecutor::getFactTransactionNumber()
 {
-// Calculate number of successful write requests
-  QSqlQuery query(m_database);
-  bool result;
-  query.exec("select tup_inserted ,tup_updated ,tup_deleted from  pg_stat_database where datname='geo2tag';");
-  query.next();
-  qlonglong factCount = query.record().value("tup_inserted").toLongLong() +
-                query.record().value("tup_updated").toLongLong() +
-                query.record().value("tup_deleted").toLongLong();
+    QSqlQuery query(m_database);
 
-  syslog(LOG_INFO, "Checking number of write requests: logged = %lld, fact = %lld", transactionCount, factCount);
-// If m_transactionCount < transactionCount then need sync
-  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
-  qlonglong transactionDiff =  storage.getValue("General_Settings/transaction_diff", QVariant(DEFAULT_DB_UPDATE_INTERVAL)).toLongLong();
-  syslog(LOG_INFO, "Diff from config = %lld, fact = %lld", transactionDiff, factCount - transactionCount);
-  result = (factCount - transactionCount >= transactionDiff);
-  if (result) transactionCount = factCount;
+    query.exec("select tup_inserted ,tup_updated ,tup_deleted from  pg_stat_database where datname='geo2tag';");
+    query.next();
+    qlonglong factCount = query.record().value("tup_inserted").toLongLong() +
+                  query.record().value("tup_updated").toLongLong() +
+                  query.record().value("tup_deleted").toLongLong();
 
-  return result;
-}
-
-void QueryExecutor::sendConfirmationLetter(const QString &address, const QString &token)
-{
-    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
-    QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
-    QString subject = storage.getValue("Mail_Settings/subject", QVariant(DEFAULT_EMAIL_SUBJECT)).toString();
-    QString body = storage.getValue("Mail_Settings/body", QVariant(DEFAULT_EMAIL_BODY)).toString();
-    syslog(LOG_INFO, "Process registration confirmation is started... ");
-    body.append(" To confirm registration, please, go to this link: ");
-    body.append(serverUrl.toStdString().c_str());
-    body.append("service/confirmRegistration-");
-    body.append(token);
-    syslog(LOG_INFO, "Setting storage: %s", storage.getFileName().toStdString().c_str());
-    syslog(LOG_INFO, "Email: %s", address.toStdString().c_str());
-    syslog(LOG_INFO, "Token: %s", token.toStdString().c_str());
-    syslog(LOG_INFO, "Subject: %s",subject.toStdString().c_str());
-    syslog(LOG_INFO, "Body: %s", body.toStdString().c_str());
-    QString command = "echo " + body + " | mail -s '" + subject + "' " + address;
-    system(command.toStdString().c_str());
-    syslog(LOG_INFO, "Process registration confirmation finished... ");
+    return factCount;
 }

@@ -109,6 +109,19 @@ void UpdateThread::incrementTransactionCount(int i)
   syslog(LOG_INFO, "Number of write requests: logged = %lld",m_transactionCount);
 }
 
+bool UpdateThread::compareTransactionNumber(qlonglong factCount)
+{
+  bool result;
+  syslog(LOG_INFO, "Checking number of write requests: logged = %lld, fact = %lld", m_transactionCount, factCount);
+  // If m_transactionCount < transactionCount then need sync
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+  qlonglong transactionDiff =  storage.getValue("General_Settings/transaction_diff", QVariant(DEFAULT_DB_UPDATE_INTERVAL)).toLongLong();
+  syslog(LOG_INFO, "Diff from config = %lld, fact = %lld", transactionDiff, factCount - m_transactionCount);
+  result = (factCount - m_transactionCount >= transactionDiff);
+  if (result) m_transactionCount = factCount;
+
+  return result;
+}
 
 void UpdateThread::run()
 {
@@ -142,7 +155,8 @@ void UpdateThread::run()
     qDebug() << "connected...";
 // Check if DB contain new changes
 
-    if (!m_queryExecutor->compareTransactionNumber(m_transactionCount))
+    qlonglong factCount = m_queryExecutor->getFactTransactionNumber();
+    if (!compareTransactionNumber(factCount))
     {
       QThread::msleep(interval);
       continue;
