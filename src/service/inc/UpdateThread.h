@@ -66,15 +66,6 @@ class UpdateThread: public QThread
 
   qlonglong m_transactionCount;
 
-  bool compareTransactionNumber();
-
-  void loadUsers(common::Users &);
-  void loadTags(DataMarks &);
-  void loadChannels(Channels &);
-  void loadTimeSlots(TimeSlots &);
-  void loadSessions(Sessions &);
-  void updateReflections(DataMarks&, common::Users&, Channels&, Sessions&);
-
   void run();
 
   public:

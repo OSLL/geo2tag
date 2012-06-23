@@ -57,11 +57,6 @@ QueryExecutor::QueryExecutor(const Geo2tagDatabase& db, QObject* parent)
 {
 }
 
-const Geo2tagDatabase& QueryExecutor::getDatabase() const
-{
-    return m_database;
-}
-
 bool QueryExecutor::connect()
 {
   return m_database.open();
@@ -648,6 +643,169 @@ void QueryExecutor::checkSessions(const QSharedPointer<Sessions>& sessions)
             sessions->erase(sessions->at(i));
         }
     }
+}
+
+void QueryExecutor::loadUsers(common::Users &container)
+{
+  QSqlQuery query(m_database);
+  query.exec("select id, login, password from users order by id;");
+  while (query.next())
+  {
+    qlonglong id = query.record().value("id").toLongLong();
+    if(container.exist(id))
+    {
+      // skip record
+      continue;
+    }
+    QString login = query.record().value("login").toString();
+    QString password = query.record().value("password").toString();
+    syslog(LOG_INFO,"Pushing | %lld | %s ",id,login.toStdString().c_str());
+    DbUser *newUser = new DbUser(login,password,id);
+    QSharedPointer<DbUser> pointer(newUser);
+    container.push_back(pointer);
+  }
+}
+
+
+void QueryExecutor::loadChannels(Channels &container)
+{
+  QSqlQuery query(m_database);
+  query.exec("select id, description, name, url from channel order by id;");
+  while (query.next())
+  {
+    qlonglong id = query.record().value("id").toLongLong();
+    if(container.exist(id))
+    {
+      // skip record
+      continue;
+    }
+    QString name = query.record().value("name").toString();
+    QString description = query.record().value("description").toString();
+    QString url = query.record().value("url").toString();
+    QSharedPointer<DbChannel> pointer(new DbChannel(id,name,description,url));
+    container.push_back(pointer);
+  }
+}
+
+
+
+void QueryExecutor::loadTags(DataMarks &container)
+{
+  QSqlQuery query(m_database);
+  query.exec("select id, time, altitude, latitude, longitude, label, description, url, user_id, channel_id from tag order by time;");
+  while (query.next())
+  {
+    qlonglong id = query.record().value("id").toLongLong();
+    if(container.exist(id))
+    {
+      // skip record
+      continue;
+    }
+    QDateTime time = query.record().value("time").toDateTime().toTimeSpec(Qt::LocalTime);
+    //       // syslog(LOG_INFO, "loaded tag with time: %s milliseconds", time;
+    qreal latitude = query.record().value("latitude").toReal();
+    qreal altitude = query.record().value("altitude").toReal();
+    qreal longitude = query.record().value("longitude").toReal();
+    QString label = query.record().value("label").toString();
+    QString description = query.record().value("description").toString();
+    QString url = query.record().value("url").toString();
+    qlonglong userId = query.record().value("user_id").toLongLong();
+    qlonglong channelId = query.record().value("channel_id").toLongLong();
+
+    DbDataMark *newMark = new DbDataMark(id,
+      altitude,
+      latitude,
+      longitude,
+      label,
+      description,
+      url,
+      time,
+      userId,
+      channelId);
+    QSharedPointer<DbDataMark> pointer(newMark);
+    container.push_back(pointer);
+  }
+}
+
+void QueryExecutor::loadSessions(Sessions &container)
+{
+    QSqlQuery query(m_database);
+    query.exec("select id, user_id, session_token, last_access_time from sessions;");
+    while (query.next()) {
+        qlonglong id = query.record().value("id").toLongLong();
+        if (container.exist(id))
+            continue;
+        qlonglong userId = query.record().value("user_id").toLongLong();
+        QSharedPointer<common::User> user(new DbUser( userId));
+
+        QString sessionToken = query.record().value("session_token").toString();
+        QDateTime lastAccessTime = query.record().value("last_access_time").toDateTime();//.toTimeSpec(Qt::LocalTime);
+
+        QSharedPointer<Session> newSession(new DbSession(id, sessionToken, lastAccessTime, user));
+        container.push_back(newSession);
+    }
+}
+
+void QueryExecutor::updateReflections(DataMarks &tags, common::Users &users, Channels &channels, Sessions &sessions)
+{
+  {
+    QSqlQuery query(m_database);
+    query.exec("select user_id, channel_id from subscribe;");
+    while (query.next())
+    {
+      qlonglong user_id = query.record().value("user_id").toLongLong();
+      qlonglong channel_id = query.record().value("channel_id").toLongLong();
+      users.item(user_id)->subscribe(channels.item(channel_id));
+    }
+  }
+  {
+    QSqlQuery query(m_database);
+    query.exec("select tag_id, channel_id from tags;");
+    while (query.next())
+    {
+      qlonglong tag_id = query.record().value("tag_id").toLongLong();
+      qlonglong channel_id = query.record().value("channel_id").toLongLong();
+
+      QSharedPointer<Channel> channel = channels.item(channel_id);
+      QSharedPointer<DataMark> tag = tags.item(tag_id);
+
+      tag->setChannel(channel);
+    }
+  }
+
+  for(int i=0; i<tags.size(); i++)
+  {
+    tags[i]->setUser(users.item(tags.at(i).dynamicCast<DbDataMark>()->getUserId()));
+    tags[i]->setChannel(channels.item(tags.at(i).dynamicCast<DbDataMark>()->getChannelId()));
+  }
+
+
+  for(int i=0; i<sessions.size(); i++)
+  {
+      sessions[i]->setUser(users.item(sessions[i]->getUser()->getId()));
+  }
+}
+
+bool QueryExecutor::compareTransactionNumber(qlonglong& transactionCount)
+{
+// Calculate number of successful write requests
+  QSqlQuery query(m_database);
+  bool result;
+  query.exec("select tup_inserted ,tup_updated ,tup_deleted from  pg_stat_database where datname='geo2tag';");
+  query.next();
+  qlonglong factCount = query.record().value("tup_inserted").toLongLong() +
+                query.record().value("tup_updated").toLongLong() +
+                query.record().value("tup_deleted").toLongLong();
+
+  syslog(LOG_INFO, "Checking number of write requests: logged = %lld, fact = %lld", transactionCount, factCount);
+// If m_transactionCount < transactionCount then need sync
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+  qlonglong transactionDiff =  storage.getValue("General_Settings/transaction_diff", QVariant(DEFAULT_DB_UPDATE_INTERVAL)).toLongLong();
+  syslog(LOG_INFO, "Diff from config = %lld, fact = %lld", transactionDiff, factCount - transactionCount);
+  result = (factCount - transactionCount >= transactionDiff);
+  if (result) transactionCount = factCount;
+
+  return result;
 }
 
 void QueryExecutor::sendConfirmationLetter(const QString &address, const QString &token)

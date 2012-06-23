@@ -55,8 +55,6 @@ class QueryExecutor : public QObject
 
     QueryExecutor(const Geo2tagDatabase& db, QObject* parent = 0);
 
-    const Geo2tagDatabase& getDatabase() const;
-
     bool isConnected();
     bool connect();
     void disconnect();
@@ -91,6 +89,14 @@ class QueryExecutor : public QObject
 
     void checkTmpUsers();
     void checkSessions(const QSharedPointer<Sessions>& sessions);
+
+    void loadUsers(common::Users &);
+    void loadTags(DataMarks &);
+    void loadChannels(Channels &);
+    void loadSessions(Sessions &);
+    void updateReflections(DataMarks&, common::Users&, Channels&, Sessions&);
+
+    bool compareTransactionNumber(qlonglong& transactionCount);
 
     void sendConfirmationLetter(const QString &, const QString &);
 
