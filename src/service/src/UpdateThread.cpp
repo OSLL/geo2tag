@@ -42,8 +42,7 @@
 #include "QueryExecutor.h"
 #include "Geo2tagDatabase.h"
 
-UpdateThread::UpdateThread(const QSqlDatabase &db,
-                           const QSharedPointer<DataMarks> &tags,
+UpdateThread::UpdateThread(const QSharedPointer<DataMarks> &tags,
                            const QSharedPointer<common::Users> &users,
                            const QSharedPointer<Channels> &channels,
                            const QSharedPointer<DataChannels>& dataChannelsMap,
@@ -55,14 +54,12 @@ UpdateThread::UpdateThread(const QSqlDatabase &db,
       m_usersContainer(users),
       m_dataChannelsMap(dataChannelsMap),
       m_sessionsContainer(sessions),
-      m_database(db),
       m_queryExecutor(0),
       m_transactionCount(0)
 {
 }
 
-UpdateThread::UpdateThread(const QSqlDatabase &db,
-                           const QSharedPointer<DataMarks> &tags,
+UpdateThread::UpdateThread(const QSharedPointer<DataMarks> &tags,
                            const QSharedPointer<common::Users> &users,
                            const QSharedPointer<Channels> &channels,
                            const QSharedPointer<DataChannels>& dataChannelsMap,
@@ -75,7 +72,6 @@ UpdateThread::UpdateThread(const QSqlDatabase &db,
       m_usersContainer(users),
       m_dataChannelsMap(dataChannelsMap),
       m_sessionsContainer(sessions),
-      m_database(db),
       m_queryExecutor(queryExecutor),
       m_transactionCount(0)
 {
@@ -133,18 +129,8 @@ void UpdateThread::run()
     {
     PerformanceCounter counter("db_update");    
 
-
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
-    bool result = m_database.open();
-    if(!result)
-    {
-      syslog(LOG_INFO, "connection error %s",m_database.lastError().text().toStdString().c_str());
-      QThread::msleep(1000);
-      continue;
-    }
-
-    syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
-    result = m_queryExecutor->connect();
+    bool result = m_queryExecutor->connect();
     if(!result)
     {
       syslog(LOG_INFO, "connection error %s", m_queryExecutor->lastError().text().toStdString().c_str());
@@ -202,13 +188,11 @@ void UpdateThread::run()
         unlockWriting();
       }
     }
-
-
     syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
     syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());
     syslog(LOG_INFO,  "current channels' size = %d", m_channelsContainer->size());
     syslog(LOG_INFO,  "current sessions' size = %d", m_sessionsContainer->size());
-    m_database.close();
+
     m_queryExecutor->disconnect();
     }
     QThread::msleep(interval);

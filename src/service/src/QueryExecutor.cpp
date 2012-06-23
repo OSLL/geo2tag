@@ -51,7 +51,6 @@
 #include "PerformanceCounter.h"
 #include "EmailMessage.h"
  
-
 QueryExecutor::QueryExecutor(const Geo2tagDatabase& db, QObject* parent)
     : QObject(parent),
       m_database(db)
@@ -89,25 +88,20 @@ qlonglong QueryExecutor::nextKey(const QString &sequence) const
   return id;
 }
 
-
 qlonglong QueryExecutor::nextTagKey() const
 {
   return nextKey("tags_seq");
 }
-
 
 qlonglong QueryExecutor::nextUserKey() const
 {
   return nextKey("users_seq");
 }
 
-
 qlonglong QueryExecutor::nextChannelKey() const
 {
   return nextKey("channels_seq");
 }
-
-
 
 qlonglong QueryExecutor::nextSessionKey() const
 {
@@ -143,7 +137,6 @@ const QString QueryExecutor::generateNewToken(const QString& accessTime, const Q
   syslog(LOG_INFO,"TOken = %s",result.toStdString().c_str());
   return result;
 }
-
 
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
@@ -189,7 +182,6 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
 
   return t;
 }
-
 
 QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Channel>& channel)
 {
@@ -413,7 +405,6 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
   return newUser;
 }
 
-
 bool QueryExecutor::subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel)
 {
   PerformanceCounter counter("QueryExecutor::subscribeChannel"); 
@@ -465,7 +456,6 @@ bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,
   }
   return result;
 }
-
 
 bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
 {
@@ -672,7 +662,6 @@ void QueryExecutor::loadUsers(common::Users &container)
   }
 }
 
-
 void QueryExecutor::loadChannels(Channels &container)
 {
   QSqlQuery query(m_database);
@@ -692,8 +681,6 @@ void QueryExecutor::loadChannels(Channels &container)
     container.push_back(pointer);
   }
 }
-
-
 
 void QueryExecutor::loadTags(DataMarks &container)
 {

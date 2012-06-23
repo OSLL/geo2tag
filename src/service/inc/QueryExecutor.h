@@ -97,12 +97,11 @@ class QueryExecutor : public QObject
     void updateReflections(DataMarks&, common::Users&, Channels&, Sessions&);
 
     qlonglong getFactTransactionNumber();
-    bool compareTransactionNumber(qlonglong& transactionCount);
 
     signals:
 
   public slots:
 
 };
-// QUERYEXECUTOR_H
-#endif
+
+#endif // QUERYEXECUTOR_H

@@ -57,8 +57,6 @@ class UpdateThread: public QThread
   QSharedPointer<DataChannels> m_dataChannelsMap;
   QSharedPointer<Sessions>     m_sessionsContainer;
 
-  QSqlDatabase m_database;
-
   QueryExecutor* m_queryExecutor;
 
   //will be locked when containers is being updated
@@ -72,9 +70,7 @@ class UpdateThread: public QThread
 
   public:
 
-
     UpdateThread(
-      const QSqlDatabase &db,
       const QSharedPointer<DataMarks>& tags,
       const QSharedPointer<common::Users>& users,
       const QSharedPointer<Channels>& channels,
@@ -83,7 +79,6 @@ class UpdateThread: public QThread
       QObject *parent = 0);
 
     UpdateThread(
-      const QSqlDatabase &db,
       const QSharedPointer<DataMarks>& tags,
       const QSharedPointer<common::Users>& users,
       const QSharedPointer<Channels>& channels,
@@ -93,8 +88,6 @@ class UpdateThread: public QThread
       QObject *parent = 0);
 
     void incrementTransactionCount(int i = 1);
-
-
 
     void lockWriting();
 

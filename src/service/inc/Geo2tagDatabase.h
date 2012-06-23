@@ -39,21 +39,21 @@
 #define GEO2TAGDATABASE_H
 
 #include <QSqlDatabase>
-
-class UpdateThread;
+#include <QSharedPointer>
+#include "UpdateThread.h"
 
 class Geo2tagDatabase : public QSqlDatabase
 {
-    UpdateThread* m_updateThread;
+    QSharedPointer<UpdateThread> m_updateThread;
 
 public:
     Geo2tagDatabase(const QSqlDatabase& parent,
-                    UpdateThread* updateThread = 0);
+                    const QSharedPointer<UpdateThread>& updateThread = QSharedPointer<UpdateThread>(0));
 
     void incrementTransactionCount(int i = 1);
 
-    UpdateThread* getUpdateThread() const;
-    void setUpdateThread(UpdateThread* updateThread);
+    QSharedPointer<UpdateThread> getUpdateThread() const;
+    void setUpdateThread(const QSharedPointer<UpdateThread>& updateThread);
 
     bool transaction();
 };
