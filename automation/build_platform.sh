@@ -52,7 +52,7 @@ dpkg-buildpackage -rfakeroot >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log
 cp ./test.log ./test_summary.log ${dir_log}
 founded_packages=`ls "${dir_automation}" | grep deb | grep -v standalone | grep -v observer`;
 echo "After building ${founded_packages}"
-if [  $(echo "${founded_packages}" | wc -w ) == "2" ] ;
+if [  $(echo "${founded_packages}" | wc -w ) == "3" ] ;
 then
 
 	status="success";
@@ -77,7 +77,8 @@ then
 		sudo -u postgres dropdb geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		sudo -u postgres dropuser geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		echo "n" | dpkg -i geo2tag_*deb libgeo2tag_*deb >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
-
+		/etc/init.d/lighttpd start	
+		
 		#TEST
 		test_result=`${dir_automation}/test_platform.sh`;
 		echo "Integration tests $test_result" >>${dir_log}/test.log.txt
@@ -115,9 +116,11 @@ cd ${dir_geo2tag}
 dh_clean
 #git stash
 cd ${dir_automation}
-rm -rf libgeo2tag*
-rm -rf geo2tag*
-rm -rf wikigps*
+rm *.deb
+rm *.tar.gz
+rm *.dsc
+rm *.changes
+
 
 
 #SEND EMAIL
