@@ -86,8 +86,8 @@ then
                 then
 		# test cases passed, move installed debs to backup
 			# copy *.deb to repo
-			cp ${dir_automation}/*.deb /var/www/geo2tag_repo/binary/
-
+			cp ${dir_automation}/*.deb /var/www/geo2tag_repo/testing/binary_i386/
+			${dir_automation}/update_repo.sh
 			echo "Tests passed" >> ${dir_log}/test.log.txt
 			status="success";
 			cd "${dir_automation}"
@@ -116,6 +116,9 @@ cd ${dir_geo2tag}
 dh_clean
 #git stash
 cd ${dir_automation}
+#rm -rf libgeo2tag
+#rm -rf geo2tag
+#rm -rf wikigps
 rm *.deb
 rm *.tar.gz
 rm *.dsc
