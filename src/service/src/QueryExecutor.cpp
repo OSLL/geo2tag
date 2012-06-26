@@ -644,7 +644,7 @@ void QueryExecutor::checkSessions(const QSharedPointer<Sessions>& sessions)
 void QueryExecutor::loadUsers(common::Users &container)
 {
   QSqlQuery query(m_database);
-  query.exec("select id, login, password from users order by id;");
+  query.exec("select id, login, password, email from users order by id;");
   while (query.next())
   {
     qlonglong id = query.record().value("id").toLongLong();
@@ -655,8 +655,9 @@ void QueryExecutor::loadUsers(common::Users &container)
     }
     QString login = query.record().value("login").toString();
     QString password = query.record().value("password").toString();
+    QString email = query.record().value("email").toString();
     syslog(LOG_INFO,"Pushing | %lld | %s ",id,login.toStdString().c_str());
-    DbUser *newUser = new DbUser(login,password,id);
+    DbUser *newUser = new DbUser(login,password,email,id);
     QSharedPointer<DbUser> pointer(newUser);
     container.push_back(pointer);
   }

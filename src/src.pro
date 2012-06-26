@@ -27,7 +27,7 @@ linux: {
              json/tst \
              http_requests \
              service \
-             #service/tst \
+             service/tst \
 	     http_requests/tst_http_requests \
 	     tracker/clients/meego/tst \
              common/tst \

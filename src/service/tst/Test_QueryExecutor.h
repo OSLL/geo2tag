@@ -64,10 +64,15 @@ namespace Test
                                                   const QDateTime& time,
                                                   const QSharedPointer<common::User>& user);
         QSharedPointer<Channel> createTestChannel(const QString& name, const QString& description, const QString& url);
+        QSharedPointer<DataMark> createTestTag(double altitude, double latitude, double longitude,
+                                              const QString& label, const QString& description, const QString& url, const QDateTime& time,
+                                              const QSharedPointer<common::User>& user,
+                                              const QSharedPointer<Channel>& channel);
         bool deleteTestUser(const QSharedPointer<common::User>& user);
         bool deleteTestTmpUser(const QSharedPointer<common::User>& user);
         bool deleteTestSession(const QSharedPointer<Session>& session);
         bool deleteTestChannel(const QSharedPointer<Channel>& channel);
+        bool deleteTestTag(const QSharedPointer<DataMark>& tag);
 
     private slots:
         void subscribeChannel();
@@ -86,6 +91,14 @@ namespace Test
         void insertNewSession();
         void updateSession();
         void deleteSession();
+
+        //void checkTmpUsers();
+        void checkSessions();
+
+        void loadUsers();
+        void loadTags();
+        void loadChannels();
+        void loadSessions();
 
     public:
         Test_QueryExecutor();

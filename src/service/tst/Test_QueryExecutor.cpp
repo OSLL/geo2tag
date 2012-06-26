@@ -249,13 +249,79 @@ namespace Test
         }
     }
 
+    QSharedPointer<DataMark> Test_QueryExecutor::createTestTag(double altitude, double latitude, double longitude,
+                                           const QString& label, const QString& description, const QString& url, const QDateTime& time,
+                                           const QSharedPointer<common::User>& user,
+                                           const QSharedPointer<Channel>& channel)
+    {
+        DbDataMark* tag = new DbDataMark(0, altitude, latitude, longitude, label, description, url, time, user->getId(), channel->getId());
+        qlonglong tagId = 0;
+        tag->setUser(user);
+        tag->setChannel(channel);
+
+        QSqlQuery query(m_database);
+        query.prepare("insert into tag (altitude , latitude, longitude, label, description, url, user_id, time, channel_id) "
+          "         values(:altitude,:latitude,:longitude,:label,:description,:url,:user_id,:time, :channel_id);");
+        query.bindValue(":altitude", tag->getAltitude());
+        query.bindValue(":latitude", tag->getLatitude());
+        query.bindValue(":longitude", tag->getLongitude());
+        query.bindValue(":label", tag->getLabel().isEmpty()? "New Mark" : tag->getLabel());
+        query.bindValue(":description", tag->getDescription());
+        query.bindValue(":url", tag->getUrl());
+        query.bindValue(":user_id", tag->getUserId());
+        query.bindValue(":channel_id", tag->getChannelId());
+        query.bindValue(":time", tag->getTime().toUTC());
+
+        m_database.transaction();
+        bool result = query.exec();
+        if (!result) {
+            m_database.rollback();
+            delete(tag);
+            return QSharedPointer<DataMark>(0);
+        } else {
+            m_database.commit();
+        }
+
+        query.prepare("select id from tag where label = :label and description = :descr;");
+        query.bindValue(":label", tag->getLabel());
+        query.bindValue(":descr", tag->getDescription());
+        result = query.exec();
+        query.next();
+        tagId = query.value(0).toLongLong();
+
+        tag->setId(tagId);
+        return QSharedPointer<DataMark>(tag);
+    }
+
+    bool Test_QueryExecutor::deleteTestTag(const QSharedPointer<DataMark> &tag)
+    {
+        QSqlQuery query(m_database);
+        query.prepare("delete from tag where id = :id;");
+        query.bindValue(":id", tag->getId());
+        m_database.transaction();
+        bool result = query.exec();
+        if (!result) {
+            m_database.rollback();
+            return false;
+        } else {
+            m_database.commit();
+            return true;
+        }
+    }
+
     // SLOTS
 
     void Test_QueryExecutor::subscribeChannel()
     {
-        QSharedPointer<common::User> user = createTestUser("user9", "test", "email9@test.org");
+        QString login = "test_user1";
+        QString passw = "test_pass1";
+        QString email = "test_email1";
+        QString name = "test_channel1";
+        QString descr = "test_descr1";
+        QString url = "test_url1";
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
-        QSharedPointer<Channel> channel = createTestChannel("Test channel 9", "Test description 9", "");
+        QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
         QVERIFY(channel != QSharedPointer<Channel>(0));
 
         bool result = m_queryExecutor->subscribeChannel(user, channel);
@@ -281,9 +347,16 @@ namespace Test
 
     void Test_QueryExecutor::unsubscribeChannel()
     {
-        QSharedPointer<common::User> user = createTestUser("user10", "test", "email10@test.org");
+        QString login = "test_user2";
+        QString passw = "test_pass2";
+        QString email = "test_email2";
+        QString name = "test_channel2";
+        QString descr = "test_descr2";
+        QString url = "test_url2";
+
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
-        QSharedPointer<Channel> channel = createTestChannel("Test channel 10", "Test description 10", "");
+        QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
         QVERIFY(channel != QSharedPointer<Channel>(0));
 
         QSqlQuery query(m_database);
@@ -318,9 +391,9 @@ namespace Test
 
     void Test_QueryExecutor::doesTmpUserExist()
     {
-        QString login = "user11";
-        QString passw = "test";
-        QString email = "emai11@test.org";
+        QString login = "test_user3";
+        QString passw = "test_pass3";
+        QString email = "test_email3";
 
         QSharedPointer<common::User> tmpUser = createTestTmpUser(login, passw, email);
         QVERIFY(tmpUser != QSharedPointer<common::User>(0));
@@ -337,9 +410,9 @@ namespace Test
 
     void Test_QueryExecutor::doesUserWithGivenEmailExist()
     {
-        QString login = "user12";
-        QString passw = "test";
-        QString email = "emai12@test.org";
+        QString login = "test_user4";
+        QString passw = "test_pass4";
+        QString email = "test_email4";
 
         QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
@@ -356,7 +429,11 @@ namespace Test
 
     void Test_QueryExecutor::deleteTmpUser()
     {
-        QSharedPointer<common::User> tmpUser = createTestTmpUser("user5", "test", "email5@test.org");
+        QString login = "test_user5";
+        QString passw = "test_pass5";
+        QString email = "test_email5";
+
+        QSharedPointer<common::User> tmpUser = createTestTmpUser(login, passw, email);
         QVERIFY(tmpUser != QSharedPointer<common::User>(0));
 
         bool result = m_queryExecutor->deleteTmpUser(QSharedPointer<common::User>(tmpUser));
@@ -372,9 +449,9 @@ namespace Test
 
     void Test_QueryExecutor::insertNewTmpUser()
     {
-        QString login = "user4";
-        QString passw = "test";
-        QString email = "email4@test.org";
+        QString login = "test_user6";
+        QString passw = "test_pass6";
+        QString email = "test_email6";
 
         QSharedPointer<common::User> tmpUser(new common::User(login, passw, email));
         QString token = m_queryExecutor->insertNewTmpUser(tmpUser);
@@ -400,9 +477,9 @@ namespace Test
 
     void Test_QueryExecutor::doesRegistrationTokenExist()
     {
-        QString login = "user13";
-        QString passw = "test";
-        QString email = "email13@test.org";
+        QString login = "test_user7";
+        QString passw = "test_pass7";
+        QString email = "test_email7";
 
         QSharedPointer<common::User> tmpUser = createTestTmpUser(login, passw, email);
         QVERIFY(tmpUser != QSharedPointer<common::User>(0));
@@ -427,9 +504,9 @@ namespace Test
 
     void Test_QueryExecutor::insertTmpUserIntoUsers()
     {
-        QString login = "user14";
-        QString passw = "test";
-        QString email = "email14@test.org";
+        QString login = "test_user8";
+        QString passw = "test_pass8";
+        QString email = "test_email8";
 
         QSharedPointer<common::User> tmpUser = createTestTmpUser(login, passw, email);
         QVERIFY(tmpUser != QSharedPointer<common::User>(0));
@@ -457,9 +534,9 @@ namespace Test
 
     void Test_QueryExecutor::deleteTmpUserWithToken()
     {
-        QString login = "user15";
-        QString passw = "test";
-        QString email = "email15@test.org";
+        QString login = "test_user9";
+        QString passw = "test_pass9";
+        QString email = "test_email9";
 
         QSharedPointer<common::User> tmpUser = createTestTmpUser(login, passw, email);
         QVERIFY(tmpUser != QSharedPointer<common::User>(0));
@@ -485,21 +562,19 @@ namespace Test
 
     void Test_QueryExecutor::insertNewTag()
     {
-        QString login = "user16";
-        QString passw = "test";
-        QString email = "email16@test.org";
-        QString name = "Test channel 16";
-        QString descr = "Test description 16";
-        QString url = "";
-        QString sessionToken = "Token16";
+        QString login = "test_user10";
+        QString passw = "test_pass10";
+        QString email = "test_email10";
+        QString name = "test_channel_10";
+        QString descr = "test_description_10";
+        QString url = "test_url_10";
+        QString sessionToken = "test_token_10";
         QDateTime time = QDateTime::currentDateTime();
         double altitude = 30.0;
         double latitude = 60.0;
         double longitude = 90.0;
-        QString label = "Test tag 16";
-        QString tagDescr = "Tag's description 16";
-
-
+        QString label = "test_tag_16";
+        QString tagDescr = "test_tag_descr_16";
         QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
         QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
@@ -538,23 +613,15 @@ namespace Test
         result = deleteTestSession(session);
         QCOMPARE(result, true);
 
-        query.prepare("delete from tag where id = :id");
-        query.bindValue(":id", tag->getId());
-        m_database.transaction();
-        result = query.exec();
-        if (!result) {
-            m_database.rollback();
-        } else {
-            m_database.commit();
-        }
+        result = deleteTestTag(tag);
         QCOMPARE(result, true);
     }
 
     void Test_QueryExecutor::insertNewUser()
     {
-        QString login = "user1";
-        QString passw = "test";
-        QString email = "email1@test.org";
+        QString login = "test_user11";
+        QString passw = "test_pass11";
+        QString email = "test_email11";
         QSharedPointer<common::User> dummyUser(new common::User(login, passw, email));
         QSharedPointer<common::User> user = m_queryExecutor->insertNewUser(dummyUser);
         QCOMPARE(user.isNull(), false);
@@ -581,9 +648,9 @@ namespace Test
 
     void Test_QueryExecutor::insertNewChannel()
     {
-        QString name = "Test channel 1";
-        QString descr = "Test description 1";
-        QString url = "";
+        QString name = "test_channel_12";
+        QString descr = "test_description_12";
+        QString url = "test_url_12";
         QSharedPointer<Channel> dummyChannel(new Channel(name, descr, url));
         QSharedPointer<Channel> channel = m_queryExecutor->insertNewChannel(dummyChannel);
         QCOMPARE(channel.isNull(), false);
@@ -607,7 +674,11 @@ namespace Test
 
     void Test_QueryExecutor::deleteUser()
     {
-        QSharedPointer<common::User> user = createTestUser("user2", "test", "email2@test.org");
+        QString login = "test_user13";
+        QString passw = "test_pass13";
+        QString email = "test_email13";
+
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
         bool result = m_queryExecutor->deleteUser(user);
         QCOMPARE(result, true);
@@ -622,14 +693,18 @@ namespace Test
 
     void Test_QueryExecutor::insertNewSession()
     {
-        QSharedPointer<common::User> user = createTestUser("user6", "test", "email6@test.org");
+        QString login = "test_user13";
+        QString passw = "test_pass13";
+        QString email = "test_email13";
+
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
         QSharedPointer<Session> dummySession(new Session("", QDateTime::currentDateTime(), user));
         QSharedPointer<Session> session = m_queryExecutor->insertNewSession(dummySession);
         QCOMPARE(session.isNull(), false);
-        QVERIFY(session->getUser()->getEmail() == "email6@test.org");
-        QVERIFY(session->getUser()->getLogin() == "user6");
-        QVERIFY(session->getUser()->getPassword() == "test");
+        QVERIFY(session->getUser()->getEmail() == email);
+        QVERIFY(session->getUser()->getLogin() == login);
+        QVERIFY(session->getUser()->getPassword() == passw);
 
         QSqlQuery query(m_database);
         query.prepare("select id, user_id from sessions where session_token = :token;");
@@ -648,9 +723,14 @@ namespace Test
 
     void Test_QueryExecutor::updateSession()
     {
-        QSharedPointer<common::User> user = createTestUser("user7", "test", "email7@test.org");
+        QString login = "test_user14";
+        QString passw = "test_pass14";
+        QString email = "test_email14";
+        QString sessionToken = "test_token_14";
+        QDateTime time = QDateTime::currentDateTime();
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
-        QSharedPointer<Session> session = createTestSession("TTTTT22222", QDateTime::currentDateTime(), user);
+        QSharedPointer<Session> session = createTestSession(sessionToken, time, user);
         QVERIFY(session != QSharedPointer<Session>(0));
 
         QDateTime timeBeforeUpdate = session->getLastAccessTime();
@@ -675,9 +755,14 @@ namespace Test
 
     void Test_QueryExecutor::deleteSession()
     {
-        QSharedPointer<common::User> user = createTestUser("user8", "test", "email8@test.org");
+        QString login = "test_user15";
+        QString passw = "test_pass15";
+        QString email = "test_email15";
+        QString sessionToken = "test_token_15";
+        QDateTime time = QDateTime::currentDateTime();
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
-        QSharedPointer<Session> session = createTestSession("TTTTT33333", QDateTime::currentDateTime(), user);
+        QSharedPointer<Session> session = createTestSession(sessionToken, time, user);
         QVERIFY(session != QSharedPointer<Session>(0));
         bool result = m_queryExecutor->deleteSession(session);
         QCOMPARE(result, true);
@@ -688,6 +773,213 @@ namespace Test
         result = query.exec();
         QCOMPARE(result, true);
         QVERIFY(query.next() == false);
+
+        result = deleteTestUser(user);
+        QCOMPARE(result, true);
+    }
+
+    /*void Test_QueryExecutor::checkTmpUsers()
+    {
+        QString login1 = "test_user1_16";
+        QString passw1 = "test_pass1_16";
+        QString email1 = "test_email1_16";
+        QString login2 = "test_user2_16";
+        QString passw2 = "test_pass2_16";
+        QString email2 = "test_email2_16";
+        QDateTime time(QDate(2000, 12, 12));
+        QString regToken = "reg_token_16";
+
+        QSharedPointer<common::User> tmpUser = createTestTmpUser(login1, passw1, email1);
+        QVERIFY(tmpUser != QSharedPointer<common::User>(0));
+
+        QSqlQuery query(m_database);
+        query.prepare("insert into signups (datetime,email,login,password,registration_token,sent) values(:time,:email,:login,:password,:r_token,:sent);");
+        query.bindValue(":time", time);
+        query.bindValue(":email", email2);
+        query.bindValue(":login", login2);
+        query.bindValue(":password", passw2);
+        query.bindValue(":r_token", regToken);
+        query.bindValue(":sent", FALSE);
+        m_database.transaction();
+        bool result = query.exec();
+        if (!result) {
+            m_database.rollback();
+        } else {
+            m_database.commit();
+        }
+        QCOMPARE(result, true);
+
+        m_queryExecutor->checkTmpUsers();
+
+        query.prepare("select sent from signups where login = :login;");
+        query.bindValue(":login", login1);
+        result = query.exec();
+        QVERIFY(query.next() == true);
+        QVERIFY(query.value(0).toBool() == true);
+
+        query.prepare("select * from signups where login = :login;");
+        query.bindValue(":login", login2);
+        result = query.exec();
+        QVERIFY(query.next() == false);
+
+        result = deleteTestTmpUser(tmpUser);
+        QCOMPARE(result, true);
+    }*/
+
+    void Test_QueryExecutor::checkSessions()
+    {
+        QString login = "test_user17";
+        QString passw = "test_pass17";
+        QString email = "test_email17";
+        QString sessionToken = "test_token_17";
+        QDateTime time(QDate(2000, 12, 12));
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
+        QVERIFY(user != QSharedPointer<common::User>(0));
+        QSharedPointer<Session> session = createTestSession(sessionToken, time, user);
+        QVERIFY(session != QSharedPointer<Session>(0));
+
+        QSharedPointer<Sessions> sessions(new Sessions());
+        QCOMPARE(sessions->size(), 0);
+        sessions->push_back(session);
+        QCOMPARE(sessions->size(), 1);
+
+        m_queryExecutor->checkSessions(sessions);
+        QCOMPARE(sessions->size(), 0);
+
+        bool result = deleteTestSession(session);
+        QCOMPARE(result, true);
+
+        result = deleteTestUser(user);
+        QCOMPARE(result, true);
+    }
+
+    void Test_QueryExecutor::loadUsers()
+    {
+        QString login = "test_user17";
+        QString passw = "test_pass17";
+        QString email = "test_email17";
+
+        QSharedPointer<common::Users> users(new common::Users());
+        QCOMPARE(users->size(), 0);
+
+        m_queryExecutor->loadUsers(*users);
+        int size = users->size();
+
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
+        QVERIFY(user != QSharedPointer<common::User>(0));
+
+        m_queryExecutor->loadUsers(*users);
+        int newSize = users->size();
+
+        QCOMPARE(size + 1, newSize);
+        QCOMPARE(users->at(newSize - 1)->getLogin(), login);
+        QCOMPARE(users->at(newSize - 1)->getPassword(), passw);
+        QCOMPARE(users->at(newSize - 1)->getEmail(), email);
+
+        bool result = deleteTestUser(user);
+        QCOMPARE(result, true);
+    }
+
+    void Test_QueryExecutor::loadTags()
+    {
+        QString login = "test_user18";
+        QString passw = "test_pass18";
+        QString email = "test_email18";
+        QString name = "test_channel_18";
+        QString descr = "test_description_18";
+        QString url = "test_url_18";
+        QDateTime time = QDateTime::currentDateTime();
+        double altitude = 30.0;
+        double latitude = 60.0;
+        double longitude = 90.0;
+        QString label = "test_tag_18";
+        QString tagDescr = "test_tag_descr_18";
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
+        QVERIFY(user != QSharedPointer<common::User>(0));
+        QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
+        QVERIFY(channel != QSharedPointer<Channel>(0));
+
+        QSharedPointer<DataMarks> tags(new DataMarks);
+        QCOMPARE(tags->size(), 0);
+
+        m_queryExecutor->loadTags(*tags);
+        int size = tags->size();
+
+        QSharedPointer<DataMark> tag = createTestTag(altitude, latitude, longitude, label, tagDescr, url, time,
+                                                     user, channel);
+        QVERIFY(tag != QSharedPointer<DataMark>(0));
+
+        m_queryExecutor->loadTags(*tags);
+        int newSize = tags->size();
+        QCOMPARE(newSize, size + 1);
+        QCOMPARE(tags->at(newSize - 1)->getLabel(), label);
+        QCOMPARE(tags->at(newSize - 1)->getDescription(), tagDescr);
+
+        bool result = deleteTestUser(user);
+        QCOMPARE(result, true);
+
+        result = deleteTestChannel(channel);
+        QCOMPARE(result, true);
+
+        result = deleteTestTag(tag);
+        QCOMPARE(result, true);
+    }
+
+    void Test_QueryExecutor::loadChannels()
+    {
+        QString name = "test_channel_19";
+        QString descr = "test_description_19";
+        QString url = "test_url_19";
+
+        QSharedPointer<Channels> channels(new Channels());
+        QCOMPARE(channels->size(), 0);
+
+        m_queryExecutor->loadChannels(*channels);
+        int size = channels->size();
+
+        QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
+        QVERIFY(channel != QSharedPointer<Channel>(0));
+
+        m_queryExecutor->loadChannels(*channels);
+        int newSize = channels->size();
+
+        QCOMPARE(newSize, size + 1);
+        QCOMPARE(channels->at(newSize - 1)->getName(), name);
+        QCOMPARE(channels->at(newSize - 1)->getDescription(), descr);
+        QCOMPARE(channels->at(newSize - 1)->getUrl(), url);
+
+        bool result = deleteTestChannel(channel);
+        QCOMPARE(result, true);
+    }
+
+    void Test_QueryExecutor::loadSessions()
+    {
+        QString login = "test_user20";
+        QString passw = "test_pass20";
+        QString email = "test_email20";
+        QString sessionToken = "test_token_20";
+        QDateTime time = QDateTime::currentDateTime();
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
+        QVERIFY(user != QSharedPointer<common::User>(0));
+
+        QSharedPointer<Sessions> sessions(new Sessions());
+        QCOMPARE(sessions->size(), 0);
+
+        m_queryExecutor->loadSessions(*sessions);
+        int size = sessions->size();
+
+        QSharedPointer<Session> session = createTestSession(sessionToken, time, user);
+        QVERIFY(session != QSharedPointer<Session>(0));
+
+        m_queryExecutor->loadSessions(*sessions);
+        int newSize = sessions->size();
+
+        QCOMPARE(newSize, size + 1);
+        QCOMPARE(sessions->at(newSize - 1)->getSessionToken(), sessionToken);
+        QCOMPARE(sessions->at(newSize - 1)->getUser()->getId(), user->getId());
+
+        bool result = deleteTestSession(session);
+        QCOMPARE(result, true);
 
         result = deleteTestUser(user);
         QCOMPARE(result, true);

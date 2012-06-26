@@ -51,7 +51,7 @@ class DbUser: public common::User
 
   public:
     DbUser(const QString& login, const QString& pass, qlonglong id );
-    DbUser(const QString& login, const QString& pass, const QString& email, qlonglong id );
+    DbUser(const QString& login, const QString& pass, const QString& email, qlonglong id);
     DbUser(qlonglong id );
 
     qlonglong getId() const;

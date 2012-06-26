@@ -8,5 +8,5 @@ dpkg-buildpackage -rfakeroot -j5
 
 cat ./test_summary.log
 
-./scripts/remove_testdb/sh
+./scripts/remove_testdb.sh
 
