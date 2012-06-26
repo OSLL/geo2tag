@@ -11,10 +11,6 @@ if [[ -n "$isBuildingRunned" ]]
 then 
 	exit 0;
 fi 
-
-##  If not - while directory /opt/geo2tag/automation/build_tasks is not empty
-##  call  build_remote.sh `cat /opt/geo2tag/automation/build_tasks/$i`
-
 #build_tasks=`ls ${dir_tasks}`;
 
 cd ${dir_automation}
