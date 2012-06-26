@@ -93,7 +93,7 @@ QString EmailMessage::getSubject() const
 void EmailMessage::send() const
 {
 
-    QString command = "echo " + m_body + " | mail -s '" + m_subject + "' " + m_email;
+    QString command =QString("echo \"%1\" | mail -s '%2' %3 &").arg(m_body).arg(m_subject).arg( m_email);
     system(command.toStdString().c_str());
 }
 

@@ -111,7 +111,7 @@ bool UpdateThread::compareTransactionNumber(qlonglong factCount)
   syslog(LOG_INFO, "Checking number of write requests: logged = %lld, fact = %lld", m_transactionCount, factCount);
   // If m_transactionCount < transactionCount then need sync
   SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
-  qlonglong transactionDiff =  storage.getValue("General_Settings/transaction_diff", QVariant(DEFAULT_DB_UPDATE_INTERVAL)).toLongLong();
+  qlonglong transactionDiff =  storage.getValue("General_Settings/transaction_diff", QVariant(DEFAULT_TRANSACTION_DIFF_TO_SYNC)).toLongLong();
   syslog(LOG_INFO, "Diff from config = %lld, fact = %lld", transactionDiff, factCount - m_transactionCount);
   result = (factCount - m_transactionCount >= transactionDiff);
   if (result) m_transactionCount = factCount;
@@ -125,7 +125,7 @@ void UpdateThread::run()
   for(;;)
   {
     SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
-    qlonglong interval = storage.getValue("General_Settings/db_update_interval", QVariant(DEFAULT_TRANSACTION_DIFF_TO_SYNC)).toLongLong();
+    qlonglong interval = storage.getValue("General_Settings/db_update_interval", QVariant(DEFAULT_DB_UPDATE_INTERVAL)).toLongLong();
     {
     PerformanceCounter counter("db_update");    
 
@@ -140,7 +140,7 @@ void UpdateThread::run()
 
     qDebug() << "connected...";
 // Check if DB contain new changes
-
+    qlonglong oldTagsContainerSize = m_tagsContainer->size();
     qlonglong factCount = m_queryExecutor->getFactTransactionNumber();
     if (!compareTransactionNumber(factCount))
     {
@@ -148,7 +148,6 @@ void UpdateThread::run()
       continue;
     }
 
-    lockWriting();
     syslog(LOG_INFO,"Containers locked for db_update");
 
     common::Users       usersContainer(*m_usersContainer);
@@ -157,12 +156,18 @@ void UpdateThread::run()
     Sessions    sessionsContainer(*m_sessionsContainer);
 
     m_queryExecutor->checkTmpUsers();
+
+    lockWriting();
     m_queryExecutor->checkSessions(m_sessionsContainer);
+    unlockWriting();
 
     m_queryExecutor->loadUsers(usersContainer);
     m_queryExecutor->loadChannels(channelsContainer);
     m_queryExecutor->loadTags(tagsContainer);
     m_queryExecutor->loadSessions(sessionsContainer);
+
+
+    lockWriting();
 
     m_usersContainer->merge(usersContainer);
     m_tagsContainer->merge(tagsContainer);
@@ -174,19 +179,22 @@ void UpdateThread::run()
     syslog(LOG_INFO, "tags added. trying to unlock");
     unlockWriting();
 
-    syslog(LOG_INFO,"lock: filling m_dataChannelsMap ");
-    for(int i=0; i<m_tagsContainer->size(); i++)
+    if (oldTagsContainerSize != m_tagsContainer->size())
     {
-      if(!m_dataChannelsMap->contains(m_tagsContainer->at(i)->getChannel(), m_tagsContainer->at(i)))
-      {
-        QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
-        QSharedPointer<Channel> channel = tag->getChannel();
-        syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i, m_tagsContainer->size(),
-         tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(), channel->getName().toStdString().c_str());
-        lockWriting();
-        m_dataChannelsMap->insert(channel, tag);
-        unlockWriting();
-      }
+    	syslog(LOG_INFO,"lock: filling m_dataChannelsMap ");
+    	for(int i=0; i<m_tagsContainer->size(); i++)
+    	{
+      		if(!m_dataChannelsMap->contains(m_tagsContainer->at(i)->getChannel(), m_tagsContainer->at(i)))
+      		{
+        		QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
+		        QSharedPointer<Channel> channel = tag->getChannel();
+		        syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i, m_tagsContainer->size(),
+        		tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(), channel->getName().toStdString().c_str());
+		        lockWriting();
+        		m_dataChannelsMap->insert(channel, tag);
+        		unlockWriting();
+    		}
+    	}
     }
     syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
     syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());
