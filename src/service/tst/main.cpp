@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,49 +28,35 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*! ---------------------------------------------------------------
- * \file UserInternal.cpp
- * \brief UserInternal implementation
+/*!
+ * \file main.cpp
+ * \brief Test suite for service
  *
- * PROJ: OSLL/geoblog
- * ---------------------------------------------------------------- */
+ * PROJ: OSLL/geo2tag
+ * ------------------------------------------------------------------------ */
 
-#include "UserInternal.h"
+#include <QtTest/QtTest>
+#include <QtCore/QtCore>
+#include <QCoreApplication>
 
-DbUser::DbUser(const QString& login,
-               const QString& pass,
-               qlonglong id)
-    : User(login,pass), m_id(id)
+// Test headers
+#include "Test_QueryExecutor.h"
+
+int main(int argc, char **argv)
 {
-}
+    QCoreApplication app(argc, argv);
 
-DbUser::DbUser(qlonglong id): m_id(id)
-{
-}
+    QObject *tests[] =
+    {
+        new Test::Test_QueryExecutor()
+    };
 
-DbUser::DbUser(const QString& login,
-               const QString& pass,
-               const QString& email,
-               qlonglong id)
-    : User(login, pass, email), m_id(id)
-{
-}
+    for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
+        QTest::qExec(tests[i]);
+    }
 
-qlonglong DbUser::getId() const
-{
-  return m_id;
+    return 0;//app.exec();
 }
 
 
-void DbUser::setId(qlonglong id)
-{
-  m_id = id;
-}
-
-
-DbUser::~DbUser()
-{
-}
-
-
-/* ===[ End of file ]=== */
+/* ===[ End of file $HeadURL$ ]=== */

@@ -399,7 +399,7 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
   }else
   {
     syslog(LOG_INFO,"Commit for NewUser sql query");
-    newUser = QSharedPointer<common::User>(new DbUser(user->getLogin(),user->getPassword(),newId));
+    newUser = QSharedPointer<common::User>(new DbUser(user->getLogin(),user->getPassword(),user->getEmail(),newId));
     m_database.commit();
   }
   return newUser;
