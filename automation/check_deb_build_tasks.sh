@@ -6,6 +6,7 @@ build_script="${dir_automation}/build_platform.sh"
 
 #  Check that build_platform doesnt started
 ##  If started - exit 
+
 isBuildingRunned=`pgrep '(build_platform|clean_db)'`;
 if [[ -n "$isBuildingRunned" ]]
 then 
