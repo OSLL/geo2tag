@@ -3,6 +3,8 @@
 # this file running tests.
 #
 
+./scripts/create_testdb.sh
+
 TESTS=`find ./ -name test.suite`
 COUNT=`echo ${TESTS} | wc -w`
 
@@ -19,6 +21,8 @@ done;
 
 FAIL=`cat test.log | grep "FAIL" | wc -l`
 PASS=`cat test.log | grep "PASS" | wc -l`
+
+./scripts/remove_testdb.sh
 
 echo "" >>test_summary.log
 echo "See 'test.log' for results" >>test_summary.log
