@@ -26,7 +26,7 @@ do
 	rm "${dir_tasks}/$i"
         tasks=`ls ${dir_tasks} | wc -w`
 	queue=`ls ${dir_tasks} | grep -v $i`;
-        ant -f mail_sender.xml -Dsubject "Starting platform build of $i task ($tasks in queue)" -Dmessage "Queue: $queue " -Dlogdir "build_tasks" 
+        ant -f mail_sender.xml -Dsubject "Starting platform build of $i branch ($tasks in queue)" -Dmessage "Queue: $queue " -Dlogdir "build_tasks" 
 	## Run remote build
 	${build_script} ${current_task}
 done;
