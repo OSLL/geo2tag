@@ -27,17 +27,3 @@ post '/test' do
   branch = getBranch(JSON.parse(params[:payload]))
   puts branch
 end
-
-post '/airomo' do
-  push = JSON.parse(request.body.read)
-  before = push["before"]
-  after = push["after"]
-  branch = getBranch(push)
-  puts before
-  puts after
-  puts branch
-  wasGood = system( "./build_webside.sh #{branch} #{after} AIROMO & " )
-  wasGood = system( "./build_platform.sh #{branch} #{after} AIROMO & " )
-  wasGood = system( "./add_build_task.sh #{branch} #{after} AIROMO & " )
-end
-
