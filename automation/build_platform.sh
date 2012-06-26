@@ -50,7 +50,7 @@ cd ${dir_geo2tag}
 dh_clean
 dpkg-buildpackage -rfakeroot >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 cp ./test.log ./test_summary.log ${dir_log}
-founded_packages=`ls "${dir_automation}" | grep deb | grep -v standalone | grep -v observer`;
+founded_packages=`ls "${dir_automation}" | grep [.]deb | grep -v standalone | grep -v observer`;
 echo "After building ${founded_packages}" >> ${dir_log}/build.log.txt
 if [  $(echo "${founded_packages}" | wc -w ) == "3" ] ;
 then
