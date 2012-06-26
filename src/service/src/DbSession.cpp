@@ -350,8 +350,8 @@ namespace common
     QSharedPointer<User> newUser = m_queryExecutor->insertTmpUserIntoUsers(registrationToken);
 
     if (!newUser.isNull()) {
-        m_updateThread->lockWriting();
         m_queryExecutor->deleteTmpUser(registrationToken);
+        m_updateThread->lockWriting();
         m_usersContainer->push_back(newUser);
         m_updateThread->unlockWriting();
         answer.append("Congratulations!");
