@@ -51,7 +51,7 @@ dh_clean
 dpkg-buildpackage -rfakeroot >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 cp ./test.log ./test_summary.log ${dir_log}
 founded_packages=`ls "${dir_automation}" | grep deb | grep -v standalone | grep -v observer`;
-echo "After building ${founded_packages}"
+echo "After building ${founded_packages}" >> ${dir_log}/build.log.txt
 if [  $(echo "${founded_packages}" | wc -w ) == "3" ] ;
 then
 
@@ -105,6 +105,8 @@ then
 		fi
 	fi
 else 
+	pack_num=`echo "${founded_packages}" | wc -w `;
+	echo "Build failed, number of packages = $pack_num, expected = 3" >>${dir_log}/build.log.txt
 	status="fail";
 fi
 
