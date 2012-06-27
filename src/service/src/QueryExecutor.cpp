@@ -577,6 +577,7 @@ void QueryExecutor::checkTmpUsers()
         updateQuery.prepare("update signups set sent = true where id = :id;");
         updateQuery.bindValue(":id", id);
         bool result = updateQuery.exec();
+        m_database.transaction();
         if(!result) {
             syslog(LOG_INFO,"Rollback for CheckTmpUser sql query");
             m_database.rollback();
