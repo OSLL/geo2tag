@@ -7,21 +7,12 @@ dir_automation="$WEBGEO_HOME/automation"
 dir_geo2tag="${dir_automation}/${web_repo}"
 dir_log="${dir_automation}/webside_logs"
 
-AIROMO_FLAG="$1"
-if [ "$AIROMO_FLAG" == "AIROMO" ] ; then
-        web_repo="airomo-web-repo"
-        dir_geo2tag="${dir_automation}/${web_repo}"
-fi
 
 if [ -e $dir_geo2tag ]; then
 	echo "geo2tag directory exists"	
 else 
         echo "geo2tag directory does not exists"
-        if [ "$AIROMO_FLAG" == "AIROMO" ] ; then
-                git clone ssh://airomo@repo.osll.spb.ru/git/airomo ${web_repo}
-        else
-                git clone git://github.com/OSLL/geo2tag.git ${web_repo}
-        fi
+        git clone git://github.com/OSLL/geo2tag.git ${web_repo}
 fi 
 
 cd $dir_geo2tag
@@ -46,16 +37,16 @@ if [ -e $CATALINA_HOME/webapps/${app} ]; then
 	date > ${dir_log}/deploy.log.txt
 	echo "Deploy of new version of site successful." >> ${dir_log}/deploy.log.txt
 	${dir_automation}/gen_index.sh
-	ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web - night build (success) ${AIROMO_FLAG}:build,test,deploy reports" -Dlogdir ${dir_log}
+	ant -f ${dir_automation}/mail_sender.xml -Dsubject "(success) geo2tag-web - night build: build,test,deploy reports" -Dmessage "" -Dlogdir ${dir_log}
 else 
 	date > ${dir_log}/deploy.log.txt
 	echo "Deploy of new version of site failed. Set stable version." >> ${dir_log}/deploy.log.txt
 	mv $CATALINA_HOME/webapps/${app_backup} $CATALINA_HOME/webapps/${app}
-	ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web - night build (fail) ${AIROMO_FLAG}:build,test,deploy reports" -Dlogdir ${dir_log}
+	ant -f ${dir_automation}/mail_sender.xml -Dsubject "(fail) geo2tag-web - night build: build,test,deploy reports" -Dmessage "" -Dlogdir ${dir_log}
 fi 
 ant clean
 git reset --hard
 git clean -fxd
 rm -rf ${dir_log}/*
 
-${dir_automation}/clean_db.sh ${AIROMO_FLAG}
+${dir_automation}/clean_db.sh 

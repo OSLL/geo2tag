@@ -44,7 +44,7 @@ date > ${dir_log}/test.log.txt
 ant test >> ${dir_log}/test.log.txt
 cp -rf  ${dir_geo2tag}/src/webside/reports/* ${dir_log}
 
-if [ "$branch" == "web-devel" ]
+if [ "$branch" == "web-devel" ] 
 then 
 	# if it is web-devel branch we should also make a deploy
 
@@ -58,13 +58,13 @@ then
 		echo "Deploy of new version of site successful." >> ${dir_log}/deploy.log.txt
 		echo "" >> ${dir_log}/deploy.log.txt
 		${dir_automation}/gen_index.sh
-		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web web-devel (success) ${AIROMO_FLAG} ${last_commit}: integration reports" -Dlogdir ${dir_log}
+		ant -f ${dir_automation}/mail_sender.xml -Dsubject "(success) geo2tag-web web-devel ${last_commit}: integration reports" -Dmessage "" -Dlogdir ${dir_log}
 	else 
 		date > ${dir_log}/deploy.log.txt
 		echo "Deploy of new version of site failed. Set stable version." >> ${dir_log}/deploy.log.txt
 		echo "" >> ${dir_log}/deploy.log.txt
 		mv $CATALINA_HOME/webapps/${app_backup} $CATALINA_HOME/webapps/${app}
-		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web web-devel (fail) ${AIROMO_FLAG} ${last_commit}: integration reports" -Dlogdir ${dir_log}
+		ant -f ${dir_automation}/mail_sender.xml -Dsubject "(fail) geo2tag-web web-devel ${last_commit}: integration reports" -Dmessage "" -Dlogdir ${dir_log}
 	fi 
 
 else
@@ -76,10 +76,10 @@ else
 	if [ -e ${dir_geo2tag}/src/webside/${app} ]
 	then
 		echo "Build of $branch successful." >> ${dir_log}/build.log.txt
- 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web $branch (success) ${AIROMO_FLAG} ${last_commit}: build and test reports" -Dlogdir ${dir_log}
+ 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "(success) geo2tag-web $branch ${last_commit}: build and test reports" -Dmessage "" -Dlogdir ${dir_log}
 	else
 		echo "Build of $branch failed." >> ${dir_log}/build.log.txt
- 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web $branch (fail) ${AIROMO_FLAG} ${last_commit}: build and test reports" -Dlogdir ${dir_log}
+ 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "(fail) geo2tag-web $branch ${last_commit}: build and test reports" -Dmessage "" -Dlogdir ${dir_log}
 	fi
 fi
 
