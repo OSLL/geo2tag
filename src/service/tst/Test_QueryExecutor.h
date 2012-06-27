@@ -92,7 +92,7 @@ namespace Test
         void updateSession();
         void deleteSession();
 
-        //void checkTmpUsers();
+        void checkTmpUsers();
         void checkSessions();
 
         void loadUsers();

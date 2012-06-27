@@ -778,7 +778,7 @@ namespace Test
         QCOMPARE(result, true);
     }
 
-    /*void Test_QueryExecutor::checkTmpUsers()
+    void Test_QueryExecutor::checkTmpUsers()
     {
         QString login1 = "test_user1_16";
         QString passw1 = "test_pass1_16";
@@ -824,7 +824,7 @@ namespace Test
 
         result = deleteTestTmpUser(tmpUser);
         QCOMPARE(result, true);
-    }*/
+    }
 
     void Test_QueryExecutor::checkSessions()
     {
