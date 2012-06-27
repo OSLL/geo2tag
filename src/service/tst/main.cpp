@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,38 +29,34 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file UserInternal.h
- * \brief Header of UserInternal
+ * \file main.cpp
+ * \brief Test suite for service
  *
  * PROJ: OSLL/geo2tag
- * ---------------------------------------------------------------- */
+ * ------------------------------------------------------------------------ */
 
-#ifndef _UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
-#define _UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
+#include <QtTest/QtTest>
+#include <QtCore/QtCore>
+#include <QCoreApplication>
 
-#include <QMutex>
-#include "User.h"
-#include "ChannelInternal.h"
+// Test headers
+#include "Test_QueryExecutor.h"
 
-/*!
- *
- */
-class DbUser: public common::User
+int main(int argc, char **argv)
 {
-  qlonglong m_id;
+    QCoreApplication app(argc, argv);
 
-  public:
-    DbUser(const QString& login, const QString& pass, qlonglong id );
-    DbUser(const QString& login, const QString& pass, const QString& email, qlonglong id);
-    DbUser(qlonglong id );
+    QObject *tests[] =
+    {
+        new Test::Test_QueryExecutor()
+    };
 
-    qlonglong getId() const;
-    void setId(qlonglong);
+    for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
+        QTest::qExec(tests[i]);
+    }
 
-    ~DbUser();
-    // class UserInternal
-};
-//_UserInternal_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
-#endif
+    return 0;//app.exec();
+}
 
-/* ===[ End of file ]=== */
+
+/* ===[ End of file $HeadURL$ ]=== */

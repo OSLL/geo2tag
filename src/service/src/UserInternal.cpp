@@ -37,14 +37,22 @@
 
 #include "UserInternal.h"
 
-DbUser::DbUser(const QString &login,
-const QString& pass,
-qlonglong id
-): User(login,pass), m_id(id)
+DbUser::DbUser(const QString& login,
+               const QString& pass,
+               qlonglong id)
+    : User(login,pass), m_id(id)
 {
 }
 
 DbUser::DbUser(qlonglong id): m_id(id)
+{
+}
+
+DbUser::DbUser(const QString& login,
+               const QString& pass,
+               const QString& email,
+               qlonglong id)
+    : User(login, pass, email), m_id(id)
 {
 }
 
