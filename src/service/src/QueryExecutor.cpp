@@ -573,9 +573,10 @@ void QueryExecutor::checkTmpUsers()
         message.send();
         syslog(LOG_INFO, "Process registration confirmation finished... ");
 
-        checkQuery.prepare("update signups set sent = true where id = :id;");
-        checkQuery.bindValue(":id", id);
-        bool result = checkQuery.exec();
+        QSqlQuery updateQuery(m_database);
+        updateQuery.prepare("update signups set sent = true where id = :id;");
+        updateQuery.bindValue(":id", id);
+        bool result = updateQuery.exec();
         if(!result) {
             syslog(LOG_INFO,"Rollback for CheckTmpUser sql query");
             m_database.rollback();

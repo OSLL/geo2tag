@@ -330,7 +330,9 @@ namespace common
     }
 
     response.setErrno(SUCCESS);
-    response.setConfirmUrl(QString(DEFAULT_SERVER)+QString("service/confirmRegistration-")+confirmToken);
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
+    response.setConfirmUrl(serverUrl+QString("service/confirmRegistration-")+confirmToken);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
