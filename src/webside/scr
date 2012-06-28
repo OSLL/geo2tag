@@ -1,5 +1,0 @@
-#!/bin/bash
-dat=`date -R`;
-#valgrind -v --tool=memcheck --leak-check=full --leak-resolution=med --log-file="/tmp/%p.log" /opt/geo2tag/sketch.wt "$@"
-#valgrind -v --tool=cachegrind --log-file="/tmp/%p.log_cachegrind" --cachegrind-out-file="/tmp/%p.cachegrind" /opt/geo2tag/sketch.wt "$@"
-valgrind -v --tool=callgrind --log-file="/tmp/%p.log_callgrind" --callgrind-out-file="/tmp/%p.callgrind" /opt/geo2tag/sketch.wt "$@"
