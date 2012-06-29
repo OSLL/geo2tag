@@ -55,13 +55,14 @@ send_status_letter ()
 	# update webtests page
 	cd ${dir_automation}
 	./update_webtests.sh $branch
-	clean_automation
+	echo "$status \n $letter_body"
 	if [ "$branch" == "master" ]
 	then
 		ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform master ${last_commit}: integration reports " -Dmessage "$letter_body" -Dlogdir "platform_logs" 
 	else
 		ant -f mail_sender.xml -Dsubject "($status) geo2tag-platform $branch ${last_commit}: build and test reports " -Dmessage "$letter_body" -Dlogdir "platform_logs"
 	fi
+	clean_automation
 	exit 0
 }
 
