@@ -100,7 +100,8 @@ namespace common
 
   const QSharedPointer<Channels> User::getSubscribedChannels() const
   {
-    return m_channels;
+//    return m_channels;
+	return
   }
 
   void User::setPassword(QString password)
