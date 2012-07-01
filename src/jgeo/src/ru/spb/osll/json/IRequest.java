@@ -139,4 +139,12 @@ public interface IRequest {
 		String LONGITUDE = "longitude";
 		String RADIUS = "radius";
 	}
+	
+    public interface IRegisterUser {
+        String REQUEST = "/registerUser";
+
+        String LOGIN = "login";
+        String PASSWORD = "password";
+        String EMAIL = "email";
+    }
 }

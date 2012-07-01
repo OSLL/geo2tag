@@ -367,5 +367,20 @@ public class JsonRequestTest extends TestCase {
 			}			
 		}
 	}
+	
+    public void testRegisterUser() {
+        final JSONObject JSONResponse = new JsonRegisterUserReguest(
+                "sergpetrov@gmail.com", "sergpetrov", "sergAP", url)
+                .doRequest();
+        assertNotNull(JSONResponse);
+        if (JSONResponse != null) {
+            Log.out.println(LOG, JSONResponse.toString());
+            JsonRegisterUserResponse r = new JsonRegisterUserResponse();
+            r.parseJson(JSONResponse);
+            boolean successResult = (r.getErrno() == Errno.SUCCESS)
+                    || (r.getErrno() == Errno.USER_ALREADY_EXIST_ERROR);
+            assertTrue(successResult);
+        }
+    }
 
 }
