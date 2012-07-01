@@ -41,32 +41,7 @@ import junit.framework.TestCase;
 
 import org.json.JSONObject;
 
-import ru.spb.osll.json.Errno;
-import ru.spb.osll.json.JsonAddUserRequest;
-import ru.spb.osll.json.JsonAddUserResponse;
-import ru.spb.osll.json.JsonApplyChannelRequest;
-import ru.spb.osll.json.JsonApplyChannelResponse;
-import ru.spb.osll.json.JsonAvailableChannelRequest;
-import ru.spb.osll.json.JsonAvailableChannelResponse;
-import ru.spb.osll.json.JsonFilterBoxRequest;
-import ru.spb.osll.json.JsonFilterChannelRequest;
-import ru.spb.osll.json.JsonFilterChannelResponse;
-import ru.spb.osll.json.JsonFilterCircleRequest;
-import ru.spb.osll.json.JsonFilterCylinderRequest;
-import ru.spb.osll.json.JsonFilterFenceRequest;
-import ru.spb.osll.json.JsonFilterPolygonRequest;
-import ru.spb.osll.json.JsonFilterRectangleRequest;
-import ru.spb.osll.json.JsonFilterResponse;
-import ru.spb.osll.json.JsonLoadTagsRequest;
-import ru.spb.osll.json.JsonLoadTagsResponse;
-import ru.spb.osll.json.JsonLoginRequest;
-import ru.spb.osll.json.JsonLoginResponse;
-import ru.spb.osll.json.JsonSubscribeRequest;
-import ru.spb.osll.json.JsonSubscribeResponse;
-import ru.spb.osll.json.JsonSubscribedChannelsRequest;
-import ru.spb.osll.json.JsonSubscribedChannelsResponse;
-import ru.spb.osll.json.JsonUnsubscribeRequest;
-import ru.spb.osll.json.JsonUnsubscribeResponse;
+import ru.spb.osll.json.*;
 import ru.spb.osll.log.Log;
 import ru.spb.osll.objects.Channel;
 import ru.spb.osll.objects.Mark;
@@ -89,6 +64,18 @@ public class JsonRequestTest extends TestCase {
 			assertEquals(r.getAuthString(), "MMMMMMMMMM");
 		}
 	}
+	
+    public void testVersion() {
+        JSONObject JSONResponse = new JsonVersionRequest(url).doRequest();
+        assertNotNull(JSONResponse);
+        if (JSONResponse != null) {
+            Log.out.println(LOG, JSONResponse.toString());
+            JsonVersionResponse r = new JsonVersionResponse();
+            r.parseJson(JSONResponse);
+            assertEquals(r.getErrno(), 0);
+            assertEquals(r.getVersionStr(), "0.16");
+        }
+    }
 
     public void testApplySubscribeUnsubscribe() {
         final JSONObject JSONResponse = new JsonApplyChannelRequest(
