@@ -1,5 +1,5 @@
 '''
- * Copyright 2012  OSLL Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2012 OSLL
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,39 +26,40 @@
  *    products derived from this software without specific prior written
  *    permission.
  
- @author: Vasily Romanikhin bac1ca89@gmail.com
+ @author: OSLL team
 '''
 
 from core.TestTemplate import TestTemplate
 import urllib2
 import json
 
-class TestLogin(TestTemplate):
-        
-    login = "test_user"
-    password = "test"
+class TestLoadTags(TestTemplate):
+       
     authToken = "unknown"
+    latitude = 30.0
+    longitude = 60.0
+    radius = 30.0
 
     def execute(self, context):
         log = []
         server = context['server']
 
         # work with JSON 
-        jdata = json.dumps({'login':self.login, 'password':self.password})
+        jdata = json.dumps({"auth_token":self.authToken, "latitude":self.latitude, "longitude":self.longitude, "radius":self.radius})
         log.append(str(jdata))
         
-        resData = urllib2.urlopen(server + "/service/login", jdata)
+        resData = urllib2.urlopen(server + "/service/loadTags", jdata)
         response = json.loads(resData.read())
         log.append(str(response))
         
-        self.authToken = response['auth_token']
         result = response['errno'] == 0
+
         return (result, log)
 
     def isEnabled(self): return True
 
     def getName(self): 
-        return 'TestLogin'
+        return 'TestLoadTags'
 
     def getDescription(self): 
-        return "TestLogin: 1) send login request 2) parse response 3) analyze data"
+        return "TestLoadtags: 1) send loadTags request 2) parse response 3) analyze data"

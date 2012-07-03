@@ -34,6 +34,7 @@
 from bottle import route, run
 from core.HTMLWriter import HTMLWriter
 from core.TestCore import TestCore
+from TestSequence import TestSequence
 
 errMessage = 'Wrong format: try again! Use http://test-tool-address/test-platform/instance="tested-instance"'
 
@@ -52,8 +53,10 @@ def index(instance='instance=tracks.osll.spb.ru:81'):
     context = {'server':instance, 
                'test_dir':'tests'}
     writer = HTMLWriter()
-    testCore = TestCore()
-    testCore.runTests(context, writer)
+    #testCore = TestCore()
+    #testCore.runTests(context, writer)
+    testSeq = TestSequence()
+    testSeq.run(context, writer)
     return writer.getPage()
 
 

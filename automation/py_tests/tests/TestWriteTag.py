@@ -1,5 +1,5 @@
 '''
- * Copyright 2012  OSLL Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2012 OSLL
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,39 +26,47 @@
  *    products derived from this software without specific prior written
  *    permission.
  
- @author: Vasily Romanikhin bac1ca89@gmail.com
+ @author: OSLL team
 '''
 
 from core.TestTemplate import TestTemplate
+from datetime import datetime
 import urllib2
 import json
 
-class TestLogin(TestTemplate):
-        
-    login = "test_user"
-    password = "test"
+class TestWriteTag(TestTemplate):
+    
     authToken = "unknown"
-
+    channel = "test_channel"
+    description = "test_description"
+    altitude = 0.0
+    latitude = 0.0
+    link = "link"
+    longitude = 0.0
+    time = "01 01 2012 12:00:00.000"
+    title = "test_tag"
+   
     def execute(self, context):
         log = []
         server = context['server']
 
         # work with JSON 
-        jdata = json.dumps({'login':self.login, 'password':self.password})
+        jdata = json.dumps({"auth_token":self.authToken, "channel":self.channel, "description":self.description , "altitude":self.altitude, "latitude": self.latitude, "link":self.link, "longitude":self.longitude, "time":self.time, "title":self.title})
+
         log.append(str(jdata))
         
-        resData = urllib2.urlopen(server + "/service/login", jdata)
+        resData = urllib2.urlopen(server + "/service/writeTag", jdata)
         response = json.loads(resData.read())
         log.append(str(response))
         
-        self.authToken = response['auth_token']
         result = response['errno'] == 0
+
         return (result, log)
 
     def isEnabled(self): return True
 
     def getName(self): 
-        return 'TestLogin'
+        return 'TestWriteTag'
 
     def getDescription(self): 
-        return "TestLogin: 1) send login request 2) parse response 3) analyze data"
+        return "TestWriteTag: 1) send writeTag request 2) parse response 3) analyze data"

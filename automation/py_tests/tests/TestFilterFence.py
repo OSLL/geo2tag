@@ -1,5 +1,5 @@
 '''
- * Copyright 2012  OSLL Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2012 OSLL
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,39 +26,52 @@
  *    products derived from this software without specific prior written
  *    permission.
  
- @author: Vasily Romanikhin bac1ca89@gmail.com
+ @author: OSLL team
 '''
 
 from core.TestTemplate import TestTemplate
+from datetime import datetime
 import urllib2
 import json
 
-class TestLogin(TestTemplate):
-        
-    login = "test_user"
-    password = "test"
+class TestFilterFence(TestTemplate):
+    
     authToken = "unknown"
-
+    timeFrom = "2012 01 01 12:00:00.000"
+    timeTo = "2012 01 13 12:00:00.000"
+    number1 = 0
+    latitude1 = 0.0
+    longitude1 = 0.0
+    number2 = 1
+    latitude2 = 70.0
+    longitude2 = 0.0
+    number3 = 2
+    latitude3 = 70.0
+    longitude3 = 100.0
+    altitude1 = -1.0
+    altitude2 = 1.0
+   
     def execute(self, context):
         log = []
         server = context['server']
 
         # work with JSON 
-        jdata = json.dumps({'login':self.login, 'password':self.password})
+        jdata = json.dumps({"auth_token":self.authToken, "time_from":self.timeFrom, "time_to":self.timeTo, "polygon":[{"number":self.number1,"latitude":self.latitude1,"longitude":self.longitude1}, {"number":self.number2,"latitude":self.latitude2,"longitude":self.longitude2}, {"number":self.number3,"latitude":self.latitude3,"longitude":self.longitude3}], "altitude_shift":{"altitude1":self.altitude1, "altitude2":self.altitude2}})
+
         log.append(str(jdata))
         
-        resData = urllib2.urlopen(server + "/service/login", jdata)
+        resData = urllib2.urlopen(server + "/service/filterFence", jdata)
         response = json.loads(resData.read())
         log.append(str(response))
         
-        self.authToken = response['auth_token']
         result = response['errno'] == 0
+
         return (result, log)
 
     def isEnabled(self): return True
 
     def getName(self): 
-        return 'TestLogin'
+        return 'TestFilterFence'
 
     def getDescription(self): 
-        return "TestLogin: 1) send login request 2) parse response 3) analyze data"
+        return "TestFilterFence: 1) send filterFence request 2) parse response 3) analyze data"

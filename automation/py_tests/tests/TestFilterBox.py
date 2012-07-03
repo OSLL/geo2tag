@@ -1,5 +1,5 @@
 '''
- * Copyright 2012  OSLL Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2012 OSLL
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,39 +26,47 @@
  *    products derived from this software without specific prior written
  *    permission.
  
- @author: Vasily Romanikhin bac1ca89@gmail.com
+ @author: OSLL team
 '''
 
 from core.TestTemplate import TestTemplate
+from datetime import datetime
 import urllib2
 import json
 
-class TestLogin(TestTemplate):
-        
-    login = "test_user"
-    password = "test"
+class TestFilterBox(TestTemplate):
+    
     authToken = "unknown"
-
+    timeFrom = "2012 01 01 12:00:00.000"
+    timeTo = "2012 01 13 12:00:00.000"
+    latitude1 = 0.0
+    latitude2 = 100.0
+    longitude1 = 0.0
+    longitude2 = 100.0
+    altitude1 = -1.0
+    altitude2 = 1.0
+   
     def execute(self, context):
         log = []
         server = context['server']
 
         # work with JSON 
-        jdata = json.dumps({'login':self.login, 'password':self.password})
+        jdata = json.dumps({"auth_token":self.authToken, "time_from":self.timeFrom, "time_to":self.timeTo, "latitude_shift":{"latitude1":self.latitude1, "latitude2":self.latitude2}, "longitude_shift":{"longitude1":self.longitude1,"longitude2":self.longitude2}, "altitude_shift":{"altitude1":self.altitude1 ,"altitude2":self.altitude2}})
+
         log.append(str(jdata))
         
-        resData = urllib2.urlopen(server + "/service/login", jdata)
+        resData = urllib2.urlopen(server + "/service/filterBox", jdata)
         response = json.loads(resData.read())
         log.append(str(response))
         
-        self.authToken = response['auth_token']
         result = response['errno'] == 0
+
         return (result, log)
 
     def isEnabled(self): return True
 
     def getName(self): 
-        return 'TestLogin'
+        return 'TestFilterBox'
 
     def getDescription(self): 
-        return "TestLogin: 1) send login request 2) parse response 3) analyze data"
+        return "TestFilterBox: 1) send filterBox request 2) parse response 3) analyze data"
