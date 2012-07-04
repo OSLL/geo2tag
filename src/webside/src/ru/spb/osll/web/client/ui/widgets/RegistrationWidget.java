@@ -89,11 +89,11 @@ public class RegistrationWidget extends FieldsWidget {
 				if (isValid()) {
 					final WUser user = new WUser(m_login.getText(), m_pass.getText());
 					user.setEmail(m_email.getText());
-					GTService.Util.getInstance().addUser(user, new AsyncCallback<WUser>() {
+					GTService.Util.getInstance().registerUser(user, new AsyncCallback<Boolean>() {
 						@Override
-						public void onSuccess(WUser result) {
-							if (result != null) {
-								showMessage(Localizer.res().successReg());
+						public void onSuccess(Boolean result) {
+							if (result = true) {
+								showMessage(Localizer.res().waitForMessage());
 								GTState.Instanse().setCurUser(null);
 								LoginWidget.Instance().dropData();
 								GTShell.Instance.setContent(LoginWidget.Instance());

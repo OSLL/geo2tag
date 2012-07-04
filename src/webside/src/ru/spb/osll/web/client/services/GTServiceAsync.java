@@ -48,6 +48,8 @@ public interface GTServiceAsync {
 	void isAuthorized(AsyncCallback<WUser> callback);
 
 	void addUser(WUser user, AsyncCallback<WUser> callback);
+	
+	void registerUser(WUser user, AsyncCallback<Boolean> callback);
 
 	void subscribe(WChannel ch, WUser u, AsyncCallback<Boolean> callback);
 

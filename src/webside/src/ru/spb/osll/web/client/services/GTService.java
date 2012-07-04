@@ -52,6 +52,8 @@ public interface GTService extends RemoteService {
 	
 	WUser addUser(WUser user) throws IllegalArgumentException;
 	
+	Boolean registerUser(WUser user) throws IllegalArgumentException;
+	
 	Boolean subscribe(WChannel ch, WUser u) throws IllegalArgumentException;
 	
 	Boolean unsubscribe(WChannel ch, WUser u) throws IllegalArgumentException;

@@ -56,7 +56,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		GTService, Session.HasSession {
 	
 	//public static String serverUrl = "http://localhost:81/service";
-	public static String serverUrl = "http://tracks.osll.spb.ru:81/service";
+	public static String serverUrl = "http://tracks.geo2tag.org:81/service";
 	
 	static {
 		Log.setLogger(new WebLogger());
@@ -101,9 +101,9 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public WUser addUser(WUser user) throws IllegalArgumentException {
 		JsonAddUserRequest request = new JsonAddUserRequest(user.getEmail(),
-															user.getLogin(), 
-															user.getPassword(), 
-															serverUrl);
+													        user.getLogin(), 
+														    user.getPassword(), 
+														    serverUrl);
 		JsonAddUserResponse response = new JsonAddUserResponse();
 		response.parseJson(request.doRequest());
 		if (response.getAuthToken() == null) {
@@ -114,6 +114,20 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 			newUser.setPassword(user.getPassword());
 			newUser.setToken(response.getAuthToken());
 			return newUser;
+		}
+	}
+	
+	public Boolean registerUser(WUser user) throws IllegalArgumentException {
+		JsonRegisterUserReguest request = new JsonRegisterUserReguest(user.getEmail(),
+														     	      user.getLogin(), 
+														     	      user.getPassword(), 
+														     	      serverUrl);
+		JsonRegisterUserResponse response = new JsonRegisterUserResponse();
+		response.parseJson(request.doRequest());
+		if (response.getErrno() == Errno.SUCCESS) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

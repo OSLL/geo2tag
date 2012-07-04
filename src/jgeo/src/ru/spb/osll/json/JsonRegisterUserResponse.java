@@ -31,27 +31,5 @@
 
 package ru.spb.osll.json;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import ru.spb.osll.log.Log;
-
 public class JsonRegisterUserResponse extends JsonBaseResponse {
-
-	private String m_authToken;
-
-	@Override
-	public void parseJson(JSONObject obj) {
-		super.parseJson(obj);
-		try {
-			m_authToken = obj.getString("auth_token");
-		} catch (JSONException e) {
-			Log.out.println(LOG, e.getMessage());
-		}
-	}
-
-	public String getAuthToken() {
-		return m_authToken;
-	}
-
 }

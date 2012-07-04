@@ -77,6 +77,7 @@ public interface GTLocalization extends Constants {
 	// Widget : RegistrationWidget
 	String email();
 	String userExists();
+	String waitForMessage();
 	String registration();
 	String successReg();
 

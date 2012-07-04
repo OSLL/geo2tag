@@ -52,7 +52,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet implements
 		LoginService, Session.HasSession {
-	public static String serverUrl = "http://tracks.osll.spb.ru:81/service";
+	public static String serverUrl = "http://tracks.geo2tag.org:81/service";
 
 	@Override
 	public WUser login(WUser user) throws IllegalArgumentException {
