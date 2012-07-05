@@ -238,6 +238,29 @@ namespace common
 
   }
 
+// Check password quality params - length, usage of different symbol groups ([-=+_*&^%$#@a-z],[A-Z],[0-9])
+  bool DbObjectsCollection::checkPasswordQuality(const QString& password) const
+  {
+    // If check is not enabled in config - all passwords are good
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    bool checkEnabled = storage.getValue("Security_Settings/password_quality_check", QVariant(DEFAULT_PASSWORD_QUALITY_CHECK)).toBool();
+    if (!checkEnabled) return true;
+
+    if ( password.size() < MINIMAL_PASSWORD_LENGTH )
+      return false;
+
+    // Check that all symbol groups below are used in password
+    QRegExp smallLetters("[-=+_*&^%$#@a-z]+");
+    QRegExp bigLetters("[A-Z]+");
+    QRegExp numbers("[0-9]+");
+    
+    if (smallLetters.indexIn(password)==-1 || bigLetters.indexIn(password)==-1 || numbers.indexIn(password)==-1 )
+      return false;
+
+    return true;
+
+  }
+
   const QString DbObjectsCollection::getPasswordHash(const QSharedPointer<User> & user) const
   {
     QString startStr = user->getLogin() + user->getPassword() + PASSWORD_SALT;
@@ -331,7 +354,15 @@ namespace common
         answer.append(response.getJson());
         return answer;
     }
-    // In DB only password hashes stored so we change password of this user by password hash
+
+    if ( !checkPasswordQuality(newTmpUser->getPassword()) )
+    {
+        response.setErrno(WEAK_PASSWORD_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+
+    // Only password hashes are stored, so we change password of this user by password hash
     newTmpUser->setPassword(getPasswordHash(newTmpUser));
     QString confirmToken = m_queryExecutor->insertNewTmpUser(newTmpUser);
     if(confirmToken.isEmpty()) {
@@ -752,8 +783,15 @@ namespace common
         return answer;
     }
 
+    if ( !checkPasswordQuality(dummyUser->getPassword()) )
+    {
+        response.setErrno(WEAK_PASSWORD_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+
     syslog(LOG_INFO, "Sending sql request for AddUser");
-    // In DB only password hashes stored so we change password of this user by password hash
+    // Only password hashes are stored, so we change password of this user by password hash
     dummyUser->setPassword(getPasswordHash(dummyUser));
     QSharedPointer<User> addedUser = m_queryExecutor->insertNewUser(dummyUser);
 
