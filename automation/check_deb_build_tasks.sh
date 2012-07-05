@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script should be runned by cron 
+# */3 * * * * /path/check_deb_build_tasks.sh
+
 dir_automation="$WEBGEO_HOME/automation"
 dir_tasks="${dir_automation}/deb_build_tasks"
 build_script="${dir_automation}/build_platform.sh"

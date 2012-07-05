@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script should be runned by cron using next params:
+# 59 23 * * * /path/midnight_deploy.sh
+
 web_repo="geo2tag-web-repo"
 app="geo2tag.war"
 app_backup="geo2tag-backup.war"
