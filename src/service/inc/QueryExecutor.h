@@ -65,7 +65,6 @@ class QueryExecutor : public QObject
     qlonglong nextTagKey() const;
     qlonglong nextSessionKey() const;
 
-    const QString generateNewToken(const QString& login,const QString& password) const;
     const QString generateNewToken(const QString& email, const QString& login,const QString& password) const;
     const QString generateNewToken(const QString& accessTime, const QString& email, const QString& login,const QString& password) const;
 

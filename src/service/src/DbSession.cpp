@@ -238,6 +238,15 @@ namespace common
 
   }
 
+  const QString DbObjectsCollection::getPasswordHash(const QSharedPointer<User> & user) const
+  {
+    QString startStr = user->getLogin() + user->getPassword() + PASSWORD_SALT;
+    QByteArray toHash = QCryptographicHash::hash(startStr.toUtf8(),QCryptographicHash::Sha1);
+    QString result(toHash.toHex());
+    syslog(LOG_INFO,"Calculating hash for password = %s",result.toStdString().c_str());
+    return result;
+  }
+
   QSharedPointer<User> DbObjectsCollection::findUser(const QSharedPointer<User> &dummyUser) const
   {
     QSharedPointer<User> realUser;      // Null pointer
@@ -246,11 +255,12 @@ namespace common
       currentUsers.size());
     if (!dummyUser->getLogin().isEmpty() && !dummyUser->getPassword().isEmpty())
     {
+        QString passwordHash = getPasswordHash(dummyUser);
     	for(int i=0; i<currentUsers.size(); i++)
     	{
             if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0
                &&
-               currentUsers.at(i)->getPassword() == dummyUser->getPassword())
+               currentUsers.at(i)->getPassword() == passwordHash)
         	return currentUsers.at(i);
     	}
     }
@@ -321,6 +331,8 @@ namespace common
         answer.append(response.getJson());
         return answer;
     }
+    // In DB only password hashes stored so we change password of this user by password hash
+    newTmpUser->setPassword(getPasswordHash(newTmpUser));
     QString confirmToken = m_queryExecutor->insertNewTmpUser(newTmpUser);
     if(confirmToken.isEmpty()) {
         response.setErrno(INTERNAL_DB_ERROR);
@@ -741,6 +753,8 @@ namespace common
     }
 
     syslog(LOG_INFO, "Sending sql request for AddUser");
+    // In DB only password hashes stored so we change password of this user by password hash
+    dummyUser->setPassword(getPasswordHash(dummyUser));
     QSharedPointer<User> addedUser = m_queryExecutor->insertNewUser(dummyUser);
 
     if(!addedUser)

@@ -108,16 +108,6 @@ qlonglong QueryExecutor::nextSessionKey() const
   return nextKey("sessions_seq");
 }
 
-const QString QueryExecutor::generateNewToken(const QString& login,const QString& password) const
-{
-  QString log=login+password;
-  QByteArray toHash(log.toUtf8());
-  toHash=QCryptographicHash::hash(log.toUtf8(),QCryptographicHash::Md5);
-  QString result(toHash.toHex());
-  syslog(LOG_INFO,"TOken = %s",result.toStdString().c_str());
-  return result;
-}
-
 const QString QueryExecutor::generateNewToken(const QString& email, const QString& login,const QString& password) const
 {
   QString log=login+password+email;
@@ -378,16 +368,12 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
   bool result;
   QSqlQuery newUserQuery(m_database);
   qlonglong newId = nextUserKey();
-  syslog(LOG_INFO,"Generating token for new user, %s : %s",user->getLogin().toStdString().c_str()
-    ,user->getPassword().toStdString().c_str());
-  QString newToken = generateNewToken(user->getLogin(),user->getPassword());
   //  syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
   newUserQuery.prepare("insert into users (id,email,login,password) values(:id,:email,:login,:password);");
   newUserQuery.bindValue(":id",newId);
   newUserQuery.bindValue(":email",user->getEmail());
   newUserQuery.bindValue(":login",user->getLogin());
   newUserQuery.bindValue(":password",user->getPassword());
-
   m_database.transaction();
 
   result=newUserQuery.exec();

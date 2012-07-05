@@ -84,6 +84,8 @@ namespace common
 
     DbObjectsCollection();
 
+    const QString getPasswordHash(const QSharedPointer<User> & user) const;
+
     QSharedPointer<User> findUser(const QSharedPointer<User>&) const;
     QSharedPointer<Session> findSession(const QSharedPointer<Session>&) const;
     QSharedPointer<Session> findSessionForUser(const QSharedPointer<User>&) const;

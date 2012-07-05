@@ -87,13 +87,13 @@ INSERT into signups (datetime, email, login, password, registration_token, sent)
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email3@test3.org', 'Mary', 'test', 'MMMMMMMMMM', FALSE);
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email4@test4.org', 'David', 'test', 'DDDDDDDDDD', FALSE);
 
-INSERT into users (email, login, password) values ('paul@test.org', 'Paul',   'test');
-INSERT into users (email, login, password) values ('kirill@test.org', 'Kirill', 'test');
-INSERT into users (email, login, password) values ('mark@test.org', 'Mark',   'test');
-INSERT into users (email, login, password) values ('yevgeni@test.org', 'Yevgeni', 'test');
+INSERT into users (email, login, password) values ('paul@test.org', 'Paul',   '811e97d9511e53a0da29efee50a8b6468c831606');
+INSERT into users (email, login, password) values ('kirill@test.org', 'Kirill', 'b8dcee14ab6a142619fdc5605c9b1182a5183292');
+INSERT into users (email, login, password) values ('mark@test.org', 'Mark',   '7b185e162978ee2b6d367c581c5ecda0fcdfbd8a');
+INSERT into users (email, login, password) values ('yevgeni@test.org', 'Yevgeni', '47e1b73dab5dbfdef3f2cd531ee44710ab1ec44e');
 
-INSERT into users (email, login, password) values ('rom@test.org', 'Rom',   'test');
-INSERT into users (email, login, password) values ('jul@test.org', 'Jul', 'test');
+INSERT into users (email, login, password) values ('rom@test.org', 'Rom',   '6f77a0a131c7a3d07595e06d1b8c9d283f234e47');
+INSERT into users (email, login, password) values ('jul@test.org', 'Jul', 'fdfd5c7cf62d92f15e64009e70f25009ffb68590');
 
 INSERT into sessions (user_id, session_token, last_access_time) values (2, 'kkkkkkkkkk', now());
 INSERT into sessions (user_id, session_token, last_access_time) values (3, 'mmmmmmmmmm', now());

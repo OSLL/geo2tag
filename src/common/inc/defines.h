@@ -73,6 +73,7 @@ void setServerPort(int port);
 // Default values
 #define DEFAULT_SERVER "http://tracks.osll.spb.ru:81/"
 #define DEFAULT_PORT 81
+#define PASSWORD_SALT "geo2tag_salt"
 
 #define DEFAULT_RADIUS            30
 #define DEFAULT_USER_NAME         "Mark"
