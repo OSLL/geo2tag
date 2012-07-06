@@ -47,6 +47,11 @@ LoginRequestJSON::LoginRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
 }
 
+LoginRequestJSON::LoginRequestJSON(const QSharedPointer<common::User>& user, QObject *parent)
+    : JsonSerializer(parent)
+{
+    m_usersContainer->push_back(user);
+}
 
 QByteArray LoginRequestJSON::getJson() const
 {

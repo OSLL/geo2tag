@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'stubs'
+require 'web_platform_test'
 
 set :port, 9494
 
@@ -17,14 +18,12 @@ end
 
 post '/refresh_platform' do
   branch = getBranch(JSON.parse(params[:payload]))
-  wasGood = system( "./build_platform.sh #{branch}" )
+  #wasGood = system( "./build_platform.sh #{branch}" )
+  wasGood = system( "./add_deb_build_task.sh #{branch}" )
+  #exec( "./build_platform.sh #{branch}" )
 end
 
-#
-# just for github json tets
-#
 post '/test' do
   branch = getBranch(JSON.parse(params[:payload]))
   puts branch
 end
-

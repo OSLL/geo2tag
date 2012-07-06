@@ -52,7 +52,6 @@ class JsonUser: public common::User
   public:
     JsonUser(const QString& login,
              const QString& pass = "unknown",
-             const QString& token = "unknown",
              const QString& email = "unknown");
 
     qlonglong getId() const;

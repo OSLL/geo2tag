@@ -35,7 +35,9 @@
 #ifndef ADDUSERREQUESTJSON_H
 #define ADDUSERREQUESTJSON_H
 
-#include "LoginRequestJSON.h"
+//#include "LoginRequestJSON.h"
+#include "JsonSerializer.h"
+#include "User.h"
 
 //typedef LoginRequestJSON AddUserRequestJSON;
 
@@ -44,13 +46,11 @@ class AddUserRequestJSON : public JsonSerializer
 public:
     AddUserRequestJSON(QObject *parent=0);
 
+    AddUserRequestJSON(const QSharedPointer<common::User>& user, QObject *parent = 0);
+
     QByteArray getJson() const;
 
     bool parseJson(const QByteArray&);
 };
 
-
-
-
-// ADDUSERREQUESTJSON_H
-#endif
+#endif // ADDUSERREQUESTJSON_H

@@ -38,10 +38,11 @@
 #include "UpdateThread.h"
 #include "SettingsStorage.h"
 #include "defines.h"
-#include "PerformanceCounter.h" 
+#include "PerformanceCounter.h"
+#include "QueryExecutor.h"
+#include "Geo2tagDatabase.h"
 
-UpdateThread::UpdateThread(const QSqlDatabase &db,
-                           const QSharedPointer<DataMarks> &tags,
+UpdateThread::UpdateThread(const QSharedPointer<DataMarks> &tags,
                            const QSharedPointer<common::Users> &users,
                            const QSharedPointer<Channels> &channels,
                            const QSharedPointer<DataChannels>& dataChannelsMap,
@@ -53,7 +54,25 @@ UpdateThread::UpdateThread(const QSqlDatabase &db,
       m_usersContainer(users),
       m_dataChannelsMap(dataChannelsMap),
       m_sessionsContainer(sessions),
-      m_database(db),
+      m_queryExecutor(0),
+      m_transactionCount(0)
+{
+}
+
+UpdateThread::UpdateThread(const QSharedPointer<DataMarks> &tags,
+                           const QSharedPointer<common::Users> &users,
+                           const QSharedPointer<Channels> &channels,
+                           const QSharedPointer<DataChannels>& dataChannelsMap,
+                           const QSharedPointer<Sessions>& sessions,
+                           QueryExecutor* queryExecutor,
+                           QObject *parent)
+    : QThread(parent),
+      m_channelsContainer(channels),
+      m_tagsContainer(tags),
+      m_usersContainer(users),
+      m_dataChannelsMap(dataChannelsMap),
+      m_sessionsContainer(sessions),
+      m_queryExecutor(queryExecutor),
       m_transactionCount(0)
 {
 }
@@ -70,6 +89,15 @@ void UpdateThread::unlockWriting()
   m_updateLock.unlock();
 }
 
+void UpdateThread::setQueryExecutor(QueryExecutor *queryExecutor)
+{
+  m_queryExecutor = queryExecutor;
+}
+
+QSharedPointer<Sessions> UpdateThread::getSessionsContainer() const
+{
+  return m_sessionsContainer;
+}
 
 void UpdateThread::incrementTransactionCount(int i)
 {
@@ -77,22 +105,16 @@ void UpdateThread::incrementTransactionCount(int i)
   syslog(LOG_INFO, "Number of write requests: logged = %lld",m_transactionCount);
 }
 
-
-bool UpdateThread::compareTransactionNumber()
+bool UpdateThread::compareTransactionNumber(qlonglong factCount)
 {
-// Calculate number of successful write requests
-  QSqlQuery query(m_database);
   bool result;
-  query.exec("select tup_inserted ,tup_updated ,tup_deleted from  pg_stat_database where datname='geo2tag';");
-  query.next();
-  qlonglong transactionCount = query.record().value("tup_inserted").toLongLong() +
-				query.record().value("tup_updated").toLongLong() +
-				query.record().value("tup_deleted").toLongLong();
-
-  syslog(LOG_INFO, "Checking number of write requests: logged = %lld, fact = %lld", m_transactionCount, transactionCount);
-// If m_transactionCount < transactionCount then need sync 
-  result = (m_transactionCount < transactionCount);
-  if (result) m_transactionCount = transactionCount;
+  syslog(LOG_INFO, "Checking number of write requests: logged = %lld, fact = %lld", m_transactionCount, factCount);
+  // If m_transactionCount < transactionCount then need sync
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+  qlonglong transactionDiff =  storage.getValue("General_Settings/transaction_diff", QVariant(DEFAULT_TRANSACTION_DIFF_TO_SYNC)).toLongLong();
+  syslog(LOG_INFO, "Diff from config = %lld, fact = %lld", transactionDiff, factCount - m_transactionCount);
+  result = (factCount - m_transactionCount >= transactionDiff);
+  if (result) m_transactionCount = factCount;
 
   return result;
 }
@@ -102,327 +124,85 @@ void UpdateThread::run()
 
   for(;;)
   {
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    qlonglong interval = storage.getValue("General_Settings/db_update_interval", QVariant(DEFAULT_DB_UPDATE_INTERVAL)).toLongLong();
     {
     PerformanceCounter counter("db_update");    
+
     syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
-    bool result = m_database.open();
+    bool result = m_queryExecutor->connect();
     if(!result)
     {
-      syslog(LOG_INFO, "connection error %s",m_database.lastError().text().toStdString().c_str());
+      syslog(LOG_INFO, "connection error %s", m_queryExecutor->lastError().text().toStdString().c_str());
       QThread::msleep(1000);
       continue;
     }
 
     qDebug() << "connected...";
 // Check if DB contain new changes
-
-    checkTmpUsers();
-    checkSessions();
-    if (!compareTransactionNumber())
+    qlonglong oldTagsContainerSize = m_tagsContainer->size();
+    qlonglong factCount = m_queryExecutor->getFactTransactionNumber();
+    if (!compareTransactionNumber(factCount))
     {
-      QThread::msleep(10000);
+      QThread::msleep(interval);
       continue;
     }
 
+    syslog(LOG_INFO,"Containers locked for db_update");
 
     common::Users       usersContainer(*m_usersContainer);
     DataMarks   tagsContainer(*m_tagsContainer);
     Channels    channelsContainer(*m_channelsContainer);
     Sessions    sessionsContainer(*m_sessionsContainer);
 
-    loadUsers(usersContainer);
-    loadChannels(channelsContainer);
-    loadTags(tagsContainer);
-    loadSessions(sessionsContainer);
+    m_queryExecutor->checkTmpUsers();
 
     lockWriting();
-    syslog(LOG_INFO,"Containers locked for db_update");
+    m_queryExecutor->checkSessions(m_sessionsContainer);
+    unlockWriting();
+
+    m_queryExecutor->loadUsers(usersContainer);
+    m_queryExecutor->loadChannels(channelsContainer);
+    m_queryExecutor->loadTags(tagsContainer);
+    m_queryExecutor->loadSessions(sessionsContainer);
+
+
+    lockWriting();
+
     m_usersContainer->merge(usersContainer);
     m_tagsContainer->merge(tagsContainer);
     m_channelsContainer->merge(channelsContainer);
     m_sessionsContainer->merge(sessionsContainer);
 
-    updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer, *m_sessionsContainer);
+    m_queryExecutor->updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer, *m_sessionsContainer);
     
     syslog(LOG_INFO, "tags added. trying to unlock");
     unlockWriting();
 
-    syslog(LOG_INFO,"lock: filling m_dataChannelsMap ");
-    for(int i=0; i<m_tagsContainer->size(); i++)
+    if (oldTagsContainerSize != m_tagsContainer->size())
     {
-      if(!m_dataChannelsMap->contains(m_tagsContainer->at(i)->getChannel(), m_tagsContainer->at(i)))
-      {
-        QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
-        QSharedPointer<Channel> channel = tag->getChannel();
-        syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i, m_tagsContainer->size(),
-         tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(), channel->getName().toStdString().c_str());
-        lockWriting();
-        m_dataChannelsMap->insert(channel, tag);
-        unlockWriting();
-      }
+    	syslog(LOG_INFO,"lock: filling m_dataChannelsMap ");
+    	for(int i=0; i<m_tagsContainer->size(); i++)
+    	{
+      		if(!m_dataChannelsMap->contains(m_tagsContainer->at(i)->getChannel(), m_tagsContainer->at(i)))
+      		{
+        		QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
+		        QSharedPointer<Channel> channel = tag->getChannel();
+		        syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i, m_tagsContainer->size(),
+        		tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(), channel->getName().toStdString().c_str());
+		        lockWriting();
+        		m_dataChannelsMap->insert(channel, tag);
+        		unlockWriting();
+    		}
+    	}
     }
-
-
     syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
     syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());
     syslog(LOG_INFO,  "current channels' size = %d", m_channelsContainer->size());
     syslog(LOG_INFO,  "current sessions' size = %d", m_sessionsContainer->size());
-    m_database.close();
+
+    m_queryExecutor->disconnect();
     }
-    QThread::msleep(10000);
+    QThread::msleep(interval);
   }
-}
-
-
-void UpdateThread::loadUsers(common::Users &container)
-{
-  QSqlQuery query(m_database);
-  query.exec("select id, login, password, token from users order by id;");
-  while (query.next())
-  {
-    qlonglong id = query.record().value("id").toLongLong();
-    if(container.exist(id))
-    {
-      // skip record
-      continue;
-    }
-    QString login = query.record().value("login").toString();
-    QString password = query.record().value("password").toString();
-    QString token = query.record().value("token").toString();
-    syslog(LOG_INFO,"Pushing | %lld | %s | %s ",id,login.toStdString().c_str(),token.toStdString().c_str());
-    DbUser *newUser = new DbUser(login,password,id,token);
-    QSharedPointer<DbUser> pointer(newUser);
-    container.push_back(pointer);
-  }
-}
-
-
-void UpdateThread::loadChannels(Channels &container)
-{
-  QSqlQuery query(m_database);
-  query.exec("select id, description, name, url from channel order by id;");
-  while (query.next())
-  {
-    qlonglong id = query.record().value("id").toLongLong();
-    if(container.exist(id))
-    {
-      // skip record
-      continue;
-    }
-    QString name = query.record().value("name").toString();
-    QString description = query.record().value("description").toString();
-    QString url = query.record().value("url").toString();
-    QSharedPointer<DbChannel> pointer(new DbChannel(id,name,description,url));
-    container.push_back(pointer);
-  }
-}
-
-
-
-void UpdateThread::loadTags(DataMarks &container)
-{
-  QSqlQuery query(m_database);
-  query.exec("select id, time, altitude, latitude, longitude, label, description, url, user_id, channel_id from tag order by time;");
-  while (query.next())
-  {
-    qlonglong id = query.record().value("id").toLongLong();
-    if(container.exist(id))
-    {
-      // skip record
-      continue;
-    }
-    QDateTime time = query.record().value("time").toDateTime().toTimeSpec(Qt::LocalTime);
-    //       // syslog(LOG_INFO, "loaded tag with time: %s milliseconds", time;
-    qreal latitude = query.record().value("latitude").toReal();
-    qreal altitude = query.record().value("altitude").toReal();
-    qreal longitude = query.record().value("longitude").toReal();
-    QString label = query.record().value("label").toString();
-    QString description = query.record().value("description").toString();
-    QString url = query.record().value("url").toString();
-    qlonglong userId = query.record().value("user_id").toLongLong();
-    qlonglong channelId = query.record().value("channel_id").toLongLong();
-
-    DbDataMark *newMark = new DbDataMark(id,
-      altitude,
-      latitude,
-      longitude,
-      label,
-      description,
-      url,
-      time,
-      userId,
-      channelId);
-    QSharedPointer<DbDataMark> pointer(newMark);
-    container.push_back(pointer);
-  }
-}
-
-void UpdateThread::loadSessions(Sessions &container)
-{
-    syslog(LOG_INFO, "Sessions size = %d", m_usersContainer->size());
-    QSqlQuery query(m_database);
-    query.exec("select id, user_id, session_token, last_access_time from sessions;");
-    while (query.next()) {
-        qlonglong id = query.record().value("id").toLongLong();
-        if (container.exist(id))
-            continue;
-        qlonglong userId = query.record().value("user_id").toLongLong();
-        QSharedPointer<common::User> user(new DbUser("", "", userId, ""));
-
-        QString sessionToken = query.record().value("session_token").toString();
-        QDateTime lastAccessTime = query.record().value("last_access_time").toDateTime();//.toTimeSpec(Qt::LocalTime);
-
-        QSharedPointer<Session> newSession(new DbSession(id, sessionToken, lastAccessTime, user));
-        container.push_back(newSession);
-    }
-}
-
-void UpdateThread::updateReflections(DataMarks &tags, common::Users &users, Channels &channels, Sessions &sessions)
-{
-  {
-    QSqlQuery query(m_database);
-    query.exec("select user_id, channel_id from subscribe;");
-    while (query.next())
-    {
-      qlonglong user_id = query.record().value("user_id").toLongLong();
-      qlonglong channel_id = query.record().value("channel_id").toLongLong();
-      users.item(user_id)->subscribe(channels.item(channel_id));
-    }
-  }
-  {
-    QSqlQuery query(m_database);
-    query.exec("select tag_id, channel_id from tags;");
-    while (query.next())
-    {
-      qlonglong tag_id = query.record().value("tag_id").toLongLong();
-      qlonglong channel_id = query.record().value("channel_id").toLongLong();
-
-      QSharedPointer<Channel> channel = channels.item(channel_id);
-      QSharedPointer<DataMark> tag = tags.item(tag_id);
-
-      tag->setChannel(channel);
-    }
-  }
-
-  for(int i=0; i<tags.size(); i++)
-  {
-    tags[i]->setUser(users.item(tags.at(i).dynamicCast<DbDataMark>()->getUserId()));
-    tags[i]->setChannel(channels.item(tags.at(i).dynamicCast<DbDataMark>()->getChannelId()));
-  }
-
-
-  for(int i=0; i<sessions.size(); i++)
-  {
-      sessions[i]->setUser(users.item(sessions[i]->getUser()->getId()));
-  }
-}
-
-void UpdateThread::checkTmpUsers()
-{
-    QSqlQuery checkQuery(m_database);
-    QSqlQuery deleteQuery(m_database);
-    syslog(LOG_INFO,"checkTmpUsers query is running now...");
-    // Sending emails to new users
-    checkQuery.exec("select id, email, registration_token from signups where sent = false;");
-    while (checkQuery.next()) {
-        qlonglong id = checkQuery.value(0).toLongLong();
-        QString email = checkQuery.value(1).toString();
-        QString token = checkQuery.value(2).toString();
-        sendConfirmationLetter(email, token);
-        checkQuery.prepare("update signups set sent = true where id = :id;");
-        checkQuery.bindValue(":id", id);
-        bool result = checkQuery.exec();
-        if(!result) {
-            syslog(LOG_INFO,"Rollback for CheckTmpUser sql query");
-            m_database.rollback();
-        } else {
-            syslog(LOG_INFO,"Commit for CheckTmpUser sql query");
-            m_database.commit();
-        }
-	lockWriting();
-	incrementTransactionCount();
-	unlockWriting();
-    }
-
-    // Deleting old signups
-    QString strQuery;
-
-    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
-    QString timelife = storage.getValue("Registration_Settings/tmp_user_timelife", QVariant(DEFAULT_TMP_USER_TIMELIFE)).toString();
-
-    strQuery.append("select id from signups where (now() - datetime) >= INTERVAL '");
-    strQuery.append(timelife);
-    strQuery.append("';");
-    checkQuery.exec(strQuery.toStdString().c_str());
-    while (checkQuery.next()) {
-        qlonglong id = checkQuery.value(0).toLongLong();
-        deleteQuery.prepare("delete from signups where id = :id;");
-        deleteQuery.bindValue(":id", id);
-        syslog(LOG_INFO,"Deleting: %s", deleteQuery.lastQuery().toStdString().c_str());
-        m_database.transaction();
-        bool result = deleteQuery.exec();
-        if(!result) {
-            syslog(LOG_INFO,"Rollback for DeleteTmpUser sql query");
-            m_database.rollback();
-        } else {
-            syslog(LOG_INFO,"Commit for DeleteTmpUser sql query");
-            m_database.commit();
-        }
-        lockWriting();
-	incrementTransactionCount();
-	unlockWriting();	
-    }
-}
-
-void UpdateThread::checkSessions()
-{
-    syslog(LOG_INFO,"checkSessions query is running now...");
-    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
-    int timelife = storage.getValue("General_Settings/session_timelife", QVariant(DEFAULT_SESSION_TIMELIFE)).toInt();
-    for (int i = 0; i < m_sessionsContainer->size(); i++) {
-        QDateTime currentTime = QDateTime::currentDateTime().toUTC();
-        //syslog(LOG_INFO, "Current time: %s", currentTime.toString().toStdString().c_str());
-        QDateTime lastAccessTime = m_sessionsContainer->at(i)->getLastAccessTime();
-        //syslog(LOG_INFO, "Last access time: %s", lastAccessTime.toString().toStdString().c_str());
-        if (lastAccessTime.addDays(timelife) <= currentTime) {
-            QSqlQuery query(m_database);
-            query.prepare("delete from sessions where id = :id;");
-            query.bindValue(":id", m_sessionsContainer->at(i)->getId());
-            syslog(LOG_INFO,"Deleting: %s", query.lastQuery().toStdString().c_str());
-            m_database.transaction();
-            bool result = query.exec();
-            if (!result) {
-                syslog(LOG_INFO, "Rollback for DeleteSession sql query");
-                m_database.rollback();
-            } else {
-                syslog(LOG_INFO, "Commit for DeleteSession sql query");
-                m_database.commit();
-            }
-	    lockWriting();
-	    incrementTransactionCount();
-            m_sessionsContainer->erase(m_sessionsContainer->at(i));
-	    unlockWriting();
-        }
-    }
-}
-
-void UpdateThread::sendConfirmationLetter(const QString &address, const QString &token)
-{
-    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
-    QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
-    QString subject = storage.getValue("Mail_Settings/subject", QVariant(DEFAULT_EMAIL_SUBJECT)).toString();
-    QString body = storage.getValue("Mail_Settings/body", QVariant(DEFAULT_EMAIL_BODY)).toString();
-    syslog(LOG_INFO, "Process registration confirmation is started... ");
-    body.append(" To confirm registration, please, go to this link: ");
-    body.append(serverUrl.toStdString().c_str());
-    body.append("service/confirmRegistration-");
-    body.append(token);
-    syslog(LOG_INFO, "Setting storage: %s", storage.getFileName().toStdString().c_str());
-    syslog(LOG_INFO, "Email: %s", address.toStdString().c_str());
-    syslog(LOG_INFO, "Token: %s", token.toStdString().c_str());
-    syslog(LOG_INFO, "Subject: %s",subject.toStdString().c_str());
-    syslog(LOG_INFO, "Body: %s", body.toStdString().c_str());
-    QString command = "echo " + body + " | mail -s '" + subject + "' " + address;
-    system(command.toStdString().c_str());
-    syslog(LOG_INFO, "Process registration confirmation finished... ");
 }

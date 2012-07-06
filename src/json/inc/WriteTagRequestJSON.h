@@ -36,12 +36,21 @@
 #define WRITETAGREQUESTJSON_H
 
 #include "JsonSerializer.h"
+#include "Session.h"
+#include "Channel.h"
+#include "DataMarks.h"
+
 
 class WriteTagRequestJSON : public JsonSerializer
 {
   public:
 
     WriteTagRequestJSON(QObject *parent=0);
+
+    WriteTagRequestJSON(const QSharedPointer<Session>& session,
+                        const QSharedPointer<Channel>& channel,
+                        const QSharedPointer<DataMark>& tag,
+                        QObject *parent=0);
 
     virtual QByteArray getJson() const;
 

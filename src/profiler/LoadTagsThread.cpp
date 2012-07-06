@@ -43,9 +43,9 @@
 #include "LoadTagsQuery.h"
 #include "defines.h"
 
-LoadTagsThread::LoadTagsThread(QSharedPointer<common::User> user)
+LoadTagsThread::LoadTagsThread(QSharedPointer<Session> session)
 {
-  m_query = new LoadTagsQuery(user,DEFAULT_LATITUDE,DEFAULT_LONGITUDE,(double)DEFAULT_RADIUS);
+  m_query = new LoadTagsQuery(session,DEFAULT_LATITUDE,DEFAULT_LONGITUDE,(double)DEFAULT_RADIUS);
   connect(m_query,SIGNAL(tagsReceived()),this, SLOT(responseReceived()));
   setConnections();
 }

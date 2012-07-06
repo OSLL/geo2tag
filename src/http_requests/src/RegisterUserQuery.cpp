@@ -69,7 +69,7 @@ QString RegisterUserQuery::getUrl() const
 
 QByteArray RegisterUserQuery::getRequestBody() const
 {
-    QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, "unknown",m_email));
+    QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, m_email));
     RegisterUserRequestJSON request;
     request.addUser(dummyUser);
     return request.getJson();

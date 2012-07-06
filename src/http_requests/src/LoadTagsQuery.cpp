@@ -87,8 +87,7 @@ QString LoadTagsQuery::getUrl() const
 
 QByteArray LoadTagsQuery::getRequestBody() const
 {
-  LoadTagsRequestJSON request(m_latitude, m_longitude, m_radius);
-  request.addSession(m_session);
+  LoadTagsRequestJSON request(m_session, m_latitude, m_longitude, m_radius);
   return request.getJson();
 }
 

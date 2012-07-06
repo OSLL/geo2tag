@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <!-- Inherit our applications main module.                      -->
+  <inherits name='ru.spb.osll.web.Geo2tag'/>
+
+  <!-- Specify the path to any remote services.                   -->
+  <servlet path="/geo2tag/greet" class="ru.spb.osll.web.server.GreetingServiceImpl" />
+
+</module>

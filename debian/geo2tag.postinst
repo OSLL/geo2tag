@@ -1,5 +1,7 @@
 #!/bin/bash
-/etc/init.d/lighttpd restart;
+/etc/init.d/lighttpd stop
+/etc/init.d/postgresql restart
+/etc/init.d/lighttpd start
 # down will be DB initialization
 # check is there geo2tag db and user
 isEmpt=`sudo -u postgres psql -A -q -t -c "select datname from pg_database" template1 | grep geo2tag`;
