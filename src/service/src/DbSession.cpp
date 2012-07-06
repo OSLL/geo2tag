@@ -261,9 +261,15 @@ namespace common
 
   }
 
-  const QString DbObjectsCollection::getPasswordHash(const QSharedPointer<User> & user) const
+
+  const QString DbObjectsCollection::getPasswordHash(const QSharedPointer<User>& user) const
   {
-    QString startStr = user->getLogin() + user->getPassword() + PASSWORD_SALT;
+    return getPasswordHash(user->getLogin(),user->getPassword());
+  }
+
+  const QString DbObjectsCollection::getPasswordHash(const QString & login,const QString & password) const
+  {
+    QString startStr = login + password + PASSWORD_SALT;
     QByteArray toHash = QCryptographicHash::hash(startStr.toUtf8(),QCryptographicHash::Sha1);
     QString result(toHash.toHex());
     syslog(LOG_INFO,"Calculating hash for password = %s",result.toStdString().c_str());
@@ -278,12 +284,11 @@ namespace common
       currentUsers.size());
     if (!dummyUser->getLogin().isEmpty() && !dummyUser->getPassword().isEmpty())
     {
-        QString passwordHash = getPasswordHash(dummyUser);
     	for(int i=0; i<currentUsers.size(); i++)
     	{
             if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0
                &&
-               currentUsers.at(i)->getPassword() == passwordHash)
+               currentUsers.at(i)->getPassword() == getPasswordHash(currentUsers.at(i)->getLogin(),dummyUser->getPassword()))
         	return currentUsers.at(i);
     	}
     }
