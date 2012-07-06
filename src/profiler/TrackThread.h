@@ -44,15 +44,17 @@
 #define _TrackThread_H_59663E9E_76FF_4254_873A_08F920EDA64B_INCLUDED_
 
 #include "ProfilerThread.h"
+#include "Channel.h"
+#include "Session.h"
+#include "DataMarks.h"
 #include "WriteTagQuery.h"
 
 class TrackThread: public ProfilerThread
 {
   Q_OBJECT;
-  QSharedPointer<DataMark> m_tag;
 
 public:
-  TrackThread(const QSharedPointer<DataMark> &tag);
+  TrackThread(const QSharedPointer<Session>& session, const QSharedPointer<Channel>& channel, const QSharedPointer<DataMark>& tag);
   ~TrackThread();
 }; // class TrackThread
 

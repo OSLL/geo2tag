@@ -68,7 +68,7 @@ void DataThread::run()
   {
     if(m_isConnected)
     {
-      qDebug() << "connected: auth_token=" << m_loginQuery->getUser()->getToken();
+      qDebug() << "connected: auth_token=" << m_loginQuery->getSession()->getUser()->getToken();
       emit(getFeed());
       //ToDo query RSS
 
@@ -87,8 +87,9 @@ void DataThread::run()
 void DataThread::onConnected()
 {
   m_isConnected = true;
-  m_user=m_loginQuery->getUser();
-  m_rssQuery=new LoadTagsQuery(m_user,60.,30.,3000000.,parent());
+  QSharedPointer<Session> session = m_loginQuery->getSession();
+  m_user=session->getUser();
+  m_rssQuery=new LoadTagsQuery(session,60.,30.,3000000.,parent());
   qDebug() << "rssFeedQuery setted" << m_rssQuery;
   connect(m_rssQuery, SIGNAL(tagsReceived()), this,SLOT(onMarksGotten()));
   connect(m_rssQuery, SIGNAL(errorOccured(QString)), SLOT(onError(QString)));

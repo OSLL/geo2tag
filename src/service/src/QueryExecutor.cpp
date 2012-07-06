@@ -40,20 +40,22 @@
 #include <QVariant>
 #include <QString>
 
+#include "defines.h"
 #include "QueryExecutor.h"
 #include "JsonUser.h"
 #include "DataMarkInternal.h"
 #include "UserInternal.h"
 #include "ChannelInternal.h"
 #include "SessionInternal.h"
+#include "SettingsStorage.h"
 #include "PerformanceCounter.h"
+#include "EmailMessage.h"
  
-
-QueryExecutor::QueryExecutor(const QSqlDatabase &db, QObject *parent): QObject(parent),
-m_database(db)
+QueryExecutor::QueryExecutor(const Geo2tagDatabase& db, QObject* parent)
+    : QObject(parent),
+      m_database(db)
 {
 }
-
 
 bool QueryExecutor::connect()
 {
@@ -66,6 +68,15 @@ bool QueryExecutor::isConnected()
   return m_database.isOpen();
 }
 
+void QueryExecutor::disconnect()
+{
+  return m_database.close();
+}
+
+QSqlError QueryExecutor::lastError()
+{
+  return m_database.lastError();
+}
 
 qlonglong QueryExecutor::nextKey(const QString &sequence) const
 {
@@ -77,25 +88,20 @@ qlonglong QueryExecutor::nextKey(const QString &sequence) const
   return id;
 }
 
-
 qlonglong QueryExecutor::nextTagKey() const
 {
   return nextKey("tags_seq");
 }
-
 
 qlonglong QueryExecutor::nextUserKey() const
 {
   return nextKey("users_seq");
 }
 
-
 qlonglong QueryExecutor::nextChannelKey() const
 {
   return nextKey("channels_seq");
 }
-
-
 
 qlonglong QueryExecutor::nextSessionKey() const
 {
@@ -132,7 +138,6 @@ const QString QueryExecutor::generateNewToken(const QString& accessTime, const Q
   return result;
 }
 
-
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
   PerformanceCounter counter("QueryExecutor::insertNewTag");
@@ -154,7 +159,6 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
   newTagQuery.bindValue(":channel_id", tag->getChannel()->getId());
   newTagQuery.bindValue(":time", tag->getTime().toUTC());
   newTagQuery.bindValue(":id", newId);
-
 
   m_database.transaction();
 
@@ -178,7 +182,6 @@ QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMa
 
   return t;
 }
-
 
 QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Channel>& channel)
 {
@@ -210,11 +213,11 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
   return newChannel;
 }
 
-QSharedPointer<common::User> QueryExecutor::doesTmpUserExist(const QSharedPointer<common::User> &user)
+bool QueryExecutor::doesTmpUserExist(const QSharedPointer<common::User> &user)
 {
     PerformanceCounter counter("QueryExecutor::doesTmpUserExist");
     QSqlQuery query(m_database);
-    query.prepare("select id, email, login, password, registration_token from signups where login = :login or email = :email;");
+    query.prepare("select * from signups where login = :login or email = :email;");
     query.bindValue(":login",user->getLogin());
     query.bindValue(":email",user->getEmail());
     syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
@@ -222,16 +225,10 @@ QSharedPointer<common::User> QueryExecutor::doesTmpUserExist(const QSharedPointe
     query.exec();
 
     if (query.next()) {
-        syslog(LOG_INFO,"Match found.");
-        qlonglong id = query.value(0).toLongLong();
-        QString email = query.value(1).toString();
-        QString login = query.value(2).toString();
-        QString password = query.value(3).toString();
-        QString token = query.value(4).toString();
-        return QSharedPointer<DbUser>(new DbUser(login, password, id, token));
+        return true;
     } else {
         syslog(LOG_INFO,"No matching users.");
-        return QSharedPointer<common::User>(NULL);
+        return false;
     }
 }
 
@@ -265,6 +262,7 @@ bool QueryExecutor::deleteTmpUser(const QSharedPointer<common::User> &user)
     syslog(LOG_INFO,"Deleting: %s", deleteSignupQuery.lastQuery().toStdString().c_str());
 
     m_database.transaction();
+
     result = deleteSignupQuery.exec();
     if(!result) {
       syslog(LOG_INFO,"Rollback for deleteSignup sql query");
@@ -276,7 +274,7 @@ bool QueryExecutor::deleteTmpUser(const QSharedPointer<common::User> &user)
     return result;
 }
 
-QSharedPointer<common::User> QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
+const QString QueryExecutor::insertNewTmpUser(const QSharedPointer<common::User> &user)
 {
     PerformanceCounter counter("QueryExecutor::insertNewTmpUser");
     bool result;
@@ -294,17 +292,17 @@ QSharedPointer<common::User> QueryExecutor::insertNewTmpUser(const QSharedPointe
     newSignupQuery.bindValue(":sent", FALSE);
 
     m_database.transaction();
+
     result = newSignupQuery.exec();
-    QSharedPointer<common::User> tmpUser = QSharedPointer<common::User>(NULL);
     if(!result) {
       syslog(LOG_INFO,"Rollback for NewSignup sql query");
       m_database.rollback();
-    } else {
-      syslog(LOG_INFO,"Commit for NewSignup sql query");
-      tmpUser = QSharedPointer<common::User>(new JsonUser(user->getLogin(),user->getPassword(),newToken,user->getEmail()));
-      m_database.commit();
-    }
-    return tmpUser;
+      return QString("");
+    } 
+    syslog(LOG_INFO,"Commit for NewSignup sql query");
+    m_database.commit();
+
+    return newToken;
 }
 
 bool QueryExecutor::doesRegistrationTokenExist(const QString &token)
@@ -362,6 +360,7 @@ bool QueryExecutor::deleteTmpUser(const QString &token)
     syslog(LOG_INFO,"Deleting: %s", deleteSignupQuery.lastQuery().toStdString().c_str());
 
     m_database.transaction();
+
     result = deleteSignupQuery.exec();
     if(!result) {
       syslog(LOG_INFO,"Rollback for deleteSignup sql query");
@@ -383,15 +382,15 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
     ,user->getPassword().toStdString().c_str());
   QString newToken = generateNewToken(user->getLogin(),user->getPassword());
   //  syslog(LOG_INFO,"newToken = %s",newToken.toStdString().c_str());
-  newUserQuery.prepare("insert into users (id,email,login,password,token) values(:id,:email,:login,:password,:a_t);");
+  newUserQuery.prepare("insert into users (id,email,login,password) values(:id,:email,:login,:password);");
   newUserQuery.bindValue(":id",newId);
   newUserQuery.bindValue(":email",user->getEmail());
   newUserQuery.bindValue(":login",user->getLogin());
   newUserQuery.bindValue(":password",user->getPassword());
-  newUserQuery.bindValue(":a_t",newToken);
-  m_database.transaction();
-  result=newUserQuery.exec();
 
+  m_database.transaction();
+
+  result=newUserQuery.exec();
   QSharedPointer<common::User> newUser = QSharedPointer<common::User>(NULL);
   if(!result)
   {
@@ -400,12 +399,11 @@ QSharedPointer<common::User> QueryExecutor::insertNewUser(const QSharedPointer<c
   }else
   {
     syslog(LOG_INFO,"Commit for NewUser sql query");
-    newUser = QSharedPointer<common::User>(new DbUser(user->getLogin(),user->getPassword(),newId,newToken));
+    newUser = QSharedPointer<common::User>(new DbUser(user->getLogin(),user->getPassword(),user->getEmail(),newId));
     m_database.commit();
   }
   return newUser;
 }
-
 
 bool QueryExecutor::subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel)
 {
@@ -419,6 +417,7 @@ bool QueryExecutor::subscribeChannel(const QSharedPointer<common::User>& user,co
     channel->getName().toStdString().c_str(),channel->getId());
 
   m_database.transaction();
+
   result=insertNewSubscribtion.exec();
   if(!result)
   {
@@ -444,6 +443,7 @@ bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,
     channel->getName().toStdString().c_str(),channel->getId());
 
   m_database.transaction();
+
   result=deleteSubscribtion.exec();
   if(!result)
   {
@@ -457,27 +457,6 @@ bool QueryExecutor::unsubscribeChannel(const QSharedPointer<common::User>& user,
   return result;
 }
 
-bool QueryExecutor::isChannelSubscribed(QSharedPointer<Channel> &channel, QSharedPointer<common::User> &user)
-{
-    PerformanceCounter counter("QueryExecutor::isChannelSubscribed"); 
-    QSqlQuery query(m_database);
-    syslog(LOG_INFO, "Checking of subscription of user %s to channel %s...", user->getToken().toStdString().c_str(), channel->getName().toStdString().c_str());
-
-    query.prepare("select * from users inner join subscribe on users.id = subscribe.user_id inner join channel on channel.id = subscribe.channel_id where name = :channel_name AND token = :token;");
-    query.bindValue(":channel_name", channel->getName());
-    query.bindValue(":token", user->getToken());
-    syslog(LOG_INFO,"Selecting: %s", query.lastQuery().toStdString().c_str());
-    query.exec();
-
-    if (query.next()) {
-        syslog(LOG_INFO,"Subscription found.");
-        return true;
-    } else {
-        syslog(LOG_INFO,"No matching subscription.");
-        return false;
-    }
-}
-
 bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
 {
     PerformanceCounter counter("QueryExecutor::deleteUser");
@@ -488,6 +467,7 @@ bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
     deleteUserQuery.bindValue(":id",user->getId() );
 
     m_database.transaction();
+
     result = deleteUserQuery.exec();
     if(!result) {
       syslog(LOG_INFO,"Rollback for deleteUser sql query");
@@ -574,4 +554,243 @@ bool QueryExecutor::deleteSession(const QSharedPointer<Session> &session)
         m_database.commit();
         return true;
     }
+}
+
+void QueryExecutor::checkTmpUsers()
+{
+    QSqlQuery checkQuery(m_database);
+    QSqlQuery deleteQuery(m_database);
+    syslog(LOG_INFO,"checkTmpUsers query is running now...");
+    // Sending emails to new users
+    checkQuery.exec("select id, email, registration_token from signups where sent = false;");
+    while (checkQuery.next()) {
+        qlonglong id = checkQuery.value(0).toLongLong();
+        QString email = checkQuery.value(1).toString();
+        QString token = checkQuery.value(2).toString();
+
+        syslog(LOG_INFO, "Process registration confirmation is started... ");
+        EmailMessage message(email, token);
+        message.send();
+        syslog(LOG_INFO, "Process registration confirmation finished... ");
+
+        QSqlQuery updateQuery(m_database);
+        updateQuery.prepare("update signups set sent = true where id = :id;");
+        updateQuery.bindValue(":id", id);
+        bool result = updateQuery.exec();
+        m_database.transaction();
+        if(!result) {
+            syslog(LOG_INFO,"Rollback for CheckTmpUser sql query");
+            m_database.rollback();
+        } else {
+            syslog(LOG_INFO,"Commit for CheckTmpUser sql query");
+            m_database.commit();
+        }
+    }
+
+    // Deleting old signups
+    QString strQuery;
+
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString timelife = storage.getValue("Registration_Settings/tmp_user_timelife", QVariant(DEFAULT_TMP_USER_TIMELIFE)).toString();
+
+    strQuery.append("select id from signups where (now() - datetime) >= INTERVAL '");
+    strQuery.append(timelife);
+    strQuery.append("';");
+    checkQuery.exec(strQuery.toStdString().c_str());
+    while (checkQuery.next()) {
+        qlonglong id = checkQuery.value(0).toLongLong();
+        deleteQuery.prepare("delete from signups where id = :id;");
+        deleteQuery.bindValue(":id", id);
+        syslog(LOG_INFO,"Deleting: %s", deleteQuery.lastQuery().toStdString().c_str());
+        m_database.transaction();
+        bool result = deleteQuery.exec();
+        if(!result) {
+            syslog(LOG_INFO,"Rollback for DeleteTmpUser sql query");
+            m_database.rollback();
+        } else {
+            syslog(LOG_INFO,"Commit for DeleteTmpUser sql query");
+            m_database.commit();
+        }
+    }
+}
+
+void QueryExecutor::checkSessions(const QSharedPointer<Sessions>& sessions)
+{
+    syslog(LOG_INFO,"checkSessions query is running now...");
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    int timelife = storage.getValue("General_Settings/session_timelife", QVariant(DEFAULT_SESSION_TIMELIFE)).toInt();
+    for (int i = 0; i < sessions->size(); i++) {
+        QDateTime currentTime = QDateTime::currentDateTime().toUTC();
+        //syslog(LOG_INFO, "Current time: %s", currentTime.toString().toStdString().c_str());
+        QDateTime lastAccessTime = sessions->at(i)->getLastAccessTime();
+        //syslog(LOG_INFO, "Last access time: %s", lastAccessTime.toString().toStdString().c_str());
+        if (lastAccessTime.addDays(timelife) <= currentTime) {
+            QSqlQuery query(m_database);
+            query.prepare("delete from sessions where id = :id;");
+            query.bindValue(":id", sessions->at(i)->getId());
+            syslog(LOG_INFO,"Deleting: %s", query.lastQuery().toStdString().c_str());
+            m_database.transaction();
+            bool result = query.exec();
+            if (!result) {
+                syslog(LOG_INFO, "Rollback for DeleteSession sql query");
+                m_database.rollback();
+            } else {
+                syslog(LOG_INFO, "Commit for DeleteSession sql query");
+                m_database.commit();
+            }
+            sessions->erase(sessions->at(i));
+        }
+    }
+}
+
+void QueryExecutor::loadUsers(common::Users &container)
+{
+  QSqlQuery query(m_database);
+  query.exec("select id, login, password, email from users order by id;");
+  while (query.next())
+  {
+    qlonglong id = query.record().value("id").toLongLong();
+    if(container.exist(id))
+    {
+      // skip record
+      continue;
+    }
+    QString login = query.record().value("login").toString();
+    QString password = query.record().value("password").toString();
+    QString email = query.record().value("email").toString();
+    syslog(LOG_INFO,"Pushing | %lld | %s ",id,login.toStdString().c_str());
+    DbUser *newUser = new DbUser(login,password,email,id);
+    QSharedPointer<DbUser> pointer(newUser);
+    container.push_back(pointer);
+  }
+}
+
+void QueryExecutor::loadChannels(Channels &container)
+{
+  QSqlQuery query(m_database);
+  query.exec("select id, description, name, url from channel order by id;");
+  while (query.next())
+  {
+    qlonglong id = query.record().value("id").toLongLong();
+    if(container.exist(id))
+    {
+      // skip record
+      continue;
+    }
+    QString name = query.record().value("name").toString();
+    QString description = query.record().value("description").toString();
+    QString url = query.record().value("url").toString();
+    QSharedPointer<DbChannel> pointer(new DbChannel(id,name,description,url));
+    container.push_back(pointer);
+  }
+}
+
+void QueryExecutor::loadTags(DataMarks &container)
+{
+  QSqlQuery query(m_database);
+  query.exec("select id, time, altitude, latitude, longitude, label, description, url, user_id, channel_id from tag order by time;");
+  while (query.next())
+  {
+    qlonglong id = query.record().value("id").toLongLong();
+    if(container.exist(id))
+    {
+      // skip record
+      continue;
+    }
+    QDateTime time = query.record().value("time").toDateTime().toTimeSpec(Qt::LocalTime);
+    //       // syslog(LOG_INFO, "loaded tag with time: %s milliseconds", time;
+    qreal latitude = query.record().value("latitude").toReal();
+    qreal altitude = query.record().value("altitude").toReal();
+    qreal longitude = query.record().value("longitude").toReal();
+    QString label = query.record().value("label").toString();
+    QString description = query.record().value("description").toString();
+    QString url = query.record().value("url").toString();
+    qlonglong userId = query.record().value("user_id").toLongLong();
+    qlonglong channelId = query.record().value("channel_id").toLongLong();
+
+    DbDataMark *newMark = new DbDataMark(id,
+      altitude,
+      latitude,
+      longitude,
+      label,
+      description,
+      url,
+      time,
+      userId,
+      channelId);
+    QSharedPointer<DbDataMark> pointer(newMark);
+    container.push_back(pointer);
+  }
+}
+
+void QueryExecutor::loadSessions(Sessions &container)
+{
+    QSqlQuery query(m_database);
+    query.exec("select id, user_id, session_token, last_access_time from sessions;");
+    while (query.next()) {
+        qlonglong id = query.record().value("id").toLongLong();
+        if (container.exist(id))
+            continue;
+        qlonglong userId = query.record().value("user_id").toLongLong();
+        QSharedPointer<common::User> user(new DbUser( userId));
+
+        QString sessionToken = query.record().value("session_token").toString();
+        QDateTime lastAccessTime = query.record().value("last_access_time").toDateTime();//.toTimeSpec(Qt::LocalTime);
+
+        QSharedPointer<Session> newSession(new DbSession(id, sessionToken, lastAccessTime, user));
+        container.push_back(newSession);
+    }
+}
+
+void QueryExecutor::updateReflections(DataMarks &tags, common::Users &users, Channels &channels, Sessions &sessions)
+{
+  {
+    QSqlQuery query(m_database);
+    query.exec("select user_id, channel_id from subscribe;");
+    while (query.next())
+    {
+      qlonglong user_id = query.record().value("user_id").toLongLong();
+      qlonglong channel_id = query.record().value("channel_id").toLongLong();
+      users.item(user_id)->subscribe(channels.item(channel_id));
+    }
+  }
+  {
+    QSqlQuery query(m_database);
+    query.exec("select tag_id, channel_id from tags;");
+    while (query.next())
+    {
+      qlonglong tag_id = query.record().value("tag_id").toLongLong();
+      qlonglong channel_id = query.record().value("channel_id").toLongLong();
+
+      QSharedPointer<Channel> channel = channels.item(channel_id);
+      QSharedPointer<DataMark> tag = tags.item(tag_id);
+
+      tag->setChannel(channel);
+    }
+  }
+
+  for(int i=0; i<tags.size(); i++)
+  {
+    tags[i]->setUser(users.item(tags.at(i).dynamicCast<DbDataMark>()->getUserId()));
+    tags[i]->setChannel(channels.item(tags.at(i).dynamicCast<DbDataMark>()->getChannelId()));
+  }
+
+
+  for(int i=0; i<sessions.size(); i++)
+  {
+      sessions[i]->setUser(users.item(sessions[i]->getUser()->getId()));
+  }
+}
+
+qlonglong QueryExecutor::getFactTransactionNumber()
+{
+    QSqlQuery query(m_database);
+
+    query.exec("select tup_inserted ,tup_updated ,tup_deleted from  pg_stat_database where datname='geo2tag';");
+    query.next();
+    qlonglong factCount = query.record().value("tup_inserted").toLongLong() +
+                  query.record().value("tup_updated").toLongLong() +
+                  query.record().value("tup_deleted").toLongLong();
+
+    return factCount;
 }

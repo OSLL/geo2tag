@@ -3,7 +3,11 @@
 #include "SubscribeChannelJSON.h"
 #include "SubscribeChannelResponseJSON.h"
 
-SubscribeChannelQuery::SubscribeChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user, QObject *parent): DefaultQuery(parent), m_channel(channel), m_user(user)
+SubscribeChannelQuery::SubscribeChannelQuery(const QSharedPointer<Channel> &channel,
+                                             const QSharedPointer<Session> &session, QObject *parent)
+    : DefaultQuery(parent),
+      m_channel(channel),
+      m_session(session)
 {
 
 }
@@ -14,10 +18,10 @@ SubscribeChannelQuery::SubscribeChannelQuery(QObject *parent): DefaultQuery(pare
 }
 
 
-void SubscribeChannelQuery::setQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<common::User> &user)
+void SubscribeChannelQuery::setQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<Session> &session)
 {
   m_channel = channel;
-  m_user = user;
+  m_session = session;
 }
 
 
@@ -31,7 +35,7 @@ QByteArray SubscribeChannelQuery::getRequestBody() const
 {
   SubscribeChannelRequestJSON request;
   request.addChannel(m_channel);
-  request.addUser(m_user);
+  request.addSession(m_session);
   return request.getJson();
 }
 

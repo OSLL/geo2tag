@@ -47,13 +47,14 @@
 #include "LoadTagsRequestJSON.h"
 #include "JsonDataMark.h"
 #include "JsonUser.h"
+#include "JsonSession.h"
 
-LoadTagsQuery::LoadTagsQuery(QSharedPointer<common::User> &user,
+LoadTagsQuery::LoadTagsQuery(QSharedPointer<Session> &session,
 double latitude,
 double longitude,
 double radius,
 QObject *parent): DefaultQuery(parent),
-m_user(user),
+m_session(session),
 m_latitude(latitude),
 m_longitude(longitude),
 m_radius(radius)
@@ -66,12 +67,12 @@ LoadTagsQuery::LoadTagsQuery(QObject *parent): DefaultQuery(parent)
 }
 
 
-void LoadTagsQuery::setQuery(QSharedPointer<common::User> &user,
+void LoadTagsQuery::setQuery(QSharedPointer<Session> &session,
 double latitude,
 double longitude,
 double radius)
 {
-  m_user=user;
+  m_session=session;
   m_latitude=latitude;
   m_longitude=longitude;
   m_radius=radius;
@@ -86,8 +87,7 @@ QString LoadTagsQuery::getUrl() const
 
 QByteArray LoadTagsQuery::getRequestBody() const
 {
-  LoadTagsRequestJSON request(m_latitude, m_longitude, m_radius);
-  request.addUser(m_user);
+  LoadTagsRequestJSON request(m_session, m_latitude, m_longitude, m_radius);
   return request.getJson();
 }
 
@@ -99,11 +99,12 @@ void LoadTagsQuery::processReply(QNetworkReply *reply)
   if(response.getErrno() == SUCCESS)
   {
     m_hashMap = response.getData();
-
+    syslog(LOG_INFO,"!!connected!");
     Q_EMIT tagsReceived();
   }
   else
   {
+    qDebug("!!errorOccured!");
     Q_EMIT errorOccured(response.getErrno());
   }
 }

@@ -110,7 +110,8 @@
 #include <QMap>
 #include <QRegExp>
 
-#include "PerformanceCounter.h" 
+#include "PerformanceCounter.h"
+#include "Geo2tagDatabase.h"
 
 namespace common
 {
@@ -160,17 +161,20 @@ namespace common
     database.setPassword("geo2tag");
 
     m_updateThread = new UpdateThread(
-      QSqlDatabase::cloneDatabase(database,"updateThread"),
       m_tagsContainer,
       m_usersContainer,
       m_channelsContainer,
       m_dataChannelsMap,
       m_sessionsContainer,
+      NULL,
       NULL);
 
-    m_updateThread->start();
+    m_queryExecutor = new QueryExecutor(Geo2tagDatabase(QSqlDatabase::cloneDatabase(database,"executor"),
+                                                        QSharedPointer<UpdateThread>(m_updateThread))
+                                        );
+    m_updateThread->setQueryExecutor(m_queryExecutor);
 
-    m_queryExecutor = new QueryExecutor(QSqlDatabase::cloneDatabase(database,"executor"), NULL);
+    m_updateThread->start();
   }
 
   DbObjectsCollection& DbObjectsCollection::getInstance()
@@ -238,16 +242,9 @@ namespace common
   {
     QSharedPointer<User> realUser;      // Null pointer
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
-    syslog(LOG_INFO, "checking user key: %s from %d known users", dummyUser->getToken().toStdString().c_str(),
+    syslog(LOG_INFO, "checking user key: %s from %d known users", dummyUser->getLogin().toStdString().c_str(),
       currentUsers.size());
-    if (!dummyUser->getToken().isEmpty() && dummyUser->getToken()!="unknown")
-    {
-    	for(int i=0; i<currentUsers.size(); i++)
-    	{
-      		if(currentUsers.at(i)->getToken() == dummyUser->getToken())
-        	return currentUsers.at(i);
-    	}
-    }else if (!dummyUser->getLogin().isEmpty() && !dummyUser->getPassword().isEmpty())
+    if (!dummyUser->getLogin().isEmpty() && !dummyUser->getPassword().isEmpty())
     {
     	for(int i=0; i<currentUsers.size(); i++)
     	{
@@ -277,13 +274,8 @@ namespace common
   QSharedPointer<Session> DbObjectsCollection::findSessionForUser(const QSharedPointer<User>& user) const
   {
       QVector< QSharedPointer<Session> > currentSessions = m_sessionsContainer->vector();
-      syslog(LOG_INFO, "checking of session existence for user with token: %s", user->getToken().toStdString().c_str());
-      if (!user->getToken().isEmpty() && user->getToken()!="unknown") {
-        for (int i = 0; i < currentSessions.size(); i++) {
-            if (currentSessions.at(i)->getUser()->getToken() == user->getToken())
-                return currentSessions.at(i);
-        }
-      } else if (!user->getLogin().isEmpty() && !user->getPassword().isEmpty()) {
+      syslog(LOG_INFO, "checking of session existence for user with name: %s", user->getLogin().toStdString().c_str());
+      if (!user->getLogin().isEmpty() && !user->getPassword().isEmpty()) {
         for (int i = 0; i < currentSessions.size(); i++) {
             if (QString::compare(currentSessions.at(i)->getUser()->getLogin(), user->getLogin(), Qt::CaseInsensitive) == 0
                 &&
@@ -329,11 +321,8 @@ namespace common
         answer.append(response.getJson());
         return answer;
     }
-    newTmpUser = m_queryExecutor->insertNewTmpUser(newTmpUser);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
-    if(newTmpUser.isNull()) {
+    QString confirmToken = m_queryExecutor->insertNewTmpUser(newTmpUser);
+    if(confirmToken.isEmpty()) {
         response.setErrno(INTERNAL_DB_ERROR);
         answer.append(response.getJson());
         syslog(LOG_INFO, "answer: %s", answer.data());
@@ -341,7 +330,9 @@ namespace common
     }
 
     response.setErrno(SUCCESS);
-    response.setConfirmUrl(QString(DEFAULT_SERVER)+QString("service/confirmRegistration-")+newTmpUser->getToken());
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
+    response.setConfirmUrl(serverUrl+QString("service/confirmRegistration-")+confirmToken);
     answer.append(response.getJson());
     syslog(LOG_INFO, "answer: %s", answer.data());
     return answer;
@@ -359,13 +350,10 @@ namespace common
     }
 
     QSharedPointer<User> newUser = m_queryExecutor->insertTmpUserIntoUsers(registrationToken);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if (!newUser.isNull()) {
-        m_updateThread->lockWriting();
         m_queryExecutor->deleteTmpUser(registrationToken);
+        m_updateThread->lockWriting();
         m_usersContainer->push_back(newUser);
         m_updateThread->unlockWriting();
         answer.append("Congratulations!");
@@ -389,38 +377,19 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser;      // Null pointer
-    QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+    QSharedPointer<User> realUser = findUser(dummyUser);      
 
-    for(int i=0; i<currentUsers.size(); i++)
-    {
-      syslog(LOG_INFO,"Look up in %s and %s",currentUsers.at(i)->getLogin().toStdString().c_str(),
-        currentUsers.at(i)->getPassword().toStdString().c_str());
-      if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0)
-      {
-        if(currentUsers.at(i)->getPassword() == dummyUser->getPassword())
-        {
-          realUser = currentUsers.at(i);
-          break;
-        }
-        else  response.setErrno(INCORRECT_CREDENTIALS_ERROR);
-      }
-    }
     if(realUser.isNull())
     {
       response.setErrno(INCORRECT_CREDENTIALS_ERROR);
     }
     else
     {
-      syslog(LOG_INFO, "Searching of session for user with token: %s", realUser->getToken().toStdString().c_str());
       QSharedPointer<Session> session = findSessionForUser(realUser);
       if (session.isNull()) {
           QSharedPointer<Session> dummySession(new Session("", QDateTime::currentDateTime(), realUser));
           syslog(LOG_INFO, "Session hasn't been found. Generating of new Session.");
           QSharedPointer<Session> addedSession = m_queryExecutor->insertNewSession(dummySession);
-	  m_updateThread->lockWriting();
-	  m_updateThread->incrementTransactionCount();
-	  m_updateThread->unlockWriting();
           if (!addedSession) {
               response.setErrno(INTERNAL_DB_ERROR);
               answer.append(response.getJson());
@@ -506,8 +475,8 @@ namespace common
     QSharedPointer<DataMark> dummyTag = request.getTags()->at(0);
     syslog(LOG_INFO,"Adding mark with altitude = %f",dummyTag->getAltitude());
 
-    syslog(LOG_INFO,"Checking for sessions with token = %s",dummyTag->getSession()->getSessionToken().toStdString().c_str());
-    QSharedPointer<Session> dummySession = dummyTag->getSession();
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    syslog(LOG_INFO,"Checking for sessions with token = %s",dummySession->getSessionToken().toStdString().c_str());
     QSharedPointer<Session> realSession = findSession(dummySession);
     if(realSession.isNull())
     {
@@ -518,7 +487,7 @@ namespace common
 
     QSharedPointer<User> realUser = realSession->getUser();
 
-    QSharedPointer<Channel> dummyChannel = dummyTag->getChannel();
+    QSharedPointer<Channel> dummyChannel = request.getChannels()->at(0);
     QSharedPointer<Channel> realChannel;// Null pointer
     QVector<QSharedPointer<Channel> > currentChannels = realUser->getSubscribedChannels()->vector();
 
@@ -543,9 +512,6 @@ namespace common
     dummyTag->setUser(realUser);
                                         //now
     QSharedPointer<DataMark> realTag = m_queryExecutor->insertNewTag(dummyTag);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
     if(realTag == NULL)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -719,9 +685,6 @@ namespace common
     }
     syslog(LOG_INFO, "Sending sql request for SubscribeQuery");
     bool result = m_queryExecutor->subscribeChannel(realUser,realChannel);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
     if(!result)
     {
       response.setErrno(INTERNAL_DB_ERROR);
@@ -779,9 +742,6 @@ namespace common
 
     syslog(LOG_INFO, "Sending sql request for AddUser");
     QSharedPointer<User> addedUser = m_queryExecutor->insertNewUser(dummyUser);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if(!addedUser)
     {
@@ -845,9 +805,6 @@ namespace common
 
     syslog(LOG_INFO, "Sending sql request for AddChannel");
     QSharedPointer<Channel> addedChannel = m_queryExecutor->insertNewChannel(dummyChannel);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if(!addedChannel)
     {
@@ -948,9 +905,6 @@ namespace common
     }
     syslog(LOG_INFO, "Sending sql request for UnsubscribeQuery");
     bool result = m_queryExecutor->unsubscribeChannel(realUser,realChannel);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if(!result)
     {
@@ -1218,9 +1172,6 @@ namespace common
 
     syslog(LOG_INFO, "Sending sql request for DeleteUser");
     bool isDeleted = m_queryExecutor->deleteUser(realUser);
-    m_updateThread->lockWriting();
-    m_updateThread->incrementTransactionCount();
-    m_updateThread->unlockWriting();
 
     if(!isDeleted)
     {

@@ -32,6 +32,7 @@
  * PROJ: OSLL/geo2tag
  */
 -->
+
 <project name="TrackerActivity" default="help">
 
 <!-- The local.properties file is created and updated by the 'android'

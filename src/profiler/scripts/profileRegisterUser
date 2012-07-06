@@ -5,7 +5,12 @@
 # this will add "method_name time_spended_for_method" records into file @output_file@
 # After this all just grep out data
 
-number_of_iterations=20;
+if [[ "$#" == "1" ]]
+then
+	number_of_iterations=$1;
+else
+	number_of_iterations=20;
+fi
 
 
 

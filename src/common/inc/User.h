@@ -60,14 +60,10 @@ namespace common
     // list of subscribed channels
     QSharedPointer<Channels> m_channels;
 
-    protected:
-
-      void setToken(const QString&);
 
     public:
 
-      User(const QString& name, const QString& passw);
-      User(const QString &name, const QString &passw, const QString &email);
+      User(const QString & name="", const QString & passw="", const QString & email="");
 
       virtual qlonglong getId() const;
 
@@ -78,7 +74,6 @@ namespace common
       const QString& getLogin() const;
       const QString& getPassword() const;
       const QString& getEmail() const;
-      const QString& getToken() const;
       const QSharedPointer<Channels> getSubscribedChannels() const;
 
       void setPassword(const QString password);

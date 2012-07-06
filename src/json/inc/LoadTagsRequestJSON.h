@@ -33,6 +33,7 @@
 #define LOADTAGSREQUESTJSON_H
 
 #include "JsonSerializer.h"
+#include "Session.h"
 
 #include <QString>
 
@@ -43,10 +44,11 @@ class LoadTagsRequestJSON: public JsonSerializer
   double m_radius;
 
   public:
-    LoadTagsRequestJSON(double latitude,
-      double longitude,
-      double radius,
-      QObject *parent=0);
+    LoadTagsRequestJSON(const QSharedPointer<Session>& session,
+                        double latitude,
+                        double longitude,
+                        double radius,
+                        QObject *parent=0);
 
     LoadTagsRequestJSON(QObject *parent=0);
 

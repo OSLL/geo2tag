@@ -27,6 +27,7 @@ HEADERS += ProfilerThread.h LoginThread.h TrackThread.h LoadTagsThread.h \
 ../common/inc/defines.h \
 ../common/inc/ErrnoTypes.h \
 ../common/inc/SettingsStorage.h \
+../common/inc/Session.h \
 ../json/inc/LoginRequestJSON.h \
 ../json/inc/LoginResponseJSON.h \
 ../json/inc/WriteTagRequestJSON.h \
@@ -37,7 +38,8 @@ HEADERS += ProfilerThread.h LoginThread.h TrackThread.h LoadTagsThread.h \
 ../json/inc/JsonDataMark.h \
 ../json/inc/JsonChannel.h \
 ../json/inc/JsonSerializer.h \
-../json/inc/DefaultResponseJSON.h 
+../json/inc/DefaultResponseJSON.h \
+../json/inc/JsonSession.h
 
 SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp LoadTagsThread.cpp \
 ../common/src/User.cpp \
@@ -46,6 +48,7 @@ SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp LoadTagsT
 ../common/src/DataMarks.cpp \
 ../common/src/defines.cpp \
 ../common/src/SettingsStorage.cpp \
+../common/src/Session.cpp \
 ../http_requests/src/DefaultQuery.cpp \
 ../http_requests/src/WriteTagQuery.cpp \
 ../http_requests/src/LoginQuery.cpp \
@@ -60,4 +63,5 @@ SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp LoadTagsT
 ../json/src/JsonDataMark.cpp \
 ../json/src/JsonSerializer.cpp \
 ../json/src/JsonUser.cpp \
-../json/src/DefaultResponseJSON.cpp 
+../json/src/DefaultResponseJSON.cpp \
+../json/src/JsonSession.cpp

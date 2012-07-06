@@ -92,6 +92,9 @@ void setServerPort(int port);
 #define DEFAULT_EMAIL_SUBJECT     "Registration confirmation"
 #define DEFAULT_EMAIL_BODY        "This will go into the body of the mail."
 
+#define DEFAULT_DB_UPDATE_INTERVAL 10000
+#define DEFAULT_TRANSACTION_DIFF_TO_SYNC 0
+
 #ifndef Q_WS_SYMBIAN
 extern uint qHash(const QPoint & p);
 #endif

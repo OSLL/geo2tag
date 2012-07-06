@@ -12,67 +12,67 @@
 	<testcase title="ADD TAG">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "channel":"My channel", "description":"tag", "latitude":60.0, "altitude":30.0, "link":"unknown", "longitude":30.0, "time":"04 03 2011 15:33:47.630", "title":"osll" }'  http://localhost:81/service/writeTag</test>
-		 <post>11</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="ADD CHANNEL (channel exists)">
 		 <pred></pred>
-		 <test>curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"name\":\"Fuel prices\", \"description\":\"my new super chanel\", \"url\":\"http://osll.spb.ru\", \"activeRadius\":3000}"  http://tracks.osll.spb.ru:81/service/addChannel</test>
-		 <post>4</post>
+		 <test>curl -d "{\"auth_token\":\"MMMMMMMMMM\", \"name\":\"Fuel prices\", \"description\":\"my new super chanel\", \"url\":\"http://osll.spb.ru\", \"activeRadius\":3000}"  http://localhost:81/service/addChannel</test>
+		 <post>1</post>
 	</testcase>
 	<testcase title="SUBSCRIBE TO CHANNEL">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM","channel":"Empty channel"}' http://localhost:81/service/subscribe</test>
-		 <post>5</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="UNSUBSCRIBE TO CHANNEL">
 		 <pred></pred>
 		 <test>curl -d "{\"auth_token\":\"MMMMMMMMMM\",\"channel\":\"Empty channel\"}"  http://localhost:81/service/unsubscribe</test>
-		 <post>11</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="SUBSCRIBED CHANNELS">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM"}'  http://localhost:81/service/subscribed</test>
-		 <post>0</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="AVAILABLE CHANNELS">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "latitude":30.0, "longitude":60.0, "radius":30.0}' http://localhost:81/service/channels</test>
-		 <post>0</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="LOAD TAGS">
 		 <pred></pred>
 		 <test>curl -d "{\"auth_token\":\"MMMMMMMMMM\",\"latitude\":30.0, \"longitude\":60.0, \"radius\":30.0}"  http://tracks.osll.spb.ru:81/service/loadTags</test>
-		 <post>0</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="CIRCLE - SPATIAL FILTER">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "time_from":"04 03 2011 15:33:47.630", "time_to":"31 12 2011 15:33:47.630", "latitude":60.1632, "longitude":24.8593,  "radius":30.0 }' http://localhost:81/service/filterCircle</test>
-		 <post>0</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="RECTANGLE - SPATIAL FILTER">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "time_from":"04 03 2011 15:33:47.630", "time_to":"31 12 2011 15:33:47.630", "latitude_shift":{ "latitude1":0.0 ,"latitude2": 100.0}, "longitude_shift":{ "longitude1":0.0 ,"longitude2": 100.0} }' http://localhost:81/service/filterRectangle</test>
-		 <post>0</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="POLYGON - SPATIAL FILTER">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "time_from":"04 03 2011 15:33:47.630", "time_to":"31 12 2011 15:33:47.630", "polygon" : [{ "number":0,"latitude":0.0,"longitude":0.0 }, { "number":1,"latitude":70.0, "longitude":0.0 }, { "number":2, "latitude":70.0, "longitude":100.0 } ] }' http://localhost:81/service/filterPolygon</test>
-		 <post>0</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="CYLINDER - SPATIAL FILTER">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "time_from":"04 03 2011 15:33:47.630", "time_to":"31 12 2011 15:33:47.630", "latitude":60.1632, "longitude":24.8593,  "radius":30.0, "altitude_shift":{ "altitude1":-1.0 ,"altitude2": 1.0} }' http://localhost:81/service/filterCylinder</test>
-		 <post>0</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="BOX - SPATIAL FILTER">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "time_from":"04 03 2011 15:33:47.630", "time_to":"31 12 2011 15:33:47.630", "latitude_shift":{ "latitude1":0.0 ,"latitude2": 100.0}, "longitude_shift":{ "longitude1":0.0 ,"longitude2": 100.0}, "altitude_shift":{ "altitude1":-1.0 ,"altitude2": 1.0} }' http://localhost:81/service/filterBox</test>
-		 <post>0</post>
+		 <post>1</post>
 	</testcase>
 	<testcase title="FENCE - SPATIAL FILTER">
 		 <pred></pred>
 		 <test>curl -d '{"auth_token":"MMMMMMMMMM", "time_from":"04 03 2011 15:33:47.630", "time_to":"31 12 2011 15:33:47.630", "polygon" : [{ "number":0,"latitude":0.0,"longitude":0.0 }, { "number":1,"latitude":70.0, "longitude":0.0 }, { "number":2, "latitude":70.0, "longitude":100.0 } ], "altitude_shift":{ "altitude1":-1.0 ,"altitude2": 1.0} }' http://localhost:81/service/filterFence</test>
-		 <post>0</post>
+		 <post>1</post>
 	</testcase>
 
 </tests>

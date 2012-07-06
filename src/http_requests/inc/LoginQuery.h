@@ -46,7 +46,7 @@
 #include <QObject>
 #include <QString>
 #include "DefaultQuery.h"
-#include "User.h"
+#include "Session.h"
 
 /*!
  * LoginQuery class definition.
@@ -59,11 +59,10 @@ class LoginQuery: public DefaultQuery
 {
   Q_OBJECT
 
-    QString m_login;
+  QString m_login;
   QString m_password;
 
-  //!< full information about user
-  QSharedPointer<common::User> m_user;
+  QSharedPointer<Session> m_session;
 
   virtual QString getUrl() const;
   virtual QByteArray getRequestBody() const;
@@ -80,7 +79,7 @@ class LoginQuery: public DefaultQuery
 
     void setQuery(const QString& login, const QString& password);
 
-    QSharedPointer<common::User> getUser() const;
+    QSharedPointer<Session> getSession() const;
 
     ~LoginQuery();
 

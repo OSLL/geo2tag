@@ -11,19 +11,13 @@ dir_log="${dir_automation}/webside_logs"
 
 branch="$1"
 last_commit="$2"
-AIROMO_FLAG="$3"
-
-if [ "$AIROMO_FLAG" == "AIROMO" ] ; then
-	web_repo="airomo-web-repo"
-	dir_geo2tag="${dir_automation}/${web_repo}"
-fi 
 
 echo ${web_repo}
 echo ${dir_geo2tag}
 
-if [ "$branch" == "devel" ]
+if [ "$branch" == "master" ]
 then
-# If branch is devel, we neednt to build|test webside
+# If branch is master, we neednt to build|test webside
 exit 0
 fi
 
@@ -31,11 +25,7 @@ if [ -e $dir_geo2tag ]; then
 	echo "geo2tag directory exists"	
 else 
 	echo "geo2tag directory does not exists"
-	if [ "$AIROMO_FLAG" == "AIROMO" ] ; then
-        	git clone ssh://airomo@repo.osll.spb.ru/git/airomo ${web_repo}	
-	else
-		git clone git://github.com/OSLL/geo2tag.git ${web_repo}
-	fi
+	git clone git://github.com/OSLL/geo2tag.git ${web_repo}
 fi 
 
 mkdir ${dir_log}
@@ -54,7 +44,7 @@ date > ${dir_log}/test.log.txt
 ant test >> ${dir_log}/test.log.txt
 cp -rf  ${dir_geo2tag}/src/webside/reports/* ${dir_log}
 
-if [ "$branch" == "web-devel" ] && [ "$AIROMO_FLAG" != "AIROMO" ]
+if [ "$branch" == "web-devel" ] 
 then 
 	# if it is web-devel branch we should also make a deploy
 
@@ -68,13 +58,13 @@ then
 		echo "Deploy of new version of site successful." >> ${dir_log}/deploy.log.txt
 		echo "" >> ${dir_log}/deploy.log.txt
 		${dir_automation}/gen_index.sh
-		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web web-devel (success) ${AIROMO_FLAG} ${last_commit}: integration reports" -Dlogdir ${dir_log}
+		ant -f ${dir_automation}/mail_sender.xml -Dsubject "(success) geo2tag-web web-devel ${last_commit}: integration reports" -Dmessage "" -Dlogdir ${dir_log}
 	else 
 		date > ${dir_log}/deploy.log.txt
 		echo "Deploy of new version of site failed. Set stable version." >> ${dir_log}/deploy.log.txt
 		echo "" >> ${dir_log}/deploy.log.txt
 		mv $CATALINA_HOME/webapps/${app_backup} $CATALINA_HOME/webapps/${app}
-		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web web-devel (fail) ${AIROMO_FLAG} ${last_commit}: integration reports" -Dlogdir ${dir_log}
+		ant -f ${dir_automation}/mail_sender.xml -Dsubject "(fail) geo2tag-web web-devel ${last_commit}: integration reports" -Dmessage "" -Dlogdir ${dir_log}
 	fi 
 
 else
@@ -86,10 +76,10 @@ else
 	if [ -e ${dir_geo2tag}/src/webside/${app} ]
 	then
 		echo "Build of $branch successful." >> ${dir_log}/build.log.txt
- 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web $branch (success) ${AIROMO_FLAG} ${last_commit}: build and test reports" -Dlogdir ${dir_log}
+ 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "(success) geo2tag-web $branch ${last_commit}: build and test reports" -Dmessage "" -Dlogdir ${dir_log}
 	else
 		echo "Build of $branch failed." >> ${dir_log}/build.log.txt
- 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "geo2tag-web $branch (fail) ${AIROMO_FLAG} ${last_commit}: build and test reports" -Dlogdir ${dir_log}
+ 		ant -f ${dir_automation}/mail_sender.xml -Dsubject "(fail) geo2tag-web $branch ${last_commit}: build and test reports" -Dmessage "" -Dlogdir ${dir_log}
 	fi
 fi
 

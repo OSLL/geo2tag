@@ -43,7 +43,7 @@
 #ifndef _AvailableChannelsQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
 #define _AvailableChannelsQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
 
-#include "SubscribedChanneslQuery.h"
+#include "SubscribedChannelsQuery.h"
 #include "defines.h"
   /*!
    * AvailableChannelsQuery class definition.
@@ -53,7 +53,7 @@
    *
    */
 
-class AvailableChannelsQuery: public SubscribedChanneslQuery
+class AvailableChannelsQuery: public SubscribedChannelsQuery
 {
 
     virtual QString getUrl() const
@@ -61,7 +61,7 @@ class AvailableChannelsQuery: public SubscribedChanneslQuery
 	return AVAILABLE_LIST_HTTP_URL;
     }
 
-}
+};
 
 //_AvailableChannelsQuery_H_57C59C6D_DC20_45B1_AF96_910534D95235_INCLUDED_
 #endif

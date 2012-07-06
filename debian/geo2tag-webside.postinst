@@ -1,0 +1,29 @@
+#!/bin/bash
+
+export_ch="export CATALINA_HOME=/opt/geo2tag/apache-tomcat-7.0.27"
+export_cb="export CATALINA_BASE=/opt/geo2tag/apache-tomcat-7.0.27"
+
+cd /opt/geo2tag
+sudo rm -r ./apache-tomcat-7.0.27
+sudo unzip ./apache-tomcat-7.0.27.zip
+sudo cp -f ./geo2tag.war ./apache-tomcat-7.0.27/webapps
+
+if grep 'CATALINA_HOME' ~/.bashrc
+then
+    sudo grep -v 'CATALINA_HOME' ~/.bashrc > ~/tmp_bashrc
+    sudo mv ~/tmp_bashrc ~/.bashrc
+fi
+echo $export_ch | sudo tee -a ~/.bashrc
+
+if grep 'CATALINA_BASE' ~/.bashrc
+then 
+    sudo grep -v 'CATALINA_BASE' ~/.bashrc > ~/tmp_bashrc
+    sudo mv ~/tmp_bashrc ~/.bashrc
+fi
+echo $export_cb | sudo tee -a ~/.bashrc
+
+export CATALINA_HOME=/opt/geo2tag/apache-tomcat-7.0.27
+export CATALINA_BASE=/opt/geo2tag/apache-tomcat-7.0.27
+
+sudo chmod u+x /opt/geo2tag/apache-tomcat-7.0.27/bin/*.sh
+sudo /opt/geo2tag/apache-tomcat-7.0.27/bin/startup.sh

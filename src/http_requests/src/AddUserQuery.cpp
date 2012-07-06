@@ -13,8 +13,11 @@
 #include "symbian.h"
 #endif
 
-AddUserQuery::AddUserQuery(const QString &login, const QString &password, QObject *parent):
-DefaultQuery(parent), m_login(login), m_password(password)
+AddUserQuery::AddUserQuery(const QString &login, const QString &password, QObject *parent, const QString& email)
+    : DefaultQuery(parent),
+      m_login(login),
+      m_password(password),
+      m_email(email)
 {
 }
 
@@ -33,7 +36,7 @@ QString AddUserQuery::getUrl() const
 
 QByteArray AddUserQuery::getRequestBody() const
 {
-  QSharedPointer<common::User> dummyUser(new JsonUser(m_login,m_password));
+  QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, m_email));
   AddUserRequestJSON request;
   request.addUser(dummyUser);
   return request.getJson();
@@ -48,8 +51,9 @@ void AddUserQuery::processReply(QNetworkReply *reply)
   m_errno = response.getErrno();
   if(response.getErrno() == SUCCESS)
   {
-    QSharedPointer<common::User> user = response.getUsers()->at(0);
-    m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, user->getToken()));
+    m_session = response.getSessions()->at(0);
+    m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, m_email));
+
     syslog(LOG_INFO,"!!connected!");
     Q_EMIT connected();
   }
@@ -60,19 +64,28 @@ void AddUserQuery::processReply(QNetworkReply *reply)
   #endif
 }
 
-
 void AddUserQuery::setQuery(const QString& login, const QString& password)
 {
   m_login=login;
   m_password=password;
 }
 
+void AddUserQuery::setQuery(const QString& login, const QString& password, const QString& email)
+{
+    m_login = login;
+    m_password = password;
+    m_email = email;
+}
 
 QSharedPointer<common::User> AddUserQuery::getUser() const
 {
   return m_user;
 }
 
+QSharedPointer<Session> AddUserQuery::getSession() const
+{
+  return m_session;
+}
 
 AddUserQuery::~AddUserQuery()
 {

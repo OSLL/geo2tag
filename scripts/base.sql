@@ -18,7 +18,6 @@ CREATE TABLE users (
   email VARCHAR(50) UNIQUE NOT NULL,
   login VARCHAR(50) UNIQUE NOT NULL,
   password VARCHAR(50) NOT NULL,
-  token VARCHAR(65) UNIQUE NOT NULL,
   constraint users_pkey primary key (id)
 );
 
@@ -88,13 +87,13 @@ INSERT into signups (datetime, email, login, password, registration_token, sent)
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email3@test3.org', 'Mary', 'test', 'MMMMMMMMMM', FALSE);
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email4@test4.org', 'David', 'test', 'DDDDDDDDDD', FALSE);
 
-INSERT into users (email, login, password, token) values ('paul@test.org', 'Paul',   'test', 'PPPPPPPPPP');
-INSERT into users (email, login, password, token) values ('kirill@test.org', 'Kirill', 'test', 'KKKKKKKKKK');
-INSERT into users (email, login, password, token) values ('mark@test.org', 'Mark',   'test', 'MMMMMMMMMM');
-INSERT into users (email, login, password, token) values ('yevgeni@test.org', 'Yevgeni', 'test', 'YYYYYYYYYY');
+INSERT into users (email, login, password) values ('paul@test.org', 'Paul',   'test');
+INSERT into users (email, login, password) values ('kirill@test.org', 'Kirill', 'test');
+INSERT into users (email, login, password) values ('mark@test.org', 'Mark',   'test');
+INSERT into users (email, login, password) values ('yevgeni@test.org', 'Yevgeni', 'test');
 
-INSERT into users (email, login, password, token) values ('rom@test.org', 'Rom',   'test', 'RRRRRRRRRR');
-INSERT into users (email, login, password, token) values ('jul@test.org', 'Jul', 'test', 'JJJJJJJJJJ');
+INSERT into users (email, login, password) values ('rom@test.org', 'Rom',   'test');
+INSERT into users (email, login, password) values ('jul@test.org', 'Jul', 'test');
 
 INSERT into sessions (user_id, session_token, last_access_time) values (2, 'kkkkkkkkkk', now());
 INSERT into sessions (user_id, session_token, last_access_time) values (3, 'mmmmmmmmmm', now());
