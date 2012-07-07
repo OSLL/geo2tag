@@ -92,9 +92,13 @@ git checkout $branch >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 git pull origin $branch >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 #BUILD deb
 
+cp ${dir_automation}/local.properties ${dir_geo2tag}/src/webside/
+rm ${dir_geo2tag}/stuff/geo2tag.war
+
 cd ${dir_geo2tag}
 dh_clean
-dpkg-buildpackage -rfakeroot >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
+# ./build_debs.sh instead 'dpkg-buildpackage -rfakeroot'
+./build_debs.sh >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 cp ./test.log ./test_summary.log ${dir_log}
 founded_packages=`ls "${dir_automation}" | grep [.]deb | grep -v standalone | grep -v observer`;
 package_count=`echo "${founded_packages}" | wc -w `;
@@ -136,7 +140,7 @@ then
 		sudo -u postgres dropdb geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		sudo -u postgres dropuser geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		echo "Start packages install: " >> ${dir_log}/deploy.log.txt
-		if ! echo "n" | dpkg -i geo2tag_*deb libgeo2tag_*deb >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
+		if ! echo "n" | dpkg -i geo2tag_*deb libgeo2tag_*deb geo2tag-webside*deb >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		then
 			status="fail"
 			letter_body="$deb_installation_error"
@@ -148,8 +152,8 @@ then
 		#TEST
 		test_result=`${dir_automation}/test_platform.sh`;
 		echo "Integration testsi:\n $test_result" >>${dir_log}/test.log.txt
-                if ! echo $test_result | grep -i fail
-                then
+		if ! echo $test_result | grep -i fail
+		then
 		# test cases passed, move installed debs to backup
 			# copy *.deb to repo
 			cp ${dir_automation}/*.deb /var/www/geo2tag_repo/testing/binary_i386/
@@ -160,6 +164,7 @@ then
 			mkdir "${dir_backup}"
 			mv -f ${dir_automation}/libgeo2tag_*deb "${dir_backup}"
 			mv -f ${dir_automation}/geo2tag_*deb "${dir_backup}"	
+			mv -f ${dir_automation}/geo2tag-webside*deb "${dir_backup}"	
 		else
 		# test cases not passed, restore backup
 			echo "Tests not passed" >> ${dir_log}/test.log.txt
