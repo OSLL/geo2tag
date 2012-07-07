@@ -42,9 +42,6 @@ import junit.framework.TestCase;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WUser;
-import ru.spb.osll.web.server.db.Channels;
-import ru.spb.osll.web.server.db.Tags;
-import ru.spb.osll.web.server.db.Users;
 import ru.spb.osll.web.server.services.GTServiceImpl;
 
 public class Geo2TagServTest extends TestCase {
@@ -141,91 +138,4 @@ public class Geo2TagServTest extends TestCase {
 			System.out.println(tag.getTime());
 		}*/
 	}
-
-	public void testUsers() {
-		WUser testUser = new WUser("Dima", "pass");
-		Users.Instance().delete(testUser);
-
-		testUser = Users.Instance().insert(testUser);
-		testUser = testUser != null ? testUser : Users.Instance()
-				.select("Dima");
-		assertTrue(Users.Instance().select("Dima").getPassword().equals("pass"));
-
-		testUser.setToken("blablabla");
-		Users.Instance().update(testUser);
-		String testToken = Users.Instance().select("Dima").getToken();
-		assertTrue(testToken.equals("blablabla"));
-
-		assertTrue(Users.Instance().delete(testUser));
-		assertTrue(Users.Instance().select("Dima") == null);
-	}
-
-	public void testChannels() {
-		WChannel testChannel = new WChannel("Channel1", "TestChannel",
-				"www.bac1ca.com/channel");
-
-		Channels.Instance().delete(testChannel);
-		assertTrue(Channels.Instance().delete(testChannel)); // FIXME
-
-		assertTrue(null != Channels.Instance().insert(testChannel));
-		assertTrue(null != Channels.Instance().insert(testChannel));
-
-		testChannel.setDescription("blablabla");
-		assertTrue(Channels.Instance().update(testChannel));
-
-		List<WChannel> channels = Channels.Instance().selectAll();
-		assertTrue(channels.get(channels.size() - 1).getDescription().equals(
-				"blablabla"));
-
-		assertTrue(Channels.Instance().delete(testChannel));
-	}
-
-	public void testTags() {
-		WUser testUser = new WUser("Dima", "pass");
-		Users.Instance().delete(testUser);
-		testUser = Users.Instance().insert(testUser);
-
-		WMark testTag1 = new WMark(1f, 1f, "testlabel1", "testTag1", "testurl",
-				testUser.getId());
-		testTag1 = Tags.Instance().insert(testTag1);
-		assertTrue(Tags.Instance().selectByUser(testUser).get(0).getLabel()
-				.equals("testlabel1"));
-
-		WMark testTag2 = new WMark(2f, 2f, "testlabel2", "testTag2", "testurl",
-				testUser.getId());
-		testTag2 = Tags.Instance().insert(testTag2);
-
-		assertTrue(2 == Tags.Instance().selectByUser(testUser).size());
-		Tags.Instance().delete(testTag2);
-		assertTrue(1 == Tags.Instance().selectByUser(testUser).size());
-
-		testTag1.setDescription("blablabla");
-		assertTrue(Tags.Instance().update(testTag1));
-		assertTrue(Tags.Instance().selectByUser(testUser).get(0)
-				.getDescription().equals("blablabla"));
-
-		// CHANNELS
-		WChannel testChannel1 = new WChannel("Channel1", "TestChannel",
-				"www.bac1ca.com/channel");
-		WChannel testChannel2 = new WChannel("Channel2", "TestChannel",
-				"www.bac1ca.com/channel");
-		Channels.Instance().delete(testChannel1);
-		Channels.Instance().delete(testChannel2);
-		testChannel1 = Channels.Instance().insert(testChannel1);
-		testChannel2 = Channels.Instance().insert(testChannel2);
-
-		Tags.Instance().addTagToChannel(testChannel1, testTag1);
-		Tags.Instance().addTagToChannel(testChannel2, testTag1);
-
-		assertTrue(1 == Tags.Instance().selectByChannel(testChannel1).size());
-		Tags.Instance().removeTagFromChannel(testChannel1, testTag1);
-		assertTrue(0 == Tags.Instance().selectByChannel(testChannel1).size());
-
-		Users.Instance().delete(testUser);
-		Channels.Instance().delete(testChannel1);
-		Channels.Instance().delete(testChannel2);
-		Tags.Instance().delete(testTag1);
-		Tags.Instance().delete(testTag2);
-	}
-
 }

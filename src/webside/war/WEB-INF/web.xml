@@ -10,41 +10,6 @@
   </welcome-file-list>
   
   <!-- Servlets -->
-  
-  <servlet>
-  	<servlet-name>LoginService</servlet-name>
-  	<servlet-class>ru.spb.osll.web.server.services.users.LoginServiceImpl</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>LoginService</servlet-name>
-  	<url-pattern>/geo2tag/LoginService</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-  	<servlet-name>ChannelService</servlet-name>
-  	<servlet-class>ru.spb.osll.web.server.services.channels.ChannelServiceImpl</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>ChannelService</servlet-name>
-  	<url-pattern>/geo2tag/ChannelService</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-  	<servlet-name>TagService</servlet-name>
-  	<servlet-class>ru.spb.osll.web.server.services.tags.TagServiceImpl</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>TagService</servlet-name>
-  	<url-pattern>/geo2tag/TagService</url-pattern>
-  </servlet-mapping>
-  <servlet>
-  	<servlet-name>VersionService</servlet-name>
-  	<servlet-class>ru.spb.osll.web.server.services.version.VersionServiceImpl</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>VersionService</servlet-name>
-  	<url-pattern>/geo2tag/VersionService</url-pattern>
-  </servlet-mapping>
   <servlet>
   	<servlet-name>GTService</servlet-name>
   	<servlet-class>ru.spb.osll.web.server.services.GTServiceImpl</servlet-class>
@@ -52,6 +17,15 @@
   <servlet-mapping>
   	<servlet-name>GTService</servlet-name>
   	<url-pattern>/geo2tag/GTService</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>VersionService</servlet-name>
+  	<servlet-class>ru.spb.osll.web.server.services.version.VersionServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>VersionService</servlet-name>
+  	<url-pattern>/geo2tag/VersionService</url-pattern>
   </servlet-mapping>
 
 </web-app>
