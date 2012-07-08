@@ -44,14 +44,12 @@ HEADERS += MainWindow.h \
 ../../../../json/inc/LoginResponseJSON.h \
 ../../../../json/inc/LoginRequestJSON.h \
 ../../../../json/inc/JsonUser.h \
-../../../../json/inc/JsonTimeSlot.h \
 ../../../../json/inc/JsonDataMark.h \
 ../../../../json/inc/JsonChannel.h \
 ../../../../json/inc/AddNewMarkResponseJSON.h \
 ../../../../json/inc/AddNewMarkRequestJSON.h \
 ../../../../json/inc/DefaultResponseJSON.h \
 ../../../../common/inc/User.h \
-../../../../common/inc/TimeSlot.h \
 ../../../../common/inc/DataMarks.h \
 ../../../../common/inc/Channel.h \
 ../../../../common/inc/ConcurrentVector.h \
@@ -80,7 +78,6 @@ MainWindow.cpp \
 ../../../../http_requests/src/DefaultQuery.cpp \
 ../../../../http_requests/src/AddNewMarkQuery.cpp \
 ../../../../common/src/User.cpp \
-../../../../common/src/TimeSlot.cpp \
 ../../../../common/src/DataMarks.cpp \
 ../../../../common/src/Channel.cpp \
 ../../../../common/src/GpsInfo.cpp \

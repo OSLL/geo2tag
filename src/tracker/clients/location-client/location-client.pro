@@ -42,7 +42,6 @@ SOURCES += \
     ../../../http_requests/src/UnsubscribeChannelQuery.cpp \
     ../../../http_requests/src/SubscribedChannelsQuery.cpp \
     ../../../common/src/User.cpp \
-    ../../../common/src/TimeSlot.cpp \
     ../../../common/src/DataMarks.cpp \
     ../../../common/src/Channel.cpp \
     ../../../common/src/GpsInfo.cpp \
@@ -108,15 +107,12 @@ HEADERS += \
     ../../../json/inc/LoadTagsRequestJSON.h \
     ../../../json/inc/LoadTagsResponseJSON.h \
     ../../../json/inc/JsonUser.h \
-    ../../../json/inc/JsonTimeSlot.h \
     ../../../json/inc/JsonDataMark.h \
     ../../../json/inc/JsonChannel.h \
     ../../../json/inc/WriteTagResponseJSON.h \
     ../../../json/inc/WriteTagRequestJSON.h \
     ../../../json/inc/DefaultResponseJSON.h \
     ../../../common/inc/User.h \
-    ../../../common/inc/TimeSlot.h \
-    ../../../common/inc/DataMarks.h \
     ../../../common/inc/Channel.h \
     ../../../common/inc/ConcurrentVector.h \
     ../../../common/inc/defines.h \

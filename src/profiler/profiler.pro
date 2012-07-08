@@ -21,7 +21,6 @@ HEADERS += ProfilerThread.h LoginThread.h TrackThread.h LoadTagsThread.h \
 ../http_requests/inc/LoginQuery.h \
 ../common/inc/User.h \
 ../common/inc/Channel.h \
-../common/inc/TimeSlot.h \
 ../common/inc/DataMarks.h \
 ../common/inc/User.h \
 ../common/inc/defines.h \
@@ -44,7 +43,6 @@ HEADERS += ProfilerThread.h LoginThread.h TrackThread.h LoadTagsThread.h \
 SOURCES += LoginThread.cpp main.cpp TrackThread.cpp ProfilerThread.cpp LoadTagsThread.cpp \
 ../common/src/User.cpp \
 ../common/src/Channel.cpp \
-../common/src/TimeSlot.cpp \
 ../common/src/DataMarks.cpp \
 ../common/src/defines.cpp \
 ../common/src/SettingsStorage.cpp \

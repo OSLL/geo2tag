@@ -49,11 +49,9 @@ const QString &url):
 m_name(name),
 m_description(description),
 m_url(url),
-m_isDisplayed(true),
-m_timeSlotIsDefault(true)
+m_isDisplayed(true)
 {
   m_activeRadius = 5.0;                 // 5 km
-  m_timeSlot = QSharedPointer<TimeSlot>(new TimeSlot(DEFAULT_TIME_SLOT_VALUE_MIN));
 }
 
 
@@ -116,31 +114,6 @@ double Channel::getRadius() const
 {
   return m_activeRadius;
 }
-
-
-void Channel::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
-{
-  m_timeSlot = timeSlot;
-}
-
-
-QSharedPointer<TimeSlot> Channel::getTimeSlot() const
-{
-  return m_timeSlot;
-}
-
-
-bool Channel::timeSlotIsDefault() const
-{
-  return m_timeSlotIsDefault;
-}
-
-
-void Channel::setDefaultTimeSlot(bool fl)
-{
-  m_timeSlotIsDefault = fl;
-}
-
 
 Channel::~Channel()
 {

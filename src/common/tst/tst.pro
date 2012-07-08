@@ -9,7 +9,6 @@ SOURCES += main.cpp \
     ../src/GpsModeller.cpp \ 
     Channel_TestObj.cpp \
     ../src/Channel.cpp \
-    ../src/TimeSlot.cpp \
     ../../json/src/JsonDataMark.cpp \
     ../src/Region.cpp
 HEADERS += User_Test.h \
@@ -23,7 +22,6 @@ HEADERS += User_Test.h \
     Channel_TestObj.h \
     Region_Test.h \
     ../inc/Channel.h \
-    ../inc/TimeSlot.h \
     ../../json/inc/JsonDataMark.h \
     ../inc/Region.h 
 

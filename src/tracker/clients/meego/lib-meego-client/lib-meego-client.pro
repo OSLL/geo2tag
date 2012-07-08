@@ -26,14 +26,12 @@ HEADERS += MeegoClient.h \
 ../../../../json/inc/LoginResponseJSON.h \
 ../../../../json/inc/LoginRequestJSON.h \
 ../../../../json/inc/JsonUser.h \
-../../../../json/inc/JsonTimeSlot.h \
 ../../../../json/inc/JsonDataMark.h \
 ../../../../json/inc/JsonChannel.h \
 ../../../../json/inc/WriteTagResponseJSON.h \
 ../../../../json/inc/WriteTagRequestJSON.h \
 ../../../../json/inc/DefaultResponseJSON.h \
 ../../../../common/inc/User.h \
-../../../../common/inc/TimeSlot.h \
 ../../../../common/inc/DataMarks.h \
 ../../../../common/inc/Channel.h \
 ../../../../common/inc/ConcurrentVector.h \
@@ -61,7 +59,6 @@ SOURCES += MeegoClient.cpp \
 ../../../../http_requests/src/DefaultQuery.cpp \
 ../../../../http_requests/src/WriteTagQuery.cpp \
 ../../../../common/src/User.cpp \
-../../../../common/src/TimeSlot.cpp \
 ../../../../common/src/DataMarks.cpp \
 ../../../../common/src/Channel.cpp \
 ../../../../common/src/GpsInfo.cpp \

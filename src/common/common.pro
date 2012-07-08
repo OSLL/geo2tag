@@ -25,7 +25,6 @@ MOBILITY = location
 # Input
 HEADERS += \
     inc/ConcurrentVector.h \
-    inc/TimeSlot.h \
     inc/Channel.h \
     inc/User.h \
     inc/DataMarks.h \
@@ -51,7 +50,6 @@ HEADERS += \
     inc/EmailMessage.h
 
 SOURCES += \
-    src/TimeSlot.cpp \
     src/Channel.cpp \
     src/User.cpp \
     src/ChannelAction.cpp \

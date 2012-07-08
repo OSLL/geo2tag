@@ -21,7 +21,6 @@ MarksHistory_TestObj.h \
 ../../../../json/inc/JsonChannel.h \
 ../../../../json/inc/DefaultResponseJSON.h \
 ../../../../common/inc/User.h \
-../../../../common/inc/TimeSlot.h \
 ../../../../common/inc/DataMarks.h \
 ../../../../common/inc/Channel.h \
 ../../../../common/inc/ConcurrentVector.h \
@@ -32,7 +31,6 @@ MarksHistory_TestObj.h \
 SOURCES += main.cpp \
 ../lib-meego-client/markshistory.cpp \
 ../../../../common/src/User.cpp \
-../../../../common/src/TimeSlot.cpp \
 ../../../../common/src/DataMarks.cpp \
 ../../../../common/src/Channel.cpp \
 ../../../../common/src/defines.cpp \
