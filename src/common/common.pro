@@ -32,9 +32,7 @@ HEADERS += \
     inc/GpsInfo.h \
     inc/defines.h \
     inc/DataChannel.h\
-    inc/TimeSlot.h \
     inc/ChannelAction.h\
-    inc/DataMarks.h \
     inc/ErrnoTypes.h \
     inc/Filtration.h \
     inc/Filter.h \

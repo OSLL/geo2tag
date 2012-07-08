@@ -28,8 +28,10 @@ linux: {
              http_requests \
              service \
              #service/tst \
-	     http_requests/tst_http_requests \
-	     tracker/clients/meego/tst \
+             wikigps_http_standalone \
+             #http_requests/tst_http_requests \
+             #wikigps_http_standalone/tst \
+             tracker/clients/meego/tst \
              common/tst \
 	     maps \
              #tracker/observer
