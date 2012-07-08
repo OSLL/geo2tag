@@ -32,14 +32,20 @@
 from core.TestTemplate import TestTemplate
 import urllib2
 import json
+import ConfigParser
 
 class TestQuitSession(TestTemplate):
        
     authToken = "unknown"
 
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
+
+        parser = ConfigParser.SafeConfigParser()
+        parser.read(testDir + "/tests.conf")
+        section = "Tests_Params";
+        self.authToken = parser.get(section, "auth_token")
 
         # work with JSON 
         jdata = json.dumps({'auth_token':self.authToken})

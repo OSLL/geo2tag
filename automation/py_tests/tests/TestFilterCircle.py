@@ -33,6 +33,7 @@ from core.TestTemplate import TestTemplate
 from datetime import datetime
 import urllib2
 import json
+import ConfigParser
 
 class TestFilterCircle(TestTemplate):
     
@@ -43,9 +44,14 @@ class TestFilterCircle(TestTemplate):
     longitude = 30.0
     radius = 30.0
    
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
+
+        parser = ConfigParser.SafeConfigParser()
+        parser.read(testDir + "/tests.conf")
+        section = "Tests_Params";
+        self.authToken = parser.get(section, "auth_token")
 
         # work with JSON 
         jdata = json.dumps({"auth_token":self.authToken, "time_from":self.timeFrom, "time_to":self.timeTo, "latitude":self.latitude, "longitude":self.longitude, "radius":self.radius})

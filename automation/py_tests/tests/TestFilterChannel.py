@@ -33,6 +33,7 @@ from core.TestTemplate import TestTemplate
 from datetime import datetime
 import urllib2
 import json
+import ConfigParser
 
 class TestFilterChannel(TestTemplate):
     
@@ -40,9 +41,15 @@ class TestFilterChannel(TestTemplate):
     channel = "test_channel"
     amount = 10
    
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
+
+        parser = ConfigParser.SafeConfigParser()
+        parser.read(testDir + "/tests.conf")
+        section = "Tests_Params";
+        self.authToken = parser.get(section, "auth_token")
+        self.channel = parser.get(section, "channel_name")
 
         # work with JSON 
         jdata = json.dumps({"auth_token":self.authToken, "channel":self.channel, "amount":self.amount})

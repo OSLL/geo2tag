@@ -31,6 +31,7 @@
 
 import os
 import re
+import ConfigParser
 from sets import Set
 
 def abstract(func):
@@ -56,12 +57,21 @@ def forName(class_string):
     return someType()
 
 def getTests(testDir):
-    tests = os.listdir(testDir)
-    testsSet = Set()
-    match = re.findall('Test\w*\.py' , tests.__str__())
-    for testName in match:
-        testsSet.add(testName[:-3]);
-    return testsSet
+    tests = []
+
+    parser = ConfigParser.SafeConfigParser()
+    parser.read(testDir + "/tests.conf")
+
+    options = []
+    section = "Tests_Order";
+    for option in parser.options(section):
+        options.append(int(option))
+
+    for option in options:
+        value = parser.get(section, str(option))        
+        tests.append(value)
+
+    return tests
 
 def testName(name):
     return 'tests' + '.' + name + '.' + name

@@ -33,16 +33,13 @@
 
 from core.TestCore import TestCore
 from core.ConsoleWriter import ConsoleWriter
-from TestSequence import TestSequence
 
 def runLocal():
     context = {'server':'http://localhost:81', 
                'test_dir':'tests'}
     writer = ConsoleWriter()
-    #testCore = TestCore()
-    #testCore.runTests(context, writer)
-    testSeq = TestSequence()
-    testSeq.run(context, writer)
+    testCore = TestCore()
+    testCore.runTests(context, writer)
 
     print writer.getPage()
      

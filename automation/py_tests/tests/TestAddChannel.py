@@ -30,20 +30,27 @@
 '''
 
 from core.TestTemplate import TestTemplate
+from datetime import datetime
 import urllib2
 import json
+import ConfigParser
 
 class TestAddChannel(TestTemplate):
     
     authToken = "unknown"
-    name = "test_channel"
+    name = "testChannel_"+ str(datetime.now())
     description = "test_description"
     url = "url"
     radius = 0.0
    
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
+
+        parser = ConfigParser.SafeConfigParser()
+        parser.read(testDir + "/tests.conf")
+        section = "Tests_Params";
+        self.authToken = parser.get(section, "auth_token")
 
         # work with JSON 
         jdata = json.dumps({"auth_token":self.authToken, "name":self.name, "description":self.description, "url":self.url, "activeRadius":self.radius})
@@ -53,6 +60,12 @@ class TestAddChannel(TestTemplate):
         resData = urllib2.urlopen(server + "/service/addChannel", jdata)
         response = json.loads(resData.read())
         log.append(str(response))
+
+        config = ConfigParser.ConfigParser()
+        config.read(testDir + '/tests.conf')
+        config.set('Tests_Params', 'channel_name', self.name)
+        with open('tests/tests.conf', 'w') as configFile:
+            config.write(configFile)
         
         result = response['errno'] == 0
 

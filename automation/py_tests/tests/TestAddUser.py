@@ -30,16 +30,18 @@
 '''
 
 from core.TestTemplate import TestTemplate
+from datetime import datetime
+import ConfigParser
 import urllib2
 import json
 
 class TestAddUser(TestTemplate):
     
-    email = "test_email"
-    login = "test_user"
-    password = "test"
+    email = "testEmail_" + str(datetime.now())
+    login = "testLogin_" + str(datetime.now())
+    password = "testPassword_" + str(datetime.now())
    
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
 
@@ -51,6 +53,14 @@ class TestAddUser(TestTemplate):
         response = json.loads(resData.read())
         log.append(str(response))
         
+        config = ConfigParser.ConfigParser()
+        config.read(testDir + '/tests.conf')
+        config.set('Tests_Params', 'user_email', self.email)
+        config.set('Tests_Params', 'user_login', self.login)
+        config.set('Tests_Params', 'user_password', self.password)
+        with open('tests/tests.conf', 'w') as configFile:
+            config.write(configFile)
+
         result = response['errno'] == 0
 
         return (result, log)

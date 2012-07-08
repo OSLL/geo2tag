@@ -32,16 +32,22 @@
 from core.TestTemplate import TestTemplate
 import urllib2
 import json
+import ConfigParser
 
 class TestLogin(TestTemplate):
         
     login = "test_user"
     password = "test"
-    authToken = "unknown"
 
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
+
+        parser = ConfigParser.SafeConfigParser()
+        parser.read(testDir + "/tests.conf")
+        section = "Tests_Params";
+        self.login = parser.get(section, "user_login")
+        self.password = parser.get(section, "user_password")
 
         # work with JSON 
         jdata = json.dumps({'login':self.login, 'password':self.password})
@@ -51,8 +57,14 @@ class TestLogin(TestTemplate):
         response = json.loads(resData.read())
         log.append(str(response))
         
-        self.authToken = response['auth_token']
+        config = ConfigParser.ConfigParser()
+        config.read(testDir + '/tests.conf')
+        config.set('Tests_Params', 'auth_token', response['auth_token'])
+        with open('tests/tests.conf', 'w') as configFile:
+            config.write(configFile)
+
         result = response['errno'] == 0
+
         return (result, log)
 
     def isEnabled(self): return True

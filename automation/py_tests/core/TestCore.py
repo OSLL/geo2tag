@@ -46,9 +46,9 @@ class TestCore(object):
         testDir = context['test_dir']
         for test in getTests(testDir):
             tInstance = forName(testName(test))
-            self.testProcess(tInstance, context, writer)
+            self.testProcess(tInstance, context, writer, testDir)
     
-    def testProcess(self, test, context, writer):
+    def testProcess(self, test, context, writer, testDir):
         name = test.getName()
         enabled = test.isEnabled()
         description = test.getDescription()
@@ -57,7 +57,7 @@ class TestCore(object):
             result = False
             log = []
             try:
-                result, log = test.execute(context)
+                result, log = test.execute(context, testDir)
             except Exception:
                 log.append('Test Execution Fail!')
             writer.addTestItem(name, description, enabled, result, log)

@@ -30,16 +30,17 @@
 '''
 
 from core.TestTemplate import TestTemplate
+from datetime import datetime
 import urllib2
 import json
 
 class TestRegisterUser(TestTemplate):
     
-    email = "test_email"
-    login = "test_user"
-    password = "test"
+    email = "testLogin_" + str(datetime.now())
+    login = "testEmail_" + str(datetime.now())
+    password = "testPassword_" + str(datetime.now())
    
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
 
