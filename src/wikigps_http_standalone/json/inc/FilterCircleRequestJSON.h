@@ -42,9 +42,9 @@
 #ifndef _FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_
 #define _FilterCircleRequestJSON_H_244B3E55_BFCE_44F6_B4B1_E0CC7B999690_INCLUDED_
 
-#include "FilterRequestJSON.h"
-#include "FShape.h"
-#include "FShapeCircle.h"
+#include "json/inc/FilterRequestJSON.h"
+#include "common/inc/FShape.h"
+#include "common/inc/FShapeCircle.h"
 
 class FilterCircleRequestJSON: public FilterRequestJSON
 {

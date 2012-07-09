@@ -48,8 +48,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "DefaultQuery.h"
-#include "Channel.h"
-#include "Session.h"
+#include "common/inc/Channel.h"
+#include "common/inc/Session.h"
 
   /*!
    * SubscribedChannelsQuery class definition.

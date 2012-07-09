@@ -38,7 +38,7 @@
 #ifndef JSONSESSION_H
 #define JSONSESSION_H
 
-#include "Session.h"
+#include "common/inc/Session.h"
 
 class JsonSession: public Session
 {

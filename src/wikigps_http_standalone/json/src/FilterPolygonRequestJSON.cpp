@@ -39,10 +39,10 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FilterPolygonRequestJSON.h"
-#include "JsonSession.h"
-#include "FShape.h"
-#include "FShapePolygon.h"
+#include "json/inc/FilterPolygonRequestJSON.h"
+#include "json/inc/JsonSession.h"
+#include "common/inc/FShape.h"
+#include "common/inc/FShapePolygon.h"
 
 #ifndef Q_WS_SYMBIAN
 #include <qjson/parser.h>

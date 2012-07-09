@@ -1,7 +1,7 @@
 #include "SubscribeChannelQuery.h"
-#include "defines.h"
-#include "SubscribeChannelJSON.h"
-#include "SubscribeChannelResponseJSON.h"
+#include "common/inc/defines.h"
+#include "json/inc/SubscribeChannelJSON.h"
+#include "json/inc/SubscribeChannelResponseJSON.h"
 
 SubscribeChannelQuery::SubscribeChannelQuery(const QSharedPointer<Channel> &channel,
                                              const QSharedPointer<Session> &session, QObject *parent)

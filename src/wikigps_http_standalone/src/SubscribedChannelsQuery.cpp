@@ -40,12 +40,12 @@
  * PROJ: geo2tag
  * ---------------------------------------------------------------- */
 #include "SubscribedChannelsQuery.h"
-#include "defines.h"
+#include "common/inc/defines.h"
 #include <QDebug>
-#include "SubscribedChannelsResponseJSON.h"
-#include "SubscribedChannelsRequestJSON.h"
-#include "JsonDataMark.h"
-#include "JsonUser.h"
+#include "json/inc/SubscribedChannelsResponseJSON.h"
+#include "json/inc/SubscribedChannelsRequestJSON.h"
+#include "json/inc/JsonDataMark.h"
+#include "json/inc/JsonUser.h"
 
 SubscribedChannelsQuery::SubscribedChannelsQuery(const QSharedPointer<Session>& session, QObject *parent)
     : DefaultQuery(parent),

@@ -34,7 +34,7 @@
 
 #ifndef LOGINREQUESTJSON_H
 #define LOGINREQUESTJSON_H
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 class LoginRequestJSON: public JsonSerializer
 {

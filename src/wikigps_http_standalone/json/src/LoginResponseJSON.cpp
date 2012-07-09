@@ -42,9 +42,9 @@
 #include "serializer.h"
 #endif
 
-#include "LoginResponseJSON.h"
-#include "JsonUser.h"
-#include "JsonSession.h"
+#include "json/inc/LoginResponseJSON.h"
+#include "json/inc/JsonUser.h"
+#include "json/inc/JsonSession.h"
 
 LoginResponseJSON::LoginResponseJSON(QObject *parent) : JsonSerializer(parent)
 {

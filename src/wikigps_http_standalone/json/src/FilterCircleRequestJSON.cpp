@@ -39,8 +39,8 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FilterCircleRequestJSON.h"
-#include "JsonSession.h"
+#include "json/inc/FilterCircleRequestJSON.h"
+#include "json/inc/JsonSession.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>

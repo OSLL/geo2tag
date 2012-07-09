@@ -35,7 +35,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "Session.h"
+#include "common/inc/Session.h"
 
 Session::Session(const QString &sessionToken, const QDateTime &lastAccessTime, const QSharedPointer<common::User> &user)
     : m_sessionToken(sessionToken),

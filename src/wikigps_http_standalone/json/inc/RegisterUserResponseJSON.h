@@ -35,7 +35,7 @@
 #ifndef REGISTERUSERRESPONSEJSON_H
 #define REGISTERUSERRESPONSEJSON_H
 
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 class RegisterUserResponseJSON : public JsonSerializer
 {

@@ -47,7 +47,7 @@
  * Class description. May use HTML formatting
  *
  */
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 class VersionResponseJSON : public JsonSerializer
 {

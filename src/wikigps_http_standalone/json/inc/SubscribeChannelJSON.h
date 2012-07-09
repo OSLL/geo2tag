@@ -43,9 +43,9 @@
 #ifndef _SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
 #define _SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
 
-#include "JsonSerializer.h"
-#include "Session.h"
-#include "Channel.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/Session.h"
+#include "common/inc/Channel.h"
 
 class SubscribeChannelRequestJSON: public JsonSerializer
 {

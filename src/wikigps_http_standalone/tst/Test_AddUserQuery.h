@@ -44,7 +44,6 @@
 #include <QSignalSpy>
 
 #include "AddUserQuery.h"
-#include "signals.h"
 
 
 namespace Test

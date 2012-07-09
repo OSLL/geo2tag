@@ -43,11 +43,11 @@
 #include <QDebug>
 
 #include "LoginQuery.h"
-#include "defines.h"
+#include "common/inc/defines.h"
 
-#include "JsonUser.h"
-#include "LoginRequestJSON.h"
-#include "LoginResponseJSON.h"
+#include "json/inc/JsonUser.h"
+#include "json/inc/LoginRequestJSON.h"
+#include "json/inc/LoginResponseJSON.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <syslog.h>

@@ -43,7 +43,7 @@
 #define _FShape_H_2055D9DC_F9B0_419F_A486_DF9A5459E64B_INCLUDED_
 
 #include <QSharedPointer>
-#include "DataMarks.h"
+#include "common/inc/DataMarks.h"
 
 class FShape
 {

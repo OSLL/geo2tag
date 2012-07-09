@@ -50,7 +50,7 @@
 #include <QObject>
 #include <QString>
 #include "DefaultQuery.h"
-#include "User.h"
+#include "common/inc/User.h"
 
 
 class VersionQuery: public DefaultQuery

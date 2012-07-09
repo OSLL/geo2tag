@@ -39,7 +39,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FShapeRectangle.h"
+#include "common/inc/FShapeRectangle.h"
 
 FShapeRectangle::FShapeRectangle(double lat1, double lon1, double lat2, double lon2) : FShapePolygon()
 {

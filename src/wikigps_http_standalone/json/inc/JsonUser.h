@@ -39,7 +39,7 @@
 #define _JsonUser_H_530385AA_47B5_4EFA_92BF_1C79CEC156BC_INCLUDED_
 
 #include <QMutex>
-#include "User.h"
+#include "common/inc/User.h"
 
 /*!
  *

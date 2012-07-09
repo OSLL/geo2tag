@@ -42,7 +42,6 @@
 #include <QObject>
 #include <QTest>
 #include "RegisterUserQuery.h"
-#include "LoginQuery.h"
 
 namespace Test
 {

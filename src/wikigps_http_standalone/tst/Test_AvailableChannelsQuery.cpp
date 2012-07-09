@@ -37,9 +37,9 @@
  * ----------------------------------------------------------- */
 
 #include "Test_AvailableChannelsQuery.h"
-#include "signals.h"
-#include "Session.h"
-#include "User.h"
+#include "common/inc/signals.h"
+#include "common/inc/Session.h"
+#include "common/inc/User.h"
 
 #include <QString>
 #include <QTimer>

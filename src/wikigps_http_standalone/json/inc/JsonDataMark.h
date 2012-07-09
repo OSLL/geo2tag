@@ -40,7 +40,7 @@
 #ifndef _JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
 #define _JsonDataMark_H_6E8C1DBF_DF18_46D0_9119_1F2D838576EE_INCLUDED_
 
-#include "DataMarks.h"
+#include "common/inc/DataMarks.h"
 
 class JsonDataMark: public DataMark
 {

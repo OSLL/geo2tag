@@ -44,7 +44,6 @@
 #include <QSignalSpy>
 
 #include "WriteTagQuery.h"
-#include "signals.h"
 
 namespace Test
 {

@@ -32,11 +32,11 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "WriteTagRequestJSON.h"
-#include "DataMarks.h"
-#include "JsonChannel.h"
-#include "JsonDataMark.h"
-#include "JsonSession.h"
+#include "json/inc/WriteTagRequestJSON.h"
+#include "common/inc/DataMarks.h"
+#include "json/inc/JsonChannel.h"
+#include "json/inc/JsonDataMark.h"
+#include "json/inc/JsonSession.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>

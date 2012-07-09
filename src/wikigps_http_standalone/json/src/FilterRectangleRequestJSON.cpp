@@ -40,11 +40,11 @@
  * ---------------------------------------------------------------- */
 
 #include <syslog.h>
-#include "FilterRectangleRequestJSON.h"
+#include "json/inc/FilterRectangleRequestJSON.h"
 
-#include "JsonSession.h"
-#include "FShape.h"
-#include "FShapeRectangle.h"
+#include "json/inc/JsonSession.h"
+#include "common/inc/FShape.h"
+#include "common/inc/FShapeRectangle.h"
 
 #ifndef Q_WS_SYMBIAN
 #include <qjson/parser.h>

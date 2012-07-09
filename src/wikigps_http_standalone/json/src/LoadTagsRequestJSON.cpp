@@ -31,11 +31,11 @@
 
 #include <QVariant>
 #include <QDebug>
-#include "LoadTagsRequestJSON.h"
+#include "json/inc/LoadTagsRequestJSON.h"
 
-#include "JsonSession.h"
-#include "JsonChannel.h"
-#include "JsonDataMark.h"
+#include "json/inc/JsonSession.h"
+#include "json/inc/JsonChannel.h"
+#include "json/inc/JsonDataMark.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>

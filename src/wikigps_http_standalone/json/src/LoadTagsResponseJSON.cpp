@@ -42,7 +42,7 @@
 
 #include <QVariant>
 #include <QDebug>
-#include "LoadTagsResponseJSON.h"
+#include "json/inc/LoadTagsResponseJSON.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>
@@ -52,12 +52,12 @@
 #include "serializer.h"
 #endif
 
-#include "User.h"
-#include "Channel.h"
+#include "common/inc/User.h"
+#include "common/inc/Channel.h"
 
-#include "JsonUser.h"
-#include "JsonChannel.h"
-#include "JsonDataMark.h"
+#include "json/inc/JsonUser.h"
+#include "json/inc/JsonChannel.h"
+#include "json/inc/JsonDataMark.h"
 
 LoadTagsResponseJSON::LoadTagsResponseJSON(const DataChannels &hashMap, QObject *parent):
 JsonSerializer(parent), m_hashMap(hashMap)

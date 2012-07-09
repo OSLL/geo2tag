@@ -34,9 +34,9 @@
 
 #include <QDebug>
 
-#include "WriteTagResponseJSON.h"
-#include "JsonDataMark.h"
-#include "DataMarks.h"
+#include "json/inc/WriteTagResponseJSON.h"
+#include "json/inc/JsonDataMark.h"
+#include "common/inc/DataMarks.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>

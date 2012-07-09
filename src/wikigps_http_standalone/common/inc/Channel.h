@@ -44,8 +44,7 @@
 #include <QVector>
 #include <QSharedPointer>
 
-//#include "ConcurrentVector.h"
-#include "TimeSlot.h"
+#include "common/inc/ConcurrentVector.h"
 
 class Channel: public QObject
 {
@@ -55,8 +54,6 @@ class Channel: public QObject
   QString m_url;                        //< Radius for visible marks
   double m_activeRadius;                //!< Displayed on the UI
   bool m_isDisplayed;
-  QSharedPointer<TimeSlot> m_timeSlot;
-  bool m_timeSlotIsDefault;
 
   public:
 
@@ -81,12 +78,6 @@ class Channel: public QObject
 
     bool isDisplayed() const;
     void setDisplayed(bool);
-
-    void setTimeSlot(QSharedPointer<TimeSlot> timeSlot);
-    QSharedPointer<TimeSlot> getTimeSlot() const;
-
-    bool timeSlotIsDefault() const;
-    void setDefaultTimeSlot(bool);
 
     virtual ~Channel();
     // class Channel

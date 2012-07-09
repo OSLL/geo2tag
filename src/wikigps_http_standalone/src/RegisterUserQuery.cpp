@@ -35,11 +35,11 @@
 #include <QDebug>
 
 #include "RegisterUserQuery.h"
-#include "defines.h"
+#include "common/inc/defines.h"
 #include "ErrnoTypes.h"
-#include "JsonUser.h"
-#include "RegisterUserRequestJSON.h"
-#include "RegisterUserResponseJSON.h"
+#include "json/inc/JsonUser.h"
+#include "json/inc/RegisterUserRequestJSON.h"
+#include "json/inc/RegisterUserResponseJSON.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <syslog.h>

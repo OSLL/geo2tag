@@ -29,7 +29,7 @@ linux: {
              service \
              #service/tst \
              wikigps_http_standalone \
-             #http_requests/tst_http_requests \
+             http_requests/tst_http_requests \
              #wikigps_http_standalone/tst \
              tracker/clients/meego/tst \
              common/tst \

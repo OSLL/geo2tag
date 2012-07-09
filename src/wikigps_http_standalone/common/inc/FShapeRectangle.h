@@ -42,7 +42,7 @@
 #ifndef _FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
 #define _FShapeRectangle_H_551E8083_C487_48C6_A778_26A3143C34A8_INCLUDED_
 
-#include "FShapePolygon.h"
+#include "common/inc/FShapePolygon.h"
 
 class FShapeRectangle : public FShapePolygon
 {

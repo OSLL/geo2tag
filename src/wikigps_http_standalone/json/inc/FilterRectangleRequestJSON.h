@@ -42,7 +42,7 @@
 #ifndef _FilterRectangleRequestJSON_H_5E249F48_BA3A_4408_A1B9_E4061F5D3B3B_INCLUDED_
 #define _FilterRectangleRequestJSON_H_5E249F48_BA3A_4408_A1B9_E4061F5D3B3B_INCLUDED_
 
-#include "FilterRequestJSON.h"
+#include "json/inc/FilterRequestJSON.h"
 
 class FilterRectangleRequestJSON : public FilterRequestJSON
 {

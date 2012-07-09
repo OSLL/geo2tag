@@ -44,10 +44,10 @@
 #define _LoadTagsResponseJSON_H_04BD2106_8277_46A9_A0E2_EAC41FE34162_INCLUDED_
 
 #include <QMultiHash>
-#include "JsonSerializer.h"
-#include "Channel.h"
-#include "DataMarks.h"
-#include "DataChannel.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/Channel.h"
+#include "common/inc/DataMarks.h"
+#include "common/inc/DataChannel.h"
 
 class LoadTagsResponseJSON: public JsonSerializer
 {

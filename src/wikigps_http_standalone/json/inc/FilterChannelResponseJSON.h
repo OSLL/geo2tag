@@ -43,7 +43,7 @@
 #ifndef _FilterChannelResponseJSON_H_D06843F4_D6CB_4B9E_B538_74F7B2E8D42A_INCLUDED_
 #define _FilterChannelResponseJSON_H_D06843F4_D6CB_4B9E_B538_74F7B2E8D42A_INCLUDED_
 
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 class FilterChannelResponseJSON: public JsonSerializer
 {

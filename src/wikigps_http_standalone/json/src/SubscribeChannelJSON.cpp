@@ -40,7 +40,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "SubscribeChannelJSON.h"
+#include "json/inc/SubscribeChannelJSON.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>
@@ -53,9 +53,9 @@
 #include <QVariant>
 #include <QVariantMap>
 
-#include "JsonChannel.h"
-#include "JsonDataMark.h"
-#include "JsonSession.h"
+#include "json/inc/JsonChannel.h"
+#include "json/inc/JsonDataMark.h"
+#include "json/inc/JsonSession.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <syslog.h>

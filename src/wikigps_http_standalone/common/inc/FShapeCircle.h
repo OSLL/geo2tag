@@ -43,7 +43,7 @@
 #define _FShapeCircle_H_685324AD_3719_4618_BE1B_F0221ABB524D_INCLUDED_
 
 #include <QSharedPointer>
-#include "FShape.h"
+#include "common/inc/FShape.h"
 
 class FShapeCircle : public FShape
 {

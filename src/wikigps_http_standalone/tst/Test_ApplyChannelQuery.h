@@ -44,7 +44,6 @@
 #include <QSignalSpy>
 
 #include "ApplyChannelQuery.h"
-#include "signals.h"
 
 namespace Test
 {

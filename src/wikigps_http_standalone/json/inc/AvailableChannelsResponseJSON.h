@@ -40,7 +40,7 @@
 #ifndef _AvailableChannelsResponseJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
 #define _AvailableChannelsResponseJSON_H_4A2A94B8_1FF7_4618_B070_AE30B225EB95_INCLUDED_
 
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 class AvailableChannelsResponseJSON: public JsonSerializer
 {

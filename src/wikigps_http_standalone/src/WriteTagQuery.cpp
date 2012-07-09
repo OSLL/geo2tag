@@ -33,9 +33,9 @@
  * ---------------------------------------------------------------- */
 
 #include "WriteTagQuery.h"
-#include "defines.h"
-#include "WriteTagRequestJSON.h"
-#include "WriteTagResponseJSON.h"
+#include "common/inc/defines.h"
+#include "json/inc/WriteTagRequestJSON.h"
+#include "json/inc/WriteTagResponseJSON.h"
 
 WriteTagQuery::WriteTagQuery(const QSharedPointer<Session>& session,
                              const QSharedPointer<Channel>& channel,

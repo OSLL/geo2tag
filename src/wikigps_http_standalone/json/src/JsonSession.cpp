@@ -35,7 +35,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "JsonSession.h"
+#include "json/inc/JsonSession.h"
 
 qlonglong JsonSession::globalSessionId = 0;
 

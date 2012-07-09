@@ -42,7 +42,7 @@
 #include <math.h>
 //#include <cstring>
 
-#include "DataMarks.h"
+#include "common/inc/DataMarks.h"
 
 void DataMark::setDescription(const QString& s)
 {
@@ -71,8 +71,6 @@ m_time(time)
   m_channel = QSharedPointer<Channel>(NULL);
   if (m_label.isEmpty())
     m_label = "New mark";
-
-  m_timeSlot = QSharedPointer<TimeSlot>(NULL);
 }
 
 
@@ -195,28 +193,6 @@ QSharedPointer<Session> DataMark::getSession() const
 QSharedPointer<Channel> DataMark::getChannel() const
 {
   return m_channel;
-}
-
-
-void DataMark::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
-{
-  m_timeSlot = timeSlot;
-}
-
-
-QSharedPointer<TimeSlot> DataMark::getTimeSlot() const
-{
-  if (m_timeSlot.isNull())
-    return m_channel->getTimeSlot();
-  return m_timeSlot;
-}
-
-
-bool DataMark::timeSlotIsNull() const
-{
-  if (m_timeSlot.isNull())
-    return true;
-  return false;
 }
 
 

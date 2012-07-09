@@ -39,7 +39,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FShapePolygon.h"
+#include "common/inc/FShapePolygon.h"
 #include <QPolygonF>
 
 FShapePolygon::FShapePolygon() : FShape()

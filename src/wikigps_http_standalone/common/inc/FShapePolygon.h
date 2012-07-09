@@ -42,7 +42,7 @@
 #ifndef _FShapePolygon_H_A08ADAEE_DA07_4E75_A64D_F4F86290B7D1_INCLUDED_
 #define _FShapePolygon_H_A08ADAEE_DA07_4E75_A64D_F4F86290B7D1_INCLUDED_
 
-#include "FShape.h"
+#include "common/inc/FShape.h"
 #include <QPointF>
 
 class FShapePolygon : public FShape

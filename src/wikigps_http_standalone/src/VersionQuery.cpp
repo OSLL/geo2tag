@@ -41,8 +41,8 @@
 
 #include "VersionQuery.h"
 #include "ErrnoTypes.h"
-#include "defines.h"
-#include "VersionResponseJSON.h"
+#include "common/inc/defines.h"
+#include "json/inc/VersionResponseJSON.h"
 
 QString VersionQuery::getUrl() const
 {

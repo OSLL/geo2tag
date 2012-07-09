@@ -7,7 +7,7 @@ DEPENDPATH += . inc src ./json/inc ./json/src ./common/inc ./common/src
 target.path = /usr/lib
 INSTALLS += target
 
-INCLUDEPATH += . inc ./json/inc ./common/inc
+INCLUDEPATH += . inc ../common/inc
 
 # Input
 HEADERS += \
@@ -66,13 +66,11 @@ HEADERS += \
            json/inc/QuitSessionResponseJSON.h \
            json/inc/JsonSession.h \
            common/inc/ConcurrentVector.h \
-           common/inc/TimeSlot.h \
            common/inc/Channel.h \
            common/inc/User.h \
            common/inc/DataMarks.h \
            common/inc/defines.h \
            common/inc/DataChannel.h\
-           common/inc/ErrnoTypes.h \
            common/inc/FShape.h \
            common/inc/FShapeCircle.h \
            common/inc/FShapePolygon.h \
@@ -125,7 +123,6 @@ SOURCES += \
            json/src/QuitSessionRequestJSON.cpp \
            json/src/QuitSessionResponseJSON.cpp \
            json/src/JsonSession.cpp \
-           common/src/TimeSlot.cpp \
            common/src/Channel.cpp \
            common/src/User.cpp \
            common/src/DataMarks.cpp \
@@ -136,8 +133,6 @@ SOURCES += \
            common/src/SettingsStorage.cpp \
            common/src/Session.cpp \
            common/src/signals.cpp \
-
-LIBS    +=  -lcommon -lqjson
 
 linux: {
     DEFINES += DESKTOP_STYLE

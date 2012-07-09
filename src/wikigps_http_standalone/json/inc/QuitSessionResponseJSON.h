@@ -35,7 +35,7 @@
 #ifndef QUITSESSIONRESPONSEJSON_H
 #define QUITSESSIONRESPONSEJSON_H
 
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 #include <QString>
 

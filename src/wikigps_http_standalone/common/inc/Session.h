@@ -42,7 +42,7 @@
 #include <QString>
 #include <QDateTime>
 
-#include "User.h"
+#include "common/inc/User.h"
 
 class Session : public QObject
 {

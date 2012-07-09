@@ -39,7 +39,7 @@
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
-#include "User.h"
+#include "common/inc/User.h"
 #include <syslog.h>
 #include <algorithm>
 

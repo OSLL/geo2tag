@@ -41,13 +41,13 @@
  * ---------------------------------------------------------------- */
 
 #include "LoadTagsQuery.h"
-#include "defines.h"
+#include "common/inc/defines.h"
 #include <QDebug>
-#include "LoadTagsResponseJSON.h"
-#include "LoadTagsRequestJSON.h"
-#include "JsonDataMark.h"
-#include "JsonUser.h"
-#include "JsonSession.h"
+#include "json/inc/LoadTagsResponseJSON.h"
+#include "json/inc/LoadTagsRequestJSON.h"
+#include "json/inc/JsonDataMark.h"
+#include "json/inc/JsonUser.h"
+#include "json/inc/JsonSession.h"
 
 LoadTagsQuery::LoadTagsQuery(QSharedPointer<Session> &session,
 double latitude,

@@ -35,7 +35,7 @@
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
-#include "JsonUser.h"
+#include "json/inc/JsonUser.h"
 
 qlonglong JsonUser::globalUserId = 0;
 

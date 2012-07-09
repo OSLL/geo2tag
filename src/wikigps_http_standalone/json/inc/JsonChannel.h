@@ -41,7 +41,7 @@
 #ifndef _JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 #define _JsonChannel_H_F613BD25_03A0_4229_9305_260275C911A1_INCLUDED_
 
-#include "Channel.h"
+#include "common/inc/Channel.h"
 
 class JsonChannel: public Channel
 {

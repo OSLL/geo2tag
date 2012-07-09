@@ -38,11 +38,10 @@
 #include <QByteArray>
 #include <QObject>
 #include <QVariantMap>
-#include "DataMarks.h"
-#include "Channel.h"
-#include "User.h"
-#include "Session.h"
-#include "TimeSlot.h"
+#include "common/inc/DataMarks.h"
+#include "common/inc/Channel.h"
+#include "common/inc/User.h"
+#include "common/inc/Session.h"
 
 class JsonSerializer:public QObject
 {

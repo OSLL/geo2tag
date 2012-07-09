@@ -53,10 +53,10 @@
 #include <QVariant>
 #include <QVariantMap>
 
-#include "SubscribedChannelsRequestJSON.h"
-#include "JsonChannel.h"
-#include "JsonDataMark.h"
-#include "JsonSession.h"
+#include "json/inc/SubscribedChannelsRequestJSON.h"
+#include "json/inc/JsonChannel.h"
+#include "json/inc/JsonDataMark.h"
+#include "json/inc/JsonSession.h"
 //#include <syslog.h>
 SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON(QObject *parent)
     : JsonSerializer(parent)

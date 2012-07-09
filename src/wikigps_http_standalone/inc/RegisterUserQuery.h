@@ -38,7 +38,7 @@
 #include <QObject>
 #include <QString>
 #include "DefaultQuery.h"
-#include "User.h"
+#include "common/inc/User.h"
 
 class RegisterUserQuery : public DefaultQuery
 {

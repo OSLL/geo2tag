@@ -43,8 +43,8 @@
 #ifndef _SubscribedChannelsJSON_H_INCLUDED_
 #define _SubscribedChannelsJSON_H_INCLUDED_
 
-#include "JsonSerializer.h"
-#include "Session.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/Session.h"
 
 class SubscribedChannelsRequestJSON: public JsonSerializer
 {

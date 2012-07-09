@@ -36,8 +36,8 @@
 #define ADDUSERREQUESTJSON_H
 
 //#include "LoginRequestJSON.h"
-#include "JsonSerializer.h"
-#include "User.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/User.h"
 
 //typedef LoginRequestJSON AddUserRequestJSON;
 

@@ -35,7 +35,7 @@
  * PROJ: OSLL/geo2tag
  * --------------------------------------------------------------------------- */
 
-#include "SettingsStorage.h"
+#include "common/inc/SettingsStorage.h"
 
 #include <QString>
 #include <QVariant>

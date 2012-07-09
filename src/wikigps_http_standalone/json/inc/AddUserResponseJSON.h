@@ -35,7 +35,7 @@
 #ifndef ADDUSERRESPONSEJSON_H
 #define ADDUSERRESPONSEJSON_H
 
-#include "LoginResponseJSON.h"
+#include "json/inc/LoginResponseJSON.h"
 
 typedef LoginResponseJSON AddUserResponseJSON;
 // ADDUSERRESPONSEJSON_H

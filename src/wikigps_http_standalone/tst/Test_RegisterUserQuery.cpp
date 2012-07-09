@@ -37,7 +37,7 @@
  * ----------------------------------------------------------- */
 
 #include "Test_RegisterUserQuery.h"
-#include "signals.h"
+#include "common/inc/signals.h"
 
 #include <QString>
 #include <QTimer>

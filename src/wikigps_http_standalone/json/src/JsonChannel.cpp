@@ -39,8 +39,8 @@
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
-#include "JsonChannel.h"
-#include "JsonDataMark.h"
+#include "json/inc/JsonChannel.h"
+#include "json/inc/JsonDataMark.h"
 
 qlonglong JsonChannel::globalChannelId = 0;
 

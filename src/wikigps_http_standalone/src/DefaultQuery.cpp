@@ -35,7 +35,7 @@
 #include <QDebug>
 #include <QNetworkConfiguration>
 #include "DefaultQuery.h"
-#include "defines.h"
+#include "common/inc/defines.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <syslog.h>

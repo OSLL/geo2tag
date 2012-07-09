@@ -42,7 +42,7 @@
 #ifndef _FilterCylinderRequestJSON_H_2F9582EA_1673_4B92_AB6B_54610840CA88_INCLUDED_
 #define _FilterCylinderRequestJSON_H_2F9582EA_1673_4B92_AB6B_54610840CA88_INCLUDED_
 
-#include "FilterCircleRequestJSON.h"
+#include "json/inc/FilterCircleRequestJSON.h"
 
 class FilterCylinderRequestJSON : public FilterCircleRequestJSON
 {

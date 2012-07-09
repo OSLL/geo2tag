@@ -42,8 +42,8 @@
 #ifndef _FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_
 #define _FilterRequestJSON_H_EA76CFDF_BF80_4912_9999_802D12531039_INCLUDED_
 
-#include "JsonSerializer.h"
-#include "FShape.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/FShape.h"
 
 class FilterRequestJSON : public JsonSerializer
 {

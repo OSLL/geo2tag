@@ -42,7 +42,7 @@
 #ifndef _FilterFenceRequestJSON_H_EC467DA6_1C50_47E2_8EC9_87CDDD60EC1F_INCLUDED_
 #define _FilterFenceRequestJSON_H_EC467DA6_1C50_47E2_8EC9_87CDDD60EC1F_INCLUDED_
 
-#include "FilterPolygonRequestJSON.h"
+#include "json/inc/FilterPolygonRequestJSON.h"
 
 class FilterFenceRequestJSON : public FilterPolygonRequestJSON
 {

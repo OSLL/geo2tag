@@ -38,7 +38,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "signals.h"
+#include "common/inc/signals.h"
 
 bool waitForSignal(QObject *sender, const char *signal, int timeout )
 {

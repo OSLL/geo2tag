@@ -43,7 +43,7 @@
 #ifndef _BuildResponseJSON_H_BAF77FAA_9607_40BA_BA8D_9A44DE0FFA97_INCLUDED_
 #define _BuildResponseJSON_H_BAF77FAA_9607_40BA_BA8D_9A44DE0FFA97_INCLUDED_
 
-#include "VersionResponseJSON.h"
+#include "json/inc/VersionResponseJSON.h"
 
 typedef VersionResponseJSON BuildResponseJSON;
 

@@ -47,10 +47,10 @@
 #include <QString>
 #include <DefaultQuery.h>
 
-#include "DataMarks.h"
-#include "Session.h"
-#include "Channel.h"
-#include "DataChannel.h"
+#include "common/inc/DataMarks.h"
+#include "common/inc/Session.h"
+#include "common/inc/Channel.h"
+#include "common/inc/DataChannel.h"
 
 /*!
  * LoadTagsQuery class definition.

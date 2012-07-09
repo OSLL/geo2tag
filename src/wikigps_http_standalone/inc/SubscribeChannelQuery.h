@@ -46,7 +46,7 @@
 #include <QObject>
 #include <QString>
 #include "DefaultQuery.h"
-#include "Session.h"
+#include "common/inc/Session.h"
 
 
   class SubscribeChannelQuery: public DefaultQuery

@@ -39,7 +39,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "VersionResponseJSON.h"
+#include "json/inc/VersionResponseJSON.h"
 
 #ifndef Q_WS_SYMBIAN
 #include <qjson/parser.h>
@@ -48,7 +48,7 @@
 #include "parser.h"
 #include "serializer.h"
 #endif
-#include "defines.h"
+#include "common/inc/defines.h"
 #include "ErrnoTypes.h"
 #include <syslog.h>
 

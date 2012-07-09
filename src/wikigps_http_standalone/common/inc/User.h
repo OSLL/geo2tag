@@ -41,9 +41,9 @@
 #include <QString>
 #include <QSharedPointer>
 #include <typeinfo>
-#include "Channel.h"
+#include "common/inc/Channel.h"
 
-//#include "ConcurrentVector.h"
+//#include "common/inc/ConcurrentVector.h"
 
 namespace common
 {

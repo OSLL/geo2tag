@@ -32,8 +32,8 @@
 #ifndef LOADTAGSREQUESTJSON_H
 #define LOADTAGSREQUESTJSON_H
 
-#include "JsonSerializer.h"
-#include "Session.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/Session.h"
 
 #include <QString>
 

@@ -36,8 +36,8 @@
 #define DATACHANNEL_H
 
 #include <QMultiHash>
-#include "Channel.h"
-#include "DataMarks.h"
+#include "common/inc/Channel.h"
+#include "common/inc/DataMarks.h"
 
 typedef QMultiMap<QSharedPointer<Channel>, QSharedPointer<DataMark> > DataChannels;
 // DATACHANNEL_H

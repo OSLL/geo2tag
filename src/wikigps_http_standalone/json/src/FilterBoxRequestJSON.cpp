@@ -39,7 +39,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FilterBoxRequestJSON.h"
+#include "json/inc/FilterBoxRequestJSON.h"
 
 #ifndef Q_WS_SYMBIAN
 #include <qjson/parser.h>

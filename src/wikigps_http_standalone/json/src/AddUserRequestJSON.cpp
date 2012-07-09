@@ -32,8 +32,8 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "AddUserRequestJSON.h"
-#include "JsonUser.h"
+#include "json/inc/AddUserRequestJSON.h"
+#include "json/inc/JsonUser.h"
 
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
 #include <qjson/parser.h>

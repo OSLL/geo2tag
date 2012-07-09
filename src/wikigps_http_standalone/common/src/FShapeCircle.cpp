@@ -39,7 +39,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FShapeCircle.h"
+#include "common/inc/FShapeCircle.h"
 
 FShapeCircle::FShapeCircle(double lat, double lon, double r) : FShape()
 {

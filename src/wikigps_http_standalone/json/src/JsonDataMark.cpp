@@ -39,7 +39,7 @@
  * PROJ: OSLL/geoblog
  * ---------------------------------------------------------------- */
 
-#include "JsonDataMark.h"
+#include "json/inc/JsonDataMark.h"
 
 qlonglong JsonDataMark::globalTagId = 0;
 

@@ -35,7 +35,7 @@
 #ifndef LOGINRESPONSEJSON_H
 #define LOGINRESPONSEJSON_H
 
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 class LoginResponseJSON : public JsonSerializer
 {

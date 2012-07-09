@@ -35,8 +35,8 @@
 #ifndef REGISTERUSERREQUESTJSON_H
 #define REGISTERUSERREQUESTJSON_H
 
-#include "JsonSerializer.h"
-#include "User.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/User.h"
 
 class RegisterUserRequestJSON : public JsonSerializer
 {

@@ -1,7 +1,7 @@
 #include <QSettings>
 #include <QDebug>
-#include "defines.h"
-#include "SettingsStorage.h"
+#include "common/inc/defines.h"
+#include "common/inc/SettingsStorage.h"
 
 
 QString getServerUrl()

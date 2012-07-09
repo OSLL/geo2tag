@@ -42,8 +42,8 @@
 #include "serializer.h"
 #endif
 
-#include "RegisterUserResponseJSON.h"
-#include "JsonUser.h"
+#include "json/inc/RegisterUserResponseJSON.h"
+#include "json/inc/JsonUser.h"
 #include "ErrnoTypes.h"
 
 RegisterUserResponseJSON::RegisterUserResponseJSON(QObject *parent)

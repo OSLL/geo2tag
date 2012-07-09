@@ -44,7 +44,6 @@
 #include <QSignalSpy>
 
 #include "LoadTagsQuery.h"
-#include "signals.h"
 
 namespace Test
 {

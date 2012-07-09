@@ -38,10 +38,10 @@
 #include <QObject>
 #include <QString>
 #include "DefaultQuery.h"
-#include "User.h"
-#include "Session.h"
-#include "Channel.h"
-#include "DataMarks.h"
+#include "common/inc/User.h"
+#include "common/inc/Session.h"
+#include "common/inc/Channel.h"
+#include "common/inc/DataMarks.h"
 
 class WriteTagQuery: public DefaultQuery
 {

@@ -35,10 +35,10 @@
 #ifndef WRITETAGREQUESTJSON_H
 #define WRITETAGREQUESTJSON_H
 
-#include "JsonSerializer.h"
-#include "Session.h"
-#include "Channel.h"
-#include "DataMarks.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/Session.h"
+#include "common/inc/Channel.h"
+#include "common/inc/DataMarks.h"
 
 
 class WriteTagRequestJSON : public JsonSerializer

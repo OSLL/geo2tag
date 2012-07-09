@@ -37,8 +37,8 @@
  * ----------------------------------------------------------- */
 
 #include "Test_SubscribeChannelQuery.h"
-#include "signals.h"
-#include "Session.h"
+#include "common/inc/signals.h"
+#include "common/inc/Session.h"
 
 #include <QString>
 #include <QTimer>

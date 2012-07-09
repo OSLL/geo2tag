@@ -42,8 +42,8 @@
 #ifndef _FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_
 #define _FilterDefaultResponseJSON_H_9F6E9355_0467_4027_87F0_9F45C6039952_INCLUDED_
 
-#include "JsonSerializer.h"
-#include "DataChannel.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/DataChannel.h"
 
 class FilterDefaultResponseJSON : public JsonSerializer
 {

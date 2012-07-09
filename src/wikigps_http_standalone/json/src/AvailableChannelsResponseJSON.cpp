@@ -45,8 +45,8 @@
 //#include "parser.h"
 //#include "serializer.h"
 
-#include "AvailableChannelsResponseJSON.h"
-#include "JsonChannel.h"
+#include "json/inc/AvailableChannelsResponseJSON.h"
+#include "json/inc/JsonChannel.h"
 
 AvailableChannelsResponseJSON::AvailableChannelsResponseJSON(QObject *parent) : JsonSerializer(parent)
 {

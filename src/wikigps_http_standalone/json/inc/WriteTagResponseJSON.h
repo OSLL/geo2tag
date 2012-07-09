@@ -35,9 +35,9 @@
 #ifndef WRITETAGRESPONSEJSON_H
 #define WRITETAGRESPONSEJSON_H
 
-#include "DefaultResponseJSON.h"
+#include "json/inc/DefaultResponseJSON.h"
 
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 class WriteTagResponseJSON : public JsonSerializer
 {

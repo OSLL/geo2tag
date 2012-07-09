@@ -35,9 +35,9 @@
 #ifndef ADDCHANNELREQUESTJSON_H_
 #define ADDCHANNELREQUESTJSON_H_
 
-#include "JsonSerializer.h"
-#include "Session.h"
-#include "Channel.h"
+#include "json/inc/JsonSerializer.h"
+#include "common/inc/Session.h"
+#include "common/inc/Channel.h"
 
 class AddChannelRequestJSON: public JsonSerializer
 {

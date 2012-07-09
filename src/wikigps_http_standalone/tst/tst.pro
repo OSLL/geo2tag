@@ -1,7 +1,5 @@
-
-#include(../../../config.pri)
-INCLUDEPATH = ../inc/ ../common/inc/ \
-              ../json/inc/ \
+include(../../../config.pri)
+INCLUDEPATH =  .. ../inc/ ../../common/inc
 
 SOURCES += \
     main.cpp \

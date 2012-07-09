@@ -35,7 +35,7 @@
 #ifndef DEFAULTRESPONSEJSON_H
 #define DEFAULTRESPONSEJSON_H
 
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 class DefaultResponseJSON : public JsonSerializer
 {

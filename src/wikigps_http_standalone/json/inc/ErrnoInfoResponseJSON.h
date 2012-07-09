@@ -43,7 +43,7 @@
 #ifndef _ErrnoInfoResponseJSON_H_914A0FC5_A5EE_448E_9420_1F8B15C1C17E_INCLUDED_
 #define _ErrnoInfoResponseJSON_H_914A0FC5_A5EE_448E_9420_1F8B15C1C17E_INCLUDED_
 
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 class ErrnoInfoResponseJSON : public JsonSerializer
 {

@@ -46,7 +46,7 @@
 #include "parser.h"
 #include "serializer.h"
 #endif
-#include "ErrnoInfoResponseJSON.h"
+#include "json/inc/ErrnoInfoResponseJSON.h"
 #include "ErrnoTypes.h"
 
 #include <syslog.h>

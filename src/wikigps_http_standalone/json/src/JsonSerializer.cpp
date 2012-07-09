@@ -32,7 +32,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "JsonSerializer.h"
+#include "json/inc/JsonSerializer.h"
 
 JsonSerializer::JsonSerializer(QObject * parent)
     : QObject(parent),

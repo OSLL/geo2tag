@@ -39,7 +39,7 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "FilterDefaultResponseJSON.h"
+#include "json/inc/FilterDefaultResponseJSON.h"
 
 #include <QVariant>
 #include <QDebug>
@@ -52,12 +52,12 @@
 #include "serializer.h"
 #endif
 
-#include "User.h"
-#include "Channel.h"
+#include "common/inc/User.h"
+#include "common/inc/Channel.h"
 
-#include "JsonUser.h"
-#include "JsonChannel.h"
-#include "JsonDataMark.h"
+#include "json/inc/JsonUser.h"
+#include "json/inc/JsonChannel.h"
+#include "json/inc/JsonDataMark.h"
 
 FilterDefaultResponseJSON::FilterDefaultResponseJSON(QObject *parent) : JsonSerializer(parent)
 {
