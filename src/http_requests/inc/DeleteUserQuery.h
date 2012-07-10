@@ -59,9 +59,6 @@ class DeleteUserQuery: public DefaultQuery
   virtual QString getUrl() const;
   virtual QByteArray getRequestBody() const;
 
-  private Q_SLOTS:
-
-//    virtual void processReply(QNetworkReply *reply);
 
   public:
 
@@ -73,9 +70,6 @@ class DeleteUserQuery: public DefaultQuery
 
     ~DeleteUserQuery();
 
-    Q_SIGNALS:
-
-  //  void connected();
 }; // class DeleteUserQuery
   
 

@@ -38,22 +38,6 @@ QByteArray ApplyChannelQuery::getRequestBody() const
 }
 
 
-/*void ApplyChannelQuery::processReply(QNetworkReply *reply)
-{
-  AddChannelResponseJSON response;
-  response.parseJson(reply->readAll());
-  m_errno = response.getErrno();
-  if(response.getErrno() == SUCCESS)
-  {
-    Q_EMIT channelAdded(m_channel);
-  }
-  else
-  {
-    Q_EMIT errorOccured(response.getErrno());
-  }
-}*/
-
-
 ApplyChannelQuery::~ApplyChannelQuery()
 {
 

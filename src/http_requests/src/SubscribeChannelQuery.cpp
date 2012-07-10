@@ -40,22 +40,6 @@ QByteArray SubscribeChannelQuery::getRequestBody() const
 }
 
 
-/*void SubscribeChannelQuery::processReply(QNetworkReply *reply)
-{
-  SubscribeChannelResponseJSON response;
-  response.parseJson(reply->readAll());
-  m_errno = response.getErrno();
-  if(response.getErrno() == SUCCESS)
-  {
-    Q_EMIT channelSubscribed(m_channel);
-  }
-  else
-  {
-    Q_EMIT errorOccured(response.getErrno());
-  }
-}*/
-
-
 SubscribeChannelQuery::~SubscribeChannelQuery()
 {
 
