@@ -50,37 +50,14 @@
 
 #include "Channel.h"
 #include "User.h"
-#include "DefaultQuery.h"
+#include "SubscribeChannelQuery.h"
 
-  class UnsubscribeChannelQuery: public DefaultQuery
+  class UnsubscribeChannelQuery: public SubscribeChannelQuery
   {
-    Q_OBJECT
-
-    QSharedPointer<common::User> m_user;
-    QSharedPointer<Channel> m_channel;
-    QString m_status;
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
-
-    private Q_SLOTS:
-
-      virtual void processReply(QNetworkReply *reply);
-
-    public:
-
-      UnsubscribeChannelQuery(QObject *parent = 0);
-
-      UnsubscribeChannelQuery(const QSharedPointer<common::User> &user,const QSharedPointer<Channel> &channel, QObject *parent = 0);
-
-      void setQuery(const QSharedPointer<common::User> &user, const QSharedPointer<Channel>  &channel);
-
-      ~UnsubscribeChannelQuery();
-
-      const QString& getStatus() const;
-      QSharedPointer<Channel> getChannel();
-
-      Q_SIGNALS:
-      void channelUnsubscribed();
+    virtual QString getUrl() const
+    {
+	return UNSUBSCRIBE_HTTP_URL;	
+    }
 
       // class UnsubscribeChannelQuery
   };

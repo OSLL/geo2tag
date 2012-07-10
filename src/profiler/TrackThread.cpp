@@ -49,7 +49,6 @@
 TrackThread::TrackThread(const QSharedPointer<Session>& session, const QSharedPointer<Channel>& channel, const QSharedPointer<DataMark>& tag)
 {
   m_query = new WriteTagQuery(session,channel,tag);
-  connect(m_query,SIGNAL(tagAdded()),this, SLOT(responseReceived()));
   setConnections();
 }
 

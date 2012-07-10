@@ -55,7 +55,7 @@ class RegisterUserQuery : public DefaultQuery
 
 private Q_SLOTS:
 
-    virtual void processReply(QNetworkReply *reply);
+    virtual void processResponse(const QByteArray &data);
 
 public:
 
@@ -67,7 +67,7 @@ public:
 
 Q_SIGNALS:
 
-    void connected();
+//    void connected();
 }; // Class RegisterUserQuery
 
 #endif // REGISTERUSERQUERY_H

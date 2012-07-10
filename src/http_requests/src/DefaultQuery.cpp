@@ -36,6 +36,14 @@
 #include <QNetworkConfiguration>
 #include "DefaultQuery.h"
 #include "defines.h"
+#include "JsonSerializer.h"
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
 #ifndef Q_OS_SYMBIAN
 #include <syslog.h>
@@ -66,10 +74,27 @@ void DefaultQuery::doRequest()
   connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(handleError()));
 }
 
+void DefaultQuery::processResponse(const QByteArray &)
+{
+}
 
 void DefaultQuery::process(QNetworkReply *reply)
 {
-  processReply(reply);
+  QByteArray data = reply->readAll();
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+
+  if (!ok) Q_EMIT errorOccured(INCORRECT_JSON_ERROR);
+  m_errno = result["errno"].toInt();
+
+  if(m_errno == SUCCESS)
+  {
+     Q_EMIT success();
+     processResponse(data);
+  }
+  else errorOccured(m_errno);
+
 }
 
 int DefaultQuery::getErrno() const

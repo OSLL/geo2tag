@@ -70,7 +70,7 @@
 
     private Q_SLOTS:
 
-      virtual void processReply(QNetworkReply *reply);
+      virtual void processResponse(const QByteArray &data);
 
     public:
 
@@ -85,7 +85,6 @@
 
       Q_SIGNALS:
 
-      void responseReceived();
 
       // class SubscribedChannelsQuery
   };

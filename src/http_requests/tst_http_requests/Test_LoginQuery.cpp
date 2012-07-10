@@ -52,7 +52,7 @@ namespace Test
         query.setQuery(login, password);
         query.doRequest();
         //connect(&query, SIGNAL(connected(QString)), this, SLOT(ok()));
-        QVERIFY(waitForSignal(&query, SIGNAL(connected()), 5000));
+        QVERIFY(waitForSignal(&query, SIGNAL(success()), 5000));
 
     }
 

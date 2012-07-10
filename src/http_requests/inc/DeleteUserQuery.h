@@ -61,7 +61,7 @@ class DeleteUserQuery: public DefaultQuery
 
   private Q_SLOTS:
 
-    virtual void processReply(QNetworkReply *reply);
+//    virtual void processReply(QNetworkReply *reply);
 
   public:
 
@@ -75,7 +75,7 @@ class DeleteUserQuery: public DefaultQuery
 
     Q_SIGNALS:
 
-    void connected();
+  //  void connected();
 }; // class DeleteUserQuery
   
 

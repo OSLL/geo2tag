@@ -54,19 +54,11 @@ QByteArray VersionQuery::getRequestBody() const
 	return QByteArray();
 }
 
-void VersionQuery::processReply(QNetworkReply *reply)
+void VersionQuery::processResponse(const QByteArray &data)
 {
   VersionResponseJSON response;
-  response.parseJson(reply->readAll());
-  m_errno = response.getErrno();
-  if(response.getErrno() == SUCCESS)
-  {
-    Q_EMIT responseReceived();
-  }
-  else
-  {
-    Q_EMIT errorOccured(response.getErrno());
-  }
+  response.parseJson(data);
+  m_version = response.getVersion();
 }
 
 VersionQuery::VersionQuery(QObject *parent ): DefaultQuery(parent)

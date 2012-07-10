@@ -83,7 +83,7 @@ QByteArray DeleteUserQuery::getRequestBody() const
 }
 
 
-void DeleteUserQuery::processReply(QNetworkReply *reply)
+/*void DeleteUserQuery::processReply(QNetworkReply *reply)
 {
   #ifndef Q_OS_SYMBIAN
   DeleteUserResponseJSON response;
@@ -99,7 +99,7 @@ void DeleteUserQuery::processReply(QNetworkReply *reply)
     Q_EMIT errorOccured(response.getErrno());
   }
   #endif
-}
+}*/
 
 
 void DeleteUserQuery::setQuery(const QString& login, const QString& password)

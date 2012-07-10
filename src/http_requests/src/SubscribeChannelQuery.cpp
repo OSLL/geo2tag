@@ -40,7 +40,7 @@ QByteArray SubscribeChannelQuery::getRequestBody() const
 }
 
 
-void SubscribeChannelQuery::processReply(QNetworkReply *reply)
+/*void SubscribeChannelQuery::processReply(QNetworkReply *reply)
 {
   SubscribeChannelResponseJSON response;
   response.parseJson(reply->readAll());
@@ -53,7 +53,7 @@ void SubscribeChannelQuery::processReply(QNetworkReply *reply)
   {
     Q_EMIT errorOccured(response.getErrno());
   }
-}
+}*/
 
 
 SubscribeChannelQuery::~SubscribeChannelQuery()

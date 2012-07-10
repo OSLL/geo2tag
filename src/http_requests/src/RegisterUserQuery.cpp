@@ -81,20 +81,12 @@ const QString& RegisterUserQuery::getConfirmUrl() const
 	return m_confirmUrl;
 }
 
-void RegisterUserQuery::processReply(QNetworkReply *reply)
+void RegisterUserQuery::processResponse(const QByteArray &data)
 {
     //#ifndef Q_OS_SYMBIAN
     RegisterUserResponseJSON response;
-    response.parseJson(reply->readAll());
-    if (response.getErrno() == SUCCESS) {
-        m_confirmUrl = response.getConfirmUrl();
-        syslog(LOG_INFO,"!!connected!");
-        qDebug("!!connected!");
-        Q_EMIT connected();
-    } else {
-        qDebug("!!errorOccured!");
-        Q_EMIT errorOccured(response.getErrno());
-    }
+    response.parseJson(data);
+    m_confirmUrl = response.getConfirmUrl();
     //#endif
 }
 

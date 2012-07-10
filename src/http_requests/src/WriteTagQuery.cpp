@@ -76,7 +76,7 @@ QByteArray WriteTagQuery::getRequestBody() const
 }
 
 
-void WriteTagQuery::processReply(QNetworkReply *reply)
+/*void WriteTagQuery::processReply(QNetworkReply *reply)
 {
   WriteTagResponseJSON response;
   response.parseJson(reply->readAll());
@@ -89,7 +89,7 @@ void WriteTagQuery::processReply(QNetworkReply *reply)
   {
     Q_EMIT errorOccured(response.getErrno());
   }
-}
+}*/
 
 
 WriteTagQuery::~WriteTagQuery()

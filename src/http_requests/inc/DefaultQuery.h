@@ -49,7 +49,7 @@ class DefaultQuery : public QObject
 
     virtual QString getUrl() const = 0;
     virtual QByteArray getRequestBody() const = 0;
-    virtual void processReply(QNetworkReply *reply) = 0;
+    virtual void processResponse(const QByteArray &);
 
     QDateTime m_sendTime;
     int m_errno;
@@ -69,6 +69,7 @@ class DefaultQuery : public QObject
     Q_SIGNALS:
 
     void responseReceived();
+    void success();
 
     void errorOccured(QString);
     void errorOccured(int);

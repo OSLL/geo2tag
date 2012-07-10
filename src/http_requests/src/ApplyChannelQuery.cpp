@@ -38,7 +38,7 @@ QByteArray ApplyChannelQuery::getRequestBody() const
 }
 
 
-void ApplyChannelQuery::processReply(QNetworkReply *reply)
+/*void ApplyChannelQuery::processReply(QNetworkReply *reply)
 {
   AddChannelResponseJSON response;
   response.parseJson(reply->readAll());
@@ -51,7 +51,7 @@ void ApplyChannelQuery::processReply(QNetworkReply *reply)
   {
     Q_EMIT errorOccured(response.getErrno());
   }
-}
+}*/
 
 
 ApplyChannelQuery::~ApplyChannelQuery()
