@@ -2,6 +2,7 @@ Source: geo2tag
 Section: user/other
 Priority: optional
 Maintainer: Open Source and Linux lab <geo2tag-support@osll.spb.ru>
+Standards-Version: 3.9.3.0
 Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6), libqtm-dev [armel], libxml2-dev [i386]
 
 Package: libgeo2tag
