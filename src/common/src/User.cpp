@@ -48,9 +48,7 @@ namespace common
 
 
   User::User(const QString &name, const QString &passw, const QString &email)
-      : m_login(name),
-        m_password(passw),
-        m_email(email),
+      : BasicUser(name, passw, email),
         m_channels(new Channels())
   {
   }
@@ -83,29 +81,9 @@ namespace common
     //syslog(LOG_INFO, "User->Unsubscribe: Num of channels after: %d", m_channels->size());
   }
 
-  const QString& User::getLogin() const
-  {
-    return m_login;
-  }
-
-  const QString& User::getPassword() const
-  {
-    return m_password;
-  }
-
-  const QString& User::getEmail() const
-  {
-    return m_email;
-  }
-
   const QSharedPointer<Channels> User::getSubscribedChannels() const
   {
     return m_channels;
-  }
-
-  void User::setPassword(QString password)
-  {
-    m_password = password;
   }
 
   User::~User()

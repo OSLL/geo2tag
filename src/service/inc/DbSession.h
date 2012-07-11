@@ -96,6 +96,7 @@ namespace common
     QByteArray processConfirmRegistrationQuery(const QString&);
     QByteArray processLoginQuery(const QByteArray&);
     QByteArray processQuitSessionQuery(const QByteArray&);
+    QByteArray processOwnedChannelsQuery(const QByteArray&);
     QByteArray processSubscribedChannelsQuery(const QByteArray&);
     QByteArray processAvailableChannelsQuery(const QByteArray&);
     QByteArray processWriteTagQuery(const QByteArray&);

@@ -3,6 +3,7 @@ include(../../../config.pri)
 INCLUDEPATH += ../inc/ ../../json/inc/
 
 SOURCES += main.cpp \ 
+    ../src/BasicUser.cpp \
     ../src/User.cpp \ 
     ../src/DataMarks.cpp \
     ../src/GpsInfo.cpp \
@@ -12,6 +13,7 @@ SOURCES += main.cpp \
     ../../json/src/JsonDataMark.cpp \
     ../src/Region.cpp
 HEADERS += User_Test.h \
+    ../inc/BasicUser.h \
     ../inc/User.h \
     ../inc/DataMarks.h \
     ../inc/GpsInfo.h \

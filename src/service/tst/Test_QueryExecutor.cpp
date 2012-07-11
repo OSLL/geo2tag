@@ -202,16 +202,18 @@ namespace Test
         }
     }
 
-    QSharedPointer<Channel> Test_QueryExecutor::createTestChannel(const QString &name, const QString &description, const QString &url)
+    QSharedPointer<Channel> Test_QueryExecutor::createTestChannel(const QString &name, const QString &description, const QString &url,
+                                                                  const QSharedPointer<common::User>& owner)
     {
         DbChannel* channel = new DbChannel(0, name, description, url);
         qlonglong channelId = 0;
 
         QSqlQuery query(m_database);
-        query.prepare("insert into channel (name, description, url) values(:name,:description,:url);");
+        query.prepare("insert into channel (name, description, url, owner_id) values(:name,:description,:url,:owner_id);");
         query.bindValue(":name", channel->getName());
         query.bindValue(":description", channel->getDescription());
         query.bindValue(":url", channel->getUrl());
+        query.bindValue(":owner_id", owner->getId());
         m_database.transaction();
         bool result = query.exec();
         if (!result) {
@@ -321,7 +323,7 @@ namespace Test
         QString url = "test_url1";
         QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
-        QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
+        QSharedPointer<Channel> channel = createTestChannel(name, descr, url, user);
         QVERIFY(channel != QSharedPointer<Channel>(0));
 
         bool result = m_queryExecutor->subscribeChannel(user, channel);
@@ -356,7 +358,7 @@ namespace Test
 
         QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
-        QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
+        QSharedPointer<Channel> channel = createTestChannel(name, descr, url, user);
         QVERIFY(channel != QSharedPointer<Channel>(0));
 
         QSqlQuery query(m_database);
@@ -577,7 +579,7 @@ namespace Test
         QString tagDescr = "test_tag_descr_16";
         QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
-        QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
+        QSharedPointer<Channel> channel = createTestChannel(name, descr, url, user);
         QVERIFY(channel != QSharedPointer<Channel>(0));
         QSharedPointer<Session> session = createTestSession(sessionToken, time, user);
         QVERIFY(session != QSharedPointer<Session>(0));
@@ -648,10 +650,18 @@ namespace Test
 
     void Test_QueryExecutor::insertNewChannel()
     {
+        QString login = "test_user12";
+        QString passw = "test_pass12";
+        QString email = "test_email12";
+
         QString name = "test_channel_12";
         QString descr = "test_description_12";
         QString url = "test_url_12";
-        QSharedPointer<Channel> dummyChannel(new Channel(name, descr, url));
+
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
+        QVERIFY(user != QSharedPointer<common::User>(0));
+
+        QSharedPointer<Channel> dummyChannel(new Channel(name, descr, url, user));
         QSharedPointer<Channel> channel = m_queryExecutor->insertNewChannel(dummyChannel);
         QCOMPARE(channel.isNull(), false);
         QVERIFY(channel->getName() == name);
@@ -669,6 +679,9 @@ namespace Test
         QVERIFY(query.value(3) == url);
 
         result = deleteTestChannel(channel);
+        QCOMPARE(result, true);
+
+        result = deleteTestUser(user);
         QCOMPARE(result, true);
     }
 
@@ -896,7 +909,7 @@ namespace Test
         QString tagDescr = "test_tag_descr_18";
         QSharedPointer<common::User> user = createTestUser(login, passw, email);
         QVERIFY(user != QSharedPointer<common::User>(0));
-        QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
+        QSharedPointer<Channel> channel = createTestChannel(name, descr, url, user);
         QVERIFY(channel != QSharedPointer<Channel>(0));
 
         QSharedPointer<DataMarks> tags(new DataMarks);
@@ -927,6 +940,10 @@ namespace Test
 
     void Test_QueryExecutor::loadChannels()
     {
+        QString login = "test_user19";
+        QString passw = "test_pass19";
+        QString email = "test_email19";
+
         QString name = "test_channel_19";
         QString descr = "test_description_19";
         QString url = "test_url_19";
@@ -937,7 +954,10 @@ namespace Test
         m_queryExecutor->loadChannels(*channels);
         int size = channels->size();
 
-        QSharedPointer<Channel> channel = createTestChannel(name, descr, url);
+        QSharedPointer<common::User> user = createTestUser(login, passw, email);
+        QVERIFY(user != QSharedPointer<common::User>(0));
+
+        QSharedPointer<Channel> channel = createTestChannel(name, descr, url, user);
         QVERIFY(channel != QSharedPointer<Channel>(0));
 
         m_queryExecutor->loadChannels(*channels);
@@ -949,6 +969,9 @@ namespace Test
         QCOMPARE(channels->at(newSize - 1)->getUrl(), url);
 
         bool result = deleteTestChannel(channel);
+        QCOMPARE(result, true);
+
+        result = deleteTestUser(user);
         QCOMPARE(result, true);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012 OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,58 +29,41 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file User.h
- * \brief Header of User
+ * \file  BasicUser.h
+ * \brief Header of BasicUser
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
-#define _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
+#ifndef BASICUSER_H
+#define BASICUSER_H
 
 #include <QString>
-#include <QSharedPointer>
-#include <typeinfo>
-#include "Channel.h"
-#include "BasicUser.h"
-
-//#include "ConcurrentVector.h"
 
 namespace common
 {
 
-  class User: public QObject, public BasicUser
-  {
-    Q_OBJECT
-
-    QString m_result;
-    QString m_token;
-    // list of subscribed channels
-    QSharedPointer<Channels> m_channels;
-
+    class BasicUser
+    {
+    private:
+        QString m_login;
+        QString m_password;
+        QString m_email;
 
     public:
+        BasicUser(const QString & name="", const QString & passw="", const QString & email="");
 
-      User(const QString & name="", const QString & passw="", const QString & email="");
+        virtual qlonglong getId() const;
 
-      virtual qlonglong getId() const;
+        const QString& getLogin() const;
+        const QString& getPassword() const;
+        const QString& getEmail() const;
 
-      void subscribe(const QSharedPointer<Channel>& channel);
+        void setPassword(const QString password);
 
-      void unsubscribe(const QSharedPointer<Channel>& channel);
+        virtual ~BasicUser();
+    };
 
-      const QSharedPointer<Channels> getSubscribedChannels() const;
+}   //namespace common
 
-      virtual ~User();
-      // class User
-  };
-
-  typedef ConcurrentVector<User> Users;
-
-}                                       //namespace common
-
-
-//_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
-#endif
-
-/* ===[ End of file ]=== */
+#endif // BASICUSER_H

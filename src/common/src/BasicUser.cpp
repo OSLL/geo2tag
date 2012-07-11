@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012 OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,58 +29,52 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file User.h
- * \brief Header of User
+ * \file  BasicUser.cpp
+ * \brief Implementation of BasicUser class
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
-#define _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
-
-#include <QString>
-#include <QSharedPointer>
-#include <typeinfo>
-#include "Channel.h"
 #include "BasicUser.h"
-
-//#include "ConcurrentVector.h"
 
 namespace common
 {
 
-  class User: public QObject, public BasicUser
-  {
-    Q_OBJECT
+    BasicUser::BasicUser(const QString &name, const QString &passw, const QString &email)
+        : m_login(name),
+          m_password(passw),
+          m_email(email)
+    {
+    }
 
-    QString m_result;
-    QString m_token;
-    // list of subscribed channels
-    QSharedPointer<Channels> m_channels;
+    qlonglong BasicUser::getId() const
+    {
+        return 0;
+    }
 
+    const QString& BasicUser::getPassword() const
+    {
+        return m_password;
+    }
 
-    public:
+    const QString& BasicUser::getLogin() const
+    {
+        return m_login;
+    }
 
-      User(const QString & name="", const QString & passw="", const QString & email="");
+    const QString& BasicUser::getEmail() const
+    {
+        return m_email;
+    }
 
-      virtual qlonglong getId() const;
+    void BasicUser::setPassword(QString password)
+    {
+        m_password = password;
+    }
 
-      void subscribe(const QSharedPointer<Channel>& channel);
+    BasicUser::~BasicUser()
+    {
+    }
 
-      void unsubscribe(const QSharedPointer<Channel>& channel);
+}   //namespace common
 
-      const QSharedPointer<Channels> getSubscribedChannels() const;
-
-      virtual ~User();
-      // class User
-  };
-
-  typedef ConcurrentVector<User> Users;
-
-}                                       //namespace common
-
-
-//_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
-#endif
-
-/* ===[ End of file ]=== */

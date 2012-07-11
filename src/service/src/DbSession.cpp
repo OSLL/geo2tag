@@ -66,6 +66,9 @@
 #include "AddChannelRequestJSON.h"
 #include "AddChannelResponseJSON.h"
 
+#include "OwnedChannelsRequest.h"
+#include "OwnedChannelsResponse.h"
+
 #include "SubscribedChannelsRequestJSON.h"
 #include "SubscribedChannelsResponseJSON.h"
 
@@ -134,6 +137,7 @@ namespace common
     m_processors.insert("writeTag", &DbObjectsCollection::processWriteTagQuery);
     m_processors.insert("loadTags", &DbObjectsCollection::processLoadTagsQuery);
     m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
+    m_processors.insert("owned", &DbObjectsCollection::processOwnedChannelsQuery);
     m_processors.insert("subscribed", &DbObjectsCollection::processSubscribedChannelsQuery);
     m_processors.insert("addUser", &DbObjectsCollection::processAddUserQuery);
     m_processors.insert("addChannel", &DbObjectsCollection::processAddChannelQuery);
@@ -584,6 +588,48 @@ namespace common
     return answer;
   }
 
+  QByteArray DbObjectsCollection::processOwnedChannelsQuery(const QByteArray &data)
+  {
+    OwnedChannelsRequestJSON request;
+    OwnedChannelsResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    QSharedPointer<Session> realSession = findSession(dummySession);
+    if(realSession.isNull())
+    {
+      response.setErrno(WRONG_TOKEN_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    QSharedPointer<User> realUser = realSession->getUser();
+
+    QSharedPointer<Channels> ownedChannels(new Channels());
+    QVector< QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+    for(int i=0; i<currentChannels.size(); i++) {
+        if(realUser->getId() == currentChannels.at(i)->getOwner()->getId()) {
+            ownedChannels->push_back(currentChannels.at(i));
+        }
+    }
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+
+    response.setChannels(ownedChannels);
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
   QByteArray DbObjectsCollection::processSubscribedChannelsQuery(const QByteArray &data)
   {
     SubscribedChannelsRequestJSON request;
@@ -861,6 +907,7 @@ namespace common
     }
 
     syslog(LOG_INFO, "Sending sql request for AddChannel");
+    dummyChannel->setOwner(realSession->getUser());
     QSharedPointer<Channel> addedChannel = m_queryExecutor->insertNewChannel(dummyChannel);
 
     if(!addedChannel)
