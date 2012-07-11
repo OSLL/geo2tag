@@ -49,10 +49,10 @@ class DbChannel: public Channel
 
   public:
     DbChannel(qlonglong id,
-      const QString &name,
-      const QString &description,
-      const QString &url="");
-
+              const QString &name,
+              const QString &description,
+              const QString &url,
+              const QSharedPointer<common::BasicUser>& owner = QSharedPointer<common::BasicUser>(0));
     qlonglong getId() const;
 
     void setId(qlonglong id);

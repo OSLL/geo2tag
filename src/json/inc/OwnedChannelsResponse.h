@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  OSLL osll@osll.spb.ru
+ * Copyright 2010-2012  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,59 +28,15 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file User.h
- * \brief Header of User
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
-#define _User_H_83C39FC3_ECFB_41CD_8902_8176172CD890_INCLUDED_
+#ifndef OWNEDCHANNELSRESPONSE_H
+#define OWNEDCHANNELSRESPONSE_H
 
-#include <QString>
-#include <QSharedPointer>
-#include <typeinfo>
-#include "Channel.h"
-#include "BasicUser.h"
+#include "SubscribedChannelsResponseJSON.h"
 
-//#include "ConcurrentVector.h"
+typedef SubscribedChannelsResponseJSON OwnedChannelsResponseJSON;
 
-namespace common
-{
-
-  class User: public QObject, public BasicUser
-  {
-    Q_OBJECT
-
-    QString m_result;
-    QString m_token;
-    // list of subscribed channels
-    QSharedPointer<Channels> m_channels;
-
-
-    public:
-
-      User(const QString & name="", const QString & passw="", const QString & email="");
-
-      virtual qlonglong getId() const;
-
-      void subscribe(const QSharedPointer<Channel>& channel);
-
-      void unsubscribe(const QSharedPointer<Channel>& channel);
-
-      const QSharedPointer<Channels> getSubscribedChannels() const;
-
-      virtual ~User();
-      // class User
-  };
-
-  typedef ConcurrentVector<User> Users;
-
-}                                       //namespace common
-
-
-//_User_H_83C39FC3_ECFB_41CD_8902_81D6172CD890_INCLUDED_
-#endif
-
-/* ===[ End of file ]=== */
+#endif // OWNEDCHANNELSRESPONSE_H

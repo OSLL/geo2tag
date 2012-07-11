@@ -5,6 +5,7 @@ INCLUDEPATH = ../inc/ ../../common/inc/ \
 
 SOURCES += main.cpp \
     ../src/JsonUser.cpp \
+    ../../common/src/BasicUser.cpp \
     ../../common/src/User.cpp \
     ../../json/src/JsonSerializer.cpp \
     ../../json/src/JsonChannel.cpp \
@@ -20,6 +21,7 @@ SOURCES += main.cpp \
     Test_QuitSessionResponseJSON.cpp
 HEADERS += JsonUser_Test.h \
     ../inc/JsonUser.h \
+    ../../common/inc/BasicUser.h \
     ../../common/inc/User.h \
     ../../json/inc/JsonChannel.h \
     ../../json/inc/JsonSerializer.h \

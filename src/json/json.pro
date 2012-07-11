@@ -54,7 +54,9 @@ HEADERS += \
 	   inc/BuildResponseJSON.h \ 
     inc/QuitSessionRequestJSON.h \
     inc/QuitSessionResponseJSON.h \
-    inc/JsonSession.h
+    inc/JsonSession.h \
+    inc/OwnedChannelsRequest.h \
+    inc/OwnedChannelsResponse.h
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \

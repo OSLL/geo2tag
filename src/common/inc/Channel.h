@@ -45,21 +45,24 @@
 #include <QSharedPointer>
 
 #include "ConcurrentVector.h"
+#include "BasicUser.h"
 
 class Channel: public QObject
 {
-  Q_OBJECT                              //!< channel name
-    QString m_name;                     //!< Description for channel
-  QString m_description;                //!< URL for mark
-  QString m_url;                        //< Radius for visible marks
-  double m_activeRadius;                //!< Displayed on the UI
+  Q_OBJECT                                      //!< channel name
+    QString m_name;                             //!< Description for channel
+  QString m_description;                        //!< URL for mark
+  QString m_url;                                //!< Radius for visible marks
+  QSharedPointer<common::BasicUser> m_owner; //!< Owner of the channel
+  double m_activeRadius;                        //!< Displayed on the UI
   bool m_isDisplayed;
 
   public:
 
     static const qulonglong DEFAULT_TIME_SLOT_VALUE_MIN;
 
-    Channel(const QString &name, const QString &description, const QString& url="");
+    Channel(const QString &name, const QString &description, const QString& url = "",
+            const QSharedPointer<common::BasicUser>& owner = QSharedPointer<common::BasicUser>(0));
 
     virtual qlonglong getId() const;
 
@@ -69,9 +72,13 @@ class Channel: public QObject
 
     const QString& getUrl() const;
 
+    const QSharedPointer<common::BasicUser>& getOwner() const;
+
     void setDescription(const QString& description);
 
     void setUrl(const QString& url);
+
+    void setOwner(const QSharedPointer<common::BasicUser>& owner);
 
     void setRadius(const double &radius);
     double getRadius() const;
