@@ -180,11 +180,12 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
   QSqlQuery newChannelQuery(m_database);
   qlonglong newId = nextChannelKey();
   syslog(LOG_INFO,"NewId ready, now preparing sql query for adding new channel");
-  newChannelQuery.prepare("insert into channel (id,name,description,url) values(:id,:name,:description,:url);");
+  newChannelQuery.prepare("insert into channel (id,name,description,url,owner_id) values(:id,:name,:description,:url,:owner_id);");
   newChannelQuery.bindValue(":id",newId);
   newChannelQuery.bindValue(":name",channel->getName());
   newChannelQuery.bindValue(":description",channel->getDescription());
   newChannelQuery.bindValue(":url",channel->getUrl());
+  newChannelQuery.bindValue(":owner_id",channel->getOwner()->getId());
 
   m_database.transaction();
 
@@ -199,7 +200,7 @@ QSharedPointer<Channel> QueryExecutor::insertNewChannel(const QSharedPointer<Cha
 
   m_database.commit();
 
-  QSharedPointer<DbChannel> newChannel(new DbChannel(newId,channel->getName(),channel->getDescription(),channel->getUrl()));
+  QSharedPointer<DbChannel> newChannel(new DbChannel(newId,channel->getName(),channel->getDescription(),channel->getUrl(),channel->getOwner()));
   return newChannel;
 }
 
@@ -654,7 +655,7 @@ void QueryExecutor::loadUsers(common::Users &container)
 void QueryExecutor::loadChannels(Channels &container)
 {
   QSqlQuery query(m_database);
-  query.exec("select id, description, name, url from channel order by id;");
+  query.exec("select id, description, name, url, owner_id from channel order by id;");
   while (query.next())
   {
     qlonglong id = query.record().value("id").toLongLong();
@@ -666,7 +667,20 @@ void QueryExecutor::loadChannels(Channels &container)
     QString name = query.record().value("name").toString();
     QString description = query.record().value("description").toString();
     QString url = query.record().value("url").toString();
-    QSharedPointer<DbChannel> pointer(new DbChannel(id,name,description,url));
+    qlonglong ownerId = query.record().value("owner_id").toLongLong();
+
+    QSqlQuery selectQuery(m_database);
+    selectQuery.prepare("select email, login, password from users where id = :owner_id;");
+    selectQuery.bindValue(":owner_id", ownerId);
+    selectQuery.exec();
+    selectQuery.next();
+
+    QString email = selectQuery.record().value("email").toString();
+    QString login = selectQuery.record().value("login").toString();
+    QString passw = selectQuery.record().value("password").toString();
+
+    QSharedPointer<common::BasicUser> owner(new DbUser(login, passw, email, ownerId));
+    QSharedPointer<DbChannel> pointer(new DbChannel(id,name,description,url,owner));
     container.push_back(pointer);
   }
 }

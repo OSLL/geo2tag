@@ -47,7 +47,8 @@ HEADERS += \
     inc/PerformanceCounter.h \
     inc/SettingsStorage.h \
     inc/Session.h \
-    inc/EmailMessage.h
+    inc/EmailMessage.h \
+    inc/BasicUser.h
 
 SOURCES += \
     src/Channel.cpp \
@@ -68,7 +69,8 @@ SOURCES += \
     src/PerformanceCounter.cpp \
     src/SettingsStorage.cpp \
     src/Session.cpp \
-    src/EmailMessage.cpp
+    src/EmailMessage.cpp \
+    src/BasicUser.cpp
 
 linux: {
     HEADERS += inc/GpsModeller.h
