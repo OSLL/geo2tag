@@ -16,7 +16,7 @@ dir_geo2tag="${dir_automation}/${platform_repo}"
 dir_log="${dir_automation}/platform_logs"
 dir_backup="${dir_automation}/platform_backup"
 remote_dir_repo="devel@download.geo2tag.org:/var/www/geo2tag_repo/testing/binary_i386/";
-remote_update_repo_command="ssh devel@download.geo2tag.org sudo update_repo.sh";
+remote_update_repo_command="ssh devel@download.geo2tag.org \'sudo ~/update_repo.sh\'";
 # How many packages should appear after deb building
 valid_package_number="3"
 branch="$1"
@@ -165,9 +165,11 @@ then
 		if ! echo $test_result | grep -i fail
 		then
 		# test cases passed, move installed debs to backup
+			echo "Copying of debs to remote server"  >> ${dir_log}/test.log.txt
+			ls ${dir_automation}/*.deb >> ${dir_log}/test.log.txt 2 >> ${dir_log}/test.log.txt
 			# copy *.deb to repo
-			scp ${dir_automation}/*.deb ${remote_dir_repo} >> ${dir_log}/test.log.txt 2 >> ${dir_log}/test.log.txt
-			${remote_update_repo_command} >> ${dir_log}/test.log.txt 2 >> ${dir_log}/test.log.txt
+			scp ${dir_automation}/*.deb ${remote_dir_repo} 
+			${remote_update_repo_command} 
 			echo "Tests passed. Current commit succesfuly integrated." >> ${dir_log}/test.log.txt
 			cd "${dir_automation}"
 			rm -rf "${dir_backup}"
