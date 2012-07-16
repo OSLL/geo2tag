@@ -16,7 +16,7 @@ dir_geo2tag="${dir_automation}/${platform_repo}"
 dir_log="${dir_automation}/platform_logs"
 dir_backup="${dir_automation}/platform_backup"
 remote_dir_repo="devel@download.geo2tag.org:/var/www/geo2tag_repo/testing/binary_i386/";
-remote_update_repo_command="ssh devel@download.geo2tag.org update_repo.sh";
+remote_update_repo_command="ssh devel@download.geo2tag.org sudo update_repo.sh";
 # How many packages should appear after deb building
 valid_package_number="3"
 branch="$1"
