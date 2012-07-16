@@ -166,8 +166,8 @@ then
 		then
 		# test cases passed, move installed debs to backup
 			# copy *.deb to repo
-			scp ${dir_automation}/*.deb ${remote_dir_repo} 
-			${remote_update_repo_command}
+			scp ${dir_automation}/*.deb ${remote_dir_repo} >> ${dir_log}/test.log.txt 2 >> ${dir_log}/test.log.txt
+			${remote_update_repo_command} >> ${dir_log}/test.log.txt 2 >> ${dir_log}/test.log.txt
 			echo "Tests passed. Current commit succesfuly integrated." >> ${dir_log}/test.log.txt
 			cd "${dir_automation}"
 			rm -rf "${dir_backup}"
