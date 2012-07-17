@@ -20,15 +20,13 @@ HEADERS += \
            inc/AddUserQuery.h \
            inc/ApplyChannelQuery.h \
            inc/SubscribeChannelQuery.h \
+           inc/UnsubscribeChannelQuery.h \
            inc/RegisterUserQuery.h \
            inc/AvailableChannelsQuery.h \
            inc/SubscribedChannelsQuery.h \
 	   inc/VersionQuery.h 
 
 
-#            inc/ApplyMarkQuery.h \
-#           inc/SubscribeChannelQuery.h \
-#           inc/UnsubscribeChannelQuery.h \
 
 
 SOURCES += \
@@ -42,14 +40,6 @@ SOURCES += \
            src/SubscribedChannelsQuery.cpp \
            src/RegisterUserQuery.cpp \ 
 	   src/VersionQuery.cpp
-
-
-# src/ApplyMarkQuery.cpp \
-#           src/AvailableChannelsListQuery.cpp \
-#           src/LoginQuery.cpp \
-#           src/LoadTagsQuery.cpp \
-#           src/UnsubscribeChannelQuery.cpp \
-#           src/SubscribeChannelQuery.cpp \
 
 
 LIBS    +=  -lcommon -lqjson

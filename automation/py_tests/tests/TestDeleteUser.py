@@ -32,15 +32,22 @@
 from core.TestTemplate import TestTemplate
 import urllib2
 import json
+import ConfigParser
 
 class TestDeleteUser(TestTemplate):
 
     login = "test_user"
     password = "test"
        
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
+
+        parser = ConfigParser.SafeConfigParser()
+        parser.read(testDir + "/tests.conf")
+        section = "Tests_Params";
+        self.login = parser.get(section, "user_login")
+        self.password = parser.get(section, "user_password")
 
         # work with JSON 
         jdata = json.dumps({'login':self.login, 'password':self.password})

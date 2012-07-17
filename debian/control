@@ -1,20 +1,24 @@
 Source: geo2tag
-Section: user/other
+Section: web
 Priority: optional
 Maintainer: Open Source and Linux lab <geo2tag-support@osll.spb.ru>
+Standards-Version: 3.9.3.0
 Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.6), libqt4-dev (>=4.6), libqtm-dev [armel], libxml2-dev [i386]
 
 Package: libgeo2tag
-Architecture: i386 amd64 armel
+Architecture: i386 amd64
+Section: libs
 Depends: ${shlibs:Depends}, libxml2 (>=2.6) [i386],libqt4-core ,libqt4-network ,libqt4-gui, libqt4-sql-psql [i386]
 Description: Geo2Tag LBS platform libs
 
 Package: geo2tag
 Architecture: i386 amd64
+Section: web
 Depends: lighttpd, postgresql-8.4, postgresql-client-8.4, libgeo2tag, libpq5, libfcgi0ldbl, mailutils, ssmtp
 Description: Geo2Tag LBS platform
 
 Package: geo2tag-webside
 Architecture: i386 amd64
+Section: web
 Depends: unzip, openjdk-6-jre
 Description: Geo2tag LBS platform web front-end

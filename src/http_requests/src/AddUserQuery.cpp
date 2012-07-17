@@ -43,24 +43,14 @@ QByteArray AddUserQuery::getRequestBody() const
 }
 
 
-void AddUserQuery::processReply(QNetworkReply *reply)
+void AddUserQuery::processResponse(const QByteArray &data)
 {
   #ifndef Q_OS_SYMBIAN
   AddUserResponseJSON response;
-  response.parseJson(reply->readAll());
-  m_errno = response.getErrno();
-  if(response.getErrno() == SUCCESS)
-  {
-    m_session = response.getSessions()->at(0);
-    m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, m_email));
+  response.parseJson(data);
 
-    syslog(LOG_INFO,"!!connected!");
-    Q_EMIT connected();
-  }
-  else
-  {
-    Q_EMIT errorOccured(response.getErrno());
-  }
+  m_session = response.getSessions()->at(0);
+  m_user = QSharedPointer<common::User>(new JsonUser(m_login, m_password, m_email));
   #endif
 }
 

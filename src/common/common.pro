@@ -25,16 +25,13 @@ MOBILITY = location
 # Input
 HEADERS += \
     inc/ConcurrentVector.h \
-    inc/TimeSlot.h \
     inc/Channel.h \
     inc/User.h \
     inc/DataMarks.h \
     inc/GpsInfo.h \
     inc/defines.h \
     inc/DataChannel.h\
-    inc/TimeSlot.h \
     inc/ChannelAction.h\
-    inc/DataMarks.h \
     inc/ErrnoTypes.h \
     inc/Filtration.h \
     inc/Filter.h \
@@ -50,10 +47,10 @@ HEADERS += \
     inc/PerformanceCounter.h \
     inc/SettingsStorage.h \
     inc/Session.h \
-    inc/EmailMessage.h
+    inc/EmailMessage.h \
+    inc/BasicUser.h
 
 SOURCES += \
-    src/TimeSlot.cpp \
     src/Channel.cpp \
     src/User.cpp \
     src/ChannelAction.cpp \
@@ -72,7 +69,8 @@ SOURCES += \
     src/PerformanceCounter.cpp \
     src/SettingsStorage.cpp \
     src/Session.cpp \
-    src/EmailMessage.cpp
+    src/EmailMessage.cpp \
+    src/BasicUser.cpp
 
 linux: {
     HEADERS += inc/GpsModeller.h

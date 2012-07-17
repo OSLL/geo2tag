@@ -58,6 +58,7 @@ void ProfilerThread::setConnections()
 {
   connect(this,SIGNAL(doRequest()),this, SLOT(sendRequest()));
   connect(m_query,SIGNAL(errorOccured(int)),this, SLOT(responseReceived()));
+  connect(m_query,SIGNAL(success()),this, SLOT(responseReceived()));
 }
 
 ProfilerThread::~ProfilerThread()

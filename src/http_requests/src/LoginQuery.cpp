@@ -82,21 +82,12 @@ QByteArray LoginQuery::getRequestBody() const
 }
 
 
-void LoginQuery::processReply(QNetworkReply *reply)
+void LoginQuery::processResponse(QByteArray &data)
 {
   //#ifndef Q_OS_SYMBIAN
   LoginResponseJSON response;
-  response.parseJson(reply->readAll());
-  m_errno = response.getErrno();
-  if(response.getErrno() == SUCCESS)
-  {
-    m_session = response.getSessions()->at(0);
-    syslog(LOG_INFO,"!!connected!");
-    Q_EMIT connected();
-  } else {
-    qDebug("!!errorOccured!");
-    Q_EMIT errorOccured(response.getErrno());
-  }
+  response.parseJson(data);
+  m_session = response.getSessions()->at(0);
 //  #endif
 }
 

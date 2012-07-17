@@ -69,7 +69,7 @@ class LoginQuery: public DefaultQuery
 
   private Q_SLOTS:
 
-    virtual void processReply(QNetworkReply *reply);
+    virtual void processResponse(QByteArray &data);
 
   public:
 
@@ -85,7 +85,7 @@ class LoginQuery: public DefaultQuery
 
     Q_SIGNALS:
 
-    void connected();
+ //   void connected();
 
     // class LoginQuery
 };

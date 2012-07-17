@@ -42,7 +42,6 @@
 #include "Channel.h"
 #include "User.h"
 #include "Session.h"
-#include "TimeSlot.h"
 
 class JsonSerializer:public QObject
 {

@@ -58,9 +58,6 @@
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
 
-    private Q_SLOTS:
-
-      virtual void processReply(QNetworkReply *reply);
 
     public:
 
@@ -74,8 +71,6 @@
 
       const QString& getStatus() const;
 
-      Q_SIGNALS:
-      void channelSubscribed(QSharedPointer<Channel> channel);
 
       // class SubscribeChannelQuery
   };

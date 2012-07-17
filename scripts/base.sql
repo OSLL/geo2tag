@@ -41,7 +41,10 @@ CREATE TABLE channel (
   name VARCHAR(300) NOT NULL,
   description VARCHAR(2048) NOT NULL, 
   url VARCHAR(2048) DEFAULT NULL,
-  constraint channel_pkey primary key (id)
+  owner_id NUMERIC(9,0) NOT NULL,
+  constraint channel_pkey primary key (id),
+  constraint fk_owner foreign key (owner_id) references users(id)
+                                                      on delete cascade
 );
 
 CREATE SEQUENCE tags_seq INCREMENT 1 MINVALUE 1 START 1 CACHE 1;
@@ -75,40 +78,39 @@ CREATE TABLE subscribe (
                                                        on delete cascade
 );
 
+INSERT into users (email, login, password) values ('paul@test.org', 'Paul',   '811e97d9511e53a0da29efee50a8b6468c831606');
+INSERT into users (email, login, password) values ('kirill@test.org', 'Kirill', 'b8dcee14ab6a142619fdc5605c9b1182a5183292');
+INSERT into users (email, login, password) values ('mark@test.org', 'Mark',   '7b185e162978ee2b6d367c581c5ecda0fcdfbd8a');
+INSERT into users (email, login, password) values ('yevgeni@test.org', 'Yevgeni', '47e1b73dab5dbfdef3f2cd531ee44710ab1ec44e');
 
-INSERT into channel (name, description, url) values ('Tourist information', 'This is free read-only tourist information channel. You can get information about buildings, sights around your location', '');
-INSERT into channel (name, description, url) values ('Public announcements', 'This is free read-only channel with public announcements from the city of your current location', '');
-INSERT into channel (name, description, url) values ('Fuel prices', 'This is free channel where you can post/read the fuel prices around your current location.', '');
-INSERT into channel (name, description, url) values ('Sales', 'This is free channel where you can post/read sales advertisements', '');
-INSERT into channel (name, description, url) values ('My channel', 'This is free channel where you and your friends can post/read your tags', '');
+INSERT into channel (name, description, url, owner_id) values ('Tourist information', 'This is free read-only tourist information channel. You can get information about buildings, sights around your location', '', 1);
+INSERT into channel (name, description, url, owner_id) values ('Public announcements', 'This is free read-only channel with public announcements from the city of your current location', '', 1);
+INSERT into channel (name, description, url, owner_id) values ('Fuel prices', 'This is free channel where you can post/read the fuel prices around your current location.', '', 1);
+INSERT into channel (name, description, url, owner_id) values ('Sales', 'This is free channel where you can post/read sales advertisements', '', 1);
+INSERT into channel (name, description, url, owner_id) values ('My channel', 'This is free channel where you and your friends can post/read your tags', '', 1);
 
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email1@test1.org', 'Alex', 'test', 'AAAAAAAAAA', FALSE);
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email2@test2.org', 'Kate', 'test', 'KKKKKKKKKK', FALSE);
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email3@test3.org', 'Mary', 'test', 'MMMMMMMMMM', FALSE);
 INSERT into signups (datetime, email, login, password, registration_token, sent) values (now(), 'email4@test4.org', 'David', 'test', 'DDDDDDDDDD', FALSE);
 
-INSERT into users (email, login, password) values ('paul@test.org', 'Paul',   'test');
-INSERT into users (email, login, password) values ('kirill@test.org', 'Kirill', 'test');
-INSERT into users (email, login, password) values ('mark@test.org', 'Mark',   'test');
-INSERT into users (email, login, password) values ('yevgeni@test.org', 'Yevgeni', 'test');
-
-INSERT into users (email, login, password) values ('rom@test.org', 'Rom',   'test');
-INSERT into users (email, login, password) values ('jul@test.org', 'Jul', 'test');
+INSERT into users (email, login, password) values ('rom@test.org', 'Rom',   '6f77a0a131c7a3d07595e06d1b8c9d283f234e47');
+INSERT into users (email, login, password) values ('jul@test.org', 'Jul', 'fdfd5c7cf62d92f15e64009e70f25009ffb68590');
 
 INSERT into sessions (user_id, session_token, last_access_time) values (2, 'kkkkkkkkkk', now());
 INSERT into sessions (user_id, session_token, last_access_time) values (3, 'mmmmmmmmmm', now());
 
-INSERT into channel (name, description, url) values ('St.Petersburg''s sights', 'This is free read-only tourist information channel.', '');
-INSERT into channel (name, description, url) values ('Route A', '', '');
-INSERT into channel (name, description, url) values ('Route B', '', '');
-INSERT into channel (name, description, url) values ('Route C', '', '');
-INSERT into channel (name, description, url) values ('Route D', '', '');
-INSERT into channel (name, description, url) values ('Route E', '', '');
+INSERT into channel (name, description, url, owner_id) values ('St.Petersburg''s sights', 'This is free read-only tourist information channel.', '', 2);
+INSERT into channel (name, description, url, owner_id) values ('Route A', '', '', 2);
+INSERT into channel (name, description, url, owner_id) values ('Route B', '', '', 2);
+INSERT into channel (name, description, url, owner_id) values ('Route C', '', '', 2);
+INSERT into channel (name, description, url, owner_id) values ('Route D', '', '', 2);
+INSERT into channel (name, description, url, owner_id) values ('Route E', '', '', 2);
 
-INSERT into channel (name, description, url) values ('Rom', 'Rom''s channel', '');
-INSERT into channel (name, description, url) values ('Jul', 'Jul''s channel', '');
-INSERT into channel (name, description, url) values ('Paul', 'Paul''s channel', '');
-INSERT into channel (name, description, url) values ('Mark', 'Mark''s channel', '');
+INSERT into channel (name, description, url, owner_id) values ('Rom', 'Rom''s channel', '', 3);
+INSERT into channel (name, description, url, owner_id) values ('Jul', 'Jul''s channel', '', 3);
+INSERT into channel (name, description, url, owner_id) values ('Paul', 'Paul''s channel', '', 3);
+INSERT into channel (name, description, url, owner_id) values ('Mark', 'Mark''s channel', '', 3);
 
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url, channel_id) values(0, 60.166504, 24.841204, 'A', 'Accident at road 51. Time: 15:45, January 2, 2010.', 1, 'http://dps.sd.gov/licensing/driver_licensing/images/Image24.gif',2);
 INSERT into tag(altitude, latitude, longitude, label, description, user_id, url, channel_id) values(0, 60.163216, 24.859314, 'B', 'Shell 95: 1.299 e', 2, 'http://www.unf.edu/groups/volctr/images/question-mark.jpg',3);

@@ -33,6 +33,7 @@ from core.TestTemplate import TestTemplate
 from datetime import datetime
 import urllib2
 import json
+import ConfigParser
 
 class TestFilterBox(TestTemplate):
     
@@ -46,9 +47,14 @@ class TestFilterBox(TestTemplate):
     altitude1 = -1.0
     altitude2 = 1.0
    
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
+
+        parser = ConfigParser.SafeConfigParser()
+        parser.read(testDir + "/tests.conf")
+        section = "Tests_Params";
+        self.authToken = parser.get(section, "auth_token")
 
         # work with JSON 
         jdata = json.dumps({"auth_token":self.authToken, "time_from":self.timeFrom, "time_to":self.timeTo, "latitude_shift":{"latitude1":self.latitude1, "latitude2":self.latitude2}, "longitude_shift":{"longitude1":self.longitude1,"longitude2":self.longitude2}, "altitude_shift":{"altitude1":self.altitude1 ,"altitude2":self.altitude2}})

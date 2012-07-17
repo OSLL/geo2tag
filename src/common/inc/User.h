@@ -42,18 +42,16 @@
 #include <QSharedPointer>
 #include <typeinfo>
 #include "Channel.h"
+#include "BasicUser.h"
 
 //#include "ConcurrentVector.h"
 
 namespace common
 {
 
-  class User: public QObject
+  class User: public QObject, public BasicUser
   {
     Q_OBJECT
-    QString m_login;
-    QString m_password;
-    QString m_email;
 
     QString m_result;
     QString m_token;
@@ -71,12 +69,7 @@ namespace common
 
       void unsubscribe(const QSharedPointer<Channel>& channel);
 
-      const QString& getLogin() const;
-      const QString& getPassword() const;
-      const QString& getEmail() const;
       const QSharedPointer<Channels> getSubscribedChannels() const;
-
-      void setPassword(const QString password);
 
       virtual ~User();
       // class User

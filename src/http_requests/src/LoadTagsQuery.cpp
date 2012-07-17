@@ -92,21 +92,11 @@ QByteArray LoadTagsQuery::getRequestBody() const
 }
 
 
-void LoadTagsQuery::processReply(QNetworkReply *reply)
+void LoadTagsQuery::processResponse(const QByteArray &data)
 {
   LoadTagsResponseJSON response;
-  response.parseJson(reply->readAll());
-  if(response.getErrno() == SUCCESS)
-  {
-    m_hashMap = response.getData();
-    syslog(LOG_INFO,"!!connected!");
-    Q_EMIT tagsReceived();
-  }
-  else
-  {
-    qDebug("!!errorOccured!");
-    Q_EMIT errorOccured(response.getErrno());
-  }
+  response.parseJson(data);
+  m_hashMap = response.getData();
 }
 
 

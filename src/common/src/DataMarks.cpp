@@ -72,7 +72,6 @@ m_time(time)
   if (m_label.isEmpty())
     m_label = "New mark";
 
-  m_timeSlot = QSharedPointer<TimeSlot>(NULL);
 }
 
 
@@ -198,26 +197,6 @@ QSharedPointer<Channel> DataMark::getChannel() const
 }
 
 
-void DataMark::setTimeSlot(QSharedPointer<TimeSlot> timeSlot)
-{
-  m_timeSlot = timeSlot;
-}
-
-
-QSharedPointer<TimeSlot> DataMark::getTimeSlot() const
-{
-  if (m_timeSlot.isNull())
-    return m_channel->getTimeSlot();
-  return m_timeSlot;
-}
-
-
-bool DataMark::timeSlotIsNull() const
-{
-  if (m_timeSlot.isNull())
-    return true;
-  return false;
-}
 
 
 double deg2rad(double deg)

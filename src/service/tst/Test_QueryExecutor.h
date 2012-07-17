@@ -63,7 +63,8 @@ namespace Test
         QSharedPointer<Session> createTestSession(const QString& token,
                                                   const QDateTime& time,
                                                   const QSharedPointer<common::User>& user);
-        QSharedPointer<Channel> createTestChannel(const QString& name, const QString& description, const QString& url);
+        QSharedPointer<Channel> createTestChannel(const QString& name, const QString& description, const QString& url,
+                                                  const QSharedPointer<common::User>& owner);
         QSharedPointer<DataMark> createTestTag(double altitude, double latitude, double longitude,
                                               const QString& label, const QString& description, const QString& url, const QDateTime& time,
                                               const QSharedPointer<common::User>& user,

@@ -3,16 +3,17 @@ include(../../../config.pri)
 INCLUDEPATH += ../inc/ ../../json/inc/
 
 SOURCES += main.cpp \ 
+    ../src/BasicUser.cpp \
     ../src/User.cpp \ 
     ../src/DataMarks.cpp \
     ../src/GpsInfo.cpp \
     ../src/GpsModeller.cpp \ 
     Channel_TestObj.cpp \
     ../src/Channel.cpp \
-    ../src/TimeSlot.cpp \
     ../../json/src/JsonDataMark.cpp \
     ../src/Region.cpp
 HEADERS += User_Test.h \
+    ../inc/BasicUser.h \
     ../inc/User.h \
     ../inc/DataMarks.h \
     ../inc/GpsInfo.h \
@@ -23,7 +24,6 @@ HEADERS += User_Test.h \
     Channel_TestObj.h \
     Region_Test.h \
     ../inc/Channel.h \
-    ../inc/TimeSlot.h \
     ../../json/inc/JsonDataMark.h \
     ../inc/Region.h 
 

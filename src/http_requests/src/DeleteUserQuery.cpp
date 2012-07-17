@@ -83,25 +83,6 @@ QByteArray DeleteUserQuery::getRequestBody() const
 }
 
 
-void DeleteUserQuery::processReply(QNetworkReply *reply)
-{
-  #ifndef Q_OS_SYMBIAN
-  DeleteUserResponseJSON response;
-  response.parseJson(reply->readAll());
-  m_errno = response.getErrno();
-  if(response.getErrno() == SUCCESS)
-  {
-    syslog(LOG_INFO,"!!connected!");
-    Q_EMIT connected();
-  }
-  else
-  {
-    Q_EMIT errorOccured(response.getErrno());
-  }
-  #endif
-}
-
-
 void DeleteUserQuery::setQuery(const QString& login, const QString& password)
 {
   m_login=login;

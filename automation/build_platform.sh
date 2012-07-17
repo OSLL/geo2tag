@@ -15,6 +15,8 @@ dir_automation="$WEBGEO_HOME/automation"
 dir_geo2tag="${dir_automation}/${platform_repo}"
 dir_log="${dir_automation}/platform_logs"
 dir_backup="${dir_automation}/platform_backup"
+remote_dir_repo="devel@download.geo2tag.org:/var/www/geo2tag_repo/testing/binary_i386/";
+remote_update_repo_command="ssh devel@download.geo2tag.org \'sudo /home/devel/update_repo.sh\'";
 # How many packages should appear after deb building
 valid_package_number="3"
 branch="$1"
@@ -92,9 +94,15 @@ git checkout $branch >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 git pull origin $branch >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 #BUILD deb
 
+cp ${dir_automation}/local.properties ${dir_geo2tag}/src/webside/
+rm ${dir_geo2tag}/stuff/geo2tag.war
+
 cd ${dir_geo2tag}
 dh_clean
-dpkg-buildpackage -rfakeroot >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
+# ./build_debs.sh instead 'dpkg-buildpackage -rfakeroot'
+echo "Starting ./build_debs.sh `date -R`" >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
+./build_debs.sh >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
+echo "Finished ./build_debs.sh `date -R`" >> ${dir_log}/build.log.txt 2>>${dir_log}/build.log.txt
 cp ./test.log ./test_summary.log ${dir_log}
 founded_packages=`ls "${dir_automation}" | grep [.]deb | grep -v standalone | grep -v observer`;
 package_count=`echo "${founded_packages}" | wc -w `;
@@ -128,6 +136,8 @@ then
 		#DEPLOY
 		cp ${dir_geo2tag}/automation/test_platform.sh ${dir_automation}
 		cd ${dir_automation}
+		echo "Starting deploy" >> ${dir_log}/deploy.log.txt 
+		date -R >> ${dir_log}/deploy.log.txt
 		echo "Stoping daemons:" >> ${dir_log}/deploy.log.txt 
 		/etc/init.d/lighttpd stop  >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt		
 		/etc/init.d/postgresql stop  >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
@@ -136,7 +146,7 @@ then
 		sudo -u postgres dropdb geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		sudo -u postgres dropuser geo2tag >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		echo "Start packages install: " >> ${dir_log}/deploy.log.txt
-		if ! echo "n" | dpkg -i geo2tag_*deb libgeo2tag_*deb >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
+		if ! echo "n" | dpkg -i geo2tag_*deb libgeo2tag_*deb geo2tag-webside*deb >> ${dir_log}/deploy.log.txt 2>>${dir_log}/deploy.log.txt
 		then
 			status="fail"
 			letter_body="$deb_installation_error"
@@ -144,22 +154,29 @@ then
 			send_status_letter		
 		fi
 		/etc/init.d/lighttpd start	
-		
+                echo "Deploy finished, starting testing" >> ${dir_log}/deploy.log.txt
+                date -R >> ${dir_log}/deploy.log.txt
 		#TEST
 		test_result=`${dir_automation}/test_platform.sh`;
-		echo "Integration testsi:\n $test_result" >>${dir_log}/test.log.txt
-                if ! echo $test_result | grep -i fail
-                then
+                echo "Testing finished" >> ${dir_log}/deploy.log.txt
+                date -R >> ${dir_log}/deploy.log.txt
+
+		echo "Integration tests:\n $test_result" >>${dir_log}/test.log.txt
+		if ! echo $test_result | grep -i fail
+		then
 		# test cases passed, move installed debs to backup
+			echo "Copying of debs to remote server"  >> ${dir_log}/test.log.txt
+			ls ${dir_automation}/*.deb >> ${dir_log}/test.log.txt 2 >> ${dir_log}/test.log.txt
 			# copy *.deb to repo
-			cp ${dir_automation}/*.deb /var/www/geo2tag_repo/testing/binary_i386/
-			${dir_automation}/update_repo.sh
+			scp ${dir_automation}/*.deb ${remote_dir_repo} 
+			${remote_update_repo_command} 
 			echo "Tests passed. Current commit succesfuly integrated." >> ${dir_log}/test.log.txt
 			cd "${dir_automation}"
 			rm -rf "${dir_backup}"
 			mkdir "${dir_backup}"
 			mv -f ${dir_automation}/libgeo2tag_*deb "${dir_backup}"
 			mv -f ${dir_automation}/geo2tag_*deb "${dir_backup}"	
+			mv -f ${dir_automation}/geo2tag-webside*deb "${dir_backup}"	
 		else
 		# test cases not passed, restore backup
 			echo "Tests not passed" >> ${dir_log}/test.log.txt

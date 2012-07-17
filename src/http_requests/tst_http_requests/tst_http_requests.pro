@@ -38,6 +38,7 @@ SOURCES += \
     ../../json/src/VersionResponseJSON.cpp \
     ../../common/src/signals.cpp \
     ../../common/src/session.cpp \
+    ../../common/src/BasicUser.cpp \
     ../../common/src/User.cpp \
     ../../common/src/Channel.cpp \
     ../../common/src/DataMarks.cpp \
@@ -89,6 +90,7 @@ HEADERS += \
     ../../json/inc/DefaultResponseJSON.h \
     ../../common/inc/signals.h \
     ../../common/inc/session.h \
+    ../../common/inc/BasicUser.h \
     ../../common/inc/User.h \
     ../../common/inc/Channel.h \
     ../../common/inc/DataMarks.h \

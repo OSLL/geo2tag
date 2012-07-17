@@ -84,8 +84,7 @@ bool LoadTagsResponseJSON::parseJson(const QByteArray &data)
   if (!ok) return false;
   m_errno = result["errno"].toInt(&ok);
 
-  QVariantMap rss = result["rss"].toMap();
-  QVariantMap channelVariant = rss["channels"].toMap();
+  QVariantMap channelVariant = result["channels"].toMap();
   QVariantList channelsList = channelVariant["items"].toList();
   int size = channelsList.size();
 

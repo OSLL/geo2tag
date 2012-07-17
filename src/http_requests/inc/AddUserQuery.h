@@ -23,7 +23,7 @@ class AddUserQuery: public DefaultQuery
 
   private Q_SLOTS:
 
-    virtual void processReply(QNetworkReply *reply);
+    virtual void processResponse(const QByteArray &data);
 
   public:
 
@@ -41,7 +41,6 @@ class AddUserQuery: public DefaultQuery
 
     Q_SIGNALS:
 
-    void connected();
 
 
 };

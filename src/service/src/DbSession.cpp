@@ -66,6 +66,9 @@
 #include "AddChannelRequestJSON.h"
 #include "AddChannelResponseJSON.h"
 
+#include "OwnedChannelsRequest.h"
+#include "OwnedChannelsResponse.h"
+
 #include "SubscribedChannelsRequestJSON.h"
 #include "SubscribedChannelsResponseJSON.h"
 
@@ -134,6 +137,7 @@ namespace common
     m_processors.insert("writeTag", &DbObjectsCollection::processWriteTagQuery);
     m_processors.insert("loadTags", &DbObjectsCollection::processLoadTagsQuery);
     m_processors.insert("subscribe", &DbObjectsCollection::processSubscribeQuery);
+    m_processors.insert("owned", &DbObjectsCollection::processOwnedChannelsQuery);
     m_processors.insert("subscribed", &DbObjectsCollection::processSubscribedChannelsQuery);
     m_processors.insert("addUser", &DbObjectsCollection::processAddUserQuery);
     m_processors.insert("addChannel", &DbObjectsCollection::processAddChannelQuery);
@@ -238,6 +242,44 @@ namespace common
 
   }
 
+// Check password quality params - length, usage of different symbol groups ([-=+_*&^%$#@a-z],[A-Z],[0-9])
+  bool DbObjectsCollection::checkPasswordQuality(const QString& password) const
+  {
+    // If check is not enabled in config - all passwords are good
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    bool checkEnabled = storage.getValue("Security_Settings/password_quality_check", QVariant(DEFAULT_PASSWORD_QUALITY_CHECK)).toBool();
+    if (!checkEnabled) return true;
+
+    if ( password.size() < MINIMAL_PASSWORD_LENGTH )
+      return false;
+
+    // Check that all symbol groups below are used in password
+    QRegExp smallLetters("[-=+_*&^%$#@a-z]+");
+    QRegExp bigLetters("[A-Z]+");
+    QRegExp numbers("[0-9]+");
+    
+    if (smallLetters.indexIn(password)==-1 || bigLetters.indexIn(password)==-1 || numbers.indexIn(password)==-1 )
+      return false;
+
+    return true;
+
+  }
+
+
+  const QString DbObjectsCollection::getPasswordHash(const QSharedPointer<User>& user) const
+  {
+    return getPasswordHash(user->getLogin(),user->getPassword());
+  }
+
+  const QString DbObjectsCollection::getPasswordHash(const QString & login,const QString & password) const
+  {
+    QString startStr = login + password + PASSWORD_SALT;
+    QByteArray toHash = QCryptographicHash::hash(startStr.toUtf8(),QCryptographicHash::Sha1);
+    QString result(toHash.toHex());
+    syslog(LOG_INFO,"Calculating hash for password = %s",result.toStdString().c_str());
+    return result;
+  }
+
   QSharedPointer<User> DbObjectsCollection::findUser(const QSharedPointer<User> &dummyUser) const
   {
     QSharedPointer<User> realUser;      // Null pointer
@@ -250,7 +292,7 @@ namespace common
     	{
             if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0
                &&
-               currentUsers.at(i)->getPassword() == dummyUser->getPassword())
+               currentUsers.at(i)->getPassword() == getPasswordHash(currentUsers.at(i)->getLogin(),dummyUser->getPassword()))
         	return currentUsers.at(i);
     	}
     }
@@ -321,6 +363,16 @@ namespace common
         answer.append(response.getJson());
         return answer;
     }
+
+    if ( !checkPasswordQuality(newTmpUser->getPassword()) )
+    {
+        response.setErrno(WEAK_PASSWORD_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+
+    // Only password hashes are stored, so we change password of this user by password hash
+    newTmpUser->setPassword(getPasswordHash(newTmpUser));
     QString confirmToken = m_queryExecutor->insertNewTmpUser(newTmpUser);
     if(confirmToken.isEmpty()) {
         response.setErrno(INTERNAL_DB_ERROR);
@@ -536,6 +588,48 @@ namespace common
     return answer;
   }
 
+  QByteArray DbObjectsCollection::processOwnedChannelsQuery(const QByteArray &data)
+  {
+    OwnedChannelsRequestJSON request;
+    OwnedChannelsResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+    QSharedPointer<Session> dummySession = request.getSessions()->at(0);
+    QSharedPointer<Session> realSession = findSession(dummySession);
+    if(realSession.isNull())
+    {
+      response.setErrno(WRONG_TOKEN_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+
+    QSharedPointer<User> realUser = realSession->getUser();
+
+    QSharedPointer<Channels> ownedChannels(new Channels());
+    QVector< QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
+    for(int i=0; i<currentChannels.size(); i++) {
+        if(realUser->getId() == currentChannels.at(i)->getOwner()->getId()) {
+            ownedChannels->push_back(currentChannels.at(i));
+        }
+    }
+
+    syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+    m_queryExecutor->updateSession(realSession);
+    syslog(LOG_INFO, "Time after updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
+
+    response.setChannels(ownedChannels);
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
   QByteArray DbObjectsCollection::processSubscribedChannelsQuery(const QByteArray &data)
   {
     SubscribedChannelsRequestJSON request;
@@ -740,7 +834,16 @@ namespace common
         return answer;
     }
 
+    if ( !checkPasswordQuality(dummyUser->getPassword()) )
+    {
+        response.setErrno(WEAK_PASSWORD_ERROR);
+        answer.append(response.getJson());
+        return answer;
+    }
+
     syslog(LOG_INFO, "Sending sql request for AddUser");
+    // Only password hashes are stored, so we change password of this user by password hash
+    dummyUser->setPassword(getPasswordHash(dummyUser));
     QSharedPointer<User> addedUser = m_queryExecutor->insertNewUser(dummyUser);
 
     if(!addedUser)
@@ -804,6 +907,7 @@ namespace common
     }
 
     syslog(LOG_INFO, "Sending sql request for AddChannel");
+    dummyChannel->setOwner(realSession->getUser());
     QSharedPointer<Channel> addedChannel = m_queryExecutor->insertNewChannel(dummyChannel);
 
     if(!addedChannel)

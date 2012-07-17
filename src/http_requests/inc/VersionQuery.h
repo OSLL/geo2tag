@@ -64,7 +64,7 @@ class VersionQuery: public DefaultQuery
 
   private Q_SLOTS:
 
-    virtual void processReply(QNetworkReply *reply);
+    virtual void processResponse(const QByteArray &data);
 
   public:
 
@@ -75,8 +75,6 @@ class VersionQuery: public DefaultQuery
     ~VersionQuery();
 
 
-    Q_SIGNALS:
-    void responseReceived();
 
     // class VersionQuery
 };

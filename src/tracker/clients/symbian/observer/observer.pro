@@ -48,7 +48,6 @@ SOURCES += \
     ../../../../maps/src/OSMCoordinatesConverter.cpp \
     ../../../../maps/src/MapsUploadThread.cpp \
     ../../../../maps/src/MapsUploader.cpp \
-    ../../../../common/src/TimeSlot.cpp \
     ../../../../common/src/DataMarks.cpp \
     ../../../../common/src/Channel.cpp \
     ../../../../json/src/RSSFeedRequestJSON.cpp \
@@ -93,7 +92,6 @@ HEADERS += \
     ../../../../maps/inc/OSMCoordinatesConverter.h \
     ../../../../maps/inc/MapsUploadThread.h \
     ../../../../maps/inc/MapsUploader.h \
-    ../../../../common/inc/TimeSlot.h \
     ../../../../common/inc/DataMarks.h \
     ../../../../common/inc/Channel.h \
     ../../../../json/inc/RSSFeedRequestJSON.h \
@@ -109,7 +107,6 @@ HEADERS += \
     ../../../../http_requests/inc/ApplyMarkQuery.h \
     ../../../../http_requests/inc/AddNewMarkQuery.h \
     ../../../../common/inc/User.h \
-    ../../../../json/inc/JsonTimeSlot.h \
     ../../../../json/inc/JsonDataMark.h \
     ../../../../json/inc/JsonChannel.h \
     ../../../../json/inc/AddNewMarkResponseJSON.h \

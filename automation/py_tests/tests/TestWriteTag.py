@@ -33,6 +33,7 @@ from core.TestTemplate import TestTemplate
 from datetime import datetime
 import urllib2
 import json
+import ConfigParser
 
 class TestWriteTag(TestTemplate):
     
@@ -46,9 +47,15 @@ class TestWriteTag(TestTemplate):
     time = "01 01 2012 12:00:00.000"
     title = "test_tag"
    
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
+
+        parser = ConfigParser.SafeConfigParser()
+        parser.read(testDir + "/tests.conf")
+        section = "Tests_Params";
+        self.authToken = parser.get(section, "auth_token")
+        self.channel = parser.get(section, "channel_name")
 
         # work with JSON 
         jdata = json.dumps({"auth_token":self.authToken, "channel":self.channel, "description":self.description , "altitude":self.altitude, "latitude": self.latitude, "link":self.link, "longitude":self.longitude, "time":self.time, "title":self.title})

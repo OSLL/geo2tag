@@ -54,8 +54,8 @@ public class JsonLoadTagsResponse extends JsonBaseResponse {
 	public void parseJson(JSONObject obj) {
 		super.parseJson(obj);
 		try {
-				JSONObject jrss = obj.getJSONObject("rss");
-				JSONObject jchannels = jrss.getJSONObject("channels");
+				//JSONObject jrss = obj.getJSONObject("rss");
+				JSONObject jchannels = obj.getJSONObject("channels");
 				JSONArray jchannelsItems = jchannels.getJSONArray("items");
 				for (int i = 0; i < jchannelsItems.length(); i++) {
 					JSONObject jchannel = jchannelsItems.getJSONObject(i);

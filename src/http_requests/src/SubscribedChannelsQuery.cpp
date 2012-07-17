@@ -79,20 +79,11 @@ QByteArray SubscribedChannelsQuery::getRequestBody() const
 }
 
 
-void SubscribedChannelsQuery::processReply(QNetworkReply *reply)
+void SubscribedChannelsQuery::processResponse(const QByteArray &data)
 {
   SubscribedChannelsResponseJSON response;
-  response.parseJson(reply->readAll());
-  if(response.getErrno() == SUCCESS)
-  {
-    m_channels = response.getChannels();
-
-    Q_EMIT responseReceived();
-  }
-  else
-  {
-    Q_EMIT errorOccured(response.getErrno());
-  }
+  response.parseJson(data);
+  m_channels = response.getChannels();
 }
 
 

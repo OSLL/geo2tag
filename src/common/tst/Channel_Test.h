@@ -65,12 +65,6 @@ namespace Test
 
     private slots:
 
-      void defaultTimeSlot()
-      {
-        QVERIFY( m_tstObject->timeSlotIsDefault() );
-
-        QCOMPARE( m_tstObject->getTimeSlot()->getSlot(), Channel::DEFAULT_TIME_SLOT_VALUE_MIN);
-      }
 
   };                                    // class Channel_Test
 

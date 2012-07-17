@@ -84,6 +84,10 @@ namespace common
 
     DbObjectsCollection();
 
+    const QString getPasswordHash(const QString & login, const QString & pasword) const;
+    const QString getPasswordHash(const QSharedPointer<User>& user)  const;
+    bool checkPasswordQuality(const QString& password) const;
+
     QSharedPointer<User> findUser(const QSharedPointer<User>&) const;
     QSharedPointer<Session> findSession(const QSharedPointer<Session>&) const;
     QSharedPointer<Session> findSessionForUser(const QSharedPointer<User>&) const;
@@ -92,6 +96,7 @@ namespace common
     QByteArray processConfirmRegistrationQuery(const QString&);
     QByteArray processLoginQuery(const QByteArray&);
     QByteArray processQuitSessionQuery(const QByteArray&);
+    QByteArray processOwnedChannelsQuery(const QByteArray&);
     QByteArray processSubscribedChannelsQuery(const QByteArray&);
     QByteArray processAvailableChannelsQuery(const QByteArray&);
     QByteArray processWriteTagQuery(const QByteArray&);

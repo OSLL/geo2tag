@@ -53,7 +53,6 @@ class WriteTagQuery: public DefaultQuery
 
   virtual QString getUrl() const;
   virtual QByteArray getRequestBody() const;
-  virtual void processReply(QNetworkReply *reply);
 
   public:
     WriteTagQuery(const QSharedPointer<Session>& session,
@@ -72,9 +71,7 @@ class WriteTagQuery: public DefaultQuery
     void setChannel(const QSharedPointer<Channel>& channel);
     const QSharedPointer<Channel>& getChannel() const;
 
-    Q_SIGNALS:
 
-    void tagAdded();
 };
 // ADDNEWMARKQUERY_H
 #endif

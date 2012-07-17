@@ -33,6 +33,7 @@ from core.TestTemplate import TestTemplate
 from datetime import datetime
 import urllib2
 import json
+import ConfigParser
 
 class TestFilterPolygon(TestTemplate):
     
@@ -49,9 +50,14 @@ class TestFilterPolygon(TestTemplate):
     latitude3 = 70.0
     longitude3 = 100.0
    
-    def execute(self, context):
+    def execute(self, context, testDir):
         log = []
         server = context['server']
+
+        parser = ConfigParser.SafeConfigParser()
+        parser.read(testDir + "/tests.conf")
+        section = "Tests_Params";
+        self.authToken = parser.get(section, "auth_token")
 
         # work with JSON 
         jdata = json.dumps({"auth_token":self.authToken, "time_from":self.timeFrom, "time_to":self.timeTo, "polygon":[{"number":self.number1,"latitude":self.latitude1,"longitude":self.longitude1}, {"number":self.number2,"latitude":self.latitude2,"longitude":self.longitude2}, {"number":self.number3,"latitude":self.latitude3,"longitude":self.longitude3}]})

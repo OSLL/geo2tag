@@ -16,7 +16,6 @@ class ApplyChannelQuery: public DefaultQuery
 
     virtual QString getUrl() const;
     virtual QByteArray getRequestBody() const;
-    virtual void processReply(QNetworkReply *reply);
 
     public:
 
@@ -29,10 +28,6 @@ class ApplyChannelQuery: public DefaultQuery
     const QSharedPointer<Channel>& getChannel() const;
 
     ~ApplyChannelQuery();
-
-    Q_SIGNALS:
-
-    void channelAdded(QSharedPointer<Channel> channel);
 
 
 };

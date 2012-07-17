@@ -74,7 +74,7 @@ class LoadTagsQuery : public DefaultQuery
 
   private Q_SLOTS:
 
-    virtual void processReply(QNetworkReply *reply);
+    virtual void processResponse(const QByteArray &data);
 
   public:
 
@@ -97,7 +97,7 @@ class LoadTagsQuery : public DefaultQuery
 
     Q_SIGNALS:
 
-    void tagsReceived();
+ //   void tagsReceived();
 
     // class LoadTagsQuery
 };
