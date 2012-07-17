@@ -7,9 +7,11 @@
 echo "Some commands will be executed with sudo, your local password maybe asked"
 
 echo "step: install building tools"
-sudo apt-get install build-essential libqt4-dev debhelper libxml2-dev libqjson-dev git vim gitk
+sudo apt-get install build-essential libqt4-dev debhelper libxml2-dev libqjson-dev libfcgi-dev git vim gitk libpq-dev
 
 echo "step: installation testing environment"
+sudo apt-get install postgresql postgresql-client
+sudo echo "local all all trust" >>/etc/postgresql/9.1/main/pg_hba.conf
 
 echo "step: downloading sources"
 #uncomment next line if you have commit access on github.com
