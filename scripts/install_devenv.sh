@@ -10,7 +10,7 @@ echo "step: install building tools"
 sudo apt-get install --reinstall build-essential libqt4-dev debhelper libxml2-dev libqjson-dev libfcgi-dev git vim gitk libpq-dev postgresql postgresql-client
 
 echo "step: installation testing environment"
-sudo echo "local all all trust" >>/etc/postgresql/9.1/main/pg_hba.conf
+sudo /bin/sh 'echo "local all all trust" >>/etc/postgresql/9.1/main/pg_hba.conf'
 
 echo "step: downloading sources"
 #uncomment next line if you have commit access on github.com
