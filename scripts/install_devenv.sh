@@ -7,10 +7,10 @@
 echo "Some commands will be executed with sudo, your local password maybe asked"
 
 echo "step: install building tools"
-sudo apt-get install --reinstall build-essential libqt4-dev debhelper libxml2-dev libqjson-dev libfcgi-dev git vim gitk libpq-dev postgresql postgresql-client
+sudo apt-get install --reinstall build-essential libqt4-dev debhelper libxml2-dev libqjson-dev libfcgi-dev git vim gitk libpq-dev postgresql-8.4 postgresql-client-8.4
 
 echo "step: installation testing environment"
-sudo /bin/sh 'echo "local all all trust" >>/etc/postgresql/9.1/main/pg_hba.conf'
+sudo /bin/sh 'echo "local all all trust" >>/etc/postgresql/8.4/main/pg_hba.conf'
 
 echo "step: downloading sources"
 #uncomment next line if you have commit access on github.com
