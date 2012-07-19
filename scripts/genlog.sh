@@ -9,6 +9,7 @@
 # In case 3 last commit message where taken as a changelog message
 
 changelog="debian/changelog";
+geo2tag_version="0.19";
 message="";
 
 if [ "$#" == "2" ]
@@ -42,7 +43,7 @@ fi
 # Getting verison last part from current date
 version_last_part=`date +%s`;
 curr_date=`date -R`;
-new_record="geo2tag (0.19.$version_last_part) unstable; urgency=low\n\n  * $message\n\n -- Open Source and Linux lab <osll@lists.osll.spb.ru> $curr_date\n"
+new_record="geo2tag ($geo2tag_version.$version_last_part) unstable; urgency=low\n\n  * $message\n\n -- Open Source and Linux lab <osll@lists.osll.spb.ru> $curr_date\n"
 
 # Adding record as a first line
 sed -i 1i"$new_record" $changelog
