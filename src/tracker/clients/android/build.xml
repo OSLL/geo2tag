@@ -33,7 +33,7 @@
  */
 -->
 
-<project name="TrackerActivity" default="help">
+<project name="G2TTracker" default="setup">
 
 <!-- The local.properties file is created and updated by the 'android'
      tool.
@@ -114,5 +114,21 @@
              - customize to your needs.
     -->
     <setup />
+
+	<!--
+    <target name="-pre-compile">
+    	<antcall target="jgeo"/>
+    </target>
+	-->
+	
+	<!-- JGEO CORE -->
+	<target name="jgeo">
+		<ant antfile="../../../jgeo/build.xml" dir="../../../jgeo/" target="all"/>
+		<copy todir="lib" file="../../../jgeo/jgeo.jar" />
+	</target>
+
+	<target name="jgeo-clean">
+		<ant antfile="../jgeo/build.xml" dir="../jgeo/" target="clean"/>
+	</target>
 
 </project>
