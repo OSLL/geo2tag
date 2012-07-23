@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 /*
- * Copyright 2010-2011  Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2010-2012  Vasily Romanikhin  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -77,7 +77,8 @@
 
     <taskdef name="setup"
         classname="com.android.ant.SetupTask"
-        classpathref="android.antlibs" />
+        classpathref="android.antlibs" 
+    />
 
 <!-- extension targets. Uncomment the ones where you want to do custom work
      in between standard targets -->
@@ -115,20 +116,18 @@
     -->
     <setup />
 
-	<!--
     <target name="-pre-compile">
     	<antcall target="jgeo"/>
     </target>
-	-->
 	
 	<!-- JGEO CORE -->
 	<target name="jgeo">
-		<ant antfile="../../../jgeo/build.xml" dir="../../../jgeo/" target="all"/>
-		<copy todir="lib" file="../../../jgeo/jgeo.jar" />
+		<ant antfile="build.xml" dir="../../../jgeo/" target="all"/>
+		<copy todir="libs" file="../../../jgeo/jgeo.jar" />
 	</target>
 
 	<target name="jgeo-clean">
-		<ant antfile="../jgeo/build.xml" dir="../jgeo/" target="clean"/>
+		<ant antfile="build.xml" dir="../../../jgeo/" target="clean"/>
 	</target>
 
 </project>
