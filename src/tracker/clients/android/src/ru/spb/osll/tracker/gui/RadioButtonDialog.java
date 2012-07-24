@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 
 /*
- * Copyright 2010-2012  Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2010-2011  Vasily Romanikhin  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,31 +27,43 @@
  *    permission.
  *
  * The advertising clause requiring mention in adverts must never be included.
- * PROJ: OSLL/geo2tag
  */
--->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="ru.spb.osll.tracker"
-      android:versionCode="1"
-      android:versionName="1.0">
-	  
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-     
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name="ru.spb.osll.tracker.TrackerActivity" android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-       	<activity android:name="ru.spb.osll.tracker.preferences.SettingsActivity" android:configChanges="orientation|keyboardHidden"/>
-	    <activity android:name=".exception.ExceptionActivity" android:configChanges="orientation|keyboardHidden"/>
-	   
-	   	<!-- 
-	   	<service android:enabled="true" android:name="ru.spb.osll.tracker.services.RequestService" android:process=":tracking"></service>
-	   	 -->
-        <service android:enabled="true" android:name="ru.spb.osll.tracker.services.RequestService"></service>
-    </application>
-</manifest> 
+
+/*! ---------------------------------------------------------------
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
+
+package ru.spb.osll.tracker.gui;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+ 
+public class RadioButtonDialog{
+	protected Context myContext;
+	private String myTitle;
+	private String[] myItems;
+	private int mySelectedItem;
+	
+	public RadioButtonDialog(Context context, String title, String[] items, int selectedItem){
+		myContext = context;
+		myTitle = title;
+		myItems = items;
+		mySelectedItem = selectedItem;
+	}
+
+	protected void itemSelected(DialogInterface dialog, int item){
+		dialog.dismiss();
+	}
+	
+	public void show(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
+		builder.setTitle(myTitle);
+		builder.setSingleChoiceItems(myItems, mySelectedItem, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int item) {
+		    	itemSelected(dialog, item);
+		    }
+		});
+		builder.create().show();
+	}
+}

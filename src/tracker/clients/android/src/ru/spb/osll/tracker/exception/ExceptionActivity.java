@@ -33,59 +33,54 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-package ru.spb.osll.json;
+package ru.spb.osll.tracker.exception;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import ru.spb.osll.tracker.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import ru.spb.osll.log.Log;
-
-import static ru.spb.osll.json.IRequest.IApplyMark.*; 
-
-public class JsonApplyMarkRequest extends JsonBaseRequest {
-	private String m_authToken;
-	private String m_channel;
-	private String m_title;
-	private String m_link;
-	private String m_description;
-	private double m_latitude;
-	private double m_longitude;
-	private double m_altitude;
-	private String m_time;
-	private String m_serverUrl;
+public class ExceptionActivity extends Activity{
+	public static String STACKTRACE = "stacktrace";
 	
-	public JsonApplyMarkRequest(String authToken, String channel, String title, String link,
-			String description, double latitude, double longitude, double altitude, String time, String serverUrl){
-		m_authToken = authToken;
-		m_channel = channel;
-		m_title = title;
-		m_link = link;
-		m_description = description;
-		m_latitude = latitude;
-		m_longitude = longitude;
-		m_altitude = altitude;
-		m_time = time;
-		m_serverUrl = serverUrl;
+	public void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
+		setContentView(R.layout.exception_view);
+		final String stackTrace = getIntent().getStringExtra(STACKTRACE);
+		final TextView exeptionTextView = (TextView)findViewById(R.id.exeption_text);
+		
+		exeptionTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
+		exeptionTextView.setClickable(false);
+		exeptionTextView.setLongClickable(false);
+
+		exeptionTextView.append("Tracker has been crached!");
+		exeptionTextView.append(stackTrace);
+		
+		findViewById(R.id.send).setOnClickListener(
+			new View.OnClickListener() {
+				public void onClick(View view) {
+					Intent sendIntent = new Intent(Intent.ACTION_SEND);
+					sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "geo2tag@lists.osll.spb.ru" });
+					sendIntent.putExtra(Intent.EXTRA_TEXT, stackTrace);
+					sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Tracker exception report");
+					sendIntent.setType("message/rfc822");
+					startActivity(sendIntent);
+					finish();
+				}
+			}
+		);
+
+		findViewById(R.id.cancel).setOnClickListener(
+			new View.OnClickListener() {
+				public void onClick(View view) {
+					finish();
+				}
+			}
+		);
 	}
+
 	
-	@Override
-	protected JSONObject doRequestInternal() throws JSONException, IOException,
-			URISyntaxException {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("auth_token", m_authToken);
-		jsonObject.put("channel", m_channel);
-		jsonObject.put("title", m_title);
-		jsonObject.put("link", m_link);
-		jsonObject.put("description", m_description);
-		jsonObject.put("latitude", m_latitude);
-		jsonObject.put("longitude", m_longitude);
-		jsonObject.put("altitude", m_altitude);
-		jsonObject.put("time", m_time);
-		Log.out.println(JSON_LOG, jsonObject.toString());
-		return JsonBase.instance().doRequest(jsonObject, new URI(m_serverUrl + REQUEST)); // TODO
-	}
 }

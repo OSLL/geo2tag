@@ -33,7 +33,7 @@
  */
 -->
 
-<project name="G2TTracker" default="setup">
+<project name="G2TTracker" default="all">
 
 <!-- The local.properties file is created and updated by the 'android'
      tool.
@@ -80,6 +80,8 @@
         classpathref="android.antlibs" 
     />
 
+	<target name="all" depends="clean, jgeo-clean, jgeo, debug" />
+	
 <!-- extension targets. Uncomment the ones where you want to do custom work
      in between standard targets -->
 <!--

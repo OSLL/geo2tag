@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 
 /*
- * Copyright 2010-2012  Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2010-2011  Vasily Romanikhin  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,31 +27,40 @@
  *    permission.
  *
  * The advertising clause requiring mention in adverts must never be included.
- * PROJ: OSLL/geo2tag
  */
--->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="ru.spb.osll.tracker"
-      android:versionCode="1"
-      android:versionName="1.0">
-	  
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-     
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name="ru.spb.osll.tracker.TrackerActivity" android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-       	<activity android:name="ru.spb.osll.tracker.preferences.SettingsActivity" android:configChanges="orientation|keyboardHidden"/>
-	    <activity android:name=".exception.ExceptionActivity" android:configChanges="orientation|keyboardHidden"/>
-	   
-	   	<!-- 
-	   	<service android:enabled="true" android:name="ru.spb.osll.tracker.services.RequestService" android:process=":tracking"></service>
-	   	 -->
-        <service android:enabled="true" android:name="ru.spb.osll.tracker.services.RequestService"></service>
-    </application>
-</manifest> 
+
+/*! ---------------------------------------------------------------
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
+
+package ru.spb.osll.tracker.exception;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.Thread.UncaughtExceptionHandler;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Process;
+
+public class ExceptionHandler implements UncaughtExceptionHandler {
+	private final Context m_context;
+
+	public ExceptionHandler(Context context) {
+		m_context = context;
+	}
+
+	public void uncaughtException(Thread thread, Throwable exception) {
+		StringWriter stackTrace = new StringWriter();
+		exception.printStackTrace(new PrintWriter(stackTrace));
+		System.err.println(stackTrace);
+
+		Intent intent = new Intent(m_context, ExceptionActivity.class);
+		intent.putExtra(ExceptionActivity.STACKTRACE, stackTrace.toString());
+		m_context.startActivity(intent);
+
+		Process.killProcess(Process.myPid());
+		System.exit(10);
+	}
+	
+}

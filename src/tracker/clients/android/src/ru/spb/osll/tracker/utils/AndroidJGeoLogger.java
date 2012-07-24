@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 
 /*
- * Copyright 2010-2012  Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2012  Vasily Romanikhin  vasily.romanikhin@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,31 +27,66 @@
  *    permission.
  *
  * The advertising clause requiring mention in adverts must never be included.
- * PROJ: OSLL/geo2tag
  */
--->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="ru.spb.osll.tracker"
-      android:versionCode="1"
-      android:versionName="1.0">
-	  
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-     
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name="ru.spb.osll.tracker.TrackerActivity" android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-       	<activity android:name="ru.spb.osll.tracker.preferences.SettingsActivity" android:configChanges="orientation|keyboardHidden"/>
-	    <activity android:name=".exception.ExceptionActivity" android:configChanges="orientation|keyboardHidden"/>
-	   
-	   	<!-- 
-	   	<service android:enabled="true" android:name="ru.spb.osll.tracker.services.RequestService" android:process=":tracking"></service>
-	   	 -->
-        <service android:enabled="true" android:name="ru.spb.osll.tracker.services.RequestService"></service>
-    </application>
-</manifest> 
+
+/*! ---------------------------------------------------------------
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
+
+package ru.spb.osll.tracker.utils;
+
+import android.util.Log;
+import ru.spb.osll.log.Logger;
+
+public class AndroidJGeoLogger implements Logger {
+
+	@Override
+	public void println(int level, String tag, int v) {
+	    log(level, tag, v);
+	}
+
+	@Override
+	public void println(int level, String tag, double v) {
+	    log(level, tag, v);
+	}
+
+
+	@Override
+	public void println(int level, String tag, float v) {
+	    log(level, tag, v);
+	}
+
+
+	@Override
+	public void println(int level, String tag, byte v) {
+	    log(level, tag, v);
+	}
+
+
+	@Override
+	public void println(int level, String tag, boolean v) {
+	    log(level, tag, v);
+	}
+
+
+	@Override
+	public void println(int level, String tag, String v) {
+	    log(level, tag, v);
+	}
+
+
+	@Override
+	public void println(int level, String tag, Throwable t) {
+		t.printStackTrace();
+		Log.e(tag, "Throwable:", t);
+	}
+	
+	private void log(int level, String tag, Object msg){
+		if (level == Logger.DEBUG) {
+		    Log.d(tag, msg.toString());
+		} else {
+		    Log.e(tag, msg.toString());
+		}
+	}
+
+}
