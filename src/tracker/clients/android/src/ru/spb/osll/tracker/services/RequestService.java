@@ -36,6 +36,7 @@ import java.util.Date;
 import org.json.JSONObject;
 
 import ru.spb.osll.json.*;
+import ru.spb.osll.tracker.R;
 import ru.spb.osll.tracker.TrackerActivity;
 import ru.spb.osll.tracker.TrackerActivity.TrackerReceiver;
 import ru.spb.osll.tracker.preferences.Settings;
@@ -103,8 +104,8 @@ public class RequestService extends LocationService {
 	private String login() throws TrackerException {
 	    final JsonBaseRequest req = new JsonLoginRequest(mSCache.login, mSCache.pass, mSCache.serverUrl);
         final JsonLoginResponse res = new JsonLoginResponse();
-	    safeSendingRequest(req, res, "Login is failed", Errno.SUCCESS);
-	    sendToLog("Login successful");
+	    safeSendingRequest(req, res, R.string.msg_srv_login_failed, Errno.SUCCESS);
+	    sendToLog(R.string.msg_srv_login_successful);
 	    return res.getAuthString();
 	}
 
@@ -116,18 +117,18 @@ public class RequestService extends LocationService {
         final JsonBaseRequest req = new JsonApplyChannelRequest(mAuthToken, mSCache.channel, 
                 "G2T tracker channel", "http://osll.spb.ru/", 3000, mSCache.serverUrl);
         final JsonApplyChannelResponse res = new JsonApplyChannelResponse();
-        safeSendingRequest(req, res, "Channel preparation failed", 
+        safeSendingRequest(req, res, R.string.msg_srv_channel_preparation_failed, 
                 Errno.SUCCESS, Errno.CHANNEL_ALREADY_EXIST_ERROR);
-        sendToLog("Channel prepared");
+        sendToLog(R.string.msg_srv_channel_prepared);
     }
     
     private void subscribeToChannel() throws TrackerException {
         final JsonBaseRequest req = new JsonSubscribeRequest(mAuthToken, 
                 mSCache.channel, mSCache.serverUrl);
         final JsonSubscribeResponse res = new JsonSubscribeResponse();
-        safeSendingRequest(req, res, "Channel preparation failed", 
+        safeSendingRequest(req, res, R.string.msg_srv_channel_preparation_failed, 
                 Errno.SUCCESS, Errno.CHANNEL_ALREADY_SUBSCRIBED_ERROR);
-        sendToLog("Channel successfully checked");
+        sendToLog(R.string.msg_srv_channel_successfully_checked);
     }
 
     public void track() throws TrackerException {
@@ -171,6 +172,10 @@ public class RequestService extends LocationService {
 		return false;
 	}
 
+    private void sendToLog(int messId) {
+        sendToLog(getResources().getString(messId));
+    }
+
     private void sendToLog(String mess) {
         sendMess(TrackerReceiver.ID_APPEND_TO_LOG, mess);
     }
@@ -192,8 +197,10 @@ public class RequestService extends LocationService {
      */
     private final int ATTEMPTS = 3;
     private void safeSendingRequest(JsonBaseRequest request, 
-        JsonBaseResponse response, String errorMsg, int... possibleErrnos) 
+        JsonBaseResponse response, int errorMsgId, int... possibleErrnos) 
         throws TrackerException {
+        final String errorMsg = getResources().getString(errorMsgId);
+        
         JSONObject JSONResponse = null;
         for (int i = 0; i < ATTEMPTS && JSONResponse == null; i++) {
             JSONResponse = request.doRequest();

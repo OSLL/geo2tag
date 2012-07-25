@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2010-2012  Vasily Romanikhin  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -39,7 +39,6 @@ import ru.spb.osll.tracker.R;
 import ru.spb.osll.tracker.gui.RadioButtonDialog;
 import ru.spb.osll.tracker.preferences.Settings.ITrackerAppSettings;
 import ru.spb.osll.tracker.preferences.Settings.ITrackerNetSettings;
-import ru.spb.osll.tracker.utils.TrackerUtil;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -124,7 +123,7 @@ public class SettingsActivity extends Activity implements ITrackerNetSettings, I
 	private Runnable m_saveToast = new Runnable() {
 		@Override
 		public void run() {
-			Toast.makeText(SettingsActivity.this, TrackerUtil.MESS_SETTINGS_SAVED, Toast.LENGTH_SHORT).show();
+			Toast.makeText(SettingsActivity.this, R.string.msg_settigns_saved, Toast.LENGTH_SHORT).show();
 		}
 	};
 

@@ -140,21 +140,4 @@ public class TrackerUtil {
 				m_logger.close();
 		}
 	}
-
-	/*
-	 * TODO move message to loc files 
-	 */
-	// messages
-	public static final String MESS_FAIL_CONNECTION = "Connection fail...";
-	public static final String MESS_FAIL_CONNECTION_TO_SERVER = "Fail connection to server...";
-	public static final String MESS_FAIL_ADDUSER = "add user fail:"; 
-	public static final String MESS_FAIL_APPLY_CHANNEL = "apply channel fail:";
-	public static final String MESS_FAIL_APPLY_MARK = "apply mark fail:";
-	
-	public static final String MESS_TRACKER_ALREADY_RUNNING = "Tracker is already running...";
-	public static final String MESS_TRACKER_START = "Tracker is running...";
-	public static final String MESS_TRACKER_STOP = "Tracker stopped...";
-	
-	public static final String MESS_SETTINGS_SAVED = "Settings saved!";
-	public static final String MESS_SETTINGS_NOT_AVAILABLE = "Settings are not available! Stop the tracker...";
 }

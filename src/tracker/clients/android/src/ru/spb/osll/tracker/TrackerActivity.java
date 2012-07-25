@@ -105,7 +105,7 @@ public class TrackerActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 			    if (TrackerUtil.isServiceRunning(TrackerActivity.this, RequestService.class)) {
-					showToast(TrackerUtil.MESS_SETTINGS_NOT_AVAILABLE);
+					showToast(R.string.msg_settigns_not_available);
 				} else {
 					startActivity(new Intent(TrackerActivity.this, SettingsActivity.class));
 				}
@@ -123,9 +123,9 @@ public class TrackerActivity extends Activity {
 	
 	private void startTracker(){
 		if (TrackerUtil.isServiceRunning(this, RequestService.class)){
-			showToast(TrackerUtil.MESS_TRACKER_ALREADY_RUNNING);
+			showToast(R.string.msg_tracker_already_running);
 		} else if (TrackerUtil.isOnline(this)){
-			showToast(TrackerUtil.MESS_TRACKER_START);
+			showToast(R.string.msg_tracker_start);
 			clearLogView();
 			TrackerUtil.notify(this);
 			startService(new Intent(this, RequestService.class));
@@ -134,13 +134,13 @@ public class TrackerActivity extends Activity {
 				TrackerUtil.hideApplication(TrackerActivity.this);
 			}
 		} else if (!TrackerUtil.isOnline(this)){
-			showToast(TrackerUtil.MESS_FAIL_CONNECTION);
+			showToast(R.string.msg_fail_connection);
 		}
 	}
 	
 	private void stopTracker(){
 		if (TrackerUtil.isServiceRunning(this, RequestService.class)){
-			showToast(TrackerUtil.MESS_TRACKER_STOP);
+			showToast(R.string.msg_tracker_stop);
 			TrackerUtil.disnotify(this);
 			stopService(new Intent(this, RequestService.class));
 		}
@@ -154,6 +154,16 @@ public class TrackerActivity extends Activity {
 			}
 		});
 	}
+	
+	private void showToast(final int resId){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(TrackerActivity.this, resId, Toast.LENGTH_SHORT).show();              
+            }
+        });
+    }
+
 
 	private static int lineCount = 0;
 	private static final int maxLines = 16;

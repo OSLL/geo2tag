@@ -4,29 +4,61 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
+    
+	<LinearLayout 
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="30dp">
 
-	<Button android:id="@+id/start_button"
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    android:text="@string/btnStart"
-	/>    
-	<Button android:id="@+id/stop_button"
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    android:text="@string/btnStop"
-	/> 
-	<Button android:id="@+id/settings_button"
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    android:text="@string/btnSettings"
-	/>   
-	<Button android:id="@+id/screeen_down_button"
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    android:text="@string/btnHide"
-	/>   
+		<LinearLayout 
+		    android:orientation="vertical"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+		    >
+			<ImageView  
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+				android:src="@drawable/globe"
+				android:layout_marginRight="30dp"
+			/>
+			<TextView
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+				android:text="@string/app_name"			
+			/>
+		</LinearLayout>
 
-	
+
+		<LinearLayout 
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content">
+
+			<Button android:id="@+id/start_button"
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/btnStart"
+			/>    
+			<Button android:id="@+id/stop_button"
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/btnStop"
+			/> 
+			<Button android:id="@+id/settings_button"
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/btnSettings"
+			/>   
+			<Button android:id="@+id/screeen_down_button"
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/btnHide"
+			/>   
+		</LinearLayout>
+	</LinearLayout>
+    
 	<ScrollView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">

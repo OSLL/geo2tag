@@ -58,4 +58,19 @@
 	<string name="btnSettings">Settings</string>
 	<string name="btnHide">Hide</string>
 	
+<!-- messages -->
+	<string name="msg_tracker_already_running">Tracker is already running...</string>
+	<string name="msg_tracker_start">Tracker is running...</string>
+	<string name="msg_tracker_stop">Tracker stopped...</string>
+	<string name="msg_fail_connection">Connection fail...</string>
+	<string name="msg_fail_connection_to_server">Fail connection to server...</string>
+	<string name="msg_settigns_saved">Settings saved!</string>
+	<string name="msg_settigns_not_available">Settings are not available! Stop the tracker...</string>
+
+	<string name="msg_srv_channel_preparation_failed">Channel preparation failed...</string>
+	<string name="msg_srv_channel_successfully_checked">Channel successfully checked...</string>
+	<string name="msg_srv_channel_prepared">Channel prepared...</string>
+	<string name="msg_srv_login_failed">Login is failed...</string>
+	<string name="msg_srv_login_successful">Login successful</string>
+	
 </resources>
