@@ -44,8 +44,10 @@ import ru.spb.osll.web.client.services.objects.Response;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WUser;
+import ru.spb.osll.web.server.DefaultValues;
 import ru.spb.osll.web.server.JGeoConnector;
 import ru.spb.osll.web.server.Session;
+import ru.spb.osll.web.server.SettingsStorage;
 import ru.spb.osll.web.server.WebLogger;
 import ru.spb.osll.json.*;
 
@@ -55,11 +57,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class GTServiceImpl extends RemoteServiceServlet implements 
 		GTService, Session.HasSession {
 	
-	//public static String serverUrl = "http://localhost:81/service";
-    // TODO http://jira.geo2tag.org:8080/browse/GT-717
-	public static String serverUrl = "http://tracks.osll.spb.ru:81/service";
-	//public static String serverUrl = 
-	//		SettingsStorage.getInstance().getValue(DefaultValues.SERVER_URL).toString() + "service";
+	public static String serverUrl = 
+			SettingsStorage.getInstance().getValue(DefaultValues.SERVER_URL).toString() + "service";
 	
 	
 	static {
