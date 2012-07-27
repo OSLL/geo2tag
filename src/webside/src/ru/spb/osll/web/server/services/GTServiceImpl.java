@@ -77,7 +77,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 			WUser newUser = new WUser(user.getLogin(), user.getPassword());
 			newUser.setToken(response.getAuthString());
 			newUser.setStatus(Response.STATUS_SUCCES);
-			//Session.Instance().addValue(this, USER_TOKEN, newUser.getToken());
+			Session.Instance().addValue(this, USER_TOKEN, newUser.getToken());
 			return newUser;
 		}
 	}
@@ -235,7 +235,6 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 	
 	@Override
 	public HttpSession getSession() {
-		System.out.println("OK");
 		return getThreadLocalRequest().getSession();
 	}
 	
