@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  Edward Ryabikov  edward.ryabikov@gmail.com
+ * Copyright 2011-2012 OSLL
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -54,8 +54,8 @@ public class JsonLoadTagsResponse extends JsonBaseResponse {
 	public void parseJson(JSONObject obj) {
 		super.parseJson(obj);
 		try {
-				//JSONObject jrss = obj.getJSONObject("rss");
-				JSONObject jchannels = obj.getJSONObject("channels");
+				JSONObject jrss = obj.getJSONObject("rss");
+				JSONObject jchannels = jrss.getJSONObject("channels");
 				JSONArray jchannelsItems = jchannels.getJSONArray("items");
 				for (int i = 0; i < jchannelsItems.length(); i++) {
 					JSONObject jchannel = jchannelsItems.getJSONObject(i);

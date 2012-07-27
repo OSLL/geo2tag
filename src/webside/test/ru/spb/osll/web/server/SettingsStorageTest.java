@@ -35,15 +35,18 @@
 
 package ru.spb.osll.web.server;
 
+import ru.spb.osll.log.Log;
 import junit.framework.TestCase;
 
 public class SettingsStorageTest extends TestCase {
+	
+	public static final String LOG = "TEST";
 	
 	public void testGetValue() {
 		SettingsStorage storage = SettingsStorage.getInstance();
 		Object url = storage.getValue(DefaultValues.SERVER_URL);
 		assertTrue(url != null);
-		System.out.println(url);
+		Log.out.println(LOG, url.toString());
 	}
 	
 }
