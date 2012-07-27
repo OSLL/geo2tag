@@ -67,8 +67,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public WUser login(WUser user) throws IllegalArgumentException {
-	    Logger.getLogger(getClass()).debug("called login()");
-
+		Logger.getLogger(getClass()).debug("called login()");
 		JsonLoginRequest request = new JsonLoginRequest(user.getLogin(), user.getPassword(), serverUrl);
 		JsonLoginResponse response = new JsonLoginResponse();
 		response.parseJson(request.doRequest());
@@ -77,8 +76,8 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		} else {
 			WUser newUser = new WUser(user.getLogin(), user.getPassword());
 			newUser.setToken(response.getAuthString());
-			newUser.setStatus(Response.STATUS_SUCCES );
-			Session.Instance().addValue(this, USER_TOKEN, newUser.getToken());
+			newUser.setStatus(Response.STATUS_SUCCES);
+			//Session.Instance().addValue(this, USER_TOKEN, newUser.getToken());
 			return newUser;
 		}
 	}
@@ -236,6 +235,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 	
 	@Override
 	public HttpSession getSession() {
+		System.out.println("OK");
 		return getThreadLocalRequest().getSession();
 	}
 	

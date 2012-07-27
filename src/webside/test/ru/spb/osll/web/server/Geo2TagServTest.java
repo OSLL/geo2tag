@@ -39,6 +39,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import ru.spb.osll.log.Log;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WUser;
@@ -46,12 +47,17 @@ import ru.spb.osll.web.server.services.GTServiceImpl;
 
 public class Geo2TagServTest extends TestCase {
 
+	public static final String LOG = "TEST";
+	public static String m_authToken = "MMMMMMMMMM";
+	
 	public void testLogin() {
 		WUser user;
 		GTServiceImpl service = new GTServiceImpl();
 		user = service.login(new WUser("Paul", "test"));
 		assertTrue(user != null);
-		assertEquals(user.getToken(), "PPPPPPPPPP");
+		assertTrue(user.getLogin() == "Paul");
+		assertTrue(user.getPassword() == "test");
+		m_authToken = user.getToken();
 	}
 	
 	public void testAddUser() {
@@ -60,13 +66,12 @@ public class Geo2TagServTest extends TestCase {
 		user.setEmail("sam@test.org");
 		user = service.addUser(user);
 		assertTrue(user == null);
-		//assertEquals(user.getToken(), "PPPPPPPPPP");
 	}
 	
 	public void testUnsubscribe() {
 		GTServiceImpl service = new GTServiceImpl();
 		WUser user = new WUser("Paul", "test");
-		user.setToken("PPPPPPPPPP");
+		user.setToken(m_authToken);
 		WChannel channel = new WChannel("Paul", "Paul's channel", GTServiceImpl.serverUrl);
 		Boolean result = service.unsubscribe(channel, user);
 		assertTrue(result == true);
@@ -75,7 +80,7 @@ public class Geo2TagServTest extends TestCase {
 	public void testSubscribe() {
 		GTServiceImpl service = new GTServiceImpl();
 		WUser user = new WUser("Paul", "test");
-		user.setToken("PPPPPPPPPP");
+		user.setToken(m_authToken);
 		WChannel channel = new WChannel("Paul", "Paul's channel", GTServiceImpl.serverUrl);
 		Boolean result = service.subscribe(channel, user);
 		assertTrue(result == true);
@@ -84,58 +89,37 @@ public class Geo2TagServTest extends TestCase {
 	public void testAvailableChannels() {
 		GTServiceImpl service = new GTServiceImpl();
 		WUser user = new WUser("Paul", "test");
-		user.setToken("PPPPPPPPPP");
+		user.setToken(m_authToken);
 		List<WChannel> availableChannels= service.availableChannels(user);
 		assertTrue(availableChannels.isEmpty() == false);
-		//System.out.println(availableChannels.get(0).getName());
-		//assertEquals(availableChannels.get(0).getName(), "Tourist information");
 	}
 	
 	public void testSubscribedChannels() {
 		GTServiceImpl service = new GTServiceImpl();
 		WUser user = new WUser("Paul", "test");
-		user.setToken("PPPPPPPPPP");
+		user.setToken(m_authToken);
 		List<WChannel> subscribedChannels= service.subscribedChannels(user);
 		assertTrue(subscribedChannels.isEmpty() == false);
-		//System.out.println(subscribedChannels.get(0).getName());
-		//assertEquals(subscribedChannels.get(0).getName(), "Channel2");
 	}
 	
 	public void testGetTagsByFilterChannel() {
 		GTServiceImpl service = new GTServiceImpl();
-		WUser user = new WUser("Kirill", "test");
-		user.setToken("KKKKKKKKKK");
+		WUser user = new WUser("Paul", "test");
+		user.setToken(m_authToken);
 		WChannel channel = new WChannel("Fuel prices", "...", GTServiceImpl.serverUrl);
 		int amount = 100;
 		List<WMark> tags = service.getTags(user, channel, amount);
-		assertTrue(tags.isEmpty() == false);
-		assertTrue(tags.size() == 3);
-		/*for (WMark tag : tags) {
-			System.out.println(tag.getLatitude());
-			System.out.println(tag.getLongitude());
-			System.out.println(tag.getLabel());
-			System.out.println(tag.getDescription());
-			System.out.println(tag.getUrl());			
-		}*/
+		assertTrue(tags.isEmpty() == true);
 	}
 	
 	public void testGetTagsByLoadTags() {
 		GTServiceImpl service = new GTServiceImpl();
-		WUser user = new WUser("Kirill", "test");
-		user.setToken("KKKKKKKKKK");
+		WUser user = new WUser("Paul", "test");
+		user.setToken(m_authToken);
 		double latitude = 60.166504;
 		double longitude = 24.841204;
 		double radius = 30.0;
 		List<WMark> tags = service.getTags(user, latitude, longitude, radius);
-		assertTrue(tags.isEmpty() == false);
-		assertTrue(tags.size() == 4);
-		/*for (WMark tag : tags) {
-			System.out.println(tag.getLabel());
-			System.out.println(tag.getLatitude());
-			System.out.println(tag.getLongitude());
-			System.out.println(tag.getDescription());
-			System.out.println(tag.getUrl());			
-			System.out.println(tag.getTime());
-		}*/
+		assertTrue(tags.isEmpty() == true);
 	}
 }

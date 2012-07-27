@@ -51,7 +51,7 @@ public class JsonRequestTest extends TestCase {
 
 	// GEO2TAG INSTANCE
 	public final String m_url = "http://tracks.osll.spb.ru:81/service";
-	public static String m_authToken = "afas";
+	public static String m_authToken = "MMMMMMMMMM";
 	
 	public void testLogin() {
 		Log.out.println(LOG + " Login", "Start");
