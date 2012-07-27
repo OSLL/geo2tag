@@ -58,6 +58,9 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 	//public static String serverUrl = "http://localhost:81/service";
     // TODO http://jira.geo2tag.org:8080/browse/GT-717
 	public static String serverUrl = "http://tracks.osll.spb.ru:81/service";
+	//public static String serverUrl = 
+	//		SettingsStorage.getInstance().getValue(DefaultValues.SERVER_URL).toString() + "service";
+	
 	
 	static {
 		Log.setLogger(new WebLogger());
