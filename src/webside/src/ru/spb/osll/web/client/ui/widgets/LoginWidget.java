@@ -117,7 +117,6 @@ public class LoginWidget extends FieldsWidget {
 	private void login(){
 		hideMessage();
 		final WUser user = new WUser(m_loginField.getText(), m_passField.getText());
-		
 		AsyncCallback<WUser> callback = new AsyncCallback<WUser>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -130,10 +129,11 @@ public class LoginWidget extends FieldsWidget {
 					if (user.getStatus() == Response.STATUS_SUCCES){
 						GTState.Instanse().setCurUser(user);
 						GTShell.Instance.setDefaultContent();
-						System.out.println(user.getToken());
 					} else if (user.getStatus() == Response.STATUS_FAIL){
 						showMessage(Localizer.res().loginFailed());
 					}
+				} else {
+					showMessage(Localizer.res().invalidCredentials());
 				}
 			}
 		};

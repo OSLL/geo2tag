@@ -69,10 +69,12 @@ public interface GTLocalization extends Constants {
 	String deployDate();
 	
 	// Widget : LoginWidget
+	String pageLogin();
 	String login();
 	String password();
 	String confirm();
 	String loginFailed();
+	String invalidCredentials();
 
 	// Widget : RegistrationWidget
 	String email();
@@ -103,4 +105,7 @@ public interface GTLocalization extends Constants {
 	
 	// Widget : TestAccountWidget
 	String TestAccountWidget();
+	
+	// Widget : RestorePasswordWidget
+	String forgotPassword();
 }

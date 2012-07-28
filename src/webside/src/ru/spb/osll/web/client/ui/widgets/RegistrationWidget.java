@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.spb.osll.web.client.GTShell;
-import ru.spb.osll.web.client.GTState;
 import ru.spb.osll.web.client.localization.Localizer;
 import ru.spb.osll.web.client.services.GTService;
 import ru.spb.osll.web.client.services.objects.WUser;
@@ -48,7 +47,9 @@ import ru.spb.osll.web.client.ui.core.UIUtil;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -58,10 +59,32 @@ public class RegistrationWidget extends FieldsWidget {
 	private TextBox m_email;
 	private PasswordTextBox m_pass;
 	private PasswordTextBox m_passConfirm;
+	
+	private Anchor m_loginLink;
+	private Anchor m_forgotPasswordLink;
 
 	@Override
 	protected String getName() {
 		return LOC.registration();
+	}
+	
+	@Override
+	protected List<Anchor> getLinks() {
+		m_loginLink = new Anchor(Localizer.res().pageLogin());
+		m_loginLink.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				dropData();
+				GTShell.Instance.setContent(LoginWidget.Instance());
+			}
+		});
+		
+		m_forgotPasswordLink = new Anchor(Localizer.res().forgotPassword());
+		
+		List<Anchor> links = new ArrayList<Anchor>();
+		links.add(m_loginLink);
+		links.add(m_forgotPasswordLink);
+		return links;
 	}
 
 	@Override
@@ -86,28 +109,7 @@ public class RegistrationWidget extends FieldsWidget {
 			@Override
 			public void onClick(ClickEvent event) {
 				hideMessage();
-				if (isValid()) {
-					final WUser user = new WUser(m_login.getText(), m_pass.getText());
-					user.setEmail(m_email.getText());
-					GTService.Util.getInstance().registerUser(user, new AsyncCallback<Boolean>() {
-						@Override
-						public void onSuccess(Boolean result) {
-							if (result = true) {
-								showMessage(Localizer.res().waitForMessage());
-								GTState.Instanse().setCurUser(null);
-								LoginWidget.Instance().dropData();
-								GTShell.Instance.setContent(LoginWidget.Instance());
-							} else {
-								showMessage(Localizer.res().userExists());
-							}
-						}
-						@Override
-						public void onFailure(Throwable caught) {
-							System.out.println(caught.getMessage());
-							showMessage(caught.getMessage());
-						}
-					});
-				}
+				registerUser();
 			}
 		});
 
@@ -116,6 +118,40 @@ public class RegistrationWidget extends FieldsWidget {
 		return buttons;
 	}
 
+	private void registerUser(){
+		hideMessage();
+		if (isValid()) {
+			final WUser user = new WUser(m_login.getText(), m_pass.getText());
+			user.setEmail(m_email.getText());
+			AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+				@Override
+				public void onSuccess(Boolean result) {
+					if (result == true) {
+						showMessage(Localizer.res().waitForMessage());
+						LoginWidget.Instance().dropData();
+						Timer timer = new Timer()
+				        {
+				            @Override
+				            public void run()
+				            {
+				            	dropData();
+				            	GTShell.Instance.setContent(LoginWidget.Instance());
+				            }
+				        };
+				        timer.schedule(2500);
+					} else {
+						showMessage(Localizer.res().userExists());
+					}
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					showMessage(caught.getMessage());
+				}
+			};
+			GTService.Util.getInstance().registerUser(user, callback);
+		}
+	}
+	
 	private boolean isValid() {
 		final String login = m_login.getText();
 		final String email = m_email.getText();
@@ -143,6 +179,14 @@ public class RegistrationWidget extends FieldsWidget {
 			return false;
 		}
 		return true;
+	}
+	
+	public void dropData() {
+	    m_login.setText("");
+	    m_email.setText("");
+	    m_pass.setText("");
+	    m_passConfirm.setText("");
+	    hideMessage();
 	}
 
 	public static RegistrationWidget Instance(){

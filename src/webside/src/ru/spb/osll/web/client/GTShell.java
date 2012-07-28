@@ -54,7 +54,7 @@ public class GTShell extends Composite {
 		m_authLink.addClickHandler(m_authHandler);
 		
 		autentificationBox.setSpacing(8);
-		autentificationBox.add( m_regLink);
+		autentificationBox.add(m_regLink);
 		autentificationBox.add(m_authLink);
 
 		initStartWidget();
