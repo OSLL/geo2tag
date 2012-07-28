@@ -57,10 +57,8 @@ public class Errno {
     public static int NETWORK_ERROR                     = 18;
     public static int EMAIL_ALREADY_EXIST_ERROR         = 19;
 
-    public Map<Integer, String> initErrnoMap() {
-
-        Map<Integer, String> emap = new HashMap<Integer, String>();
-
+    private static Map<Integer, String> emap = new HashMap<Integer, String>();
+    static {
         emap.put(SUCCESS,                           "SUCCESS");                         // 0
         emap.put(WRONG_TOKEN_ERROR,                 "WRONG_TOKEN_ERROR");               // 1
         emap.put(USER_ALREADY_EXIST_ERROR,          "USER_ALREADY_EXIST_ERROR");        // 2
@@ -81,12 +79,10 @@ public class Errno {
         emap.put(TMP_USER_ALREADY_EXIST_ERROR,      "TMP_USER_ALREADY_EXIST_ERROR");    // 17
         emap.put(NETWORK_ERROR,                     "NETWORK_ERROR");                   // 18
         emap.put(EMAIL_ALREADY_EXIST_ERROR,         "EMAIL_ALREADY_EXIST_ERROR");       // 19
-
-        return emap;
     }
 	
-	public String getErrorByCode(int error) {
-		return initErrnoMap().get(error);
+	public static String getErrorByCode(int error) {
+		return emap.get(error);
 	}
 
 }

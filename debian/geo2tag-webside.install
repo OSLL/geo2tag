@@ -1,2 +1,3 @@
 debian/tmp/opt/geo2tag/geo2tag.war
 debian/tmp/opt/geo2tag/apache-tomcat-7.0.27.zip
+debian/tmp/opt/geo2tag/geo2tag-webside.conf

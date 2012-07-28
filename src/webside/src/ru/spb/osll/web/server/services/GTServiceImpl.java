@@ -44,8 +44,10 @@ import ru.spb.osll.web.client.services.objects.Response;
 import ru.spb.osll.web.client.services.objects.WChannel;
 import ru.spb.osll.web.client.services.objects.WMark;
 import ru.spb.osll.web.client.services.objects.WUser;
+import ru.spb.osll.web.server.DefaultValues;
 import ru.spb.osll.web.server.JGeoConnector;
 import ru.spb.osll.web.server.Session;
+import ru.spb.osll.web.server.SettingsStorage;
 import ru.spb.osll.web.server.WebLogger;
 import ru.spb.osll.json.*;
 
@@ -55,8 +57,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class GTServiceImpl extends RemoteServiceServlet implements 
 		GTService, Session.HasSession {
 	
-	//public static String serverUrl = "http://localhost:81/service";
-	public static String serverUrl = "http://tracks.geo2tag.org:81/service";
+	public static String serverUrl = 
+			SettingsStorage.getInstance().getValue(DefaultValues.SERVER_URL).toString() + "service";
+	
 	
 	static {
 		Log.setLogger(new WebLogger());
@@ -64,8 +67,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public WUser login(WUser user) throws IllegalArgumentException {
-	    Logger.getLogger(getClass()).debug("called login()");
-
+		Logger.getLogger(getClass()).debug("called login()");
 		JsonLoginRequest request = new JsonLoginRequest(user.getLogin(), user.getPassword(), serverUrl);
 		JsonLoginResponse response = new JsonLoginResponse();
 		response.parseJson(request.doRequest());
@@ -74,7 +76,7 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 		} else {
 			WUser newUser = new WUser(user.getLogin(), user.getPassword());
 			newUser.setToken(response.getAuthString());
-			newUser.setStatus(Response.STATUS_SUCCES );
+			newUser.setStatus(Response.STATUS_SUCCES);
 			Session.Instance().addValue(this, USER_TOKEN, newUser.getToken());
 			return newUser;
 		}

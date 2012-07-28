@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 /*
- * Copyright 2010-2011  Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2010-2012  Vasily Romanikhin  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,7 +33,7 @@
  */
 -->
 
-<project name="TrackerActivity" default="help">
+<project name="G2TTracker" default="all">
 
 <!-- The local.properties file is created and updated by the 'android'
      tool.
@@ -77,8 +77,11 @@
 
     <taskdef name="setup"
         classname="com.android.ant.SetupTask"
-        classpathref="android.antlibs" />
+        classpathref="android.antlibs" 
+    />
 
+	<target name="all" depends="clean, jgeo-clean, jgeo, debug" />
+	
 <!-- extension targets. Uncomment the ones where you want to do custom work
      in between standard targets -->
 <!--
@@ -114,5 +117,19 @@
              - customize to your needs.
     -->
     <setup />
+
+    <target name="-pre-compile">
+    	<antcall target="jgeo"/>
+    </target>
+	
+	<!-- JGEO CORE -->
+	<target name="jgeo">
+		<ant antfile="build.xml" dir="../../../jgeo/" target="all"/>
+		<copy todir="libs" file="../../../jgeo/jgeo.jar" />
+	</target>
+
+	<target name="jgeo-clean">
+		<ant antfile="build.xml" dir="../../../jgeo/" target="clean"/>
+	</target>
 
 </project>

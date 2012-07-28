@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011  Vasily Romanikhin  bac1ca89@gmail.com
+ * Copyright 2010-2012  Vasily Romanikhin  bac1ca89@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -54,11 +54,12 @@ public class JsonApplyMarkRequest extends JsonBaseRequest {
 	private String m_description;
 	private double m_latitude;
 	private double m_longitude;
+	private double m_altitude;
 	private String m_time;
 	private String m_serverUrl;
 	
 	public JsonApplyMarkRequest(String authToken, String channel, String title, String link,
-			String description, double latitude, double longitude, String time, String serverUrl){
+			String description, double latitude, double longitude, double altitude, String time, String serverUrl){
 		m_authToken = authToken;
 		m_channel = channel;
 		m_title = title;
@@ -66,23 +67,24 @@ public class JsonApplyMarkRequest extends JsonBaseRequest {
 		m_description = description;
 		m_latitude = latitude;
 		m_longitude = longitude;
+		m_altitude = altitude;
 		m_time = time;
 		m_serverUrl = serverUrl;
 	}
-	
 	
 	@Override
 	protected JSONObject doRequestInternal() throws JSONException, IOException,
 			URISyntaxException {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(AUTH_TOKEN, m_authToken);
-		jsonObject.put(CHANNEL, m_channel);
-		jsonObject.put(TITLE, m_title);
-		jsonObject.put(LINK, m_link);
-		jsonObject.put(DESCRIPTION, m_description);
-		jsonObject.put(LATITUDE, m_latitude);
-		jsonObject.put(LONGITUDE, m_longitude);
-		jsonObject.put(TIME, m_time);
+		jsonObject.put("auth_token", m_authToken);
+		jsonObject.put("channel", m_channel);
+		jsonObject.put("title", m_title);
+		jsonObject.put("link", m_link);
+		jsonObject.put("description", m_description);
+		jsonObject.put("latitude", m_latitude);
+		jsonObject.put("longitude", m_longitude);
+		jsonObject.put("altitude", m_altitude);
+		jsonObject.put("time", m_time);
 		Log.out.println(JSON_LOG, jsonObject.toString());
 		return JsonBase.instance().doRequest(jsonObject, new URI(m_serverUrl + REQUEST)); // TODO
 	}

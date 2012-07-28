@@ -63,7 +63,7 @@ public interface IRequest {
 	}
 
 	public interface IApplyMark{
-		String REQUEST = "/apply";
+		String REQUEST = "/writeTag";
 
 		String AUTH_TOKEN = "auth_token";
 		String CHANNEL = "channel";

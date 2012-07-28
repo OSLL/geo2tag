@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+/*
+ * Copyright 2012  Vasily Romanikhin  bac1ca89@gmail.com
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * 3. The name of the author may not be used to endorse or promote
+ *    products derived from this software without specific prior written
+ *    permission.
+ *
+ * The advertising clause requiring mention in adverts must never be included.
+ * PROJ: OSLL/geo2tag
+ */
+-->
+
 <resources>
-    <string name="hello">Hello World, TrackerActivity!</string>
-    <string name="app_name">BusTracker</string>
+    <string name="app_name">Geo2Tag Tracker</string>
     
     
 <!-- settings -->
    	<string name="login">Login</string>
    	<string name="password">Password</string>
    	<string name="channel">Channel</string>
-   	<string name="key">Key</string>
    	<string name="server_address">Geo2Tag server</string>
    	<string name="time_request">Time between ticks</string>
 	<string name="radius">Radius</string>
@@ -25,5 +57,20 @@
 	<string name="btnStop">Stop Tracker</string>
 	<string name="btnSettings">Settings</string>
 	<string name="btnHide">Hide</string>
+	
+<!-- messages -->
+	<string name="msg_tracker_already_running">Tracker is already running...</string>
+	<string name="msg_tracker_start">Tracker is running...</string>
+	<string name="msg_tracker_stop">Tracker stopped...</string>
+	<string name="msg_fail_connection">Connection fail...</string>
+	<string name="msg_fail_connection_to_server">Fail connection to server...</string>
+	<string name="msg_settigns_saved">Settings saved!</string>
+	<string name="msg_settigns_not_available">Settings are not available! Stop the tracker...</string>
+
+	<string name="msg_srv_channel_preparation_failed">Channel preparation failed...</string>
+	<string name="msg_srv_channel_successfully_checked">Channel successfully checked...</string>
+	<string name="msg_srv_channel_prepared">Channel prepared...</string>
+	<string name="msg_srv_login_failed">Login is failed...</string>
+	<string name="msg_srv_login_successful">Login successful</string>
 	
 </resources>
