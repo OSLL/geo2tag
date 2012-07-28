@@ -5,12 +5,12 @@
 
 class Settings
 {
-private:
+  private:
     QSettings instance;
     Settings();
     QMap<QString,QString> m_channels;
 
-public:
+  public:
     static Settings& getInstance();
     QString getLogin();
     QString getPassword();
@@ -24,8 +24,5 @@ public:
     void setTimeInterval(int interval);
     bool isHavingAuthData();
 
-
-
 };
-
-#endif // SETTINGS_H
+#endif                                  // SETTINGS_H

@@ -38,24 +38,24 @@
 #include "SessionInternal.h"
 
 DbSession::DbSession(qlonglong id,
-                     const QString &sessionToken,
-                     const QDateTime &lastAccessTime,
-                     const QSharedPointer<common::User> &user)
-    : Session(sessionToken, lastAccessTime, user),
-      m_id(id)
+const QString &sessionToken,
+const QDateTime &lastAccessTime,
+const QSharedPointer<common::User> &user)
+: Session(sessionToken, lastAccessTime, user),
+m_id(id)
 {
 }
 
 
 qlonglong DbSession::getId() const
 {
-    return m_id;
+  return m_id;
 }
 
 
 void DbSession::setId(qlonglong id)
 {
-    m_id = id;
+  m_id = id;
 }
 
 

@@ -41,27 +41,25 @@ QTM_USE_NAMESPACE
 
 class LocationManager : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QGeoPositionInfoSource *m_satelliteSource;
-    QGeoPositionInfoSource *m_nonSatelliteSource;
-    QGeoPositionInfo m_satelliteInfo;
-    QGeoPositionInfo m_nonSatelliteInfo;
-    QMutex m_infoMutex;
+  QGeoPositionInfoSource *m_nonSatelliteSource;
+  QGeoPositionInfo m_satelliteInfo;
+  QGeoPositionInfo m_nonSatelliteInfo;
+  QMutex m_infoMutex;
 
-public:
+  public:
     explicit LocationManager(QObject *parent = 0);
     QGeoPositionInfo getInfo();
     bool isInfoValid();
 
-
-signals:
+    signals:
     void positionUpdated();
 
-public slots:
+  public slots:
     void satellitePositionUpdated(const QGeoPositionInfo &info);
     void nonSatellitePositionUpdated(const QGeoPositionInfo &info);
 
 };
-
-#endif // LOCATIONMANAGER_H
+#endif                                  // LOCATIONMANAGER_H

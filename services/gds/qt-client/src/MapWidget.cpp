@@ -6,302 +6,347 @@
 QTM_USE_NAMESPACE
 
 static const bool enableKineticPanning = true;
-static const qreal kineticPanningHalflife = 200.0; // time until kinetic panning speed slows down to 50%, in msec
-static const qreal panSpeedNormal = 0.3; // keyboard panning speed without modifiers, in pixels/msec
-static const qreal panSpeedFast = 1.0; // keyboard panning speed with shift, in pixels/msec
-static const qreal kineticPanSpeedThreshold = 0.02; // minimum panning speed, in pixels/msec
-static const int kineticPanningResolution = 75; // temporal resolution. Smaller values take more CPU but improve visual quality
-static const int holdTimeThreshold = 200; // maximum time between last mouse move and mouse release for kinetic panning to kick in
+                                        // time until kinetic panning speed slows down to 50%, in msec
+static const qreal kineticPanningHalflife = 200.0;
+static const qreal panSpeedNormal = 0.3;// keyboard panning speed without modifiers, in pixels/msec
+static const qreal panSpeedFast = 1.0;  // keyboard panning speed with shift, in pixels/msec
+                                        // minimum panning speed, in pixels/msec
+static const qreal kineticPanSpeedThreshold = 0.02;
+                                        // temporal resolution. Smaller values take more CPU but improve visual quality
+static const int kineticPanningResolution = 75;
+                                        // maximum time between last mouse move and mouse release for kinetic panning to kick in
+static const int holdTimeThreshold = 200;
 
 MapWidget::MapWidget(QGeoMappingManager *manager) :
-    QGraphicsGeoMap(manager),
-    coordQueryState(false),
-    panActive(false),
-    kineticTimer(new QTimer),
-    lastCircle(0)
+QGraphicsGeoMap(manager),
+coordQueryState(false),
+panActive(false),
+kineticTimer(new QTimer),
+lastCircle(0)
 {
-    for (int i = 0; i < 5; ++i) mouseHistory.append(MouseHistoryEntry());
+  for (int i = 0; i < 5; ++i) mouseHistory.append(MouseHistoryEntry());
 
-    //connect(kineticTimer, SIGNAL(timeout()), this, SLOT(kineticTimerEvent()));
-    kineticTimer->setInterval(kineticPanningResolution);
+  //connect(kineticTimer, SIGNAL(timeout()), this, SLOT(kineticTimerEvent()));
+  kineticTimer->setInterval(kineticPanningResolution);
 
-    //this->addMapObject(new QGeoMapObject(new QGeoMapData()));
+  //this->addMapObject(new QGeoMapObject(new QGeoMapData()));
 }
+
 
 MapWidget::~MapWidget() {}
 
 void MapWidget::setMouseClickCoordQuery(bool state)
 {
-    coordQueryState = state;
+  coordQueryState = state;
 }
+
 
 void MapWidget::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    setFocus();
-    if (event->button() == Qt::LeftButton) {
-        if (event->modifiers() & Qt::ControlModifier) {
-        } else {
-            if (coordQueryState) {
-                emit coordQueryResult(screenPositionToCoordinate(event->lastPos()));
-                return;
-            }
-
-            panActive = true;
-
-            // When pressing, stop the timer and stop all current kinetic panning
-            kineticTimer->stop();
-            kineticPanSpeed = QPointF();
-
-            lastMoveTime = QTime::currentTime();
-        }
+  setFocus();
+  if (event->button() == Qt::LeftButton)
+  {
+    if (event->modifiers() & Qt::ControlModifier)
+    {
     }
+    else
+    {
+      if (coordQueryState)
+      {
+        emit coordQueryResult(screenPositionToCoordinate(event->lastPos()));
+        return;
+      }
 
-    event->accept();
+      panActive = true;
+
+      // When pressing, stop the timer and stop all current kinetic panning
+      kineticTimer->stop();
+      kineticPanSpeed = QPointF();
+
+      lastMoveTime = QTime::currentTime();
+    }
+  }
+
+  event->accept();
 }
+
 
 void MapWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton) {
-        if (panActive) {
-            panActive = false;
+  if (event->button() == Qt::LeftButton)
+  {
+    if (panActive)
+    {
+      panActive = false;
 
-            if (!enableKineticPanning || lastMoveTime.msecsTo(QTime::currentTime()) > holdTimeThreshold) {
-                return;
-            }
+      if (!enableKineticPanning || lastMoveTime.msecsTo(QTime::currentTime()) > holdTimeThreshold)
+      {
+        return;
+      }
 
-            kineticPanSpeed = QPointF();
-            int entries_considered = 0;
+      kineticPanSpeed = QPointF();
+      int entries_considered = 0;
 
-            QTime currentTime = QTime::currentTime();
-            foreach(MouseHistoryEntry entry, mouseHistory) {
-                // first=speed, second=time
-                int deltaTime = entry.second.msecsTo(currentTime);
-                if (deltaTime < holdTimeThreshold) {
-                    kineticPanSpeed += entry.first;
-                    entries_considered++;
-                }
-            }
-            if (entries_considered > 0) kineticPanSpeed /= entries_considered;
-            lastMoveTime = currentTime;
-
-            // When releasing the mouse button/finger while moving, start the kinetic panning timer
-            kineticTimer->start();
-            panDecellerate = true;
+      QTime currentTime = QTime::currentTime();
+      foreach(MouseHistoryEntry entry, mouseHistory)
+      {
+        // first=speed, second=time
+        int deltaTime = entry.second.msecsTo(currentTime);
+        if (deltaTime < holdTimeThreshold)
+        {
+          kineticPanSpeed += entry.first;
+          entries_considered++;
         }
+      }
+      if (entries_considered > 0) kineticPanSpeed /= entries_considered;
+      lastMoveTime = currentTime;
+
+      // When releasing the mouse button/finger while moving, start the kinetic panning timer
+      kineticTimer->start();
+      panDecellerate = true;
     }
+  }
 
-    emit clicked(event->pos());
+  emit clicked(event->pos());
 
-    event->accept();
+  event->accept();
 }
+
 
 void MapWidget::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (event->modifiers() & Qt::ControlModifier) {
-        if (lastCircle)
-            lastCircle->setCenter(this->screenPositionToCoordinate(event->pos()));
-    } else if (panActive) {
-        // Calculate time delta
-        QTime currentTime = QTime::currentTime();
-        int deltaTime = lastMoveTime.msecsTo(currentTime);
-        lastMoveTime = currentTime;
-
-        // Calculate position delta
-        QPointF delta = event->lastPos() - event->pos();
-
-        // Calculate and set speed
-        if (deltaTime > 0) {
-            kineticPanSpeed = delta / deltaTime;
-
-            mouseHistory.push_back(MouseHistoryEntry(kineticPanSpeed, currentTime));
-            mouseHistory.pop_front();
-        }
-
-        // Pan map
-        panFloatWrapper(delta);
-    }
-
-    event->accept();
-}
-
-void MapWidget::kineticTimerEvent()
-{
+  if (event->modifiers() & Qt::ControlModifier)
+  {
+    if (lastCircle)
+      lastCircle->setCenter(this->screenPositionToCoordinate(event->pos()));
+  }
+  else if (panActive)
+  {
+    // Calculate time delta
     QTime currentTime = QTime::currentTime();
     int deltaTime = lastMoveTime.msecsTo(currentTime);
     lastMoveTime = currentTime;
 
-    if (panDecellerate)
-        kineticPanSpeed *= pow(qreal(0.5), qreal(deltaTime / kineticPanningHalflife));
+    // Calculate position delta
+    QPointF delta = event->lastPos() - event->pos();
 
-    QPointF scaledSpeed = kineticPanSpeed * deltaTime;
+    // Calculate and set speed
+    if (deltaTime > 0)
+    {
+      kineticPanSpeed = delta / deltaTime;
 
-    if (kineticPanSpeed.manhattanLength() < kineticPanSpeedThreshold) {
-        // Kinetic panning is almost halted -> stop it.
-        kineticTimer->stop();
-        return;
+      mouseHistory.push_back(MouseHistoryEntry(kineticPanSpeed, currentTime));
+      mouseHistory.pop_front();
     }
-    panFloatWrapper(scaledSpeed);
+
+    // Pan map
+    panFloatWrapper(delta);
+  }
+
+  event->accept();
 }
+
+
+void MapWidget::kineticTimerEvent()
+{
+  QTime currentTime = QTime::currentTime();
+  int deltaTime = lastMoveTime.msecsTo(currentTime);
+  lastMoveTime = currentTime;
+
+  if (panDecellerate)
+    kineticPanSpeed *= pow(qreal(0.5), qreal(deltaTime / kineticPanningHalflife));
+
+  QPointF scaledSpeed = kineticPanSpeed * deltaTime;
+
+  if (kineticPanSpeed.manhattanLength() < kineticPanSpeedThreshold)
+  {
+    // Kinetic panning is almost halted -> stop it.
+    kineticTimer->stop();
+    return;
+  }
+  panFloatWrapper(scaledSpeed);
+}
+
 
 // Wraps the pan(int, int) method to achieve floating point accuracy, which is needed to scroll smoothly.
 void MapWidget::panFloatWrapper(const QPointF& delta)
 {
-    // Add to previously stored panning distance
-    remainingPan += delta;
+  // Add to previously stored panning distance
+  remainingPan += delta;
 
-    // Convert to integers
-    QPoint move = remainingPan.toPoint();
+  // Convert to integers
+  QPoint move = remainingPan.toPoint();
 
-    // Commit mouse movement
-    pan(move.x(), move.y());
+  // Commit mouse movement
+  pan(move.x(), move.y());
 
-    // Store committed mouse movement
-    remainingPan -= move;
+  // Store committed mouse movement
+  remainingPan -= move;
 
 }
+
 
 void MapWidget::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    setFocus();
+  setFocus();
 
-    pan(event->lastPos().x() -  size().width() / 2.0, event->lastPos().y() - size().height() / 2.0);
-    if (zoomLevel() < maximumZoomLevel())
-        setZoomLevel(zoomLevel() + 1);
+  pan(event->lastPos().x() -  size().width() / 2.0, event->lastPos().y() - size().height() / 2.0);
+  if (zoomLevel() < maximumZoomLevel())
+    setZoomLevel(zoomLevel() + 1);
 
-    event->accept();
+  event->accept();
 }
+
 
 void MapWidget::keyPressEvent(QKeyEvent *event)
 {
-    switch (event->key()) {
+  switch (event->key())
+  {
     case Qt::Key_Minus:
-#ifdef Q_OS_SYMBIAN
+    #ifdef Q_OS_SYMBIAN
     case Qt::Key_VolumeDown:
-#endif
-        if (zoomLevel() > minimumZoomLevel()) {
-            setZoomLevel(zoomLevel() - 1);
-        }
-        break;
+    #endif
+      if (zoomLevel() > minimumZoomLevel())
+      {
+        setZoomLevel(zoomLevel() - 1);
+      }
+      break;
 
     case Qt::Key_Plus:
-#ifdef Q_OS_SYMBIAN
+    #ifdef Q_OS_SYMBIAN
     case Qt::Key_VolumeUp:
-#endif
-        if (zoomLevel() < maximumZoomLevel()) {
-            setZoomLevel(zoomLevel() + 1);
-        }
-        break;
+    #endif
+      if (zoomLevel() < maximumZoomLevel())
+      {
+        setZoomLevel(zoomLevel() + 1);
+      }
+      break;
 
     case Qt::Key_T:
-        if (mapType() == QGraphicsGeoMap::StreetMap)
-            setMapType(QGraphicsGeoMap::SatelliteMapDay);
-        else if (mapType() == QGraphicsGeoMap::SatelliteMapDay)
-            setMapType(QGraphicsGeoMap::StreetMap);
-        break;
+      if (mapType() == QGraphicsGeoMap::StreetMap)
+        setMapType(QGraphicsGeoMap::SatelliteMapDay);
+      else if (mapType() == QGraphicsGeoMap::SatelliteMapDay)
+        setMapType(QGraphicsGeoMap::StreetMap);
+      break;
 
     case Qt::Key_Shift:
-        // If there's no current movement, we don't need to handle shift.
-        if (panDir.manhattanLength() == 0) break;
+      // If there's no current movement, we don't need to handle shift.
+      if (panDir.manhattanLength() == 0) break;
     case Qt::Key_Left:
     case Qt::Key_Right:
     case Qt::Key_Up:
     case Qt::Key_Down:
-        if (!event->isAutoRepeat()) {
-            switch (event->key()) {
-            case Qt::Key_Left:
-                panDir.setX(-1);
-                break;
+      if (!event->isAutoRepeat())
+      {
+        switch (event->key())
+        {
+          case Qt::Key_Left:
+            panDir.setX(-1);
+            break;
 
-            case Qt::Key_Right:
-                panDir.setX(1);
-                break;
+          case Qt::Key_Right:
+            panDir.setX(1);
+            break;
 
-            case Qt::Key_Up:
-                panDir.setY(-1);
-                break;
+          case Qt::Key_Up:
+            panDir.setY(-1);
+            break;
 
-            case Qt::Key_Down:
-                panDir.setY(1);
-                break;
-            }
-
-            lastMoveTime = QTime::currentTime();
-            kineticTimer->start();
-            panDecellerate = false;
-
-            applyPan(event->modifiers());
+          case Qt::Key_Down:
+            panDir.setY(1);
+            break;
         }
-        break;
-    }
 
-    event->accept();
+        lastMoveTime = QTime::currentTime();
+        kineticTimer->start();
+        panDecellerate = false;
+
+        applyPan(event->modifiers());
+      }
+      break;
+  }
+
+  event->accept();
 }
+
 
 void MapWidget::keyReleaseEvent(QKeyEvent* event)
 {
-    event->accept();
+  event->accept();
 
-    // Qt seems to have auto-repeated release events too...
-    if (event->isAutoRepeat()) return;
+  // Qt seems to have auto-repeated release events too...
+  if (event->isAutoRepeat()) return;
 
-    switch (event->key()) {
+  switch (event->key())
+  {
     case Qt::Key_Left:
     case Qt::Key_Right:
-        panDir.setX(0);
-        break;
+      panDir.setX(0);
+      break;
 
     case Qt::Key_Up:
     case Qt::Key_Down:
-        panDir.setY(0);
-        break;
+      panDir.setY(0);
+      break;
 
     case Qt::Key_Shift:
-        if (panDir.manhattanLength() == 0) return;
-        break;
+      if (panDir.manhattanLength() == 0) return;
+      break;
 
     default:
-        return;
-    }
+      return;
+  }
 
-    applyPan(event->modifiers());
+  applyPan(event->modifiers());
 }
+
 
 // Evaluates the panDir field and sets kineticPanSpeed accordingly. Used in MapWidget::keyPressEvent and MapWidget::keyReleaseEvent
 void MapWidget::applyPan(const Qt::KeyboardModifiers& modifiers)
 {
-    Q_ASSERT(panDir.manhattanLength() <= 2);
+  Q_ASSERT(panDir.manhattanLength() <= 2);
 
-    if (panDir.manhattanLength() == 0) {
-        // If no more direction keys are held down, decellerate
-        panDecellerate = true;
-    } else {
-        // Otherwise, set new direction
-        qreal panspeed = (modifiers & Qt::ShiftModifier) ? panSpeedFast : panSpeedNormal;
+  if (panDir.manhattanLength() == 0)
+  {
+    // If no more direction keys are held down, decellerate
+    panDecellerate = true;
+  }
+  else
+  {
+    // Otherwise, set new direction
+    qreal panspeed = (modifiers & Qt::ShiftModifier) ? panSpeedFast : panSpeedNormal;
 
-        if (panDir.manhattanLength() == 2) {
-            // If 2 keys are held down, adjust speed to achieve the same speed in all 8 possible directions
-            panspeed *= sqrt(0.5);
-        }
-
-        // Finally set the current panning speed
-        kineticPanSpeed = QPointF(panDir) * panspeed;
+    if (panDir.manhattanLength() == 2)
+    {
+      // If 2 keys are held down, adjust speed to achieve the same speed in all 8 possible directions
+      panspeed *= sqrt(0.5);
     }
+
+    // Finally set the current panning speed
+    kineticPanSpeed = QPointF(panDir) * panspeed;
+  }
 }
+
 
 void MapWidget::wheelEvent(QGraphicsSceneWheelEvent* event)
 {
-    qreal panx = event->pos().x() - size().width() / 2.0;
-    qreal pany = event->pos().y() - size().height() / 2.0;
-    pan(panx, pany);
-    if (event->delta() > 0) { //zoom in
-        if (zoomLevel() < maximumZoomLevel()) {
-            setZoomLevel(zoomLevel() + 1);
-        }
-    } else { //zoom out
-        if (zoomLevel() > minimumZoomLevel()) {
-            setZoomLevel(zoomLevel() - 1);
-        }
+  qreal panx = event->pos().x() - size().width() / 2.0;
+  qreal pany = event->pos().y() - size().height() / 2.0;
+  pan(panx, pany);
+  if (event->delta() > 0)               //zoom in
+  {
+    if (zoomLevel() < maximumZoomLevel())
+    {
+      setZoomLevel(zoomLevel() + 1);
     }
-    pan(-panx, -pany);
-    event->accept();
+  }                                     //zoom out
+  else
+  {
+    if (zoomLevel() > minimumZoomLevel())
+    {
+      setZoomLevel(zoomLevel() - 1);
+    }
+  }
+  pan(-panx, -pany);
+  event->accept();
 }

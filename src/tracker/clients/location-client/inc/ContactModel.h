@@ -7,17 +7,18 @@
 
 class ContactModel: public QAbstractListModel
 {
-    Q_OBJECT
-private:
+  Q_OBJECT
+    private:
     QList<QSharedPointer<Contact> > contacts;
 
-public:
-    enum ContactRoles{
-        NameRole = Qt::UserRole+1,
-        CustomNameRole,
-        ImageRole,
-        LatRole,
-        LngRole
+  public:
+    enum ContactRoles
+    {
+      NameRole = Qt::UserRole+1,
+      CustomNameRole,
+      ImageRole,
+      LatRole,
+      LngRole
     };
 
     ContactModel(QObject *parent=0);
@@ -31,10 +32,9 @@ public:
     QList<QSharedPointer<Contact> > getContacts();
     QSharedPointer<Contact> getContactByName(const QString &contactName);
     int getContactNumByName(const QString &contactName);
-public slots:
+  public slots:
     void drawPins();
     void setCustomNameByIndex(/*const QModelIndex &*/int index, const QString & newName);
 
 };
-
-#endif // CONTACTMODEL_H
+#endif                                  // CONTACTMODEL_H

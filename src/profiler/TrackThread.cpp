@@ -45,12 +45,12 @@
 #include <QEventLoop>
 #include <QDateTime>
 
-
 TrackThread::TrackThread(const QSharedPointer<Session>& session, const QSharedPointer<Channel>& channel, const QSharedPointer<DataMark>& tag)
 {
   m_query = new WriteTagQuery(session,channel,tag);
   setConnections();
 }
+
 
 TrackThread::~TrackThread()
 {

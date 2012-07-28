@@ -54,6 +54,7 @@ ProfilerThread::ProfilerThread()
   m_sendTime = QDateTime::currentDateTime();
 }
 
+
 void ProfilerThread::setConnections()
 {
   connect(this,SIGNAL(doRequest()),this, SLOT(sendRequest()));
@@ -61,26 +62,31 @@ void ProfilerThread::setConnections()
   connect(m_query,SIGNAL(success()),this, SLOT(responseReceived()));
 }
 
+
 ProfilerThread::~ProfilerThread()
 {
   delete m_query;
 }
 
+
 void ProfilerThread::run()
 {
- emit doRequest();
- exec();
+  emit doRequest();
+  exec();
 }
 
-int ProfilerThread::getCounter() 
+
+int ProfilerThread::getCounter()
 {
   return m_counter;
 }
+
 
 void ProfilerThread::incCounter()
 {
   m_counter++;
 }
+
 
 void ProfilerThread::sendRequest()
 {
@@ -90,6 +96,7 @@ void ProfilerThread::sendRequest()
   m_sendTime = QDateTime::currentDateTime();
   m_query->doRequest();
 }
+
 
 void ProfilerThread::responseReceived()
 {

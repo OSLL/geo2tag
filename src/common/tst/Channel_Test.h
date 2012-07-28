@@ -65,7 +65,6 @@ namespace Test
 
     private slots:
 
-
   };                                    // class Channel_Test
 
 }                                       // end of namespace Test

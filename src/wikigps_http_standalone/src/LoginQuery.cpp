@@ -69,7 +69,7 @@ DefaultQuery(parent)
 
 QString LoginQuery::getUrl() const
 {
-    return LOGIN_HTTP_URL;
+  return LOGIN_HTTP_URL;
 }
 
 
@@ -93,11 +93,13 @@ void LoginQuery::processReply(QNetworkReply *reply)
     m_session = response.getSessions()->at(0);
     syslog(LOG_INFO,"!!connected!");
     Q_EMIT connected();
-  } else {
+  }
+  else
+  {
     qDebug("!!errorOccured!");
     Q_EMIT errorOccured(response.getErrno());
   }
-//  #endif
+  //  #endif
 }
 
 
@@ -121,4 +123,3 @@ LoginQuery::~LoginQuery()
 
 
 /* ===[ End of file $HeadURL$ ]=== */
-

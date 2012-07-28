@@ -50,15 +50,16 @@ WriteTagRequestJSON::WriteTagRequestJSON(QObject *parent) : JsonSerializer(paren
 {
 }
 
+
 WriteTagRequestJSON::WriteTagRequestJSON(const QSharedPointer<Session> &session,
-                                         const QSharedPointer<Channel> &channel,
-                                         const QSharedPointer<DataMark> &tag,
-                                         QObject *parent)
-    : JsonSerializer(parent)
+const QSharedPointer<Channel> &channel,
+const QSharedPointer<DataMark> &tag,
+QObject *parent)
+: JsonSerializer(parent)
 {
-    m_sessionsContainer->push_back(session);
-    m_channelsContainer->push_back(channel);
-    m_tagsContainer->push_back(tag);
+  m_sessionsContainer->push_back(session);
+  m_channelsContainer->push_back(channel);
+  m_tagsContainer->push_back(tag);
 }
 
 

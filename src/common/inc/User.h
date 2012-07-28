@@ -53,11 +53,10 @@ namespace common
   {
     Q_OBJECT
 
-    QString m_result;
+      QString m_result;
     QString m_token;
     // list of subscribed channels
     QSharedPointer<Channels> m_channels;
-
 
     public:
 

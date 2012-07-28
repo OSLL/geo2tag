@@ -45,5 +45,4 @@
 #include <QEventLoop>
 #include <QTimer>
 bool waitForSignal(QObject *sender, const char *signal, int timeout = 5000);
-
-#endif // SIGNALS_H
+#endif                                  // SIGNALS_H

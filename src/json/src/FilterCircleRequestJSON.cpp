@@ -57,17 +57,17 @@ FilterCircleRequestJSON::FilterCircleRequestJSON(QObject *parent) : FilterReques
 
 QByteArray FilterCircleRequestJSON::getJson() const
 {
-    QJson::Serializer serializer;
-    QVariantMap obj;
-    obj.insert("auth_token",m_sessionsContainer->at(0)->getSessionToken());
-    obj.insert("latitude", m_latitude);
-    obj.insert("longitude", m_longitude);
-    obj.insert("radius", m_radius);
-    obj.insert("time_from", getTimeFrom().toString("dd MM yyyy HH:mm:ss.zzz"));
-    obj.insert("time_to", getTimeTo().toString("dd MM yyyy HH:mm:ss.zzz"));
-    if (m_channelsContainer->size() > 0)
-        obj.insert("channel", m_channelsContainer->at(0)->getName());
-    return serializer.serialize(obj);
+  QJson::Serializer serializer;
+  QVariantMap obj;
+  obj.insert("auth_token",m_sessionsContainer->at(0)->getSessionToken());
+  obj.insert("latitude", m_latitude);
+  obj.insert("longitude", m_longitude);
+  obj.insert("radius", m_radius);
+  obj.insert("time_from", getTimeFrom().toString("dd MM yyyy HH:mm:ss.zzz"));
+  obj.insert("time_to", getTimeTo().toString("dd MM yyyy HH:mm:ss.zzz"));
+  if (m_channelsContainer->size() > 0)
+    obj.insert("channel", m_channelsContainer->at(0)->getName());
+  return serializer.serialize(obj);
 }
 
 
@@ -100,25 +100,29 @@ bool FilterCircleRequestJSON::parseJson(const QByteArray&data)
   return true;
 }
 
+
 void FilterCircleRequestJSON::setShape(const QSharedPointer<FShapeCircle> &shape)
 {
-    FilterRequestJSON::setShape(shape);
-    m_latitude = shape->getLatitude();
-    m_longitude = shape->getLongitude();
-    m_radius = shape->getRadius();
+  FilterRequestJSON::setShape(shape);
+  m_latitude = shape->getLatitude();
+  m_longitude = shape->getLongitude();
+  m_radius = shape->getRadius();
 }
+
 
 double FilterCircleRequestJSON::getLatitude() const
 {
-    return m_latitude;
+  return m_latitude;
 }
+
 
 double FilterCircleRequestJSON::getLongitude() const
 {
-    return m_longitude;
+  return m_longitude;
 }
+
 
 double FilterCircleRequestJSON::getRadius() const
 {
-    return m_radius;
+  return m_radius;
 }

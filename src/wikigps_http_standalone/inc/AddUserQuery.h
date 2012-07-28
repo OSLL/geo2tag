@@ -39,12 +39,11 @@
 #include "DefaultQuery.h"
 #include "common/inc/Session.h"
 
-
 class AddUserQuery: public DefaultQuery
 {
   Q_OBJECT
 
-  QString m_login;
+    QString m_login;
   QString m_password;
   QString m_email;
 
@@ -77,6 +76,5 @@ class AddUserQuery: public DefaultQuery
 
     void connected();
 
-
 };
-#endif // ADDUSERQUERY_H
+#endif                                  // ADDUSERQUERY_H

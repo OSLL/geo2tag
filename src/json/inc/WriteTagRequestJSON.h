@@ -40,7 +40,6 @@
 #include "Channel.h"
 #include "DataMarks.h"
 
-
 class WriteTagRequestJSON : public JsonSerializer
 {
   public:
@@ -48,9 +47,9 @@ class WriteTagRequestJSON : public JsonSerializer
     WriteTagRequestJSON(QObject *parent=0);
 
     WriteTagRequestJSON(const QSharedPointer<Session>& session,
-                        const QSharedPointer<Channel>& channel,
-                        const QSharedPointer<DataMark>& tag,
-                        QObject *parent=0);
+      const QSharedPointer<Channel>& channel,
+      const QSharedPointer<DataMark>& tag,
+      QObject *parent=0);
 
     virtual QByteArray getJson() const;
 

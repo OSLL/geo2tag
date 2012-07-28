@@ -46,14 +46,13 @@
 namespace Test
 {
 
-    class Test_RegisterUserQuery : public QObject
-    {
-        Q_OBJECT
+  class Test_RegisterUserQuery : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-        void response();
+      private slots:
+      void response();
 
-    };  // class Test_RegisterUserQuery
-} // namespace Test
-
-#endif // TEST_REGISTERUSERQUERY_H
+  };                                    // class Test_RegisterUserQuery
+}                                       // namespace Test
+#endif                                  // TEST_REGISTERUSERQUERY_H

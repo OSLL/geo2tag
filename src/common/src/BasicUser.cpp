@@ -40,41 +40,40 @@
 namespace common
 {
 
-    BasicUser::BasicUser(const QString &name, const QString &passw, const QString &email)
-        : m_login(name),
-          m_password(passw),
-          m_email(email)
-    {
-    }
+  BasicUser::BasicUser(const QString &name, const QString &passw, const QString &email)
+    : m_login(name),
+    m_password(passw),
+    m_email(email)
+  {
+  }
 
-    qlonglong BasicUser::getId() const
-    {
-        return 0;
-    }
+  qlonglong BasicUser::getId() const
+  {
+    return 0;
+  }
 
-    const QString& BasicUser::getPassword() const
-    {
-        return m_password;
-    }
+  const QString& BasicUser::getPassword() const
+  {
+    return m_password;
+  }
 
-    const QString& BasicUser::getLogin() const
-    {
-        return m_login;
-    }
+  const QString& BasicUser::getLogin() const
+  {
+    return m_login;
+  }
 
-    const QString& BasicUser::getEmail() const
-    {
-        return m_email;
-    }
+  const QString& BasicUser::getEmail() const
+  {
+    return m_email;
+  }
 
-    void BasicUser::setPassword(QString password)
-    {
-        m_password = password;
-    }
+  void BasicUser::setPassword(QString password)
+  {
+    m_password = password;
+  }
 
-    BasicUser::~BasicUser()
-    {
-    }
+  BasicUser::~BasicUser()
+  {
+  }
 
-}   //namespace common
-
+}                                       //namespace common

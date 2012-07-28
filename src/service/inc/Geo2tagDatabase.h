@@ -44,11 +44,11 @@
 
 class Geo2tagDatabase : public QSqlDatabase
 {
-    QSharedPointer<UpdateThread> m_updateThread;
+  QSharedPointer<UpdateThread> m_updateThread;
 
-public:
+  public:
     Geo2tagDatabase(const QSqlDatabase& parent,
-                    const QSharedPointer<UpdateThread>& updateThread = QSharedPointer<UpdateThread>(0));
+      const QSharedPointer<UpdateThread>& updateThread = QSharedPointer<UpdateThread>(0));
 
     void incrementTransactionCount(int i = 1);
 
@@ -57,6 +57,4 @@ public:
 
     bool transaction();
 };
-
-
-#endif // GEO2TAGDATABASE_H
+#endif                                  // GEO2TAGDATABASE_H

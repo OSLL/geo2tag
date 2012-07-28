@@ -38,18 +38,20 @@
 #include "defines.h"
 
 DefaultQuery::DefaultQuery(QObject *parent): QObject(parent),
-    m_manager(new QNetworkAccessManager(parent)),
-    m_url(DEFAULT_URL)
+m_manager(new QNetworkAccessManager(parent)),
+m_url(DEFAULT_URL)
 {
   connect(m_manager, SIGNAL(finished(QNetworkReply*)),this, SLOT(process(QNetworkReply*)));
   connect(m_manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-          this, SLOT(handleError()));
+    this, SLOT(handleError()));
 }
+
 
 void DefaultQuery::setUrl(const QString &url)
 {
-    m_url = url;
+  m_url = url;
 }
+
 
 void DefaultQuery::doRequest()
 {

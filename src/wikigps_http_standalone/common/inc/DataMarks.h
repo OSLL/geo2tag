@@ -113,7 +113,6 @@ class DataMark: public QObject
     QSharedPointer<Channel> getChannel() const;
     static double getDistance(double lat1, double lon1, double lat2, double lon2);
 
-
     virtual ~DataMark();
 };
 

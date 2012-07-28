@@ -42,59 +42,66 @@
 #include "RegisterUserResponseJSON.h"
 
 RegisterUserQuery::RegisterUserQuery(const QString &email, const QString &login, const QString &password, QObject *parent)
-    : DefaultQuery(parent),
-      m_email(email),
-      m_login(login),
-      m_password(password)
+: DefaultQuery(parent),
+m_email(email),
+m_login(login),
+m_password(password)
 {
 }
 
+
 RegisterUserQuery::RegisterUserQuery(QObject *parent)
-    : DefaultQuery(parent)
+: DefaultQuery(parent)
 {
 }
+
 
 QString RegisterUserQuery::getUrl() const
 {
-    //const QString str = "http://localhost:80/service/registerUser";
-    //return str;
-    return REGISTER_USER_HTTP_URL;
+  //const QString str = "http://localhost:80/service/registerUser";
+  //return str;
+  return REGISTER_USER_HTTP_URL;
 }
+
 
 QByteArray RegisterUserQuery::getRequestBody() const
 {
-    QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, "unknown",m_email));
-    RegisterUserRequestJSON request;
-    request.addUser(dummyUser);
-    return request.getJson();
+  QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, "unknown",m_email));
+  RegisterUserRequestJSON request;
+  request.addUser(dummyUser);
+  return request.getJson();
 }
+
 
 void RegisterUserQuery::processReply(QNetworkReply *reply)
 {
-    RegisterUserResponseJSON response;
-    response.parseJson(reply->readAll());
-    if (response.getErrno() == SUCCESS) {
-        Q_EMIT connected();
-    } else {
-        Q_EMIT errorOccured(getErrnoDescription(response.getErrno()));
-    }
+  RegisterUserResponseJSON response;
+  response.parseJson(reply->readAll());
+  if (response.getErrno() == SUCCESS)
+  {
+    Q_EMIT connected();
+  }
+  else
+  {
+    Q_EMIT errorOccured(getErrnoDescription(response.getErrno()));
+  }
 }
+
 
 void RegisterUserQuery::setQuery(const QString &email, const QString &login, const QString &password)
 {
-    m_email = email;
-    m_login = login;
-    m_password = password;
+  m_email = email;
+  m_login = login;
+  m_password = password;
 }
+
 
 QSharedPointer<common::User> RegisterUserQuery::getUser() const
 {
-    return m_user;
+  return m_user;
 }
+
 
 RegisterUserQuery::~RegisterUserQuery()
 {
 }
-
-
-

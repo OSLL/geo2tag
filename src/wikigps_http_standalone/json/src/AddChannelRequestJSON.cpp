@@ -48,14 +48,16 @@ AddChannelRequestJSON::AddChannelRequestJSON(QObject *parent) : JsonSerializer(p
 {
 }
 
+
 AddChannelRequestJSON::AddChannelRequestJSON(const QSharedPointer<Session> &session,
-                                             const QSharedPointer<Channel> &channel,
-                                             QObject *parent)
-    : JsonSerializer(parent)
+const QSharedPointer<Channel> &channel,
+QObject *parent)
+: JsonSerializer(parent)
 {
-    m_sessionsContainer->push_back(session);
-    m_channelsContainer->push_back(channel);
+  m_sessionsContainer->push_back(session);
+  m_channelsContainer->push_back(channel);
 }
+
 
 QByteArray AddChannelRequestJSON::getJson() const
 {

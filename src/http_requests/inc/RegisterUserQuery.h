@@ -42,22 +42,22 @@
 
 class RegisterUserQuery : public DefaultQuery
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QString m_email;
-    QString m_login;
-    QString m_password;
+  QString m_login;
+  QString m_password;
 
-    QString m_confirmUrl;
+  QString m_confirmUrl;
 
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
 
-private Q_SLOTS:
+  private Q_SLOTS:
 
     virtual void processResponse(const QByteArray &data);
 
-public:
+  public:
 
     RegisterUserQuery(const QString& email, const QString& login, const QString& password, QObject *parent = 0);
     RegisterUserQuery(QObject *parent = 0);
@@ -65,9 +65,8 @@ public:
     const QString& getConfirmUrl() const;
     ~RegisterUserQuery();
 
-Q_SIGNALS:
+    Q_SIGNALS:
 
-//    void connected();
-}; // Class RegisterUserQuery
-
-#endif // REGISTERUSERQUERY_H
+    //    void connected();
+};                                      // Class RegisterUserQuery
+#endif                                  // REGISTERUSERQUERY_H

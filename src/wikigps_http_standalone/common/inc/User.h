@@ -51,7 +51,7 @@ namespace common
   class User: public QObject
   {
     Q_OBJECT
-    QString m_login;
+      QString m_login;
     QString m_password;
     QString m_email;
 
@@ -59,7 +59,6 @@ namespace common
     QString m_token;
     // list of subscribed channels
     QSharedPointer<Channels> m_channels;
-
 
     public:
 

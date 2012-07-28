@@ -58,9 +58,7 @@ class SubscribedChannelsRequestJSON: public JsonSerializer
 
     bool parseJson(const QByteArray&);
 
-
-}; // class SubscribedChannelsJSON
-
-#endif //_SubscribedChannelsJSON_H_INCLUDED_
+};                                      // class SubscribedChannelsJSON
+#endif                                  //_SubscribedChannelsJSON_H_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

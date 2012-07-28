@@ -46,11 +46,11 @@
 #include <syslog.h>
 
 DbChannel::DbChannel(qlonglong id,
-                     const QString &name,
-                     const QString &description,
-                     const QString &url,
-                     const QSharedPointer<common::BasicUser>& owner)
-    : Channel(name, description, url, owner), m_id(id)
+const QString &name,
+const QString &description,
+const QString &url,
+const QSharedPointer<common::BasicUser>& owner)
+: Channel(name, description, url, owner), m_id(id)
 {
 }
 

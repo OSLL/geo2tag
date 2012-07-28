@@ -40,26 +40,24 @@
 
 class SosWidget : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QPushButton *m_sosButton;
-    WriteTagQuery *m_writeSosQuery;
-    Settings m_settings;
-    LocationManager *m_locationManager;
+  WriteTagQuery *m_writeSosQuery;
+  Settings m_settings;
+  LocationManager *m_locationManager;
 
-public:
+  public:
     explicit SosWidget(LocationManager *locationManager, QWidget *parent = 0);
 
-signals:
+    signals:
 
-public slots:
+  public slots:
     void sos();
     void onSosSent();
     void onError(QString error);
 
-
-private:
+  private:
     void initGUI();
 };
-
-#endif // SOSWIDGET_H
+#endif                                  // SOSWIDGET_H

@@ -43,30 +43,29 @@
 
 class MainWidget : public QTabWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
     Settings m_settings;
 
-    LocationManager *m_locationManager;
-    SosWidget *m_sosWidget;
-    EventsWidget *m_eventsWidget;
-    TrackingWidget *m_trackingWidget;
-    bool m_shouldStartTracking;
+  LocationManager *m_locationManager;
+  SosWidget *m_sosWidget;
+  EventsWidget *m_eventsWidget;
+  TrackingWidget *m_trackingWidget;
+  bool m_shouldStartTracking;
 
-public:
+  public:
     explicit MainWidget(QWidget *parent = 0);
     ~MainWidget();
 
-signals:
+    signals:
 
-public slots:
+  public slots:
     void signIn(const QString& authToken);
     void signOut();
     void onSettingsUpdated();
 
-private:
+  private:
     void initGUI();
 
 };
-
-#endif // MAINWIDGET_H
+#endif                                  // MAINWIDGET_H

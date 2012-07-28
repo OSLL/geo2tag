@@ -48,59 +48,61 @@
 #endif
 
 RegisterUserQuery::RegisterUserQuery(const QString &email, const QString &login, const QString &password, QObject *parent)
-    : DefaultQuery(parent),
-      m_email(email),
-      m_login(login),
-      m_password(password)
+: DefaultQuery(parent),
+m_email(email),
+m_login(login),
+m_password(password)
 {
 }
 
+
 RegisterUserQuery::RegisterUserQuery(QObject *parent)
-    : DefaultQuery(parent)
+: DefaultQuery(parent)
 {
 }
+
 
 QString RegisterUserQuery::getUrl() const
 {
-    //const QString str = "http://localhost:80/service/registerUser";
-    //return str;
-    return REGISTER_USER_HTTP_URL;
+  //const QString str = "http://localhost:80/service/registerUser";
+  //return str;
+  return REGISTER_USER_HTTP_URL;
 }
+
 
 QByteArray RegisterUserQuery::getRequestBody() const
 {
-    QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, m_email));
-    RegisterUserRequestJSON request;
-    request.addUser(dummyUser);
-    return request.getJson();
+  QSharedPointer<common::User> dummyUser(new JsonUser(m_login, m_password, m_email));
+  RegisterUserRequestJSON request;
+  request.addUser(dummyUser);
+  return request.getJson();
 }
 
 
 const QString& RegisterUserQuery::getConfirmUrl() const
 {
-	return m_confirmUrl;
+  return m_confirmUrl;
 }
+
 
 void RegisterUserQuery::processResponse(const QByteArray &data)
 {
-    //#ifndef Q_OS_SYMBIAN
-    RegisterUserResponseJSON response;
-    response.parseJson(data);
-    m_confirmUrl = response.getConfirmUrl();
-    //#endif
+  //#ifndef Q_OS_SYMBIAN
+  RegisterUserResponseJSON response;
+  response.parseJson(data);
+  m_confirmUrl = response.getConfirmUrl();
+  //#endif
 }
+
 
 void RegisterUserQuery::setQuery(const QString &email, const QString &login, const QString &password)
 {
-    m_email = email;
-    m_login = login;
-    m_password = password;
+  m_email = email;
+  m_login = login;
+  m_password = password;
 }
 
 
 RegisterUserQuery::~RegisterUserQuery()
 {
 }
-
-
-

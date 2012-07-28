@@ -45,10 +45,10 @@ class LoadTagsRequestJSON: public JsonSerializer
 
   public:
     LoadTagsRequestJSON(const QSharedPointer<Session>& session,
-                        double latitude,
-                        double longitude,
-                        double radius,
-                        QObject *parent=0);
+      double latitude,
+      double longitude,
+      double radius,
+      QObject *parent=0);
 
     LoadTagsRequestJSON(QObject *parent=0);
 

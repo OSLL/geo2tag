@@ -49,7 +49,7 @@
 
 class SubscribeChannelRequestJSON: public JsonSerializer
 {
-public:
+  public:
     SubscribeChannelRequestJSON(QObject *parent = 0);
 
     SubscribeChannelRequestJSON(const QSharedPointer<Session>& session, const QSharedPointer<Channel> &channel, QObject *parent = 0);
@@ -61,8 +61,7 @@ public:
 
     //   ~SubscribeChannelRequestJSON();
 
-};  // class SubscribeChannelJSON
-
-#endif //_SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
+};                                      // class SubscribeChannelJSON
+#endif                                  //_SubscribeChannelJSON_H_098EA975_5CFE_4C7A_B848_4CE151DE65FB_INCLUDED_
 
 /* ===[ End of file $HeadURL$ ]=== */

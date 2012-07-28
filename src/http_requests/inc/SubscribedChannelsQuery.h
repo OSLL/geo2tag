@@ -51,44 +51,42 @@
 #include "Channel.h"
 #include "Session.h"
 
-  /*!
-   * SubscribedChannelsQuery class definition.
-   *
-   * The object of this class represents http query to server.
-   * This query includes json request for list of subscribed channels.
-   *
-   */
-  class SubscribedChannelsQuery : public DefaultQuery
-  {
-    Q_OBJECT
+/*!
+ * SubscribedChannelsQuery class definition.
+ *
+ * The object of this class represents http query to server.
+ * This query includes json request for list of subscribed channels.
+ *
+ */
+class SubscribedChannelsQuery : public DefaultQuery
+{
+  Q_OBJECT
 
     QSharedPointer<Session> m_session;
-    QSharedPointer<Channels> m_channels;
+  QSharedPointer<Channels> m_channels;
 
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
 
-    private Q_SLOTS:
+  private Q_SLOTS:
 
-      virtual void processResponse(const QByteArray &data);
+    virtual void processResponse(const QByteArray &data);
 
-    public:
+  public:
 
-      SubscribedChannelsQuery(QObject *parent = 0);
+    SubscribedChannelsQuery(QObject *parent = 0);
 
-      SubscribedChannelsQuery(const QSharedPointer<Session>& session, QObject *parent = 0);
+    SubscribedChannelsQuery(const QSharedPointer<Session>& session, QObject *parent = 0);
 
-      ~SubscribedChannelsQuery();
+    ~SubscribedChannelsQuery();
 
-      const QSharedPointer<Channels>& getChannels() const;
-      void setQuery(const QSharedPointer<Session>& session);
+    const QSharedPointer<Channels>& getChannels() const;
+    void setQuery(const QSharedPointer<Session>& session);
 
-      Q_SIGNALS:
+    Q_SIGNALS:
 
-
-      // class SubscribedChannelsQuery
-  };
-
+    // class SubscribedChannelsQuery
+};
 
 //_SubscribedChannelsQuery_H_714B1547_7B50_4397_B7A4_1964DBF03673_INCLUDED_
 #endif

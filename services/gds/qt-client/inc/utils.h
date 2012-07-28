@@ -6,5 +6,4 @@
 #include "ErrnoTypes.h"
 
 QString getErrnoDescription(int errno);
-
-#endif /* UTILS_H */
+#endif                                  /* UTILS_H */

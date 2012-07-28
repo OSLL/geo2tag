@@ -5,12 +5,11 @@
 #include "DefaultQuery.h"
 #include "Session.h"
 
-
 class AddUserQuery: public DefaultQuery
 {
   Q_OBJECT
 
-  QString m_login;
+    QString m_login;
   QString m_password;
   QString m_email;
 
@@ -41,7 +40,5 @@ class AddUserQuery: public DefaultQuery
 
     Q_SIGNALS:
 
-
-
 };
-#endif // ADDUSERQUERY_H
+#endif                                  // ADDUSERQUERY_H

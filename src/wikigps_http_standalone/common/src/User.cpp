@@ -46,12 +46,11 @@
 namespace common
 {
 
-
   User::User(const QString &name, const QString &passw, const QString &email)
-      : m_login(name),
-        m_password(passw),
-        m_email(email),
-        m_channels(new Channels())
+    : m_login(name),
+    m_password(passw),
+    m_email(email),
+    m_channels(new Channels())
   {
   }
 
@@ -63,17 +62,17 @@ namespace common
 
   void User::subscribe(const QSharedPointer<Channel>& channel)
   {
-//    syslog(LOG_INFO,"Trying subscribed %lld for %lld",getId(),channel->getId());
- //   if(!m_channels->exist(channel->getId()))
- //   {
-      //syslog(LOG_INFO, "User->Subscribe: Num of channels before: %d", m_channels->size());
-      m_channels->push_back(channel);
-      //syslog(LOG_INFO, "User->Subscribe: Num of channels after: %d", m_channels->size());
-      //syslog(LOG_INFO,"Success subscription");
-//    }else
-//    {
-//      syslog(LOG_INFO,"Unsuccess subscription");
-//    }
+    //    syslog(LOG_INFO,"Trying subscribed %lld for %lld",getId(),channel->getId());
+    //   if(!m_channels->exist(channel->getId()))
+    //   {
+    //syslog(LOG_INFO, "User->Subscribe: Num of channels before: %d", m_channels->size());
+    m_channels->push_back(channel);
+    //syslog(LOG_INFO, "User->Subscribe: Num of channels after: %d", m_channels->size());
+    //syslog(LOG_INFO,"Success subscription");
+    //    }else
+    //    {
+    //      syslog(LOG_INFO,"Unsuccess subscription");
+    //    }
   }
 
   void User::unsubscribe(const QSharedPointer<Channel>& channel)

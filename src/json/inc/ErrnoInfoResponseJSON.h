@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _ErrnoInfoResponseJSON_H_914A0FC5_A5EE_448E_9420_1F8B15C1C17E_INCLUDED_
 #define _ErrnoInfoResponseJSON_H_914A0FC5_A5EE_448E_9420_1F8B15C1C17E_INCLUDED_
 
@@ -54,6 +53,5 @@ class ErrnoInfoResponseJSON : public JsonSerializer
 
     virtual bool parseJson(const QByteArray&);
 
-}; // class ErrnoInfoResponseJSON
-
-#endif //_ErrnoInfoResponseJSON_H_914A0FC5_A5EE_448E_9420_1F8B15C1C17E_INCLUDED_
+};                                      // class ErrnoInfoResponseJSON
+#endif                                  //_ErrnoInfoResponseJSON_H_914A0FC5_A5EE_448E_9420_1F8B15C1C17E_INCLUDED_

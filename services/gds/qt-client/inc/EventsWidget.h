@@ -48,38 +48,38 @@
 
 class EventsWidget : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QGeoServiceProvider *m_serviceProvider;
-    QGeoMappingManager *m_mapManager;
+  QGeoMappingManager *m_mapManager;
 
-    MapWidget *m_mapWidget;
-    QGraphicsView *m_graphicsView;
-    QSlider *m_slider;
+  MapWidget *m_mapWidget;
+  QGraphicsView *m_graphicsView;
+  QSlider *m_slider;
 
-    QDateTime m_lastCentered;
+  QDateTime m_lastCentered;
 
-    LocationManager *m_locationManager;
-    EventsService m_eventsService;
-    QThread m_eventsThread;
-    Settings m_settings;
+  LocationManager *m_locationManager;
+  EventsService m_eventsService;
+  QThread m_eventsThread;
+  Settings m_settings;
 
-    QPixmap m_positionIcon;
-    QPoint m_positionOffset;
-    QGeoMapPixmapObject *m_positionObject;
+  QPixmap m_positionIcon;
+  QPoint m_positionOffset;
+  QGeoMapPixmapObject *m_positionObject;
 
-    QPixmap m_eventIcon;
-    QPoint m_eventOffset;
-    QList<QGeoMapPixmapObject*> m_eventObjects;
-    Events m_events;
+  QPixmap m_eventIcon;
+  QPoint m_eventOffset;
+  QList<QGeoMapPixmapObject*> m_eventObjects;
+  Events m_events;
 
-public:
+  public:
     explicit EventsWidget(LocationManager *locationManager, QWidget *parent = 0);
     ~EventsWidget();
 
-signals:
+    signals:
 
-public slots:
+  public slots:
     void startEventsService();
     void stopEventsService();
     void sliderValueChanged(int zoomLevel);
@@ -93,9 +93,8 @@ public slots:
     void setCenter(QGeoCoordinate coordinate);
     void onSettingsUpdated();
 
-private:
+  private:
     void initGUI();
 
 };
-
-#endif // EVENTSWIDGET_H
+#endif                                  // EVENTSWIDGET_H

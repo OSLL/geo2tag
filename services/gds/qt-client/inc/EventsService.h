@@ -49,35 +49,34 @@ Q_DECLARE_METATYPE(Events)
 
 class EventsService : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
     LocationManager *m_locationManager;
-    FilterCircleQuery *m_filterCircleQuery;
-    QSharedPointer<common::User> m_user;
-    QSet<int> m_eventsIds;
-    Phonon::MediaObject *m_mediaPlayer;
-    Settings m_settings;
-    int m_eventsRadius;
-    QSharedPointer<Channel> m_eventsChannel;
+  FilterCircleQuery *m_filterCircleQuery;
+  QSharedPointer<common::User> m_user;
+  QSet<int> m_eventsIds;
+  Phonon::MediaObject *m_mediaPlayer;
+  Settings m_settings;
+  int m_eventsRadius;
+  QSharedPointer<Channel> m_eventsChannel;
 
-public:
+  public:
     explicit EventsService(LocationManager *locationManager, QObject *parent = 0);
     ~EventsService();
 
-public slots:
+  public slots:
     void requestEvents();
     void startService(QString name, QString password, QString auth_token, QString serverUrl);
     void stopService();
     void updateSettings();
 
-signals:
+    signals:
     void eventsReceived(Events events);
     void errorOccured(QString error);
 
-private slots:
+  private slots:
     void onTagsReceived();
     void onError(QString error);
 
 };
-
-#endif // EVENTSSERVICE_H
+#endif                                  // EVENTSSERVICE_H

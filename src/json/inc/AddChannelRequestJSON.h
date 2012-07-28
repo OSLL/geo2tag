@@ -46,8 +46,8 @@ class AddChannelRequestJSON: public JsonSerializer
     AddChannelRequestJSON(QObject *parent=0);
 
     AddChannelRequestJSON(const QSharedPointer<Session>& session,
-                          const QSharedPointer<Channel>& channel,
-                          QObject* parent = 0);
+      const QSharedPointer<Channel>& channel,
+      QObject* parent = 0);
 
     QByteArray getJson() const;
 

@@ -48,39 +48,36 @@
 #include "DefaultQuery.h"
 #include "common/inc/Session.h"
 
-
-  class SubscribeChannelQuery: public DefaultQuery
-  {
-    Q_OBJECT
+class SubscribeChannelQuery: public DefaultQuery
+{
+  Q_OBJECT
 
     QSharedPointer<Channel> m_channel;
-    QSharedPointer<Session> m_session;
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
+  QSharedPointer<Session> m_session;
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
 
-    private Q_SLOTS:
+  private Q_SLOTS:
 
-      virtual void processReply(QNetworkReply *reply);
+    virtual void processReply(QNetworkReply *reply);
 
-    public:
+  public:
 
-      SubscribeChannelQuery(QObject *parent = 0);
+    SubscribeChannelQuery(QObject *parent = 0);
 
-      SubscribeChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<Session> &session, QObject *parent = 0);
+    SubscribeChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<Session> &session, QObject *parent = 0);
 
-      void setQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<Session> &session);
+    void setQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<Session> &session);
 
-      ~SubscribeChannelQuery();
+    ~SubscribeChannelQuery();
 
-      const QString& getStatus() const;
+    const QString& getStatus() const;
 
-      Q_SIGNALS:
-      void channelSubscribed(QSharedPointer<Channel> channel);
+    Q_SIGNALS:
+    void channelSubscribed(QSharedPointer<Channel> channel);
 
-      // class SubscribeChannelQuery
-  };
-
-
+    // class SubscribeChannelQuery
+};
 
 //_SubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
 #endif

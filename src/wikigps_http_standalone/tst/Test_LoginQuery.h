@@ -46,14 +46,13 @@
 namespace Test
 {
 
-    class Test_LoginQuery : public QObject
-    {
-        Q_OBJECT
+  class Test_LoginQuery : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-        void response();
+      private slots:
+      void response();
 
-    };  // class Test_LoginQuery
-} // namespace Test
-
-#endif // TEST_LOGINQUERY_H
+  };                                    // class Test_LoginQuery
+}                                       // namespace Test
+#endif                                  // TEST_LOGINQUERY_H

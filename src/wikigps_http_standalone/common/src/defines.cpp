@@ -3,7 +3,6 @@
 #include "common/inc/defines.h"
 #include "common/inc/SettingsStorage.h"
 
-
 QString getServerUrl()
 {
   SettingsStorage storage(SETTINGS_STORAGE_FILENAME);

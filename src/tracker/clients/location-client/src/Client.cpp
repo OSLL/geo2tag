@@ -16,16 +16,14 @@
 
 Client::Client(ContactModel *contactModel, QObject *parent) :
 QObject(parent),m_trackInterval(5),
-    m_authentificated(0), m_trackingPermitted(Settings::getInstance().getPermission()),
-    m_isHavingOwnChannel(true), m_contactModel(contactModel)
+m_authentificated(0), m_trackingPermitted(Settings::getInstance().getPermission()),
+m_isHavingOwnChannel(true), m_contactModel(contactModel)
 {
   m_timer = new QTimer(this);
   connect(m_timer, SIGNAL(timeout()), SLOT(track()));
 
   m_additionalTimer = new QTimer(this);
   connect(m_additionalTimer, SIGNAL(timeout()),SLOT(getTagsRequest()));
-
-
 
   m_loginQuery = new LoginQuery(this);
   connect(m_loginQuery, SIGNAL(connected()), SLOT(onAuthentificated()));
@@ -70,24 +68,27 @@ QObject(parent),m_trackInterval(5),
   qDebug()<<Settings::getInstance().getPassword();
 
   if (Settings::getInstance().isHavingAuthData())
-      auth(Settings::getInstance().getLogin(),Settings::getInstance().getPassword());
+    auth(Settings::getInstance().getLogin(),Settings::getInstance().getPassword());
 
 }
+
 
 void Client::setPermission(bool permission)
 {
-    m_trackingPermitted = permission;
-    if ((permission) && (!isTracking()))
-        startTrack();
-    else
-        if ((!permission) && (isTracking()))
-            stopTrack();
+  m_trackingPermitted = permission;
+  if ((permission) && (!isTracking()))
+    startTrack();
+  else
+  if ((!permission) && (isTracking()))
+    stopTrack();
 }
+
 
 bool Client::isTrackingPermitted()
 {
-    return m_trackingPermitted;
+  return m_trackingPermitted;
 }
+
 
 void Client::auth(QString user, QString pass)
 {
@@ -96,12 +97,13 @@ void Client::auth(QString user, QString pass)
 
 }
 
+
 void Client::registration(const QString &email, const QString &user, const QString &pass)
 {
-    Settings::getInstance().setLogin(user);
-    Settings::getInstance().setPassword(pass);
-    m_RegisterUserQuery->setQuery(email, user,pass);
-    m_RegisterUserQuery->doRequest();
+  Settings::getInstance().setLogin(user);
+  Settings::getInstance().setPassword(pass);
+  m_RegisterUserQuery->setQuery(email, user,pass);
+  m_RegisterUserQuery->doRequest();
 }
 
 
@@ -127,15 +129,15 @@ void Client::onError(QString err)
 
 void Client::onError(int err)
 {
-    qDebug()<<"err="<<err;
+  qDebug()<<"err="<<err;
   if (err==INCORRECT_CREDENTIALS_ERROR)
     emit error(QVariant("Incorrect login or password"));
   else
-      if (err==USER_ALREADY_EXIST_ERROR)
-          emit error(QVariant("User with that name already exist"));
+  if (err==USER_ALREADY_EXIST_ERROR)
+    emit error(QVariant("User with that name already exist"));
   else
-          if (err==CHANNEL_DOES_NOT_EXIST_ERROR)
-              emit error(QVariant("User with that name isn't existed"));
+  if (err==CHANNEL_DOES_NOT_EXIST_ERROR)
+    emit error(QVariant("User with that name isn't existed"));
 
 }
 
@@ -171,69 +173,73 @@ void Client::sendHistory()
 
 void Client::onAuthentificated()
 {
-    qDebug() << "Authentificated " <<  m_loginQuery->getUser()->getToken();
+  qDebug() << "Authentificated " <<  m_loginQuery->getUser()->getToken();
 
   m_user =  m_loginQuery->getUser();
   Settings::getInstance().setLogin(m_user->getLogin());
   Settings::getInstance().setPassword(m_user->getPassword());
 
-
   m_authentificated = true;
   if (!m_isHavingOwnChannel)
   {
-      QSharedPointer<Channel> channel = QSharedPointer<Channel>(new Channel(m_user->getLogin(),m_user->getLogin() + "'s channel"));
-      channel->setRadius(40000000);
-      m_applyChannelQuery->setQuery(channel, m_user);
-      m_applyChannelQuery->doRequest();
+    QSharedPointer<Channel> channel = QSharedPointer<Channel>(new Channel(m_user->getLogin(),m_user->getLogin() + "'s channel"));
+    channel->setRadius(40000000);
+    m_applyChannelQuery->setQuery(channel, m_user);
+    m_applyChannelQuery->doRequest();
   }
   getTagsRequest();
   startTrack();
 
-   emit authentificated(QVariant(m_user->getLogin()));
+  emit authentificated(QVariant(m_user->getLogin()));
 }
+
+
 void Client::process(QNetworkReply *)
 {
-    m_isHavingOwnChannel =false;
-    //pause(10000);
-    auth(Settings::getInstance().getLogin(), Settings::getInstance().getPassword());
+  m_isHavingOwnChannel =false;
+  //pause(10000);
+  auth(Settings::getInstance().getLogin(), Settings::getInstance().getPassword());
 }
+
 
 void Client::onRegistered()
 {
-    qDebug() << "Registered " <<  m_RegisterUserQuery->getConfirmUrl();
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QNetworkRequest request;
-    request.setUrl(m_RegisterUserQuery->getConfirmUrl());
-    manager->get(request);
-    connect(manager, SIGNAL(finished(QNetworkReply*)),this, SLOT(process(QNetworkReply*)));
-   // connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(handleError()));
-
+  qDebug() << "Registered " <<  m_RegisterUserQuery->getConfirmUrl();
+  QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+  QNetworkRequest request;
+  request.setUrl(m_RegisterUserQuery->getConfirmUrl());
+  manager->get(request);
+  connect(manager, SIGNAL(finished(QNetworkReply*)),this, SLOT(process(QNetworkReply*)));
+  // connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(handleError()));
 
 }
+
+
 void Client::subscribeChannel(const QString &channel)
 {
-    QSharedPointer<Channel> m_channel = QSharedPointer<Channel>(new Channel(channel,channel));
-    qDebug()<<"channel: "<<m_channel->getName();
-    m_subscribeChannelQuery->setQuery(m_channel, m_user);
-    m_subscribeChannelQuery->doRequest();
+  QSharedPointer<Channel> m_channel = QSharedPointer<Channel>(new Channel(channel,channel));
+  qDebug()<<"channel: "<<m_channel->getName();
+  m_subscribeChannelQuery->setQuery(m_channel, m_user);
+  m_subscribeChannelQuery->doRequest();
 }
+
 
 void Client::subscribeToOwnChannel()
 {
-    subscribeChannel(m_user->getLogin());
+  subscribeChannel(m_user->getLogin());
 }
+
 
 void Client::onChannelSubscribed(QSharedPointer<Channel> channel)
 {
-    qDebug()<<"Channel is subscribed ="<<channel->getName();
-    m_channels.insert(channel,"");
-    if (channel->getName()!=m_user->getLogin())
+  qDebug()<<"Channel is subscribed ="<<channel->getName();
+  m_channels.insert(channel,"");
+  if (channel->getName()!=m_user->getLogin())
     m_contactModel->addContact(QSharedPointer<Contact>(new Contact(channel->getName(),channel->getName())));
-    Settings::getInstance().setCustomName(channel->getName(),channel->getName());
-    pause(1000);
-    getTagsRequest();
+  Settings::getInstance().setCustomName(channel->getName(),channel->getName());
+  pause(1000);
+  getTagsRequest();
 }
-
 
 
 void Client::pause(int msecs)
@@ -252,7 +258,7 @@ void Client::startTrack()
   {
     m_timer->start(m_trackInterval*1000);
     if (m_additionalTimer->isActive())
-        m_additionalTimer->stop();
+      m_additionalTimer->stop();
   }
 
 }
@@ -260,7 +266,7 @@ void Client::startTrack()
 
 void Client::onMarkAdded()
 {
-    qDebug()<<"Mark added";
+  qDebug()<<"Mark added";
 }
 
 
@@ -282,9 +288,10 @@ void Client::track()
 
 void Client::onHistoryFull()
 {
-  if (isOnline() && isAuthentificated()) {
-      sendHistory();
-      getTagsRequest();
+  if (isOnline() && isAuthentificated())
+  {
+    sendHistory();
+    getTagsRequest();
   }
 }
 
@@ -318,77 +325,82 @@ bool Client::isTracking()
 
 void Client::stopTrack()
 {
-  if (m_timer->isActive()) {
-      m_timer->stop();
-      m_additionalTimer->start(m_history->getHistoryLimit()*m_trackInterval*1000);
+  if (m_timer->isActive())
+  {
+    m_timer->stop();
+    m_additionalTimer->start(m_history->getHistoryLimit()*m_trackInterval*1000);
   }
   if (isOnline() && isAuthentificated() && !m_history->isEmpty()) sendHistory();
 }
 
+
 void Client::setHistoryLimit(int sec)
 {
-    m_history->setHistoryLimit(sec/m_trackInterval);
+  m_history->setHistoryLimit(sec/m_trackInterval);
 
 }
 
 
 void Client::getTagsRequest()
 {
-    m_loadTagsQuery->setQuery(m_user,0,0,40000000);
-    m_loadTagsQuery->doRequest();
+  m_loadTagsQuery->setQuery(m_user,0,0,40000000);
+  m_loadTagsQuery->doRequest();
 }
+
 
 void Client::onGetTags()
 {
-    QList<QSharedPointer <Channel> > channels = m_loadTagsQuery->getData().uniqueKeys();
-    for (int i=0; i<channels.size(); i++) {
-        if (channels.at(i)->getName()!=m_user->getLogin())
-        {
-        QList<QSharedPointer<DataMark> > data = m_loadTagsQuery->getData().values(channels.at(i));
-        if (!data.isEmpty()) {
-            QSharedPointer<DataMark> mark = data.at(data.size()-1);
-            STATUS_TYPE type = LOST;
-            m_contactModel->getContactByName(channels.at(i)->getName())->setLastDataMark(mark);
-             qDebug()<<"---------------------------------";
-            qDebug()<<"channel name="<<channels.at(i)->getName();
-            qDebug()<<"mark lng="<<mark->getLongitude();
-            qDebug()<<"mark lat="<<mark->getLatitude();
-            qDebug()<<"---------------------------------";
-        }
-
-
-        }
-
+  QList<QSharedPointer <Channel> > channels = m_loadTagsQuery->getData().uniqueKeys();
+  for (int i=0; i<channels.size(); i++)
+  {
+    if (channels.at(i)->getName()!=m_user->getLogin())
+    {
+      QList<QSharedPointer<DataMark> > data = m_loadTagsQuery->getData().values(channels.at(i));
+      if (!data.isEmpty())
+      {
+        QSharedPointer<DataMark> mark = data.at(data.size()-1);
+        STATUS_TYPE type = LOST;
+        m_contactModel->getContactByName(channels.at(i)->getName())->setLastDataMark(mark);
+        qDebug()<<"---------------------------------";
+        qDebug()<<"channel name="<<channels.at(i)->getName();
+        qDebug()<<"mark lng="<<mark->getLongitude();
+        qDebug()<<"mark lat="<<mark->getLatitude();
+        qDebug()<<"---------------------------------";
+      }
 
     }
 
+  }
 
 }
+
 
 void Client::unSubscribeChannelRequest(const QString &channelName)
 {
-    QSharedPointer<Channel> channel = QSharedPointer<Channel>(new Channel(channelName, channelName + "'s channel"));
-    m_unsubscribeChannelQuery->setQuery(m_user,channel);
-    m_unsubscribeChannelQuery->doRequest();
+  QSharedPointer<Channel> channel = QSharedPointer<Channel>(new Channel(channelName, channelName + "'s channel"));
+  m_unsubscribeChannelQuery->setQuery(m_user,channel);
+  m_unsubscribeChannelQuery->doRequest();
 }
+
 
 void Client::onChannelUnsubscribed()
 {
-    m_contactModel->removeContact(m_unsubscribeChannelQuery->getChannel()->getName());
+  m_contactModel->removeContact(m_unsubscribeChannelQuery->getChannel()->getName());
 
 }
 
+
 void Client::logout()
 {
-    if (isTracking())
-        stopTrack();
-    else
-        if (m_additionalTimer->isActive())
-            m_additionalTimer->stop();
-    Settings::getInstance().setLogin("unknown");
-    Settings::getInstance().setPassword("unknown");
-    int size = m_contactModel->getContacts().size();
-    for (int i=0;i<size;i++)
-        m_contactModel->removeContact(m_contactModel->getContacts().at(0)->getChannelName());
+  if (isTracking())
+    stopTrack();
+  else
+  if (m_additionalTimer->isActive())
+    m_additionalTimer->stop();
+  Settings::getInstance().setLogin("unknown");
+  Settings::getInstance().setPassword("unknown");
+  int size = m_contactModel->getContacts().size();
+  for (int i=0;i<size;i++)
+    m_contactModel->removeContact(m_contactModel->getContacts().at(0)->getChannelName());
 
 }

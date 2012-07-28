@@ -44,18 +44,19 @@
 
 int main(int argc, char **argv)
 {
-    QCoreApplication app(argc, argv);
+  QCoreApplication app(argc, argv);
 
-    QObject *tests[] =
-    {
-        new Test::Test_QueryExecutor()
-    };
+  QObject *tests[] =
+  {
+    new Test::Test_QueryExecutor()
+  };
 
-    for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
-        QTest::qExec(tests[i]);
-    }
+  for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++)
+  {
+    QTest::qExec(tests[i]);
+  }
 
-    return 0;//app.exec();
+  return 0;                             //app.exec();
 }
 
 

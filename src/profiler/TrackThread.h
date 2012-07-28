@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _TrackThread_H_59663E9E_76FF_4254_873A_08F920EDA64B_INCLUDED_
 #define _TrackThread_H_59663E9E_76FF_4254_873A_08F920EDA64B_INCLUDED_
 
@@ -53,9 +52,8 @@ class TrackThread: public ProfilerThread
 {
   Q_OBJECT;
 
-public:
-  TrackThread(const QSharedPointer<Session>& session, const QSharedPointer<Channel>& channel, const QSharedPointer<DataMark>& tag);
-  ~TrackThread();
-}; // class TrackThread
-
-#endif //_TrackThread_H_59663E9E_76FF_4254_873A_08F920EDA64B_INCLUDED_
+  public:
+    TrackThread(const QSharedPointer<Session>& session, const QSharedPointer<Channel>& channel, const QSharedPointer<DataMark>& tag);
+    ~TrackThread();
+};                                      // class TrackThread
+#endif                                  //_TrackThread_H_59663E9E_76FF_4254_873A_08F920EDA64B_INCLUDED_

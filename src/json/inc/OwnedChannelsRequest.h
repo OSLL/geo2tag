@@ -38,5 +38,4 @@
 #include "SubscribedChannelsRequestJSON.h"
 
 typedef SubscribedChannelsRequestJSON OwnedChannelsRequestJSON;
-
-#endif // OWNEDCHANNELSREQUEST_H
+#endif                                  // OWNEDCHANNELSREQUEST_H

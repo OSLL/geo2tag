@@ -79,8 +79,9 @@ QByteArray LoginQuery::getRequestBody() const
 void LoginQuery::processReply(QNetworkReply *reply)
 {
   LoginResponseJSON response;
-  if (!response.parseJson(reply->readAll())) {
-      return;
+  if (!response.parseJson(reply->readAll()))
+  {
+    return;
   }
   if(response.getErrno() == SUCCESS)
   {
@@ -101,9 +102,10 @@ void LoginQuery::setQuery(const QString& login, const QString& password)
   m_password=password;
 }
 
+
 void LoginQuery::setUrl(const QString &url)
 {
-    DefaultQuery::setUrl(url + LOGIN_HTTP_URL);
+  DefaultQuery::setUrl(url + LOGIN_HTTP_URL);
 }
 
 

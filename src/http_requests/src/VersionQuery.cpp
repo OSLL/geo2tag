@@ -46,13 +46,15 @@
 
 QString VersionQuery::getUrl() const
 {
-	return VERSION_HTTP_URL;
+  return VERSION_HTTP_URL;
 }
+
 
 QByteArray VersionQuery::getRequestBody() const
 {
-	return QByteArray();
+  return QByteArray();
 }
+
 
 void VersionQuery::processResponse(const QByteArray &data)
 {
@@ -61,14 +63,17 @@ void VersionQuery::processResponse(const QByteArray &data)
   m_version = response.getVersion();
 }
 
+
 VersionQuery::VersionQuery(QObject *parent ): DefaultQuery(parent)
 {
 }
 
+
 const QString& VersionQuery::getVersion() const
 {
-	return m_version;
+  return m_version;
 }
+
 
 VersionQuery::~VersionQuery()
 {

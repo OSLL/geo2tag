@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FilterChannelRequestJSON_H_796EB5EC_74E0_4EA2_A43C_7F6F850122D5_INCLUDED_
 #define _FilterChannelRequestJSON_H_796EB5EC_74E0_4EA2_A43C_7F6F850122D5_INCLUDED_
 
@@ -47,20 +46,19 @@
 
 class FilterChannelRequestJSON: public JsonSerializer
 {
-private:
-  QString m_channel;
-  int m_amount;
+  private:
+    QString m_channel;
+    int m_amount;
 
-public:
-  FilterChannelRequestJSON(QObject *parent = 0);
+  public:
+    FilterChannelRequestJSON(QObject *parent = 0);
 
-  QByteArray getJson() const;
+    QByteArray getJson() const;
 
-  bool parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 
-  QString getChannelName();
+    QString getChannelName();
 
-  int getAmount();
+    int getAmount();
 };
-
-#endif //_FilterChannelRequestJSON_H_796EB5EC_74E0_4EA2_A43C_7F6F850122D5_INCLUDED_
+#endif                                  //_FilterChannelRequestJSON_H_796EB5EC_74E0_4EA2_A43C_7F6F850122D5_INCLUDED_

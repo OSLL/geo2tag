@@ -56,6 +56,7 @@ VersionResponseJSON::VersionResponseJSON(QObject *parent): JsonSerializer(parent
 {
 }
 
+
 QByteArray VersionResponseJSON::getJson() const
 {
   QJson::Serializer serializer;
@@ -65,6 +66,7 @@ QByteArray VersionResponseJSON::getJson() const
   if (getErrno()== SUCCESS) obj.insert("version", m_version);
   return serializer.serialize(obj);
 }
+
 
 bool VersionResponseJSON::parseJson(const QByteArray& data)
 {
@@ -81,10 +83,12 @@ bool VersionResponseJSON::parseJson(const QByteArray& data)
   return true;
 }
 
+
 const QString& VersionResponseJSON::getVersion()
 {
   return m_version;
 }
+
 
 void VersionResponseJSON::setVersion(const QString& version)
 {

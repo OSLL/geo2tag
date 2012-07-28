@@ -44,55 +44,54 @@
 
 class FilterCircleQuery : public DefaultQuery
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QSharedPointer<common::User> m_user;
-    double m_latitude;
-    double m_longitude;
-    double m_radius;
-    QDateTime m_timeFrom;
-    QDateTime m_timeTo;
-    QSharedPointer<Channel> m_channel;
+  double m_latitude;
+  double m_longitude;
+  double m_radius;
+  QDateTime m_timeFrom;
+  QDateTime m_timeTo;
+  QSharedPointer<Channel> m_channel;
 
-    DataChannels m_hashMap;
+  DataChannels m_hashMap;
 
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
 
-private slots:
+  private slots:
 
     virtual void processReply(QNetworkReply *reply);
 
-public:
+  public:
 
     FilterCircleQuery(QSharedPointer<common::User> &user,
-                      double latitude,
-                      double longitude,
-                      double radius,
-                      QDateTime timeFrom,
-                      QDateTime timeTo,
-                      const QSharedPointer<Channel> &channel = QSharedPointer<Channel>(0),
-                      QObject *parent = 0);
+      double latitude,
+      double longitude,
+      double radius,
+      QDateTime timeFrom,
+      QDateTime timeTo,
+      const QSharedPointer<Channel> &channel = QSharedPointer<Channel>(0),
+      QObject *parent = 0);
 
     FilterCircleQuery(QObject *parent = 0);
 
     void setQuery(QSharedPointer<common::User> &user,
-                  double latitude,
-                  double longitude,
-                  double radius,
-                  QDateTime timeFrom,
-                  QDateTime timeTo,
-                  const QSharedPointer<Channel> &channel = QSharedPointer<Channel>(0));
+      double latitude,
+      double longitude,
+      double radius,
+      QDateTime timeFrom,
+      QDateTime timeTo,
+      const QSharedPointer<Channel> &channel = QSharedPointer<Channel>(0));
 
     ~FilterCircleQuery();
 
     const DataChannels& getData() const;
 
-signals:
+    signals:
 
     void tagsReceived();
 
     // class LoadTagsQuery
 };
-
-#endif /* FILTERCIRCLEQUERY_H */
+#endif                                  /* FILTERCIRCLEQUERY_H */

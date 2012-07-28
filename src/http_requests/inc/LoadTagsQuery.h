@@ -97,7 +97,7 @@ class LoadTagsQuery : public DefaultQuery
 
     Q_SIGNALS:
 
- //   void tagsReceived();
+    //   void tagsReceived();
 
     // class LoadTagsQuery
 };

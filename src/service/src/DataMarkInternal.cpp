@@ -69,10 +69,12 @@ qlonglong DbDataMark::getUserId() const
   return m_userId;
 }
 
+
 qlonglong DbDataMark::getChannelId() const
 {
   return m_channelId;
 }
+
 
 void DbDataMark::setId(qlonglong id)
 {

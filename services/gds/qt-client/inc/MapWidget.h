@@ -13,23 +13,23 @@ QTM_USE_NAMESPACE
 
 class MapWidget : public QGraphicsGeoMap
 {
-    Q_OBJECT
+  Q_OBJECT
 
-public:
+    public:
     MapWidget(QGeoMappingManager *manager);
     ~MapWidget();
 
-public slots:
+  public slots:
     void setMouseClickCoordQuery(bool state);
 
-signals:
+    signals:
     void coordQueryResult(const QGeoCoordinate &coord);
     void clicked(QPointF pos);
 
-private slots:
+  private slots:
     void kineticTimerEvent();
 
-protected:
+  protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
@@ -38,7 +38,7 @@ protected:
     void keyReleaseEvent(QKeyEvent* event);
     void wheelEvent(QGraphicsSceneWheelEvent* event);
 
-private:
+  private:
     bool coordQueryState;
     bool panActive;
     bool panDecellerate;
@@ -60,8 +60,7 @@ private:
     void panFloatWrapper(const QPointF& delta);
     void applyPan(const Qt::KeyboardModifiers& modifiers);
 
-public:
+  public:
     QGeoMapCircleObject *lastCircle;
 };
-
-#endif /* MAPWIDGET_H */
+#endif                                  /* MAPWIDGET_H */

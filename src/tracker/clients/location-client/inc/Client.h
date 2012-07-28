@@ -20,7 +20,6 @@
 #include "LoadTagsQuery.h"
 #include "UnsubscribeChannelQuery.h"
 
-
 class Client : public QObject
 {
   Q_OBJECT
@@ -49,7 +48,6 @@ class Client : public QObject
     LoadTagsQuery *m_loadTagsQuery;
     UnsubscribeChannelQuery *m_unsubscribeChannelQuery;
 
-
     void pause(int msecs);
 
   public:
@@ -68,7 +66,6 @@ class Client : public QObject
     void unSubscribeChannelRequest(const QString &channelName);
     void logout();
 
-
   private slots:
     void onError(QString error);
     void onError(int err);
@@ -78,7 +75,7 @@ class Client : public QObject
     void track();
     void process(QNetworkReply*);
     void subscribeToOwnChannel();
- signals:
+    signals:
     void error(QVariant error);
     void authentificated(QVariant);
     void authRequest();
@@ -99,12 +96,11 @@ class Client : public QObject
     // When history is full
     void onHistoryFull();
 
-   // void constructContactModel();
+    // void constructContactModel();
     void getTagsRequest();
     void onGetTags();
 
     void onChannelUnsubscribed();
-
 
 };
 #endif                                  // CLIENT_H

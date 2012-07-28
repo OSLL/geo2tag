@@ -30,5 +30,4 @@
 
 #include <QString>
 QString getErrnoDescription(int err);
-
 #endif

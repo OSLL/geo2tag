@@ -39,11 +39,10 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _VersionResponseJSON_H_918C60A1_2644_4543_A0A0_986A2A4D5A20_INCLUDED_
 #define _VersionResponseJSON_H_918C60A1_2644_4543_A0A0_986A2A4D5A20_INCLUDED_
 
- /*!
+/*!
  * Class description. May use HTML formatting
  *
  */
@@ -51,7 +50,7 @@
 
 class VersionResponseJSON : public JsonSerializer
 {
-    QString m_version;
+  QString m_version;
   public:
     VersionResponseJSON(QObject *parent = 0);
 
@@ -62,6 +61,5 @@ class VersionResponseJSON : public JsonSerializer
     void setVersion(const QString&);
 
     const QString& getVersion();
-}; // class VersionResponseJSON
-
-#endif //_VersionResponseJSON_H_918C60A1_2644_4543_A0A0_986A2A4D5A20_INCLUDED_
+};                                      // class VersionResponseJSON
+#endif                                  //_VersionResponseJSON_H_918C60A1_2644_4543_A0A0_986A2A4D5A20_INCLUDED_

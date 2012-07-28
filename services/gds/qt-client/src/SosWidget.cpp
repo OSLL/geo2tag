@@ -43,79 +43,84 @@
 #include "JsonUser.h"
 
 SosWidget::SosWidget(LocationManager *locationManager, QWidget *parent) :
-    QWidget(parent),
-    m_locationManager(locationManager)
+QWidget(parent),
+m_locationManager(locationManager)
 {
-    m_sosButton = new QPushButton();
-    QPixmap m_sosPixmap(":/data/sos128.png");
-    QIcon icon(m_sosPixmap);
-    QSize iconSize(m_sosPixmap.width(), m_sosPixmap.height());
-    m_sosButton->setIconSize(iconSize);
-    m_sosButton->setIcon(icon);
-    //m_sosButton = new QPushButton(QIcon(":/data/sos128.png"), this);
+  m_sosButton = new QPushButton();
+  QPixmap m_sosPixmap(":/data/sos128.png");
+  QIcon icon(m_sosPixmap);
+  QSize iconSize(m_sosPixmap.width(), m_sosPixmap.height());
+  m_sosButton->setIconSize(iconSize);
+  m_sosButton->setIcon(icon);
+  //m_sosButton = new QPushButton(QIcon(":/data/sos128.png"), this);
 
-    initGUI();
+  initGUI();
 
-    m_writeSosQuery = new WriteTagQuery(this);
+  m_writeSosQuery = new WriteTagQuery(this);
 
-    connect(m_sosButton, SIGNAL(clicked()), this, SLOT(sos()));
-    connect(m_writeSosQuery, SIGNAL(tagAdded()),
-            this, SLOT(onSosSent()));
-    connect(m_writeSosQuery, SIGNAL(errorOccured(QString)),
-            this, SLOT(onError(QString)));
+  connect(m_sosButton, SIGNAL(clicked()), this, SLOT(sos()));
+  connect(m_writeSosQuery, SIGNAL(tagAdded()),
+    this, SLOT(onSosSent()));
+  connect(m_writeSosQuery, SIGNAL(errorOccured(QString)),
+    this, SLOT(onError(QString)));
 }
+
 
 void SosWidget::initGUI()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addWidget(m_sosButton, 0, Qt::AlignVCenter);
-    //mainLayout->addStretch();
-    this->setLayout(mainLayout);
+  QVBoxLayout *mainLayout = new QVBoxLayout();
+  mainLayout->addWidget(m_sosButton, 0, Qt::AlignVCenter);
+  //mainLayout->addStretch();
+  this->setLayout(mainLayout);
 }
+
 
 void SosWidget::sos()
 {
-    qDebug() << "sos clicked";
-    QSharedPointer<DataMark> sosMark;
-    QString description = m_settings.getDescription();
-    if (description.isEmpty())
-        description = "no description";
-    sosMark = QSharedPointer<DataMark>(
-               new DataMark(0, 0, 0, "SOS", description, "", QDateTime::currentDateTime()));
+  qDebug() << "sos clicked";
+  QSharedPointer<DataMark> sosMark;
+  QString description = m_settings.getDescription();
+  if (description.isEmpty())
+    description = "no description";
+  sosMark = QSharedPointer<DataMark>(
+    new DataMark(0, 0, 0, "SOS", description, "", QDateTime::currentDateTime()));
 
-    QGeoPositionInfo info = m_locationManager->getInfo();
-    if (info.isValid()) {
-        QSharedPointer<Channel> channel;
-        QSharedPointer<common::User> user;
-        channel = QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, ""));
-        user = QSharedPointer<JsonUser>(new JsonUser(m_settings.getLogin(),
-                                                     m_settings.getPassword(),
-                                                     m_settings.getAuthToken()));
-        sosMark->setUser(user);
-        sosMark->setChannel(channel);
-        sosMark->setLatitude(info.coordinate().latitude());
-        sosMark->setLongitude(info.coordinate().longitude());
-        sosMark->setTime();
-        m_writeSosQuery->setTag(sosMark);
-        m_writeSosQuery->setUrl(m_settings.getServerUrl());
-        m_writeSosQuery->doRequest();
-    } else {
-        qDebug() << "invalid geo info, waiting and trying again";
-        QTimer::singleShot(DEFAULT_SOS_PERIOD * 1000, this, SLOT(sos()));
-    }
+  QGeoPositionInfo info = m_locationManager->getInfo();
+  if (info.isValid())
+  {
+    QSharedPointer<Channel> channel;
+    QSharedPointer<common::User> user;
+    channel = QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, ""));
+    user = QSharedPointer<JsonUser>(new JsonUser(m_settings.getLogin(),
+      m_settings.getPassword(),
+      m_settings.getAuthToken()));
+    sosMark->setUser(user);
+    sosMark->setChannel(channel);
+    sosMark->setLatitude(info.coordinate().latitude());
+    sosMark->setLongitude(info.coordinate().longitude());
+    sosMark->setTime();
+    m_writeSosQuery->setTag(sosMark);
+    m_writeSosQuery->setUrl(m_settings.getServerUrl());
+    m_writeSosQuery->doRequest();
+  }
+  else
+  {
+    qDebug() << "invalid geo info, waiting and trying again";
+    QTimer::singleShot(DEFAULT_SOS_PERIOD * 1000, this, SLOT(sos()));
+  }
 }
+
 
 void SosWidget::onSosSent()
 {
-    qDebug() << "Sos sent successfully!";
-    QMessageBox::information(this, "GeoDoctorSearch", "SOS sent successfully");
+  qDebug() << "Sos sent successfully!";
+  QMessageBox::information(this, "GeoDoctorSearch", "SOS sent successfully");
 }
+
 
 void SosWidget::onError(QString error)
 {
-    qDebug() << "error occured during sos, error: " << error;
-    // TODO: add to SOS status!
-    QTimer::singleShot(DEFAULT_SOS_PERIOD * 1000, this, SLOT(sos()));
+  qDebug() << "error occured during sos, error: " << error;
+  // TODO: add to SOS status!
+  QTimer::singleShot(DEFAULT_SOS_PERIOD * 1000, this, SLOT(sos()));
 }
-
-

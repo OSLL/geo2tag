@@ -39,11 +39,10 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _VersionQuery_H_52287A2A_5A63_4D8A_9885_DE97CAC4C5BA_INCLUDED_
 #define _VersionQuery_H_52287A2A_5A63_4D8A_9885_DE97CAC4C5BA_INCLUDED_
 
- /*!
+/*!
  * Class description. May use HTML formatting
  *
  */
@@ -52,12 +51,11 @@
 #include "DefaultQuery.h"
 #include "User.h"
 
-
 class VersionQuery: public DefaultQuery
 {
   Q_OBJECT
 
-  virtual QString getUrl() const;
+    virtual QString getUrl() const;
   virtual QByteArray getRequestBody() const;
 
   QString m_version;
@@ -74,10 +72,6 @@ class VersionQuery: public DefaultQuery
 
     ~VersionQuery();
 
-
-
     // class VersionQuery
 };
-
-
-#endif //_VersionQuery_H_52287A2A_5A63_4D8A_9885_DE97CAC4C5BA_INCLUDED_
+#endif                                  //_VersionQuery_H_52287A2A_5A63_4D8A_9885_DE97CAC4C5BA_INCLUDED_

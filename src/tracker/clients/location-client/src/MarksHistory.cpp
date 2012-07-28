@@ -32,7 +32,7 @@ int MarksHistory::getHistoryLimit()
 bool MarksHistory::isEmpty()
 {
   if (m_marks.size()==0)
-      return true;
+    return true;
   else return false;
 }
 
@@ -46,7 +46,7 @@ void MarksHistory::pushMark(QSharedPointer<DataMark> mark)
   if (m_marks.size()==m_historyLimit+1)
   {
     emit isFull();
- //   m_marks.pop_back();
+    //   m_marks.pop_back();
   }
   QString tmp="Mark history:";
   for (int i=0;i<m_marks.size();i++)

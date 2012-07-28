@@ -48,14 +48,13 @@
 
 namespace Test
 {
-    class Test_AvailableChannelsQuery : public QObject
-    {
-        Q_OBJECT
+  class Test_AvailableChannelsQuery : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-        void response();
+      private slots:
+      void response();
 
-    };  // class Test_AvailableChannelsQuery
-} // namespace Test
-
-#endif // TEST_AVAILABLECHANNELSQUERY_H
+  };                                    // class Test_AvailableChannelsQuery
+}                                       // namespace Test
+#endif                                  // TEST_AVAILABLECHANNELSQUERY_H

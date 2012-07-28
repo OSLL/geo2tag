@@ -40,33 +40,32 @@
 
 class TrackingService : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
     WriteTagQuery *m_writeTagQuery;
-    LocationManager *m_locationManager;
-    QSharedPointer<DataMark> m_dataMark;
-    QSharedPointer<common::User> m_user;
-    QSharedPointer<Channel> m_channel;
-    Settings m_settings;
-    int m_period;
+  LocationManager *m_locationManager;
+  QSharedPointer<DataMark> m_dataMark;
+  QSharedPointer<common::User> m_user;
+  QSharedPointer<Channel> m_channel;
+  Settings m_settings;
+  int m_period;
 
-public:
+  public:
     explicit TrackingService(LocationManager *locationManager, QObject *parent = 0);
 
-public slots:
+  public slots:
     void startTracking(QString name, QString password, QString authToken, QString serverUrl);
     void stopTracking();
     void updateSettings();
 
-signals:
+    signals:
     void markSent(QPointF coordinates);
     void errorOccured(QString error);
 
-private slots:
+  private slots:
     void sendMark();
     void onMarkSent();
     void onError(QString error);
 
 };
-
-#endif // TRACKINGSERVICE_H
+#endif                                  // TRACKINGSERVICE_H

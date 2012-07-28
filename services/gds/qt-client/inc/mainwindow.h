@@ -47,29 +47,30 @@
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QSharedPointer<GDSService> m_GDSService;
-    bool m_isSignedIn;
-    Settings m_settings;
+  bool m_isSignedIn;
+  Settings m_settings;
 
-    // GUI
-    QStackedWidget *m_stackedWidget;
-    LoginWidget *m_loginWidget;
-    CreateAccountWidget *m_createAccountWidget;
-    MainWidget *m_mainWidget;
-    SettingsWidget *m_settingsWidget;
-    QMenuBar *m_menuBar;
-    QMenu *m_menu;
-    QAction *m_settingsAction;
-    QAction *m_signOutAction;
-    QAction *m_exitAction;
+  // GUI
+  QStackedWidget *m_stackedWidget;
+  LoginWidget *m_loginWidget;
+  CreateAccountWidget *m_createAccountWidget;
+  MainWidget *m_mainWidget;
+  SettingsWidget *m_settingsWidget;
+  QMenuBar *m_menuBar;
+  QMenu *m_menu;
+  QAction *m_settingsAction;
+  QAction *m_signOutAction;
+  QAction *m_exitAction;
 
-public:
-    enum ScreenOrientation {
-        ScreenOrientationLockPortrait,
-        ScreenOrientationLockLandscape,
-        ScreenOrientationAuto
+  public:
+    enum ScreenOrientation
+    {
+      ScreenOrientationLockPortrait,
+      ScreenOrientationLockLandscape,
+      ScreenOrientationAuto
     };
 
     explicit MainWindow(QWidget *parent = 0);
@@ -79,7 +80,7 @@ public:
     void setOrientation(ScreenOrientation orientation);
     void showExpanded();
 
-public slots:
+  public slots:
     void onLoginSignedIn(const QString& authToken);
     void onCreateAccountRequested();
     void onCreateAccountFinished();
@@ -90,10 +91,9 @@ public slots:
     void onSignOutAction();
     void onExitAction();
 
-private:
+  private:
     void createActions();
     void createMenus();
     void initGUI();
 };
-
-#endif // MAINWINDOW_H
+#endif                                  // MAINWINDOW_H

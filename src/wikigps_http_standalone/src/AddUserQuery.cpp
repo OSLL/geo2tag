@@ -32,7 +32,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #include <QDebug>
 
 #include "AddUserQuery.h"
@@ -49,10 +48,10 @@
 #endif
 
 AddUserQuery::AddUserQuery(const QString &login, const QString &password, QObject *parent, const QString& email)
-    : DefaultQuery(parent),
-      m_login(login),
-      m_password(password),
-      m_email(email)
+: DefaultQuery(parent),
+m_login(login),
+m_password(password),
+m_email(email)
 {
 }
 
@@ -99,28 +98,33 @@ void AddUserQuery::processReply(QNetworkReply *reply)
   #endif
 }
 
+
 void AddUserQuery::setQuery(const QString& login, const QString& password)
 {
   m_login=login;
   m_password=password;
 }
 
+
 void AddUserQuery::setQuery(const QString& login, const QString& password, const QString& email)
 {
-    m_login = login;
-    m_password = password;
-    m_email = email;
+  m_login = login;
+  m_password = password;
+  m_email = email;
 }
+
 
 QSharedPointer<common::User> AddUserQuery::getUser() const
 {
   return m_user;
 }
 
+
 QSharedPointer<Session> AddUserQuery::getSession() const
 {
   return m_session;
 }
+
 
 AddUserQuery::~AddUserQuery()
 {

@@ -44,17 +44,16 @@
 
 namespace Test
 {
-    void Test_LoginQuery::response()
-    {
-        LoginQuery query(this);
-        QString login = "Mark";
-        QString password = "test";
-        query.setQuery(login, password);
-        query.doRequest();
-        //connect(&query, SIGNAL(connected(QString)), this, SLOT(ok()));
-        QVERIFY(waitForSignal(&query, SIGNAL(success()), 5000));
+  void Test_LoginQuery::response()
+  {
+    LoginQuery query(this);
+    QString login = "Mark";
+    QString password = "test";
+    query.setQuery(login, password);
+    query.doRequest();
+    //connect(&query, SIGNAL(connected(QString)), this, SLOT(ok()));
+    QVERIFY(waitForSignal(&query, SIGNAL(success()), 5000));
 
-    }
+  }
 
-} // end of namespace Test
-
+}                                       // end of namespace Test

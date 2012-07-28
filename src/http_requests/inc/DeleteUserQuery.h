@@ -39,10 +39,8 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_
 #define _DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_
-
 
 #include <QObject>
 #include <QString>
@@ -53,12 +51,11 @@ class DeleteUserQuery: public DefaultQuery
 {
   Q_OBJECT
 
-  QString m_login;
+    QString m_login;
   QString m_password;
 
   virtual QString getUrl() const;
   virtual QByteArray getRequestBody() const;
-
 
   public:
 
@@ -70,7 +67,5 @@ class DeleteUserQuery: public DefaultQuery
 
     ~DeleteUserQuery();
 
-}; // class DeleteUserQuery
-  
-
-#endif //_DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_
+};                                      // class DeleteUserQuery
+#endif                                  //_DeleteUserQuery_H_CB0E2C53_C4F4_4133_9300_DAAAF2394A69_INCLUDED_

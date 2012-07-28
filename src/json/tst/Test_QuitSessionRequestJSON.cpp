@@ -39,33 +39,32 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-
 namespace Test
 {
-    void Test_QuitSessionRequestJSON::getJson()
-    {
-        QuitSessionRequestJSON request;
-        QByteArray data;
-        QJson::Serializer serializer;
-        QVariantMap obj;
+  void Test_QuitSessionRequestJSON::getJson()
+  {
+    QuitSessionRequestJSON request;
+    QByteArray data;
+    QJson::Serializer serializer;
+    QVariantMap obj;
 
-        data = QString("{\"auth_token\":\"MMMMMMMMMM\"}").toAscii();
-        obj.insert("auth_token", QString("MMMMMMMMMM"));
+    data = QString("{\"auth_token\":\"MMMMMMMMMM\"}").toAscii();
+    obj.insert("auth_token", QString("MMMMMMMMMM"));
 
-        QByteArray true_json = serializer.serialize(obj);
+    QByteArray true_json = serializer.serialize(obj);
 
-        request.parseJson(data);
-        QCOMPARE(request.getJson(), true_json);
-    }
+    request.parseJson(data);
+    QCOMPARE(request.getJson(), true_json);
+  }
 
-    void Test_QuitSessionRequestJSON::parseJson()
-    {
-        QuitSessionRequestJSON request;
-        QByteArray data;
+  void Test_QuitSessionRequestJSON::parseJson()
+  {
+    QuitSessionRequestJSON request;
+    QByteArray data;
 
-        data = QString("{\"auth_token\":\"MMMMMMMMMM\"}").toAscii();
-        QCOMPARE(request.parseJson(data), true);
-        QCOMPARE(request.getSessionToken(), QString("MMMMMMMMMM"));
-    }
+    data = QString("{\"auth_token\":\"MMMMMMMMMM\"}").toAscii();
+    QCOMPARE(request.parseJson(data), true);
+    QCOMPARE(request.getSessionToken(), QString("MMMMMMMMMM"));
+  }
 
-} // end of namespace Test
+}                                       // end of namespace Test

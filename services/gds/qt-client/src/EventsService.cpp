@@ -39,142 +39,164 @@
 #include <QThread>
 
 EventsService::EventsService(LocationManager *locationManager, QObject *parent) :
-    QObject(parent),
-    m_locationManager(locationManager),
-    m_filterCircleQuery(0),
-    m_mediaPlayer(0)
+QObject(parent),
+m_locationManager(locationManager),
+m_filterCircleQuery(0),
+m_mediaPlayer(0)
 {
 }
+
 
 EventsService::~EventsService()
 {
-    if (m_mediaPlayer) {
-        m_mediaPlayer->stop();
-        m_mediaPlayer->deleteLater();
-    }
+  if (m_mediaPlayer)
+  {
+    m_mediaPlayer->stop();
+    m_mediaPlayer->deleteLater();
+  }
 }
+
 
 void EventsService::startService(QString name, QString password, QString authToken, QString serverUrl)
 {
-    qDebug() << "EventsService::startService " << this->thread()->currentThreadId();
+  qDebug() << "EventsService::startService " << this->thread()->currentThreadId();
 
-    m_eventsRadius = m_settings.getRadius();
-    m_eventsChannel = QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "", ""));
+  m_eventsRadius = m_settings.getRadius();
+  m_eventsChannel = QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "", ""));
 
-    if (m_filterCircleQuery != 0)
-        m_filterCircleQuery->deleteLater();
+  if (m_filterCircleQuery != 0)
+    m_filterCircleQuery->deleteLater();
 
-    m_filterCircleQuery = new FilterCircleQuery(this);
-    connect(m_filterCircleQuery, SIGNAL(tagsReceived()), this, SLOT(onTagsReceived()));
-    connect(m_filterCircleQuery, SIGNAL(errorOccured(QString)), this, SLOT(onError(QString)));
+  m_filterCircleQuery = new FilterCircleQuery(this);
+  connect(m_filterCircleQuery, SIGNAL(tagsReceived()), this, SLOT(onTagsReceived()));
+  connect(m_filterCircleQuery, SIGNAL(errorOccured(QString)), this, SLOT(onError(QString)));
 
-    m_user = QSharedPointer<JsonUser>(new JsonUser(name, password, authToken));
-    m_filterCircleQuery->setUrl(serverUrl + FILTER_CIRCLE_HTTP_URL);
+  m_user = QSharedPointer<JsonUser>(new JsonUser(name, password, authToken));
+  m_filterCircleQuery->setUrl(serverUrl + FILTER_CIRCLE_HTTP_URL);
 
-    requestEvents();
+  requestEvents();
 }
+
 
 void EventsService::stopService()
 {
 }
 
+
 void EventsService::requestEvents()
 {
-    qDebug() << "EventsService::requestEvents";
-    QGeoPositionInfo info = m_locationManager->getInfo();
-    if (info.isValid()) {
-        QDateTime currentTime = QDateTime::currentDateTimeUtc();
+  qDebug() << "EventsService::requestEvents";
+  QGeoPositionInfo info = m_locationManager->getInfo();
+  if (info.isValid())
+  {
+    QDateTime currentTime = QDateTime::currentDateTimeUtc();
 
-        // just for sure that all newest events will be received
-        QDateTime timeTo = currentTime.addYears(1);
+    // just for sure that all newest events will be received
+    QDateTime timeTo = currentTime.addYears(1);
 
-        QDateTime timeFrom = currentTime.addSecs( - RELEVANT_PERIOD_IN_HOURS * 60 * 60);
+    QDateTime timeFrom = currentTime.addSecs( - RELEVANT_PERIOD_IN_HOURS * 60 * 60);
 
-        m_filterCircleQuery->setQuery(m_user, info.coordinate().latitude(),
-                                      info.coordinate().longitude(), m_eventsRadius,
-                                      timeFrom, timeTo, m_eventsChannel);
+    m_filterCircleQuery->setQuery(m_user, info.coordinate().latitude(),
+      info.coordinate().longitude(), m_eventsRadius,
+      timeFrom, timeTo, m_eventsChannel);
 
-        qDebug() << "do events service request";
-        m_filterCircleQuery->doRequest();
-    } else {
-        qDebug() << "invalid geo info, waitin and trying again";
-        QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
-    }
+    qDebug() << "do events service request";
+    m_filterCircleQuery->doRequest();
+  }
+  else
+  {
+    qDebug() << "invalid geo info, waitin and trying again";
+    QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
+  }
 }
+
 
 void EventsService::onTagsReceived()
 {
-    qDebug() << "EventsService::onTagsReceived";
-    DataChannels data = m_filterCircleQuery->getData();
-    QList<QSharedPointer<Channel> > channels = data.keys();
-    Events events;
-    bool found = false;
-    for (int i = 0; i < channels.size(); ++i) {
-        qDebug() << "channel: " << channels[i]->getName();
-        if (channels[i]->getName() == "Events") {
-            found = true;
-            events = data.values(channels[i]);
-            break;
-        }
+  qDebug() << "EventsService::onTagsReceived";
+  DataChannels data = m_filterCircleQuery->getData();
+  QList<QSharedPointer<Channel> > channels = data.keys();
+  Events events;
+  bool found = false;
+  for (int i = 0; i < channels.size(); ++i)
+  {
+    qDebug() << "channel: " << channels[i]->getName();
+    if (channels[i]->getName() == "Events")
+    {
+      found = true;
+      events = data.values(channels[i]);
+      break;
     }
+  }
 
-    if (!NOT_RECEIVE_OWN_EVENTS) {
-        QMutableListIterator<QSharedPointer<DataMark> > iter(events);
-        while (iter.hasNext()) {
-            QSharedPointer<DataMark> event = iter.next();
-            qDebug() << event->getUser()->getLogin();
-            if (event->getUser()->getLogin() == m_user->getLogin()) {
-                iter.remove();
-            }
-        }
+  if (!NOT_RECEIVE_OWN_EVENTS)
+  {
+    QMutableListIterator<QSharedPointer<DataMark> > iter(events);
+    while (iter.hasNext())
+    {
+      QSharedPointer<DataMark> event = iter.next();
+      qDebug() << event->getUser()->getLogin();
+      if (event->getUser()->getLogin() == m_user->getLogin())
+      {
+        iter.remove();
+      }
     }
+  }
 
-    if (found) {
-        bool newEvents = false;
-        bool expiredEvents = false;
-        QSet<int> newEventsIds;
-        foreach (QSharedPointer<DataMark> event, events) {
-            int id = event->getId();
-            qDebug() << "id: " << id;
-            newEventsIds.insert(id);
-            if (!m_eventsIds.contains(id))
-                newEvents = true;
-        }
-        if (!newEventsIds.contains(m_eventsIds)) {
-            expiredEvents = true;
-        }
-        if (newEvents) {
-            // play alert
-            if (m_mediaPlayer) {
-                m_mediaPlayer->stop();
-                m_mediaPlayer->deleteLater();
-            }
-            qDebug() << "start player";
-            using namespace Phonon;
-#ifdef Q_OS_SYMBIAN
-            m_mediaPlayer = createPlayer(MusicCategory, MediaSource(":/data/siren.wav"));
-            m_mediaPlayer->play();
-#endif
-            qDebug() << "player finished";
-        }
-        if (newEvents || expiredEvents) {
-            m_eventsIds = newEventsIds;
-            emit eventsReceived(events);
-        }
+  if (found)
+  {
+    bool newEvents = false;
+    bool expiredEvents = false;
+    QSet<int> newEventsIds;
+    foreach (QSharedPointer<DataMark> event, events)
+    {
+      int id = event->getId();
+      qDebug() << "id: " << id;
+      newEventsIds.insert(id);
+      if (!m_eventsIds.contains(id))
+        newEvents = true;
     }
+    if (!newEventsIds.contains(m_eventsIds))
+    {
+      expiredEvents = true;
+    }
+    if (newEvents)
+    {
+      // play alert
+      if (m_mediaPlayer)
+      {
+        m_mediaPlayer->stop();
+        m_mediaPlayer->deleteLater();
+      }
+      qDebug() << "start player";
+      using namespace Phonon;
+      #ifdef Q_OS_SYMBIAN
+      m_mediaPlayer = createPlayer(MusicCategory, MediaSource(":/data/siren.wav"));
+      m_mediaPlayer->play();
+      #endif
+      qDebug() << "player finished";
+    }
+    if (newEvents || expiredEvents)
+    {
+      m_eventsIds = newEventsIds;
+      emit eventsReceived(events);
+    }
+  }
 
-    QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
+  QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
 }
+
 
 void EventsService::onError(QString error)
 {
-    qDebug() << "EventsService::onErrorOccured error: " << error;
-    emit errorOccured(error);
-    QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
+  qDebug() << "EventsService::onErrorOccured error: " << error;
+  emit errorOccured(error);
+  QTimer::singleShot(DEFAULT_EVENTS_PERIOD * 1000, this, SLOT(requestEvents()));
 }
+
 
 void EventsService::updateSettings()
 {
-    qDebug() << "Updating EventsService settings";
-    m_eventsRadius = m_settings.getRadius();
+  qDebug() << "Updating EventsService settings";
+  m_eventsRadius = m_settings.getRadius();
 }

@@ -155,8 +155,8 @@ namespace common
     m_processors.insert("filterBox", &DbObjectsCollection::processFilterBoxQuery);
     m_processors.insert("filterFence", &DbObjectsCollection::processFilterFenceQuery);
     m_processors.insert("filterChannel", &DbObjectsCollection::processFilterChannelQuery);
-//  Here also should be something like
-//  m_processors.insert("confirmRegistration-*", &DbObjectsCollection::processFilterFenceQuery);
+    //  Here also should be something like
+    //  m_processors.insert("confirmRegistration-*", &DbObjectsCollection::processFilterFenceQuery);
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QPSQL");
     database.setHostName("localhost");
@@ -174,8 +174,8 @@ namespace common
       NULL);
 
     m_queryExecutor = new QueryExecutor(Geo2tagDatabase(QSqlDatabase::cloneDatabase(database,"executor"),
-                                                        QSharedPointer<UpdateThread>(m_updateThread))
-                                        );
+      QSharedPointer<UpdateThread>(m_updateThread))
+      );
     m_updateThread->setQueryExecutor(m_queryExecutor);
 
     m_updateThread->start();
@@ -206,11 +206,11 @@ namespace common
     {
       if (queryType.compare(queries[i],Qt::CaseInsensitive) == 0)
       {
-	
+
         ProcessMethod method = m_processors.value(queries[i]);
         syslog(LOG_INFO,"calling %s processor %s",queryType.toStdString().c_str(),QString(body).toStdString().c_str());
         QByteArray aa;
-	PerformanceCounter a(queryType.toStdString());
+        PerformanceCounter a(queryType.toStdString());
         aa = (*this.*method)(body);
         return aa;
       }
@@ -218,17 +218,20 @@ namespace common
 
     // Extra code for extracting token from url !
     QRegExp rx("confirmRegistration-([a-zA-Z0-9]+)");
-    if (rx.exactMatch(queryType)) {
-        syslog(LOG_INFO, "Pattern matched!");
-        const QString token = rx.cap(1);
-        ProcessMethodWithStr method = &DbObjectsCollection::processConfirmRegistrationQuery;
-        QByteArray aa; 
-        PerformanceCounter a("confirmRegistration");
-        aa = (*this.*method)(token);
-        return aa;
+    if (rx.exactMatch(queryType))
+    {
+      syslog(LOG_INFO, "Pattern matched!");
+      const QString token = rx.cap(1);
+      ProcessMethodWithStr method = &DbObjectsCollection::processConfirmRegistrationQuery;
+      QByteArray aa;
+      PerformanceCounter a("confirmRegistration");
+      aa = (*this.*method)(token);
+      return aa;
 
-    } else {
-        syslog(LOG_INFO, "Pattern not matched!");
+    }
+    else
+    {
+      syslog(LOG_INFO, "Pattern not matched!");
     }
     // end of extra code !
 
@@ -242,7 +245,7 @@ namespace common
 
   }
 
-// Check password quality params - length, usage of different symbol groups ([-=+_*&^%$#@a-z],[A-Z],[0-9])
+  // Check password quality params - length, usage of different symbol groups ([-=+_*&^%$#@a-z],[A-Z],[0-9])
   bool DbObjectsCollection::checkPasswordQuality(const QString& password) const
   {
     // If check is not enabled in config - all passwords are good
@@ -257,14 +260,13 @@ namespace common
     QRegExp smallLetters("[-=+_*&^%$#@a-z]+");
     QRegExp bigLetters("[A-Z]+");
     QRegExp numbers("[0-9]+");
-    
+
     if (smallLetters.indexIn(password)==-1 || bigLetters.indexIn(password)==-1 || numbers.indexIn(password)==-1 )
       return false;
 
     return true;
 
   }
-
 
   const QString DbObjectsCollection::getPasswordHash(const QSharedPointer<User>& user) const
   {
@@ -288,44 +290,48 @@ namespace common
       currentUsers.size());
     if (!dummyUser->getLogin().isEmpty() && !dummyUser->getPassword().isEmpty())
     {
-    	for(int i=0; i<currentUsers.size(); i++)
-    	{
-            if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0
-               &&
-               currentUsers.at(i)->getPassword() == getPasswordHash(currentUsers.at(i)->getLogin(),dummyUser->getPassword()))
-        	return currentUsers.at(i);
-    	}
+      for(int i=0; i<currentUsers.size(); i++)
+      {
+        if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0
+          &&
+          currentUsers.at(i)->getPassword() == getPasswordHash(currentUsers.at(i)->getLogin(),dummyUser->getPassword()))
+          return currentUsers.at(i);
+      }
     }
     return realUser;
   }
 
   QSharedPointer<Session> DbObjectsCollection::findSession(const QSharedPointer<Session>& dummySession) const
   {
-      QVector< QSharedPointer<Session> > currentSessions = m_sessionsContainer->vector();
-      syslog(LOG_INFO, "checking session key: %s from %d known session", dummySession->getSessionToken().toStdString().c_str(),
-                                                                         currentSessions.size());
-      if (!dummySession->getSessionToken().isEmpty()) {
-          for (int i=0; i<currentSessions.size(); i++) {
-              if(currentSessions.at(i)->getSessionToken() == dummySession->getSessionToken())
-              return currentSessions.at(i);
-          }
+    QVector< QSharedPointer<Session> > currentSessions = m_sessionsContainer->vector();
+    syslog(LOG_INFO, "checking session key: %s from %d known session", dummySession->getSessionToken().toStdString().c_str(),
+      currentSessions.size());
+    if (!dummySession->getSessionToken().isEmpty())
+    {
+      for (int i=0; i<currentSessions.size(); i++)
+      {
+        if(currentSessions.at(i)->getSessionToken() == dummySession->getSessionToken())
+          return currentSessions.at(i);
       }
-      return QSharedPointer<Session>(NULL);
+    }
+    return QSharedPointer<Session>(NULL);
   }
 
   QSharedPointer<Session> DbObjectsCollection::findSessionForUser(const QSharedPointer<User>& user) const
   {
-      QVector< QSharedPointer<Session> > currentSessions = m_sessionsContainer->vector();
-      syslog(LOG_INFO, "checking of session existence for user with name: %s", user->getLogin().toStdString().c_str());
-      if (!user->getLogin().isEmpty() && !user->getPassword().isEmpty()) {
-        for (int i = 0; i < currentSessions.size(); i++) {
-            if (QString::compare(currentSessions.at(i)->getUser()->getLogin(), user->getLogin(), Qt::CaseInsensitive) == 0
-                &&
-                currentSessions.at(i)->getUser()->getPassword() == user->getPassword())
-              return currentSessions.at(i);
-          }
+    QVector< QSharedPointer<Session> > currentSessions = m_sessionsContainer->vector();
+    syslog(LOG_INFO, "checking of session existence for user with name: %s", user->getLogin().toStdString().c_str());
+    if (!user->getLogin().isEmpty() && !user->getPassword().isEmpty())
+    {
+      for (int i = 0; i < currentSessions.size(); i++)
+      {
+        if (QString::compare(currentSessions.at(i)->getUser()->getLogin(), user->getLogin(), Qt::CaseInsensitive) == 0
+          &&
+          currentSessions.at(i)->getUser()->getPassword() == user->getPassword())
+          return currentSessions.at(i);
       }
-      return QSharedPointer<Session>(NULL);
+    }
+    return QSharedPointer<Session>(NULL);
   }
 
   QByteArray DbObjectsCollection::processRegisterUserQuery(const QByteArray &data)
@@ -334,10 +340,11 @@ namespace common
     RegisterUserResponseJSON response;
     QByteArray answer;
     answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-    if (!request.parseJson(data)) {
-        response.setErrno(INCORRECT_JSON_ERROR);
-        answer.append(response.getJson());
-        return answer;
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+      return answer;
     }
     QSharedPointer<User> newTmpUser = request.getUsers()->at(0);
     QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
@@ -352,33 +359,36 @@ namespace common
       }
     }
 
-    if(m_queryExecutor->doesUserWithGivenEmailExist(newTmpUser)) {
-        response.setErrno(EMAIL_ALREADY_EXIST_ERROR);
-        answer.append(response.getJson());
-        return answer;
+    if(m_queryExecutor->doesUserWithGivenEmailExist(newTmpUser))
+    {
+      response.setErrno(EMAIL_ALREADY_EXIST_ERROR);
+      answer.append(response.getJson());
+      return answer;
     }
 
-    if(m_queryExecutor->doesTmpUserExist(newTmpUser)) {
-        response.setErrno(TMP_USER_ALREADY_EXIST_ERROR);
-        answer.append(response.getJson());
-        return answer;
+    if(m_queryExecutor->doesTmpUserExist(newTmpUser))
+    {
+      response.setErrno(TMP_USER_ALREADY_EXIST_ERROR);
+      answer.append(response.getJson());
+      return answer;
     }
 
     if ( !checkPasswordQuality(newTmpUser->getPassword()) )
     {
-        response.setErrno(WEAK_PASSWORD_ERROR);
-        answer.append(response.getJson());
-        return answer;
+      response.setErrno(WEAK_PASSWORD_ERROR);
+      answer.append(response.getJson());
+      return answer;
     }
 
     // Only password hashes are stored, so we change password of this user by password hash
     newTmpUser->setPassword(getPasswordHash(newTmpUser));
     QString confirmToken = m_queryExecutor->insertNewTmpUser(newTmpUser);
-    if(confirmToken.isEmpty()) {
-        response.setErrno(INTERNAL_DB_ERROR);
-        answer.append(response.getJson());
-        syslog(LOG_INFO, "answer: %s", answer.data());
-        return answer;
+    if(confirmToken.isEmpty())
+    {
+      response.setErrno(INTERNAL_DB_ERROR);
+      answer.append(response.getJson());
+      syslog(LOG_INFO, "answer: %s", answer.data());
+      return answer;
     }
 
     response.setErrno(SUCCESS);
@@ -396,21 +406,25 @@ namespace common
     answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
     //syslog(LOG_INFO, "Confirming!");
     bool tokenExists = m_queryExecutor->doesRegistrationTokenExist(registrationToken);
-    if (!tokenExists) {
-        answer.append("Given token doesn't exist!");
-        return answer;
+    if (!tokenExists)
+    {
+      answer.append("Given token doesn't exist!");
+      return answer;
     }
 
     QSharedPointer<User> newUser = m_queryExecutor->insertTmpUserIntoUsers(registrationToken);
 
-    if (!newUser.isNull()) {
-        m_queryExecutor->deleteTmpUser(registrationToken);
-        m_updateThread->lockWriting();
-        m_usersContainer->push_back(newUser);
-        m_updateThread->unlockWriting();
-        answer.append("Congratulations!");
-    } else {
-        answer.append("Attempt of inserting user has failed!");
+    if (!newUser.isNull())
+    {
+      m_queryExecutor->deleteTmpUser(registrationToken);
+      m_updateThread->lockWriting();
+      m_usersContainer->push_back(newUser);
+      m_updateThread->unlockWriting();
+      answer.append("Congratulations!");
+    }
+    else
+    {
+      answer.append("Attempt of inserting user has failed!");
     }
     return answer;
   }
@@ -429,7 +443,7 @@ namespace common
     }
 
     QSharedPointer<User> dummyUser = request.getUsers()->at(0);
-    QSharedPointer<User> realUser = findUser(dummyUser);      
+    QSharedPointer<User> realUser = findUser(dummyUser);
 
     if(realUser.isNull())
     {
@@ -438,26 +452,30 @@ namespace common
     else
     {
       QSharedPointer<Session> session = findSessionForUser(realUser);
-      if (session.isNull()) {
-          QSharedPointer<Session> dummySession(new Session("", QDateTime::currentDateTime(), realUser));
-          syslog(LOG_INFO, "Session hasn't been found. Generating of new Session.");
-          QSharedPointer<Session> addedSession = m_queryExecutor->insertNewSession(dummySession);
-          if (!addedSession) {
-              response.setErrno(INTERNAL_DB_ERROR);
-              answer.append(response.getJson());
-              syslog(LOG_INFO, "answer: %s", answer.data());
-              return answer;
-          }
-          m_updateThread->lockWriting();
-          m_sessionsContainer->push_back(addedSession);
-          m_updateThread->unlockWriting();
-          response.addSession(addedSession);
-      } else {
-          syslog(LOG_INFO, "Session has been found. Session's token: %s", session->getSessionToken().toStdString().c_str());
-          syslog(LOG_INFO, "Time before updating: %s", session->getLastAccessTime().toUTC().toString().toStdString().c_str());
-          m_queryExecutor->updateSession(session);
-          syslog(LOG_INFO, "Time after updating: %s", session->getLastAccessTime().toUTC().toString().toStdString().c_str());
-          response.addSession(session);
+      if (session.isNull())
+      {
+        QSharedPointer<Session> dummySession(new Session("", QDateTime::currentDateTime(), realUser));
+        syslog(LOG_INFO, "Session hasn't been found. Generating of new Session.");
+        QSharedPointer<Session> addedSession = m_queryExecutor->insertNewSession(dummySession);
+        if (!addedSession)
+        {
+          response.setErrno(INTERNAL_DB_ERROR);
+          answer.append(response.getJson());
+          syslog(LOG_INFO, "answer: %s", answer.data());
+          return answer;
+        }
+        m_updateThread->lockWriting();
+        m_sessionsContainer->push_back(addedSession);
+        m_updateThread->unlockWriting();
+        response.addSession(addedSession);
+      }
+      else
+      {
+        syslog(LOG_INFO, "Session has been found. Session's token: %s", session->getSessionToken().toStdString().c_str());
+        syslog(LOG_INFO, "Time before updating: %s", session->getLastAccessTime().toUTC().toString().toStdString().c_str());
+        m_queryExecutor->updateSession(session);
+        syslog(LOG_INFO, "Time after updating: %s", session->getLastAccessTime().toUTC().toString().toStdString().c_str());
+        response.addSession(session);
       }
       response.setErrno(SUCCESS);
       //response.addUser(realUser);
@@ -470,46 +488,48 @@ namespace common
 
   QByteArray DbObjectsCollection::processQuitSessionQuery(const QByteArray &data)
   {
-      QuitSessionRequestJSON request;
-      QuitSessionResponseJSON response;
-      QByteArray answer;
-      answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
-      if (!request.parseJson(data)) {
-          response.setErrno(INCORRECT_JSON_ERROR);
-          answer.append(response.getJson());
-          return answer;
-      }
+    QuitSessionRequestJSON request;
+    QuitSessionResponseJSON response;
+    QByteArray answer;
+    answer.append("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
 
-      QString sessionToken = request.getSessionToken();
-      syslog(LOG_INFO, "Searching of session with token: %s", sessionToken.toStdString().c_str());
-      QSharedPointer<Session> dummySession(new Session(sessionToken, QDateTime::currentDateTime(), QSharedPointer<User>(NULL)));
-      QSharedPointer<Session> realSession = findSession(dummySession);
+    QString sessionToken = request.getSessionToken();
+    syslog(LOG_INFO, "Searching of session with token: %s", sessionToken.toStdString().c_str());
+    QSharedPointer<Session> dummySession(new Session(sessionToken, QDateTime::currentDateTime(), QSharedPointer<User>(NULL)));
+    QSharedPointer<Session> realSession = findSession(dummySession);
 
-      if(realSession.isNull()) {
-          syslog(LOG_INFO, "Session hasn't been found.");
-          response.setErrno(WRONG_TOKEN_ERROR);
-          answer.append(response.getJson());
-          return answer;
-      }
+    if(realSession.isNull())
+    {
+      syslog(LOG_INFO, "Session hasn't been found.");
+      response.setErrno(WRONG_TOKEN_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
 
-      syslog(LOG_INFO, "Session has been found. Deleting...");
-      syslog(LOG_INFO, "Number of sessions before deleting: %d", m_sessionsContainer->size());
-      bool result = m_queryExecutor->deleteSession(realSession);
-      if (!result) {
-          response.setErrno(INTERNAL_DB_ERROR);
-          answer.append(response.getJson());
-          syslog(LOG_INFO, "answer: %s", answer.data());
-          return answer;
-      }
-      m_sessionsContainer->erase(realSession);
-      syslog(LOG_INFO, "Number of sessions after deleting: %d", m_sessionsContainer->size());
-
-      response.setErrno(SUCCESS);
+    syslog(LOG_INFO, "Session has been found. Deleting...");
+    syslog(LOG_INFO, "Number of sessions before deleting: %d", m_sessionsContainer->size());
+    bool result = m_queryExecutor->deleteSession(realSession);
+    if (!result)
+    {
+      response.setErrno(INTERNAL_DB_ERROR);
       answer.append(response.getJson());
       syslog(LOG_INFO, "answer: %s", answer.data());
       return answer;
-  }
+    }
+    m_sessionsContainer->erase(realSession);
+    syslog(LOG_INFO, "Number of sessions after deleting: %d", m_sessionsContainer->size());
 
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
 
   QByteArray DbObjectsCollection::processWriteTagQuery(const QByteArray &data)
   {
@@ -613,10 +633,12 @@ namespace common
 
     QSharedPointer<Channels> ownedChannels(new Channels());
     QVector< QSharedPointer<Channel> > currentChannels = m_channelsContainer->vector();
-    for(int i=0; i<currentChannels.size(); i++) {
-        if(realUser->getId() == currentChannels.at(i)->getOwner()->getId()) {
-            ownedChannels->push_back(currentChannels.at(i));
-        }
+    for(int i=0; i<currentChannels.size(); i++)
+    {
+      if(realUser->getId() == currentChannels.at(i)->getOwner()->getId())
+      {
+        ownedChannels->push_back(currentChannels.at(i));
+      }
     }
 
     syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
@@ -828,17 +850,18 @@ namespace common
       }
     }
 
-    if(m_queryExecutor->doesUserWithGivenEmailExist(dummyUser)) {
-        response.setErrno(EMAIL_ALREADY_EXIST_ERROR);
-        answer.append(response.getJson());
-        return answer;
+    if(m_queryExecutor->doesUserWithGivenEmailExist(dummyUser))
+    {
+      response.setErrno(EMAIL_ALREADY_EXIST_ERROR);
+      answer.append(response.getJson());
+      return answer;
     }
 
     if ( !checkPasswordQuality(dummyUser->getPassword()) )
     {
-        response.setErrno(WEAK_PASSWORD_ERROR);
-        answer.append(response.getJson());
-        return answer;
+      response.setErrno(WEAK_PASSWORD_ERROR);
+      answer.append(response.getJson());
+      return answer;
     }
 
     syslog(LOG_INFO, "Sending sql request for AddUser");
@@ -998,7 +1021,7 @@ namespace common
       if(QString::compare(subscribedChannels->at(i)->getName(), dummyChannel->getName(), Qt::CaseInsensitive) == 0)
       {
         realChannel = subscribedChannels->at(i);
-	break;
+        break;
       }
     }
     if(realChannel.isNull())
@@ -1110,7 +1133,8 @@ namespace common
       // look for ...
       for(int i = 0; i<channels->size(); i++)
       {
-        if (channels->at(i)->getName() == request.getChannels()->at(0)->getName()){
+        if (channels->at(i)->getName() == request.getChannels()->at(0)->getName())
+        {
           targetChannel = channels->at(i);
           break;
         }
@@ -1224,12 +1248,14 @@ namespace common
     QSharedPointer<Channel> channel;
     for(int i = 0; i<channels->size(); i++)
     {
-      if(QString::compare(channels->at(i)->getName(), request.getChannelName(), Qt::CaseInsensitive) == 0){
+      if(QString::compare(channels->at(i)->getName(), request.getChannelName(), Qt::CaseInsensitive) == 0)
+      {
         channel = channels->at(i);
         break;
       }
     }
-    if (channel.isNull()){
+    if (channel.isNull())
+    {
       response.setErrno(CHANNEL_DOES_NOT_EXIST_ERROR);
       answer.append(response.getJson());
       return answer;
@@ -1250,7 +1276,6 @@ namespace common
     return answer;
   }
 
-
   QByteArray DbObjectsCollection::processDeleteUserQuery(const QByteArray& data)
   {
     syslog(LOG_INFO, "starting DeleteUser processing");
@@ -1266,8 +1291,8 @@ namespace common
     // Look for user with the same name
     QSharedPointer<User> realUser = findUser(request.getUsers()->at(0));
 
-
-    if(!realUser) {
+    if(!realUser)
+    {
       response.setErrno(INCORRECT_CREDENTIALS_ERROR);
       answer.append(response.getJson());
       syslog(LOG_INFO, "answer: %s", answer.data());

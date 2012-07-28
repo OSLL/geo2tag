@@ -49,23 +49,24 @@
 
 int main(int argc, char **argv)
 {
-    QCoreApplication app(argc, argv);
+  QCoreApplication app(argc, argv);
 
-    QObject *tests[] =
-    {
-        new Test::JsonUser_Test(),
-        new Test::Test_RegisterUserRequestJSON(),
-        new Test::Test_RegisterUserResponseJSON(),
-        new Test::Test_AvailableChannelsResponseJSON(),
-        new Test::Test_QuitSessionRequestJSON(),
-        new Test::Test_QuitSessionResponseJSON()
-    };
+  QObject *tests[] =
+  {
+    new Test::JsonUser_Test(),
+    new Test::Test_RegisterUserRequestJSON(),
+    new Test::Test_RegisterUserResponseJSON(),
+    new Test::Test_AvailableChannelsResponseJSON(),
+    new Test::Test_QuitSessionRequestJSON(),
+    new Test::Test_QuitSessionResponseJSON()
+  };
 
-    QTest::qExec(tests[4]);
-    for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++) {
-        QTest::qExec(tests[i]);
-    }
-    return 0;//app.exec();
+  QTest::qExec(tests[4]);
+  for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++)
+  {
+    QTest::qExec(tests[i]);
+  }
+  return 0;                             //app.exec();
 }
 
 

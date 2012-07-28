@@ -63,16 +63,16 @@
 
 SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
-#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+  #if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
   syslog(LOG_INFO,"SubscribeChannelRequestJSON::SubscribeChannelRequestJSON()");
-#endif
+  #endif
 }
 
 
 SubscribeChannelRequestJSON::SubscribeChannelRequestJSON(const QSharedPointer<Session> &session,
-                                                         const QSharedPointer<Channel> &channel,
-                                                         QObject *parent)
-    : JsonSerializer(parent)
+const QSharedPointer<Channel> &channel,
+QObject *parent)
+: JsonSerializer(parent)
 {
   m_sessionsContainer->push_back(session);
   m_channelsContainer->push_back(channel);

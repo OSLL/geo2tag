@@ -46,12 +46,12 @@
 
 class Session : public QObject
 {
-private:
+  private:
     QString      m_sessionToken;
     QDateTime    m_lastAccessTime;
     QSharedPointer<common::User> m_user;
 
-public:
+  public:
     Session(const QString& sessionToken, const QDateTime& lastAccessTime, const QSharedPointer<common::User>& user);
 
     void setSessionToken(const QString& sessionToken);
@@ -68,6 +68,4 @@ public:
 };
 
 typedef ConcurrentVector<Session> Sessions;
-
-
-#endif // SESSION_H
+#endif                                  // SESSION_H

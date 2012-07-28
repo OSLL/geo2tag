@@ -45,18 +45,16 @@
 
 namespace Test
 {
-    void Test_SubscribeChannelQuery::response()
-    {
-        SubscribeChannelQuery query;
-        QSharedPointer<Channel> channel(new Channel("name", "description"));
-        QSharedPointer<common::User> user(new common::User("Paul", "test"));
-        QSharedPointer<Session> session(new Session("ppppppppp", QDateTime::currentDateTime().toUTC(), user));
-        query.setQuery(channel, session);
-        query.doRequest();
-        //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
-        QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
-    }
+  void Test_SubscribeChannelQuery::response()
+  {
+    SubscribeChannelQuery query;
+    QSharedPointer<Channel> channel(new Channel("name", "description"));
+    QSharedPointer<common::User> user(new common::User("Paul", "test"));
+    QSharedPointer<Session> session(new Session("ppppppppp", QDateTime::currentDateTime().toUTC(), user));
+    query.setQuery(channel, session);
+    query.doRequest();
+    //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
+    QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
+  }
 
-} // end of namespace Test
-
-
+}                                       // end of namespace Test

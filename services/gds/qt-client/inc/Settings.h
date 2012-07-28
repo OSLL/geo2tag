@@ -17,9 +17,9 @@
 class Settings
 {
 
-    QSettings m_settings;
+  QSettings m_settings;
 
-public:
+  public:
     Settings();
 
     bool isSettingsEmpty();
@@ -44,5 +44,4 @@ public:
     void setTrackingPeriod(int trackingPeriod);
 
 };
-
-#endif // SETTINGS_H
+#endif                                  // SETTINGS_H

@@ -123,4 +123,3 @@ LoadTagsQuery::~LoadTagsQuery()
 
 
 /* ===[ End of file $HeadURL$ ]=== */
-

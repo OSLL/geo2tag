@@ -43,37 +43,38 @@
 #include "Geo2tagDatabase.h"
 
 UpdateThread::UpdateThread(const QSharedPointer<DataMarks> &tags,
-                           const QSharedPointer<common::Users> &users,
-                           const QSharedPointer<Channels> &channels,
-                           const QSharedPointer<DataChannels>& dataChannelsMap,
-                           const QSharedPointer<Sessions>& sessions,
-                           QObject *parent)
-    : QThread(parent),
-      m_channelsContainer(channels),
-      m_tagsContainer(tags),
-      m_usersContainer(users),
-      m_dataChannelsMap(dataChannelsMap),
-      m_sessionsContainer(sessions),
-      m_queryExecutor(0),
-      m_transactionCount(0)
+const QSharedPointer<common::Users> &users,
+const QSharedPointer<Channels> &channels,
+const QSharedPointer<DataChannels>& dataChannelsMap,
+const QSharedPointer<Sessions>& sessions,
+QObject *parent)
+: QThread(parent),
+m_channelsContainer(channels),
+m_tagsContainer(tags),
+m_usersContainer(users),
+m_dataChannelsMap(dataChannelsMap),
+m_sessionsContainer(sessions),
+m_queryExecutor(0),
+m_transactionCount(0)
 {
 }
 
+
 UpdateThread::UpdateThread(const QSharedPointer<DataMarks> &tags,
-                           const QSharedPointer<common::Users> &users,
-                           const QSharedPointer<Channels> &channels,
-                           const QSharedPointer<DataChannels>& dataChannelsMap,
-                           const QSharedPointer<Sessions>& sessions,
-                           QueryExecutor* queryExecutor,
-                           QObject *parent)
-    : QThread(parent),
-      m_channelsContainer(channels),
-      m_tagsContainer(tags),
-      m_usersContainer(users),
-      m_dataChannelsMap(dataChannelsMap),
-      m_sessionsContainer(sessions),
-      m_queryExecutor(queryExecutor),
-      m_transactionCount(0)
+const QSharedPointer<common::Users> &users,
+const QSharedPointer<Channels> &channels,
+const QSharedPointer<DataChannels>& dataChannelsMap,
+const QSharedPointer<Sessions>& sessions,
+QueryExecutor* queryExecutor,
+QObject *parent)
+: QThread(parent),
+m_channelsContainer(channels),
+m_tagsContainer(tags),
+m_usersContainer(users),
+m_dataChannelsMap(dataChannelsMap),
+m_sessionsContainer(sessions),
+m_queryExecutor(queryExecutor),
+m_transactionCount(0)
 {
 }
 
@@ -89,21 +90,25 @@ void UpdateThread::unlockWriting()
   m_updateLock.unlock();
 }
 
+
 void UpdateThread::setQueryExecutor(QueryExecutor *queryExecutor)
 {
   m_queryExecutor = queryExecutor;
 }
+
 
 QSharedPointer<Sessions> UpdateThread::getSessionsContainer() const
 {
   return m_sessionsContainer;
 }
 
+
 void UpdateThread::incrementTransactionCount(int i)
 {
   m_transactionCount+=i;
   syslog(LOG_INFO, "Number of write requests: logged = %lld",m_transactionCount);
 }
+
 
 bool UpdateThread::compareTransactionNumber(qlonglong factCount)
 {
@@ -119,6 +124,7 @@ bool UpdateThread::compareTransactionNumber(qlonglong factCount)
   return result;
 }
 
+
 void UpdateThread::run()
 {
 
@@ -127,81 +133,80 @@ void UpdateThread::run()
     SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
     qlonglong interval = storage.getValue("General_Settings/db_update_interval", QVariant(DEFAULT_DB_UPDATE_INTERVAL)).toLongLong();
     {
-    PerformanceCounter counter("db_update");    
+      PerformanceCounter counter("db_update");
 
-    syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
-    bool result = m_queryExecutor->connect();
-    if(!result)
-    {
-      syslog(LOG_INFO, "connection error %s", m_queryExecutor->lastError().text().toStdString().c_str());
-      QThread::msleep(1000);
-      continue;
-    }
+      syslog(LOG_INFO, "trying to connect to database..., file: %s, line: %d", __FILE__, __LINE__);
+      bool result = m_queryExecutor->connect();
+      if(!result)
+      {
+        syslog(LOG_INFO, "connection error %s", m_queryExecutor->lastError().text().toStdString().c_str());
+        QThread::msleep(1000);
+        continue;
+      }
 
-    qDebug() << "connected...";
-// Check if DB contain new changes
-    qlonglong oldTagsContainerSize = m_tagsContainer->size();
-    qlonglong factCount = m_queryExecutor->getFactTransactionNumber();
-    if (!compareTransactionNumber(factCount))
-    {
-      QThread::msleep(interval);
-      continue;
-    }
+      qDebug() << "connected...";
+      // Check if DB contain new changes
+      qlonglong oldTagsContainerSize = m_tagsContainer->size();
+      qlonglong factCount = m_queryExecutor->getFactTransactionNumber();
+      if (!compareTransactionNumber(factCount))
+      {
+        QThread::msleep(interval);
+        continue;
+      }
 
-    syslog(LOG_INFO,"Containers locked for db_update");
+      syslog(LOG_INFO,"Containers locked for db_update");
 
-    common::Users       usersContainer(*m_usersContainer);
-    DataMarks   tagsContainer(*m_tagsContainer);
-    Channels    channelsContainer(*m_channelsContainer);
-    Sessions    sessionsContainer(*m_sessionsContainer);
+      common::Users       usersContainer(*m_usersContainer);
+      DataMarks   tagsContainer(*m_tagsContainer);
+      Channels    channelsContainer(*m_channelsContainer);
+      Sessions    sessionsContainer(*m_sessionsContainer);
 
-    m_queryExecutor->checkTmpUsers();
+      m_queryExecutor->checkTmpUsers();
 
-    lockWriting();
-    m_queryExecutor->checkSessions(m_sessionsContainer);
-    unlockWriting();
+      lockWriting();
+      m_queryExecutor->checkSessions(m_sessionsContainer);
+      unlockWriting();
 
-    m_queryExecutor->loadUsers(usersContainer);
-    m_queryExecutor->loadChannels(channelsContainer);
-    m_queryExecutor->loadTags(tagsContainer);
-    m_queryExecutor->loadSessions(sessionsContainer);
+      m_queryExecutor->loadUsers(usersContainer);
+      m_queryExecutor->loadChannels(channelsContainer);
+      m_queryExecutor->loadTags(tagsContainer);
+      m_queryExecutor->loadSessions(sessionsContainer);
 
+      lockWriting();
 
-    lockWriting();
+      m_usersContainer->merge(usersContainer);
+      m_tagsContainer->merge(tagsContainer);
+      m_channelsContainer->merge(channelsContainer);
+      m_sessionsContainer->merge(sessionsContainer);
 
-    m_usersContainer->merge(usersContainer);
-    m_tagsContainer->merge(tagsContainer);
-    m_channelsContainer->merge(channelsContainer);
-    m_sessionsContainer->merge(sessionsContainer);
+      m_queryExecutor->updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer, *m_sessionsContainer);
 
-    m_queryExecutor->updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer, *m_sessionsContainer);
-    
-    syslog(LOG_INFO, "tags added. trying to unlock");
-    unlockWriting();
+      syslog(LOG_INFO, "tags added. trying to unlock");
+      unlockWriting();
 
-    if (oldTagsContainerSize != m_tagsContainer->size())
-    {
-    	syslog(LOG_INFO,"lock: filling m_dataChannelsMap ");
-    	for(int i=0; i<m_tagsContainer->size(); i++)
-    	{
-      		if(!m_dataChannelsMap->contains(m_tagsContainer->at(i)->getChannel(), m_tagsContainer->at(i)))
-      		{
-        		QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
-		        QSharedPointer<Channel> channel = tag->getChannel();
-		        syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i, m_tagsContainer->size(),
-        		tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(), channel->getName().toStdString().c_str());
-		        lockWriting();
-        		m_dataChannelsMap->insert(channel, tag);
-        		unlockWriting();
-    		}
-    	}
-    }
-    syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
-    syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());
-    syslog(LOG_INFO,  "current channels' size = %d", m_channelsContainer->size());
-    syslog(LOG_INFO,  "current sessions' size = %d", m_sessionsContainer->size());
+      if (oldTagsContainerSize != m_tagsContainer->size())
+      {
+        syslog(LOG_INFO,"lock: filling m_dataChannelsMap ");
+        for(int i=0; i<m_tagsContainer->size(); i++)
+        {
+          if(!m_dataChannelsMap->contains(m_tagsContainer->at(i)->getChannel(), m_tagsContainer->at(i)))
+          {
+            QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
+            QSharedPointer<Channel> channel = tag->getChannel();
+            syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i, m_tagsContainer->size(),
+              tag->getTime().toString("dd MM yyyy HH:mm:ss.zzz").toStdString().c_str(), channel->getName().toStdString().c_str());
+            lockWriting();
+            m_dataChannelsMap->insert(channel, tag);
+            unlockWriting();
+          }
+        }
+      }
+      syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
+      syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());
+      syslog(LOG_INFO,  "current channels' size = %d", m_channelsContainer->size());
+      syslog(LOG_INFO,  "current sessions' size = %d", m_sessionsContainer->size());
 
-    m_queryExecutor->disconnect();
+      m_queryExecutor->disconnect();
     }
     QThread::msleep(interval);
   }

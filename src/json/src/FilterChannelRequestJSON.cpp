@@ -80,10 +80,12 @@ bool FilterChannelRequestJSON::parseJson(const QByteArray&data)
   return ok;
 }
 
+
 QString FilterChannelRequestJSON::getChannelName()
 {
   return m_channel;
 }
+
 
 int FilterChannelRequestJSON::getAmount()
 {

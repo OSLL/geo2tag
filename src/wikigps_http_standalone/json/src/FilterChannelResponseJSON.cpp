@@ -95,6 +95,7 @@ bool FilterChannelResponseJSON::parseJson(const QByteArray&)
   return false;
 }
 
+
 void FilterChannelResponseJSON::setData(QSharedPointer<Channel> channel,
 QList<QSharedPointer<DataMark> > tags)
 {

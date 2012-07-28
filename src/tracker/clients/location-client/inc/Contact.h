@@ -3,22 +3,22 @@
 #include <QSharedPointer>
 #include "Channel.h"
 #include "DataMarks.h"
-enum STATUS_TYPE {
-    MY_CHANNEL,
-    AVAILABLE,
-    LOST
+enum STATUS_TYPE
+{
+  MY_CHANNEL,
+  AVAILABLE,
+  LOST
 };
 class Contact: public QObject
 {
-    Q_OBJECT
-private:
+  Q_OBJECT
+    private:
     QString m_channelName;
     QString m_customName;
     QSharedPointer<DataMark> m_lastMark;
     STATUS_TYPE m_status;
 
-
-public:
+  public:
     Contact(QObject* parent=0);
     Contact(const QString &channelName,const QString &customName, STATUS_TYPE status = LOST, QObject *parent=0);
     QString getChannelName() const;
@@ -29,9 +29,8 @@ public:
     void setLastDataMark(QSharedPointer<DataMark> datamark);
     void setStatus(STATUS_TYPE status);
     STATUS_TYPE getStatus() const;
-signals:
+    signals:
     void contactChanged();
 
 };
-
-#endif // CONTACT_H
+#endif                                  // CONTACT_H

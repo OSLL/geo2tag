@@ -39,12 +39,10 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _DeleteUserResponseJSON_H_0000F356_F4F1_47A8_9042_31C1569A745C_INCLUDED_
 #define _DeleteUserResponseJSON_H_0000F356_F4F1_47A8_9042_31C1569A745C_INCLUDED_
 
 #include "DefaultResponseJSON.h"
 
 typedef DefaultResponseJSON DeleteUserResponseJSON;
-
-#endif //_DeleteUserResponseJSON_H_0000F356_F4F1_47A8_9042_31C1569A745C_INCLUDED_
+#endif                                  //_DeleteUserResponseJSON_H_0000F356_F4F1_47A8_9042_31C1569A745C_INCLUDED_

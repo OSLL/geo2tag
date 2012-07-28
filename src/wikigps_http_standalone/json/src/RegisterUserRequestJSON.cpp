@@ -47,34 +47,37 @@ RegisterUserRequestJSON::RegisterUserRequestJSON(QObject *parent) : JsonSerializ
 {
 }
 
+
 RegisterUserRequestJSON::RegisterUserRequestJSON(const QSharedPointer<common::User> &user, QObject *parent)
-    : JsonSerializer(parent)
+: JsonSerializer(parent)
 {
-    m_usersContainer->push_back(user);
+  m_usersContainer->push_back(user);
 }
+
 
 QByteArray RegisterUserRequestJSON::getJson() const
 {
-    QJson::Serializer serializer;
-    QVariantMap obj;
-    obj.insert("email", m_usersContainer->at(0)->getEmail());
-    obj.insert("login", m_usersContainer->at(0)->getLogin());
-    obj.insert("password", m_usersContainer->at(0)->getPassword());
-    return serializer.serialize(obj);
+  QJson::Serializer serializer;
+  QVariantMap obj;
+  obj.insert("email", m_usersContainer->at(0)->getEmail());
+  obj.insert("login", m_usersContainer->at(0)->getLogin());
+  obj.insert("password", m_usersContainer->at(0)->getPassword());
+  return serializer.serialize(obj);
 }
+
 
 bool RegisterUserRequestJSON::parseJson(const QByteArray &data)
 {
-    clearContainers();
+  clearContainers();
 
-    QJson::Parser parser;
-    bool ok;
-    QVariantMap result = parser.parse(data, &ok).toMap();
-    if (!ok) return false;
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
 
-    QString email = result["email"].toString();
-    QString login = result["login"].toString();
-    QString password = result["password"].toString();
-    m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login, password,email)));
-    return true;
+  QString email = result["email"].toString();
+  QString login = result["login"].toString();
+  QString password = result["password"].toString();
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser(login, password,email)));
+  return true;
 }

@@ -52,18 +52,15 @@
 #include "User.h"
 #include "SubscribeChannelQuery.h"
 
-  class UnsubscribeChannelQuery: public SubscribeChannelQuery
+class UnsubscribeChannelQuery: public SubscribeChannelQuery
+{
+  virtual QString getUrl() const
   {
-    virtual QString getUrl() const
-    {
-	return UNSUBSCRIBE_HTTP_URL;	
-    }
+    return UNSUBSCRIBE_HTTP_URL;
+  }
 
-      // class UnsubscribeChannelQuery
-  };
-
-
-
+  // class UnsubscribeChannelQuery
+};
 
 //_UnsubscribeChannelQuery_H_AEC54E51_233A_4854_90B8_F70C8DAAF3ED_INCLUDED_
 #endif

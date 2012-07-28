@@ -39,22 +39,22 @@
 #include "FShapeCircle.h"
 
 FilterCircleQuery::FilterCircleQuery(
-        QSharedPointer<common::User> &user,
-        double latitude,
-        double longitude,
-        double radius,
-        QDateTime timeFrom,
-        QDateTime timeTo,
-        const QSharedPointer<Channel> &channel,
-        QObject *parent)
-    : DefaultQuery(parent),
-      m_user(user),
-      m_latitude(latitude),
-      m_longitude(longitude),
-      m_radius(radius),
-      m_timeFrom(timeFrom),
-      m_timeTo(timeTo),
-      m_channel(channel)
+QSharedPointer<common::User> &user,
+double latitude,
+double longitude,
+double radius,
+QDateTime timeFrom,
+QDateTime timeTo,
+const QSharedPointer<Channel> &channel,
+QObject *parent)
+: DefaultQuery(parent),
+m_user(user),
+m_latitude(latitude),
+m_longitude(longitude),
+m_radius(radius),
+m_timeFrom(timeFrom),
+m_timeTo(timeTo),
+m_channel(channel)
 {
 }
 
@@ -65,20 +65,20 @@ FilterCircleQuery::FilterCircleQuery(QObject *parent): DefaultQuery(parent)
 
 
 void FilterCircleQuery::setQuery(QSharedPointer<common::User> &user,
-                                 double latitude,
-                                 double longitude,
-                                 double radius,
-                                 QDateTime timeFrom,
-                                 QDateTime timeTo,
-                                 const QSharedPointer<Channel> &channel)
+double latitude,
+double longitude,
+double radius,
+QDateTime timeFrom,
+QDateTime timeTo,
+const QSharedPointer<Channel> &channel)
 {
-    m_user = user;
-    m_latitude = latitude;
-    m_longitude = longitude;
-    m_radius = radius;
-    m_timeFrom = timeFrom;
-    m_timeTo = timeTo;
-    m_channel = channel;
+  m_user = user;
+  m_latitude = latitude;
+  m_longitude = longitude;
+  m_radius = radius;
+  m_timeFrom = timeFrom;
+  m_timeTo = timeTo;
+  m_channel = channel;
 }
 
 
@@ -90,31 +90,31 @@ QString FilterCircleQuery::getUrl() const
 
 QByteArray FilterCircleQuery::getRequestBody() const
 {
-    FilterCircleRequestJSON request;
-    QSharedPointer<FShapeCircle> shape(new FShapeCircle(m_latitude, m_longitude, m_radius));
-    request.setShape(shape);
-    request.setTimeFrom(m_timeFrom);
-    request.setTimeTo(m_timeTo);
-    if (m_channel != 0)
-        request.setChannel(m_channel);
-    request.addUser(m_user);
-    return request.getJson();
+  FilterCircleRequestJSON request;
+  QSharedPointer<FShapeCircle> shape(new FShapeCircle(m_latitude, m_longitude, m_radius));
+  request.setShape(shape);
+  request.setTimeFrom(m_timeFrom);
+  request.setTimeTo(m_timeTo);
+  if (m_channel != 0)
+    request.setChannel(m_channel);
+  request.addUser(m_user);
+  return request.getJson();
 }
 
 
 void FilterCircleQuery::processReply(QNetworkReply *reply)
 {
-    FilterDefaultResponseJSON response;
-    response.parseJson(reply->readAll());
-    if (response.getErrno() == SUCCESS)
-    {
-        m_hashMap = response.getDataChannels();
-        emit tagsReceived();
-    }
-    else
-    {
-        emit errorOccured(getErrnoDescription(response.getErrno()));
-    }
+  FilterDefaultResponseJSON response;
+  response.parseJson(reply->readAll());
+  if (response.getErrno() == SUCCESS)
+  {
+    m_hashMap = response.getDataChannels();
+    emit tagsReceived();
+  }
+  else
+  {
+    emit errorOccured(getErrnoDescription(response.getErrno()));
+  }
 }
 
 

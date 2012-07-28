@@ -43,27 +43,26 @@
 namespace common
 {
 
-    class BasicUser
-    {
+  class BasicUser
+  {
     private:
-        QString m_login;
-        QString m_password;
-        QString m_email;
+      QString m_login;
+      QString m_password;
+      QString m_email;
 
     public:
-        BasicUser(const QString & name="", const QString & passw="", const QString & email="");
+      BasicUser(const QString & name="", const QString & passw="", const QString & email="");
 
-        virtual qlonglong getId() const;
+      virtual qlonglong getId() const;
 
-        const QString& getLogin() const;
-        const QString& getPassword() const;
-        const QString& getEmail() const;
+      const QString& getLogin() const;
+      const QString& getPassword() const;
+      const QString& getEmail() const;
 
-        void setPassword(const QString password);
+      void setPassword(const QString password);
 
-        virtual ~BasicUser();
-    };
+      virtual ~BasicUser();
+  };
 
-}   //namespace common
-
-#endif // BASICUSER_H
+}                                       //namespace common
+#endif                                  // BASICUSER_H

@@ -39,166 +39,176 @@
 #include "JsonUser.h"
 
 CreateAccountWidget::CreateAccountWidget(QWidget *parent) :
-    QWidget(parent)
+QWidget(parent)
 {
-    m_loginEdit = new QLineEdit(this);
-    m_passwordEdit = new QLineEdit(this);
-    m_passwordEdit->setEchoMode(QLineEdit::Password);
-    m_rePasswordEdit = new QLineEdit(this);
-    m_rePasswordEdit->setEchoMode(QLineEdit::Password);
-    m_registerButton = new QPushButton("Register", this);
-    m_cancelButton = new QPushButton("Cancel", this);
+  m_loginEdit = new QLineEdit(this);
+  m_passwordEdit = new QLineEdit(this);
+  m_passwordEdit->setEchoMode(QLineEdit::Password);
+  m_rePasswordEdit = new QLineEdit(this);
+  m_rePasswordEdit->setEchoMode(QLineEdit::Password);
+  m_registerButton = new QPushButton("Register", this);
+  m_cancelButton = new QPushButton("Cancel", this);
 
-    initGUI();
+  initGUI();
 
-    m_addEventsChannelQuery = new AddChannelQuery(this);
-    m_registerQuery = new RegisterUserQuery(this);
-    m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
-    m_addChannelQuery = new AddChannelQuery(this);
-    m_subscribeTracking = new SubscribeChannelQuery(this);
-    m_subscribeEvents = new SubscribeChannelQuery(this);
+  m_addEventsChannelQuery = new AddChannelQuery(this);
+  m_registerQuery = new RegisterUserQuery(this);
+  m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
+  m_addChannelQuery = new AddChannelQuery(this);
+  m_subscribeTracking = new SubscribeChannelQuery(this);
+  m_subscribeEvents = new SubscribeChannelQuery(this);
 
-    connect(m_registerButton, SIGNAL(clicked()),
-            this, SLOT(onRegisterClicked()));
-    connect(m_cancelButton, SIGNAL(clicked()),
-            this, SLOT(onCancelClicked()));
-    connect(m_registerQuery, SIGNAL(connected()),
-            this, SLOT(onUserAdded()));
-    connect(m_registerQuery, SIGNAL(errorOccured(QString)),
-            this, SLOT(onError(QString)));
-    connect(m_registerQuery, SIGNAL(networkErrorOccured(QString)),
-            this, SLOT(onError(QString)), Qt::QueuedConnection);
-    connect(m_loginQuery, SIGNAL(connected()),
-            this, SLOT(onLoggedIn()));
-    connect(m_loginQuery, SIGNAL(errorOccured(QString)),
-            this, SLOT(onError(QString)));
-    connect(m_loginQuery, SIGNAL(networkErrorOccured(QString)),
-            this, SLOT(onError(QString)), Qt::QueuedConnection);
-    connect(m_addChannelQuery, SIGNAL(channelAdded()),
-            this, SLOT(onChannelAdded()));
-    connect(m_addChannelQuery, SIGNAL(errorOccured(QString)),
-            this, SLOT(onError(QString)));
-    connect(m_addChannelQuery, SIGNAL(networkErrorOccured(QString)),
-            this, SLOT(onError(QString)), Qt::QueuedConnection);
-    connect(m_subscribeTracking, SIGNAL(subscribed()),
-            this, SLOT(onTrackingSubscribed()));
-    connect(m_subscribeTracking, SIGNAL(errorOccured(QString)),
-            this, SLOT(onError(QString)));
-    connect(m_subscribeTracking, SIGNAL(networkErrorOccured(QString)),
-            this, SLOT(onError(QString)), Qt::QueuedConnection);
-    connect(m_subscribeEvents, SIGNAL(subscribed()),
-            this, SLOT(onEventsSubscribed()));
-    connect(m_subscribeEvents, SIGNAL(errorOccured(QString)),
-            this, SLOT(onError(QString)));
-    connect(m_subscribeEvents, SIGNAL(networkErrorOccured(QString)),
-            this, SLOT(onError(QString)), Qt::QueuedConnection);
+  connect(m_registerButton, SIGNAL(clicked()),
+    this, SLOT(onRegisterClicked()));
+  connect(m_cancelButton, SIGNAL(clicked()),
+    this, SLOT(onCancelClicked()));
+  connect(m_registerQuery, SIGNAL(connected()),
+    this, SLOT(onUserAdded()));
+  connect(m_registerQuery, SIGNAL(errorOccured(QString)),
+    this, SLOT(onError(QString)));
+  connect(m_registerQuery, SIGNAL(networkErrorOccured(QString)),
+    this, SLOT(onError(QString)), Qt::QueuedConnection);
+  connect(m_loginQuery, SIGNAL(connected()),
+    this, SLOT(onLoggedIn()));
+  connect(m_loginQuery, SIGNAL(errorOccured(QString)),
+    this, SLOT(onError(QString)));
+  connect(m_loginQuery, SIGNAL(networkErrorOccured(QString)),
+    this, SLOT(onError(QString)), Qt::QueuedConnection);
+  connect(m_addChannelQuery, SIGNAL(channelAdded()),
+    this, SLOT(onChannelAdded()));
+  connect(m_addChannelQuery, SIGNAL(errorOccured(QString)),
+    this, SLOT(onError(QString)));
+  connect(m_addChannelQuery, SIGNAL(networkErrorOccured(QString)),
+    this, SLOT(onError(QString)), Qt::QueuedConnection);
+  connect(m_subscribeTracking, SIGNAL(subscribed()),
+    this, SLOT(onTrackingSubscribed()));
+  connect(m_subscribeTracking, SIGNAL(errorOccured(QString)),
+    this, SLOT(onError(QString)));
+  connect(m_subscribeTracking, SIGNAL(networkErrorOccured(QString)),
+    this, SLOT(onError(QString)), Qt::QueuedConnection);
+  connect(m_subscribeEvents, SIGNAL(subscribed()),
+    this, SLOT(onEventsSubscribed()));
+  connect(m_subscribeEvents, SIGNAL(errorOccured(QString)),
+    this, SLOT(onError(QString)));
+  connect(m_subscribeEvents, SIGNAL(networkErrorOccured(QString)),
+    this, SLOT(onError(QString)), Qt::QueuedConnection);
 }
+
 
 void CreateAccountWidget::initGUI()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addWidget(new QLabel("Login", this));
-    mainLayout->addWidget(m_loginEdit);
-    mainLayout->addWidget(new QLabel("Password", this));
-    mainLayout->addWidget(m_passwordEdit);
-    mainLayout->addWidget(new QLabel("Reenter password:", this));
-    mainLayout->addWidget(m_rePasswordEdit);
-    QHBoxLayout *btnsLayout = new QHBoxLayout();
-    btnsLayout->addWidget(m_registerButton);
-    btnsLayout->addWidget(m_cancelButton);
-    mainLayout->addLayout(btnsLayout);
-    mainLayout->addStretch();
-    this->setLayout(mainLayout);
+  QVBoxLayout *mainLayout = new QVBoxLayout();
+  mainLayout->addWidget(new QLabel("Login", this));
+  mainLayout->addWidget(m_loginEdit);
+  mainLayout->addWidget(new QLabel("Password", this));
+  mainLayout->addWidget(m_passwordEdit);
+  mainLayout->addWidget(new QLabel("Reenter password:", this));
+  mainLayout->addWidget(m_rePasswordEdit);
+  QHBoxLayout *btnsLayout = new QHBoxLayout();
+  btnsLayout->addWidget(m_registerButton);
+  btnsLayout->addWidget(m_cancelButton);
+  mainLayout->addLayout(btnsLayout);
+  mainLayout->addStretch();
+  this->setLayout(mainLayout);
 }
+
 
 void CreateAccountWidget::onRegisterClicked()
 {
-    qDebug() << "register clicked";
+  qDebug() << "register clicked";
 
-    m_login = m_loginEdit->text();
-    m_password = m_passwordEdit->text();
-    QString rePassword = m_rePasswordEdit->text();
+  m_login = m_loginEdit->text();
+  m_password = m_passwordEdit->text();
+  QString rePassword = m_rePasswordEdit->text();
 
-    if (m_login.length() == 0) {
-        QMessageBox::information(this, "Geo Doctor Search","Login can't be empty");
-        return;
-    }
-    if (m_password.length() == 0) {
-        QMessageBox::information(this, "Geo Doctor Search","Password can't be empty");
-        return;
-    }
-    if (rePassword != m_password) {
-        QMessageBox::information(this, "Geo Doctor Search","Passwords should match");
-        return;
-    }
+  if (m_login.length() == 0)
+  {
+    QMessageBox::information(this, "Geo Doctor Search","Login can't be empty");
+    return;
+  }
+  if (m_password.length() == 0)
+  {
+    QMessageBox::information(this, "Geo Doctor Search","Password can't be empty");
+    return;
+  }
+  if (rePassword != m_password)
+  {
+    QMessageBox::information(this, "Geo Doctor Search","Passwords should match");
+    return;
+  }
 
-    m_registerQuery->setQuery("no email", m_login, m_password);
-    m_registerQuery->setUrl(m_settings.getServerUrl() + ADD_USER_HTTP_URL);
-    m_registerQuery->doRequest();
+  m_registerQuery->setQuery("no email", m_login, m_password);
+  m_registerQuery->setUrl(m_settings.getServerUrl() + ADD_USER_HTTP_URL);
+  m_registerQuery->doRequest();
 
 }
-
 
 
 void CreateAccountWidget::onCancelClicked()
 {
-    qDebug() << "cancel clicked";
-    emit finished();
+  qDebug() << "cancel clicked";
+  emit finished();
 }
+
 
 void CreateAccountWidget::onError(QString error)
 {
-    qDebug() << "create account error: " << error;
-    QMessageBox::information(this, "Error", error);
+  qDebug() << "create account error: " << error;
+  QMessageBox::information(this, "Error", error);
 }
+
 
 void CreateAccountWidget::onUserAdded()
 {
-    qDebug() << "User added";
-    m_loginQuery->setQuery(m_login, m_password);
-    m_loginQuery->setUrl(m_settings.getServerUrl());
-    m_loginQuery->doRequest();
+  qDebug() << "User added";
+  m_loginQuery->setQuery(m_login, m_password);
+  m_loginQuery->setUrl(m_settings.getServerUrl());
+  m_loginQuery->doRequest();
 }
+
 
 void CreateAccountWidget::onLoggedIn()
 {
-    qDebug() << "User logged in, token: " << m_loginQuery->getUser()->getToken();
+  qDebug() << "User logged in, token: " << m_loginQuery->getUser()->getToken();
 
-    QSharedPointer<Channel> eventsChannel =
-            QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "Channel with events", ""));
-    m_addEventsChannelQuery->setQuery(m_loginQuery->getUser(), eventsChannel);
-    m_addEventsChannelQuery->setUrl(m_settings.getServerUrl());
-    m_addEventsChannelQuery->doRequest();
+  QSharedPointer<Channel> eventsChannel =
+    QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "Channel with events", ""));
+  m_addEventsChannelQuery->setQuery(m_loginQuery->getUser(), eventsChannel);
+  m_addEventsChannelQuery->setUrl(m_settings.getServerUrl());
+  m_addEventsChannelQuery->doRequest();
 
-    QSharedPointer<Channel> channel =
-            QSharedPointer<Channel>(new Channel(m_login, m_login + "'s channel", ""));
-    m_addChannelQuery->setQuery(m_loginQuery->getUser(), channel);
-    m_addChannelQuery->setUrl(m_settings.getServerUrl());
-    m_addChannelQuery->doRequest();
+  QSharedPointer<Channel> channel =
+    QSharedPointer<Channel>(new Channel(m_login, m_login + "'s channel", ""));
+  m_addChannelQuery->setQuery(m_loginQuery->getUser(), channel);
+  m_addChannelQuery->setUrl(m_settings.getServerUrl());
+  m_addChannelQuery->doRequest();
 }
+
 
 void CreateAccountWidget::onChannelAdded()
 {
-    qDebug() << "Channel added";
-    m_subscribeTracking->setQuery(m_loginQuery->getUser(),
-                                  m_addChannelQuery->getChannel());
-    m_subscribeTracking->setUrl(m_settings.getServerUrl());
-    m_subscribeTracking->doRequest();
+  qDebug() << "Channel added";
+  m_subscribeTracking->setQuery(m_loginQuery->getUser(),
+    m_addChannelQuery->getChannel());
+  m_subscribeTracking->setUrl(m_settings.getServerUrl());
+  m_subscribeTracking->doRequest();
 }
+
 
 void CreateAccountWidget::onTrackingSubscribed()
 {
-    qDebug() << "Tracking subscribed";
-    QSharedPointer<Channel> eventsChannel =
-            QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, ""));
-    m_subscribeEvents->setQuery(m_loginQuery->getUser(),
-                                  eventsChannel);
-    m_subscribeEvents->setUrl(m_settings.getServerUrl());
-    m_subscribeEvents->doRequest();
+  qDebug() << "Tracking subscribed";
+  QSharedPointer<Channel> eventsChannel =
+    QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, ""));
+  m_subscribeEvents->setQuery(m_loginQuery->getUser(),
+    eventsChannel);
+  m_subscribeEvents->setUrl(m_settings.getServerUrl());
+  m_subscribeEvents->doRequest();
 }
+
 
 void CreateAccountWidget::onEventsSubscribed()
 {
-    qDebug() << "Events subscribed";
-    emit finished();
+  qDebug() << "Events subscribed";
+  emit finished();
 }

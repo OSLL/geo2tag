@@ -56,6 +56,7 @@ ErrnoInfoResponseJSON::ErrnoInfoResponseJSON(QObject *parent): JsonSerializer(pa
 {
 }
 
+
 QByteArray ErrnoInfoResponseJSON::getJson() const
 {
   QJson::Serializer serializer;
@@ -78,6 +79,7 @@ QByteArray ErrnoInfoResponseJSON::getJson() const
   obj.insert("errno", getErrno());
   return serializer.serialize(obj);
 }
+
 
 bool ErrnoInfoResponseJSON::parseJson(const QByteArray&)
 {

@@ -45,7 +45,5 @@ class MainWindow : public QMainWindow
     void trackingSettings();
     void pathSettings();
 
-
-
 };
 #endif                                  // MAINWINDOW_H

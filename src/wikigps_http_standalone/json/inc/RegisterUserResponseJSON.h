@@ -39,17 +39,16 @@
 
 class RegisterUserResponseJSON : public JsonSerializer
 {
-    Q_OBJECT
+  Q_OBJECT
     QString m_confirmUrl;
-public:
+  public:
     RegisterUserResponseJSON(QObject *parent = 0);
 
     QByteArray getJson() const;
 
     bool parseJson(const QByteArray &);
-    
+
     void setConfirmUrl(const QString&);
     const QString& getConfirmUrl() const;
 };
-
-#endif // REGISTERUSERRESPONSEJSON_H
+#endif                                  // REGISTERUSERRESPONSEJSON_H

@@ -121,11 +121,9 @@ namespace common
 
     QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 
+    //    void processSendConfirmationLetter(const QString &address);
 
-//    void processSendConfirmationLetter(const QString &address);
-
-
-//    static void processSendConfirmationLetter(const QString&);
+    //    static void processSendConfirmationLetter(const QString&);
 
     public:
 
@@ -139,12 +137,10 @@ namespace common
       DbObjectsCollection(const DbObjectsCollection& obj);
       DbObjectsCollection& operator=(const DbObjectsCollection& obj);
 
-  }; // class DbSession
+  };                                    // class DbSession
 
   // namespace common
 }
-
-
-#endif //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
+#endif                                  //_DbSession_H_9BF6A8FE_DA47_4F7A_B008_2EA2842C490F_INCLUDED_
 
 /* ===[ End of file ]=== */

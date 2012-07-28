@@ -41,10 +41,10 @@
 
 class QuitSessionResponseJSON: public JsonSerializer
 {
-private:
+  private:
     QString m_sessionToken;
 
-public:
+  public:
     QuitSessionResponseJSON(QObject *parent = 0);
 
     QByteArray getJson() const;
@@ -52,5 +52,4 @@ public:
 
     ~QuitSessionResponseJSON();
 };
-
-#endif // QUITSESSIONRESPONSEJSON_H
+#endif                                  // QUITSESSIONRESPONSEJSON_H

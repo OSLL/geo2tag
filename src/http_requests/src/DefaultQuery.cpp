@@ -67,16 +67,18 @@ void DefaultQuery::doRequest()
   url.setPort(getServerPort());
   request.setUrl(url);
 
-//  qDebug() << "doing post to" << url << " with body: " << getRequestBody();
+  //  qDebug() << "doing post to" << url << " with body: " << getRequestBody();
   syslog(LOG_INFO,"posting http request to %s with body %s",url.toString().toStdString().c_str(),QString(getRequestBody()).toStdString().c_str());
   QNetworkReply *reply = m_manager->post(request, getRequestBody());
   m_sendTime = QDateTime::currentDateTime();
   connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(handleError()));
 }
 
+
 void DefaultQuery::processResponse(const QByteArray &)
 {
 }
+
 
 void DefaultQuery::process(QNetworkReply *reply)
 {
@@ -90,12 +92,13 @@ void DefaultQuery::process(QNetworkReply *reply)
 
   if(m_errno == SUCCESS)
   {
-     Q_EMIT success();
-     processResponse(data);
+    Q_EMIT success();
+    processResponse(data);
   }
   else errorOccured(m_errno);
 
 }
+
 
 int DefaultQuery::getErrno() const
 {

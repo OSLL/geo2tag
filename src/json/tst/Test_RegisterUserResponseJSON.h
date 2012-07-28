@@ -29,11 +29,11 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
-* \file RegisterUserResponseJSON_Test.h
-* \brief Test suite for RegisterUserResponseJSON class
-*
-* PROJ: OSLL/geo2tag
-* ----------------------------------------------------------- */
+ * \file RegisterUserResponseJSON_Test.h
+ * \brief Test suite for RegisterUserResponseJSON class
+ *
+ * PROJ: OSLL/geo2tag
+ * ----------------------------------------------------------- */
 
 #ifndef TEST_REGISTERUSERRESPONSEJSON_H
 #define TEST_REGISTERUSERRESPONSEJSON_H
@@ -44,14 +44,13 @@
 
 namespace Test
 {
-    class Test_RegisterUserResponseJSON : public QObject
-    {
-        Q_OBJECT
+  class Test_RegisterUserResponseJSON : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_RegisterUserResponseJSON
-}                // end of namespace Test
-
-#endif // TEST_REGISTERUSERRESPONSEJSON_H
+      private slots:
+      void getJson();
+      void parseJson();
+  };                                    // class Test_RegisterUserResponseJSON
+}                                       // end of namespace Test
+#endif                                  // TEST_REGISTERUSERRESPONSEJSON_H

@@ -47,14 +47,13 @@
 
 namespace Test
 {
-    class Test_LoadTagsQuery : public QObject
-    {
-        Q_OBJECT
+  class Test_LoadTagsQuery : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-        void response();
+      private slots:
+      void response();
 
-    };  // class Test_LoadTagsQuery
-} // namespace Test
-
-#endif // TEST_LOADTAGSQUERY_H
+  };                                    // class Test_LoadTagsQuery
+}                                       // namespace Test
+#endif                                  // TEST_LOADTAGSQUERY_H

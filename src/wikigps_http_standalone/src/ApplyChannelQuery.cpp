@@ -38,9 +38,9 @@
 #include "json/inc/AddChannelResponseJSON.h"
 
 ApplyChannelQuery::ApplyChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<Session> &session, QObject *parent)
-    : DefaultQuery(parent),
-      m_channel(channel),
-      m_session(session)
+: DefaultQuery(parent),
+m_channel(channel),
+m_session(session)
 {
 }
 

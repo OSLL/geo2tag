@@ -59,7 +59,7 @@ class LoginQuery: public DefaultQuery
 {
   Q_OBJECT
 
-  QString m_login;
+    QString m_login;
   QString m_password;
 
   QSharedPointer<Session> m_session;

@@ -39,11 +39,10 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _LoadTagsThread_H_5CA4CB3D_0FCD_45EE_8A20_BF2A49175E75_INCLUDED_
 #define _LoadTagsThread_H_5CA4CB3D_0FCD_45EE_8A20_BF2A49175E75_INCLUDED_
 
- /*!
+/*!
  * Class description. May use HTML formatting
  *
  */
@@ -54,11 +53,9 @@
 class LoadTagsThread: public ProfilerThread
 {
   Q_OBJECT;
-public:
-  LoadTagsThread(QSharedPointer<Session> session);
+  public:
+    LoadTagsThread(QSharedPointer<Session> session);
 
-  ~LoadTagsThread();
-}; // class LoadTagsThread
-  
-
-#endif //_LoadTagsThread_H_5CA4CB3D_0FCD_45EE_8A20_BF2A49175E75_INCLUDED_
+    ~LoadTagsThread();
+};                                      // class LoadTagsThread
+#endif                                  //_LoadTagsThread_H_5CA4CB3D_0FCD_45EE_8A20_BF2A49175E75_INCLUDED_

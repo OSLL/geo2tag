@@ -62,7 +62,7 @@ QString WriteTagQuery::getUrl() const
 
 void WriteTagQuery::setUrl(const QString &url)
 {
-    DefaultQuery::setUrl(url + APPLY_HTTP_URL);
+  DefaultQuery::setUrl(url + APPLY_HTTP_URL);
 }
 
 

@@ -42,36 +42,35 @@
 
 class LoginWidget : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
     Settings m_settings;
-    LoginQuery *m_loginQuery;
-    AddChannelQuery *m_addEventsChannelQuery;
+  LoginQuery *m_loginQuery;
+  AddChannelQuery *m_addEventsChannelQuery;
 
-    // GUI
-    QLineEdit *m_loginEdit;
-    QLineEdit *m_passwordEdit;
-    QCheckBox *m_rememberCheck;
-    QPushButton *m_signInButton;
-    QPushButton *m_createAccountButton;
+  // GUI
+  QLineEdit *m_loginEdit;
+  QLineEdit *m_passwordEdit;
+  QCheckBox *m_rememberCheck;
+  QPushButton *m_signInButton;
+  QPushButton *m_createAccountButton;
 
-public:
+  public:
     explicit LoginWidget(QWidget *parent = 0);
     void fill();
 
-signals:
+    signals:
     void signedIn(const QString& authToken);
     void createAccountRequested();
 
-public slots:
+  public slots:
     void onSignInClicked();
     void onCreateAccountClicked();
     void onLoginConnected();
     void onError(QString error);
 
-private:
+  private:
     void initGUI();
 
 };
-
-#endif // LOGINWIDGET_H
+#endif                                  // LOGINWIDGET_H

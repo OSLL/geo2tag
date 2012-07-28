@@ -46,65 +46,64 @@
 
 namespace Test
 {
-    class Test_QueryExecutor : public QObject
-    {
-        Q_OBJECT
+  class Test_QueryExecutor : public QObject
+  {
+    Q_OBJECT
 
-        QSharedPointer<QueryExecutor> m_queryExecutor;
-        Geo2tagDatabase m_database;
+      QSharedPointer<QueryExecutor> m_queryExecutor;
+    Geo2tagDatabase m_database;
 
     private:
-        QSharedPointer<common::User> createTestUser(const QString& login,
-                                                    const QString& password,
-                                                    const QString& email);
-        QSharedPointer<common::User> createTestTmpUser(const QString& login,
-                                                       const QString& password,
-                                                       const QString& email);
-        QSharedPointer<Session> createTestSession(const QString& token,
-                                                  const QDateTime& time,
-                                                  const QSharedPointer<common::User>& user);
-        QSharedPointer<Channel> createTestChannel(const QString& name, const QString& description, const QString& url,
-                                                  const QSharedPointer<common::User>& owner);
-        QSharedPointer<DataMark> createTestTag(double altitude, double latitude, double longitude,
-                                              const QString& label, const QString& description, const QString& url, const QDateTime& time,
-                                              const QSharedPointer<common::User>& user,
-                                              const QSharedPointer<Channel>& channel);
-        bool deleteTestUser(const QSharedPointer<common::User>& user);
-        bool deleteTestTmpUser(const QSharedPointer<common::User>& user);
-        bool deleteTestSession(const QSharedPointer<Session>& session);
-        bool deleteTestChannel(const QSharedPointer<Channel>& channel);
-        bool deleteTestTag(const QSharedPointer<DataMark>& tag);
+      QSharedPointer<common::User> createTestUser(const QString& login,
+        const QString& password,
+        const QString& email);
+      QSharedPointer<common::User> createTestTmpUser(const QString& login,
+        const QString& password,
+        const QString& email);
+      QSharedPointer<Session> createTestSession(const QString& token,
+        const QDateTime& time,
+        const QSharedPointer<common::User>& user);
+      QSharedPointer<Channel> createTestChannel(const QString& name, const QString& description, const QString& url,
+        const QSharedPointer<common::User>& owner);
+      QSharedPointer<DataMark> createTestTag(double altitude, double latitude, double longitude,
+        const QString& label, const QString& description, const QString& url, const QDateTime& time,
+        const QSharedPointer<common::User>& user,
+        const QSharedPointer<Channel>& channel);
+      bool deleteTestUser(const QSharedPointer<common::User>& user);
+      bool deleteTestTmpUser(const QSharedPointer<common::User>& user);
+      bool deleteTestSession(const QSharedPointer<Session>& session);
+      bool deleteTestChannel(const QSharedPointer<Channel>& channel);
+      bool deleteTestTag(const QSharedPointer<DataMark>& tag);
 
     private slots:
-        void subscribeChannel();
-        void unsubscribeChannel();
-        void doesTmpUserExist();
-        void doesUserWithGivenEmailExist();
-        void deleteTmpUser();
-        void insertNewTmpUser();
-        void doesRegistrationTokenExist();
-        void insertTmpUserIntoUsers();
-        void deleteTmpUserWithToken();
-        void insertNewTag();
-        void insertNewUser();
-        void insertNewChannel();
-        void deleteUser();
-        void insertNewSession();
-        void updateSession();
-        void deleteSession();
+      void subscribeChannel();
+      void unsubscribeChannel();
+      void doesTmpUserExist();
+      void doesUserWithGivenEmailExist();
+      void deleteTmpUser();
+      void insertNewTmpUser();
+      void doesRegistrationTokenExist();
+      void insertTmpUserIntoUsers();
+      void deleteTmpUserWithToken();
+      void insertNewTag();
+      void insertNewUser();
+      void insertNewChannel();
+      void deleteUser();
+      void insertNewSession();
+      void updateSession();
+      void deleteSession();
 
-        void checkTmpUsers();
-        void checkSessions();
+      void checkTmpUsers();
+      void checkSessions();
 
-        void loadUsers();
-        void loadTags();
-        void loadChannels();
-        void loadSessions();
+      void loadUsers();
+      void loadTags();
+      void loadChannels();
+      void loadSessions();
 
     public:
-        Test_QueryExecutor();
+      Test_QueryExecutor();
 
-    };               // class Test_QueryExecutor
-}      // end of namespace Test
-
-#endif // TEST_QUERYEXECUTOR_H
+  };                                    // class Test_QueryExecutor
+}                                       // end of namespace Test
+#endif                                  // TEST_QUERYEXECUTOR_H

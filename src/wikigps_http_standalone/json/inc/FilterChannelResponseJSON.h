@@ -39,7 +39,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _FilterChannelResponseJSON_H_D06843F4_D6CB_4B9E_B538_74F7B2E8D42A_INCLUDED_
 #define _FilterChannelResponseJSON_H_D06843F4_D6CB_4B9E_B538_74F7B2E8D42A_INCLUDED_
 
@@ -47,18 +46,17 @@
 
 class FilterChannelResponseJSON: public JsonSerializer
 {
-private:
-  QList<QSharedPointer<DataMark> > m_tags;
-  QSharedPointer<Channel> m_channel;
+  private:
+    QList<QSharedPointer<DataMark> > m_tags;
+    QSharedPointer<Channel> m_channel;
 
-public:
-  FilterChannelResponseJSON(QObject *parent = 0);
+  public:
+    FilterChannelResponseJSON(QObject *parent = 0);
 
-  QByteArray getJson() const;
+    QByteArray getJson() const;
 
-  bool parseJson(const QByteArray&);
+    bool parseJson(const QByteArray&);
 
-  void setData(QSharedPointer<Channel> channel, QList<QSharedPointer<DataMark> > tags);
+    void setData(QSharedPointer<Channel> channel, QList<QSharedPointer<DataMark> > tags);
 };
-
-#endif //_FilterChannelResponseJSON_H_D06843F4_D6CB_4B9E_B538_74F7B2E8D42A_INCLUDED_
+#endif                                  //_FilterChannelResponseJSON_H_D06843F4_D6CB_4B9E_B538_74F7B2E8D42A_INCLUDED_

@@ -36,7 +36,6 @@
  * PROJ: OSLL/geo2tag
  * ----------------------------------------------------------- */
 
-
 #include <QObject>
 #include <QtTest/QtTest>
 #include <QSignalSpy>
@@ -45,50 +44,48 @@
 #include "VersionQuery.h"
 #include "signals.h"
 
-
-
 namespace Test
 {
   class VersionQuery_Test : public QObject
   {
     Q_OBJECT;
 
-		// VersionQuery*  m_tstObject; // Object for testing
-  
-  public:
-    
-    VersionQuery_Test(QObject *parent =0) : QObject(parent)
-    {
-  	  // initialization here
-			// m_tstObject = new VersionQuery;
-    }
-    
-    ~VersionQuery_Test()
-    {
-  	  // destroying  here
-			// delete m_tstObject;
-			// m_tstObject = NULL;
-    }
-  
-  private slots:
-  
-    void test1()
-    {
+    // VersionQuery*  m_tstObject; // Object for testing
 
-	VersionQuery * query = new VersionQuery(this);
-	QSignalSpy spy_version(query,SIGNAL(responseReceived()));
-	query->doRequest();
-	QVERIFY(waitForSignal(query,SIGNAL(responseReceived()),5000));
-	QCOMPARE(spy_version.count(), 1);
-		
-     // see docs: http://doc.qt.nokia.com/4.7/qtest.html
-  
-     //QCOMPARE();
-     //QWARN();
-     //QVERIFY();
-     //QTEST();
-    }
-  
-  }; // class VersionQuery_Test
+    public:
 
-} // end of namespace Test
+      VersionQuery_Test(QObject *parent =0) : QObject(parent)
+      {
+        // initialization here
+        // m_tstObject = new VersionQuery;
+      }
+
+      ~VersionQuery_Test()
+      {
+        // destroying  here
+        // delete m_tstObject;
+        // m_tstObject = NULL;
+      }
+
+    private slots:
+
+      void test1()
+      {
+
+        VersionQuery * query = new VersionQuery(this);
+        QSignalSpy spy_version(query,SIGNAL(responseReceived()));
+        query->doRequest();
+        QVERIFY(waitForSignal(query,SIGNAL(responseReceived()),5000));
+        QCOMPARE(spy_version.count(), 1);
+
+        // see docs: http://doc.qt.nokia.com/4.7/qtest.html
+
+        //QCOMPARE();
+        //QWARN();
+        //QVERIFY();
+        //QTEST();
+      }
+
+  };                                    // class VersionQuery_Test
+
+}                                       // end of namespace Test

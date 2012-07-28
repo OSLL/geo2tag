@@ -44,12 +44,12 @@
 
 class EmailMessage
 {
-private:
+  private:
     QString m_email;
     QString m_subject;
     QString m_body;
 
-public:
+  public:
     EmailMessage(QString email, QString info);
 
     void setEmail(QString email);
@@ -62,6 +62,4 @@ public:
 
     void send() const;
 };
-
-
-#endif // EMAILMESSAGE_H
+#endif                                  // EMAILMESSAGE_H

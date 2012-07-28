@@ -47,13 +47,12 @@ class JsonSession: public Session
 
   public:
     JsonSession(const QString& sessionToken,
-                const QDateTime& lastAccessTime,
-                const QSharedPointer<common::User>& user);
+      const QDateTime& lastAccessTime,
+      const QSharedPointer<common::User>& user);
 
     qlonglong getId() const;
     void setId(qlonglong);
 
     ~JsonSession();
 };
-
-#endif // JSONSESSION_H
+#endif                                  // JSONSESSION_H

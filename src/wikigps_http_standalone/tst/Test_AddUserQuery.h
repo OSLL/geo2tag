@@ -45,18 +45,16 @@
 
 #include "AddUserQuery.h"
 
-
 namespace Test
 {
 
-    class Test_AddUserQuery : public QObject
-    {
-        Q_OBJECT
+  class Test_AddUserQuery : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-        void response();
+      private slots:
+      void response();
 
-    };  // class Test_AddUserQuery
-} // namespace Test
-
-#endif // TEST_ADDUSERQUERY_H
+  };                                    // class Test_AddUserQuery
+}                                       // namespace Test
+#endif                                  // TEST_ADDUSERQUERY_H

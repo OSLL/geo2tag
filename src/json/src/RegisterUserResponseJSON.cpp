@@ -47,44 +47,46 @@
 #include "ErrnoTypes.h"
 
 RegisterUserResponseJSON::RegisterUserResponseJSON(QObject *parent)
-    : JsonSerializer(parent)
+: JsonSerializer(parent)
 {
 }
 
+
 void RegisterUserResponseJSON::setConfirmUrl(const QString& url)
 {
-    m_confirmUrl = url;
+  m_confirmUrl = url;
 }
 
 
 const QString& RegisterUserResponseJSON::getConfirmUrl() const
 {
-    return m_confirmUrl;
+  return m_confirmUrl;
 }
+
 
 QByteArray RegisterUserResponseJSON::getJson() const
 {
-    QJson::Serializer serializer;
-    QVariantMap obj;
-    obj.insert("errno", m_errno);
-    if (m_errno == SUCCESS) obj.insert("confirmUrl", m_confirmUrl);
-    return serializer.serialize(obj);
+  QJson::Serializer serializer;
+  QVariantMap obj;
+  obj.insert("errno", m_errno);
+  if (m_errno == SUCCESS) obj.insert("confirmUrl", m_confirmUrl);
+  return serializer.serialize(obj);
 }
+
 
 bool RegisterUserResponseJSON::parseJson(const QByteArray &data)
 {
-    //clearContainers();
-    QJson::Parser parser;
-    bool ok;
+  //clearContainers();
+  QJson::Parser parser;
+  bool ok;
 
-    QVariantMap result = parser.parse(data, &ok).toMap();
-    if (!ok) return false;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
 
-    result["errno"].toInt(&ok);
-    if (!ok) return false;
-    m_errno = result["errno"].toInt(&ok);
-    m_confirmUrl = result["confirmUrl"].toString();
+  result["errno"].toInt(&ok);
+  if (!ok) return false;
+  m_errno = result["errno"].toInt(&ok);
+  m_confirmUrl = result["confirmUrl"].toString();
 
-    return true;
+  return true;
 }
-

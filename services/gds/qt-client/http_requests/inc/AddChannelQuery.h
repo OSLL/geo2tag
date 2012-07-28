@@ -9,10 +9,10 @@
 
 class AddChannelQuery: public DefaultQuery
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QSharedPointer<common::User> m_user;
-    QSharedPointer<Channel> m_channel;
+  QSharedPointer<Channel> m_channel;
 
   virtual QString getUrl() const;
   virtual QByteArray getRequestBody() const;
@@ -20,13 +20,13 @@ class AddChannelQuery: public DefaultQuery
 
   public:
     AddChannelQuery(const QSharedPointer<common::User> &user,
-                    const QSharedPointer<Channel> &channel,
-                    QObject *parent = 0);
+      const QSharedPointer<Channel> &channel,
+      QObject *parent = 0);
     AddChannelQuery(QObject *parent = 0);
 
     ~AddChannelQuery();
     void setQuery(const QSharedPointer<common::User> &user,
-                  const QSharedPointer<Channel> &channel);
+      const QSharedPointer<Channel> &channel);
     void setUrl(const QString &url);
 
     QSharedPointer<common::User> getUser() const;
@@ -38,4 +38,3 @@ class AddChannelQuery: public DefaultQuery
 };
 // ADDCHANNELQUERY_H
 #endif
-

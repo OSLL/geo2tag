@@ -43,36 +43,34 @@
 
 class CreateAccountWidget : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QString m_login;
-    QString m_password;
-    QString m_authToken;
+  QString m_password;
+  QString m_authToken;
 
-    Settings m_settings;
-    AddChannelQuery *m_addEventsChannelQuery;
-    RegisterUserQuery *m_registerQuery;
-    LoginQuery *m_loginQuery;
-    AddChannelQuery *m_addChannelQuery;
-    SubscribeChannelQuery *m_subscribeTracking;
-    SubscribeChannelQuery *m_subscribeEvents;
+  Settings m_settings;
+  AddChannelQuery *m_addEventsChannelQuery;
+  RegisterUserQuery *m_registerQuery;
+  LoginQuery *m_loginQuery;
+  AddChannelQuery *m_addChannelQuery;
+  SubscribeChannelQuery *m_subscribeTracking;
+  SubscribeChannelQuery *m_subscribeEvents;
 
+  // GUI
+  QLineEdit *m_loginEdit;
+  QLineEdit *m_passwordEdit;
+  QLineEdit *m_rePasswordEdit;
+  QPushButton *m_registerButton;
+  QPushButton *m_cancelButton;
 
-    // GUI
-    QLineEdit *m_loginEdit;
-    QLineEdit *m_passwordEdit;
-    QLineEdit *m_rePasswordEdit;
-    QPushButton *m_registerButton;
-    QPushButton *m_cancelButton;
-
-
-public:
+  public:
     explicit CreateAccountWidget(QWidget *parent = 0);
-    
-signals:
+
+    signals:
     void finished();
-    
-public slots:
+
+  public slots:
     void onRegisterClicked();
     void onCancelClicked();
     void onUserAdded();
@@ -83,9 +81,8 @@ public slots:
 
     void onError(QString error);
 
-private:
+  private:
     void initGUI();
-    
-};
 
-#endif // CREATEACCOUNTWIDGET_H
+};
+#endif                                  // CREATEACCOUNTWIDGET_H

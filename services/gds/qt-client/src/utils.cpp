@@ -3,7 +3,8 @@
 
 QString getErrnoDescription(int err)
 {
-    switch (err) {
+  switch (err)
+  {
     case SUCCESS: return "";
     case WRONG_TOKEN_ERROR: return "Wrong authorization";
     case USER_ALREADY_EXIST_ERROR: return "User already exists";
@@ -24,5 +25,5 @@ QString getErrnoDescription(int err)
     //TMP_USER_ALREADY_EXIST_ERROR,
     case NETWORK_ERROR: return "Network server error";
     default: return "Unknown error";
-    }
+  }
 }

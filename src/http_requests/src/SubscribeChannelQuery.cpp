@@ -4,10 +4,10 @@
 #include "SubscribeChannelResponseJSON.h"
 
 SubscribeChannelQuery::SubscribeChannelQuery(const QSharedPointer<Channel> &channel,
-                                             const QSharedPointer<Session> &session, QObject *parent)
-    : DefaultQuery(parent),
-      m_channel(channel),
-      m_session(session)
+const QSharedPointer<Session> &session, QObject *parent)
+: DefaultQuery(parent),
+m_channel(channel),
+m_session(session)
 {
 
 }
@@ -44,6 +44,3 @@ SubscribeChannelQuery::~SubscribeChannelQuery()
 {
 
 }
-
-
-

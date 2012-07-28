@@ -45,25 +45,25 @@
 
 class TrackingWidget : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QPushButton *m_trackingButton;
-    QLabel *m_status;
-    QTextEdit *m_log;
+  QLabel *m_status;
+  QTextEdit *m_log;
 
-    LocationManager *m_locationManager;
-    Settings m_settings;
-    QThread m_trackingThread;
-    TrackingService m_trackingService;
+  LocationManager *m_locationManager;
+  Settings m_settings;
+  QThread m_trackingThread;
+  TrackingService m_trackingService;
 
-public:
+  public:
     explicit TrackingWidget(LocationManager *locationManager, QWidget *parent = 0);
 
     bool isTracking() const;
 
-signals:
+    signals:
 
-public slots:
+  public slots:
     void startTracking();
     void stopTracking();
     void changeTrackingMode();
@@ -73,10 +73,8 @@ public slots:
     void onError(QString error);
     void onSettingsUpdated();
 
-private:
+  private:
     void initGUI();
 
-
 };
-
-#endif // TRACKINGWIDGET_H
+#endif                                  // TRACKINGWIDGET_H

@@ -49,7 +49,7 @@ class QueryExecutor : public QObject
 
     Geo2tagDatabase m_database;
 
-    qlonglong nextKey(const QString& sequence) const;
+  qlonglong nextKey(const QString& sequence) const;
 
   public:
 
@@ -70,7 +70,7 @@ class QueryExecutor : public QObject
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
-    bool		             doesTmpUserExist(const QSharedPointer<common::User> &user);
+    bool                 doesTmpUserExist(const QSharedPointer<common::User> &user);
     bool                     doesUserWithGivenEmailExist(const QSharedPointer<common::User> &user);
     bool                     deleteTmpUser(const QSharedPointer<common::User> &user);
     const QString  insertNewTmpUser(const QSharedPointer<common::User> &user);
@@ -102,5 +102,4 @@ class QueryExecutor : public QObject
   public slots:
 
 };
-
-#endif // QUERYEXECUTOR_H
+#endif                                  // QUERYEXECUTOR_H

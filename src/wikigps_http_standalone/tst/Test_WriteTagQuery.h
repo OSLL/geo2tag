@@ -47,14 +47,13 @@
 
 namespace Test
 {
-    class Test_WriteTagQuery : public QObject
-    {
-        Q_OBJECT
+  class Test_WriteTagQuery : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-        void response();
+      private slots:
+      void response();
 
-    };  // class Test_WriteTagQuery
-} // namespace Test
-
-#endif // TEST_WRITETAGQUERY_H
+  };                                    // class Test_WriteTagQuery
+}                                       // namespace Test
+#endif                                  // TEST_WRITETAGQUERY_H

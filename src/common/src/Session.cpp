@@ -38,46 +38,54 @@
 #include "Session.h"
 
 Session::Session(const QString &sessionToken, const QDateTime &lastAccessTime, const QSharedPointer<common::User> &user)
-    : m_sessionToken(sessionToken),
-      m_lastAccessTime(lastAccessTime),
-      m_user(user)
+: m_sessionToken(sessionToken),
+m_lastAccessTime(lastAccessTime),
+m_user(user)
 {
 }
+
 
 void Session::setSessionToken(const QString &sessionToken)
 {
-    m_sessionToken = sessionToken;
+  m_sessionToken = sessionToken;
 }
+
 
 void Session::setLastAccessTime(const QDateTime lastAccessTime)
 {
-    m_lastAccessTime = lastAccessTime;
+  m_lastAccessTime = lastAccessTime;
 }
+
 
 void Session::setUser(const QSharedPointer<common::User> &user)
 {
-    m_user = user;
+  m_user = user;
 }
+
 
 const QString& Session::getSessionToken() const
 {
-    return m_sessionToken;
+  return m_sessionToken;
 }
+
 
 const QDateTime& Session::getLastAccessTime() const
 {
-    return m_lastAccessTime;
+  return m_lastAccessTime;
 }
+
 
 const QSharedPointer<common::User>& Session::getUser() const
 {
-    return m_user;
+  return m_user;
 }
+
 
 qlonglong Session::getId() const
 {
-    return 0;
+  return 0;
 }
+
 
 Session::~Session()
 {

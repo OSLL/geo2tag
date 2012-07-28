@@ -44,29 +44,32 @@
 #endif
 
 QuitSessionResponseJSON::QuitSessionResponseJSON(QObject *parent)
-    : JsonSerializer(parent)
+: JsonSerializer(parent)
 {
 }
+
 
 QByteArray QuitSessionResponseJSON::getJson() const
 {
-    QJson::Serializer serializer;
-    QVariantMap obj;
-    obj.insert("errno", m_errno);
-    return serializer.serialize(obj);
+  QJson::Serializer serializer;
+  QVariantMap obj;
+  obj.insert("errno", m_errno);
+  return serializer.serialize(obj);
 }
+
 
 bool QuitSessionResponseJSON::parseJson(const QByteArray&data)
 {
-    QJson::Parser parser;
-    bool ok;
-    QVariantMap result = parser.parse(data, &ok).toMap();
-    if (!ok) return false;
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
 
-    m_errno = result["errno"].toInt();
+  m_errno = result["errno"].toInt();
 
-    return true;
+  return true;
 }
+
 
 QuitSessionResponseJSON::~QuitSessionResponseJSON()
 {

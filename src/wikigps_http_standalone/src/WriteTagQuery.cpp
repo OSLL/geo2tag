@@ -38,12 +38,12 @@
 #include "json/inc/WriteTagResponseJSON.h"
 
 WriteTagQuery::WriteTagQuery(const QSharedPointer<Session>& session,
-                             const QSharedPointer<Channel>& channel,
-                             const QSharedPointer<DataMark> &tag, QObject *parent)
-    : DefaultQuery(parent),
-      m_session(session),
-      m_channel(channel),
-      m_tag(tag)
+const QSharedPointer<Channel>& channel,
+const QSharedPointer<DataMark> &tag, QObject *parent)
+: DefaultQuery(parent),
+m_session(session),
+m_channel(channel),
+m_tag(tag)
 {
 
 }
@@ -109,23 +109,26 @@ const QSharedPointer<DataMark>& WriteTagQuery::getTag() const
   return m_tag;
 }
 
+
 void WriteTagQuery::setSession(const QSharedPointer<Session> &session)
 {
-    m_session = session;
+  m_session = session;
 }
+
 
 const QSharedPointer<Session>& WriteTagQuery::getSession() const
 {
-    return m_session;
+  return m_session;
 }
+
 
 void WriteTagQuery::setChannel(const QSharedPointer<Channel> &channel)
 {
-    m_channel = channel;
+  m_channel = channel;
 }
+
 
 const QSharedPointer<Channel>& WriteTagQuery::getChannel() const
 {
-    return m_channel;
+  return m_channel;
 }
-

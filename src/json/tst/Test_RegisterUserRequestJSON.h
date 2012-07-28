@@ -44,14 +44,13 @@
 
 namespace Test
 {
-    class Test_RegisterUserRequestJSON : public QObject
-    {
-        Q_OBJECT
+  class Test_RegisterUserRequestJSON : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_RegisterUserRequestJSON
-}                // end of namespace Test
-
-#endif // TEST_REGISTERUSERREQUESTJSON_H
+      private slots:
+      void getJson();
+      void parseJson();
+  };                                    // class Test_RegisterUserRequestJSON
+}                                       // end of namespace Test
+#endif                                  // TEST_REGISTERUSERREQUESTJSON_H

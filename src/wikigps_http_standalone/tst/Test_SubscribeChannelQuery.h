@@ -47,14 +47,13 @@
 
 namespace Test
 {
-    class Test_SubscribeChannelQuery : public QObject
-    {
-        Q_OBJECT
+  class Test_SubscribeChannelQuery : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-        void response();
+      private slots:
+      void response();
 
-    };  // class Test_SubscribeChannelQuery
-} // namespace Test
-
-#endif // TEST_SUBSCRIBECHANNELQUERY_H
+  };                                    // class Test_SubscribeChannelQuery
+}                                       // namespace Test
+#endif                                  // TEST_SUBSCRIBECHANNELQUERY_H

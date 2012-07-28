@@ -5,22 +5,19 @@
 
 class GDSService : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
-private:
+    private:
 
-public:
+  public:
     explicit GDSService(QObject *parent = 0);
 
     void startTracking();
     void stopTracking();
     bool isTracking();
 
-public slots:
+  public slots:
     void settingsUpdated();
 
-
-
 };
-
-#endif // GDSSERVICE_H
+#endif                                  // GDSSERVICE_H

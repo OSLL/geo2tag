@@ -44,14 +44,13 @@
 
 namespace Test
 {
-    class Test_QuitSessionRequestJSON : public QObject
-    {
-        Q_OBJECT
+  class Test_QuitSessionRequestJSON : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };
+      private slots:
+      void getJson();
+      void parseJson();
+  };
 }
-
-#endif // TEST_QUITSESSIONREQUESTJSON_H
+#endif                                  // TEST_QUITSESSIONREQUESTJSON_H

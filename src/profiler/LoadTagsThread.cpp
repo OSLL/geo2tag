@@ -49,6 +49,7 @@ LoadTagsThread::LoadTagsThread(QSharedPointer<Session> session)
   setConnections();
 }
 
+
 LoadTagsThread::~LoadTagsThread()
 {
 }

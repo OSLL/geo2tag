@@ -39,11 +39,10 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_
 #define _ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_
 
- /*!
+/*!
  * Class description. May use HTML formatting
  *
  */
@@ -59,29 +58,26 @@ class ProfilerThread: public QThread
   static int m_counter;
   QDateTime m_sendTime;
   void run();
-public:
-  static int m_number_of_requests; 
-  static double m_requests_per_second;
-  ProfilerThread();
-  ~ProfilerThread();
-  
-  DefaultQuery * m_query; 
-  void setConnections();
+  public:
+    static int m_number_of_requests;
+    static double m_requests_per_second;
+    ProfilerThread();
+    ~ProfilerThread();
 
- 
-  static int getCounter() ;
-  static void incCounter() ;
+    DefaultQuery * m_query;
+    void setConnections();
 
-signals:
- 
-  void doRequest();
+    static int getCounter() ;
+    static void incCounter() ;
 
-public slots:
-  
-  void sendRequest();
-  void responseReceived();
+    signals:
 
-}; // class ProfilerThread
-  
+    void doRequest();
 
-#endif //_ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_
+  public slots:
+
+    void sendRequest();
+    void responseReceived();
+
+};                                      // class ProfilerThread
+#endif                                  //_ProfilerThread_H_FF30C939_DBCD_4AC8_AE14_506674F6D5B6_INCLUDED_

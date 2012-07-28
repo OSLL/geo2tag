@@ -47,16 +47,16 @@
 
 namespace Test
 {
-    void Test_LoadTagsQuery::response()
-    {
-        LoadTagsQuery query(this);
-        QSharedPointer<common::User> user(new common::User("Paul", "test"));
-        QSharedPointer<Session> session(new Session("pppppppppp", QDateTime::currentDateTime().toUTC(), user));
-        query.setQuery(session, 30.0, 60.0, 30.0);
-        query.doRequest();
-        //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
-        QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
+  void Test_LoadTagsQuery::response()
+  {
+    LoadTagsQuery query(this);
+    QSharedPointer<common::User> user(new common::User("Paul", "test"));
+    QSharedPointer<Session> session(new Session("pppppppppp", QDateTime::currentDateTime().toUTC(), user));
+    query.setQuery(session, 30.0, 60.0, 30.0);
+    query.doRequest();
+    //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
+    QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
 
-    }
+  }
 
-} // end of namespace Test
+}                                       // end of namespace Test

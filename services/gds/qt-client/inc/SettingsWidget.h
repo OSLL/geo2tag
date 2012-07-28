@@ -9,34 +9,33 @@
 
 class SettingsWidget : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
     Settings m_settings;
 
-    // GUI
-    QTextEdit *m_description;
-    QLineEdit *m_serverUrlEdit;
-    QLineEdit *m_radiusEdit;
-    QLineEdit *m_trackingPeriodEdit;
-    QPushButton *m_okButton;
-    QPushButton *m_cancelButton;
+  // GUI
+  QTextEdit *m_description;
+  QLineEdit *m_serverUrlEdit;
+  QLineEdit *m_radiusEdit;
+  QLineEdit *m_trackingPeriodEdit;
+  QPushButton *m_okButton;
+  QPushButton *m_cancelButton;
 
-public:
+  public:
     explicit SettingsWidget(QWidget *parent = 0);
 
     void fill();
-    
-signals:
+
+    signals:
     void saved();
     void cancelled();
-    
-public slots:
+
+  public slots:
     void onOkClicked();
     void onCancelClicked();
 
-private:
+  private:
     void initGUI();
-    
-};
 
-#endif // SETTINGSWIDGET_H
+};
+#endif                                  // SETTINGSWIDGET_H

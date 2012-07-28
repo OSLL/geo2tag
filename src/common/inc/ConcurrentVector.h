@@ -130,7 +130,8 @@ class ConcurrentVector
     {
       QMutexLocker locker(&m_lock);
       int i = m_container.indexOf(val);
-      if(i != -1) {
+      if(i != -1)
+      {
         m_container.remove(i);
         m_map.remove(m_map.key(val));
       }

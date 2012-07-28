@@ -39,12 +39,10 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _DeleteUserRequestJSON_H_3DE2A0A1_514B_45AA_8DC9_B22431EE0FCA_INCLUDED_
 #define _DeleteUserRequestJSON_H_3DE2A0A1_514B_45AA_8DC9_B22431EE0FCA_INCLUDED_
 
 #include "json/inc/LoginRequestJSON.h"
 
 typedef LoginRequestJSON DeleteUserRequestJSON;
-
-#endif //_DeleteUserRequestJSON_H_3DE2A0A1_514B_45AA_8DC9_B22431EE0FCA_INCLUDED_
+#endif                                  //_DeleteUserRequestJSON_H_3DE2A0A1_514B_45AA_8DC9_B22431EE0FCA_INCLUDED_

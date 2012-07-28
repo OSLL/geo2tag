@@ -40,61 +40,64 @@
 #include "defines.h"
 #include "SettingsStorage.h"
 
-
 EmailMessage::EmailMessage(QString email, QString info)
 {
-    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
-    QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
-    QString subject = storage.getValue("Mail_Settings/subject", QVariant(DEFAULT_EMAIL_SUBJECT)).toString();
-    QString body = storage.getValue("Mail_Settings/body", QVariant(DEFAULT_EMAIL_BODY)).toString();
-    body.append(" To confirm registration, please, go to this link: ");
-    body.append(serverUrl.toStdString().c_str());
-    body.append("service/confirmRegistration-");
-    body.append(info);
-    syslog(LOG_INFO, "Email: %s", email.toStdString().c_str());
-    syslog(LOG_INFO, "Subject: %s",subject.toStdString().c_str());
-    syslog(LOG_INFO, "Body: %s", body.toStdString().c_str());
-    m_email = email;
-    m_subject = subject;
-    m_body = body;
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+  QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
+  QString subject = storage.getValue("Mail_Settings/subject", QVariant(DEFAULT_EMAIL_SUBJECT)).toString();
+  QString body = storage.getValue("Mail_Settings/body", QVariant(DEFAULT_EMAIL_BODY)).toString();
+  body.append(" To confirm registration, please, go to this link: ");
+  body.append(serverUrl.toStdString().c_str());
+  body.append("service/confirmRegistration-");
+  body.append(info);
+  syslog(LOG_INFO, "Email: %s", email.toStdString().c_str());
+  syslog(LOG_INFO, "Subject: %s",subject.toStdString().c_str());
+  syslog(LOG_INFO, "Body: %s", body.toStdString().c_str());
+  m_email = email;
+  m_subject = subject;
+  m_body = body;
 }
+
 
 void EmailMessage::setEmail(QString email)
 {
-    m_email = email;
+  m_email = email;
 }
+
 
 void EmailMessage::setBody(QString body)
 {
-    m_body = body;
+  m_body = body;
 }
+
 
 void EmailMessage::setSubject(QString subject)
 {
-    m_subject = subject;
+  m_subject = subject;
 }
 
 
 QString EmailMessage::getBody() const
 {
-    return m_body;
+  return m_body;
 }
+
 
 QString EmailMessage::getEmail() const
 {
-    return m_email;
+  return m_email;
 }
+
 
 QString EmailMessage::getSubject() const
 {
-    return m_subject;
+  return m_subject;
 }
+
 
 void EmailMessage::send() const
 {
 
-    QString command =QString("echo \"%1\" | mail -s '%2' %3 &").arg(m_body).arg(m_subject).arg( m_email);
-    system(command.toStdString().c_str());
+  QString command =QString("echo \"%1\" | mail -s '%2' %3 &").arg(m_body).arg(m_subject).arg( m_email);
+  system(command.toStdString().c_str());
 }
-
-

@@ -46,16 +46,16 @@
 #endif
 
 LoadTagsRequestJSON::LoadTagsRequestJSON(const QSharedPointer<Session>& session,
-                                         double latitude,
-                                         double longitude,
-                                         double radius,
-                                         QObject *parent)
-    : JsonSerializer(parent),
-      m_latitude(latitude),
-      m_longitude(longitude),
-      m_radius(radius)
+double latitude,
+double longitude,
+double radius,
+QObject *parent)
+: JsonSerializer(parent),
+m_latitude(latitude),
+m_longitude(longitude),
+m_radius(radius)
 {
-    m_sessionsContainer->push_back(session);
+  m_sessionsContainer->push_back(session);
 }
 
 
@@ -81,7 +81,7 @@ bool LoadTagsRequestJSON::parseJson(const QByteArray &data)
   if (!ok) return false;
   m_latitude = result["latitude"].toDouble(&ok);
   if ((m_latitude < 0) or (m_latitude > 90)) return false;
- 
+
   result["longitude"].toDouble(&ok);
   if (!ok) return false;
   m_longitude = result["longitude"].toDouble(&ok);

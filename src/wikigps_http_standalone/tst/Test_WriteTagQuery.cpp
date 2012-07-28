@@ -48,23 +48,21 @@
 
 namespace Test
 {
-    void Test_WriteTagQuery::response()
-    {
-        WriteTagQuery query(this);
-        QSharedPointer<Channel> channel(new Channel("Test channel", "description"));
-        QSharedPointer<common::User> user(new common::User("Paul", "test"));
-        QSharedPointer<Session> session(new Session("ppppppppp", QDateTime::currentDateTime().toUTC(), user));
-        JsonDataMark tag(30.0, 60.0, 30.0, "Test mark", "Test description", "", QDateTime::currentDateTime());
-        tag.setChannel(channel);
-        tag.setSession(session);
-        query.setSession(session);
-        query.setChannel(channel);
-        query.setTag(QSharedPointer<DataMark>(&tag));
-        query.doRequest();
-        //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
-        QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
-    }
+  void Test_WriteTagQuery::response()
+  {
+    WriteTagQuery query(this);
+    QSharedPointer<Channel> channel(new Channel("Test channel", "description"));
+    QSharedPointer<common::User> user(new common::User("Paul", "test"));
+    QSharedPointer<Session> session(new Session("ppppppppp", QDateTime::currentDateTime().toUTC(), user));
+    JsonDataMark tag(30.0, 60.0, 30.0, "Test mark", "Test description", "", QDateTime::currentDateTime());
+    tag.setChannel(channel);
+    tag.setSession(session);
+    query.setSession(session);
+    query.setChannel(channel);
+    query.setTag(QSharedPointer<DataMark>(&tag));
+    query.doRequest();
+    //connect(&query, SIGNAL(errorOccured(QString)), this, SLOT(ok()));
+    QVERIFY(waitForSignal(&query, SIGNAL(errorOccured(int)), 5000));
+  }
 
-} // end of namespace Test
-
-
+}                                       // end of namespace Test

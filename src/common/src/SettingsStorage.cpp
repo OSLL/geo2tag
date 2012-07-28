@@ -42,36 +42,40 @@
 #include <QSettings>
 
 SettingsStorage::SettingsStorage(const QString &filename)
-    : m_filename(filename)
+: m_filename(filename)
 {
 }
+
 
 QString SettingsStorage::getFileName()
 {
-    return m_filename;
+  return m_filename;
 }
+
 
 void SettingsStorage::setFileName(const QString &filename)
 {
-    m_filename = filename;
+  m_filename = filename;
 }
+
 
 void SettingsStorage::setValue(const QString &key, const QVariant &value, const QString &group)
 {
-    QSettings settings(m_filename, QSettings::IniFormat);
-    settings.beginGroup(group);
-    settings.setValue(key, value);
-    settings.endGroup();
+  QSettings settings(m_filename, QSettings::IniFormat);
+  settings.beginGroup(group);
+  settings.setValue(key, value);
+  settings.endGroup();
 }
+
 
 QVariant SettingsStorage::getValue(const QString &key, const QVariant &defaultValue)
 {
-    QSettings settings(m_filename, QSettings::IniFormat);
-    QVariant value = settings.value(key, defaultValue);
-    return value;
+  QSettings settings(m_filename, QSettings::IniFormat);
+  QVariant value = settings.value(key, defaultValue);
+  return value;
 }
+
 
 SettingsStorage::~SettingsStorage()
 {
 }
-

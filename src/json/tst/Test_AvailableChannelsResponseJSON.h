@@ -44,14 +44,13 @@
 
 namespace Test
 {
-    class Test_AvailableChannelsResponseJSON : public QObject
-    {
-        Q_OBJECT
+  class Test_AvailableChannelsResponseJSON : public QObject
+  {
+    Q_OBJECT
 
-    private slots:
-          void getJson();
-          void parseJson();
-    };               // class Test_AvailableChannelsResponseJSON
-}                // end of namespace Test
-
-#endif // TEST_AVAILABLECHANNELSRESPONSEJSON_H
+      private slots:
+      void getJson();
+      void parseJson();
+  };                                    // class Test_AvailableChannelsResponseJSON
+}                                       // end of namespace Test
+#endif                                  // TEST_AVAILABLECHANNELSRESPONSEJSON_H

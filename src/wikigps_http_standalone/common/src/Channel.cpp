@@ -115,6 +115,7 @@ double Channel::getRadius() const
   return m_activeRadius;
 }
 
+
 Channel::~Channel()
 {
 }

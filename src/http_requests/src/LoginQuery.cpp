@@ -69,7 +69,7 @@ DefaultQuery(parent)
 
 QString LoginQuery::getUrl() const
 {
-    return LOGIN_HTTP_URL;
+  return LOGIN_HTTP_URL;
 }
 
 
@@ -88,7 +88,7 @@ void LoginQuery::processResponse(QByteArray &data)
   LoginResponseJSON response;
   response.parseJson(data);
   m_session = response.getSessions()->at(0);
-//  #endif
+  //  #endif
 }
 
 

@@ -39,13 +39,12 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
 #define _LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
 
- /*!
+/*!
  * Class description. May use HTML formatting
- * Logic - send request, increment m_counter, recieve response, count delay, 
+ * Logic - send request, increment m_counter, recieve response, count delay,
  */
 #include "ProfilerThread.h"
 
@@ -53,11 +52,9 @@ class LoginThread: public ProfilerThread
 {
   Q_OBJECT;
 
-public:
-  LoginThread();
-  ~LoginThread();
+  public:
+    LoginThread();
+    ~LoginThread();
 
-}; // class LoginThread
-  
-
-#endif //_LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_
+};                                      // class LoginThread
+#endif                                  //_LoginThread_H_CD1AE5D5_1AC4_4182_8CD5_5AFE4FE46140_INCLUDED_

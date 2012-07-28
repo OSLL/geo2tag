@@ -42,9 +42,9 @@
 
 class DbSession: public Session
 {
-    qlonglong m_id;
+  qlonglong m_id;
 
-public:
+  public:
     DbSession(qlonglong id, const QString& sessionToken, const QDateTime& lastAccessTime, const QSharedPointer<common::User>& user);
 
     qlonglong getId() const;
@@ -52,5 +52,4 @@ public:
 
     ~DbSession();
 };
-
-#endif // SESSIONINTERNAL_H
+#endif                                  // SESSIONINTERNAL_H

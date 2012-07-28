@@ -61,17 +61,20 @@ bool FShapeCircle::filtrate(const QSharedPointer<DataMark> &mark)
   return DataMark::getDistance(m_lat, m_lon, lat, lon) <= m_radius;
 }
 
+
 double FShapeCircle::getLatitude() const
 {
-    return m_lat;
+  return m_lat;
 }
+
 
 double FShapeCircle::getLongitude() const
 {
-    return m_lon;
+  return m_lon;
 }
+
 
 double FShapeCircle::getRadius() const
 {
-    return m_radius;
+  return m_radius;
 }

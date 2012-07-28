@@ -48,8 +48,8 @@
 #include "JsonUser.h"
 
 SubscribedChannelsQuery::SubscribedChannelsQuery(const QSharedPointer<Session>& session, QObject *parent)
-    : DefaultQuery(parent),
-      m_session(session)
+: DefaultQuery(parent),
+m_session(session)
 {
 }
 

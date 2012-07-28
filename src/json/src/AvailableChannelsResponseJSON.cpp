@@ -109,7 +109,8 @@ QByteArray AvailableChannelsResponseJSON::getJson() const
   }
 
   QVariantMap channelsMap;
-  if (!m_channelsContainer->size() == 0){
+  if (!m_channelsContainer->size() == 0)
+  {
     channelsMap.insert("channels", channelsList);
   }
   channelsMap.insert("errno", m_errno);

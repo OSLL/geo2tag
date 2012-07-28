@@ -36,105 +36,114 @@
 #include <QMessageBox>
 #include "defines.h"
 
-
 LoginWidget::LoginWidget(QWidget *parent) :
-    QWidget(parent)
+QWidget(parent)
 {
-    m_loginEdit = new QLineEdit(this);
-    m_passwordEdit = new QLineEdit(this);
-    m_passwordEdit->setEchoMode(QLineEdit::Password);
-    m_rememberCheck = new QCheckBox("Remember me", this);
-    m_signInButton = new QPushButton("Sign in", this);
-    m_createAccountButton = new QPushButton("Create account", this);
+  m_loginEdit = new QLineEdit(this);
+  m_passwordEdit = new QLineEdit(this);
+  m_passwordEdit->setEchoMode(QLineEdit::Password);
+  m_rememberCheck = new QCheckBox("Remember me", this);
+  m_signInButton = new QPushButton("Sign in", this);
+  m_createAccountButton = new QPushButton("Create account", this);
 
-    initGUI();
+  initGUI();
 
-    m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
-    m_addEventsChannelQuery = new AddChannelQuery(this);
+  m_loginQuery = new LoginQuery(DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, this);
+  m_addEventsChannelQuery = new AddChannelQuery(this);
 
-    connect(m_signInButton, SIGNAL(clicked()),
-             this, SLOT(onSignInClicked()));
-    connect(m_createAccountButton, SIGNAL(clicked()),
-            this, SLOT(onCreateAccountClicked()));
-    connect(m_loginQuery, SIGNAL(connected()),
-            this, SLOT(onLoginConnected()));
-    connect(m_loginQuery, SIGNAL(errorOccured(QString)),
-            this, SLOT(onError(QString)));
-    connect(m_loginQuery, SIGNAL(networkErrorOccured(QString)),
-            this, SLOT(onError(QString)), Qt::QueuedConnection);
+  connect(m_signInButton, SIGNAL(clicked()),
+    this, SLOT(onSignInClicked()));
+  connect(m_createAccountButton, SIGNAL(clicked()),
+    this, SLOT(onCreateAccountClicked()));
+  connect(m_loginQuery, SIGNAL(connected()),
+    this, SLOT(onLoginConnected()));
+  connect(m_loginQuery, SIGNAL(errorOccured(QString)),
+    this, SLOT(onError(QString)));
+  connect(m_loginQuery, SIGNAL(networkErrorOccured(QString)),
+    this, SLOT(onError(QString)), Qt::QueuedConnection);
 }
+
 
 void LoginWidget::fill()
 {
-    if (m_settings.isRememberMe()) {
-        m_loginEdit->setText(m_settings.getLogin());
-        m_passwordEdit->setText(m_settings.getPassword());
-        m_rememberCheck->setChecked(true);
-    } else {
-        m_loginEdit->setText("");
-        m_passwordEdit->setText("");
-        m_rememberCheck->setChecked(false);
-    }
+  if (m_settings.isRememberMe())
+  {
+    m_loginEdit->setText(m_settings.getLogin());
+    m_passwordEdit->setText(m_settings.getPassword());
+    m_rememberCheck->setChecked(true);
+  }
+  else
+  {
+    m_loginEdit->setText("");
+    m_passwordEdit->setText("");
+    m_rememberCheck->setChecked(false);
+  }
 }
+
 
 void LoginWidget::initGUI()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addWidget(new QLabel("Login", this));
-    mainLayout->addWidget(m_loginEdit);
-    mainLayout->addWidget(new QLabel("Password"));
-    mainLayout->addWidget(m_passwordEdit);
-    mainLayout->addWidget(m_rememberCheck);
-    mainLayout->addWidget(m_signInButton);
-    mainLayout->addWidget(m_createAccountButton);
-    mainLayout->addStretch();
-    this->setLayout(mainLayout);
+  QVBoxLayout *mainLayout = new QVBoxLayout();
+  mainLayout->addWidget(new QLabel("Login", this));
+  mainLayout->addWidget(m_loginEdit);
+  mainLayout->addWidget(new QLabel("Password"));
+  mainLayout->addWidget(m_passwordEdit);
+  mainLayout->addWidget(m_rememberCheck);
+  mainLayout->addWidget(m_signInButton);
+  mainLayout->addWidget(m_createAccountButton);
+  mainLayout->addStretch();
+  this->setLayout(mainLayout);
 }
+
 
 void LoginWidget::onSignInClicked()
 {
-    qDebug() << "signing in";
-    QString login = m_loginEdit->text();
-    QString password = m_passwordEdit->text();
-    m_loginQuery->setQuery(login, password);
-    m_loginQuery->setUrl(m_settings.getServerUrl());
-    m_loginQuery->doRequest();
+  qDebug() << "signing in";
+  QString login = m_loginEdit->text();
+  QString password = m_passwordEdit->text();
+  m_loginQuery->setQuery(login, password);
+  m_loginQuery->setUrl(m_settings.getServerUrl());
+  m_loginQuery->doRequest();
 }
+
 
 void LoginWidget::onCreateAccountClicked()
 {
-    qDebug() << "creating account";
-    emit createAccountRequested();
+  qDebug() << "creating account";
+  emit createAccountRequested();
 }
+
 
 void LoginWidget::onLoginConnected()
 {
-    qDebug() << "logged in";
-    QString auth_token = m_loginQuery->getUser()->getToken();
-    qDebug() << "token: " << auth_token;
+  qDebug() << "logged in";
+  QString auth_token = m_loginQuery->getUser()->getToken();
+  qDebug() << "token: " << auth_token;
 
-    QSharedPointer<Channel> eventsChannel =
-            QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "Channel with events", ""));
-    m_addEventsChannelQuery->setQuery(m_loginQuery->getUser(), eventsChannel);
-    m_addEventsChannelQuery->setUrl(m_settings.getServerUrl());
-    m_addEventsChannelQuery->doRequest();
+  QSharedPointer<Channel> eventsChannel =
+    QSharedPointer<Channel>(new Channel(EVENTS_CHANNEL, "Channel with events", ""));
+  m_addEventsChannelQuery->setQuery(m_loginQuery->getUser(), eventsChannel);
+  m_addEventsChannelQuery->setUrl(m_settings.getServerUrl());
+  m_addEventsChannelQuery->doRequest();
 
-    m_settings.setLogin(m_loginEdit->text());
-    m_settings.setPassword(m_passwordEdit->text());
-    m_settings.setAuthToken(auth_token);
-    if (m_rememberCheck->checkState()) {
-        m_settings.setRememberMe(true);
-    } else {
-        m_settings.setRememberMe(false);
-    }
+  m_settings.setLogin(m_loginEdit->text());
+  m_settings.setPassword(m_passwordEdit->text());
+  m_settings.setAuthToken(auth_token);
+  if (m_rememberCheck->checkState())
+  {
+    m_settings.setRememberMe(true);
+  }
+  else
+  {
+    m_settings.setRememberMe(false);
+  }
 
-    emit signedIn(auth_token);
+  emit signedIn(auth_token);
 }
+
 
 void LoginWidget::onError(QString error)
 {
-    qDebug() << "login error: " << error;
-    QMessageBox::information(this, "Error", error);
+  qDebug() << "login error: " << error;
+  QMessageBox::information(this, "Error", error);
 }
-
-

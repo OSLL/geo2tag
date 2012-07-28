@@ -59,16 +59,16 @@
 #include "JsonSession.h"
 //#include <syslog.h>
 SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON(QObject *parent)
-    : JsonSerializer(parent)
+: JsonSerializer(parent)
 {
-//  syslog(LOG_INFO,"SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON()");
+  //  syslog(LOG_INFO,"SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON()");
 }
 
 
 SubscribedChannelsRequestJSON::SubscribedChannelsRequestJSON(const QSharedPointer<Session> &session, QObject *parent)
-    : JsonSerializer(parent)
+: JsonSerializer(parent)
 {
-    m_sessionsContainer->push_back(session);
+  m_sessionsContainer->push_back(session);
 }
 
 

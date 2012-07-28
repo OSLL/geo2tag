@@ -45,21 +45,21 @@
 
 #include "SubscribedChannelsQuery.h"
 #include "defines.h"
-  /*!
-   * AvailableChannelsQuery class definition.
-   *
-   * The object of this class represents http query to server.
-   * This query includes json request for list of available channels.
-   *
-   */
+/*!
+ * AvailableChannelsQuery class definition.
+ *
+ * The object of this class represents http query to server.
+ * This query includes json request for list of available channels.
+ *
+ */
 
 class AvailableChannelsQuery: public SubscribedChannelsQuery
 {
 
-    virtual QString getUrl() const
-    {
-	return AVAILABLE_LIST_HTTP_URL;
-    }
+  virtual QString getUrl() const
+  {
+    return AVAILABLE_LIST_HTTP_URL;
+  }
 
 };
 

@@ -38,5 +38,4 @@
 #include "SubscribedChannelsResponseJSON.h"
 
 typedef SubscribedChannelsResponseJSON OwnedChannelsResponseJSON;
-
-#endif // OWNEDCHANNELSRESPONSE_H
+#endif                                  // OWNEDCHANNELSRESPONSE_H

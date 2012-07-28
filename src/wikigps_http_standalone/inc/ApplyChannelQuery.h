@@ -40,19 +40,18 @@
 #include "common/inc/Session.h"
 #include "common/inc/Channel.h"
 
-
 class ApplyChannelQuery: public DefaultQuery
 {
-    Q_OBJECT
+  Q_OBJECT
 
     QSharedPointer<Channel> m_channel;
-    QSharedPointer<Session> m_session;
+  QSharedPointer<Session> m_session;
 
-    virtual QString getUrl() const;
-    virtual QByteArray getRequestBody() const;
-    virtual void processReply(QNetworkReply *reply);
+  virtual QString getUrl() const;
+  virtual QByteArray getRequestBody() const;
+  virtual void processReply(QNetworkReply *reply);
 
-    public:
+  public:
 
     ApplyChannelQuery(const QSharedPointer<Channel> &channel, const QSharedPointer<Session> &session, QObject *parent = 0);
 
@@ -68,6 +67,5 @@ class ApplyChannelQuery: public DefaultQuery
 
     void channelAdded(QSharedPointer<Channel> channel);
 
-
 };
-#endif // APPLYCHANNELQUERY_H
+#endif                                  // APPLYCHANNELQUERY_H

@@ -4,9 +4,9 @@
 #include "AddChannelResponseJSON.h"
 
 AddChannelQuery::AddChannelQuery(const QSharedPointer<common::User> &user,
-                                 const QSharedPointer<Channel> &channel,
-                                 QObject *parent) :
-    DefaultQuery(parent), m_user(user), m_channel(channel)
+const QSharedPointer<Channel> &channel,
+QObject *parent) :
+DefaultQuery(parent), m_user(user), m_channel(channel)
 {
 }
 
@@ -17,10 +17,10 @@ AddChannelQuery::AddChannelQuery(QObject *parent): DefaultQuery(parent)
 
 
 void AddChannelQuery::setQuery(const QSharedPointer<common::User> &user,
-                               const QSharedPointer<Channel> &channel)
+const QSharedPointer<Channel> &channel)
 {
-    m_user = user;
-    m_channel = channel;
+  m_user = user;
+  m_channel = channel;
 }
 
 
@@ -32,7 +32,7 @@ QString AddChannelQuery::getUrl() const
 
 void AddChannelQuery::setUrl(const QString &url)
 {
-    DefaultQuery::setUrl(url + ADD_CHANNEL_HTTP_URL);
+  DefaultQuery::setUrl(url + ADD_CHANNEL_HTTP_URL);
 }
 
 
@@ -64,12 +64,14 @@ AddChannelQuery::~AddChannelQuery()
 {
 }
 
+
 QSharedPointer<common::User> AddChannelQuery::getUser() const
 {
-    return m_user;
+  return m_user;
 }
+
 
 QSharedPointer<Channel> AddChannelQuery::getChannel() const
 {
-    return m_channel;
+  return m_channel;
 }

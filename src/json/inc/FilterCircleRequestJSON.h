@@ -48,9 +48,9 @@
 
 class FilterCircleRequestJSON: public FilterRequestJSON
 {
-    double m_latitude;
-    double m_longitude;
-    double m_radius;
+  double m_latitude;
+  double m_longitude;
+  double m_radius;
   public:
     FilterCircleRequestJSON(QObject *parent=0);
 

@@ -40,7 +40,7 @@
 
 class RegisterUserRequestJSON : public JsonSerializer
 {
-public:
+  public:
     RegisterUserRequestJSON(QObject *parent=0);
 
     RegisterUserRequestJSON(const QSharedPointer<common::User>& user, QObject *parent=0);
@@ -49,5 +49,4 @@ public:
 
     bool parseJson(const QByteArray&);
 };
-
-#endif // REGISTERUSERREQUESTJSON_H
+#endif                                  // REGISTERUSERREQUESTJSON_H
