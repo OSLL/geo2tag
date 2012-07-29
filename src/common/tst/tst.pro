@@ -13,7 +13,8 @@ SOURCES += \
     ../../json/src/JsonDataMark.cpp \
     ../src/DataMarks.cpp
 
-CONFIG +=qtestlib
+CONFIG +=qtestlib console
+CONFIG -=app_bundle
 
 TARGET = utest.CommonTypes
 
@@ -22,3 +23,4 @@ HEADERS += \
     ../inc/GpsInfo.h \
     ../../json/inc/JsonDataMark.h \
     ../inc/DataMarks.h
+
