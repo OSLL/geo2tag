@@ -47,7 +47,7 @@ private slots:
 
 }
 
-QTEST_MAIN(Test::CommonTypes)
+QTEST_APPLESS_MAIN(Test::CommonTypes)
 #include "test_CommonTypes.moc"
 
 
