@@ -40,5 +40,3 @@ linux: {
 #SUBDIRS += \
 #    http_requests/tst_http_requests
 
-SUBDIRS += \
-    common/tst/test_CommonTypes
