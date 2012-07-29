@@ -15,7 +15,7 @@ SOURCES += \
 
 CONFIG +=qtestlib
 
-TARGET = test_CommonTypes
+TARGET = utest_CommonTypes
 
 HEADERS += \
     ../inc/Region.h \

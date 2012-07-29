@@ -9,7 +9,7 @@ SOURCE_DIR = $$PWD
 #contains(QT_CONFIG, reduce_exports):CONFIG+=hide_symbols
 
 contains(TEMPLATE,.*lib):DEFINES += QT_SHARED
-    
+
 #QMAKE_CXXFLAGS += -Werror
 
 maemo5: {
@@ -35,15 +35,15 @@ symbian: {
 linux: {
 #    QMAKE_CXX = g++-4.5
 #    QMAKE_LINK = g++-4.5
-    QMAKE_CXXFLAGS += -fpermissive -g3 -DREDEFINE_QT_SIGNALS -I/usr/local/include/libxml2 -Werror 
-		INCLUDEPATH += /usr/local/include/libxml2/
+    QMAKE_CXXFLAGS += -fpermissive -g3 -DREDEFINE_QT_SIGNALS -I/usr/local/include/libxml2 -Werror
+    INCLUDEPATH += /usr/local/include/libxml2/ INCLUDEPATH /usr/include/libxml2/
     OBJECTS_DIR = .obj
     MOC_DIR = .moc
 }
 
 linux_profiling: {
-	QMAKE_CXXFLAGS_DEBUG += -pg
-	QMAKE_LFLAGS_DEBUG += -pg
+  QMAKE_CXXFLAGS_DEBUG += -pg
+  QMAKE_LFLAGS_DEBUG += -pg
 }
 
 LIBS += -L$$SOURCE_DIR/src/lib
