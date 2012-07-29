@@ -1,3 +1,9 @@
+geo2tag (0.20.0) unstable; urgency=low
+
+  * release
+
+ -- Open Source and Linux lab <geo2tag-devel@lists.osll.spb.ru>  Sun, 29 Jul 2012 17:44:30 +0400
+
 geo2tag (0.19.1) unstable; urgency=low
 
   * bugs fixed
