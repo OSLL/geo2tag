@@ -668,22 +668,22 @@ void QueryExecutor::checkTmpUsers()
 }
 
 
-void QueryExecutor::checkSessions(const QSharedPointer<Sessions>& sessions)
+void QueryExecutor::checkSessions(UpdateThread* thread)
 {
   syslog(LOG_INFO,"checkSessions query is running now...");
   SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
   int timelife = storage.getValue("General_Settings/session_timelife", QVariant(DEFAULT_SESSION_TIMELIFE)).toInt();
-  for (int i = 0; i < sessions->size(); i++)
+  for (int i = 0; i < thread->getSessionsContainer()->size(); i++)
   {
     QDateTime currentTime = QDateTime::currentDateTime().toUTC();
     //syslog(LOG_INFO, "Current time: %s", currentTime.toString().toStdString().c_str());
-    QDateTime lastAccessTime = sessions->at(i)->getLastAccessTime();
+    QDateTime lastAccessTime = thread->getSessionsContainer()->at(i)->getLastAccessTime();
     //syslog(LOG_INFO, "Last access time: %s", lastAccessTime.toString().toStdString().c_str());
     if (lastAccessTime.addDays(timelife) <= currentTime)
     {
       QSqlQuery query(m_database);
       query.prepare("delete from sessions where id = :id;");
-      query.bindValue(":id", sessions->at(i)->getId());
+      query.bindValue(":id", thread->getSessionsContainer()->at(i)->getId());
       syslog(LOG_INFO,"Deleting: %s", query.lastQuery().toStdString().c_str());
       m_database.transaction();
       bool result = query.exec();
@@ -697,7 +697,9 @@ void QueryExecutor::checkSessions(const QSharedPointer<Sessions>& sessions)
         syslog(LOG_INFO, "Commit for DeleteSession sql query");
         m_database.commit();
       }
-      sessions->erase(sessions->at(i));
+      thread->lockWriting();
+      thread->getSessionsContainer()->erase(thread->getSessionsContainer()->at((i)));
+      thread->unlockWriting();
     }
   }
 }

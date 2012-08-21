@@ -87,7 +87,7 @@ class QueryExecutor : public QObject
     bool                     deleteSession(const QSharedPointer<Session>& session);
 
     void checkTmpUsers();
-    void checkSessions(const QSharedPointer<Sessions>& sessions);
+    void checkSessions(UpdateThread* thread);
 
     void loadUsers(common::Users &);
     void loadTags(DataMarks &);

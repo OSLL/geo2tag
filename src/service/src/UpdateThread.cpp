@@ -154,18 +154,13 @@ void UpdateThread::run()
         continue;
       }
 
-      syslog(LOG_INFO,"Containers locked for db_update");
+      m_queryExecutor->checkTmpUsers();
+      m_queryExecutor->checkSessions(this);
 
       common::Users       usersContainer(*m_usersContainer);
       DataMarks   tagsContainer(*m_tagsContainer);
       Channels    channelsContainer(*m_channelsContainer);
       Sessions    sessionsContainer(*m_sessionsContainer);
-
-      m_queryExecutor->checkTmpUsers();
-
-      lockWriting();
-      m_queryExecutor->checkSessions(m_sessionsContainer);
-      unlockWriting();
 
       m_queryExecutor->loadUsers(usersContainer);
       m_queryExecutor->loadChannels(channelsContainer);
@@ -173,6 +168,7 @@ void UpdateThread::run()
       m_queryExecutor->loadSessions(sessionsContainer);
 
       lockWriting();
+      syslog(LOG_INFO,"Containers locked for db_update");
 
       m_usersContainer->merge(usersContainer);
       m_tagsContainer->merge(tagsContainer);
