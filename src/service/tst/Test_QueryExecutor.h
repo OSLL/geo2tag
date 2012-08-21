@@ -94,7 +94,6 @@ namespace Test
       void deleteSession();
 
       void checkTmpUsers();
-      void checkSessions();
 
       void loadUsers();
       void loadTags();

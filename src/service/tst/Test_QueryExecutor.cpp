@@ -875,33 +875,6 @@ namespace Test
     QCOMPARE(result, true);
   }
 
-  void Test_QueryExecutor::checkSessions()
-  {
-    QString login = "test_user17";
-    QString passw = "test_pass17";
-    QString email = "test_email17";
-    QString sessionToken = "test_token_17";
-    QDateTime time(QDate(2000, 12, 12));
-    QSharedPointer<common::User> user = createTestUser(login, passw, email);
-    QVERIFY(user != QSharedPointer<common::User>(0));
-    QSharedPointer<Session> session = createTestSession(sessionToken, time, user);
-    QVERIFY(session != QSharedPointer<Session>(0));
-
-    QSharedPointer<Sessions> sessions(new Sessions());
-    QCOMPARE(sessions->size(), 0);
-    sessions->push_back(session);
-    QCOMPARE(sessions->size(), 1);
-
-    m_queryExecutor->checkSessions(sessions);
-    QCOMPARE(sessions->size(), 0);
-
-    bool result = deleteTestSession(session);
-    QCOMPARE(result, true);
-
-    result = deleteTestUser(user);
-    QCOMPARE(result, true);
-  }
-
   void Test_QueryExecutor::loadUsers()
   {
     QString login = "test_user17";
