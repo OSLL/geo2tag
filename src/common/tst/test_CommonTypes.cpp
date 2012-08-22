@@ -11,14 +11,14 @@
 namespace Test
 {
 
-class CommonTypes : public QObject
-{
+  class CommonTypes : public QObject
+  {
     Q_OBJECT
 
-private slots:
+      private slots:
 
-    void testRegionPoints()
-    {
+      void testRegionPoints()
+      {
         // Object for testing
         common::Region *  m_tstObject = new common::Region();
 
@@ -34,20 +34,18 @@ private slots:
 
         QVERIFY(m_tstObject->atRegion(POINT_IN_REGION));
         QVERIFY(!m_tstObject->atRegion(POINT_OUT_REGION));
-    }
+      }
 
-    void testGpsInstanceDefaults()
-    {
-      QCOMPARE(common::GpsInfo::getInstance().isReady(),false);
-      QCOMPARE(common::GpsInfo::getInstance().getLatitude(),0.);
-      QCOMPARE(common::GpsInfo::getInstance().getLongitude(),0.);
-    }
-};
-
+      void testGpsInstanceDefaults()
+      {
+        QCOMPARE(common::GpsInfo::getInstance().isReady(),false);
+        QCOMPARE(common::GpsInfo::getInstance().getLatitude(),0.);
+        QCOMPARE(common::GpsInfo::getInstance().getLongitude(),0.);
+      }
+  };
 
 }
 
+
 QTEST_APPLESS_MAIN(Test::CommonTypes)
 #include "test_CommonTypes.moc"
-
-

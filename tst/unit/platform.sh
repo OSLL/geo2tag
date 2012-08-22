@@ -4,8 +4,11 @@
 #
 
 export LD_LIBRARY_PATH=./debian/build/lib/
+export PWD="123"
 
+echo "Type your postgres password"
 su - postgres -c "createuser -s test_user"
+echo "Type your postgres password"
 su - postgres -c "createdb -O test_user test_db"
 psql test_db -U test_user < ./scripts/base.sql
 
@@ -26,7 +29,9 @@ done;
 FAIL=`cat test.log | grep "FAIL" | wc -l`
 PASS=`cat test.log | grep "PASS" | wc -l`
 
+echo "Type your postgres password"
 su - postgres -c "dropdb test_db"
+echo "Type your postgres password"
 su - postgres -c "dropuser test_user"
 
 echo "" >>test_summary.log
