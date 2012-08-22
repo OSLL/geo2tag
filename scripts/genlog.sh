@@ -9,7 +9,7 @@
 # In case 3 last commit message where taken as a changelog message
 
 changelog="debian/changelog";
-geo2tag_version="0.20";
+geo2tag_version="0.20.1";
 message="";
 
 if [ "$#" == "2" ]
