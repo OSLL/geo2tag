@@ -41,6 +41,7 @@
 
 // Test headers
 #include "Test_QueryExecutor.h"
+#include "UpdateThread_Test.h"
 
 int main(int argc, char **argv)
 {
@@ -48,7 +49,8 @@ int main(int argc, char **argv)
 
   QObject *tests[] =
   {
-    new Test::Test_QueryExecutor()
+    new Test::Test_QueryExecutor(),
+    new Test::UpdateThread_Test()
   };
 
   for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++)

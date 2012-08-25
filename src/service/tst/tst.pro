@@ -31,7 +31,8 @@ HEADERS += ../inc/QueryExecutor.h \
            ../inc/DataMarkInternal.h \
            ../inc/SessionInternal.h \
            ../inc/ChannelInternal.h \
-           Test_QueryExecutor.h
+           Test_QueryExecutor.h \ 
+	   UpdateThread_Test.h	   
 
 CONFIG   += qtestlib
 

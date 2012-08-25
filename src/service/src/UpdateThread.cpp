@@ -203,6 +203,8 @@ void UpdateThread::run()
       syslog(LOG_INFO,  "current sessions' size = %d", m_sessionsContainer->size());
 
       m_queryExecutor->disconnect();
+      qDebug() << "sync completed!!!";
+      Q_EMIT syncronizationComplete();
     }
     QThread::msleep(interval);
   }
