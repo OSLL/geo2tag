@@ -46,11 +46,13 @@
 #include "QueryExecutor.h"
 #include "signals.h"
 #include "defines.h"
+#include "JsonDataMark.h"
+#include "SettingsStorage.h"
 #include <QSharedPointer>
-
 
 namespace Test
 {
+#define DATAMARKS_TO_ADD 10
   class UpdateThread_Test : public QObject
   {
     Q_OBJECT;
@@ -96,15 +98,36 @@ namespace Test
   
     void testDbSyncronization()
     {
+
+  	   SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+           qlonglong interval = storage.getValue("General_Settings/db_update_interval", QVariant(DEFAULT_DB_UPDATE_INTERVAL)).toLongLong();
 	   // #1 Create updateThread and check that it syncronize with DB
 	   m_tstObject = new UpdateThread(m_tags, m_users, m_channels, m_dataChannelsMap, m_sessions, m_queryExecutor);
 	   m_tstObject->start();
-    	   QVERIFY(waitForSignal(m_tstObject, SIGNAL(syncronizationComplete()), 2 * DEFAULT_DB_UPDATE_INTERVAL));
+    	   QVERIFY(waitForSignal(m_tstObject, SIGNAL(syncronizationComplete()), 2 * interval));
 	   QVERIFY(m_tags->size() > 0);
 	   QVERIFY(m_channels->size() > 0);
 	   QVERIFY(m_users->size() > 0);
 	   QVERIFY(m_dataChannelsMap->size() > 0);
 	   QVERIFY(m_sessions->size() > 0);
+
+	   // #2 Add manualy dataMarks, check that they appear at cache
+	   QSharedPointer<DataMark> testMark (new JsonDataMark(0.,0.,0.,"","","",QDateTime::currentDateTime()));
+	   testMark->setUser(m_users->at(0));
+	   testMark->setChannel(m_users->at(0)->getSubscribedChannels()->at(0));
+
+	   qlonglong tagsOldSize = m_tags->size();
+	   qDebug() << "tagsOldSize = " << tagsOldSize; 
+	   m_queryExecutor->connect();
+	   for (int i = 0; i < DATAMARKS_TO_ADD; i++ )
+		QVERIFY(m_queryExecutor->insertNewTag(testMark));
+
+	
+    	   QVERIFY(waitForSignal(m_tstObject, SIGNAL(syncronizationComplete()), 2 * interval));
+	   qDebug() << "tagsNewSize = " << m_tags->size();
+	   QVERIFY(m_tags->size() == tagsOldSize + DATAMARKS_TO_ADD);
+
+
      // see docs: http://doc.qt.nokia.com/4.7/qtest.html
   
      //QCOMPARE();

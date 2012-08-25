@@ -5,7 +5,6 @@ INCLUDEPATH = ../inc/ ../../common/inc/ \
               ../../json/inc
 
 SOURCES += ../src/QueryExecutor.cpp \
-           #../src/UpdateThread.cpp \
            ../src/Geo2tagDatabase.cpp \
            ../../common/src/User.cpp \
            ../../common/src/Channel.cpp \
@@ -20,7 +19,6 @@ SOURCES += ../src/QueryExecutor.cpp \
            Test_QueryExecutor.cpp
 
 HEADERS += ../inc/QueryExecutor.h \
-           #../inc/UpdateThread.h \
            ../inc/Geo2tagDatabase.h \
            ../../common/inc/User.h \
            ../../common/inc/Channel.h \
@@ -43,4 +41,4 @@ QT += sql
 
 TARGET = test.suite
 
-LIBS    +=  -lcommon -lqjson
+LIBS    +=  -lcommon -lqjson -lwikigpsJson
