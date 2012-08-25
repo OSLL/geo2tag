@@ -1,0 +1,8 @@
+gwt.sdk=/opt/gwt
+junit.jar=/opt/junit/junit-4.10.jar
+openlayers.jar=/opt/libs/gwt-openlayers-client-0.5.jar
+gwt-visual.jar=/opt/libs/gwt-visualization.jar
+
+#server.url=http://62.76.179.81:8080
+#server.username=name
+#server.password=pass
