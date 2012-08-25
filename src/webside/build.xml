@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Geo2tag" default="build" basedir=".">
-	<property name="version" value="0.19" />
+<property name="version" value="0.20.x" />
 
 	<!--
  * Copyright 2011-2012 OSLL
@@ -33,7 +33,7 @@
  * The advertising clause requiring mention in adverts must never be included.
  -->
 
-	<!-- ==============================================================
+<!-- ==============================================================
  * PROJ: OSLL/geo2tag
  * ================================================================ -->
 
@@ -267,6 +267,16 @@
 
 	<target name="jgeo-clean">
 		<ant antfile="../jgeo/build.xml" dir="../jgeo/" target="clean"/>
+	</target>
+
+	<target name = "prepare-libs">
+		<echo message="Loading 3rdparty libs to default location"/>
+                <copy tofile="./local.properties" file="../../conf/webside.local.properties.default"/>
+		<mkdir dir="/opt/libs"/>
+                <get src="http://download.geo2tag.org/libs/gwt-openlayers-client-0.5.jar" dest="/opt/libs/"/>
+		<get src="http://download.geo2tag.org/libs/gwt-visualization.jar" dest="/opt/libs/"/>
+		<get src="http://download.geo2tag.org/libs/gwt_i18n_server_1.0.jar" dest="/opt/libs/"/>
+		<get src="http://download.geo2tag.org/libs/junit-4.9b3.jar" dest="/opt/libs/"/>
 	</target>
 	
 </project>
