@@ -39,6 +39,6 @@ TEMPLATE = app
 QT += testlib
 QT += sql
 
-TARGET = test.suite
+TARGET = utest.DbInteraction
 
 LIBS    +=  -lcommon -lqjson -lwikigpsJson
