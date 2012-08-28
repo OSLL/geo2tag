@@ -9,14 +9,16 @@
 # send logs to the maillist
 
 # First parametr of this script - name of the branch, wich platform will be builded and tested
-
+/
 platform_repo="geo2tag-platform-repo"
 dir_automation="$WEBGEO_HOME/automation"
 dir_geo2tag="${dir_automation}/${platform_repo}"
 dir_log="${dir_automation}/platform_logs"
 dir_backup="${dir_automation}/platform_backup"
-remote_dir_repo="devel@download.geo2tag.org:/var/www/geo2tag_repo/testing/binary_i386/";
-remote_update_repo_command="ssh devel@download.geo2tag.org sudo /home/devel/update_repo.sh";
+remote_repo="devel@download.geo2tag.org"
+remote_dir_repo="${remote_repo}:/var/www/geo2tag_repo/testing/binary_i386/";
+remote_update_repo_command="ssh ${remote_repo} sudo /home/devel/update_repo.sh";
+remote_test_dir_clean="/var/www/geo2tag_repo/testing/*/*"
 # How many packages should appear after deb building
 valid_package_number="3"
 branch="$1"
@@ -168,6 +170,7 @@ then
 			echo "Copying of debs to remote server"  >> ${dir_log}/test.log.txt
 			ls ${dir_automation}/*.deb >> ${dir_log}/test.log.txt 2 >> ${dir_log}/test.log.txt
 			# copy *.deb to repo
+			ssh ${remote_repo} rm -rf ${remote_test_dir_clean}
 			scp ${dir_automation}/*.deb ${remote_dir_repo} 
 			${remote_update_repo_command} 
 			echo "Tests passed. Current commit succesfuly integrated." >> ${dir_log}/test.log.txt
