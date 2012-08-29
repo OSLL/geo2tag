@@ -41,4 +41,4 @@ do
 done  
 
 #cp -r ${testing_repo}/* ${stable_repo}
-#${update_repo}
+${update_repo}
