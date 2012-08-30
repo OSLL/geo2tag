@@ -196,6 +196,7 @@ void UpdateThread::run()
             unlockWriting();
           }
         }
+        Q_EMIT newTagInsertionComplete(m_tagsContainer->size()-oldTagsContainerSize);
       }
       syslog(LOG_INFO, "current users' size = %d",m_usersContainer->size());
       syslog(LOG_INFO, "current tags' size = %d",m_tagsContainer->size());

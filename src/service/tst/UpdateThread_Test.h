@@ -52,6 +52,7 @@
 #include "JsonSession.h"
 #include "SettingsStorage.h"
 #include <QSharedPointer>
+#include <QSignalSpy>
 
 namespace Test
 {
@@ -222,6 +223,44 @@ namespace Test
        qDebug() << "sessionsNewSize = " << m_sessions->size();
        QVERIFY(m_sessions->size() == sessionsOldSize + SESSIONS_TO_ADD);
     }
+    
+    void testDataChannelSync()
+    {
+      // Add marks and check newTagInsertionComplete(int)  
+      QSharedPointer<DataMark> testMark (new JsonDataMark(0.,0.,0.,"","","",QDateTime::currentDateTime()));
+      testMark->setUser(m_users->at(0));
+      testMark->setChannel(m_users->at(0)->getSubscribedChannels()->at(0));
+
+      m_queryExecutor->connect();
+
+      QSignalSpy spy_tagsSync_1(m_tstObject, SIGNAL(newTagInsertionComplete(int)));
+
+      for (int i = 0; i < DATAMARKS_TO_ADD; i++ )
+	QVERIFY(m_queryExecutor->insertNewTag(testMark));
+
+      
+
+      waitForSignal(m_tstObject, SIGNAL(syncronizationComplete()), 2 * m_updateInterval);
+      QCOMPARE(spy_tagsSync_1.count(), 1);
+      // new  QSignalSpy 
+      QSignalSpy spy_tagsSync_2(m_tstObject, SIGNAL(newTagInsertionComplete(int)));
+     // Add users and check that newTagInsertionComplete(int) is not occured 
+      m_queryExecutor->connect();
+      for (int i = 0; i < USERS_TO_ADD; i++ )
+      {
+         // Random users credentials
+         QString testUserName = QString::number(rand()%10000), 
+		    testUserPassword = QString::number(rand()%10000),
+		    testUserEmail = QString("%1@test.com").arg(QString::number(rand()%10000));
+         QSharedPointer<common::User> testUser(new JsonUser(testUserName, testUserPassword, testUserEmail));
+         // Adding random user into db
+         QVERIFY(m_queryExecutor->insertNewUser(testUser));
+       }
+
+      waitForSignal(m_tstObject, SIGNAL(syncronizationComplete()), 2 * m_updateInterval);
+      QCOMPARE(spy_tagsSync_2.count(), 0);
+    }
+
   }; // class UpdateThread_Test
 
 } // end of namespace Test

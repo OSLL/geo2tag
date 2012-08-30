@@ -99,6 +99,7 @@ class UpdateThread: public QThread
   signals:
     
     void syncronizationComplete();
+    void newTagInsertionComplete(int tagsCount);
 
   public slots:
 

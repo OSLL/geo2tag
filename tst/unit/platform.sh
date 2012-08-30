@@ -12,7 +12,7 @@ echo "Type your postgres password"
 su - postgres -c "createdb -O test_user test_db"
 psql test_db -U test_user < ./scripts/base.sql
 
-TESTS=`find ./ -name test.suite`
+TESTS=`find ./ -name test.suite -o -name utest.*`
 COUNT=`echo ${TESTS} | wc -w`
 
 
