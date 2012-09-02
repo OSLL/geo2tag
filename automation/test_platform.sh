@@ -150,5 +150,29 @@ then
         exit 1
 fi
 
+random_number=$((RANDOM%1000000));
+rand_user=user_$random_number;
+rand_email=email_$random_number;
+response_add_rand_user_test=`curl -d "{\"login\":\"$rand_user\",\"password\":\"test\",\"email\":\"$rand_email\"}" http://localhost:81/service/addUser`;
+echo "Add random user test - $response_add_rand_user_test"
+if ! echo $response_add_rand_user_test | grep -q -s -F "$correct_result"  ;
+then
+        echo "Fail at add random user test"
+        exit 1
+fi
+
+
+response_restore_password_test=`curl -d "{\"email\":\"$rand_email\"}"  http://localhost:81/service/restorePassword`;
+echo $response_restore_password_test;
+echo $ "Restore Password test - $response_restore_password_test"
+correct_result_restore_password="\"errno\" : 0";
+if ! echo $response_restore_password_test | grep -q -s -F "$correct_result_restore_password"  ; 
+then
+        echo "Fail at restorePassword test"
+        exit 1
+fi
+
+
 
 echo "Success"
+
