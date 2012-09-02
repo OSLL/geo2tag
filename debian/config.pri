@@ -33,6 +33,7 @@ linux{
 
 LIBS += -L$$SOURCE_DIR/build/lib
 QMAKE_LFLAGS += -L$$SOURCE_DIR/src/lib
+QMAKE_LIBDIR_QT = $$SOURCE_DIR/src/lib $$QMAKE_LIBDIR_QT
 
 OBJECTS_DIR = .obj
 UI_HEADERS_DIR = inc
