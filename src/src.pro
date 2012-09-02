@@ -3,8 +3,7 @@ include(../config.pri)
 
 
 CONFIG += ordered
-
-message($$CONFIG)
+message($$LIBS)
 
 symbian: {
 	message(symbian target)

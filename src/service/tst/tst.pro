@@ -1,15 +1,18 @@
 include(../../../config.pri)
 
-INCLUDEPATH = ../inc/ ../../common/inc/ \
-              ../../service/inc/ \
+DEPENDDEPATH = . \
+              ../inc/ \ 
+              ../src/ \
+              ../../common/inc/ \
+              ../../common/src/ \
+              ../../json/inc \
+              ../../json/src 
+
+INCLUDEPATH = . ../inc/ ../../common/inc/ \
               ../../json/inc
 
 SOURCES += ../src/QueryExecutor.cpp \
            ../src/Geo2tagDatabase.cpp \
-           ../../common/src/User.cpp \
-           ../../common/src/Channel.cpp \
-           ../../common/src/Datamarks.cpp \
-           ../../common/src/Session.cpp \
            ../src/UpdateThread.cpp \
            ../src/UserInternal.cpp \
            ../src/DataMarkInternal.cpp \
@@ -20,10 +23,6 @@ SOURCES += ../src/QueryExecutor.cpp \
 
 HEADERS += ../inc/QueryExecutor.h \
            ../inc/Geo2tagDatabase.h \
-           ../../common/inc/User.h \
-           ../../common/inc/Channel.h \
-           ../../common/inc/Datamarks.h \
-           ../../common/inc/Session.h \
            ../inc/UpdateThread.h \
            ../inc/UserInternal.h \
            ../inc/DataMarkInternal.h \
@@ -40,5 +39,6 @@ QT += testlib
 QT += sql
 
 TARGET = utest.DbInteraction
-
-LIBS    +=  -lcommon -lqjson -lwikigpsJson
+LIBS -= -L/usr/lib
+LIBS    +=  -lcommon -lwikigpsJson
+message($$LIBS)
