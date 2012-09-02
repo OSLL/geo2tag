@@ -287,6 +287,17 @@ namespace common
     return result;
   }
 
+  const QString DbObjectsCollection::generateNewPassword(const QSharedPointer<common::User>& user) const
+  {
+    QDateTime time = QDateTime::currentDateTime().toUTC();
+    QString log = time.toString() + user->getEmail() + user->getPassword();
+    QByteArray toHash(log.toUtf8());
+    toHash=QCryptographicHash::hash(log.toUtf8(),QCryptographicHash::Md5);
+    QString result(toHash.toHex());
+    syslog(LOG_INFO,"Password = %s",result.toStdString().c_str());
+    return result;
+  }
+
   QSharedPointer<User> DbObjectsCollection::findUser(const QSharedPointer<User> &dummyUser) const
   {
     QSharedPointer<User> realUser;      // Null pointer
@@ -1366,8 +1377,15 @@ namespace common
       return answer;
     }
 
-    QSharedPointer<common::User> updatedUser = m_queryExecutor->updateUserPassword(realUser);
-    syslog(LOG_INFO, "%s", updatedUser->getPassword().toStdString().c_str());
+    SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+    int passwLength = storage.getValue("Security_Settings/password_length", QVariant(DEFAULT_PASSWORD_LENGTH)).toInt();
+    QString password = generateNewPassword(realUser).left(passwLength);
+    QString hash = getPasswordHash(realUser->getLogin(), password);
+    syslog(LOG_INFO, "%s", realUser->getPassword().toStdString().c_str());
+    QSharedPointer<common::User> updatedUser = m_queryExecutor->updateUserPassword(realUser, hash);
+
+    syslog(LOG_INFO, "%s", password.toStdString().c_str());
+    syslog(LOG_INFO, "%s", hash.toStdString().c_str());
 
     if(updatedUser.isNull())
     {
@@ -1379,7 +1397,7 @@ namespace common
 
     syslog(LOG_INFO, "Sending email for restoring password");
     EmailMessage message(updatedUser->getEmail());
-    message.sendAsRestorePwdMessage(updatedUser->getPassword());
+    message.sendAsRestorePwdMessage(password);
 
     response.setErrno(SUCCESS);
     answer.append(response.getJson());

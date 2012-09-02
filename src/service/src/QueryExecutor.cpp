@@ -138,17 +138,6 @@ const QString QueryExecutor::generateNewToken(const QString& accessTime, const Q
   return result;
 }
 
-const QString QueryExecutor::generateNewPassword(const QString &time, const QString &email, const QString &oldPwd) const
-{
-  QString log=time+email+oldPwd;
-  QByteArray toHash(log.toUtf8());
-  toHash=QCryptographicHash::hash(log.toUtf8(),QCryptographicHash::Md5);
-  QString result(toHash.toHex());
-  syslog(LOG_INFO,"Password = %s",result.toStdString().c_str());
-  return result;
-}
-
-
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
   PerformanceCounter counter("QueryExecutor::insertNewTag");
@@ -521,15 +510,10 @@ bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
   return result;
 }
 
-QSharedPointer<common::User> QueryExecutor::updateUserPassword(const QSharedPointer<common::User>& user)
+QSharedPointer<common::User> QueryExecutor::updateUserPassword(const QSharedPointer<common::User>& user, const QString& password)
 {
   QSqlQuery query(m_database);
-
-  QDateTime currentTime = QDateTime::currentDateTime().toUTC();
-  QString password = generateNewPassword(currentTime.toString(), user->getEmail(), user->getPassword()).left(8);
-
   syslog(LOG_INFO, "Updating password for user with id: %lld", user->getId());
-
   query.prepare("update users set password = :pwd where id = :id;");
   query.bindValue(":pwd", password);
   query.bindValue(":id", user->getId());

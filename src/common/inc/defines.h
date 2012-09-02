@@ -89,6 +89,7 @@ void setServerPort(int port);
 
 #define DEFAULT_PASSWORD_QUALITY_CHECK false
 #define MINIMAL_PASSWORD_LENGTH 6
+#define DEFAULT_PASSWORD_LENGTH 12
 
 //#define TRACKER_TAG_LABEL   "tracker's tag"
 //#define TRACKER_MSECS_TIMEOUT 500
