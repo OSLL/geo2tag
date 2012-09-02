@@ -40,5 +40,6 @@ QT += sql
 
 TARGET = utest.DbInteraction
 LIBS -= -L/usr/lib
-LIBS    +=  -lcommon -lwikigpsJson
+QMAKE_LIBDIR_QT -= /usr/lib
+LIBS += -lcommon -lwikigpsJson
 message($$LIBS)
