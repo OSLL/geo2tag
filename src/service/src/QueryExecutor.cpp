@@ -138,6 +138,16 @@ const QString QueryExecutor::generateNewToken(const QString& accessTime, const Q
   return result;
 }
 
+const QString QueryExecutor::generateNewPassword(const QString &time, const QString &email, const QString &oldPwd) const
+{
+  QString log=time+email+oldPwd;
+  QByteArray toHash(log.toUtf8());
+  toHash=QCryptographicHash::hash(log.toUtf8(),QCryptographicHash::Md5);
+  QString result(toHash.toHex());
+  syslog(LOG_INFO,"Password = %s",result.toStdString().c_str());
+  return result;
+}
+
 
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
@@ -511,6 +521,37 @@ bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
   return result;
 }
 
+QSharedPointer<common::User> QueryExecutor::updateUserPassword(const QSharedPointer<common::User>& user)
+{
+  QSqlQuery query(m_database);
+
+  QDateTime currentTime = QDateTime::currentDateTime().toUTC();
+  QString password = generateNewPassword(currentTime.toString(), user->getEmail(), user->getPassword()).left(8);
+
+  syslog(LOG_INFO, "Updating password for user with id: %lld", user->getId());
+
+  query.prepare("update users set password = :pwd where id = :id;");
+  query.bindValue(":pwd", password);
+  query.bindValue(":id", user->getId());
+
+  m_database.transaction();
+
+  bool result = query.exec();
+  if (!result)
+  {
+    syslog(LOG_INFO,"Rollback for updateUserPassword sql query");
+    m_database.rollback();
+    return QSharedPointer<common::User>(NULL);
+  }
+  else
+  {
+    syslog(LOG_INFO,"Commit for updateUsersPassword sql query");
+    m_database.commit();
+    user->setPassword(password);
+    return user;
+  }
+}
+
 
 QSharedPointer<Session> QueryExecutor::insertNewSession(const QSharedPointer<Session>& session)
 {
@@ -615,8 +656,8 @@ void QueryExecutor::checkTmpUsers()
     QString token = checkQuery.value(2).toString();
 
     syslog(LOG_INFO, "Process registration confirmation is started... ");
-    EmailMessage message(email, token);
-    message.send();
+    EmailMessage message(email);
+    message.sendAsRegistrationLetter(token);
     syslog(LOG_INFO, "Process registration confirmation finished... ");
 
     QSqlQuery updateQuery(m_database);

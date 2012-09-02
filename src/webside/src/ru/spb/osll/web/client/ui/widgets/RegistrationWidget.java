@@ -59,9 +59,6 @@ public class RegistrationWidget extends FieldsWidget {
 	private TextBox m_email;
 	private PasswordTextBox m_pass;
 	private PasswordTextBox m_passConfirm;
-	
-	private Anchor m_loginLink;
-	private Anchor m_forgotPasswordLink;
 
 	@Override
 	protected String getName() {
@@ -70,8 +67,8 @@ public class RegistrationWidget extends FieldsWidget {
 	
 	@Override
 	protected List<Anchor> getLinks() {
-		m_loginLink = new Anchor(Localizer.res().pageLogin());
-		m_loginLink.addClickHandler(new ClickHandler() {
+		Anchor loginLink = new Anchor(Localizer.res().pageLogin());
+		loginLink.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				dropData();
@@ -79,11 +76,11 @@ public class RegistrationWidget extends FieldsWidget {
 			}
 		});
 		
-		m_forgotPasswordLink = new Anchor(Localizer.res().forgotPassword());
+		Anchor forgotPasswordLink = new Anchor(Localizer.res().forgotPassword());
 		
 		List<Anchor> links = new ArrayList<Anchor>();
-		links.add(m_loginLink);
-		links.add(m_forgotPasswordLink);
+		links.add(loginLink);
+		links.add(forgotPasswordLink);
 		return links;
 	}
 

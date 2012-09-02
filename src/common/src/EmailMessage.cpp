@@ -40,22 +40,9 @@
 #include "defines.h"
 #include "SettingsStorage.h"
 
-EmailMessage::EmailMessage(QString email, QString info)
+EmailMessage::EmailMessage(QString email) :
+    m_email(email)
 {
-  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
-  QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
-  QString subject = storage.getValue("Mail_Settings/subject", QVariant(DEFAULT_EMAIL_SUBJECT)).toString();
-  QString body = storage.getValue("Mail_Settings/body", QVariant(DEFAULT_EMAIL_BODY)).toString();
-  body.append(" To confirm registration, please, go to this link: ");
-  body.append(serverUrl.toStdString().c_str());
-  body.append("service/confirmRegistration-");
-  body.append(info);
-  syslog(LOG_INFO, "Email: %s", email.toStdString().c_str());
-  syslog(LOG_INFO, "Subject: %s",subject.toStdString().c_str());
-  syslog(LOG_INFO, "Body: %s", body.toStdString().c_str());
-  m_email = email;
-  m_subject = subject;
-  m_body = body;
 }
 
 
@@ -97,7 +84,38 @@ QString EmailMessage::getSubject() const
 
 void EmailMessage::send() const
 {
-
-  QString command =QString("echo \"%1\" | mail -s '%2' %3 &").arg(m_body).arg(m_subject).arg( m_email);
+  QString command = QString("echo \"%1\" | mail -s '%2' %3 &").arg(m_body).arg(m_subject).arg(m_email);
   system(command.toStdString().c_str());
+}
+
+void EmailMessage::sendAsRegistrationLetter(const QString& info)
+{
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+  QString serverUrl = storage.getValue("General_Settings/server_url", QVariant(DEFAULT_SERVER)).toString();
+  QString subject = storage.getValue("Mail_Settings/subject", QVariant(DEFAULT_REGISTRATION_EMAIL_SUBJECT)).toString();
+  QString body = storage.getValue("Mail_Settings/body", QVariant(DEFAULT_REGISTRATION_EMAIL_BODY)).toString();
+  body.append(" To confirm registration, please, go to this link: ");
+  body.append(serverUrl.toStdString().c_str());
+  body.append("service/confirmRegistration-");
+  body.append(info);
+  m_subject = subject;
+  m_body = body;
+  syslog(LOG_INFO, "Email: %s", m_email.toStdString().c_str());
+  syslog(LOG_INFO, "Subject: %s", m_subject.toStdString().c_str());
+  syslog(LOG_INFO, "Body: %s", m_body.toStdString().c_str());
+  send();
+}
+
+void EmailMessage::sendAsRestorePwdMessage(const QString& pwd)
+{
+  SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
+  QString subject = storage.getValue("Mail_Settings/restore_pwd_subject", QVariant(DEFAULT_RESTORE_PASSWORD_SUBJECT)).toString();
+  QString body = storage.getValue("Mail_Settings/restore_pwd_body", QVariant(DEFAULT_RESTORE_PASSWORD_BODY)).toString()
+          + " " + pwd;
+  m_subject = subject;
+  m_body = body;
+  syslog(LOG_INFO, "Email: %s", m_email.toStdString().c_str());
+  syslog(LOG_INFO, "Subject: %s", m_subject.toStdString().c_str());
+  syslog(LOG_INFO, "Body: %s", m_body.toStdString().c_str());
+  send();
 }

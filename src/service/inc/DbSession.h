@@ -89,6 +89,7 @@ namespace common
     bool checkPasswordQuality(const QString& password) const;
 
     QSharedPointer<User> findUser(const QSharedPointer<User>&) const;
+    QSharedPointer<User> findUser(const QString&) const;
     QSharedPointer<Session> findSession(const QSharedPointer<Session>&) const;
     QSharedPointer<Session> findSessionForUser(const QSharedPointer<User>&) const;
 
@@ -118,6 +119,8 @@ namespace common
     QByteArray processFilterBoxQuery(const QByteArray&);
     QByteArray processFilterFenceQuery(const QByteArray&);
     QByteArray processFilterChannelQuery(const QByteArray&);
+
+    QByteArray processRestorePasswordQuery(const QByteArray&);
 
     QByteArray internalProcessFilterQuery(FilterRequestJSON&, const QByteArray&, bool is3d);
 

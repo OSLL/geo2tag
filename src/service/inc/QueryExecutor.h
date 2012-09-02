@@ -67,6 +67,7 @@ class QueryExecutor : public QObject
 
     const QString generateNewToken(const QString& email, const QString& login,const QString& password) const;
     const QString generateNewToken(const QString& accessTime, const QString& email, const QString& login,const QString& password) const;
+    const QString generateNewPassword(const QString& time, const QString& email, const QString& oldPwd) const;
 
     bool                     subscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
     bool                     unsubscribeChannel(const QSharedPointer<common::User>& user,const QSharedPointer<Channel>& channel);
@@ -81,6 +82,7 @@ class QueryExecutor : public QObject
     QSharedPointer<common::User>    insertNewUser(const QSharedPointer<common::User>&);
     QSharedPointer<Channel>  insertNewChannel(const QSharedPointer<Channel>&);
     bool                     deleteUser(const QSharedPointer<common::User> &user);
+    QSharedPointer<common::User>  updateUserPassword(const QSharedPointer<common::User>& user);
     // Sessions
     QSharedPointer<Session>  insertNewSession(const QSharedPointer<Session>& session);
     bool                     updateSession(const QSharedPointer<Session>& session);

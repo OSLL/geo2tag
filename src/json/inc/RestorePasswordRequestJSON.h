@@ -28,40 +28,25 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file  EmailMessage.h
- * \brief Declaration of the class EmailMessage
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef EMAILMESSAGE_H
-#define EMAILMESSAGE_H
+#ifndef RESTOREPASSWORDREQUEST_H
+#define RESTOREPASSWORDREQUEST_H
 
-#include <QString>
+#include "JsonSerializer.h"
 
-#include "User.h"
-
-class EmailMessage
+class RestorePasswordRequestJSON : public JsonSerializer
 {
-  private:
-    QString m_email;
-    QString m_subject;
-    QString m_body;
-
   public:
-    EmailMessage(QString email);
+    RestorePasswordRequestJSON(QObject *parent=0);
 
-    void setEmail(QString email);
-    void setSubject(QString subject);
-    void setBody(QString body);
+    RestorePasswordRequestJSON(const QSharedPointer<common::User>& user, QObject *parent=0);
 
-    QString getEmail() const;
-    QString getSubject() const;
-    QString getBody() const;
+    QByteArray getJson() const;
 
-    void send() const;
-    void sendAsRegistrationLetter(const QString& info);
-    void sendAsRestorePwdMessage(const QString& pwd);
+    bool parseJson(const QByteArray&);
 };
-#endif                                  // EMAILMESSAGE_H
+
+#endif // RESTOREPASSWORDREQUEST_H

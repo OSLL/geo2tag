@@ -28,40 +28,55 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file  EmailMessage.h
- * \brief Declaration of the class EmailMessage
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef EMAILMESSAGE_H
-#define EMAILMESSAGE_H
+#include "RestorePasswordRequestJSON.h"
+#include "JsonUser.h"
 
-#include <QString>
+#if !defined(Q_OS_SYMBIAN) && !defined(Q_WS_SIMULATOR)
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#else
+#include "parser.h"
+#include "serializer.h"
+#endif
 
-#include "User.h"
-
-class EmailMessage
+RestorePasswordRequestJSON::RestorePasswordRequestJSON(QObject *parent) : JsonSerializer(parent)
 {
-  private:
-    QString m_email;
-    QString m_subject;
-    QString m_body;
+}
 
-  public:
-    EmailMessage(QString email);
 
-    void setEmail(QString email);
-    void setSubject(QString subject);
-    void setBody(QString body);
+RestorePasswordRequestJSON::RestorePasswordRequestJSON(const QSharedPointer<common::User> &user, QObject *parent) :
+  JsonSerializer(parent)
+{
+  m_usersContainer->push_back(user);
+}
 
-    QString getEmail() const;
-    QString getSubject() const;
-    QString getBody() const;
 
-    void send() const;
-    void sendAsRegistrationLetter(const QString& info);
-    void sendAsRestorePwdMessage(const QString& pwd);
-};
-#endif                                  // EMAILMESSAGE_H
+QByteArray RestorePasswordRequestJSON::getJson() const
+{
+  QJson::Serializer serializer;
+  QVariantMap obj;
+  obj.insert("email", m_usersContainer->at(0)->getEmail());
+  obj.insert("login", m_usersContainer->at(0)->getLogin());
+  obj.insert("password", m_usersContainer->at(0)->getPassword());
+  return serializer.serialize(obj);
+}
+
+
+bool RestorePasswordRequestJSON::parseJson(const QByteArray &data)
+{
+  clearContainers();
+
+  QJson::Parser parser;
+  bool ok;
+  QVariantMap result = parser.parse(data, &ok).toMap();
+  if (!ok) return false;
+
+  QString email = result["email"].toString();
+  m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("unknown", "unknown", email)));
+  return true;
+}
+

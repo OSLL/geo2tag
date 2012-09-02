@@ -44,6 +44,7 @@
 #include "defines.h"
 #include "SettingsStorage.h"
 #include "DbSession.h"
+#include "EmailMessage.h"
 
 #include "LoginRequestJSON.h"
 #include "LoginResponseJSON.h"
@@ -80,6 +81,9 @@
 
 #include "UnsubscribeChannelRequestJSON.h"
 #include "UnsubscribeChannelResponseJSON.h"
+
+#include "RestorePasswordRequestJSON.h"
+#include "RestorePasswordResponseJSON.h"
 
 #include "Filtration.h"
 #include "Filter.h"
@@ -146,6 +150,7 @@ namespace common
     m_processors.insert("version", &DbObjectsCollection::processVersionQuery);
     m_processors.insert("deleteUser", &DbObjectsCollection::processDeleteUserQuery);
     m_processors.insert("build", &DbObjectsCollection::processBuildQuery);
+    m_processors.insert("restorePassword", &DbObjectsCollection::processRestorePasswordQuery);
 
     m_processors.insert("errnoInfo", &DbObjectsCollection::processGetErrnoInfo);
     m_processors.insert("filterCircle", &DbObjectsCollection::processFilterCircleQuery);
@@ -295,6 +300,23 @@ namespace common
         if(QString::compare(currentUsers.at(i)->getLogin(), dummyUser->getLogin(), Qt::CaseInsensitive) == 0
           &&
           currentUsers.at(i)->getPassword() == getPasswordHash(currentUsers.at(i)->getLogin(),dummyUser->getPassword()))
+          return currentUsers.at(i);
+      }
+    }
+    return realUser;
+  }
+
+  QSharedPointer<User> DbObjectsCollection::findUser(const QString& email) const
+  {
+    QSharedPointer<User> realUser;      // Null pointer
+    QVector<QSharedPointer<User> > currentUsers = m_usersContainer->vector();
+    syslog(LOG_INFO, "checking user key: %s from %d known users", email.toStdString().c_str(),
+      currentUsers.size());
+    if (!email.isEmpty())
+    {
+      for(int i=0; i<currentUsers.size(); i++)
+      {
+        if(QString::compare(currentUsers.at(i)->getEmail(), email, Qt::CaseInsensitive) == 0)
           return currentUsers.at(i);
       }
     }
@@ -1313,6 +1335,51 @@ namespace common
     // Here will be removing user from container
     m_usersContainer->erase(realUser);
     m_updateThread->unlockWriting();
+
+    response.setErrno(SUCCESS);
+    answer.append(response.getJson());
+    syslog(LOG_INFO, "answer: %s", answer.data());
+    return answer;
+  }
+
+
+  QByteArray DbObjectsCollection::processRestorePasswordQuery(const QByteArray& data)
+  {
+    syslog(LOG_INFO, "starting RestorePassword processing");
+    RestorePasswordRequestJSON request;
+    RestorePasswordResponseJSON response;
+    QByteArray answer("Status: 200 OK\r\nContent-Type: text/html\r\n\r\n");
+    if (!request.parseJson(data))
+    {
+      response.setErrno(INCORRECT_JSON_ERROR);
+      answer.append(response.getJson());
+      return answer;
+    }
+    // Look for user with the same name
+    QSharedPointer<User> realUser = findUser(request.getUsers()->at(0)->getEmail());
+
+    if(!realUser)
+    {
+      response.setErrno(INCORRECT_CREDENTIALS_ERROR);
+      answer.append(response.getJson());
+      syslog(LOG_INFO, "answer: %s", answer.data());
+      return answer;
+    }
+
+    QSharedPointer<common::User> updatedUser = m_queryExecutor->updateUserPassword(realUser);
+    syslog(LOG_INFO, "%s", updatedUser->getPassword().toStdString().c_str());
+
+    if(updatedUser.isNull())
+    {
+      response.setErrno(INTERNAL_DB_ERROR);
+      answer.append(response.getJson());
+      syslog(LOG_INFO, "answer: %s", answer.data());
+      return answer;
+    }
+
+    syslog(LOG_INFO, "Sending email for restoring password");
+    EmailMessage message(updatedUser->getEmail());
+    message.sendAsRestorePwdMessage(updatedUser->getPassword());
 
     response.setErrno(SUCCESS);
     answer.append(response.getJson());

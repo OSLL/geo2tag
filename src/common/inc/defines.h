@@ -93,8 +93,10 @@ void setServerPort(int port);
 //#define TRACKER_TAG_LABEL   "tracker's tag"
 //#define TRACKER_MSECS_TIMEOUT 500
 
-#define DEFAULT_EMAIL_SUBJECT     "Registration confirmation"
-#define DEFAULT_EMAIL_BODY        "This will go into the body of the mail."
+#define DEFAULT_REGISTRATION_EMAIL_SUBJECT     "Registration confirmation"
+#define DEFAULT_REGISTRATION_EMAIL_BODY        "This will go into the body of the mail."
+#define DEFAULT_RESTORE_PASSWORD_SUBJECT       "Password restoring"
+#define DEFAULT_RESTORE_PASSWORD_BODY          "The body of password restoring email"
 
 #define DEFAULT_DB_UPDATE_INTERVAL 10000
 #define DEFAULT_TRANSACTION_DIFF_TO_SYNC 0

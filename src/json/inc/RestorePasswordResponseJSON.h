@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012  OSLL osll@osll.spb.ru
+ * Copyright 2010-2011  OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,40 +28,16 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-/*!
- * \file  EmailMessage.h
- * \brief Declaration of the class EmailMessage
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef EMAILMESSAGE_H
-#define EMAILMESSAGE_H
+#ifndef RESTOREPASSWORDRESPONSE_H
+#define RESTOREPASSWORDRESPONSE_H
 
-#include <QString>
+#include "DefaultResponseJSON.h"
 
-#include "User.h"
+typedef DefaultResponseJSON RestorePasswordResponseJSON;
 
-class EmailMessage
-{
-  private:
-    QString m_email;
-    QString m_subject;
-    QString m_body;
+#endif // RESTOREPASSWORDRESPONSE_H
 
-  public:
-    EmailMessage(QString email);
-
-    void setEmail(QString email);
-    void setSubject(QString subject);
-    void setBody(QString body);
-
-    QString getEmail() const;
-    QString getSubject() const;
-    QString getBody() const;
-
-    void send() const;
-    void sendAsRegistrationLetter(const QString& info);
-    void sendAsRestorePwdMessage(const QString& pwd);
-};
-#endif                                  // EMAILMESSAGE_H

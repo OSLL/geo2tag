@@ -56,7 +56,9 @@ HEADERS += \
     inc/QuitSessionResponseJSON.h \
     inc/JsonSession.h \
     inc/OwnedChannelsRequest.h \
-    inc/OwnedChannelsResponse.h
+    inc/OwnedChannelsResponse.h \
+    inc/RestorePasswordRequestJSON.h \
+    inc/RestorePasswordResponseJSON.h
 
 SOURCES += \
            src/AvailableChannelsResponseJSON.cpp \
@@ -91,7 +93,8 @@ SOURCES += \
            src/FilterChannelResponseJSON.cpp \             
     src/QuitSessionRequestJSON.cpp \
     src/QuitSessionResponseJSON.cpp \
-    src/JsonSession.cpp
+    src/JsonSession.cpp \
+    src/RestorePasswordRequestJSON.cpp
            
 
 LIBS    +=  -lcommon -lqjson
