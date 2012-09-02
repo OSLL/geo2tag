@@ -40,7 +40,7 @@
 
 #include <QMutex>
 #include "User.h"
-
+#include <QDebug>
 /*!
  *
  */

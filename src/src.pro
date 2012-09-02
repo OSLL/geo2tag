@@ -24,16 +24,14 @@ linux: {
   SUBDIRS += common
   SUBDIRS += \
              json \
-             json/tst \
              http_requests \
              service \
              service/tst \
-             #wikigps_http_standalone \
+             json/tst \
              http_requests/tst_http_requests \
-             #wikigps_http_standalone/tst \
              tracker/clients/meego/tst \
              common/tst \
-	     maps \
+	     maps 
              #tracker/observer
 }
 
