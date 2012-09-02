@@ -14,11 +14,15 @@ SOURCES += main.cpp \
     ../../json/src/AvailableChannelsResponseJSON.cpp \
     ../../json/src/QuitSessionRequestJSON.cpp \
     ../../json/src/QuitSessionResponseJSON.cpp \
+    ../../json/src/RestorePasswordRequestJSON.cpp \
+    ../../json/src/DefaultResponseJSON.cpp \
     Test_RegisterUserResponseJSON.cpp \
     Test_RegisterUserRequestJSON.cpp \
     Test_AvailableChannelsResponseJSON.cpp \
     Test_QuitSessionRequestJSON.cpp \
-    Test_QuitSessionResponseJSON.cpp
+    Test_QuitSessionResponseJSON.cpp \
+    Test_RestorePasswordRequestJSON.cpp \
+    Test_RestorePasswordResponseJSON.cpp
 HEADERS += JsonUser_Test.h \
     ../inc/JsonUser.h \
     ../../common/inc/BasicUser.h \
@@ -30,11 +34,16 @@ HEADERS += JsonUser_Test.h \
     ../../json/inc/AvailableChannelsResponseJSON.h \
     ../../json/inc/QuitSessionRequestJSON.h \
     ../../json/inc/QuitSessionResponseJSON.h \
+    ../../json/inc/RestorePasswordRequestJSON.h \
+    ../../json/inc/RestorePasswordResponseJSON.h \
+    ../../json/inc/DefaultResponseJSON.h \
     Test_RegisterUserResponseJSON.h \
     Test_RegisterUserRequestJSON.h \
     Test_AvailableChannelsResponseJSON.h \
     Test_QuitSessionResponseJSON.h \
-    Test_QuitSessionRequestJSON.h
+    Test_QuitSessionRequestJSON.h \
+    Test_RestorePasswordResponseJSON.h \
+    Test_RestorePasswordRequestJSON.h
 
 CONFIG   += qtestlib
 
