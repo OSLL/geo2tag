@@ -29,48 +29,45 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file main.cpp
- * \brief Test suite for json
+ * \file Test_RestorePasswordRequestJSON.cpp
+ * \brief Test suite for RestorePasswordRequestJSON class
  *
  * PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * ----------------------------------------------------------- */
 
-#include <QtTest/QtTest>
-#include <QtCore/QtCore>
-#include <QCoreApplication>
-
-// Test headers
-#include "JsonUser_Test.h"
-#include "Test_RegisterUserRequestJSON.h"
-#include "Test_RegisterUserResponseJSON.h"
-#include "Test_AvailableChannelsResponseJSON.h"
-#include "Test_QuitSessionRequestJSON.h"
-#include "Test_QuitSessionResponseJSON.h"
 #include "Test_RestorePasswordRequestJSON.h"
-#include "Test_RestorePasswordResponseJSON.h"
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#include "ErrnoTypes.h"
+#include <QDebug>
 
-int main(int argc, char **argv)
+namespace Test
 {
-  QCoreApplication app(argc, argv);
-
-  QObject *tests[] =
+  void Test_RestorePasswordRequestJSON::getJson()
   {
-    new Test::JsonUser_Test(),
-    new Test::Test_RegisterUserRequestJSON(),
-    new Test::Test_RegisterUserResponseJSON(),
-    new Test::Test_AvailableChannelsResponseJSON(),
-    new Test::Test_QuitSessionRequestJSON(),
-    new Test::Test_QuitSessionResponseJSON(),
-    new Test::Test_RestorePasswordRequestJSON(),
-    new Test::Test_RestorePasswordResponseJSON()
-  };
+    RestorePasswordRequestJSON request;
+    QByteArray data;
+    QJson::Serializer serializer;
+    QVariantMap obj;
 
-  for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++)
-  {
-    QTest::qExec(tests[i]);
+    data = QString("{\"email\":\"test\"}").toAscii();
+    qDebug() << data;
+    obj.insert("email", QString("test"));
+
+    QByteArray true_json = serializer.serialize(obj);
+
+    request.parseJson(data);
+    QCOMPARE(request.getJson(), true_json);
   }
-  return 0;                             //app.exec();
-}
 
+  void Test_RestorePasswordRequestJSON::parseJson()
+  {
+    RestorePasswordRequestJSON request;
+    QByteArray data;
 
-/* ===[ End of file $HeadURL$ ]=== */
+    data = QString("{\"email\":\"test\"}").toAscii();
+    QCOMPARE(request.parseJson(data), true);
+    QCOMPARE(request.getUsers()->at(0)->getEmail(), QString("test"));
+  }
+
+}                                       // end of namespace Test

@@ -60,8 +60,6 @@ QByteArray RestorePasswordRequestJSON::getJson() const
   QJson::Serializer serializer;
   QVariantMap obj;
   obj.insert("email", m_usersContainer->at(0)->getEmail());
-  obj.insert("login", m_usersContainer->at(0)->getLogin());
-  obj.insert("password", m_usersContainer->at(0)->getPassword());
   return serializer.serialize(obj);
 }
 

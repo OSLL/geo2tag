@@ -29,48 +29,33 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 /*!
- * \file main.cpp
- * \brief Test suite for json
+ * \file Test_RestorePasswordRequestJSON.h
+ * \brief Test suite for RestorePasswordResponseJSON class
  *
  * PROJ: OSLL/geo2tag
- * ------------------------------------------------------------------------ */
+ * ----------------------------------------------------------- */
 
-#include <QtTest/QtTest>
-#include <QtCore/QtCore>
-#include <QCoreApplication>
+#ifndef TEST_RESTOREPASSWORDRESPONSEJSON_H
+#define TEST_RESTOREPASSWORDRESPONSEJSON_H
 
-// Test headers
-#include "JsonUser_Test.h"
-#include "Test_RegisterUserRequestJSON.h"
-#include "Test_RegisterUserResponseJSON.h"
-#include "Test_AvailableChannelsResponseJSON.h"
-#include "Test_QuitSessionRequestJSON.h"
-#include "Test_QuitSessionResponseJSON.h"
-#include "Test_RestorePasswordRequestJSON.h"
-#include "Test_RestorePasswordResponseJSON.h"
+#include <QObject>
+#include <QtTest>
+#include "../inc/RestorePasswordResponseJSON.h"
 
-int main(int argc, char **argv)
+namespace Test
 {
-  QCoreApplication app(argc, argv);
-
-  QObject *tests[] =
+  class Test_RestorePasswordResponseJSON : public QObject
   {
-    new Test::JsonUser_Test(),
-    new Test::Test_RegisterUserRequestJSON(),
-    new Test::Test_RegisterUserResponseJSON(),
-    new Test::Test_AvailableChannelsResponseJSON(),
-    new Test::Test_QuitSessionRequestJSON(),
-    new Test::Test_QuitSessionResponseJSON(),
-    new Test::Test_RestorePasswordRequestJSON(),
-    new Test::Test_RestorePasswordResponseJSON()
-  };
+    Q_OBJECT
 
-  for (unsigned int i = 0; i < sizeof(tests)/sizeof(QObject*); i++)
-  {
-    QTest::qExec(tests[i]);
-  }
-  return 0;                             //app.exec();
-}
+      private slots:
+      void getJson();
+      void parseJson();
+  };                                    // class Test_RestorePasswordResponseJSON
+}                                       // end of namespace Test
+#endif                                  // TEST_RESTOREPASSWORDRESPONSEJSON_H
 
 
-/* ===[ End of file $HeadURL$ ]=== */
+
+
+
