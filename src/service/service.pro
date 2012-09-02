@@ -2,7 +2,6 @@ TEMPLATE = app
 include(../../config.pri)
 TARGET = fcgi_server
 
-
 INSTALLS += target conf_lighttpd odbc_configs postgre_conf
 
 target.path = /opt/geo2tag/
