@@ -47,7 +47,6 @@ linux_profiling: {
 }
 
 LIBS += -L$$SOURCE_DIR/src/lib
-QMAKE_LFLAGS += -L$$SOURCE_DIR/src/lib
 QMAKE_LIBDIR_QT = $$SOURCE_DIR/src/lib $$QMAKE_LIBDIR_QT
 
 
