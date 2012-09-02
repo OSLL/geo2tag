@@ -234,6 +234,19 @@ public class GTServiceImpl extends RemoteServiceServlet implements
 	}
 	
 	@Override
+	public Boolean restorePassword(String email) 
+			throws IllegalArgumentException {
+		JsonRestorePasswordRequest request = new JsonRestorePasswordRequest(email, serverUrl);
+		JsonRestorePasswordResponse response = new JsonRestorePasswordResponse();
+		response.parseJson(request.doRequest());
+		if (response.getErrno() == Errno.SUCCESS) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
 	public HttpSession getSession() {
 		return getThreadLocalRequest().getSession();
 	}

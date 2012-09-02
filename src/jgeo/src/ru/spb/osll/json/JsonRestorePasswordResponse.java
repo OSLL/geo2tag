@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 OSLL
+ * Copyright 2010-2012 OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,44 +29,13 @@
  * The advertising clause requiring mention in adverts must never be included.
  */
 
-package ru.spb.osll.web.client.services;
+/*! ---------------------------------------------------------------
+ * PROJ: OSLL/geo2tag
+ * ---------------------------------------------------------------- */
 
-import java.util.List;
+package ru.spb.osll.json;
 
-import ru.spb.osll.web.client.services.objects.WChannel;
-import ru.spb.osll.web.client.services.objects.WMark;
-import ru.spb.osll.web.client.services.objects.WUser;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-public interface GTServiceAsync {
-
-	void login(WUser user, AsyncCallback<WUser> callback);
-
-	void logout(AsyncCallback<Boolean> callback);
-
-	void isAuthorized(AsyncCallback<WUser> callback);
-
-	void addUser(WUser user, AsyncCallback<WUser> callback);
-	
-	void registerUser(WUser user, AsyncCallback<Boolean> callback);
-
-	void subscribe(WChannel ch, WUser u, AsyncCallback<Boolean> callback);
-
-	void unsubscribe(WChannel ch, WUser u, AsyncCallback<Boolean> callback);
-
-	void availableChannels(WUser u, AsyncCallback<List<WChannel>> callback);
-
-	void subscribedChannels(WUser u, AsyncCallback<List<WChannel>> callback);
-
-	void ownedChannels(WUser u, AsyncCallback<List<WChannel>> callback);
-
-    void getTags(WUser u, WChannel ch, int amount, AsyncCallback<List<WMark>> callback);
-
-	void getTags(WUser u, List<WChannel> channels, int amount, AsyncCallback<List<WMark>> callback);
-	
-	void getTags(WUser u, double latitude, double longitude, double radius, AsyncCallback<List<WMark>> callback);
-	
-	void restorePassword(String email, AsyncCallback<Boolean> callback);
+public class JsonRestorePasswordResponse extends JsonBaseResponse {
 
 }
+

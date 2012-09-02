@@ -74,7 +74,8 @@ public interface GTService extends RemoteService {
 	List<WMark> getTags(WUser u, double latitude, double longitude, double radius) 
 			throws IllegalArgumentException;
 
-
+	Boolean restorePassword(String email) throws IllegalArgumentException;
+	
 	// TODO 
 	/* 
 	List<WMark> getTags(WUser u, Date dateFrom, Date dateTo)

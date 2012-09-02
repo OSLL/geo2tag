@@ -1384,9 +1384,6 @@ namespace common
     syslog(LOG_INFO, "%s", realUser->getPassword().toStdString().c_str());
     QSharedPointer<common::User> updatedUser = m_queryExecutor->updateUserPassword(realUser, hash);
 
-    syslog(LOG_INFO, "%s", password.toStdString().c_str());
-    syslog(LOG_INFO, "%s", hash.toStdString().c_str());
-
     if(updatedUser.isNull())
     {
       response.setErrno(INTERNAL_DB_ERROR);

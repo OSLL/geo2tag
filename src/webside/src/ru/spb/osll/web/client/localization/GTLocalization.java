@@ -44,6 +44,7 @@ public interface GTLocalization extends Constants {
 	String btnSignin();
 	String btnRegister();
 	String btnSignout();
+	String btnSubmit();
 	
 	// warnings
 	String wrngLoginNull();
@@ -107,5 +108,7 @@ public interface GTLocalization extends Constants {
 	String TestAccountWidget();
 	
 	// Widget : RestorePasswordWidget
+	String passwRestoring();
 	String forgotPassword();
+	String waitForPwdRestoring();
 }

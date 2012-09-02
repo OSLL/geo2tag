@@ -147,4 +147,10 @@ public interface IRequest {
         String PASSWORD = "password";
         String EMAIL = "email";
     }
+    
+    public interface IRestorePassword {
+        String REQUEST = "/restorePassword";
+
+        String EMAIL = "email";
+    }
 }

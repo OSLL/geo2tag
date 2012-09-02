@@ -77,6 +77,13 @@ public class RegistrationWidget extends FieldsWidget {
 		});
 		
 		Anchor forgotPasswordLink = new Anchor(Localizer.res().forgotPassword());
+		forgotPasswordLink.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				dropData();
+				GTShell.Instance.setContent(RestorePasswordWidget.Instance());
+			}
+		});
 		
 		List<Anchor> links = new ArrayList<Anchor>();
 		links.add(loginLink);
