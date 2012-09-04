@@ -38,7 +38,12 @@ TEMPLATE = app
 QT += testlib
 QT += sql
 
-TARGET = utest.DbInteraction
+
+## GT_779 This is not correct test format for pulse. refactoring is required
+TARGET = utest.DbInteraction-old
+
+
+
 LIBS -= -L/usr/lib
 LIBS += -lcommon -lwikigpsJson
 message($$LIBS)
