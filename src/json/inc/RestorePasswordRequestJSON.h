@@ -48,5 +48,4 @@ class RestorePasswordRequestJSON : public JsonSerializer
 
     bool parseJson(const QByteArray&);
 };
-
-#endif // RESTOREPASSWORDREQUEST_H
+#endif                                  // RESTOREPASSWORDREQUEST_H

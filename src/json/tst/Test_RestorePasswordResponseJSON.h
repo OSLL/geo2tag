@@ -54,8 +54,3 @@ namespace Test
   };                                    // class Test_RestorePasswordResponseJSON
 }                                       // end of namespace Test
 #endif                                  // TEST_RESTOREPASSWORDRESPONSEJSON_H
-
-
-
-
-

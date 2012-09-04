@@ -49,7 +49,7 @@ RestorePasswordRequestJSON::RestorePasswordRequestJSON(QObject *parent) : JsonSe
 
 
 RestorePasswordRequestJSON::RestorePasswordRequestJSON(const QSharedPointer<common::User> &user, QObject *parent) :
-  JsonSerializer(parent)
+JsonSerializer(parent)
 {
   m_usersContainer->push_back(user);
 }
@@ -77,4 +77,3 @@ bool RestorePasswordRequestJSON::parseJson(const QByteArray &data)
   m_usersContainer->push_back(QSharedPointer<common::User>(new JsonUser("unknown", "unknown", email)));
   return true;
 }
-

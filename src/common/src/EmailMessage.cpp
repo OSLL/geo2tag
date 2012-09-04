@@ -41,7 +41,7 @@
 #include "SettingsStorage.h"
 
 EmailMessage::EmailMessage(QString email) :
-    m_email(email)
+m_email(email)
 {
 }
 
@@ -88,6 +88,7 @@ void EmailMessage::send() const
   system(command.toStdString().c_str());
 }
 
+
 void EmailMessage::sendAsRegistrationLetter(const QString& info)
 {
   SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
@@ -106,12 +107,13 @@ void EmailMessage::sendAsRegistrationLetter(const QString& info)
   send();
 }
 
+
 void EmailMessage::sendAsRestorePwdMessage(const QString& pwd)
 {
   SettingsStorage storage(SETTINGS_STORAGE_FILENAME);
   QString subject = storage.getValue("Mail_Settings/restore_pwd_subject", QVariant(DEFAULT_RESTORE_PASSWORD_SUBJECT)).toString();
   QString body = storage.getValue("Mail_Settings/restore_pwd_body", QVariant(DEFAULT_RESTORE_PASSWORD_BODY)).toString()
-          + " " + pwd;
+    + " " + pwd;
   m_subject = subject;
   m_body = body;
   syslog(LOG_INFO, "Email: %s", m_email.toStdString().c_str());

@@ -1353,7 +1353,6 @@ namespace common
     return answer;
   }
 
-
   QByteArray DbObjectsCollection::processRestorePasswordQuery(const QByteArray& data)
   {
     syslog(LOG_INFO, "starting RestorePassword processing");

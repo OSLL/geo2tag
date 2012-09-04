@@ -96,8 +96,8 @@ class UpdateThread: public QThread
     void setQueryExecutor(QueryExecutor* queryExecutor);
     QSharedPointer<Sessions> getSessionsContainer() const;
 
-  signals:
-    
+    signals:
+
     void syncronizationComplete();
     void newTagInsertionComplete(int tagsCount);
 

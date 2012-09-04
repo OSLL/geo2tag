@@ -138,6 +138,7 @@ const QString QueryExecutor::generateNewToken(const QString& accessTime, const Q
   return result;
 }
 
+
 QSharedPointer<DataMark> QueryExecutor::insertNewTag(const QSharedPointer<DataMark>& tag)
 {
   PerformanceCounter counter("QueryExecutor::insertNewTag");
@@ -509,6 +510,7 @@ bool QueryExecutor::deleteUser(const QSharedPointer<common::User> &user)
   }
   return result;
 }
+
 
 QSharedPointer<common::User> QueryExecutor::updateUserPassword(const QSharedPointer<common::User>& user, const QString& password)
 {

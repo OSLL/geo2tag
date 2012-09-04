@@ -38,6 +38,4 @@
 #include "DefaultResponseJSON.h"
 
 typedef DefaultResponseJSON RestorePasswordResponseJSON;
-
-#endif // RESTOREPASSWORDRESPONSE_H
-
+#endif                                  // RESTOREPASSWORDRESPONSE_H
