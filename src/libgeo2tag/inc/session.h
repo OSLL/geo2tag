@@ -61,9 +61,17 @@ namespace Geo
 
       /**
         Initialize session
-        \param initParams key-value init parameters map
+        \param initParams key-value init parameters map separated by semicolon (;)
+
+        available parameters
+          \param url  Geo2tag instance url
+          \param user Registered username
+          \param password Obvious, right?
+
+
+        \example "url=http://tracks.osll.spb.ru:8080;user=vasya;password=1982374hfd"
         */
-      static bool init(const std::map<std::string,std::string> &params);
+      static bool init(const char* initializationString);
 
       /**
         Check the state of session
