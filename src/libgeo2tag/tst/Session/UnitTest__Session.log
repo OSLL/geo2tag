@@ -1,0 +1,5 @@
+Entered test-function: initTestCase
+Entered test-function: isValid
+Entered test-function: saveState
+Entered test-function: srestoreState
+Entered test-function: cleanupTestCase
