@@ -57,6 +57,8 @@ namespace Geo
   class Session
   {
 
+      std::map< std::string, std::string> m_params;
+
     public:
 
       /**
@@ -71,7 +73,7 @@ namespace Geo
 
         \example "url=http://tracks.osll.spb.ru:8080;user=vasya;password=1982374hfd"
         */
-      static bool init(const char* initializationString);
+      static bool init(const char* initializationString =NULL);
 
       static Session* instance();
 
