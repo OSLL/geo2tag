@@ -53,7 +53,7 @@ class Filtration
   public:
     Filtration();
 
-    ~Filtration();
+    virtual ~Filtration();
 
     void addFilter(const QSharedPointer<Filter> & filter);
 
