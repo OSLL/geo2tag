@@ -1,7 +1,5 @@
 /*
- * Copyright 2010 - 2012  Kirill Krinkin  kirill.krinkin@gmail.com
- *
- * Geo2tag LBS Platform (geo2tag.org)
+ * Copyright ${YEAR}  ${AUTHOR}  ${EMAIL}
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -13,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -33,17 +31,31 @@
 
 /*! ---------------------------------------------------------------
  *
- * \file Session.cpp
- * \brief Session implementation
- *
- * File description
+ * \file ${TESTFILE}
+ * \brief Unit test suite for ${PACKAGE} / ${CLASS}
  *
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#include "../inc/session.h"
+#include <QtTest/QTest>
 
-namespace Geo2tag
+namespace Test
 {
 
-} // namespace Geo2tag
+  class ${CLASS} : public QObject
+  {
+    Q_OBJECT
+
+      private slots:
+
+      void test${CLASS}Default()
+      {
+        QVERIFY(false);
+      }
+  };
+
+}
+
+
+QTEST_APPLESS_MAIN(Test::${CLASS})
+#include "${TESTMOC}"
