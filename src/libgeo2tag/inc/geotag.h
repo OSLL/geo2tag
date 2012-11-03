@@ -47,41 +47,74 @@
 
 #include <string>
 
-namespace Geo2tag
+namespace Geo
 {
+static double DEFAULT_DISTANCE_PRECISION = 0.0000000001;
+static double DEFAULT_ANGLE_PRECISION    = 0.0000000000001;
 
-  class Coord
-  {
-      double altitude;
-      double latitude;
-      double longitude;
-  };
+struct Coord
+{
+    double altitude;
+    double latitude;
+    double longitude;
 
- /*!
+    Coord(double a, double la, double lo): altitude(a), latitude(la), longitude(lo) {}
+
+    bool operator==(const Coord& obj);
+};
+
+/*!
    * Class description. May use HTML formatting
    *
    */
-  class Geotag
-  {
-      Coord       m_coord;
-      __int64_t   m_timestamp;
-      std::string m_label;
-      std::string m_data;
+class Geotag
+{
+    Coord       m_coord;
+    time_t      m_timestamp;
+    std::string m_label;
+    std::string m_data;
 
-  public:
+public:
 
-      Geotag(const Coord& coord, const std::string& label, std::string& data);
+    explicit Geotag();
+    Geotag(double b, double l, double h, const char * label ="", const char *data ="");
 
-      __int64_t timestamp();
-      std::string label();
-      std::string data();
+    time_t timestamp() const;
+    const char* label() const {return m_label.c_str(); }
+    const char* data() const {return m_data.c_str(); }
+    void setLabel(const char *value) { m_label.assign(value);}
+    void setData(const char* value) { m_data.assign(value);}
+
+    double latitude() const         { return m_coord.latitude;}
+    double longitude() const             { return m_coord.longitude;}
+    double altitude() const                { return m_coord.altitude;}
+    void setLatitude(double value)       { m_coord.latitude=value; }
+    void setLongitude(double value)      { m_coord.longitude=value; }
+    void setAltitude(double value)       { m_coord.altitude=value; }
+    double b() const         { return latitude(); }
+    double l() const         { return longitude();}
+    double h() const         { return altitude();}
+    void setB(double value)  { setLatitude(value); }
+    void setL(double value)  { setLongitude(value); }
+    void setH(double value)  { setAltitude(value); }
+
+    /*
+      \return \b true if objects are in the same place
+      */
+    bool isColocated(const Geotag& obj,
+                     double distancePrecision = DEFAULT_DISTANCE_PRECISION,
+                     double anglePrecision = DEFAULT_ANGLE_PRECISION);
+
+
+protected:
+    static time_t now();
     
-  private:    
+private:
     Geotag(const Geotag& obj);
     Geotag& operator=(const Geotag& obj);
 
-  }; // class Geotag
-  
+}; // class Geotag
+
 } // namespace Geo2tag
 
 #endif //_Geotag_H_04676504_3E24_4452_B066_52C876A91FFA_INCLUDED_

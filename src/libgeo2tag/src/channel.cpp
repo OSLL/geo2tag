@@ -43,7 +43,7 @@
 
 #include "../inc/channel.h"
 
-namespace Geo2tag
+namespace Geo
 {
 
 } // namespace Geo2tag

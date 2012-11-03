@@ -39,15 +39,18 @@
 
 #include <QtTest/QTest>
 
-namespace Test
+// All unit test should be in UnitTest namespase
+namespace UnitTest
 {
 
+  // Unit test is just a Qt Class
   class ${CLASS} : public QObject
   {
     Q_OBJECT
 
       private slots:
 
+      // Test method is just a private slot
       void test${CLASS}Default()
       {
         QVERIFY(false);
@@ -57,5 +60,5 @@ namespace Test
 }
 
 
-QTEST_APPLESS_MAIN(Test::${CLASS})
+QTEST_APPLESS_MAIN(UnitTest::${CLASS})
 #include "${TESTMOC}"

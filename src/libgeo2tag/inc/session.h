@@ -48,7 +48,7 @@
 #include <map>
 #include <string>
 
-namespace Geo2tag
+namespace Geo
 {
 
   /**

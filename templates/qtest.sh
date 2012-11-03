@@ -11,16 +11,19 @@ YEAR=`date +%Y`
 TESTFILE="${PACKAGE}_${CLASS}.cpp"
 TESTMOC="${PACKAGE}_${CLASS}.moc"
 
-TESTPRO="${PACKAGE}_${CLASS}.pro"
+TESTPRO="${CLASS}.pro"
+
+
+mkdir ./${CLASS}
 
 A="cat <<EOF
 `cat qtest_template.pro`
 EOF"
 
-eval "$A" >$TESTPRO
+eval "$A" >${CLASS}/$TESTPRO
 
 A="cat <<EOF
 `cat qtest_template.cpp`
 EOF"
 
-eval "$A" >$TESTFILE
+eval "$A" >${CLASS}/$TESTFILE

@@ -42,8 +42,41 @@
  * ---------------------------------------------------------------- */
 
 #include "../inc/geotag.h"
+#include <cmath>
 
-namespace Geo2tag
+namespace Geo
 {
+
+Geotag::Geotag() : m_coord(.0,.0,.0), m_timestamp(now())
+{
+
+}
+
+Geotag::Geotag(double b, double l, double h, const char * label, const char *data) :
+    m_coord(b,l,h),m_label(label),m_data(data)
+{
+}
+
+time_t Geotag::timestamp() const
+{
+    return m_timestamp;
+}
+
+bool Geotag::isColocated(const Geotag &obj, double distancePrecision, double anglePrecision)
+{
+    if(fabs(altitude()-obj.altitude())>=distancePrecision)
+        return false;
+    if(fabs(longitude()-obj.longitude())>=anglePrecision)
+        return false;
+    if(fabs(latitude()-obj.latitude())>=anglePrecision)
+        return false;
+
+    return true;
+}
+
+time_t Geotag::now()
+{
+    return time(NULL);
+}
 
 } // namespace Geo2tag

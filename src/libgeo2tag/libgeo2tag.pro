@@ -2,7 +2,7 @@ TEMPLATE = lib
 CONFIG += console
 CONFIG -= qt
 
-TARGET = geo2tagB
+TARGET = geo2tag
 
 HEADERS += \
     inc/session.h \

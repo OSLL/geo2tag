@@ -48,7 +48,7 @@
 #include <string>
 #include "../inc/geotag.h"
 
-namespace Geo2tag
+namespace Geo
 {
  /*!
    * Channel. Entity for aggregating tags
