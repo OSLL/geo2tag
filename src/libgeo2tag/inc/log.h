@@ -1,7 +1,5 @@
 /*
- * Copyright 2010 - 2012  Kirill Krinkin  kirill.krinkin@gmail.com
- *
- * Geo2tag LBS Platform (geo2tag.org)
+ * Copyright 2012  Kirill Krinkin  kirill.krinkin@gmail.com
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,8 +30,8 @@
  */
 
 /*! ---------------------------------------------------------------
- * \file Session.h
- * \brief Header of Session
+ * \file Log.h
+ * \brief Header of Log
  * \todo add comment here
  *
  * File description
@@ -42,63 +40,80 @@
  * ---------------------------------------------------------------- */
 
 
-#ifndef _Session_H_95B6E7F9_B628_4F43_8577_D5BF1A5F59E2_INCLUDED_
-#define _Session_H_95B6E7F9_B628_4F43_8577_D5BF1A5F59E2_INCLUDED_
+#ifndef _Log_H_15CB69AA_AD4A_4920_9586_22AD73133FD5_INCLUDED_
+#define _Log_H_15CB69AA_AD4A_4920_9586_22AD73133FD5_INCLUDED_
 
-#include <map>
-#include <string>
+#include <stdio.h>
 
-namespace Geo
+namespace
 {
 
-  /**
-      This is an entry and initialization point for library
-    */
-  class Session
-  {
+typedef enum
+{
+    DEFAULT=0,
+    MAX_FACILITY_VALUE
+} FACILITY;
 
-    public:
-
-      /**
-        Initialize session
-        \param initParams key-value init parameters map separated by semicolon (;)
-
-        available parameters
-          \param url  Geo2tag instance url
-          \param user Registered username
-          \param password Obvious, right?
+typedef enum
+{
+    FATAL,
+    ERROR,
+    WARNING,
+    INFO,
+    MAX_SEVERIY_VALUE
+} SEVERITY;
 
 
-        \example "url=http://tracks.osll.spb.ru:8080;user=vasya;password=1982374hfd"
-        */
-      static bool init(const char* initializationString);
+const char* ___log_facility_name[MAX_FACILITY_VALUE] = {"Default"};
+const char* ___log_severity_name[MAX_SEVERIY_VALUE] = {
+    "F",
+    "E",
+    "W",
+    "I",
+};
 
-      static Session* instance();
+/*!
+   * Class description. May use HTML formatting
+   *
+   */
+class Log
+{
 
-      /**
-        Check the state of session
-        */
-      static bool isValid();
+    SEVERITY m_severity;
+    FACILITY m_facility;
+    const char *m_file;
+    const char *m_func;
+    int m_line;
 
-      /**
-        Save current session state for further restore
-        \note: will be extended by State object
-        */
-      static bool saveState();
+public:
+    Log(const char *file, int line, const char *func, SEVERITY severity = INFO, FACILITY facility = DEFAULT) :
+        m_severity(severity),
+        m_facility(facility),
+        m_file(file),
+        m_func(func),
+        m_line(line) {}
 
-      /**
-        Restore state from previous saved state object
-        */
-      static bool restoreState();
+    void write(const char *msg)
+    {
+        //will be fixed
+        printf("%s: [%s] %s +%d :%s msg=\"%s\"\n",
+               ___log_severity_name[m_severity], ___log_facility_name[m_facility],
+               m_file,m_line,m_func,msg);
+    }
 
-    private:
+private:
+    Log(const Log& obj);
+    Log& operator=(const Log& obj);
 
-      Session(const Session& obj);
-      Session& operator=(const Session& obj);
+}; // class Log
+
+//should be in one line
+#define LOG(msg,severity,facility) { Log __l(__FILE__,__LINE__,__FUNCSIG__,(severity),(facility)); __l.write(msg); }
+
+//should be in one line
+#define LOG(msg) { Log __l(__FILE__,__LINE__,__FUNCTION__,INFO,DEFAULT); __l.write(msg); }
 
 
-  }; // class Session
+} // namespace Geo
 
-} // namespace Geo2tag
-
-#endif //_Session_H_95B6E7F9_B628_4F43_8577_D5BF1A5F59E2_INCLUDED_
+#endif //_Log_H_15CB69AA_AD4A_4920_9586_22AD73133FD5_INCLUDED_

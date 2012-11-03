@@ -38,6 +38,7 @@
  * ---------------------------------------------------------------- */
 
 #include <QtTest/QTest>
+#include "../../inc/session.h"
 
 // All unit test should be in UnitTest namespase
 namespace UnitTest
@@ -48,7 +49,15 @@ class Session : public QObject
 {
     Q_OBJECT
 
+    //Geo::Session m_object;
+
 private slots:
+
+    void initTestCase()
+    {
+        QVERIFY(Geo::Session::init(""));
+
+    }
 
     void init()
     {

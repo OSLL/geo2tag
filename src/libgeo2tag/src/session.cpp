@@ -42,8 +42,16 @@
  * ---------------------------------------------------------------- */
 
 #include "../inc/session.h"
+#include "../inc/log.h"
 
 namespace Geo
 {
+
+bool Session::init(const char *initializationString)
+{
+    LOG("test log");
+}
+
+
 
 } // namespace Geo2tag
