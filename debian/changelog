@@ -1,3 +1,9 @@
+geo2tag (0.20.2) unstable; urgency=low
+
+  * Upgraded Postgres reference
+
+ -- Open Source and Linux lab <geo2tag-development@osll.spb.ru>  Sat, 03 Nov 2012 00:00:00 +0400
+
 geo2tag (0.20.1.1345618727) unstable; urgency=low
 
   * beautify

@@ -44,14 +44,67 @@
 #include "../inc/session.h"
 #include "../inc/log.h"
 
+#include <QMutex>
+#include <QMutexLocker>
+#include <QString>
+#include <QDebug>
+#include <QStringList>
+
+namespace
+{
+  QMutex        g_sessionMutex;
+  Geo::Session   *g_sessionObject=NULL;
+
+  bool init_map(std::map<std::string,std::string>& map, const char *str)
+  {
+      QString s(str);
+      QStringList sl = s.split(";");
+      QString kv;
+      foreach(kv,sl)
+      {
+          QStringList keyValue = kv.split("=");
+          if(keyValue.size()!=2)
+              return false;
+          QString key   = keyValue[0].trimmed();
+          QString value = keyValue[1].trimmed();
+          qDebug() << "key=" << key << ", value="<< value;
+          map[key.toStdString()]=value.toStdString();
+      }
+      return true;
+  }
+}
+
 namespace Geo
 {
 
 bool Session::init(const char *initializationString)
 {
-    LOG("test log");
+    if(g_sessionObject != NULL) //already initialized
+        return false;
+    g_sessionObject = new Session();
+
+    init_map((g_sessionObject->m_params),initializationString);
+
+    return true;
+
 }
 
+Session& Session::instance()
+{
+    //LOCK_SESSION;
 
+    Q_ASSERT(g_sessionObject != NULL);
+
+    return *g_sessionObject;
+}
+
+Session::Session(): m_isValid(false)
+{
+}
+
+const std::string &Session::param(const std::string &key) const
+{
+    return m_params[key];
+}
 
 } // namespace Geo2tag

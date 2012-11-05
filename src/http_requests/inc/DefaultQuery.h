@@ -57,7 +57,6 @@ class DefaultQuery : public QObject
   protected Q_SLOTS:
 
     void process(QNetworkReply *reply);
-
     void handleError();
 
   public:

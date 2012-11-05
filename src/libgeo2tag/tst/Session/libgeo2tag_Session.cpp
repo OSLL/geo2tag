@@ -53,10 +53,15 @@ class Session : public QObject
 
 private slots:
 
+
+    void instance()
+    {
+       // QVERIFY(Geo::Session::instance() == NULL);
+    }
+
     void initTestCase()
     {
-        QVERIFY(Geo::Session::init(""));
-
+        Geo::Session::init("url=http://tracks.osll.spb.ru:81/service;user=test;passwprd=test");
     }
 
     void init()
@@ -69,12 +74,13 @@ private slots:
         QVERIFY(FALSE);
     }
 
+
     void saveState()
     {
         QVERIFY(FALSE);
     }
 
-    void srestoreState()
+    void restoreState()
     {
         QVERIFY(FALSE);
     }

@@ -47,6 +47,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 namespace Geo
 {
@@ -56,8 +57,8 @@ namespace Geo
     */
   class Session
   {
-
-      std::map< std::string, std::string> m_params;
+      mutable std::map< std::string, std::string> m_params;
+      bool m_isValid;
 
     public:
 
@@ -75,12 +76,14 @@ namespace Geo
         */
       static bool init(const char* initializationString =NULL);
 
-      static Session* instance();
+      static Session& instance();
 
       /**
         Check the state of session
         */
-      static bool isValid();
+      bool isValid() { return m_isValid; }
+
+      const std::string& param(const std::string& key) const;
 
       /**
         Save current session state for further restore
@@ -94,6 +97,8 @@ namespace Geo
       static bool restoreState();
 
     private:
+
+      Session();
 
       Session(const Session& obj);
       Session& operator=(const Session& obj);

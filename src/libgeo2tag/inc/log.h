@@ -108,7 +108,7 @@ private:
 }; // class Log
 
 //should be in one line
-#define LOG(msg,severity,facility) { Log __l(__FILE__,__LINE__,__FUNCSIG__,(severity),(facility)); __l.write(msg); }
+//#define LOG(msg,severity,facility) { Log __l(__FILE__,__LINE__,__FUNCSIG__,(severity),(facility)); __l.write(msg); }
 
 //should be in one line
 #define LOG(msg) { Log __l(__FILE__,__LINE__,__FUNCTION__,INFO,DEFAULT); __l.write(msg); }

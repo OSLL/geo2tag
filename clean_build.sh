@@ -2,6 +2,6 @@
 
 find ./ -name test.suite | xargs rm
 
-dpkg-buildpackage -rfakeroot -j5
+dpkg-buildpackage -d -rfakeroot -j5
 
 cat ./test_summary.log
