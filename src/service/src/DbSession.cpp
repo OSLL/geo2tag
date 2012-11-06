@@ -119,9 +119,14 @@
 
 #include "PerformanceCounter.h"
 #include "Geo2tagDatabase.h"
+#include "DbSession.h"
 
 namespace common
 {
+
+   QMutex dbAccessMutex;
+
+
   const QString DbObjectsCollection::error = QString("Error");
   const QString DbObjectsCollection::ok = QString("Ok");
 
@@ -449,10 +454,11 @@ namespace common
 
     if (!newUser.isNull())
     {
+      QMutexLocker l(&common::dbAccessMutex);
       m_queryExecutor->deleteTmpUser(registrationToken);
-      m_updateThread->lockWriting();
+      //GT-765 bug m_updateThread->lockWriting();
       m_usersContainer->push_back(newUser);
-      m_updateThread->unlockWriting();
+      //GT-765 bug m_updateThread->unlockWriting();
       answer.append("Congratulations!");
     }
     else
@@ -497,9 +503,10 @@ namespace common
           syslog(LOG_INFO, "answer: %s", answer.data());
           return answer;
         }
-        m_updateThread->lockWriting();
+        QMutexLocker l(&dbAccessMutex);
+        //GT-765 bug m_updateThread->lockWriting();
         m_sessionsContainer->push_back(addedSession);
-        m_updateThread->unlockWriting();
+        //GT-765 bug m_updateThread->unlockWriting();
         response.addSession(addedSession);
       }
       else
@@ -624,10 +631,13 @@ namespace common
       return answer;
     }
 
-    m_updateThread->lockWriting();
+    {
+        QMutexLocker l(&dbAccessMutex);
+    //GT-765 bug m_updateThread->lockWriting();
     m_tagsContainer->push_back(realTag);
     m_dataChannelsMap->insert(realChannel, realTag);
-    m_updateThread->unlockWriting();
+    //GT-765 bug m_updateThread->unlockWriting();
+    }
 
     syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
     m_queryExecutor->updateSession(realSession);
@@ -840,10 +850,15 @@ namespace common
       answer.append(response.getJson());
       return answer;
     }
+
+    {
+
     m_updateThread->lockWriting();
     syslog(LOG_INFO, "Try to subscribe for realChannel = %lld",realChannel->getId());
     realUser->subscribe(realChannel);
     m_updateThread->unlockWriting();
+    }
+
 
     syslog(LOG_INFO, "Time before updating: %s", realSession->getLastAccessTime().toUTC().toString().toStdString().c_str());
     m_queryExecutor->updateSession(realSession);
