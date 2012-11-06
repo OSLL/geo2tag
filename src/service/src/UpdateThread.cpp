@@ -41,6 +41,7 @@
 #include "PerformanceCounter.h"
 #include "QueryExecutor.h"
 #include "Geo2tagDatabase.h"
+#include "DbSession.h"
 
 UpdateThread::UpdateThread(const QSharedPointer<DataMarks> &tags,
 const QSharedPointer<common::Users> &users,
@@ -78,16 +79,16 @@ m_transactionCount(0)
 {
 }
 
-
+//GT-765 bug
 void UpdateThread::lockWriting()
 {
-  m_updateLock.lockForWrite();
+//GT-765 bug  m_updateLock.lockForWrite();
 }
 
 
 void UpdateThread::unlockWriting()
 {
-  m_updateLock.unlock();
+//GT-765 bug   m_updateLock.unlock();
 }
 
 
@@ -170,6 +171,8 @@ void UpdateThread::run()
       lockWriting();
       syslog(LOG_INFO,"Containers locked for db_update");
 
+      {
+          QMutexLocker l(&common::dbAccessMutex);
       m_usersContainer->merge(usersContainer);
       m_tagsContainer->merge(tagsContainer);
       m_channelsContainer->merge(channelsContainer);
@@ -178,6 +181,7 @@ void UpdateThread::run()
       m_queryExecutor->updateReflections(*m_tagsContainer,*m_usersContainer, *m_channelsContainer, *m_sessionsContainer);
 
       syslog(LOG_INFO, "tags added. trying to unlock");
+      }
       unlockWriting();
 
       if (oldTagsContainerSize != m_tagsContainer->size())
@@ -187,6 +191,7 @@ void UpdateThread::run()
         {
           if(!m_dataChannelsMap->contains(m_tagsContainer->at(i)->getChannel(), m_tagsContainer->at(i)))
           {
+            QMutexLocker l(&common::dbAccessMutex);
             QSharedPointer<DataMark> tag = m_tagsContainer->at(i);
             QSharedPointer<Channel> channel = tag->getChannel();
             syslog(LOG_INFO, "adding %d from %d tag %s to channel %s", i, m_tagsContainer->size(),

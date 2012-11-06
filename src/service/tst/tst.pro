@@ -18,6 +18,7 @@ SOURCES += ../src/QueryExecutor.cpp \
            ../src/DataMarkInternal.cpp \
            ../src/SessionInternal.cpp \
            ../src/ChannelInternal.cpp \
+           ../src/DbSession.cpp\
            main.cpp \
            Test_QueryExecutor.cpp \
     ../src/DbSession.cpp

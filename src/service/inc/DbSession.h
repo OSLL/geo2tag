@@ -46,7 +46,6 @@
 #include <QtSql>
 #include <QThread>
 #include <QMap>
-//#include </usr/include/qt4/QtSql/qsql_psql.h>
 #include "DataMarks.h"
 #include "Channel.h"
 #include "DataChannel.h"
@@ -55,9 +54,14 @@
 #include "QueryExecutor.h"
 #include "FilterRequestJSON.h"
 #include "Session.h"
+#include <QMutex>
+#include <QMutexLocker>
 
 namespace common
 {
+
+extern QMutex dbAccessMutex;
+
   /*!
    * \brief session with database
    */
