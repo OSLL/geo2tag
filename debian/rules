@@ -69,8 +69,8 @@ clean:
 unittest:
 	./tst/unit/platform.sh
 	
-
-install: build unittest
+#kkv: this is not unitr tests -- disabled
+install: build 
 	dh_testdir
 	dh_testroot
 	dh_clean -k

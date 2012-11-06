@@ -9,8 +9,16 @@
 # In case 3 last commit message where taken as a changelog message
 
 changelog="debian/changelog";
-geo2tag_version="0.20.1";
+geo2tag_version=`cat VERSION`;
 message="";
+branchname=`git branch | grep '\*' | cut -d' ' -f2`
+
+
+echo "changelog: ${changelog}"
+echo "base version: ${geo2tag_version}"
+echo "branch: ${branchname}"
+echo "extra message: ${changelog}"
+
 
 if [ "$#" == "2" ]
 then
@@ -41,9 +49,11 @@ else
 fi
 
 # Getting verison last part from current date
-version_last_part=`date +%s`;
+version_last_part="-${branchname}-"`date +%s`;
 curr_date=`date -R`;
-new_record="geo2tag ($geo2tag_version.$version_last_part) unstable; urgency=low\n\n  * $message\n\n -- Open Source and Linux lab  <geo2tag-development@osll.spb.ru> $curr_date\n"
+new_record="geo2tag ($geo2tag_version$version_last_part) unstable; urgency=low\n\n  * $message\n\n -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> $curr_date\n"
+
+echo "Generated record\n${new_record}"
 
 # Adding record as a first line
 sed -i 1i"$new_record" $changelog
