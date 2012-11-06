@@ -1,199 +1,44 @@
-geo2tag (0.21.2-GT-765-bugfix-1352192934) unstable; urgency=low
+geo2tag (0.21.2-1352194979-bGT-765-bugfix) unstable; urgency=low
 
-  * GT-765 added testing script
+  * GT-765 added branch to version
 
- -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> Tue, 06 Nov 2012 09:08:54 +0000
+ -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru>  Tue, 06 Nov 2012 09:42:59 +0000
 
-geo2tag (0.21.2--GT-765-bugfix-1352192921) unstable; urgency=low
+geo2tag (0.21.2-1352194946-bGT-765-bugfix) unstable; urgency=low
 
-  * GT-765 added testing script
+  * GT-765 added branch to version
 
- -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> Tue, 06 Nov 2012 09:08:41 +0000
+ -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru>  Tue, 06 Nov 2012 09:42:26 +0000
 
-geo2tag (0.21.2.-GT-765-bugfix-1352192902) unstable; urgency=low
+geo2tag (0.21.2-1352194926-bGT-765-bugfix) unstable; urgency=low
 
-  * GT-765 added testing script
+  * GT-765 added branch to version
 
- -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> Tue, 06 Nov 2012 09:08:22 +0000
+ -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru>  Tue, 06 Nov 2012 09:42:06 +0000
 
-geo2tag (0.21.2.1352192856) unstable; urgency=low
+geo2tag (0.21.2-1352194893-bGT-765-bugfix) unstable; urgency=low
 
-  * GT-765 added testing script
+  * GT-765 added branch to version
 
- -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> Tue, 06 Nov 2012 09:07:36 +0000
+ -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru>  Tue, 06 Nov 2012 09:41:33 +0000
 
-geo2tag (0.21.2.1352192778) unstable; urgency=low
+geo2tag (0.21.2-1352194858-bGT-765-bugfix) unstable; urgency=low
 
-  * GT-765 added testing script
+  * GT-765 added branch to version
 
- -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> Tue, 06 Nov 2012 09:06:18 +0000
+ -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru>  Tue, 06 Nov 2012 09:40:58 +0000
 
-geo2tag (0.21.2.1352192737) unstable; urgency=low
+geo2tag (0.21.2-GT-765-bugfix-1352194724) unstable; urgency=low
 
-  * GT-765 added testing script
+  * GT-765 added branch to version
 
- -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> Tue, 06 Nov 2012 09:05:37 +0000
+ -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru>  Tue, 06 Nov 2012 09:38:44 +0000
 
-geo2tag (0.21.2.1352192667) unstable; urgency=low
+geo2tag (0.21.2-GT-765-bugfix-1352194617) unstable; urgency=low
 
-  * GT-765 added testing script
+  * GT-765 added branch to version
 
- -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> Tue, 06 Nov 2012 09:04:27 +0000
+ -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru>  Tue, 06 Nov 2012 09:36:57 +0000
 
-geo2tag (0.21.2.1352192643) unstable; urgency=low
 
-  * GT-765 added testing script
-
- -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> Tue, 06 Nov 2012 09:04:03 +0000
-
-geo2tag (0.20.1.1352192152) unstable; urgency=low
-
-  * GT-765 added testing script
-
- -- Open Source and Linux lab  <geo2tag-development@osll.spb.ru> Tue, 06 Nov 2012 08:55:52 +0000
-
-geo2tag (0.20.1.1345618727) unstable; urgency=low
-
-  * beautify
-
- -- Open Source and Linux lab <geo2tag-development@osll.spb.ru>  Wed, 22 Aug 2012 10:58:47 +0400
-
-geo2tag (0.20.0) unstable; urgency=low
-
-  * release
-
- -- Open Source and Linux lab <geo2tag-devel@lists.osll.spb.ru>  Sun, 29 Jul 2012 17:44:30 +0400
-
-geo2tag (0.19.1) unstable; urgency=low
-
-  * bugs fixed
-
- -- Open Source and Linux lab <osll@lists.osll.spb.ru>  Fri, 1 Jul 2012 11:35:30 +0400
-
-geo2tag (0.19.0) unstable; urgency=low
-
-  * release
-
- -- Open Source and Linux lab <osll@lists.osll.spb.ru>  Fri, 6 Jun 2012 11:35:30 +0400
-
-wikigps (0.1.6) unstable; urgency=low
-
-  * lots of fixies
-
- -- Open Source and Linux lab <osll@lists.osll.spb.ru>  Fri, 13 May 2011 22:17:30 +0400
-
-wikigps (0.1.5k) unstable; urgency=low
-
-  * fix for daemon fail
-  * fix for daemon fail
-
- -- Open Source and Linux lab <osll@lists.osll.spb.ru>  Sun, 24 Apr 2011 18:50:39 +0400
-
-wikigps (0.1.5j) unstable; urgency=low
-
-  * all settings now stored in one place
-
- -- Open Source and Linux lab <osll@lists.osll.spb.ru>  Mon, 18 Apr 2011 22:41:17 +0400
-
-wikigps (0.1.5i) unstable; urgency=low
-
-  * fix for login
-
- -- Paul Zubarev <zps@osll.spb.ru>  Thu, 24 Mar 2011 23:24:58 +0300
-
-wikigps (0.1.5h) unstable; urgency=low
-
-  * fix for login
-
- -- Paul Zubarev <zps@osll.spb.ru>  Wed, 23 Mar 2011 18:41:09 +0300
-
-wikigps (0.1.5g) unstable; urgency=low
-
-  * added config file for server port configuring
-
- -- Paul Zubarev <zps@osll.spb.ru>  Mon, 21 Mar 2011 20:10:12 +0300
-
-wikigps (0.1.5f) unstable; urgency=low
-
-  * added webside(again)
-
- -- Paul Zubarev <zps@osll.spb.ru>  Sun, 20 Mar 2011 11:11:08 +0300
-
-wikigps (0.1.5e) unstable; urgency=low
-
-  * fix for empty server url
-
- -- Paul Zubarev <zps@osll.spb.ru>  Sun, 06 Mar 2011 11:56:37 +0300
-
-wikigps (0.1.5d) unstable; urgency=low
-
-  * provided fix for QNetworkpointer
-
- -- Paul Zubarev <zps@osll.spb.ru>  Tue, 01 Mar 2011 21:34:56 +0300
-
-wikigps (0.1.5c) unstable; urgency=low
-
-  * splited lib ans service for -standalone packages
-
- -- Paul Zubarev <zps@osll.spb.ru>  Tue, 22 Feb 2011 21:37:51 +0300
-
-wikigps (0.1.5b) unstable; urgency=low
-
-  * remove sharedlib dependece
-
- -- Paul Zubarev <zps@osll.spb.ru>  Tue, 15 Feb 2011 16:17:51 +0300
-
-wikigps (0.1.5a) unstable; urgency=low
-
-  * remove sharedlib dependece
-
- -- Paul Zubarev <zps@osll.spb.ru>  Mon, 15 Feb 2011 00:17:51 +0300
-
-wikigps (0.1.5) unstable; urgency=low
-
-  * added dependence from wikigps-qt
-
- -- Paul Zubarev <zps@osll.spb.ru>  Mon, 14 Feb 2011 23:37:51 +0300
-
-wikigps (0.1.4) unstable; urgency=low
-
-  * replacing for QSharedPointer
-
- -- Paul Zubarev <zps@osll.spb.ru>  Thu, 20 Jan 2011 13:54:50 +0300
-
-wikigps (0.1.3) unstable; urgency=low
-
-  * tracker init.d script changed
-
- -- Paul Zubarev <zps@osll.spb.ru>  Sun, 31 Oct 2010 11:30:01 +0300
-
-wikigps (0.1.2) unstable; urgency=low
-
-  * tracker splited for two parts
-
- -- Paul Zubarev <zps@osll.spb.ru>  Sat, 30 Oct 2010 18:39:11 +0400
-
-wikigps (0.1.1) unstable; urgency=low
-
-  * small bugs are fixed
-
- -- Paul Zubarev <zps@osll.spb.ru>  Fri, 24 Sep 2010 10:55:45 +0400 
-
-wikigps (0.1.0) unstable; urgency=low
-
-  * the_platform iteration release
-
- -- Paul Zubarev <zps@osll.spb.ru>  Sat, 04 Sep 2010 16:26:46 +0400
-
-wikigps (0.0.9) unstable; urgency=low
-
-  * Tampere's release
-
- -- Paul Zubarev <zps@osll.spb.ru>  Sun, 23 May 2010 12:38:54 +0300
-
-wikigps (0.0.7) unstable; urgency=low
-
-  * ToDo.
-
- -- Paul Zubarev <zps@osll.spb.ru>  Fri, 2 Apr 2010 00:21:54 +0300
 

@@ -1,7 +1,5 @@
 #!/usr/bin/make -f
-# debian/rules for cadaver
-#
-# Written by Pavel Zubarev <zps@osll.spb.ru>.
+# Geo2tag LBS Platform
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -11,7 +9,7 @@
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 #VERSION := $(shell echo '$(DEBVERS)' | sed -e 's/^[[:digit:]]*://' -e 's/[~-].*//')
-version = `head -n 1 debian/changelog | grep -o '[.0-9]\{2,\}'` 
+version = `cat VERSION` 
 lastCommit = `git log --pretty=format:'%h' -n 1`
 buildNum = `git log --pretty=format:'' | wc -l`
 CFLAGS = -Wall -g

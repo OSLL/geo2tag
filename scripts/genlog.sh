@@ -17,7 +17,7 @@ branchname=`git branch | grep '\*' | cut -d' ' -f2`
 echo "changelog: ${changelog}"
 echo "base version: ${geo2tag_version}"
 echo "branch: ${branchname}"
-echo "extra message: ${changelog}"
+echo "extra message: $message"
 
 
 if [ "$#" == "2" ]
@@ -49,11 +49,11 @@ else
 fi
 
 # Getting verison last part from current date
-version_last_part="-${branchname}-"`date +%s`;
+version_last_part="`date +%s`-b${branchname}";
 curr_date=`date -R`;
-new_record="geo2tag ($geo2tag_version$version_last_part) unstable; urgency=low\n\n  * $message\n\n -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru> $curr_date\n"
+new_record="geo2tag ($geo2tag_version-$version_last_part) unstable; urgency=low\n\n  * $message\n\n -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru>  $curr_date\n"
 
-echo "Generated record\n${new_record}"
+echo "${new_record}" >./.changelog_record
 
 # Adding record as a first line
 sed -i 1i"$new_record" $changelog
