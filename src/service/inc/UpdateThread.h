@@ -44,6 +44,8 @@
 #include "ChannelInternal.h"
 #include "DataChannel.h"
 #include "SessionInternal.h"
+#include <QMutex>
+#include <QMutexLocker>
 
 class QueryExecutor;
 
@@ -51,7 +53,7 @@ class UpdateThread: public QThread
 {
   Q_OBJECT
 
-    QSharedPointer<Channels>     m_channelsContainer;
+  QSharedPointer<Channels>     m_channelsContainer;
   QSharedPointer<DataMarks>    m_tagsContainer;
   QSharedPointer<common::Users>        m_usersContainer;
   QSharedPointer<DataChannels> m_dataChannelsMap;
@@ -60,7 +62,8 @@ class UpdateThread: public QThread
   QueryExecutor* m_queryExecutor;
 
   //will be locked when containers is being updated
-  QReadWriteLock m_updateLock;
+  //QReadWriteLock m_updateLock;
+
 
   qlonglong m_transactionCount;
 
@@ -89,8 +92,8 @@ class UpdateThread: public QThread
 
     void incrementTransactionCount(int i = 1);
 
+////GT-765 bug
     void lockWriting();
-
     void unlockWriting();
 
     void setQueryExecutor(QueryExecutor* queryExecutor);
