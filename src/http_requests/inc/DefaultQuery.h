@@ -41,7 +41,7 @@
 #include <QDateTime>
 #include "ErrnoTypes.h"
 
-class DefaultQuery : public QObject
+class QueryObject : public QObject
 {
   Q_OBJECT
     protected:
@@ -60,7 +60,7 @@ class DefaultQuery : public QObject
     void handleError();
 
   public:
-    DefaultQuery(QObject *parent = 0);
+    QueryObject(QObject *parent = 0);
 
     void doRequest();
 

@@ -61,28 +61,28 @@ private slots:
 
     void initTestCase()
     {
-        Geo::Session::init("url=http://tracks.osll.spb.ru:81/service;user=test;passwprd=test");
-    }
-
-    void init()
-    {
-        QVERIFY(FALSE);
+        Geo::Session::init("url=http://demo.geo2tag.org:80/service;user=test;password=test");
     }
 
     void isValid()
     {
-        QVERIFY(FALSE);
+        QVERIFY(Geo::Session::instance().isValid());
     }
 
 
     void saveState()
     {
-        QVERIFY(FALSE);
+        //QVERIFY(FALSE);
     }
 
     void restoreState()
     {
-        QVERIFY(FALSE);
+        //QVERIFY(FALSE);
+    }
+
+    void login()
+    {
+        QVERIFY(Geo::Session::instance().login());
     }
 };
 

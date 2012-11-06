@@ -1,5 +1,5 @@
 /*
- * Copyright 2010  Open Source & Linux Lab (OSLL)  osll@osll.spb.ru
+ * Copyright 2010-2012 OSLL osll@osll.spb.ru
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,68 +28,57 @@
  *
  * The advertising clause requiring mention in adverts must never be included.
  */
-
-/* $Id$ */
-/*!
- * \file LoginQuery.h
- * \brief Header of LoginQuery
- * \todo add comment here
- *
- * File description
- *
+/*----------------------------------------------------------------- !
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-#ifndef _LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
-#define _LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
+#ifndef LIBGEOTAG_QUERY_OBJECT_H
+#define LIBGEOTAG_QUERY_OBJECT_H
 
 #include <QObject>
-#include <QString>
-#include "DefaultQuery.h"
-#include "Session.h"
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QDateTime>
+#include "ErrnoTypes.h"
 
-/*!
- * LoginQuery class definition.
- *
- * The object of this class represents http query to server.
- * This query sends user name and password and gets auth_token.
- *
- */
-class LoginQuery: public QueryObject
+
+namespace Geo
+{
+class QueryObject : public QObject
 {
   Q_OBJECT
+    protected:
+    QNetworkAccessManager *m_manager;
 
-  QString m_login;
-  QString m_password;
+    QString m_url;
+    QString m_req;
 
-  QSharedPointer<Session> m_session;
 
-  virtual QString getUrl() const;
-  virtual QByteArray getRequestBody() const;
+  protected Q_SLOTS:
 
-  private Q_SLOTS:
-
-    virtual void processResponse(QByteArray &data);
+    void process(QNetworkReply *reply);
+    void handleError();
 
   public:
+    QueryObject(const QString& url, const QString& req, QObject *parent = 0);
 
-    LoginQuery(const QString& login, const QString& password, QObject *parent = 0);
+  public slots:
+    void doRequest();
 
-    LoginQuery(QObject *parent = 0);
+    int getErrno() const;
+    void processResponse(const QByteArray &ar);
 
-    void setQuery(const QString& login, const QString& password);
+    signals:
 
-    QSharedPointer<Session> getSession() const;
+    void responseReceived();
+    void success();
 
-    ~LoginQuery();
+    void errorOccured(QString);
+    void errorOccured(int);
 
-    Q_SIGNALS:
-
-    //   void connected();
-
-    // class LoginQuery
 };
-//_LoginQuery_H_1ED2F4BC_FCC5_4CD7_85EB_9C83BEF4B96C_INCLUDED_
-#endif
 
-/* ===[ End of file $HeadURL$ ]=== */
+} // namespace
+
+// LIBGEOTAG_QUERY_OBJECT
+#endif

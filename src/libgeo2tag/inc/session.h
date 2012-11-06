@@ -96,12 +96,19 @@ namespace Geo
         */
       static bool restoreState();
 
+      ///// Main interface ///
+
+      bool login();
+
     private:
+
+      void checkValid();
 
       Session();
 
       Session(const Session& obj);
       Session& operator=(const Session& obj);
+
 
 
   }; // class Session

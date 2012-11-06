@@ -19,7 +19,8 @@ SOURCES += ../src/QueryExecutor.cpp \
            ../src/SessionInternal.cpp \
            ../src/ChannelInternal.cpp \
            main.cpp \
-           Test_QueryExecutor.cpp
+           Test_QueryExecutor.cpp \
+    ../src/DbSession.cpp
 
 HEADERS += ../inc/QueryExecutor.h \
            ../inc/Geo2tagDatabase.h \

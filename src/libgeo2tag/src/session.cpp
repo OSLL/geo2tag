@@ -43,6 +43,7 @@
 
 #include "../inc/session.h"
 #include "../inc/log.h"
+#include "queryobject.h"
 
 #include <QMutex>
 #include <QMutexLocker>
@@ -67,7 +68,6 @@ namespace
               return false;
           QString key   = keyValue[0].trimmed();
           QString value = keyValue[1].trimmed();
-          qDebug() << "key=" << key << ", value="<< value;
           map[key.toStdString()]=value.toStdString();
       }
       return true;
@@ -83,7 +83,8 @@ bool Session::init(const char *initializationString)
         return false;
     g_sessionObject = new Session();
 
-    init_map((g_sessionObject->m_params),initializationString);
+    g_sessionObject->m_isValid = init_map((g_sessionObject->m_params),initializationString);
+
 
     return true;
 
@@ -105,6 +106,26 @@ Session::Session(): m_isValid(false)
 const std::string &Session::param(const std::string &key) const
 {
     return m_params[key];
+}
+
+void Session::checkValid()
+{
+    Q_ASSERT(false);//not implemented
+}
+
+bool Session::login()
+{
+    QString req;
+    req+="{ \"login\":\"";
+    req+=QString(m_params["user"].c_str());
+    req+="\", \"password\":\"";
+    req+=QString(m_params["password"].c_str())+"\"}";
+
+    qDebug() << "request=" << req;
+
+    QueryObject query(m_params["url"].c_str(),req);
+    query.doRequest();
+    return false;
 }
 
 } // namespace Geo2tag

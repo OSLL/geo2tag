@@ -4,8 +4,10 @@
 
 TEMPLATE = subdirs 
 CONFIG +=ordered
+QT += network
 #DEPENDPATH +=
-#INCLUDEPATH += 
+INCLUDEPATH += \
+    ../common/inc/
 
 
 SUBDIRS += \

@@ -9,7 +9,7 @@ INSTALLS += target
 
 INCLUDEPATH += . inc \
                  ../common/inc/ \
-                 ../json/inc
+                 ../json/inc \
 
 # Input
 HEADERS += \
