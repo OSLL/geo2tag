@@ -1,3 +1,9 @@
+geo2tag (0.21.2-1352203319-blibgeo2tag-devel) unstable; urgency=low
+
+  * fix test build
+
+ -- Open Source and Linux lab  <geo2tag-support@osll.spb.ru>  Tue, 06 Nov 2012 12:01:59 +0000
+
 geo2tag (0.21.2-1352202039-blibgeo2tag-devel) unstable; urgency=low
 
   * 765 script for testing
