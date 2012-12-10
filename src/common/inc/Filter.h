@@ -49,7 +49,7 @@ class Filter
 {
   public:
     virtual bool filtrate(const QSharedPointer<DataMark> &mark) = 0;
-		virtual ~Filter() {}
+    virtual ~Filter() {}
 
 };                                      // class Filter
 #endif                                  //_Filter_H_F1B0F887_FC25_4557_B002_AC962387F3F9_INCLUDED_

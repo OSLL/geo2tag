@@ -41,7 +41,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _Geotag_H_04676504_3E24_4452_B066_52C876A91FFA_INCLUDED_
 #define _Geotag_H_04676504_3E24_4452_B066_52C876A91FFA_INCLUDED_
 
@@ -52,36 +51,35 @@ namespace Geo2tag
 
   class Coord
   {
-      double altitude;
-      double latitude;
-      double longitude;
+    double altitude;
+    double latitude;
+    double longitude;
   };
 
- /*!
+  /*!
    * Class description. May use HTML formatting
    *
    */
   class Geotag
   {
-      Coord       m_coord;
-      __int64_t   m_timestamp;
-      std::string m_label;
-      std::string m_data;
+    Coord       m_coord;
+    __int64_t   m_timestamp;
+    std::string m_label;
+    std::string m_data;
 
-  public:
+    public:
 
       Geotag(const Coord& coord, const std::string& label, std::string& data);
 
       __int64_t timestamp();
       std::string label();
       std::string data();
-    
-  private:    
-    Geotag(const Geotag& obj);
-    Geotag& operator=(const Geotag& obj);
 
-  }; // class Geotag
-  
-} // namespace Geo2tag
+    private:
+      Geotag(const Geotag& obj);
+      Geotag& operator=(const Geotag& obj);
 
-#endif //_Geotag_H_04676504_3E24_4452_B066_52C876A91FFA_INCLUDED_
+  };                                    // class Geotag
+
+}                                       // namespace Geo2tag
+#endif                                  //_Geotag_H_04676504_3E24_4452_B066_52C876A91FFA_INCLUDED_

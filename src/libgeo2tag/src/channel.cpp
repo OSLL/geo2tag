@@ -46,4 +46,4 @@
 namespace Geo2tag
 {
 
-} // namespace Geo2tag
+}                                       // namespace Geo2tag

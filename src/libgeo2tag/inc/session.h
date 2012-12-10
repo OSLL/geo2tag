@@ -41,7 +41,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _Session_H_95B6E7F9_B628_4F43_8577_D5BF1A5F59E2_INCLUDED_
 #define _Session_H_95B6E7F9_B628_4F43_8577_D5BF1A5F59E2_INCLUDED_
 
@@ -86,9 +85,7 @@ namespace Geo2tag
       Session(const Session& obj);
       Session& operator=(const Session& obj);
 
+  };                                    // class Session
 
-  }; // class Session
-
-} // namespace Geo2tag
-
-#endif //_Session_H_95B6E7F9_B628_4F43_8577_D5BF1A5F59E2_INCLUDED_
+}                                       // namespace Geo2tag
+#endif                                  //_Session_H_95B6E7F9_B628_4F43_8577_D5BF1A5F59E2_INCLUDED_

@@ -41,7 +41,6 @@
  * PROJ: OSLL/geo2tag
  * ---------------------------------------------------------------- */
 
-
 #ifndef _Channel_H_7B1A7CD3_CD56_459B_81FD_1438824FC280_INCLUDED_
 #define _Channel_H_7B1A7CD3_CD56_459B_81FD_1438824FC280_INCLUDED_
 
@@ -50,16 +49,15 @@
 
 namespace Geo2tag
 {
- /*!
+  /*!
    * Channel. Entity for aggregating tags
    *
    */
   class Channel
   {
-      size_t m_currentIndex;
+    size_t m_currentIndex;
 
-
-  public:
+    public:
       /**
           Find Channel data
           \param name -- name of channel
@@ -97,13 +95,12 @@ namespace Geo2tag
         \return number of new uploaded tags
         */
       size_t update();
-    
-  private:    
-    Channel(const Channel& obj);
-    Channel& operator=(const Channel& obj);
 
-  }; // class Channel
-  
-} // namespace Geo2tag
+    private:
+      Channel(const Channel& obj);
+      Channel& operator=(const Channel& obj);
 
-#endif //_Channel_H_7B1A7CD3_CD56_459B_81FD_1438824FC280_INCLUDED_
+  };                                    // class Channel
+
+}                                       // namespace Geo2tag
+#endif                                  //_Channel_H_7B1A7CD3_CD56_459B_81FD_1438824FC280_INCLUDED_
