@@ -50,6 +50,9 @@
 #include <QString>
 #include <QDebug>
 #include <QStringList>
+#include <QWaitCondition>
+#include <QTimer>
+#include <QTest>
 
 namespace
 {
@@ -115,16 +118,36 @@ void Session::checkValid()
 
 bool Session::login()
 {
-    QString req;
-    req+="{ \"login\":\"";
-    req+=QString(m_params["user"].c_str());
-    req+="\", \"password\":\"";
-    req+=QString(m_params["password"].c_str())+"\"}";
+    QString req_str =
+        "{ \"login\":\""
+        +QString(m_params["user"].c_str())
+        +"\", \"password\":\""
+        +QString(m_params["password"].c_str())+"\"}";
 
-    qDebug() << "request=" << req;
+    qDebug() << "request=" << req_str;
 
-    QueryObject query(m_params["url"].c_str(),req);
-    query.doRequest();
+    QNetworkAccessManager nam;
+    QByteArray requestBody(req_str.toStdString().data());
+    QNetworkRequest req(QUrl(m_params["url"].c_str()));
+
+    QNetworkReply *rep = nam.post(req,requestBody);
+
+    while(!rep->isFinished())
+    {
+       QTest::qSleep(1000);
+                qDebug() << "1";
+                QByteArray data=rep->readAll();
+
+
+                qDebug() << QString(data);
+
+    }
+
+    QByteArray data=rep->readAll();
+
+
+    qDebug() << QString(data);
+
     return false;
 }
 

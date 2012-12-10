@@ -61,7 +61,7 @@ private slots:
 
     void initTestCase()
     {
-        Geo::Session::init("url=http://demo.geo2tag.org:80/service;user=test;password=test");
+        Geo::Session::init("url=http://demo.geo2tag.org:80/;user=test;password=test");
     }
 
     void isValid()
@@ -83,11 +83,13 @@ private slots:
     void login()
     {
         QVERIFY(Geo::Session::instance().login());
+
+
     }
 };
 
 }
 
 
-QTEST_APPLESS_MAIN(UnitTest::Session)
+QTEST_MAIN(UnitTest::Session)
 #include "libgeo2tag_Session.moc"

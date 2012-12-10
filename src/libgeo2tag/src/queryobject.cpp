@@ -68,10 +68,15 @@ namespace Geo
 
 void QueryObject::doRequest()
 {
-    QNetworkRequest request;//(QUrl(m_url));
-    QByteArray req;//(m_req.toStdString().c_str(),m_req.size());
+    QUrl url(m_url);
+    url.setPort(80);
 
-    QNetworkReply *reply = m_manager->post(request, req);
+    QNetworkRequest request;
+    request.setUrl(url);
+
+    QByteArray array;
+
+    QNetworkReply *reply = m_manager->post(request, array);
     //connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(handleError()));
 }
 
